@@ -8,13 +8,14 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Peridio Documentation',
   tagline: 'How it works and how to use it',
-  url: 'https://documentation.peridio.com',
-  baseUrl: '/',
+  url: 'https://peridio.github.io',
+  baseUrl: '/parasola/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'peridio', // Usually your GitHub org/user name.
-  projectName: 'peridio-documentation', // Usually your repo name.
+  projectName: 'parasola', // Usually your repo name.
+  trailingSlash: false,
 
   presets: [
     [
@@ -28,6 +29,15 @@ const config = {
         },
       },
     ],
+    [
+      'redocusaurus',
+      {
+        debug: true,
+        specs: [{
+          spec: 'static/openapi/openapi.yaml',
+        }],
+      }
+    ],
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -35,21 +45,14 @@ const config = {
       navbar: {
         title: 'Peridio Documentation',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Peridio logo mark',
           src: 'img/logo.svg',
         },
         items: [
           {
-            type: 'doc',
-            docId: 'reference-introduction',
+            href: '/api/0',
             position: 'left',
-            label: 'Reference',
-          },
-          {
-            type: 'doc',
-            docId: 'guides',
-            position: 'left',
-            label: 'Guides',
+            label: 'API Reference',
           },
           {
             href: 'https://github.com/peridio',
@@ -65,8 +68,8 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Reference',
-                to: '/docs/reference',
+                label: 'API Reference',
+                to: '/api/0',
               },
             ],
           },

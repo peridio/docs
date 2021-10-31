@@ -5,4 +5,4 @@ title: Introduction
 
 # Introduction
 
-describe the reference
+Documentation that spans two or more Peridio components.
