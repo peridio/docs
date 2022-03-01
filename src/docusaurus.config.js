@@ -6,10 +6,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Peridio Documentation',
-  tagline: 'How it works and how to use it',
-  url: 'https://peridio.github.io',
-  baseUrl: '/parasola/',
+  title: 'Documentation',
+  url: 'https://docs.peridio.com',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -21,12 +20,15 @@ const config = {
     [
       '@docusaurus/preset-classic',
       {
+        theme: {
+          customCss: [require.resolve('./src/css/custom.css')]
+        },
+        blog: false,
         docs: {
           path: 'docs',
-          routeBasePath: 'docs',
+          routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-          // ... other options
-        },
+        }
       },
     ],
     [
@@ -43,47 +45,38 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Peridio Documentation',
+        title: 'Peridio',
         logo: {
           alt: 'Peridio logo mark',
           src: 'img/logo.svg',
         },
         items: [
           {
-            href: '/api/0',
+            href: '/reference/api-keys',
             position: 'left',
-            label: 'API Reference',
+            label: 'Reference',
           },
           {
-            href: 'https://github.com/peridio',
-            label: 'GitHub',
-            position: 'right',
+            href: '/guides/accepting-an-invite',
+            position: 'left',
+            label: 'Guides',
+          },
+          {
+            href: '/cli/installation',
+            position: 'left',
+            label: 'CLI',
+          },
+          {
+            href: '/api/0',
+            position: 'left',
+            label: 'API',
           },
         ],
       },
       footer: {
-        style: 'dark',
         links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'API Reference',
-                to: '/api/0',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/peridio',
-              },
-            ],
-          },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Very. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Peridio.`,
       },
       prism: {
         theme: lightCodeTheme,

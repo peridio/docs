@@ -13,9 +13,26 @@
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
-  system: [
-    'system'
+  reference: [
+    'reference/api-keys',
+    'reference/authorization-policies',
+    'reference/authorization-scopes',
+    'reference/element-types',
+    'reference/elements',
+    'reference/functional-accounts',
+    'reference/members',
+    'reference/nodes'
+  ],
+  guides: [
+    'guides/accepting-an-invite',
+    'guides/logging-in',
+    'guides/creating-an-api-key',
+    'guides/using-an-api-key'
+  ],
+  cli: [
+    'cli/installation'
   ]
 };
 
 module.exports = sidebars;
+

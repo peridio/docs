@@ -6,14 +6,31 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
-  --ifm-color-primary-darkest: rgb(26, 136, 112);
-  --ifm-color-primary-light: rgb(70, 203, 174);
-  --ifm-color-primary-lighter: rgb(102, 212, 189);
-  --ifm-color-primary-lightest: rgb(146, 224, 208);
-  --ifm-code-font-size: 95%;
+  --ifm-footer-background-color: white;
+  --ifm-color-primary: #3424ee;
+  --ifm-link-color: #525860;
+  --ifm-color-content-secondary: #525860;
+  --ifm-color-primary-dark: #212028;
+  --ifm-color-primary-darker: #1f1f25;
+  --ifm-color-primary-darkest: #1a191f;
+  --ifm-color-primary-light: #292830;
+  --ifm-color-primary-lighter: #2b2933;
+  --ifm-color-primary-lightest: #302f39;
+  --ifm-breadcrumb-color-active: black;
+}
+
+html[data-theme='dark'] {
+  --ifm-color-content-secondary: #525860;
+  --ifm-breadcrumb-item-background-active: white;
+  --ifm-color-content-inverse: white;
+  --ifm-footer-background-color: black;
+  --ifm-background-color: black;
+  --ifm-background-surface-color: black;
+  --ifm-breadcrumb-color-active: black;
+}
+
+html[data-theme='dark'] .breadcrumbs .breadcrumbs__item a {
+  background-color: white;
 }
 
 .docusaurus-highlight-code-line {
@@ -25,4 +42,12 @@
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme='dark'] .navbar {
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+footer {
+  border-top: 1px solid var(--ifm-toc-border-color);
 }
