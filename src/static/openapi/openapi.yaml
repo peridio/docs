@@ -60,6 +60,7 @@ x-tagGroups:
   - name: "Endpoints"
     tags:
       - "Identity"
+      - "Elements"
 paths:
   /identity:
     get:
@@ -75,11 +76,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/identity'
-  /element-types:
+  /elements:
     post:
-      summary: Create
+      summary: Create Element
       tags:
-        - 'Element Types'
+        - 'Elements'
       requestBody:
         required: true
         content:
@@ -96,44 +97,148 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-type'
+                $ref: '#/components/schemas/element'
     get:
-      summary: Retrieve
+      summary: Retrieve Elements
       tags:
-        - 'Element Types'
+        - 'Elements'
       parameters:
-        - name: element_type_ids
-          example: '42,13,100'
+        - name: element_ids
           in: query
           schema:
-            $ref: '#/components/schemas/array-of-element-type-ids'
+            $ref: '#/components/schemas/comma-delimited-ids'
       responses:
         '200':
           description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-element-types'
+                $ref: '#/components/schemas/array-of-elements'
+        '404':
+          description: Not found.
+  /elements/{element_id}/versions:
+    post:
+      summary: Create version
+      tags:
+        - 'Elements'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                binaries_scope:
+                  $ref: '#/components/schemas/element-version-binaries-scope'
+                name:
+                  $ref: '#/components/schemas/element-version-name'
+              required:
+                - binaries_scope
+                - name
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-version'
+    get:
+      summary: Retrieve versions
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_version_ids
+          in: query
+          schema:
+            $ref: '#/components/schemas/comma-delimited-ids'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-element-versions'
+        '404':
+          description: Not found.
+  /elements/{element_id}/versions/{version_id}/binaries:
+    post:
+      summary: Create binary
+      tags:
+        - 'Elements'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                json:
+                  type: object
+                  properties:
+                    node_type_id:
+                      anyOf:
+                        - type: 'null'
+                        - $ref: '#/components/schemas/node-type-id'
+                    node_id:
+                      anyOf:
+                        - type: 'null'
+                        - $ref: '#/components/schemas/node-id'
+                data:
+                  $ref: '#/components/schemas/element-version-binary-data'
+              required:
+                - json
+                - data
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-version-binary'
+    get:
+      summary: Retrieve binaries
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_version_binary_ids
+          in: query
+          schema:
+            $ref: '#/components/schemas/comma-delimited-ids'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-element-version-binaries'
         '404':
           description: Not found.
 components:
   schemas:
+    comma-delimited-ids:
+      type: string
+      description: Comma delimited set of IDs to filter by.
     api-key-id:
       type: string
       format: uuid
-    array-of-element-type-ids:
+    array-of-element-version-binaries:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-type-id'
-    array-of-element-types:
+        $ref: '#/components/schemas/element-version-binary'
+    array-of-element-versions:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-type'
-    element-type:
+        $ref: '#/components/schemas/element-version'
+    array-of-elements:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/element'
+    element:
       allOf:
         - type: object
           properties:
@@ -141,15 +246,74 @@ components:
               type: string
               format: date-time
             id:
-              $ref: '#/components/schemas/element-type-id'
+              $ref: '#/components/schemas/element-id'
             name:
               $ref: '#/components/schemas/name'
             updated_at:
               type: string
               format: date-time
-    element-type-id:
+    element-id:
       type: string
       format: uuid
+    element-version:
+      allOf:
+        - type: object
+          properties:
+            binaries_scope:
+              $ref: '#/components/schemas/element-version-binaries-scope'
+            created_at:
+              type: string
+              format: date-time
+            element_id:
+              $ref: '#/components/schemas/element-id'
+            id:
+              $ref: '#/components/schemas/element-version-id'
+            name:
+              $ref: '#/components/schemas/element-version-name'
+            updated_at:
+              type: string
+              format: date-time
+    element-version-binary:
+      allOf:
+        - type: object
+          properties:
+            binaries_scope:
+              $ref: '#/components/schemas/element-version-binaries-scope'
+            created_at:
+              type: string
+              format: date-time
+            id:
+              $ref: '#/components/schemas/element-version-binary-id'
+            element_version_id:
+              $ref: '#/components/schemas/element-version-id'
+            node_type_id:
+              anyOf:
+                - type: 'null'
+                - $ref: '#/components/schemas/node-type-id'
+            node_id:
+              anyOf:
+                - type: 'null'
+                - $ref: '#/components/schemas/node-id'
+            updated_at:
+              type: string
+              format: date-time
+    element-version-binary-id:
+      type: string
+      format: uuid
+    element-version-binary-data:
+      type: string
+      format: binary
+    element-version-binaries-scope:
+      type: string
+      enum:
+        - element_version
+        - node_type
+        - node
+    element-version-id:
+      type: string
+      format: uuid
+    element-version-name:
+      type: string
     account-id:
       type: string
       format: uuid
@@ -169,3 +333,9 @@ components:
       type: string
       minLength: 1
       maxLength: 128
+    node-id:
+      type: string
+      format: uuid
+    node-type-id:
+      type: string
+      format: uuid
