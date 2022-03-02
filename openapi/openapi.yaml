@@ -205,7 +205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-element-versions'
+                $ref: '#/components/schemas/array-of-element-version-binaries'
         '404':
           description: Not found.
 components:
@@ -273,6 +273,8 @@ components:
       allOf:
         - type: object
           properties:
+            binaries_scope:
+              $ref: '#/components/schemas/element-version-binaries-scope'
             created_at:
               type: string
               format: date-time
@@ -280,6 +282,14 @@ components:
               $ref: '#/components/schemas/element-version-binary-id'
             element_version_id:
               $ref: '#/components/schemas/element-version-id'
+            node_type_id:
+              anyOf:
+                - type: 'null'
+                - $ref: '#/components/schemas/node-type-id'
+            node_id:
+              anyOf:
+                - type: 'null'
+                - $ref: '#/components/schemas/node-id'
             updated_at:
               type: string
               format: date-time
