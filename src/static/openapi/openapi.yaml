@@ -65,7 +65,7 @@ paths:
     get:
       summary: Retrieve
       description: |
-        Retrieves information identifying the API Key used to authenticate the request, the Functional Account it is a part of, and the Member it belongs to if applicable.
+        Retrieves information identifying the API Key used to authenticate the request, the Account it is a part of, and the Member it belongs to if applicable.
       tags:
         - 'Identity'
       responses:
@@ -150,7 +150,7 @@ components:
     element-type-id:
       type: string
       format: uuid
-    functional-account-id:
+    account-id:
       type: string
       format: uuid
     identity:
@@ -158,8 +158,8 @@ components:
       properties:
         api_key_id:
           $ref: '#/components/schemas/api-key-id'
-        functional_account_id:
-          $ref: '#/components/schemas/functional-account-id'
+        account_id:
+          $ref: '#/components/schemas/account-id'
         member_id:
           $ref: '#/components/schemas/member-id'
     member-id:

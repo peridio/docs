@@ -19,7 +19,7 @@ const sidebars = {
     'reference/authorization-scopes',
     'reference/element-types',
     'reference/elements',
-    'reference/functional-accounts',
+    'reference/accounts',
     'reference/members',
     'reference/nodes'
   ],
