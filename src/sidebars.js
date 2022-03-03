@@ -14,12 +14,12 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   reference: [
+    'reference/accounts',
     'reference/api-keys',
     'reference/authorization-policies',
     'reference/authorization-scopes',
     'reference/element-types',
     'reference/elements',
-    'reference/accounts',
     'reference/members',
     'reference/nodes'
   ],
