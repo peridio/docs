@@ -60,13 +60,12 @@ x-tagGroups:
   - name: "Endpoints"
     tags:
       - "Identity"
-      - "Elements"
 paths:
   /identity:
     get:
       summary: Retrieve
       description: |
-        Retrieves information identifying the API Key used to authenticate the request, the Functional Account it is a part of, and the Member it belongs to if applicable.
+        Retrieves information identifying the API Key used to authenticate the request, the Account it is a part of, and the Member it belongs to if applicable.
       tags:
         - 'Identity'
       responses:
@@ -76,11 +75,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/identity'
-  /elements:
+  /element-types:
     post:
-      summary: Create Element
+      summary: Create
       tags:
-        - 'Elements'
+        - 'Element Types'
       requestBody:
         required: true
         content:
@@ -97,144 +96,44 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element'
+                $ref: '#/components/schemas/element-type'
     get:
-      summary: Retrieve Elements
+      summary: Retrieve
       tags:
-        - 'Elements'
+        - 'Element Types'
       parameters:
-        - name: element_ids
+        - name: element_type_ids
+          example: '42,13,100'
           in: query
           schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
+            $ref: '#/components/schemas/array-of-element-type-ids'
       responses:
         '200':
           description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-elements'
-        '404':
-          description: Not found.
-  /elements/{element_id}/versions:
-    post:
-      summary: Create version
-      tags:
-        - 'Elements'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                binaries_scope:
-                  $ref: '#/components/schemas/element-version-binaries-scope'
-                name:
-                  $ref: '#/components/schemas/element-version-name'
-              required:
-                - binaries_scope
-                - name
-      responses:
-        '201':
-          description: Created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/element-version'
-    get:
-      summary: Retrieve versions
-      tags:
-        - 'Elements'
-      parameters:
-        - name: element_version_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
-      responses:
-        '200':
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/array-of-element-versions'
-        '404':
-          description: Not found.
-  /elements/{element_id}/versions/{version_id}/binaries:
-    post:
-      summary: Create binary
-      tags:
-        - 'Elements'
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                json:
-                  type: object
-                  properties:
-                    node_type_id:
-                      $ref: '#/components/schemas/node-type-id'
-                    node_id:
-                      $ref: '#/components/schemas/node-id'
-                data:
-                  $ref: '#/components/schemas/element-version-binary-data'
-              required:
-                - json
-                - data
-      responses:
-        '201':
-          description: Created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/element-version-binary'
-    get:
-      summary: Retrieve binaries
-      tags:
-        - 'Elements'
-      parameters:
-        - name: element_version_binary_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
-      responses:
-        '200':
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/array-of-element-version-binaries'
+                $ref: '#/components/schemas/array-of-element-types'
         '404':
           description: Not found.
 components:
   schemas:
-    comma-delimited-ids:
-      type: string
-      description: Comma delimited set of IDs to filter by.
     api-key-id:
       type: string
       format: uuid
-    array-of-element-version-binaries:
+    array-of-element-type-ids:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-version-binary'
-    array-of-element-versions:
+        $ref: '#/components/schemas/element-type-id'
+    array-of-element-types:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-version'
-    array-of-elements:
-      type: array
-      minItems: 0
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/element'
-    element:
+        $ref: '#/components/schemas/element-type'
+    element-type:
       allOf:
         - type: object
           properties:
@@ -242,75 +141,16 @@ components:
               type: string
               format: date-time
             id:
-              $ref: '#/components/schemas/element-id'
+              $ref: '#/components/schemas/element-type-id'
             name:
               $ref: '#/components/schemas/name'
             updated_at:
               type: string
               format: date-time
-    element-id:
+    element-type-id:
       type: string
       format: uuid
-    element-version:
-      allOf:
-        - type: object
-          properties:
-            binaries_scope:
-              $ref: '#/components/schemas/element-version-binaries-scope'
-            created_at:
-              type: string
-              format: date-time
-            element_id:
-              $ref: '#/components/schemas/element-id'
-            id:
-              $ref: '#/components/schemas/element-version-id'
-            name:
-              $ref: '#/components/schemas/element-version-name'
-            updated_at:
-              type: string
-              format: date-time
-    element-version-binary:
-      allOf:
-        - type: object
-          properties:
-            binaries_scope:
-              $ref: '#/components/schemas/element-version-binaries-scope'
-            created_at:
-              type: string
-              format: date-time
-            id:
-              $ref: '#/components/schemas/element-version-binary-id'
-            element_version_id:
-              $ref: '#/components/schemas/element-version-id'
-            node_type_id:
-              anyOf:
-                - type: 'null'
-                - $ref: '#/components/schemas/node-type-id'
-            node_id:
-              anyOf:
-                - type: 'null'
-                - $ref: '#/components/schemas/node-id'
-            updated_at:
-              type: string
-              format: date-time
-    element-version-binary-id:
-      type: string
-      format: uuid
-    element-version-binary-data:
-      type: string
-      format: binary
-    element-version-binaries-scope:
-      type: string
-      enum:
-        - element_version
-        - node_type
-        - node
-    element-version-id:
-      type: string
-      format: uuid
-    element-version-name:
-      type: string
-    functional-account-id:
+    account-id:
       type: string
       format: uuid
     identity:
@@ -318,8 +158,8 @@ components:
       properties:
         api_key_id:
           $ref: '#/components/schemas/api-key-id'
-        functional_account_id:
-          $ref: '#/components/schemas/functional-account-id'
+        account_id:
+          $ref: '#/components/schemas/account-id'
         member_id:
           $ref: '#/components/schemas/member-id'
     member-id:
@@ -329,9 +169,3 @@ components:
       type: string
       minLength: 1
       maxLength: 128
-    node-id:
-      type: string
-      format: uuid
-    node-type-id:
-      type: string
-      format: uuid
