@@ -1,10 +1,16 @@
-# Members
+---
+title: Members
+---
 
-A Member represents a person's access to a particular Account.
+<head>
+  <title>Ref | Members</title>
+</head>
 
-# Attributes
+A Member represents a person's access to an Account.
 
-__Status__
+## Attributes
+
+**status**
 
 A finite set of states a Member can be in.
 
