@@ -46,10 +46,9 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Peridio',
         logo: {
-          alt: 'Peridio logo mark',
-          src: 'img/logo.svg',
+          alt: 'Peridio logo color black',
+          src: 'img/logo-color-black.svg',
         },
         items: [
           {
