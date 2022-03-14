@@ -4,45 +4,22 @@ info:
   title: Peridio API
   version: "0.1.0"
 servers:
-  - url: https://api.peridio.com/
-    description: Production.
-  - url: https://api.staging.peridio.com/
-    description: Staging.
+  - url: https://api.peridio.com/v0
 tags:
   - name: "Authentication"
     x-traitTag: true
     description: |
-      [API keys](/reference/api-keys) are used to authenticate requests. They are included with requests by way of [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication).
+      Requests are authenticated by the [API Key](/reference/api-keys) provided via the `peridio-api-key` header.
 
-      ```
-      API Key username:
-      f183e95f0e5d4428a22d984f9c52338ePOj0C2MHm+thjebPLep0
-
-      API Key password:
-      P67eBJ2lbU6UnhGOFQLOHa23KY9tgo/o/J2ypQE2
-
-      String to encode with Base64:
-      f183e95f0e5d4428a22d984f9c52338ePOj0C2MHm+thjebPLep0:P67eBJ2lbU6UnhGOFQLOHa23KY9tgo/o/J2ypQE2
-
-      Resulting Base64 encoded string:
-      ZjE4M2U5NWYwZTVkNDQyOGEyMmQ5ODRmOWM1MjMzOGVQT2owQzJNSG0rdGhqZWJQTGVwMDpQNjdlQkoybGJVNlVuaEdPRlFMT0hhMjNLWTl0Z28vby9KMnlwUUUy
-
-      Resulting request header:
-      Authorization: Basic ZjE4M2U5NWYwZTVkNDQyOGEyMmQ5ODRmOWM1MjMzOGVQT2owQzJNSG0rdGhqZWJQTGVwMDpQNjdlQkoybGJVNlVuaEdPRlFMT0hhMjNLWTl0Z28vby9KMnlwUUUy
+      ```shell
+      curl https://api.peridio.com/v1/identity \
+        -H peridio-api-key: ZjE4M2U5NWYwZTVkNDQyOGEyMmQ5ODRmOWM1MjMzOGVQT2owQzJNSG0rdGhqZWJQTGVwMFA2N2VCSjJsYlU2VW5oR09GUUxPSGEyM0tZOXRnby9vL0oyeXBRRTI
       ```
   - name: "Element Types"
   - name: "Errors"
     x-traitTag: true
     description: |
       Peridio uses conventional HTTP response codes to indicate the success or failure of an API request.
-
-      In general:
-
-      - `2xx` indicate success.
-      - `4xx` indicate an error due to the request itself.
-      - `5xx` indicate an error with Peridio's servers.
-
-      In particular:
 
       - `200 OK` - Everything worked as expected.
       - `401 Unauthorized` - No valid API Key provided.
@@ -60,13 +37,13 @@ x-tagGroups:
   - name: "Endpoints"
     tags:
       - "Identity"
-      - "Elements"
+      # - "Elements"
 paths:
   /identity:
     get:
-      summary: Retrieve
+      summary: Get
       description: |
-        Retrieves information identifying the API Key used to authenticate the request, the Account it is a part of, and the Member it belongs to if applicable.
+        Gets information identifying the API Key used to authenticate the request, the Account it is a part of, and the Member it belongs to if applicable.
       tags:
         - 'Identity'
       responses:
@@ -325,7 +302,9 @@ components:
         account_id:
           $ref: '#/components/schemas/account-id'
         member_id:
-          $ref: '#/components/schemas/member-id'
+          anyOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/member-id'
     member-id:
       type: string
       format: uuid

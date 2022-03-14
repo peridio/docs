@@ -6,12 +6,13 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Documentation',
+  title: 'Docs',
+  tagline: 'From our minds to yours.',
   url: 'https://docs.peridio.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.svg',
   organizationName: 'peridio', // Usually your GitHub org/user name.
   projectName: 'parasola', // Usually your repo name.
   trailingSlash: false,
@@ -34,8 +35,8 @@ const config = {
     [
       'redocusaurus',
       {
-        debug: true,
         specs: [{
+          layout: {title: 'API'},
           spec: 'static/openapi/openapi.yaml',
         }],
       }
@@ -52,15 +53,15 @@ const config = {
         },
         items: [
           {
-            href: '/reference/api-keys',
+            href: '/reference/accounts',
             position: 'left',
             label: 'Reference',
           },
-          {
-            href: '/guides/accepting-an-invite',
-            position: 'left',
-            label: 'Guides',
-          },
+          // {
+          //   href: '/guides/accepting-an-invite',
+          //   position: 'left',
+          //   label: 'Guides',
+          // },
           {
             href: '/cli/installation',
             position: 'left',

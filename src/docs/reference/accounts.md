@@ -1,4 +1,10 @@
-# Accounts
+---
+title: Accounts
+---
+
+<head>
+  <title>Ref | Accounts</title>
+</head>
 
 An Account is a container for your resources. You create and manage your resources in an Account, and the Account provides administrative capabilities for access and billing.
 

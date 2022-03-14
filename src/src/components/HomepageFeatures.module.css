@@ -5,6 +5,24 @@
   width: 100%;
 }
 
+.features a:hover {
+  text-decoration: none;
+}
+
+.features a p {
+  padding-left: 5px;
+  border-left: solid 2px var(--ifm-footer-background-color);
+}
+
+.features a:hover p {
+  display: block;
+  border-radius: 5px;
+}
+
+.features span {
+  color: black;
+}
+
 .featureSvg {
   height: 200px;
   width: 200px;

@@ -8,7 +8,7 @@
 :root {
   --ifm-footer-background-color: white;
   --ifm-color-primary: #3424ee;
-  --ifm-link-color: #525860;
+  --ifm-link-color: #3424ee;
   --ifm-color-content-secondary: #525860;
   --ifm-color-primary-dark: #212028;
   --ifm-color-primary-darker: #1f1f25;
@@ -17,6 +17,16 @@
   --ifm-color-primary-lighter: #2b2933;
   --ifm-color-primary-lightest: #302f39;
   --ifm-breadcrumb-color-active: black;
+  --ifm-font-family-base: "Avenir";
+}
+
+@font-face {
+  font-family: "Avenir";
+  src: url("/font/avenir-regular.otf");
+}
+
+html {
+  font-family: "Avenir";
 }
 
 html[data-theme='dark'] {
@@ -50,4 +60,11 @@ html[data-theme='dark'] .navbar {
 
 footer {
   border-top: 1px solid var(--ifm-toc-border-color);
+}
+
+.hero__title {
+  font-size: 2rem;
+}
+.hero__subtitle {
+  font-size: 1rem;
 }

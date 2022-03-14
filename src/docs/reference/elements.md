@@ -1,3 +1,9 @@
-# Elements
+---
+title: Elements
+---
 
-Elements are binaries you wish to distribute to Nodes.
+<head>
+  <title>Ref | Elements</title>
+</head>
+
+Elements represent a category of versioned binaries you wish to manage.

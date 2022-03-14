@@ -16,12 +16,8 @@ const sidebars = {
   reference: [
     'reference/accounts',
     'reference/api-keys',
-    'reference/authorization-policies',
-    'reference/authorization-scopes',
-    'reference/element-types',
     'reference/elements',
-    'reference/members',
-    'reference/nodes'
+    'reference/members'
   ],
   guides: [
     'guides/accepting-an-invite',
@@ -30,7 +26,8 @@ const sidebars = {
     'guides/using-an-api-key'
   ],
   cli: [
-    'cli/installation'
+    'cli/installation',
+    'cli/authentication'
   ]
 };
 
