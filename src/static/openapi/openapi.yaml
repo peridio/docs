@@ -127,8 +127,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/distribution'
   /elements:
+    get:
+      summary: list elements
+      tags:
+        - 'Elements'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-elements'
     post:
-      summary: Create Element
+      summary: create element
       tags:
         - 'Elements'
       requestBody:
@@ -142,124 +152,153 @@ paths:
               required:
                 - name
       responses:
-        '201':
+        '200':
           description: Created.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/element'
+  /elements/{element_id}:
     get:
-      summary: Retrieve Elements
+      summary: get element
       tags:
         - 'Elements'
       parameters:
-        - name: element_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
+        - name: element_id
+          in: path
       responses:
         '200':
-          description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-elements'
-        '404':
-          description: Not found.
-  /elements/{element_id}/versions:
-    post:
-      summary: Create version
+                $ref: '#/components/schemas/element'
+    put:
+      summary: update element
       tags:
         - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
       requestBody:
         required: true
         content:
           application/json:
             schema:
               properties:
-                binaries_scope:
-                  $ref: '#/components/schemas/element-version-binaries-scope'
                 name:
-                  $ref: '#/components/schemas/element-version-name'
-              required:
-                - binaries_scope
-                - name
+                  $ref: '#/components/schemas/name'
       responses:
-        '201':
-          description: Created.
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-version'
+                $ref: '#/components/schemas/element'
+  /elements/{element_id}/versions:
     get:
-      summary: Retrieve versions
+      summary: list versions
       tags:
         - 'Elements'
       parameters:
-        - name: element_version_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
+        - name: element_id
+          in: path
       responses:
         '200':
-          description: Ok.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/array-of-element-versions'
-        '404':
-          description: Not found.
-  /elements/{element_id}/versions/{version_id}/binaries:
     post:
-      summary: Create binary
+      summary: create version
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                number:
+                  $ref: '#/components/schemas/element-version-number'
+              required:
+                - number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-version'
+  /elements/{element_id}/versions/{version_id}:
+    get:
+      summary: get version
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+        - name: version_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-version'
+  /elements/{element_id}/versions/{version_id}/binaries:
+    get:
+      summary: list binaries
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+        - name: version_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-element-binaries'
+    post:
+      summary: create binary
       tags:
         - 'Elements'
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/octet-stream:
             schema:
-              type: object
-              properties:
-                json:
-                  type: object
-                  properties:
-                    node_type_id:
-                      anyOf:
-                        - type: 'null'
-                        - $ref: '#/components/schemas/node-type-id'
-                    node_id:
-                      anyOf:
-                        - type: 'null'
-                        - $ref: '#/components/schemas/node-id'
-                data:
-                  $ref: '#/components/schemas/element-version-binary-data'
-              required:
-                - json
-                - data
+              type: string
+              format: binary
+              description: The submitted binary must be less than or equal to 1 GB.
       responses:
-        '201':
+        '200':
           description: Created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-version-binary'
+                $ref: '#/components/schemas/element-binary'
+  /elements/{element_id}/versions/{version_id}/binaries/{binary_id}:
     get:
-      summary: Retrieve binaries
+      summary: get binary
       tags:
         - 'Elements'
       parameters:
-        - name: element_version_binary_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
+        - name: element_id
+          in: path
+        - name: version_id
+          in: path
+        - name: binary_id
+          in: path
       responses:
         '200':
-          description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-element-version-binaries'
+                $ref: '#/components/schemas/element-binary'
   /identity:
     get:
       summary: Get
@@ -416,9 +455,9 @@ paths:
                 $ref: '#/components/schemas/node-group'
 components:
   schemas:
-    comma-delimited-ids:
+    account-id:
       type: string
-      description: Comma delimited set of IDs to filter by.
+      format: uuid
     api-key-id:
       type: string
       format: uuid
@@ -434,12 +473,12 @@ components:
       maxItems: 100
       items:
         $ref: '#/components/schemas/element-id'
-    array-of-element-version-binaries:
+    array-of-element-binaries:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-version-binary'
+        $ref: '#/components/schemas/element-binary'
     array-of-element-versions:
       type: array
       minItems: 0
@@ -497,6 +536,28 @@ components:
             updated_at:
               type: string
               format: date-time
+    element-binary:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            hash:
+              type: string
+            id:
+              $ref: '#/components/schemas/element-binary-id'
+            size:
+              type: integer
+              format: bytes
+            updated_at:
+              type: string
+              format: date-time
+            version_id:
+              $ref: '#/components/schemas/element-version-id'
+    element-binary-id:
+      type: string
+      format: uuid
     element-id:
       type: string
       format: uuid
@@ -504,8 +565,6 @@ components:
       allOf:
         - type: object
           properties:
-            binaries_scope:
-              $ref: '#/components/schemas/element-version-binaries-scope'
             created_at:
               type: string
               format: date-time
@@ -513,53 +572,12 @@ components:
               $ref: '#/components/schemas/element-id'
             id:
               $ref: '#/components/schemas/element-version-id'
-            name:
-              $ref: '#/components/schemas/element-version-name'
+            number:
+              $ref: '#/components/schemas/element-version-number'
             updated_at:
               type: string
               format: date-time
-    element-version-binary:
-      allOf:
-        - type: object
-          properties:
-            binaries_scope:
-              $ref: '#/components/schemas/element-version-binaries-scope'
-            created_at:
-              type: string
-              format: date-time
-            id:
-              $ref: '#/components/schemas/element-version-binary-id'
-            element_version_id:
-              $ref: '#/components/schemas/element-version-id'
-            node_type_id:
-              anyOf:
-                - type: 'null'
-                - $ref: '#/components/schemas/node-type-id'
-            node_id:
-              anyOf:
-                - type: 'null'
-                - $ref: '#/components/schemas/node-id'
-            updated_at:
-              type: string
-              format: date-time
-    element-version-binary-id:
-      type: string
-      format: uuid
-    element-version-binary-data:
-      type: string
-      format: binary
-    element-version-binaries-scope:
-      type: string
-      enum:
-        - element_version
-        - node_type
-        - node
     element-version-id:
-      type: string
-      format: uuid
-    element-version-name:
-      type: string
-    account-id:
       type: string
       format: uuid
     identity:
@@ -573,6 +591,8 @@ components:
           anyOf:
             - type: 'null'
             - $ref: '#/components/schemas/member-id'
+    element-version-number:
+      type: string
     member-id:
       type: string
       format: uuid
