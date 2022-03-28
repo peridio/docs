@@ -17,7 +17,8 @@ const sidebars = {
     'reference/accounts',
     'reference/api-keys',
     'reference/elements',
-    'reference/members'
+    'reference/members',
+    'reference/nerves'
   ],
   guides: [
     'guides/accepting-an-invite',
