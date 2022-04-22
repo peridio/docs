@@ -15,20 +15,35 @@ tags:
       curl https://api.peridio.com/v1/identity \
         -H peridio-api-key: ZjE4M2U5NWYwZTVkNDQyOGEyMmQ5ODRmOWM1MjMzOGVQT2owQzJNSG0rdGhqZWJQTGVwMFA2N2VCSjJsYlU2VW5oR09GUUxPSGEyM0tZOXRnby9vL0oyeXBRRTI
       ```
-  - name: "Element Types"
   - name: "Errors"
     x-traitTag: true
     description: |
       Peridio uses conventional HTTP response codes to indicate the success or failure of an API request.
 
+      ## HTTP Status Codes
+
       - `200 OK` - Everything worked as expected.
+      - `400 Bad Request` - The request was invalid.
       - `401 Unauthorized` - No valid API Key provided.
       - `403 Forbidden` - The request is unauthorized.
       - `404 Not Found` - The requested resource doesn't exist.
+      - `406 Not Acceptable` - The request indicated an accepted content type we do not support.
       - `409 Conflict` - The request is using a stale resource hash.
       - `422 Unprocessable Entity` - The request was understood but is semantically invalid.
       - `429 Too Many Requests` - Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
       - `500 Internal Server Error` - Something went wrong on Peridio's end.
+
+      ## Peridio Error Codes
+
+      - `bad_endpoint` - The requested endpoint does not exist.
+      - `conflict` - The request was denied to prevent it from acting on potentially stale presumptions.
+      - `content_negotiation` - The request's "accept" header is unacceptable.
+      - `internal_server_error` - An unaccounted for error was encountered.
+      - `not_found` - A subject of the request could not be resolved.
+      - `parameter` - The parameter's requirements were not met.
+      - `too_many_requests` - Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
+      - `unauthenticated` - A Peridio API key was not provided.
+      - `unauthorized` - The authentication identity does not have access to a necessary authorization scope.
 x-tagGroups:
   - name: "Overview"
     tags:
@@ -36,9 +51,254 @@ x-tagGroups:
       - "Errors"
   - name: "Endpoints"
     tags:
+      - "Distributions"
+      - "Elements"
       - "Identity"
-      # - "Elements"
+      - "Nodes"
 paths:
+  /distributions:
+    get:
+      summary: list distributions
+      tags:
+        - 'Distributions'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-distributions'
+    post:
+      summary: create distribution
+      tags:
+        - 'Distributions'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                element_version_id:
+                  $ref: '#/components/schemas/element-version-id'
+                name:
+                  $ref: '#/components/schemas/name'
+              required:
+                - element_version_id
+                - name
+      responses:
+        '200':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distribution'
+  /distributions/{distribution_id}:
+    get:
+      summary: get distribution
+      tags:
+        - 'Distributions'
+      parameters:
+        - name: distribution_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distribution'
+    put:
+      summary: update distribution
+      tags:
+        - 'Distributions'
+      parameters:
+        - name: distribution_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distribution'
+  /elements:
+    get:
+      summary: list elements
+      tags:
+        - 'Elements'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-elements'
+    post:
+      summary: create element
+      tags:
+        - 'Elements'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+              required:
+                - name
+      responses:
+        '200':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element'
+  /elements/{element_id}:
+    get:
+      summary: get element
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element'
+    put:
+      summary: update element
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element'
+  /elements/{element_id}/versions:
+    get:
+      summary: list versions
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-element-versions'
+    post:
+      summary: create version
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                number:
+                  $ref: '#/components/schemas/element-version-number'
+              required:
+                - number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-version'
+  /elements/{element_id}/versions/{version_id}:
+    get:
+      summary: get version
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+        - name: version_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-version'
+  /elements/{element_id}/versions/{version_id}/binaries:
+    get:
+      summary: list binaries
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+        - name: version_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-element-binaries'
+    post:
+      summary: create binary
+      tags:
+        - 'Elements'
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+              description: The submitted binary must be less than or equal to 1 GB.
+      responses:
+        '200':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-binary'
+  /elements/{element_id}/versions/{version_id}/binaries/{binary_id}:
+    get:
+      summary: get binary
+      tags:
+        - 'Elements'
+      parameters:
+        - name: element_id
+          in: path
+        - name: version_id
+          in: path
+        - name: binary_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/element-binary'
   /identity:
     get:
       summary: Get
@@ -53,11 +313,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/identity'
-  /elements:
-    post:
-      summary: Create Element
+  /nodes:
+    get:
+      summary: list nodes
       tags:
-        - 'Elements'
+        - 'Nodes'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-nodes'
+    post:
+      summary: create node
+      tags:
+        - 'Nodes'
       requestBody:
         required: true
         content:
@@ -66,143 +336,149 @@ paths:
               properties:
                 name:
                   $ref: '#/components/schemas/name'
+                node_group_id:
+                  $ref: '#/components/schemas/node-group-id'
               required:
+                - node_group_id
                 - name
       responses:
-        '201':
+        '200':
           description: Created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element'
+                $ref: '#/components/schemas/node'
+  /nodes/{node_id}:
     get:
-      summary: Retrieve Elements
+      summary: get node
       tags:
-        - 'Elements'
+        - 'Nodes'
       parameters:
-        - name: element_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
+        - name: node_id
+          in: path
       responses:
         '200':
-          description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-elements'
-        '404':
-          description: Not found.
-  /elements/{element_id}/versions:
-    post:
-      summary: Create version
+                $ref: '#/components/schemas/node'
+    put:
+      summary: update node
       tags:
-        - 'Elements'
+        - 'Nodes'
+      parameters:
+        - name: node_id
+          in: path
       requestBody:
         required: true
         content:
           application/json:
             schema:
               properties:
-                binaries_scope:
-                  $ref: '#/components/schemas/element-version-binaries-scope'
                 name:
-                  $ref: '#/components/schemas/element-version-name'
-              required:
-                - binaries_scope
-                - name
-      responses:
-        '201':
-          description: Created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/element-version'
-    get:
-      summary: Retrieve versions
-      tags:
-        - 'Elements'
-      parameters:
-        - name: element_version_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
+                  $ref: '#/components/schemas/name'
       responses:
         '200':
-          description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-element-versions'
-        '404':
-          description: Not found.
-  /elements/{element_id}/versions/{version_id}/binaries:
-    post:
-      summary: Create binary
+                $ref: '#/components/schemas/node'
+  /node-groups:
+    get:
+      summary: list groups
       tags:
-        - 'Elements'
+        - 'Nodes'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-node-groups'
+    post:
+      summary: create group
+      tags:
+        - 'Nodes'
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              type: object
               properties:
-                json:
-                  type: object
-                  properties:
-                    node_type_id:
-                      anyOf:
-                        - type: 'null'
-                        - $ref: '#/components/schemas/node-type-id'
-                    node_id:
-                      anyOf:
-                        - type: 'null'
-                        - $ref: '#/components/schemas/node-id'
-                data:
-                  $ref: '#/components/schemas/element-version-binary-data'
+                distribution_id:
+                  $ref: '#/components/schemas/distribution-id'
+                name:
+                  $ref: '#/components/schemas/name'
               required:
-                - json
-                - data
+                - distribution_id
+                - name
       responses:
-        '201':
+        '200':
           description: Created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-version-binary'
+                $ref: '#/components/schemas/node-group'
+  /node-groups/{node_group_id}:
     get:
-      summary: Retrieve binaries
+      summary: get group
       tags:
-        - 'Elements'
+        - 'Nodes'
       parameters:
-        - name: element_version_binary_ids
-          in: query
-          schema:
-            $ref: '#/components/schemas/comma-delimited-ids'
+        - name: node_group_id
+          in: path
       responses:
         '200':
-          description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-element-version-binaries'
-        '404':
-          description: Not found.
+                $ref: '#/components/schemas/node-group'
+    put:
+      summary: update group
+      tags:
+        - 'Nodes'
+      parameters:
+        - name: node_group_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node-group'
 components:
   schemas:
-    comma-delimited-ids:
+    account-id:
       type: string
-      description: Comma delimited set of IDs to filter by.
+      format: uuid
     api-key-id:
       type: string
       format: uuid
-    array-of-element-version-binaries:
+    array-of-distributions:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-version-binary'
+        $ref: '#/components/schemas/distribution'
+    array-of-element-ids:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/element-id'
+    array-of-element-binaries:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/element-binary'
     array-of-element-versions:
       type: array
       minItems: 0
@@ -215,6 +491,37 @@ components:
       maxItems: 100
       items:
         $ref: '#/components/schemas/element'
+    array-of-node-groups:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/node-group'
+    array-of-nodes:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/node'
+    distribution:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            id:
+              $ref: '#/components/schemas/distribution-id'
+            name:
+              $ref: '#/components/schemas/name'
+            element_version_id:
+              $ref: '#/components/schemas/element-version-id'
+            updated_at:
+              type: string
+              format: date-time
+    distribution-id:
+      type: string
+      format: uuid
     element:
       allOf:
         - type: object
@@ -229,6 +536,28 @@ components:
             updated_at:
               type: string
               format: date-time
+    element-binary:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            hash:
+              type: string
+            id:
+              $ref: '#/components/schemas/element-binary-id'
+            size:
+              type: integer
+              format: bytes
+            updated_at:
+              type: string
+              format: date-time
+            version_id:
+              $ref: '#/components/schemas/element-version-id'
+    element-binary-id:
+      type: string
+      format: uuid
     element-id:
       type: string
       format: uuid
@@ -236,8 +565,6 @@ components:
       allOf:
         - type: object
           properties:
-            binaries_scope:
-              $ref: '#/components/schemas/element-version-binaries-scope'
             created_at:
               type: string
               format: date-time
@@ -245,53 +572,12 @@ components:
               $ref: '#/components/schemas/element-id'
             id:
               $ref: '#/components/schemas/element-version-id'
-            name:
-              $ref: '#/components/schemas/element-version-name'
+            number:
+              $ref: '#/components/schemas/element-version-number'
             updated_at:
               type: string
               format: date-time
-    element-version-binary:
-      allOf:
-        - type: object
-          properties:
-            binaries_scope:
-              $ref: '#/components/schemas/element-version-binaries-scope'
-            created_at:
-              type: string
-              format: date-time
-            id:
-              $ref: '#/components/schemas/element-version-binary-id'
-            element_version_id:
-              $ref: '#/components/schemas/element-version-id'
-            node_type_id:
-              anyOf:
-                - type: 'null'
-                - $ref: '#/components/schemas/node-type-id'
-            node_id:
-              anyOf:
-                - type: 'null'
-                - $ref: '#/components/schemas/node-id'
-            updated_at:
-              type: string
-              format: date-time
-    element-version-binary-id:
-      type: string
-      format: uuid
-    element-version-binary-data:
-      type: string
-      format: binary
-    element-version-binaries-scope:
-      type: string
-      enum:
-        - element_version
-        - node_type
-        - node
     element-version-id:
-      type: string
-      format: uuid
-    element-version-name:
-      type: string
-    account-id:
       type: string
       format: uuid
     identity:
@@ -305,6 +591,8 @@ components:
           anyOf:
             - type: 'null'
             - $ref: '#/components/schemas/member-id'
+    element-version-number:
+      type: string
     member-id:
       type: string
       format: uuid
@@ -312,6 +600,41 @@ components:
       type: string
       minLength: 1
       maxLength: 128
+    node:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            id:
+              $ref: '#/components/schemas/node-id'
+            name:
+              $ref: '#/components/schemas/name'
+            node_group_id:
+              $ref: '#/components/schemas/node-group-id'
+            updated_at:
+              type: string
+              format: date-time
+    node-group:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            distribution_id:
+              $ref: '#/components/schemas/distribution-id'
+            id:
+              $ref: '#/components/schemas/node-group-id'
+            name:
+              $ref: '#/components/schemas/name'
+            updated_at:
+              type: string
+              format: date-time
+    node-group-id:
+      type: string
+      format: uuid
     node-id:
       type: string
       format: uuid
