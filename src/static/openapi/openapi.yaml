@@ -15,20 +15,35 @@ tags:
       curl https://api.peridio.com/v1/identity \
         -H peridio-api-key: ZjE4M2U5NWYwZTVkNDQyOGEyMmQ5ODRmOWM1MjMzOGVQT2owQzJNSG0rdGhqZWJQTGVwMFA2N2VCSjJsYlU2VW5oR09GUUxPSGEyM0tZOXRnby9vL0oyeXBRRTI
       ```
-  - name: "Element Types"
   - name: "Errors"
     x-traitTag: true
     description: |
       Peridio uses conventional HTTP response codes to indicate the success or failure of an API request.
 
+      ## HTTP Status Codes
+
       - `200 OK` - Everything worked as expected.
+      - `400 Bad Request` - The request was invalid.
       - `401 Unauthorized` - No valid API Key provided.
       - `403 Forbidden` - The request is unauthorized.
       - `404 Not Found` - The requested resource doesn't exist.
+      - `406 Not Acceptable` - The request indicated an accepted content type we do not support.
       - `409 Conflict` - The request is using a stale resource hash.
       - `422 Unprocessable Entity` - The request was understood but is semantically invalid.
       - `429 Too Many Requests` - Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
       - `500 Internal Server Error` - Something went wrong on Peridio's end.
+
+      ## Peridio Error Codes
+
+      - `bad_endpoint` - The requested endpoint does not exist.
+      - `conflict` - The request was denied to prevent it from acting on potentially stale presumptions.
+      - `content_negotiation` - The request's "accept" header is unacceptable.
+      - `internal_server_error` - An unaccounted for error was encountered.
+      - `not_found` - A subject of the request could not be resolved.
+      - `parameter` - The parameter's requirements were not met.
+      - `too_many_requests` - Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
+      - `unauthenticated` - A Peridio API key was not provided.
+      - `unauthorized` - The authentication identity does not have access to a necessary authorization scope.
 x-tagGroups:
   - name: "Overview"
     tags:
@@ -36,23 +51,81 @@ x-tagGroups:
       - "Errors"
   - name: "Endpoints"
     tags:
+      - "Distributions"
+      - "Elements"
       - "Identity"
-      # - "Elements"
+      - "Nodes"
 paths:
-  /identity:
+  /distributions:
     get:
-      summary: Get
-      description: |
-        Gets information identifying the API Key used to authenticate the request, the Account it is a part of, and the Member it belongs to if applicable.
+      summary: list distributions
       tags:
-        - 'Identity'
+        - 'Distributions'
       responses:
         '200':
-          description: Ok.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/identity'
+                $ref: '#/components/schemas/array-of-distributions'
+    post:
+      summary: create distribution
+      tags:
+        - 'Distributions'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                element_version_id:
+                  $ref: '#/components/schemas/element-version-id'
+                name:
+                  $ref: '#/components/schemas/name'
+              required:
+                - element_version_id
+                - name
+      responses:
+        '200':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distribution'
+  /distributions/{distribution_id}:
+    get:
+      summary: get distribution
+      tags:
+        - 'Distributions'
+      parameters:
+        - name: distribution_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distribution'
+    put:
+      summary: update distribution
+      tags:
+        - 'Distributions'
+      parameters:
+        - name: distribution_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distribution'
   /elements:
     post:
       summary: Create Element
@@ -187,8 +260,160 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/array-of-element-version-binaries'
-        '404':
-          description: Not found.
+  /identity:
+    get:
+      summary: Get
+      description: |
+        Gets information identifying the API Key used to authenticate the request, the Account it is a part of, and the Member it belongs to if applicable.
+      tags:
+        - 'Identity'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/identity'
+  /nodes:
+    get:
+      summary: list nodes
+      tags:
+        - 'Nodes'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-nodes'
+    post:
+      summary: create node
+      tags:
+        - 'Nodes'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+                node_group_id:
+                  $ref: '#/components/schemas/node-group-id'
+              required:
+                - node_group_id
+                - name
+      responses:
+        '200':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node'
+  /nodes/{node_id}:
+    get:
+      summary: get node
+      tags:
+        - 'Nodes'
+      parameters:
+        - name: node_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node'
+    put:
+      summary: update node
+      tags:
+        - 'Nodes'
+      parameters:
+        - name: node_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node'
+  /node-groups:
+    get:
+      summary: list groups
+      tags:
+        - 'Nodes'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/array-of-node-groups'
+    post:
+      summary: create group
+      tags:
+        - 'Nodes'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                distribution_id:
+                  $ref: '#/components/schemas/distribution-id'
+                name:
+                  $ref: '#/components/schemas/name'
+              required:
+                - distribution_id
+                - name
+      responses:
+        '200':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node-group'
+  /node-groups/{node_group_id}:
+    get:
+      summary: get group
+      tags:
+        - 'Nodes'
+      parameters:
+        - name: node_group_id
+          in: path
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node-group'
+    put:
+      summary: update group
+      tags:
+        - 'Nodes'
+      parameters:
+        - name: node_group_id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node-group'
 components:
   schemas:
     comma-delimited-ids:
@@ -197,6 +422,18 @@ components:
     api-key-id:
       type: string
       format: uuid
+    array-of-distributions:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/distribution'
+    array-of-element-ids:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/element-id'
     array-of-element-version-binaries:
       type: array
       minItems: 0
@@ -215,6 +452,37 @@ components:
       maxItems: 100
       items:
         $ref: '#/components/schemas/element'
+    array-of-node-groups:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/node-group'
+    array-of-nodes:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/node'
+    distribution:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            id:
+              $ref: '#/components/schemas/distribution-id'
+            name:
+              $ref: '#/components/schemas/name'
+            element_version_id:
+              $ref: '#/components/schemas/element-version-id'
+            updated_at:
+              type: string
+              format: date-time
+    distribution-id:
+      type: string
+      format: uuid
     element:
       allOf:
         - type: object
@@ -312,6 +580,41 @@ components:
       type: string
       minLength: 1
       maxLength: 128
+    node:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            id:
+              $ref: '#/components/schemas/node-id'
+            name:
+              $ref: '#/components/schemas/name'
+            node_group_id:
+              $ref: '#/components/schemas/node-group-id'
+            updated_at:
+              type: string
+              format: date-time
+    node-group:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            distribution_id:
+              $ref: '#/components/schemas/distribution-id'
+            id:
+              $ref: '#/components/schemas/node-group-id'
+            name:
+              $ref: '#/components/schemas/name'
+            updated_at:
+              type: string
+              format: date-time
+    node-group-id:
+      type: string
+      format: uuid
     node-id:
       type: string
       format: uuid

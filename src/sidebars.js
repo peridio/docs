@@ -16,9 +16,13 @@ const sidebars = {
   reference: [
     'reference/accounts',
     'reference/api-keys',
+    'reference/authentication-identities',
+    'reference/distributions',
     'reference/elements',
     'reference/members',
-    'reference/nerves'
+    'reference/nerves',
+    'reference/node-groups',
+    'reference/nodes'
   ],
   guides: [
     'guides/accepting-an-invite',
@@ -27,10 +31,8 @@ const sidebars = {
     'guides/using-an-api-key'
   ],
   cli: [
-    'cli/installation',
     'cli/authentication'
   ]
 };
 
 module.exports = sidebars;
-

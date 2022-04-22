@@ -59,13 +59,8 @@ const config = {
             position: 'left',
             label: 'Reference',
           },
-          // {
-          //   href: '/guides/accepting-an-invite',
-          //   position: 'left',
-          //   label: 'Guides',
-          // },
           {
-            href: '/cli/installation',
+            href: '/cli/authentication',
             position: 'left',
             label: 'CLI',
           },

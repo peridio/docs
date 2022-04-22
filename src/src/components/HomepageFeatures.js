@@ -24,7 +24,7 @@ export default function HomepageFeatures() {
                 <span>Use the reference to learn about Peridio resources.</span>
               </p>
             </a>
-          <a href="cli/installation">
+          <a href="cli/authentication">
             <p>
               <h2>CLI »</h2>
               <span>Use the CLI to simply interact with Peridio.</span>
