@@ -6,4 +6,4 @@ title: Node Groups
   <title>Ref | Node Groups</title>
 </head>
 
-Nodes groups are collections of nodes. They have a distribution configured against them that dictates what element binaries get staged for download for the nodes.
+Nodes groups are collections of nodes of a single node type. They are associated with a set of distributions. A node group's distributions form an anti-arborescence or in-tree.
