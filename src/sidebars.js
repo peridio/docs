@@ -22,6 +22,7 @@ const sidebars = {
     'reference/members',
     'reference/nerves',
     'reference/node-groups',
+    'reference/node-types',
     'reference/nodes'
   ],
   guides: [
