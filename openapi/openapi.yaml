@@ -54,23 +54,25 @@ x-tagGroups:
       - "Distributions"
       - "Elements"
       - "Identity"
+      - "Node Types"
       - "Nodes"
 paths:
   /distributions:
     get:
       summary: list distributions
       tags:
-        - 'Distributions'
+        - "Distributions"
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-distributions'
+                $ref: "#/components/schemas/array-of-distributions"
     post:
       summary: create distribution
       tags:
-        - 'Distributions'
+        - "Distributions"
       requestBody:
         required: true
         content:
@@ -78,40 +80,56 @@ paths:
             schema:
               properties:
                 element_version_id:
-                  $ref: '#/components/schemas/element-version-id'
+                  $ref: "#/components/schemas/element-version-id"
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across distributions within an account.
+                next_distribution_id:
+                  $ref: "#/components/schemas/distribution-id"
+                  description: |
+                    Only a single distribution within a node group at any given time is allowed to have an unset `next_distribution_id` and it is referred to as the head distribution.
+                node_group_id:
+                  $ref: "#/components/schemas/node-group-id"
               required:
                 - element_version_id
                 - name
+                - node_group_id
       responses:
-        '200':
+        "200":
           description: Created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/distribution'
+                $ref: "#/components/schemas/distribution"
   /distributions/{distribution_id}:
     get:
       summary: get distribution
       tags:
-        - 'Distributions'
+        - "Distributions"
       parameters:
         - name: distribution_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/distribution'
+                $ref: "#/components/schemas/distribution"
     put:
       summary: update distribution
       tags:
-        - 'Distributions'
+        - "Distributions"
       parameters:
         - name: distribution_id
           in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -119,28 +137,32 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across distributions within an account.
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/distribution'
+                $ref: "#/components/schemas/distribution"
   /elements:
     get:
       summary: list elements
       tags:
-        - 'Elements'
+        - "Elements"
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-elements'
+                $ref: "#/components/schemas/array-of-elements"
     post:
       summary: create element
       tags:
-        - 'Elements'
+        - "Elements"
       requestBody:
         required: true
         content:
@@ -148,37 +170,46 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across elements within an account.
               required:
                 - name
       responses:
-        '200':
-          description: Created.
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element'
+                $ref: "#/components/schemas/element"
   /elements/{element_id}:
     get:
       summary: get element
       tags:
-        - 'Elements'
+        - "Elements"
       parameters:
         - name: element_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element'
+                $ref: "#/components/schemas/element"
     put:
       summary: update element
       tags:
-        - 'Elements'
+        - "Elements"
       parameters:
         - name: element_id
           in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -186,34 +217,44 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across elements within an account.
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element'
+                $ref: "#/components/schemas/element"
   /elements/{element_id}/versions:
     get:
-      summary: list versions
+      summary: list element versions
       tags:
-        - 'Elements'
+        - "Elements"
       parameters:
         - name: element_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-element-versions'
+                $ref: "#/components/schemas/array-of-element-versions"
     post:
-      summary: create version
+      summary: create element version
       tags:
-        - 'Elements'
+        - "Elements"
       parameters:
         - name: element_id
           in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -221,51 +262,79 @@ paths:
             schema:
               properties:
                 number:
-                  $ref: '#/components/schemas/element-version-number'
+                  $ref: "#/components/schemas/element-version-number"
+                  description: |
+                    Uniqueness enforced across an element's versions within an account.
               required:
                 - number
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-version'
-  /elements/{element_id}/versions/{version_id}:
+                $ref: "#/components/schemas/element-version"
+  /elements/{element_id}/versions/{element_version_id}:
     get:
-      summary: get version
+      summary: get element version
       tags:
-        - 'Elements'
+        - "Elements"
       parameters:
         - name: element_id
           in: path
-        - name: version_id
+          required: true
+          schema:
+            type: string
+        - name: element_version_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-version'
-  /elements/{element_id}/versions/{version_id}/binaries:
+                $ref: "#/components/schemas/element-version"
+  /elements/{element_id}/versions/{element_version_id}/binaries:
     get:
-      summary: list binaries
+      summary: list element version binaries
       tags:
-        - 'Elements'
+        - "Elements"
       parameters:
         - name: element_id
           in: path
-        - name: version_id
+          required: true
+          schema:
+            type: string
+        - name: element_version_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-element-binaries'
+                $ref: "#/components/schemas/array-of-element-version-binaries"
     post:
-      summary: create binary
+      summary: create element version binary
       tags:
-        - 'Elements'
+        - "Elements"
+      parameters:
+        - name: element_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: element_version_id
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -275,59 +344,70 @@ paths:
               format: binary
               description: The submitted binary must be less than or equal to 1 GB.
       responses:
-        '200':
-          description: Created.
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-binary'
-  /elements/{element_id}/versions/{version_id}/binaries/{binary_id}:
-    get:
-      summary: get binary
+                $ref: "#/components/schemas/element-version-binary"
+  ? /elements/{element_id}/versions/{element_version_id}/binaries/{element_version_binary_id}
+  : get:
+      summary: get element version binary
       tags:
-        - 'Elements'
+        - "Elements"
       parameters:
         - name: element_id
           in: path
-        - name: version_id
+          required: true
+          schema:
+            type: string
+        - name: element_version_id
           in: path
-        - name: binary_id
+          required: true
+          schema:
+            type: string
+        - name: element_version_binary_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/element-binary'
+                $ref: "#/components/schemas/element-version-binary"
   /identity:
     get:
-      summary: Get
+      summary: get identity
       description: |
         Gets information identifying the API Key used to authenticate the request, the Account it is a part of, and the Member it belongs to if applicable.
       tags:
-        - 'Identity'
+        - "Identity"
       responses:
-        '200':
-          description: Ok.
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/identity'
+                $ref: "#/components/schemas/identity"
   /nodes:
     get:
       summary: list nodes
       tags:
-        - 'Nodes'
+        - "Nodes"
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-nodes'
+                $ref: "#/components/schemas/array-of-nodes"
     post:
       summary: create node
       tags:
-        - 'Nodes'
+        - "Nodes"
       requestBody:
         required: true
         content:
@@ -335,40 +415,52 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across nodes within an account.
                 node_group_id:
-                  $ref: '#/components/schemas/node-group-id'
+                  $ref: "#/components/schemas/node-group-id"
+                node_type_id:
+                  $ref: "#/components/schemas/node-type-id"
               required:
-                - node_group_id
                 - name
+                - node_group_id
+                - node_type_id
       responses:
-        '200':
+        "200":
           description: Created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/node'
+                $ref: "#/components/schemas/node"
   /nodes/{node_id}:
     get:
       summary: get node
       tags:
-        - 'Nodes'
+        - "Nodes"
       parameters:
         - name: node_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/node'
+                $ref: "#/components/schemas/node"
     put:
       summary: update node
       tags:
-        - 'Nodes'
+        - "Nodes"
       parameters:
         - name: node_id
           in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -376,69 +468,82 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across nodes within an account.
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/node'
+                $ref: "#/components/schemas/node"
   /node-groups:
     get:
       summary: list groups
       tags:
-        - 'Nodes'
+        - "Nodes"
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/array-of-node-groups'
+                $ref: "#/components/schemas/array-of-node-groups"
     post:
-      summary: create group
+      summary: create node group
       tags:
-        - 'Nodes'
+        - "Nodes"
       requestBody:
         required: true
         content:
           application/json:
             schema:
               properties:
-                distribution_id:
-                  $ref: '#/components/schemas/distribution-id'
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across node groups within an account.
+                node_type_id:
+                  $ref: "#/components/schemas/node-type-id"
               required:
-                - distribution_id
                 - name
+                - node_type_id
       responses:
-        '200':
+        "200":
           description: Created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/node-group'
+                $ref: "#/components/schemas/node-group"
   /node-groups/{node_group_id}:
     get:
       summary: get group
       tags:
-        - 'Nodes'
+        - "Nodes"
       parameters:
         - name: node_group_id
           in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/node-group'
+                $ref: "#/components/schemas/node-group"
     put:
       summary: update group
       tags:
-        - 'Nodes'
+        - "Nodes"
       parameters:
         - name: node_group_id
           in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -446,13 +551,94 @@ paths:
             schema:
               properties:
                 name:
-                  $ref: '#/components/schemas/name'
+                  $ref: "#/components/schemas/name"
+                  description: |
+                    Uniqueness enforced across node groups within an account.
       responses:
-        '200':
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/node-group'
+                $ref: "#/components/schemas/node-group"
+  /node-types:
+    get:
+      summary: list node types
+      tags:
+        - "Node Types"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/array-of-node-types"
+    post:
+      summary: create node type
+      description: Name is unique
+      tags:
+        - "Node Types"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: "#/components/schemas/name"
+              required:
+                - name
+      responses:
+        "200":
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/node-type"
+  /node-types/{node_type_id}:
+    get:
+      summary: get node type
+      tags:
+        - "Node Types"
+      parameters:
+        - name: node_type_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/node-type"
+    put:
+      summary: update node type
+      description: Name is unique
+      tags:
+        - "Node Types"
+      parameters:
+        - name: node_type_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: "#/components/schemas/name"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/node-type"
 components:
   schemas:
     account-id:
@@ -466,43 +652,49 @@ components:
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/distribution'
+        $ref: "#/components/schemas/distribution"
     array-of-element-ids:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-id'
-    array-of-element-binaries:
+        $ref: "#/components/schemas/element-id"
+    array-of-element-version-binaries:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-binary'
+        $ref: "#/components/schemas/element-version-binary"
     array-of-element-versions:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element-version'
+        $ref: "#/components/schemas/element-version"
     array-of-elements:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/element'
+        $ref: "#/components/schemas/element"
     array-of-node-groups:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/node-group'
+        $ref: "#/components/schemas/node-group"
+    array-of-node-types:
+      type: array
+      minItems: 0
+      maxItems: 100
+      items:
+        $ref: "#/components/schemas/node-type"
     array-of-nodes:
       type: array
       minItems: 0
       maxItems: 100
       items:
-        $ref: '#/components/schemas/node'
+        $ref: "#/components/schemas/node"
     distribution:
       allOf:
         - type: object
@@ -510,12 +702,16 @@ components:
             created_at:
               type: string
               format: date-time
-            id:
-              $ref: '#/components/schemas/distribution-id'
-            name:
-              $ref: '#/components/schemas/name'
             element_version_id:
-              $ref: '#/components/schemas/element-version-id'
+              $ref: "#/components/schemas/element-version-id"
+            id:
+              $ref: "#/components/schemas/distribution-id"
+            name:
+              $ref: "#/components/schemas/name"
+            next_distribution_id:
+              $ref: "#/components/schemas/distribution-id"
+            node_group_id:
+              $ref: "#/components/schemas/node-group-id"
             updated_at:
               type: string
               format: date-time
@@ -530,34 +726,12 @@ components:
               type: string
               format: date-time
             id:
-              $ref: '#/components/schemas/element-id'
+              $ref: "#/components/schemas/element-id"
             name:
-              $ref: '#/components/schemas/name'
+              $ref: "#/components/schemas/name"
             updated_at:
               type: string
               format: date-time
-    element-binary:
-      allOf:
-        - type: object
-          properties:
-            created_at:
-              type: string
-              format: date-time
-            hash:
-              type: string
-            id:
-              $ref: '#/components/schemas/element-binary-id'
-            size:
-              type: integer
-              format: bytes
-            updated_at:
-              type: string
-              format: date-time
-            version_id:
-              $ref: '#/components/schemas/element-version-id'
-    element-binary-id:
-      type: string
-      format: uuid
     element-id:
       type: string
       format: uuid
@@ -569,14 +743,36 @@ components:
               type: string
               format: date-time
             element_id:
-              $ref: '#/components/schemas/element-id'
+              $ref: "#/components/schemas/element-id"
             id:
-              $ref: '#/components/schemas/element-version-id'
+              $ref: "#/components/schemas/element-version-id"
             number:
-              $ref: '#/components/schemas/element-version-number'
+              $ref: "#/components/schemas/element-version-number"
             updated_at:
               type: string
               format: date-time
+    element-version-binary:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            hash:
+              type: string
+            id:
+              $ref: "#/components/schemas/element-version-binary-id"
+            size:
+              type: integer
+              format: bytes
+            updated_at:
+              type: string
+              format: date-time
+            element_version_id:
+              $ref: "#/components/schemas/element-version-id"
+    element-version-binary-id:
+      type: string
+      format: uuid
     element-version-id:
       type: string
       format: uuid
@@ -584,13 +780,13 @@ components:
       type: object
       properties:
         api_key_id:
-          $ref: '#/components/schemas/api-key-id'
+          $ref: "#/components/schemas/api-key-id"
         account_id:
-          $ref: '#/components/schemas/account-id'
+          $ref: "#/components/schemas/account-id"
         member_id:
           anyOf:
-            - type: 'null'
-            - $ref: '#/components/schemas/member-id'
+            - type: "null"
+            - $ref: "#/components/schemas/member-id"
     element-version-number:
       type: string
     member-id:
@@ -608,11 +804,13 @@ components:
               type: string
               format: date-time
             id:
-              $ref: '#/components/schemas/node-id'
+              $ref: "#/components/schemas/node-id"
             name:
-              $ref: '#/components/schemas/name'
+              $ref: "#/components/schemas/name"
             node_group_id:
-              $ref: '#/components/schemas/node-group-id'
+              $ref: "#/components/schemas/node-group-id"
+            node_type_id:
+              $ref: "#/components/schemas/node-type-id"
             updated_at:
               type: string
               format: date-time
@@ -623,12 +821,28 @@ components:
             created_at:
               type: string
               format: date-time
-            distribution_id:
-              $ref: '#/components/schemas/distribution-id'
             id:
-              $ref: '#/components/schemas/node-group-id'
+              $ref: "#/components/schemas/node-group-id"
             name:
-              $ref: '#/components/schemas/name'
+              $ref: "#/components/schemas/name"
+              description: |
+                Uniqueness enforced across node groups within an account.
+            node_type_id:
+              $ref: "#/components/schemas/node-type-id"
+            updated_at:
+              type: string
+              format: date-time
+    node-type:
+      allOf:
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            id:
+              $ref: "#/components/schemas/node-type-id"
+            name:
+              $ref: "#/components/schemas/name"
             updated_at:
               type: string
               format: date-time
