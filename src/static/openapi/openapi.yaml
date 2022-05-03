@@ -709,7 +709,9 @@ components:
             name:
               $ref: "#/components/schemas/name"
             next_distribution_id:
-              $ref: "#/components/schemas/distribution-id"
+              anyOf:
+                - type: "null"
+                - $ref: "#/components/schemas/distribution-id"
             node_group_id:
               $ref: "#/components/schemas/node-group-id"
             updated_at:
