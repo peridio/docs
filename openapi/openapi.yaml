@@ -219,6 +219,10 @@ paths:
                   $ref: "#/components/schemas/name"
                   description: |
                     Uniqueness enforced across distributions within an account.
+                next_distribution_id:
+                  $ref: "#/components/schemas/distribution-id"
+                  description: |
+                    Only a single distribution within a node group at any given time is allowed to have an unset `next_distribution_id` and it is referred to as the head distribution.
       responses:
         "200":
           description: ""
