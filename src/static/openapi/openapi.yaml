@@ -18,32 +18,111 @@ tags:
   - name: "Errors"
     x-traitTag: true
     description: |
-      Peridio uses conventional HTTP response codes to indicate the success or failure of an API request.
+      Errors returned use the following structure:
 
-      ## HTTP Status Codes
+      ```json
+      {"code": "some_error_code", "context": {}}
+      ```
 
-      - `200 OK` - Everything worked as expected.
-      - `400 Bad Request` - The request was invalid.
-      - `401 Unauthorized` - No valid API Key provided.
-      - `403 Forbidden` - The request is unauthorized.
-      - `404 Not Found` - The requested resource doesn't exist.
-      - `406 Not Acceptable` - The request indicated an accepted content type we do not support.
-      - `409 Conflict` - The request is using a stale resource hash.
-      - `422 Unprocessable Entity` - The request was understood but is semantically invalid.
-      - `429 Too Many Requests` - Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
-      - `500 Internal Server Error` - Something went wrong on Peridio's end.
+      The value of the `context` key is dependent on the error code.
 
-      ## Peridio Error Codes
+      ## Bad Endpoint
 
-      - `bad_endpoint` - The requested endpoint does not exist.
-      - `conflict` - The request was denied to prevent it from acting on potentially stale presumptions.
-      - `content_negotiation` - The request's "accept" header is unacceptable.
-      - `internal_server_error` - An unaccounted for error was encountered.
-      - `not_found` - A subject of the request could not be resolved.
-      - `parameter` - The parameter's requirements were not met.
-      - `too_many_requests` - Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
-      - `unauthenticated` - A Peridio API key was not provided.
-      - `unauthorized` - The authentication identity does not have access to a necessary authorization scope.
+      The requested endpoint does not exist.
+
+      Returns a 400 HTTP status code and uses the `bad_endpoint` error code.
+
+      ```json
+      {"code": "bad_endpoint", "context": {}}
+      ```
+
+      ## Unauthenticated
+
+      A valid Peridio API key was not provided.
+
+      Returns a 401 HTTP status code and uses the `unauthenticated` error code.
+
+      ```json
+      {"code": "unauthenticated", "context": {"api_key": null}}
+      ```
+
+      ## Unauthorized
+
+      The authentication identity does not have access to a necessary authorization scope.
+
+      Returns a 403 HTTP status code and uses the `unauthorized` error code.
+
+      ```json
+      {"code": "unauthorized", "context": {"resource_id": "some_resource_id", "scope_name": "some_scope_name"}}
+      ```
+
+      ## Not Found
+
+      A subject of the request could not be resolved.
+
+      Returns a 404 HTTP status code and uses the `not_found` error code.
+
+      ```json
+      {"code": "not_found", "context": {}}
+      ```
+
+      ## Content Negotiation
+
+      The request's "accept" header is unacceptable.
+
+      Returns a 406 HTTP status code and uses the `content_negotiation` error code.
+
+      ```json
+      {"code": "content_negotiation", "context": {}}
+      ```
+
+      ## Conflict
+
+      The request was denied to prevent it from acting on potentially stale presumptions.
+
+      Returns a 409 HTTP status code and uses the `conflict` error code.
+
+      ```json
+      {"code": "conflict", "context": {}}
+      ```
+
+      ## Parameter
+
+      The parameter's requirements were not met.
+
+      Returns a 422 HTTP status code and uses the `parameter` error code.
+
+      ```json
+      {"code": "parameter", "context": {"parameter": "name_of_parameter", "reason": "required"}}
+      ```
+
+      ### Reasons
+
+      - `bad_length` - The value supplied is either too short or too long.
+      - `invalid` - The value supplied does not match the data type required.
+      - `must_be_unique` - The value supplied is already in use elsewhere and must be unique.
+      - `required` - No value was supplied but the parameter is required.
+
+      ## Too Many Requests
+
+      Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
+
+      Returns a 429 HTTP status code and uses the `too_many_requests` error code.
+
+      ```json
+      {"code": "too_many_requests", "context": {}}
+      ```
+
+      ## Internal Server Error
+
+      An unaccounted for error was encountered.
+
+      Returns a 500 HTTP status code and uses the `internal_server_error` error code.
+
+      ```json
+      {"code": "internal_server_error", "context": {}}
+      ```
+
 x-tagGroups:
   - name: "Overview"
     tags:
