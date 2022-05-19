@@ -3,6 +3,7 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const mdxMermaid = require('mdx-mermaid');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -16,30 +17,32 @@ const config = {
   organizationName: 'peridio', // Usually your GitHub org/user name.
   projectName: 'parasola', // Usually your repo name.
   trailingSlash: false,
-
   presets: [
     [
       '@docusaurus/preset-classic',
       {
         theme: {
-          customCss: [require.resolve('./src/css/custom.css')]
+          customCss: [require.resolve('./src/css/custom.css')],
         },
         blog: false,
         docs: {
           path: 'docs',
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-        }
+          remarkPlugins: [mdxMermaid],
+        },
       },
     ],
     [
       'redocusaurus',
       {
-        specs: [{
-          layout: {title: 'API'},
-          spec: 'static/openapi/openapi.yaml',
-        }],
-      }
+        specs: [
+          {
+            layout: { title: 'API' },
+            spec: 'static/openapi/openapi.yaml',
+          },
+        ],
+      },
     ],
   ],
   themeConfig:
@@ -72,8 +75,7 @@ const config = {
         ],
       },
       footer: {
-        links: [
-        ],
+        links: [],
         copyright: `Copyright © ${new Date().getFullYear()} Peridio.`,
       },
       prism: {

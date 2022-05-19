@@ -23,17 +23,17 @@ const sidebars = {
     'reference/nerves',
     'reference/node-groups',
     'reference/node-types',
-    'reference/nodes'
+    'reference/nodes',
   ],
   guides: [
     'guides/accepting-an-invite',
     'guides/logging-in',
     'guides/creating-an-api-key',
-    'guides/using-an-api-key'
+    'guides/using-an-api-key',
   ],
   cli: [
-    'cli/authentication'
-  ]
+    'cli/authentication',
+  ],
 };
 
 module.exports = sidebars;
