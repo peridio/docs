@@ -26,6 +26,18 @@ tags:
 
       The value of the `context` key is dependent on the error code.
 
+      Possible error codes:
+
+      - `bad_endpoint`
+      - `conflict`
+      - `content_negotiation`
+      - `internal_server_error`
+      - `not_found`
+      - `parameter`
+      - `too_many_requests`
+      - `unauthenticated`
+      - `unauthorized`
+
       ## Bad Endpoint
 
       The requested endpoint does not exist.
@@ -36,34 +48,14 @@ tags:
       {"code": "bad_endpoint", "context": {}}
       ```
 
-      ## Unauthenticated
+      ## Conflict
 
-      A valid Peridio API key was not provided.
+      The request was denied to prevent it from acting on potentially stale presumptions.
 
-      Returns a 401 HTTP status code and uses the `unauthenticated` error code.
-
-      ```json
-      {"code": "unauthenticated", "context": {"api_key": null}}
-      ```
-
-      ## Unauthorized
-
-      The authentication identity does not have access to a necessary authorization scope.
-
-      Returns a 403 HTTP status code and uses the `unauthorized` error code.
+      Returns a 409 HTTP status code and uses the `conflict` error code.
 
       ```json
-      {"code": "unauthorized", "context": {"resource_id": "some_resource_id", "scope_name": "some_scope_name"}}
-      ```
-
-      ## Not Found
-
-      A subject of the request could not be resolved.
-
-      Returns a 404 HTTP status code and uses the `not_found` error code.
-
-      ```json
-      {"code": "not_found", "context": {}}
+      {"code": "conflict", "context": {}}
       ```
 
       ## Content Negotiation
@@ -76,14 +68,24 @@ tags:
       {"code": "content_negotiation", "context": {}}
       ```
 
-      ## Conflict
+      ## Internal Server Error
 
-      The request was denied to prevent it from acting on potentially stale presumptions.
+      An unaccounted for error was encountered.
 
-      Returns a 409 HTTP status code and uses the `conflict` error code.
+      Returns a 500 HTTP status code and uses the `internal_server_error` error code.
 
       ```json
-      {"code": "conflict", "context": {}}
+      {"code": "internal_server_error", "context": {}}
+      ```
+
+      ## Not Found
+
+      A subject of the request could not be resolved.
+
+      Returns a 404 HTTP status code and uses the `not_found` error code.
+
+      ```json
+      {"code": "not_found", "context": {}}
       ```
 
       ## Parameter
@@ -113,14 +115,24 @@ tags:
       {"code": "too_many_requests", "context": {}}
       ```
 
-      ## Internal Server Error
+      ## Unauthenticated
 
-      An unaccounted for error was encountered.
+      A valid Peridio API key was not provided.
 
-      Returns a 500 HTTP status code and uses the `internal_server_error` error code.
+      Returns a 401 HTTP status code and uses the `unauthenticated` error code.
 
       ```json
-      {"code": "internal_server_error", "context": {}}
+      {"code": "unauthenticated", "context": {"api_key": null}}
+      ```
+
+      ## Unauthorized
+
+      The authentication identity does not have access to a necessary authorization scope.
+
+      Returns a 403 HTTP status code and uses the `unauthorized` error code.
+
+      ```json
+      {"code": "unauthorized", "context": {"resource_id": "some_resource_id", "scope_name": "some_scope_name"}}
       ```
 
 x-tagGroups:
@@ -133,7 +145,6 @@ x-tagGroups:
       - "Distributions"
       - "Elements"
       - "Identity"
-      - "Node Types"
       - "Nodes"
 paths:
   /distributions:
@@ -167,7 +178,7 @@ paths:
                 next_distribution_id:
                   $ref: "#/components/schemas/distribution-id"
                   description: |
-                    Only a single distribution within a node group at any given time is allowed to have an unset `next_distribution_id` and it is referred to as the head distribution.
+                    Only a single distribution within a node group at any given time is allowed to have a `next_distribution_id` with a value of `null`, and it is referred to as the head distribution. When creating a distribution, supplying a `next_distribution_id` of `null` will automatically make the created disitribution the head of the node group. This means if there was already a head distribution, it will have its `next_distribution_id` automatically updated to the ID of the distribution being created.
                 node_group_id:
                   $ref: "#/components/schemas/node-group-id"
               required:
@@ -648,7 +659,7 @@ paths:
     get:
       summary: list node types
       tags:
-        - "Node Types"
+        - "Nodes"
       responses:
         "200":
           description: ""
@@ -660,7 +671,7 @@ paths:
       summary: create node type
       description: Name is unique
       tags:
-        - "Node Types"
+        - "Nodes"
       requestBody:
         required: true
         content:
@@ -682,7 +693,7 @@ paths:
     get:
       summary: get node type
       tags:
-        - "Node Types"
+        - "Nodes"
       parameters:
         - name: node_type_id
           in: path
@@ -700,7 +711,7 @@ paths:
       summary: update node type
       description: Name is unique
       tags:
-        - "Node Types"
+        - "Nodes"
       parameters:
         - name: node_type_id
           in: path
