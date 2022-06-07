@@ -1,17 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
-import HomepageFeatures from '../components/HomepageFeatures';
 
 function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">Peridio Documentation</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <h1 className="hero__title">Documentation</h1>
+        <p className="hero__subtitle">Find user guides, developer guides, API references, and more.</p>
       </div>
     </header>
   );
@@ -22,7 +19,32 @@ export default function Home() {
     <Layout>
       <HomepageHeader />
       <main>
-        <HomepageFeatures />
+        <div className={styles.stack}>
+          <div className={styles.header}>
+            <span className={styles.title}>Cremini</span>
+            <span className={styles.subtitle}>v1-stable</span>
+          </div>
+          <div className={styles.body}>
+            <ul>
+              <li><a href="/cremini/reference/organizations">Reference</a></li>
+              <li><a href="/cremini/admin-api">Admin API</a></li>
+              <li><a href="/cremini/device-api">Device API</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.stack}>
+          <div className={styles.header}>
+            <span className={styles.title}>Chanterelle</span>
+            <span className={styles.subtitle}>v2-alpha</span>
+          </div>
+          <div className={styles.body}>
+            <ul>
+              <li><a href="/chanterelle/reference/accounts">Reference</a></li>
+              <li><a href="/chanterelle/cli/installation">CLI</a></li>
+              <li><a href="/chanterelle/api">Peridio API</a></li>
+            </ul>
+          </div>
+        </div>
       </main>
     </Layout>
   );

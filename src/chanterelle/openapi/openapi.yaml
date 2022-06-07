@@ -2,19 +2,12 @@
 openapi: 3.1.0
 info:
   title: Peridio API
-  version: "0.1.0"
+  version: "1.0.0-alpha.1"
 servers:
   - url: https://api.peridio.com/v0
+security:
+  - API Key: []
 tags:
-  - name: "Authentication"
-    x-traitTag: true
-    description: |
-      Requests are authenticated by the [API Key](/reference/api-keys) provided via the `peridio-api-key` header.
-
-      ```shell
-      curl https://api.peridio.com/v1/identity \
-        -H peridio-api-key: ZjE4M2U5NWYwZTVkNDQyOGEyMmQ5ODRmOWM1MjMzOGVQT2owQzJNSG0rdGhqZWJQTGVwMFA2N2VCSjJsYlU2VW5oR09GUUxPSGEyM0tZOXRnby9vL0oyeXBRRTI
-      ```
   - name: "Errors"
     x-traitTag: true
     description: |
@@ -138,7 +131,6 @@ tags:
 x-tagGroups:
   - name: "Overview"
     tags:
-      - "Authentication"
       - "Errors"
   - name: "Endpoints"
     tags:
@@ -734,6 +726,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/node-type"
 components:
+  securitySchemes:
+    API Key:
+      type: apiKey
+      name: peridio-api-key
+      in: "header"
   schemas:
     account-id:
       type: string

@@ -17,29 +17,62 @@ const config = {
   organizationName: 'peridio', // Usually your GitHub org/user name.
   projectName: 'parasola', // Usually your repo name.
   trailingSlash: false,
-  presets: [
+  plugins: [
     [
-      '@docusaurus/preset-classic',
-      {
-        theme: {
-          customCss: [require.resolve('./src/css/custom.css')],
-        },
-        blog: false,
-        docs: {
-          path: 'docs',
-          routeBasePath: '/',
-          sidebarPath: require.resolve('./sidebars.js'),
-          remarkPlugins: [mdxMermaid],
-        },
+      '@docusaurus/plugin-content-docs', {
+        breadcrumbs: false,
+        id: 'cremini',
+        path: 'cremini/docs',
+        routeBasePath: '/cremini',
+        sidebarPath: require.resolve('./cremini-sidebars.js'),
+        remarkPlugins: [mdxMermaid],
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs', {
+        breadcrumbs: false,
+        id: 'chanterelle',
+        path: 'chanterelle/docs',
+        routeBasePath: '/chanterelle',
+        sidebarPath: require.resolve('./chanterelle-sidebars.js'),
+        remarkPlugins: [mdxMermaid],
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-pages', {
+
+      },
+    ],
+  ],
+  themes: [
+    [
+      '@docusaurus/theme-classic', {
+        customCss: [require.resolve('./src/css/custom.css')],
+      },
+    ],
+  ],
+  presets: [
     [
       'redocusaurus',
       {
         specs: [
           {
+            route: '/cremini/admin-api',
+            id: 'cremini-admin',
             layout: { title: 'API' },
-            spec: 'static/openapi/openapi.yaml',
+            spec: 'cremini/openapi/peridio-admin-openapi.yaml',
+          },
+          {
+            route: '/cremini/device-api',
+            id: 'cremini-device',
+            layout: { title: 'API' },
+            spec: 'cremini/openapi/peridio-device-openapi.yaml',
+          },
+          {
+            route: '/chanterelle/api',
+            id: 'chanterelle',
+            layout: { title: 'API' },
+            spec: 'chanterelle/openapi/openapi.yaml',
           },
         ],
       },
@@ -56,23 +89,7 @@ const config = {
           alt: 'Peridio logo color black',
           src: 'img/logo-color-black.svg',
         },
-        items: [
-          {
-            href: '/reference/accounts',
-            position: 'left',
-            label: 'Reference',
-          },
-          {
-            href: '/cli/authentication',
-            position: 'left',
-            label: 'CLI',
-          },
-          {
-            href: '/api/0',
-            position: 'left',
-            label: 'API',
-          },
-        ],
+        items: [],
       },
       footer: {
         links: [],

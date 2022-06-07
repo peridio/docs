@@ -1,0 +1,70 @@
+---
+openapi: 3.1.0
+info:
+  title: Peridio Device API
+  version: "1.0.0"
+servers:
+  - url: https://device.cremini.peridio.com
+security:
+  - Mutual TLS: []
+x-tagGroups:
+  - name: "Endpoints"
+    tags:
+      - "Devices"
+paths:
+  /device/me:
+    get:
+      summary: get device me
+      tags:
+        - "Devices"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      identifier:
+                        $ref: "peridio-admin-openapi.yaml#/components/schemas/device-identifier"
+  /device/update:
+    get:
+      summary: get device update
+      tags:
+        - "Devices"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      update_available:
+                        type: boolean
+                      firmware_url:
+                        oneOf:
+                          - type: "null"
+                          - type: string
+                      firmware_meta:
+                        oneOf:
+                          - type: "null"
+                          - $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-metadata"
+                      deployment_id:
+                        oneOf:
+                          - type: "null"
+                          - $ref: "peridio-admin-openapi.yaml#/components/schemas/deployment-id"
+components:
+  securitySchemes:
+    Mutual TLS:
+      type: mutualTLS
+      description: The provided client certificate must be signed by a CA certificate registered with the [Peridio Admin API](https://docs.peridio.com/cremini/admin-api#tag/CA-Certificates).
+  schemas:
+    device-me:
+      type: string
+    device-update:
+      type: string

@@ -8,6 +8,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  margin-bottom: 100px;
 }
 
 @media screen and (max-width: 966px) {
@@ -20,4 +21,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.stack {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  width: 15rem;
+  border-radius: 5px;
+}
+
+.stack .header {
+  font-size: 18px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.stack .body {
+  padding-top: 15px;
+  font-size: 14px;
+}
+
+.stack .header .subtitle {
+  color: var(--ifm-color-content-secondary);
+  font-size: var(--ifm-h5-font-size);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  justify-content: center;
+  column-gap: 45px;
+  margin-bottom: 100px;
 }
