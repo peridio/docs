@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkparasola=self.webpackChunkparasola||[]).push([[120],{86057:function(a){a.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"chanterelle"}')}}]);
