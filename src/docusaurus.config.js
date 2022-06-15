@@ -72,7 +72,7 @@ const config = {
             route: '/chanterelle/api',
             id: 'chanterelle',
             layout: { title: 'API' },
-            spec: 'chanterelle/openapi/openapi.yaml',
+            spec: 'chanterelle/openapi/peridio-api-openapi.yaml',
           },
         ],
       },

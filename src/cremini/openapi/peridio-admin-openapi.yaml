@@ -1,6 +1,7 @@
 ---
 openapi: 3.1.0
 info:
+  description: The Peridio Admin API facilitates management of Peridio v1 (Cremini) resources.
   title: Peridio Admin API
   version: "1.0.0"
 servers:
@@ -1456,9 +1457,6 @@ components:
           $ref: "#/components/schemas/ca-certificate-serial"
     ca-certificate-serial:
       $ref: "#/components/schemas/serial"
-    csr:
-      description: Base64 encoded device CSR.
-      type: string
     delta-updatable:
       type: boolean
     deployment:
@@ -1483,8 +1481,6 @@ components:
           description: Reference https://hexdocs.pm/elixir/Version.html#module-requirements.
           example: "== 1.0.0"
           type: string
-    deployment-id:
-      type: string
     deployment-is-active:
       type: boolean
     deployment-name:
@@ -1680,6 +1676,4 @@ components:
     version:
       description: Reference https://hexdocs.pm/elixir/Version.html#module-versions.
       example: 1.0.0-alpha.3
-      type: string
-    x509-certificate-pem:
       type: string

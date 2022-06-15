@@ -1,0 +1,14 @@
+apis:
+  peridio-admin-api:
+    root: ./cremini/openapi/peridio-admin-openapi.yaml
+  peridio-api:
+    root: ./chanterelle/openapi/peridio-api-openapi.yaml
+  peridio-device-api:
+    root: ./cremini/openapi/peridio-device-openapi.yaml
+lint:
+  extends:
+    - recommended
+  rules:
+    operation-4xx-response: off
+    operation-operationId: off
+    info-license: off
