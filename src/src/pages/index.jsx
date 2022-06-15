@@ -27,8 +27,8 @@ export default function Home() {
           <div className={styles.body}>
             <ul>
               <li><a href="/cremini/reference/organizations">Reference</a></li>
-              <li><a href="/cremini/admin-api">Admin API</a></li>
-              <li><a href="/cremini/device-api">Device API</a></li>
+              <li><a href="/cremini/admin-api">Peridio Admin API</a></li>
+              <li><a href="/cremini/device-api">Peridio Device API</a></li>
             </ul>
           </div>
         </div>

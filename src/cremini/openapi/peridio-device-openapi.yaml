@@ -1,6 +1,7 @@
 ---
 openapi: 3.1.0
 info:
+  description: The Peridio Device API facilitates device-based operations within Peridio v1 (Cremini).
   title: Peridio Device API
   version: "1.0.0"
 servers:
@@ -57,14 +58,9 @@ paths:
                       deployment_id:
                         oneOf:
                           - type: "null"
-                          - $ref: "peridio-admin-openapi.yaml#/components/schemas/deployment-id"
+                          - type: integer
 components:
   securitySchemes:
     Mutual TLS:
       type: mutualTLS
       description: The provided client certificate must be signed by a CA certificate registered with the [Peridio Admin API](https://docs.peridio.com/cremini/admin-api#tag/CA-Certificates).
-  schemas:
-    device-me:
-      type: string
-    device-update:
-      type: string
