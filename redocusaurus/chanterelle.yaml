@@ -1,5 +1,8 @@
 openapi: 3.1.0
 info:
+  description: >-
+    The Peridio API facilitates management of Peridio v2 (Chanterelle)
+    resources.
   title: Peridio API
   version: 1.0.0-alpha.1
 servers:
@@ -837,12 +840,6 @@ components:
       maxItems: 100
       items:
         $ref: '#/components/schemas/distribution'
-    array-of-element-ids:
-      type: array
-      minItems: 0
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/element-id'
     array-of-element-version-binaries:
       type: array
       minItems: 0
