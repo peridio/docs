@@ -14,6 +14,9 @@ const sidebars = {
     'reference/products',
     'reference/users',
   ],
+  guides: [
+    'guides/creating-x509-certificates-with-openssl',
+  ],
 };
 
 module.exports = sidebars;
