@@ -229,7 +229,7 @@ keyUsage=critical,digitalSignature
 subjectKeyIdentifier=hash
 ```
 
-For a comprehensive understanding of what the above configuration is doing, one should read exhaustively read through all of the [references](references). If you find yourself in a position of having to manage PKI, this must be considered a required effort.
+For a comprehensive understanding of what the above configuration is doing, one should read exhaustively read through all of the [references](#references). If you find yourself in a position of having to manage PKI, this must be considered a required effort.
 
 ## References
 
