@@ -4,6 +4,12 @@ This guide describes how to create X.509 certificates with the [OpenSSL CLI](htt
 
 Last tested with OpenSSL 3.0.4 21 Jun 2022.
 
+## Hardware Constraints
+
+For nearly every production scenario, Peridio recommends storing your sensitive credentials in a hardware security module. It is common for hardware security modules to impose constraints on the credentials they store. For example, Microchip's [ATECC608B](https://www.microchip.com/en-us/product/ATECC608B) stores certificates [in a novel fashion](https://ww1.microchip.com/downloads/en/Appnotes/20006367A.pdf). One can use this guide to create certificates that are compatible with the ATECC608B so long as the start dates have a resolution of hours (minute and second must be 0) and end dates are a set number of years from the issue date (must have identical month, day, hour, minute and second as corresponding issue date).
+
+While this guide is useful for quickly creating certificates for non-production runs, one should be mindful that the choices you make with respect to production hardware, firmware, and software can impose constraints upon your public key infrastructure. To avoid unexpected delays in development and manufacturing and ensure you have the time and resources available to operate securely, it is best to make the decisions that dictate these constraints as soon as possible.
+
 ## Private and Public Keys
 
 Every X.509 certificate has a public key within it. The public key is derived from a private key. When considered together they are referred to as an asymetric key pair. Generally, this field is refered to as [public-key cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography) or asymmetric cryptography.
@@ -32,7 +38,27 @@ openssl ecparam \
 
 ## Create Certificates
 
-Some of the commands below will reference a file, `openssl.cnf`, this is available at [Appendix A](#a---opensslcnf).
+Some of the commands below will reference an `openssl.cnf` file, you must create this with the contents described at [Appendix A](#a---opensslcnf).
+
+The aforementioned config requires one additional file to track created certificates and one additional directory to store certificates historically. You must create them:
+
+```sh
+touch database.txt
+mkdir certificates
+```
+
+Note that when creating certificates with the `openssl ca` command that it will write the same created certificate file twice, once to the `certificates` directory where the name will be the serial number in hex with *.pem* appended, and once to the calling directory with the name specified by the `-out` option of the command.
+
+### Inspect a Certificate Signing Request
+
+To inspect any certificate signing request created later in this guide:
+
+```sh
+openssl req \
+  -in certificate-signing-request.pem \
+  -text \
+  -noout
+```
 
 ### Inspect a Certificate
 
@@ -65,23 +91,42 @@ openssl ecparam \
 
 ***WARNING:*** Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is fundamentally compromised.
 
-#### Create a Certificate
+#### Create a Certificate Signing Request
 
 Reference [openssl-req](#openssl-req).
 
 ```sh
 openssl req \
   -config openssl.cnf \
-  -days 3650 \
   -key root-private-key.pem \
   -new \
-  -out root-certificate.pem \
+  -out root-certificate-signing-request.pem \
   -section root_certificate_authority_req \
-  -subj "/CN=unique-root-name" \
-  -x509
+  -subj "/CN=unique-root-name"
 ```
 
-***WARNING:*** The `-days` option should be specified cautiously as it dictates how long the certificate will be valid for. The impact of a certificate expiring is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates).
+#### Create a Certificate
+
+Reference [openssl-ca](#openssl-ca).
+
+You must fill in the `-startdate` and `-enddate` values.
+
+```sh
+openssl ca \
+  -batch \
+  -config openssl.cnf \
+  -enddate YYYYMMDDHHMMSSZ \
+  -extensions root_certificate_authority_extensions \
+  -in root-certificate-signing-request.pem \
+  -keyfile root-private-key.pem \
+  -out root-certificate.pem \
+  -selfsign \
+  -startdate YYYYMMDDHHMMSSZ
+```
+
+***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
+
+You may retain or delete the certificate signing request depending on your use case.
 
 The certificate can be openly distributed without compromising security.
 
@@ -106,27 +151,40 @@ openssl ecparam \
 
 ***WARNING:*** Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is fundamentally compromised.
 
-#### Create a Certificate
+#### Create a Certificate Signing Request
 
 Reference [openssl-req](#openssl-req).
 
 ```sh
 openssl req \
-  -CA root-certificate.pem \
-  -CAkey root-private-key.pem \
-  -config openssl.cnf \
-  -days 3650 \
   -key intermediate-private-key.pem \
   -new \
-  -out intermediate-certificate.pem \
-  -section intermediate_certificate_authority_req \
-  -subj "/CN=unique-intermediate-name" \
-  -x509
+  -out intermediate-certificate-signing-request.pem \
+  -subj "/CN=unique-intermediate-name"
 ```
 
-***WARNING:*** The `-days` option should be specified cautiously as it dictates how long the certificate will be valid for. The impact of a certificate expiring is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates).
+#### Create a Certificate
 
-Note the `-CA` and `-CAkey` options; these indicate the certificate that will issue and sign the certificate you are creating. In this case we create an intermediate from a root, but you may also create an intermediate from another intermediate.
+Reference [openssl-ca](#openssl-ca).
+
+You must fill in the `-startdate` and `-enddate` values.
+
+```sh
+openssl ca \
+  -batch \
+  -cert root-certificate.pem \
+  -config openssl.cnf \
+  -enddate YYYYMMDDHHMMSSZ \
+  -extensions intermediate_certificate_authority_extensions \
+  -in intermediate-certificate-signing-request.pem \
+  -keyfile root-private-key.pem \
+  -out intermediate-certificate.pem \
+  -startdate YYYYMMDDHHMMSSZ
+```
+
+***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
+
+You may retain or delete the certificate signing request depending on your use case.
 
 The certificate can be openly distributed without compromising security.
 
@@ -151,27 +209,40 @@ openssl ecparam \
 
 ***WARNING:*** Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is fundamentally compromised.
 
-#### Create a Certificate
+#### Create a Certificate Signing Request
 
 Reference [openssl-req](#openssl-req).
 
 ```sh
 openssl req \
-  -CA intermediate-certificate.pem \
-  -CAkey intermediate-private-key.pem \
-  -config openssl.cnf \
-  -days 398 \
   -key end-entity-private-key.pem \
   -new \
-  -out end-entity-certificate.pem \
-  -section end_entity_certificate_req \
-  -subj "/CN=unique-end-entity-name" \
-  -x509
+  -out end-entity-certificate-signing-request.pem \
+  -subj "/CN=unique-end-entity-name"
 ```
 
-***WARNING:*** The `-days` option should be specified cautiously as it dictates how long the certificate will be valid for. The impact of a certificate expiring is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates).
+#### Create a Certificate
 
-Note the `-CA` and `-CAkey` options; these indicate the certificate that will issue and sign the certificate you are creating. In this case we create an end entity from an intermediate, but you may also create an end entity from a root.
+Reference [openssl-ca](#openssl-ca).
+
+You must fill in the `-startdate` and `-enddate` values.
+
+```sh
+openssl ca \
+  -batch \
+  -cert intermediate-certificate.pem \
+  -config openssl.cnf \
+  -enddate YYYYMMDDHHMMSSZ \
+  -extensions end_entity_certificate_extensions \
+  -in end-entity-certificate-signing-request.pem \
+  -keyfile intermediate-private-key.pem \
+  -out end-entity-certificate.pem \
+  -startdate YYYYMMDDHHMMSSZ
+```
+
+***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
+
+You may retain or delete the certificate signing request depending on your use case.
 
 The certificate can be openly distributed without compromising security.
 
@@ -185,42 +256,46 @@ In this guide, we use the following config referenced as `openssl.cnf`.
 
 ```cnf
 #
-# root
+# ca
 #
 
-[ root_certificate_authority_req ]
-prompt=no
+[ ca ]
+default_ca=default_ca
+
+[ default_ca ]
+database=database.txt
+default_days=0
+default_md=SHA256
+email_in_dn=no
+new_certs_dir=certificates
+policy=default_policy
+rand_serial=yes
+unique_subject=no
 x509_extensions=root_certificate_authority_extensions
 
+[ default_policy ]
+countryName            = optional
+stateOrProvinceName    = optional
+organizationName       = optional
+organizationalUnitName = optional
+commonName             = supplied
+
+#
+# extensions
+#
+
 [ root_certificate_authority_extensions ]
-subjectKeyIdentifier=hash
-authorityKeyIdentifier=keyid:always
-basicConstraints=critical,CA:TRUE
-keyUsage=critical,digitalSignature,keyCertSign,cRLSign
+basicConstraints=critical,CA:TRUE,pathlen:1
 extendedKeyUsage=serverAuth,clientAuth
-
-#
-# intermediate
-#
-
-[ intermediate_certificate_authority_req ]
-prompt=no
-x509_extensions=intermediate_certificate_authority_extensions
+keyUsage=critical,digitalSignature,keyCertSign,cRLSign
+subjectKeyIdentifier=hash
 
 [ intermediate_certificate_authority_extensions ]
-basicConstraints=critical,CA:TRUE,pathlen:0
-keyUsage=critical,digitalSignature,keyCertSign,cRLSign
-extendedKeyUsage=serverAuth,clientAuth
-subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid:always
-
-#
-# end entity
-#
-
-[ end_entity_certificate_req ]
-prompt=no
-x509_extensions=end_entity_certificate_extensions
+basicConstraints=critical,CA:TRUE,pathlen:0
+extendedKeyUsage=serverAuth,clientAuth
+keyUsage=critical,digitalSignature,keyCertSign,cRLSign
+subjectKeyIdentifier=hash
 
 [ end_entity_certificate_extensions ]
 authorityKeyIdentifier=keyid:always
@@ -229,29 +304,29 @@ keyUsage=critical,digitalSignature
 subjectKeyIdentifier=hash
 ```
 
-For a comprehensive understanding of what the above configuration is doing, one should exhaustively read all of this guide's [references](#references). If you find yourself in a position of having to manage PKI, this must be considered a required effort.
+For a comprehensive understanding of what the above configuration is doing, one should exhaustively read all of this guide's [References](#references).
 
 ## References
 
 ### config
 
-OpenSSL's CONF library configuration files, reference https://www.openssl.org/docs/manmaster/man5/config.html.
+OpenSSL's CONF library configuration files, reference https://www.openssl.org/docs/man3.0/man5/config.html.
+
+### openssl-ca
+
+OpenSSL's sample minimal CA application, reference https://www.openssl.org/docs/man3.0/man1/openssl-ca.html.
 
 ### openssl-ecparam
 
-OpenSSL's EC parameter manipulation and generation command, reference https://www.openssl.org/docs/manmaster/man1/openssl-ecparam.html.
+OpenSSL's EC parameter manipulation and generation command, reference https://www.openssl.org/docs/man3.0/man1/openssl-ecparam.html.
 
 ### openssl-req
 
-OpenSSL's PKCS#10 certificate request and certificate generating command, reference https://www.openssl.org/docs/manmaster/man1/openssl-req.html.
+OpenSSL's PKCS#10 certificate request and certificate generating command, reference https://www.openssl.org/docs/man3.0/man1/openssl-req.html.
 
 ### openssl-x509
 
-OpenSSL's certificate display and signing command, reference https://www.openssl.org/docs/manmaster/man1/openssl-x509.html.
-
-### x509v3_config
-
-OpenSSL's X509 V3 certificate extension configuration format, reference https://www.openssl.org/docs/manmaster/man5/x509v3_config.html.
+OpenSSL's certificate display and signing command, reference https://www.openssl.org/docs/man3.0/man1/openssl-x509.html.
 
 ### RFC 4158
 
@@ -260,3 +335,7 @@ Internet X.509 Public Key Infrastructure: Certification Path Building, reference
 ### RFC 5280
 
 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile, reference https://datatracker.ietf.org/doc/html/rfc5280.
+
+### x509v3_config
+
+OpenSSL's X509 V3 certificate extension configuration format, reference https://www.openssl.org/docs/man3.0/man5/x509v3_config.html.
