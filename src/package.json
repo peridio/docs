@@ -15,32 +15,27 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-beta.20",
-    "@docusaurus/preset-classic": "^2.0.0-beta.20",
+    "@docusaurus/core": "^2.1.0",
+    "@docusaurus/preset-classic": "^2.1.0",
     "@mdx-js/react": "^1.6.21",
     "@svgr/webpack": "^5.5.0",
-    "clsx": "^1.1.1",
-    "eslint": "^8.15.0",
+    "clsx": "^1.2.1",
+    "eslint": "^8.23.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "file-loader": "^6.2.0",
-    "mdx-mermaid": "^1.2.2",
-    "mermaid": "^9.1.1",
-    "prism-react-renderer": "^1.3.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "redocusaurus": "^1.1.2",
+    "mdx-mermaid": "^1.3.2",
+    "mermaid": "^9.1.6",
+    "prism-react-renderer": "^1.3.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "redocusaurus": "^1.3.0",
     "url-loader": "^4.1.1"
   },
-  "resolutions": {
-    "nth-check": "2.0.1",
-    "trim": "1.0.1",
-    "css-what": "5.0.1",
-    "css-select": "3.1.2"
-  },
+  "resolutions": {},
   "browserslist": {
     "production": [
       ">0.5%",
@@ -54,7 +49,7 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/eslint-plugin": "^2.0.0-beta.20",
-    "@redocly/cli": "^1.0.0-beta.102"
+    "@docusaurus/eslint-plugin": "^2.1.0",
+    "@redocly/cli": "^1.0.0-beta.108"
   }
 }
