@@ -7,15 +7,14 @@ const sidebars = {
     'reference/deployments',
     'reference/device-certificates',
     'reference/devices',
-    'reference/element-signing-keys',
-    'reference/firmware',
-    'reference/just-in-time-registration',
+    'reference/firmware-signing-keys',
+    'reference/firmwares',
+    'reference/just-in-time-provisioning',
     'reference/organizations',
     'reference/products',
     'reference/users',
   ],
   guides: [
-    'guides/creating-element-signing-keys',
     'guides/creating-x509-certificates-with-openssl',
   ],
 };

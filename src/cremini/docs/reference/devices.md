@@ -20,7 +20,7 @@ Proactive creation of devices means that you create a device before it ever atte
 
 Reactive creation of devices means that you configure Peridio in such a way that groups of devices are able to connect to the Peridio Device API without you having taken any per device action, and in that moment they are reactively created by Peridio for you "just in time".
 
-For documentation regarding configuring Peridio in this fashion, reference [just in time registration](just-in-time-registration).
+For documentation regarding configuring Peridio in this fashion, reference [just in time provisioning](just-in-time-provisioning).
 
 ## Tags
 
