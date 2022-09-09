@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkparasola=self.webpackChunkparasola||[]).push([[2886],{9986:a=>{a.exports=JSON.parse('{"name":"docusaurus-plugin-redoc","id":"chanterelle"}')}}]);
