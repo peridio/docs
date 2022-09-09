@@ -2,6 +2,34 @@
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
+  cli: [
+    'cli',
+    {
+      type: 'category',
+      label: 'Commands',
+      items: [
+        {
+          collapsible: false,
+          type: 'category',
+          label: 'signing-keys',
+          items: [
+            'cli/signing-keys/create',
+            'cli/signing-keys/delete',
+            'cli/signing-keys/get',
+            'cli/signing-keys/list'
+          ]
+        },
+        {
+          collapsible: false,
+          type: 'category',
+          label: 'users',
+          items: [
+            'cli/users/me'
+          ]
+        }
+      ]
+    }
+  ],
   reference: [
     'reference/ca-certificates',
     'reference/deployments',
