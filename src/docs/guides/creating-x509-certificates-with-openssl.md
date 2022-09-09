@@ -124,7 +124,7 @@ openssl ca \
   -startdate YYYYMMDDHHMMSSZ
 ```
 
-***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
+***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/reference/ca-certificates) and [Device Certificates](/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
 
 You may retain or delete the certificate signing request depending on your use case.
 
@@ -182,7 +182,7 @@ openssl ca \
   -startdate YYYYMMDDHHMMSSZ
 ```
 
-***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
+***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/reference/ca-certificates) and [Device Certificates](/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
 
 You may retain or delete the certificate signing request depending on your use case.
 
@@ -240,7 +240,7 @@ openssl ca \
   -startdate YYYYMMDDHHMMSSZ
 ```
 
-***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/cremini/reference/ca-certificates) and [Device Certificates](/cremini/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
+***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/reference/ca-certificates) and [Device Certificates](/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
 
 You may retain or delete the certificate signing request depending on your use case.
 

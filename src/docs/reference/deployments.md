@@ -2,10 +2,6 @@
 title: Deployments
 ---
 
-<head>
-  <title>Ref | Deployments</title>
-</head>
-
 A deployment makes [firmware](firmwares) available to [devices](devices) associated with the same [product](products) as the deployment and that satisfy the deployment's conditions. Deployments may be configured as active or not. Only active deployments may be considered when Peridio evaluates if an update is available for a device.
 
 ## Conditions

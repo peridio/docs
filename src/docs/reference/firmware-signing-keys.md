@@ -2,10 +2,6 @@
 title: Firmware Signing Keys
 ---
 
-<head>
-  <title>Ref | Firmware Signing Keys</title>
-</head>
-
 Firmware signing keys are ED25519 keys which consist of a public/private key pair.
 
 The private portion of firmware signing keys are used by users to sign firmwares.

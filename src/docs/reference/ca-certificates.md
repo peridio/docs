@@ -2,10 +2,6 @@
 title: CA Certificates
 ---
 
-<head>
-  <title>Ref | CA Certificates</title>
-</head>
-
 A CA certificate is an X.509 certificate that signs [device certificates](device-certificates). The validity of said signature on the device's certificate is verified when a [user](users) creates a device certificate and as part of [just in time provisioning](just-in-time-provisioning).
 
 ## Just in Time Provisioning
