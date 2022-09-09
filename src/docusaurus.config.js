@@ -21,20 +21,9 @@ const config = {
     [
       '@docusaurus/plugin-content-docs', {
         breadcrumbs: false,
-        id: 'cremini',
-        path: 'cremini/docs',
-        routeBasePath: '/cremini',
-        sidebarPath: require.resolve('./cremini-sidebars.js'),
-        remarkPlugins: [mdxMermaid],
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs', {
-        breadcrumbs: false,
-        id: 'chanterelle',
-        path: 'chanterelle/docs',
-        routeBasePath: '/chanterelle',
-        sidebarPath: require.resolve('./chanterelle-sidebars.js'),
+        path: 'docs',
+        routeBasePath: '/',
+        sidebarPath: require.resolve('./sidebars.js'),
         remarkPlugins: [mdxMermaid],
       },
     ],
@@ -57,22 +46,16 @@ const config = {
       {
         specs: [
           {
-            route: '/cremini/admin-api',
-            id: 'cremini-admin',
+            route: '/admin-api',
+            id: 'admin',
             layout: { title: 'API' },
-            spec: 'cremini/openapi/peridio-admin-openapi.yaml',
+            spec: 'openapi/peridio-admin-openapi.yaml',
           },
           {
-            route: '/cremini/device-api',
-            id: 'cremini-device',
+            route: '/device-api',
+            id: 'device',
             layout: { title: 'API' },
-            spec: 'cremini/openapi/peridio-device-openapi.yaml',
-          },
-          {
-            route: '/chanterelle/api',
-            id: 'chanterelle',
-            layout: { title: 'API' },
-            spec: 'chanterelle/openapi/peridio-api-openapi.yaml',
+            spec: 'openapi/peridio-device-openapi.yaml',
           },
         ],
       },
@@ -89,7 +72,13 @@ const config = {
           alt: 'Peridio logo color black',
           src: 'img/logo-color-black.svg',
         },
-        items: [],
+        items: [
+          { label: 'Reference', href: '/reference' },
+          { label: 'CLI', href: '/cli' },
+          { label: 'Admin API', href: '/admin-api' },
+          { label: 'Device API', href: '/device-api' },
+          { label: 'Guides', href: '/guides' },
+        ],
       },
       footer: {
         links: [],

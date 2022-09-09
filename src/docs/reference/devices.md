@@ -4,10 +4,6 @@ title: Devices
 
 A device is the logical representation of a physical or virtual thing you wish to manage firmware for with Peridio.
 
-<head>
-  <title>Ref | Devices</title>
-</head>
-
 ## Creation
 
 Devices can be created proactively or reactively. The former is sometimes convenient when just starting out or taking a one off action, but quickly becomes untenable. When you wish to optimize the process of onboarding devices it is typically best to take a reactive approach.

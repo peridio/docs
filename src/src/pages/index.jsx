@@ -19,33 +19,13 @@ export default function Home() {
     <Layout>
       <HomepageHeader />
       <main>
-        <div className={styles.stack}>
-          <div className={styles.header}>
-            <span className={styles.title}>Cremini</span>
-            <span className={styles.subtitle}>v1-stable</span>
-          </div>
-          <div className={styles.body}>
-            <ul>
-              <li><a href="/cremini/guides/creating-x509-certificates-with-openssl">Guides</a></li>
-              <li><a href="/cremini/reference/organizations">Reference</a></li>
-              <li><a href="/cremini/admin-api">Peridio Admin API</a></li>
-              <li><a href="/cremini/device-api">Peridio Device API</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className={styles.stack}>
-          <div className={styles.header}>
-            <span className={styles.title}>Chanterelle</span>
-            <span className={styles.subtitle}>v2-alpha</span>
-          </div>
-          <div className={styles.body}>
-            <ul>
-              <li><a href="/chanterelle/reference/accounts">Reference</a></li>
-              <li><a href="/chanterelle/cli/installation">CLI</a></li>
-              <li><a href="/chanterelle/api">Peridio API</a></li>
-            </ul>
-          </div>
-        </div>
+        <ul>
+          <li><a href="/reference/organizations">Reference</a></li>
+          <li><a href="/cli">Command Line Interface</a></li>
+          <li><a href="/admin-api">Peridio Admin API</a></li>
+          <li><a href="/device-api">Peridio Device API</a></li>
+          <li><a href="/guides/creating-x509-certificates-with-openssl">Guides</a></li>
+        </ul>
       </main>
     </Layout>
   );

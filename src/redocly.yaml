@@ -1,10 +1,8 @@
 apis:
   peridio-admin-api:
-    root: ./cremini/openapi/peridio-admin-openapi.yaml
-  peridio-api:
-    root: ./chanterelle/openapi/peridio-api-openapi.yaml
+    root: ./openapi/peridio-admin-openapi.yaml
   peridio-device-api:
-    root: ./cremini/openapi/peridio-device-openapi.yaml
+    root: ./openapi/peridio-device-openapi.yaml
 lint:
   extends:
     - recommended
