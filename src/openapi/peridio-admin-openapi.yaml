@@ -16,11 +16,64 @@ x-tagGroups:
       - "Devices"
       - "Firmwares"
       - "Keys"
+      - "Metadata"
       - "Organization Users"
       - "Product Users"
       - "Products"
       - "Users"
 paths:
+  /metadata:
+    get:
+      summary: get a list of metadata
+      tags:
+        - "Metadata"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/array-of-ca-certificates"
+    post:
+      summary: create ca certificate
+      tags:
+        - "CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                cert:
+                  description: Base64 encoded CA certificate.
+                  type: string
+                description:
+                  type: string
+              required:
+                - cert
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ca-certificate"
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
