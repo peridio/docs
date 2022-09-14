@@ -11,6 +11,18 @@ const sidebars = {
         {
           collapsible: false,
           type: 'category',
+          label: 'deployments',
+          items: [
+            'cli/deployments/create',
+            'cli/deployments/delete',
+            'cli/deployments/get',
+            'cli/deployments/list',
+            'cli/deployments/update',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
           label: 'firmwares',
           items: [
             'cli/firmwares/create',
