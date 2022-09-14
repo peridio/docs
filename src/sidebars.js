@@ -11,6 +11,17 @@ const sidebars = {
         {
           collapsible: false,
           type: 'category',
+          label: 'firmwares',
+          items: [
+            'cli/firmwares/create',
+            'cli/firmwares/delete',
+            'cli/firmwares/get',
+            'cli/firmwares/list',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
           label: 'signing-keys',
           items: [
             'cli/signing-keys/create',
