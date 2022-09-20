@@ -23,6 +23,19 @@ const sidebars = {
         {
           collapsible: false,
           type: 'category',
+          label: 'devices',
+          items: [
+            'cli/devices/create',
+            'cli/devices/delete',
+            'cli/devices/get',
+            'cli/devices/list',
+            'cli/devices/update',
+            'cli/devices/authenticate',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
           label: 'firmwares',
           items: [
             'cli/firmwares/create',
