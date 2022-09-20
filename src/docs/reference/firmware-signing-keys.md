@@ -15,3 +15,19 @@ The public key is the base64 encoding of the raw 32 byte public key. The private
 ## Creation
 
 The [fwup CLI](https://github.com/fwup-home/fwup) can be used to generate a valid pair of key files.
+
+```text
+fwup -g
+```
+
+Register the public key with Peridio.
+
+```text
+peridio signing-keys create \
+  --key value \
+  --api-key value \
+  --name value \
+  --organization-name value
+```
+
+Now firmware [signed with the private key](firmwares#sign-a-fwup-archive) will be authorized for submission into Peridio.
