@@ -14,7 +14,7 @@ peridio \
   create \
   [OPTIONS] \
   --api-key <api-key> \
-  --firmware <firmware> \
+  --firmware-path <firmware-path> \
   --organization-name <organization-name> \
   --product-name <product-name> \
   --ttl <ttl> \
@@ -32,7 +32,7 @@ Prints version information
 
 ## Options
 
-`--firmware <firmware>`
+`--firmware-path <firmware-path>`
 
 The path to the firmware.
 

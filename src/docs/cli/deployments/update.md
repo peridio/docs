@@ -15,7 +15,7 @@ peridio \
   [OPTIONS] \
   --api-key <api-key> \
   --deployment-name <deployment-name> \
-  --firmware <firmware> \
+  --firmware-uuid <firmware-uuid> \
   --is-active <is-active>
   --name <name> \
   --organization-name <organization-name> \
@@ -48,7 +48,7 @@ The version of the deployment. Must respect this format: https://hexdocs.pm/elix
 
 The name of the deployment.
 
-`--firmware <firmware>`
+`--firmware-uuid <firmware-uuid>`
 
 The firmare uuid.
 

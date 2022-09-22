@@ -14,7 +14,7 @@ peridio \
   create \
   [OPTIONS] \
   --api-key <api-key> \
-  --firmware <firmware> \
+  --firmware-uuid <firmware-uuid> \
   --name <name> \
   --organization-name <organization-name> \
   --product-name <product-name>
@@ -34,10 +34,6 @@ Prints version information
 
 ## Options
 
-`--tags <tags>`
-
-The device tags list.
-
 `--version <version>`
 
 The version of the deployment. Must respect this format: https://hexdocs.pm/elixir/Version.html#module-requirements
@@ -48,7 +44,7 @@ The version of the deployment. Must respect this format: https://hexdocs.pm/elix
 
 The API key used to authenticate and authorize the request.
 
-`--firmware <firmware>`
+`--firmware-uuid <firmware-uuid>`
 
 The firmare uuid.
 
@@ -63,6 +59,10 @@ The organization to interact with.
 `--product-name <product-name>`
 
 The name of the product.
+
+`--tags <tags>`
+
+The device tags list.
 
 ### Defaulted
 
