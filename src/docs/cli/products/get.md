@@ -1,22 +1,21 @@
 ---
-title: authenticate
+title: get
 ---
 
-# peridio devices authenticate
+# peridio products get
 
-Authenticate a device.
+Get a product.
 
 ## Usage
 
 ```
 peridio \
-  devices \
-  authenticate \
+  products \
+  get \
   [OPTIONS] \
   --api-key <api-key> \
-  --certificate-path <certificate-path> \
   --organization-name <organization-name> \
-  --product-name <product-name> \
+  --product-name <product-name>
 ```
 
 ## Flags
@@ -36,10 +35,6 @@ Prints version information
 `--api-key <api-key>`, `$PERIDIO_API_KEY`
 
 The API key used to authenticate and authorize the request.
-
-`--certificate-path <certificate-path>`
-
-The certificate path.
 
 `--organization-name <organization-name>`
 

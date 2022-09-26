@@ -1,22 +1,23 @@
 ---
-title: authenticate
+title: delete
 ---
 
-# peridio devices authenticate
+# peridio device-certificates delete
 
-Authenticate a device.
+Delete a device certificate.
 
 ## Usage
 
 ```
 peridio \
-  devices \
-  authenticate \
+  device-certificates \
+  delete \
   [OPTIONS] \
   --api-key <api-key> \
-  --certificate-path <certificate-path> \
+  --certificate-serial <certificate-serial> \
+  --device-identifier <device-identifier> \
   --organization-name <organization-name> \
-  --product-name <product-name> \
+  --product-name <product-name>
 ```
 
 ## Flags
@@ -37,9 +38,13 @@ Prints version information
 
 The API key used to authenticate and authorize the request.
 
-`--certificate-path <certificate-path>`
+`--certificate-serial <certificate-serial>`
 
-The certificate path.
+The device certificate serial.
+
+`--device-identifier <device-identifier>`
+
+The unique identifier of the device.
 
 `--organization-name <organization-name>`
 

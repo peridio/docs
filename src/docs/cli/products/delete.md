@@ -1,22 +1,21 @@
 ---
-title: authenticate
+title: delete
 ---
 
-# peridio devices authenticate
+# peridio products delete
 
-Authenticate a device.
+Delete a product.
 
 ## Usage
 
 ```
 peridio \
-  devices \
-  authenticate \
+  products \
+  delete \
   [OPTIONS] \
   --api-key <api-key> \
-  --certificate-path <certificate-path> \
   --organization-name <organization-name> \
-  --product-name <product-name> \
+  --product-name <product-name>
 ```
 
 ## Flags
@@ -36,10 +35,6 @@ Prints version information
 `--api-key <api-key>`, `$PERIDIO_API_KEY`
 
 The API key used to authenticate and authorize the request.
-
-`--certificate-path <certificate-path>`
-
-The certificate path.
 
 `--organization-name <organization-name>`
 

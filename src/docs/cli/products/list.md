@@ -1,22 +1,20 @@
 ---
-title: authenticate
+title: list
 ---
 
-# peridio devices authenticate
+# peridio products list
 
-Authenticate a device.
+List products.
 
 ## Usage
 
 ```
 peridio \
-  devices \
-  authenticate \
+  products \
+  list \
   [OPTIONS] \
   --api-key <api-key> \
-  --certificate-path <certificate-path> \
-  --organization-name <organization-name> \
-  --product-name <product-name> \
+  --organization-name <organization-name>
 ```
 
 ## Flags
@@ -37,17 +35,9 @@ Prints version information
 
 The API key used to authenticate and authorize the request.
 
-`--certificate-path <certificate-path>`
-
-The certificate path.
-
 `--organization-name <organization-name>`
 
 The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
 
 ### Defaulted
 
