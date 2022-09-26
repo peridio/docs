@@ -1,22 +1,22 @@
 ---
-title: authenticate
+title: create
 ---
 
-# peridio devices authenticate
+# peridio products create
 
-Authenticate a device.
+Create a product.
 
 ## Usage
 
 ```
 peridio \
-  devices \
-  authenticate \
+  products \
+  create \
   [OPTIONS] \
   --api-key <api-key> \
-  --certificate-path <certificate-path> \
-  --organization-name <organization-name> \
-  --product-name <product-name> \
+  --delta-updatable <delta-updatable> \
+  --name <name> \
+  --organization-name <organization-name>
 ```
 
 ## Flags
@@ -31,23 +31,23 @@ Prints version information
 
 ## Options
 
+`--delta-updatable <delta-updatable>`
+
+Is the product delta updatable.
+
 ### Required
 
 `--api-key <api-key>`, `$PERIDIO_API_KEY`
 
 The API key used to authenticate and authorize the request.
 
-`--certificate-path <certificate-path>`
+`--name <name>`
 
-The certificate path.
+The name of the product.
 
 `--organization-name <organization-name>`
 
 The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
 
 ### Defaulted
 

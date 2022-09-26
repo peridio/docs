@@ -1,19 +1,20 @@
 ---
-title: authenticate
+title: create
 ---
 
-# peridio devices authenticate
+# peridio device-certificates create
 
-Authenticate a device.
+Create a device certificate.
 
 ## Usage
 
 ```
 peridio \
-  devices \
-  authenticate \
+  device-certificates \
+  create \
   [OPTIONS] \
   --api-key <api-key> \
+  --device-identifier <device-identifier> \
   --certificate-path <certificate-path> \
   --organization-name <organization-name> \
   --product-name <product-name> \
@@ -36,6 +37,10 @@ Prints version information
 `--api-key <api-key>`, `$PERIDIO_API_KEY`
 
 The API key used to authenticate and authorize the request.
+
+`--device-identifier <device-identifier>`
+
+The device unique identifier.
 
 `--certificate-path <certificate-path>`
 

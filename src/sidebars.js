@@ -36,12 +36,35 @@ const sidebars = {
         {
           collapsible: false,
           type: 'category',
+          label: 'device certificates',
+          items: [
+            'cli/device-certificates/create',
+            'cli/device-certificates/delete',
+            'cli/device-certificates/get',
+            'cli/device-certificates/list',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
           label: 'firmwares',
           items: [
             'cli/firmwares/create',
             'cli/firmwares/delete',
             'cli/firmwares/get',
             'cli/firmwares/list',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
+          label: 'products',
+          items: [
+            'cli/products/create',
+            'cli/products/delete',
+            'cli/products/get',
+            'cli/products/list',
+            'cli/products/update',
           ],
         },
         {
