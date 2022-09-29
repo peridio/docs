@@ -58,6 +58,18 @@ const sidebars = {
         {
           collapsible: false,
           type: 'category',
+          label: 'organization users',
+          items: [
+            'cli/organization-users/create',
+            'cli/organization-users/delete',
+            'cli/organization-users/get',
+            'cli/organization-users/list',
+            'cli/organization-users/update',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
           label: 'products',
           items: [
             'cli/products/create',
@@ -65,6 +77,18 @@ const sidebars = {
             'cli/products/get',
             'cli/products/list',
             'cli/products/update',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
+          label: 'product users',
+          items: [
+            'cli/product-users/add',
+            'cli/product-users/delete',
+            'cli/product-users/get',
+            'cli/product-users/list',
+            'cli/product-users/update',
           ],
         },
         {
