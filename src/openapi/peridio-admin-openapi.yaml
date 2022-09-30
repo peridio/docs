@@ -562,19 +562,16 @@ paths:
           application/json:
             schema:
               properties:
-                data:
-                  type: object
-                  properties:
-                    description:
-                      $ref: "#/components/schemas/device-description"
-                    healthy:
-                      $ref: "#/components/schemas/device-healthy"
-                    identifier:
-                      $ref: "#/components/schemas/device-identifier"
-                    last_communication:
-                      $ref: "#/components/schemas/device-last-communication"
-                    tags:
-                      $ref: "#/components/schemas/array-of-device-tags"
+                description:
+                  $ref: "#/components/schemas/device-description"
+                healthy:
+                  $ref: "#/components/schemas/device-healthy"
+                identifier:
+                  $ref: "#/components/schemas/device-identifier"
+                last_communication:
+                  $ref: "#/components/schemas/device-last-communication"
+                tags:
+                  $ref: "#/components/schemas/array-of-device-tags"
               required:
                 - identifier
       responses:
@@ -898,6 +895,8 @@ paths:
                   format: binary
                 ttl:
                   type: integer
+              required:
+                - firmware
       responses:
         "201":
           description: Ok.
@@ -1043,7 +1042,7 @@ paths:
                     $ref: "#/components/schemas/product-user"
   /orgs/{organization_name}/products/{product_name}/users/{user_username}:
     delete:
-      summary: delete product user
+      summary: remove product user
       tags:
         - "Product Users"
       parameters:
@@ -1154,7 +1153,7 @@ paths:
                   data:
                     $ref: "#/components/schemas/array-of-organization-users"
     post:
-      summary: create organization user
+      summary: add organization user
       tags:
         - "Organization Users"
       parameters:
@@ -1187,7 +1186,7 @@ paths:
                     $ref: "#/components/schemas/organization-user"
   /orgs/{organization_name}/users/{user_username}:
     delete:
-      summary: delete organization user
+      summary: remove organization user
       tags:
         - "Organization Users"
       parameters:
