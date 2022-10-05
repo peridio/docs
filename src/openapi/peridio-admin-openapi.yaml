@@ -1539,7 +1539,10 @@ components:
         identifier:
           $ref: "#/components/schemas/device-identifier"
         last_communication:
-          $ref: "#/components/schemas/device-last-communication"
+          oneOf:
+            - enum:
+                - never
+            - $ref: "#/components/schemas/device-last-communication"
         status:
           $ref: "#/components/schemas/device-status"
         tags:
