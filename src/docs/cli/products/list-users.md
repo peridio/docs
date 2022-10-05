@@ -1,10 +1,10 @@
 ---
-title: create
+title: list-users
 ---
 
-# peridio device-certificates create
+# peridio products list-users
 
-Create a device certificate.
+List users associated with a product.
 
 ## Flags
 
@@ -15,14 +15,6 @@ Prints help information.
 ## Options
 
 ### Required
-
-`--device-identifier <device-identifier>`
-
-The device unique identifier.
-
-`--certificate-path <certificate-path>`
-
-The certificate path.
 
 `--organization-name <organization-name>`
 

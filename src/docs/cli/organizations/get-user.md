@@ -1,10 +1,10 @@
 ---
-title: list
+title: get-user
 ---
 
-# peridio deployments list
+# peridio organizations get-user
 
-List deployments information.
+Get a user's association with an organization.
 
 ## Flags
 
@@ -20,6 +20,6 @@ Prints help information.
 
 The organization to interact with.
 
-`--product-name <product-name>`
+`--user-username <user-username>`
 
-The name of the product.
+The organization user username.

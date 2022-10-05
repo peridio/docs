@@ -5,11 +5,11 @@ const sidebars = {
   cli: [
     'cli',
     {
+      collapsible: false,
       type: 'category',
       label: 'Commands',
       items: [
         {
-          collapsible: false,
           type: 'category',
           label: 'deployments',
           items: [
@@ -21,7 +21,6 @@ const sidebars = {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'devices',
           items: [
@@ -34,7 +33,6 @@ const sidebars = {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'device certificates',
           items: [
@@ -45,7 +43,6 @@ const sidebars = {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'firmwares',
           items: [
@@ -56,43 +53,33 @@ const sidebars = {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
-          label: 'organization users',
+          label: 'organizations',
           items: [
-            'cli/organization-users/create',
-            'cli/organization-users/delete',
-            'cli/organization-users/get',
-            'cli/organization-users/list',
-            'cli/organization-users/update',
+            'cli/organizations/add-user',
+            'cli/organizations/get-user',
+            'cli/organizations/list-users',
+            'cli/organizations/remove-user',
+            'cli/organizations/update-user',
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'products',
           items: [
+            'cli/products/add-user',
             'cli/products/create',
             'cli/products/delete',
             'cli/products/get',
+            'cli/products/get-user',
             'cli/products/list',
+            'cli/products/list-users',
+            'cli/products/remove-user',
             'cli/products/update',
+            'cli/products/update-user',
           ],
         },
         {
-          collapsible: false,
-          type: 'category',
-          label: 'product users',
-          items: [
-            'cli/product-users/add',
-            'cli/product-users/delete',
-            'cli/product-users/get',
-            'cli/product-users/list',
-            'cli/product-users/update',
-          ],
-        },
-        {
-          collapsible: false,
           type: 'category',
           label: 'signing-keys',
           items: [
@@ -103,7 +90,6 @@ const sidebars = {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'users',
           items: [

@@ -1,10 +1,10 @@
 ---
-title: list
+title: list-users
 ---
 
-# peridio deployments list
+# peridio organizations list-users
 
-List deployments information.
+List users associated with an organization.
 
 ## Flags
 
@@ -19,7 +19,3 @@ Prints help information.
 `--organization-name <organization-name>`
 
 The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.

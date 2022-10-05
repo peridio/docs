@@ -1,10 +1,10 @@
 ---
-title: create
+title: remove-user
 ---
 
-# peridio device-certificates create
+# peridio product remove-user
 
-Create a device certificate.
+Disassociate a user from a product.
 
 ## Flags
 
@@ -16,14 +16,6 @@ Prints help information.
 
 ### Required
 
-`--device-identifier <device-identifier>`
-
-The device unique identifier.
-
-`--certificate-path <certificate-path>`
-
-The certificate path.
-
 `--organization-name <organization-name>`
 
 The organization to interact with.
@@ -31,3 +23,7 @@ The organization to interact with.
 `--product-name <product-name>`
 
 The name of the product.
+
+`--user-username <user-username>`
+
+The organization user username.
