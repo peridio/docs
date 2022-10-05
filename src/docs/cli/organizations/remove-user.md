@@ -1,10 +1,10 @@
 ---
-title: list
+title: remove-user
 ---
 
-# peridio deployments list
+# peridio organizations remove-user
 
-List deployments information.
+Disassociate a user from an organization.
 
 ## Flags
 
@@ -20,6 +20,6 @@ Prints help information.
 
 The organization to interact with.
 
-`--product-name <product-name>`
+`--user-username <user-username>`
 
-The name of the product.
+The organization user username.

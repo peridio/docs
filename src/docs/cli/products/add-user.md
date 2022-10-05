@@ -1,10 +1,10 @@
 ---
-title: create
+title: add-user
 ---
 
-# peridio device-certificates create
+# peridio products add-user
 
-Create a device certificate.
+Associate a user with a product.
 
 ## Flags
 
@@ -16,14 +16,6 @@ Prints help information.
 
 ### Required
 
-`--device-identifier <device-identifier>`
-
-The device unique identifier.
-
-`--certificate-path <certificate-path>`
-
-The certificate path.
-
 `--organization-name <organization-name>`
 
 The organization to interact with.
@@ -31,3 +23,11 @@ The organization to interact with.
 `--product-name <product-name>`
 
 The name of the product.
+
+`--role <role>`
+
+The product user role.
+
+`--username <username>`
+
+The product user username.

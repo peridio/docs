@@ -6,32 +6,11 @@ title: update
 
 Update a device.
 
-## Usage
-
-```
-peridio \
-  devices \
-  update \
-  [OPTIONS] \
-  --api-key <api-key> \
-  --description <description> \
-  --healthy <healthy> \
-  --device-identifier <device-identifier> \
-  --last-communication  <last-communication> \
-  --organization-name <organization-name> \
-  --product-name <product-name> \
-  --tags <tags>
-```
-
 ## Flags
 
 `-h`, `--help`
 
-Prints help information
-
-`-V`, `--version`
-
-Prints version information
+Prints help information.
 
 ## Options
 
@@ -53,10 +32,6 @@ The tags of the device.
 
 ### Required
 
-`--api-key <api-key>`, `$PERIDIO_API_KEY`
-
-The API key used to authenticate and authorize the request.
-
 `--device-identifier <device-identifier>`
 
 The device unique identifier.
@@ -68,9 +43,3 @@ The organization to interact with.
 `--product-name <product-name>`
 
 The name of the product.
-
-### Defaulted
-
-`--base-url <base-url>`, `$PERIDIO_BASE_URL`
-
-The base URL of the API to interact with.
