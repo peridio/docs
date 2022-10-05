@@ -1525,13 +1525,17 @@ components:
       type: object
       properties:
         description:
-          $ref: "#/components/schemas/device-description"
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/device-description"
         firmware_metadata:
           oneOf:
             - type: "null"
             - $ref: "#/components/schemas/firmware-metadata"
         healthy:
-          $ref: "#/components/schemas/device-healthy"
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/device-healthy"
         identifier:
           $ref: "#/components/schemas/device-identifier"
         last_communication:
@@ -1539,7 +1543,9 @@ components:
         status:
           $ref: "#/components/schemas/device-status"
         tags:
-          $ref: "#/components/schemas/array-of-device-tags"
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/array-of-device-tags"
         version:
           $ref: "#/components/schemas/device-version"
     device-certificate:
