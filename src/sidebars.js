@@ -11,6 +11,18 @@ const sidebars = {
       items: [
         {
           type: 'category',
+          label: 'ca certificates',
+          items: [
+            'cli/ca-certificates/create',
+            'cli/ca-certificates/create_verification_code',
+            'cli/ca-certificates/delete',
+            'cli/ca-certificates/get',
+            'cli/ca-certificates/list',
+          ],
+        },
+        {
+          collapsible: false,
+          type: 'category',
           label: 'deployments',
           items: [
             'cli/deployments/create',
