@@ -4,7 +4,7 @@ title: delete
 
 # peridio ca-certificates delete
 
-Delete an ca certificate.
+Delete an CA certificate.
 
 ## Flags
 
@@ -22,4 +22,4 @@ The organization to interact with.
 
 `--ca-certificate-serial <ca-certificate-serial>`
 
-The ca certificate serial.
+The CA certificate serial.

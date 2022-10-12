@@ -10,6 +10,7 @@ const sidebars = {
       label: 'Commands',
       items: [
         {
+          collapsible: false,
           type: 'category',
           label: 'ca certificates',
           items: [
@@ -18,10 +19,10 @@ const sidebars = {
             'cli/ca-certificates/delete',
             'cli/ca-certificates/get',
             'cli/ca-certificates/list',
+            'cli/ca-certificates/update',
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'deployments',
           items: [

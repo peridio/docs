@@ -24,7 +24,7 @@ x-tagGroups:
 paths:
   /orgs/{organization_name}/ca_certificates:
     get:
-      summary: get ca certificates
+      summary: get CA certificates
       tags:
         - "CA Certificates"
       parameters:
@@ -43,7 +43,7 @@ paths:
                   data:
                     $ref: "#/components/schemas/array-of-ca-certificates"
     post:
-      summary: create ca certificate
+      summary: create CA certificate
       tags:
         - "CA Certificates"
       parameters:
@@ -58,10 +58,10 @@ paths:
           application/json:
             schema:
               properties:
-                cert:
+                certificate:
                   description: Base64 encoded CA certificate.
                   type: string
-                verification_cert:
+                verification_certificate:
                   description: >
                     Base64 encoded verification certificate.
 
@@ -69,9 +69,11 @@ paths:
                   type: string
                 description:
                   type: string
+                jitp:
+                  $ref: "#/components/schemas/ca-jitp"
               required:
-                - cert
-                - verification_cert
+                - certificate
+                - verification_certificate
       responses:
         "201":
           description: Ok.
@@ -83,7 +85,7 @@ paths:
                     $ref: "#/components/schemas/ca-certificate"
   /orgs/{organization_name}/ca_certificates/{ca_certificate_serial}:
     delete:
-      summary: delete ca certificate
+      summary: delete CA certificate
       tags:
         - "CA Certificates"
       parameters:
@@ -101,7 +103,7 @@ paths:
         "204":
           description: Ok.
     get:
-      summary: get ca certificate
+      summary: get CA certificate
       tags:
         - "CA Certificates"
       parameters:
@@ -124,9 +126,43 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ca-certificate"
+    put:
+      summary: update CA certificate
+      tags:
+        - "CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: ca_certificate_serial
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/ca-certificate-serial"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  type: string
+                jitp:
+                  $ref: "#/components/schemas/ca-jitp"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ca-certificate"
   /orgs/{organization_name}/ca_certificates/verification_codes:
     post:
-      summary: create ca verification code
+      summary: create CA verification code
       tags:
         - "CA Certificates"
       parameters:
@@ -1432,6 +1468,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/ca-certificate"
+    array-of-ca-jitp-tags:
+      type: array
+      items:
+        $ref: "#/components/schemas/ca-jitp-tag"
     array-of-deployments:
       type: array
       items:
@@ -1489,6 +1529,21 @@ components:
         verification_code:
           description: Expires in one week
           type: string
+    ca-jitp:
+      type: object
+      properties:
+        description:
+          type: string
+        product_name:
+          type: string
+        tags:
+          $ref: "#/components/schemas/array-of-ca-jitp-tags"
+      required:
+        - description
+        - tags
+        - product_name
+    ca-jitp-tag:
+      type: string
     delta-updatable:
       type: boolean
     deployment:
