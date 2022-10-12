@@ -4,7 +4,7 @@ title: get
 
 # peridio ca-certificates get
 
-Get an ca certificate.
+Get a CA certificate.
 
 ## Flags
 
@@ -22,5 +22,5 @@ The organization to interact with.
 
 `--ca-certificate-serial <ca-certificate-serial>`
 
-The ca certificate serial.
+The CA certificate serial.
 

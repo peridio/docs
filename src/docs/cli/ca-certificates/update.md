@@ -1,24 +1,28 @@
 ---
-title: create
+title: update
 ---
 
-# peridio ca-certificates create
+# peridio ca-certificates update
 
-Create a CA certificate.
+Update a CA information.
 
-Just in time provisioning (JITP) is disabled by default, but supplying any of the JITP flags will enable it.
+Supplying any of the JITP flags will enable Just in time provisioning (JITP).
 
 ## Flags
 
 `-h`, `--help`
 
-Prints help information
+Prints help information.
 
 ## Options
 
 `--description <description>`
 
 The CA description.
+
+`--disable-jitp`
+
+Use this flag if you want to disable JITP (overrides any other JITP option).
 
 `--jitp-description <jitp-description>`
 
@@ -38,10 +42,7 @@ A comma separated set of tags to apply to affected devices.
 
 The organization to interact with.
 
-`-c`, `--certificate-path <certificate-path>`
+`--ca-certificate-serial <ca-certificate-serial>`
 
-The base64 CA certificate path.
+The CA certificate serial.
 
-`-v`, `--verification-certificate-path <verification-certificate-path>`
-
-The base64 verification certificate path.

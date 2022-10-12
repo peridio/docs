@@ -4,7 +4,7 @@ title: list
 
 # peridio ca-certificates list
 
-List ca certificates information.
+List CA certificates information.
 
 ## Flags
 
