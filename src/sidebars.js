@@ -10,7 +10,6 @@ const sidebars = {
       label: 'Commands',
       items: [
         {
-          collapsible: false,
           type: 'category',
           label: 'ca certificates',
           items: [
