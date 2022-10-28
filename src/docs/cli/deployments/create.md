@@ -14,6 +14,10 @@ Prints help information.
 
 ## Options
 
+`--delta-updatable <delta-updatable>`
+
+Is the deployment delta updatable.
+
 `--version <version>`
 
 The version of the deployment. Must respect this format: https://hexdocs.pm/elixir/Version.html#module-requirements

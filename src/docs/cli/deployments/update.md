@@ -14,6 +14,10 @@ Prints help information.
 
 ## Options
 
+`--delta-updatable <delta-updatable>`
+
+Is the deployment delta updatable.
+
 `--tags <tags>`
 
 The device tags list.

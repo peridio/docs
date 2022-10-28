@@ -14,10 +14,6 @@ Prints help information.
 
 ## Options
 
-`--delta-updatable <delta-updatable>`
-
-Is the product delta updatable.
-
 ### Required
 
 `--name <name>`
