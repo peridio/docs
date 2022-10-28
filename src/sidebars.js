@@ -2,6 +2,9 @@
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
+  agent: [
+    'agent',
+  ],
   cli: [
     'cli',
     {
@@ -140,14 +143,17 @@ const sidebars = {
     {
       collapsible: false,
       type: 'category',
-      label: 'Security',
+      label: 'Guides',
       items: [
+        'guides/creating-deployments',
+        'guides/creating-firmware',
+        'guides/creating-firmware-signing-keys',
+        'guides/creating-products',
         'guides/creating-x509-certificates-with-openssl',
       ],
       link: {
         type: 'generated-index',
         title: 'Guides',
-        description: 'Learn about the most important Docusaurus concepts!',
         slug: '/guides',
       },
     },

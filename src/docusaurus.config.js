@@ -74,10 +74,11 @@ const config = {
         },
         items: [
           { label: 'Reference', href: '/reference' },
-          { label: 'CLI', href: '/cli' },
+          { label: 'Guides', href: '/guides' },
           { label: 'Admin API', href: '/admin-api' },
           { label: 'Device API', href: '/device-api' },
-          { label: 'Guides', href: '/guides' },
+          { label: 'CLI', href: '/cli' },
+          { label: 'Agent', href: '/agent' },
         ],
       },
       footer: {

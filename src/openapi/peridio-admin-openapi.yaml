@@ -1,7 +1,6 @@
 ---
 openapi: 3.1.0
 info:
-  description: The Peridio Admin API facilitates management of Peridio v1 (Cremini) resources.
   title: Peridio Admin API
   version: "1.0.0"
 servers:
@@ -956,6 +955,7 @@ paths:
                 firmware:
                   type: string
                   format: binary
+                  description: Reference [firmware file requirements](/reference/firmwares#firmware-file-requirements).
                 ttl:
                   type: integer
               required:
@@ -1627,6 +1627,7 @@ components:
     device-healthy:
       type: boolean
     device-identifier:
+      description: Uniquely identifies a device within an organization.
       type: string
     device-last-communication:
       type: string
@@ -1682,6 +1683,7 @@ components:
           oneOf:
             - type: "null"
             - type: string
+          description: The version of FWUP bundled within the firmware.
         misc:
           oneOf:
             - type: "null"
@@ -1701,6 +1703,7 @@ components:
     firmware-uuid:
       type: string
       format: uuid
+      description: Uniquely identifies a firmware.
     key:
       type: object
       properties:
@@ -1736,6 +1739,7 @@ components:
       type: string
     product-name:
       type: string
+      description: Uniquely identifies a product within an organization.
     product-user:
       type: object
       properties:

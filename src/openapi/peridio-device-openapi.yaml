@@ -16,6 +16,7 @@ paths:
   /device/me:
     get:
       summary: get device me
+      description: Returns information about the device identified by the request's authentication.
       tags:
         - "Devices"
       responses:
@@ -33,8 +34,19 @@ paths:
   /device/update:
     get:
       summary: get device update
+      description: |
+        Returns information regarding whether an update is available or not.
+
+        If an update is available, additional information describing the update is returned including a presigned URL to acquire the update.
       tags:
         - "Devices"
+      parameters:
+        - in: header
+          name: x-nerveshub-uuid
+          schema:
+            description: The UUID of the currently active firmware on the device.
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-uuid"
+          required: true
       responses:
         "200":
           description: Ok.
@@ -46,8 +58,14 @@ paths:
                     type: object
                     properties:
                       update_available:
+                        description: |
+                          An update may not be available if:
+
+                            1. There is no applicable deployment, i.e., the device is up to date.
+                            2. The device or an applicable deployment is quarantined.
                         type: boolean
                       firmware_url:
+                        description: A presigned HTTPS URL. Expires in 24 hours.
                         oneOf:
                           - type: "null"
                           - type: string
@@ -56,6 +74,7 @@ paths:
                           - type: "null"
                           - $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-metadata"
                       deployment_id:
+                        description: Uniquely identifies a deployment.
                         oneOf:
                           - type: "null"
                           - type: integer
@@ -63,4 +82,4 @@ components:
   securitySchemes:
     Mutual TLS:
       type: mutualTLS
-      description: The provided client certificate must be signed by a CA certificate registered with the [Peridio Admin API](https://docs.peridio.com/cremini/admin-api#tag/CA-Certificates).
+      description: The provided client certificate must be signed by a [CA certificate](https://docs.peridio.com/reference/ca-certificates) registered with Peridio.
