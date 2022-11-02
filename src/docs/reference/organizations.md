@@ -2,9 +2,7 @@
 title: Organizations
 ---
 
-An Organization is a container for your resources. You create and manage your resources in an Organization, and the Organization provides administrative capabilities for access and billing.
-
-Using multiple Organizations is a best practice for scaling your environment, as it provides a natural billing boundary for costs, isolates resources for security, gives flexibility or individuals and teams, in addition to being adaptable for new business processes.
+At the highest level, Peridio resources are created and managed within an organization.
 
 ## User Access
 

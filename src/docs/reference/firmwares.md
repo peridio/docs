@@ -4,53 +4,36 @@ title: Firmwares
 
 Firmwares are the data you wish to distribute to devices.
 
-Peridio leverages [fwup](https://github.com/fwup-home/fwup) to package, sign, verify, and apply firmwares. fwup uses cryptographically signed ZIP archives to package firmwares.
+Peridio requires the use of [fwup](https://github.com/fwup-home/fwup) archives as the packaing format for firmwares. This means the binaries you upload to Peridio and the binaries your devices will download from Peridio are fwup archives. The contents of an archive are up to you; ranging from no files, to 1 file, to `n` files. They are capable of packaging an arbitrary stringy metadata payload. Note that fwup archives themselves are ZIP archives and can be interacted with as such.
 
-## Creation
+To learn more about how to use firmware, see the [creating firmware](/guides/creating-firmware) guide.
 
-### Create a fwup Archive
+## Firmware Installation
 
-```text
-fwup \
-  -c \
-  -f fwup.conf \
-  -o demo.fw
-```
+It is possible to perform firmware installation with Peridio in a self-managed or Peridio-managed fashion.
 
-### Sign a fwup Archive
+### Self-Managed
 
-See [firmware signing keys](firmware-signing-keys).
+This approach means you are responsible for all device-side interactions with Peridio as well as executing any device-side operation thereafter. This buys absolute flexibility at the cost of owning the complexity yourself.
 
-```text
-fwup \
-  -S \
-  -s fwup-key.priv \
-  -i demo.fw \
-  -o signed-demo.fw
-```
+### Peridio Managed
 
-### Verify a fwup Archive is Signed
+The [Peridio Agent](/agent) can be used to check for updates, stream their download (including automated delta updates), verify their signature, and install their contents. This buys efficient simplicity at the cost of flexibility.
 
-```text
-fwup \
-  -m \
-  -p fwup-key.pub \
-  -i signed-demo.fw
-```
+## Firmware File Requirements
 
-A failure would print an error like:
+- Firmware files are signed fwup archives.
+- The following [global scope](https://github.com/fwup-home/fwup#global-scope) options must be specified:
+  - `meta-architecture` must have a value. Informational.
+  - `meta-platform` must have a value. Informational.
+  - `meta-product` must exactly match the name of a [product](/reference/products) in your [organization](/reference/organizations). Defines the product within which the firmware will be scoped.
+  - `meta-version` must be a valid [semantic version](https://semver.org/spec/v2.0.0.html). Defines the version of the firmware.
 
-> fwup: Firmware archive's meta.conf fails digital signature verification.
-
-### Create a Firmware
-
-Use the [create firmware](https://docs.peridio.com/admin-api#tag/Firmwares/paths/~1orgs~1%7Borganization_name%7D~1products~1%7Bproduct_name%7D~1firmwares/post) Admin API endpoint supplying a signed fwup archive.
-
-### Time to Live (TTL)
+## Time to Live (TTL)
 
 Firmwares can be configured on a per-firmware basis to be deleted automatically after a set amount of seconds by configuring their `ttl` field. Firmware associated with a deployment will never be automatically deleted. Dissassociating a firmware with a configured TTL from all deployments will cause the TTL to begin counting down again from its maximum value.
 
-#### Example
+### Example
 
 1. Firmware (A) is created with `ttl: 60` and is associated with zero deployments.
     - Firmware (A)'s TTL begins counting down and it will be automatically deleted once it runs out.
@@ -62,3 +45,44 @@ Firmwares can be configured on a per-firmware basis to be deleted automatically 
     - Firmware (A) is still associated with at least one deployment, its TTL continues to be ignored and it still will not be automatically deleted.
 5. Deployment (C) is deleted.
     - Firmware (A) is associated with zero deployments, its TTL begins counting down from its maximum value of `60` and it will be automatically deleted once it runs out.
+
+## Delta Updates
+
+It is possible to ship delta updates with Peridio in a self-managed or Peridio-managed fashion.
+
+### Self-Managed
+
+This approach yields the greatest flexibility, but comes at the cost of complexity. It would mean you would be responsible for:
+
+1. Generating patch files yourself before submitting them as firmware to Peridio.
+2. Ensuring you orchestrate your deployments in such a manner as to serve patch files to the correct devices.
+3. Write the device code to apply the patch files.
+
+Note that with this approach you would not actually enable delta updates features in Peridio (check boxes in the Web Console nor fields in the API/CLI), as that is used only in the Peridio-Managed case.
+
+### Peridio-Managed
+
+This approach has Peridio automatically generate, serve, and apply patch files for you, but comes at the cost of flexibility and customization. In particular, the following requirements are imposed:
+
+- Delta updates are enabled on a per deployment basis.
+- fwup must be used to apply updates, and it must be version 1.6.0 or greater.
+- While your fwup conf and archives may include arbitrary contents, only a file-resource named `rootfs.img` will be diffed/patched.
+- Your fwup conf's tasks to write the `rootfs.img` must use the `delta-source-raw-offset`, `delta-source-raw-count`, and `raw_write` settings.
+  - If you wish to also use an A/B update scheme, the tasks may for example resemble the following:
+
+    ```
+    task upgrade.a {
+        on-resource rootfs.img {
+            delta-source-raw-offset=${ROOTFS_B_PART_OFFSET}
+            delta-source-raw-count=${ROOTFS_B_PART_COUNT}
+            raw_write(${ROOTFS_A_PART_OFFSET})
+        }
+    }
+    task upgrade.b {
+        on-resource rootfs.img {
+            delta-source-raw-offset=${ROOTFS_A_PART_OFFSET}
+            delta-source-raw-count=${ROOTFS_A_PART_COUNT}
+            raw_write(${ROOTFS_B_PART_OFFSET})
+        }
+    }
+    ```
