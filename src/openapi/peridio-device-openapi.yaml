@@ -31,6 +31,8 @@ paths:
                     properties:
                       identifier:
                         $ref: "peridio-admin-openapi.yaml#/components/schemas/device-identifier"
+                      quarantined:
+                        type: boolean
   /device/update:
     get:
       summary: get device update
