@@ -1,8 +1,5 @@
 openapi: 3.1.0
 info:
-  description: >-
-    The Peridio Admin API facilitates management of Peridio v1 (Cremini)
-    resources.
   title: Peridio Admin API
   version: 1.0.0
 servers:
@@ -313,9 +310,6 @@ paths:
           application/json:
             schema:
               properties:
-                delta_updatable:
-                  $ref: '#/components/schemas/delta-updatable'
-                  default: false
                 name:
                   $ref: '#/components/schemas/product-name'
               required:
@@ -396,8 +390,6 @@ paths:
                 product:
                   type: object
                   properties:
-                    delta_updatable:
-                      $ref: '#/components/schemas/delta-updatable'
                     name:
                       $ref: '#/components/schemas/product-name'
               required:
@@ -459,6 +451,9 @@ paths:
               properties:
                 conditions:
                   $ref: '#/components/schemas/deployment-conditions'
+                delta_updatable:
+                  $ref: '#/components/schemas/delta-updatable'
+                  default: false
                 firmware:
                   $ref: '#/components/schemas/firmware-uuid'
                 is_active:
@@ -566,6 +561,8 @@ paths:
                       $ref: '#/components/schemas/deployment-name'
                     conditions:
                       $ref: '#/components/schemas/deployment-conditions'
+                    delta_updatable:
+                      $ref: '#/components/schemas/delta-updatable'
                     firmware:
                       $ref: '#/components/schemas/firmware-uuid'
                     is_active:
@@ -958,6 +955,9 @@ paths:
                 firmware:
                   type: string
                   format: binary
+                  description: >-
+                    Reference [firmware file
+                    requirements](/reference/firmwares#firmware-file-requirements).
                 ttl:
                   type: integer
               required:
@@ -1553,6 +1553,8 @@ components:
       properties:
         conditions:
           $ref: '#/components/schemas/deployment-conditions'
+        delta_updatable:
+          $ref: '#/components/schemas/delta-updatable'
         firmware_uuid:
           $ref: '#/components/schemas/firmware-uuid'
         is_active:
@@ -1631,6 +1633,7 @@ components:
     device-healthy:
       type: boolean
     device-identifier:
+      description: Uniquely identifies a device within an organization.
       type: string
     device-last-communication:
       type: string
@@ -1686,6 +1689,7 @@ components:
           oneOf:
             - type: 'null'
             - type: string
+          description: The version of FWUP bundled within the firmware.
         misc:
           oneOf:
             - type: 'null'
@@ -1705,6 +1709,7 @@ components:
     firmware-uuid:
       type: string
       format: uuid
+      description: Uniquely identifies a firmware.
     key:
       type: object
       properties:
@@ -1732,14 +1737,13 @@ components:
     product:
       type: object
       properties:
-        delta_updatable:
-          $ref: '#/components/schemas/delta-updatable'
         name:
           $ref: '#/components/schemas/product-name'
     product-architecture:
       type: string
     product-name:
       type: string
+      description: Uniquely identifies a product within an organization.
     product-user:
       type: object
       properties:
