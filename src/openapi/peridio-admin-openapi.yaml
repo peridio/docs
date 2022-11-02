@@ -311,9 +311,6 @@ paths:
           application/json:
             schema:
               properties:
-                delta_updatable:
-                  $ref: "#/components/schemas/delta-updatable"
-                  default: false
                 name:
                   $ref: "#/components/schemas/product-name"
               required:
@@ -394,8 +391,6 @@ paths:
                 product:
                   type: object
                   properties:
-                    delta_updatable:
-                      $ref: "#/components/schemas/delta-updatable"
                     name:
                       $ref: "#/components/schemas/product-name"
               required:
@@ -457,6 +452,9 @@ paths:
               properties:
                 conditions:
                   $ref: "#/components/schemas/deployment-conditions"
+                delta_updatable:
+                  $ref: "#/components/schemas/delta-updatable"
+                  default: false
                 firmware:
                   $ref: "#/components/schemas/firmware-uuid"
                 is_active:
@@ -564,6 +562,8 @@ paths:
                       $ref: "#/components/schemas/deployment-name"
                     conditions:
                       $ref: "#/components/schemas/deployment-conditions"
+                    delta_updatable:
+                      $ref: "#/components/schemas/delta-updatable"
                     firmware:
                       $ref: "#/components/schemas/firmware-uuid"
                     is_active:
@@ -1551,6 +1551,8 @@ components:
       properties:
         conditions:
           $ref: "#/components/schemas/deployment-conditions"
+        delta_updatable:
+          $ref: "#/components/schemas/delta-updatable"
         firmware_uuid:
           $ref: "#/components/schemas/firmware-uuid"
         is_active:
@@ -1728,8 +1730,6 @@ components:
     product:
       type: object
       properties:
-        delta_updatable:
-          $ref: "#/components/schemas/delta-updatable"
         name:
           $ref: "#/components/schemas/product-name"
     product-architecture:
