@@ -120,6 +120,7 @@ const sidebars = {
       type: 'category',
       label: 'Reference',
       items: [
+        'reference/agent',
         'reference/ca-certificates',
         'reference/deployments',
         'reference/device-certificates',
