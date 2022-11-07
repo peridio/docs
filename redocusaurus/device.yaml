@@ -34,6 +34,8 @@ paths:
                     properties:
                       identifier:
                         $ref: '#/components/schemas/device-identifier'
+                      quarantined:
+                        type: boolean
   /device/update:
     get:
       summary: get device update
