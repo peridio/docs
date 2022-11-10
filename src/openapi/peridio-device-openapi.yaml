@@ -44,7 +44,7 @@ paths:
         - "Devices"
       parameters:
         - in: header
-          name: x-nerveshub-uuid
+          name: x-peridio-uuid
           schema:
             description: The UUID of the currently active firmware on the device.
             $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-uuid"

@@ -34,7 +34,7 @@ meta-vcs-identifier = "23758867219c8d84c8363316e6dd2f9fd7ae3049"
 meta-version = "1.0.0"
 
 file-resource tuber.txt {
-  host-path = "vegetables/tuber.txt"
+  host-path = "tuber.txt"
 }
 ```
 
