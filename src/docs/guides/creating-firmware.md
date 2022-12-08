@@ -6,9 +6,9 @@ To learn more about Peridio firmware in general, see the [firmwares](/reference/
 
 ## Prerequisites
 
-- [fwup](https://github.com/fwup-home/fwup)
+- [fwup CLI](https://github.com/fwup-home/fwup).
   - Last tested with version 1.9.1.
-- [peridio](https://github.com/peridio/morel/releases)
+- [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.3.0.
 
 In order to create a firmware it must be associated with a preexisting product. To learn how to create a product, see the [creating products](/guides/creating-products) guide.

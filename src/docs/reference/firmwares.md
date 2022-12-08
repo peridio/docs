@@ -4,7 +4,7 @@ title: Firmwares
 
 Firmwares are the data you wish to distribute to devices.
 
-Peridio requires the use of [fwup](https://github.com/fwup-home/fwup) archives as the packaing format for firmwares. This means the binaries you upload to Peridio and the binaries your devices will download from Peridio are fwup archives. The contents of an archive are up to you; ranging from no files, to 1 file, to `n` files. They are capable of packaging an arbitrary stringy metadata payload. Note that fwup archives themselves are ZIP archives and can be interacted with as such.
+Peridio requires the use of [fwup](https://github.com/fwup-home/fwup) archives as the packaging format for firmwares. This means the binaries you upload to Peridio and the binaries your devices will download from Peridio are fwup archives. The contents of an archive are up to you; ranging from no files, to 1 file, to `n` files. They are capable of packaging an arbitrary stringy metadata payload. Note that fwup archives themselves are ZIP archives and can be interacted with as such.
 
 To learn more about how to use firmware, see the [creating firmware](/guides/creating-firmware) guide.
 

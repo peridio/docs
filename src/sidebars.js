@@ -146,6 +146,7 @@ const sidebars = {
       type: 'category',
       label: 'Guides',
       items: [
+        'guides/creating-ca-certificates',
         'guides/creating-deployments',
         'guides/creating-firmware',
         'guides/creating-firmware-signing-keys',
