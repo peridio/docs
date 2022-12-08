@@ -4,7 +4,7 @@ This guide describes how to create X.509 certificates with [OpenSSL](https://www
 
 ## Prerequisites
 
-- [OpenSSL](https://www.openssl.org/)
+- [OpenSSL CLI](https://www.openssl.org/).
   - Last tested with version 3.0.4 21 Jun 2022.
 
 ## Hardware Constraints

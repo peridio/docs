@@ -6,7 +6,7 @@ To learn more about Peridio deployments in general, see the [deployments](/refer
 
 ## Prerequisites
 
-- [peridio](https://github.com/peridio/morel/releases)
+- [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.3.0.
 
 In order to create a deployment it must be associated with a preexisting product and firmware. To learn how to create a product, see the [creating products](/guides/creating-products) guide. To learn how to create firmware, see the [creating firmware](/guides/creating-firmware) guide.

@@ -6,7 +6,7 @@ To learn more about Peridio products in general, see the [products](/reference/p
 
 ## Prerequisites
 
-- [peridio](https://github.com/peridio/morel/releases)
+- [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.3.0.
 
 ## Create Product
