@@ -148,6 +148,7 @@ const sidebars = {
       items: [
         'guides/creating-ca-certificates',
         'guides/creating-deployments',
+        'guides/creating-devices',
         'guides/creating-firmware',
         'guides/creating-firmware-signing-keys',
         'guides/creating-products',

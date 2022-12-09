@@ -24,7 +24,7 @@ export default function Home() {
           <li><a href="/cli">Command Line Interface</a></li>
           <li><a href="/admin-api">Peridio Admin API</a></li>
           <li><a href="/device-api">Peridio Device API</a></li>
-          <li><a href="/guides/creating-x509-certificates-with-openssl">Guides</a></li>
+          <li><a href="/guides">Guides</a></li>
         </ul>
       </main>
     </Layout>
