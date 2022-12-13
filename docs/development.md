@@ -4,7 +4,7 @@ Yarn commands are executed in the `src` directory
 
 ## Installation
 
-```shell
+```console
 yarn --cwd src
 ```
 
@@ -12,7 +12,7 @@ This command installs dependencies defined in `src/package.json`.
 
 ## Development Server
 
-```shell
+```console
 yarn --cwd src start
 ```
 

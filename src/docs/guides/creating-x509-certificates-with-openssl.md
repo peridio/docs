@@ -32,7 +32,7 @@ Effective security requires keeping the private key private; the public key can 
 
 To inspect any private key created later in this guide:
 
-```sh
+```console
 openssl ecparam \
   -in key.pem \
   -text \
@@ -45,7 +45,7 @@ Some of the commands below will reference an `openssl.cnf` file, you must create
 
 The aforementioned config requires one additional file to track created certificates and one additional directory to store certificates historically. You must create them:
 
-```sh
+```console
 touch database.txt
 mkdir certificates
 ```
@@ -56,7 +56,7 @@ Note that when creating certificates with the `openssl ca` command that it will 
 
 To inspect any certificate signing request created later in this guide:
 
-```sh
+```console
 openssl req \
   -in certificate-signing-request.pem \
   -text \
@@ -67,7 +67,7 @@ openssl req \
 
 To inspect any certificate created later in this guide:
 
-```sh
+```console
 openssl x509 \
   -in certificate.pem \
   -text \
@@ -85,7 +85,7 @@ Generally speaking, a root certificate authority is a certificate that:
 
 Reference [openssl-ecparam](#openssl-ecparam).
 
-```sh
+```console
 openssl ecparam \
   -genkey \
   -name prime256v1 \
@@ -98,7 +98,7 @@ openssl ecparam \
 
 Reference [openssl-req](#openssl-req).
 
-```sh
+```console
 openssl req \
   -config openssl.cnf \
   -key root-private-key.pem \
@@ -114,7 +114,7 @@ Reference [openssl-ca](#openssl-ca).
 
 You must fill in the `-startdate` and `-enddate` values.
 
-```sh
+```console
 openssl ca \
   -batch \
   -config openssl.cnf \
@@ -145,7 +145,7 @@ Generally speaking, an intermediate certificate authority is a certificate that:
 
 Reference [openssl-ecparam](#openssl-ecparam).
 
-```sh
+```console
 openssl ecparam \
   -genkey \
   -name prime256v1 \
@@ -158,7 +158,7 @@ openssl ecparam \
 
 Reference [openssl-req](#openssl-req).
 
-```sh
+```console
 openssl req \
   -key intermediate-private-key.pem \
   -new \
@@ -172,7 +172,7 @@ Reference [openssl-ca](#openssl-ca).
 
 You must fill in the `-startdate` and `-enddate` values.
 
-```sh
+```console
 openssl ca \
   -batch \
   -cert root-certificate.pem \
@@ -203,7 +203,7 @@ Generally speaking, an end-entity certificate is a certificate that:
 
 Reference [openssl-ecparam](#openssl-ecparam).
 
-```sh
+```console
 openssl ecparam \
   -genkey \
   -name prime256v1 \
@@ -216,7 +216,7 @@ openssl ecparam \
 
 Reference [openssl-req](#openssl-req).
 
-```sh
+```console
 openssl req \
   -key end-entity-private-key.pem \
   -new \
@@ -230,7 +230,7 @@ Reference [openssl-ca](#openssl-ca).
 
 You must fill in the `-startdate` and `-enddate` values.
 
-```sh
+```console
 openssl ca \
   -batch \
   -cert intermediate-certificate.pem \
