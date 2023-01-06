@@ -2,7 +2,87 @@
 openapi: 3.1.0
 info:
   title: Peridio Admin API
-  version: "1.0.0"
+  version: "v1"
+  description: |
+    # Search Query Language
+
+    Some endpoints specify a `search` parameter. The value of this parameter must be a string that
+    contains a valid query as defined by this search query language.
+
+    ## Queries
+
+    A query consists of at least one and at most five clauses joined by the `and` keyword.
+
+    For example:
+
+    ```text
+    inserted_at>='2023-01-01T00:00:00Z' and description~'east blue'
+    ```
+
+    ## Clauses
+
+    A clause consists of a key, an operator, and a value.
+
+    For example:
+
+    ```text
+    inserted_at>='2023-01-01T00:00:00Z'
+    ```
+
+    ## Keys
+
+    When performing a search, the set of valid keys is defined by the relevant endpoint's `search`
+    parameter's documentation.
+
+    ## Operators
+
+    Each key an endpoint specifies as searchable will be associated with a set of operators that
+    are valid to use with it. Below are all possible operators and their associated operation:
+
+    |Keyword|Operation|
+    |-|-|
+    |`:`|equals (case-sensitive)|
+    |`~`|substring (case-sensitive)|
+    |`<`|less than|
+    |`<=`|less than or equal to|
+    |`>`|greater than|
+    |`>=`|greater than or equal to|
+
+    ## Values
+
+    Each key will specify which type of value it acepts.
+
+    ### String
+
+    You must use single quotes when supplying a string. You can escape single quotes inside of
+    single quotes with a backslash (`\`).
+
+    For example:
+
+    ```text
+    summary~'zoro\'s three sword style'
+    ```
+
+    ### Date-Time
+
+    You must use single quotes when supplying a date-time and you must use the following
+    representation: `'[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]Z'`. The timezone is always UTC.
+
+    For example:
+
+    ```text
+    inserted_at:'2023-01-01T00:00:00Z'
+    ```
+
+    ### Numeric
+
+    Numeric values are supplied as-is without single quotes.
+
+    For example:
+
+    ```text
+    berries:100000000
+    ```
 servers:
   - url: https://api.cremini.peridio.com
 security:
@@ -10,6 +90,7 @@ security:
 x-tagGroups:
   - name: "Endpoints"
     tags:
+      - "Artifacts"
       - "CA Certificates"
       - "Deployments"
       - "Device Certificates"
@@ -21,6 +102,129 @@ x-tagGroups:
       - "Products"
       - "Users"
 paths:
+  /artifacts:
+    post:
+      summary: create Artifact
+      tags:
+        - "Artifacts"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/artifact-description"
+                name:
+                  $ref: "#/components/schemas/artifact-name"
+                organization_name:
+                  schema:
+                    $ref: "#/components/schemas/organization-name"
+              required:
+                - organization_name
+                - name
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact:
+                    $ref: "#/components/schemas/artifact"
+    get:
+      summary: list Artifacts
+      tags:
+        - "Artifacts"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`description`|`:` and `~`.|String.|
+            |`inserted_at`|`:`, `~`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`name`|`:` and `~`.|String.|
+            |`updated_at`|`:`, `~`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifacts:
+                    $ref: "#/components/schemas/array-of-artifacts"
+  /artifacts/{artifact_id}:
+    get:
+      summary: get Artifact
+      tags:
+        - "Artifacts"
+      parameters:
+        - name: artifact_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-id"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact:
+                    $ref: "#/components/schemas/artifact"
+    patch:
+      summary: update Artifact
+      tags:
+        - "Artifacts"
+      parameters:
+        - name: artifact_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/artifact-description"
+                name:
+                  $ref: "#/components/schemas/artifact-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact:
+                    $ref: "#/components/schemas/artifact"
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
@@ -1464,6 +1668,10 @@ components:
   schemas:
     access-token:
       type: string
+    array-of-artifacts:
+      type: array
+      items:
+        $ref: "#/components/schemas/artifact"
     array-of-ca-certificates:
       type: array
       items:
@@ -1508,6 +1716,32 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/product"
+    artifact:
+      type: object
+      properties:
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/artifact-description"
+            - type: "null"
+        id:
+          $ref: "#/components/schemas/artifact-id"
+        inserted_at:
+          type: string
+          format: date-time
+        name:
+          $ref: "#/components/schemas/artifact-name"
+        updated_at:
+          type: string
+          format: date-time
+    artifact-id:
+      type: string
+      format: uuid
+    artifact-name:
+      type: string
+      maxLength: 128
+    artifact-description:
+      type: string
+      maxLength: 256
     ca-certificate:
       type: object
       properties:
@@ -1717,6 +1951,18 @@ components:
       type: string
     key-name:
       type: string
+    limit:
+      description: Specifies the max length of the returned results.
+      default: 10
+      maximum: 100
+      minimum: 1
+      type: integer
+    order:
+      description: Controls whether the order of results is ascending or descending by (`inserted_at`, `id`).
+      type: string
+      enum:
+        - asc
+        - desc
     organization-name:
       type: string
     organization-user:
@@ -1728,6 +1974,12 @@ components:
           $ref: "#/components/schemas/role-name"
         username:
           $ref: "#/components/schemas/user-username"
+    page:
+      description: |
+        A cursor for pagination across multiple pages of results. Don’t include this parameter on
+        the first call. Use the `next_page` value returned in a previous response to request
+        subsequent results.
+      type: string
     platform:
       type: string
     product:
