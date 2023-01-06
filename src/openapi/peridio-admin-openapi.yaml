@@ -2,25 +2,669 @@
 openapi: 3.1.0
 info:
   title: Peridio Admin API
-  version: "1.0.0"
+  version: "v1"
+  description: |
+    # Expanding Responses
+
+    Some endpoints are able to return more data than they normally do by expanding their response.
+    When this is possible the endpoint will specify the `expand` field and will document which
+    fields can be expanded. The `expand` field takes an array of string field names that identify
+    which fields you wish to expand.
+
+    For example:
+
+    ```text
+    /foo?expand[]=bar&expand[]=baz
+    ```
+
+    # Search Query Language
+
+    Some endpoints specify a `search` parameter. The value of this parameter must be a string that
+    contains a valid query as defined by this search query language.
+
+    ## Queries
+
+    A query consists of at least one and at most five clauses joined by the `and` keyword.
+
+    For example:
+
+    ```text
+    inserted_at>='2023-01-01T00:00:00Z' and description~'east blue'
+    ```
+
+    ## Clauses
+
+    A clause consists of a key, an operator, and a value.
+
+    For example:
+
+    ```text
+    inserted_at>='2023-01-01T00:00:00Z'
+    ```
+
+    ## Keys
+
+    When performing a search, the set of valid keys is defined by the relevant endpoint's `search`
+    parameter's documentation.
+
+    ## Operators
+
+    Each key an endpoint specifies as searchable will be associated with a set of operators that
+    are valid to use with it. Below are all possible operators and their associated operation:
+
+    |Keyword|Operation|
+    |-|-|
+    |`:`|equals (case-sensitive)|
+    |`~`|substring (case-sensitive)|
+    |`<`|less than|
+    |`<=`|less than or equal to|
+    |`>`|greater than|
+    |`>=`|greater than or equal to|
+
+    ## Values
+
+    Each key will specify which type of value it acepts.
+
+    ### String
+
+    You must use single quotes when supplying a string. You can escape single quotes inside of
+    single quotes with a backslash (`\`).
+
+    For example:
+
+    ```text
+    summary~'zoro\'s three sword style'
+    ```
+
+    ### Date-Time
+
+    You must use single quotes when supplying a date-time and you must use the following
+    representation: `'[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]Z'`. The timezone is always UTC.
+
+    For example:
+
+    ```text
+    inserted_at:'2023-01-01T00:00:00Z'
+    ```
+
+    ### Numeric
+
+    Numeric values are supplied as-is without single quotes.
+
+    For example:
+
+    ```text
+    berries:100000000
+    ```
 servers:
   - url: https://api.cremini.peridio.com
 security:
   - api_key: []
+tags:
+  - name: Experimental Overview
+    x-displayName: Overview
+    description: |
+      Experimental endpoints are documented here, but access to them is only available through a
+      private, closed beta group.
+
+      All experimental endpoints are subject to change and their promotion to general availability
+      in the Peridio Admin API is not guaranteed.
 x-tagGroups:
-  - name: "Endpoints"
+  - name: Endpoints
     tags:
-      - "CA Certificates"
-      - "Deployments"
-      - "Device Certificates"
-      - "Devices"
-      - "Firmwares"
-      - "Keys"
-      - "Organization Users"
-      - "Product Users"
-      - "Products"
-      - "Users"
+      - CA Certificates
+      - Deployments
+      - Device Certificates
+      - Devices
+      - Firmwares
+      - Keys
+      - Organization Users
+      - Product Users
+      - Products
+      - Users
+  - name: Experimental
+    tags:
+      - Experimental Overview
+      - Artifacts
+      - Artifact Versions
+      - Binaries
 paths:
+  /artifacts:
+    post:
+      operationId: create-artifact
+      summary: create Artifact
+      tags:
+        - "Artifacts"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/artifact-description"
+                name:
+                  $ref: "#/components/schemas/artifact-name"
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+              required:
+                - organization_name
+                - name
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact:
+                    $ref: "#/components/schemas/artifact"
+    get:
+      operationId: list-artifacts
+      summary: list Artifacts
+      tags:
+        - "Artifacts"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`description`|`:` and `~`.|String.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`name`|`:` and `~`.|String.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifacts:
+                    $ref: "#/components/schemas/array-of-artifacts"
+  /artifacts/{artifact_id}:
+    get:
+      operationId: retrieve-artifact
+      summary: retrieve Artifact
+      tags:
+        - "Artifacts"
+      parameters:
+        - name: artifact_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-id"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact:
+                    $ref: "#/components/schemas/artifact"
+    patch:
+      operationId: update-artifact
+      summary: update Artifact
+      tags:
+        - "Artifacts"
+      parameters:
+        - name: artifact_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/artifact-description"
+                name:
+                  $ref: "#/components/schemas/artifact-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact:
+                    $ref: "#/components/schemas/artifact"
+  /artifact-versions:
+    post:
+      operationId: create-artifact-version
+      summary: create Artifact Version
+      tags:
+        - "Artifact Versions"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                artifact_id:
+                  $ref: "#/components/schemas/artifact-id"
+                description:
+                  $ref: "#/components/schemas/artifact-version-description"
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+                version:
+                  $ref: "#/components/schemas/artifact-version-version"
+              required:
+                - artifact_id
+                - organization_name
+                - version
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_version:
+                    $ref: "#/components/schemas/artifact-version"
+    get:
+      operationId: list-artifact-versions
+      summary: list Artifact Versions
+      tags:
+        - "Artifact Versions"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`artifact_id`|`:`.|String.|
+            |`description`|`:` and `~`. |String.|
+            |`id`|`:`.|String.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`version`|`:` and `~`. |String.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_versions:
+                    $ref: "#/components/schemas/array-of-artifact-versions"
+  /artifact-versions/{artifact_version_id}:
+    get:
+      operationId: retrieve-artifact-version
+      summary: retrieve Artifact Version
+      tags:
+        - "Artifact Versions"
+      parameters:
+        - name: artifact_version_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-version-id"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_version:
+                    $ref: "#/components/schemas/artifact-version"
+    patch:
+      operationId: update-artifact-version
+      summary: update Artifact Version
+      tags:
+        - "Artifact Versions"
+      parameters:
+        - name: artifact_version_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-version-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/artifact-version-description"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_version:
+                    $ref: "#/components/schemas/artifact-version"
+  /binaries:
+    post:
+      operationId: create-binary
+      summary: create Binary
+      description: |
+        Create the initial record of the binary.
+
+        To upload the actual binary, use [upload Binary](#tag/Binaries/operation/upload-binary).
+        To finalize the binary for use, use [sign Binary](#tag/Binaries/operation/sign-binary).
+      tags:
+        - "Binaries"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                artifact_version_id:
+                  $ref: "#/components/schemas/artifact-version-id"
+                description:
+                  $ref: "#/components/schemas/binary-description"
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+                target:
+                  $ref: "#/components/schemas/target-triplet"
+              required:
+                - artifact_version_id
+                - organization_name
+                - target
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: "#/components/schemas/binary"
+    get:
+      operationId: list-binaries
+      summary: list Binaries
+      tags:
+        - "Binaries"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            See [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`artifact_version_id`|`:`.|String.|
+            |`description`|`:` and `~`. |String.|
+            |`id`|`:`.|String.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`target`|`:` and `~`. |String.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binaries:
+                    $ref: "#/components/schemas/array-of-binaries"
+  /binaries/{binary_id}:
+    get:
+      operationId: retrieve-binary
+      summary: retrieve Binary
+      tags:
+        - "Binaries"
+      parameters:
+        - name: binary_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-id"
+        - name: expand
+          description: |
+            See [expanding responses](#section/Expanding-Responses).
+
+            |Field|Description|
+            |-|-|
+            |`url`|Includes a presigned URL for downloading the binary.|
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: "#/components/schemas/binary"
+    patch:
+      operationId: update-binary
+      summary: update Binary
+      tags:
+        - "Binaries"
+      parameters:
+        - name: binary_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/binary-description"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: "#/components/schemas/binary"
+  /binaries/{binary_id}/abort-upload:
+    post:
+      operationId: abort-upload-binary
+      summary: abort upload Binary
+      description: |
+        Aborts the current upload of a binary.
+
+        To create the initial record of the binary, use
+        [create Binary](#tag/Binaries/operation/create-binary).
+        To upload the actual binary, use [upload Binary](#tag/Binaries/operation/upload-binary).
+        To finalize the binary for use, use [sign Binary](#tag/Binaries/operation/sign-binary).
+
+        The request will fail if:
+
+        - The value of `upload_status` for the specified binary is not `in_progress` prior to this
+          request.
+
+        If successful, the specified binary will be altered in the following manner:
+
+        - `upload_status` will be updated to `aborted`. Any bytes Peridio may have received up
+          till this point will be discarded. You may attempt to upload the binary again.
+      tags:
+        - "Binaries"
+      parameters:
+        - name: binary_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-id"
+      responses:
+        "204":
+          description: Ok.
+  /binaries/{binary_id}/upload:
+    post:
+      operationId: upload-binary
+      summary: upload Binary
+      description: |
+        Upload the actual binary.
+
+        To create the initial record of the binary, use
+        [create Binary](#tag/Binaries/operation/create-binary).
+        To abort the binary upload, use
+        [abort upload Binary](#tag/Binaries/operation/abort-upload-binary).
+        To finalize the binary for use, use [sign Binary](#tag/Binaries/operation/sign-binary).
+
+        The request will fail if:
+
+        - The value of `upload_status` for the specified binary is not one of: `not_started`,
+          `in_progress`, or `aborted` prior to this request.
+      tags:
+        - "Binaries"
+      parameters:
+        - name: binary_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-id"
+        - name: Content-Range
+          description: |
+            Standard HTTP Content-Range header. Indicates what portion of the binary you are
+            uploading. Acceptable values take the form `bytes <range-start>-<range-end>/<size>`.
+            This API will return an error if supplied `*` for any of the above placeholders.
+
+            While this header is typically not required, it is conditionally required when a
+            portion of the binary has already been uploaded to Peridio. In that case you must
+            supply this header, and the `<range-start>` must match the `size` reported by
+            performing a [retrieve Binary](#tag/Binaries/operation/retrieve-binary) request.
+
+            See the [uploading binaries guide](/guides/uploading-binaries#resuming-uploads).
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "204":
+          description: Ok.
+  /binaries/{binary_id}/sign:
+    post:
+      operationId: sign-binary
+      summary: sign Binary
+      tags:
+        - "Binaries"
+      description: |
+        Finalize the binary for use.
+
+        To create the initial record of the binary, use
+        [create Binary](#tag/Binaries/operation/create-binary).
+        To upload the actual binary, use [upload Binary](#tag/Binaries/operation/upload-binary).
+
+        The request will fail if:
+
+        - The `signature` is invalid for the key identified by the `signing_key_id`.
+        - The value of `upload_status` for the specified binary is not `in_progress` prior to this
+          request.
+
+        If successful, the specified binary will be altered in the following manner:
+
+        - `signing_key_id` and `signature` will be updated to the values provided.
+        - `upload_status` will be updated to `complete`.
+      parameters:
+        - name: binary_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                signing_key_id:
+                  $ref: "#/components/schemas/key-key"
+                signature:
+                  $ref: "#/components/schemas/signature"
+              required:
+                - signing_key_id
+                - signature
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: "#/components/schemas/binary"
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
@@ -1032,6 +1676,19 @@ paths:
           required: true
           schema:
             $ref: "#/components/schemas/firmware-uuid"
+        - name: expand
+          description: |
+            See [expanding responses](#section/Expanding-Responses).
+
+            |Field|Description|
+            |-|-|
+            |`url`|Includes a presigned URL for downloading the firmware.|
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: Ok.
@@ -1464,6 +2121,18 @@ components:
   schemas:
     access-token:
       type: string
+    array-of-artifacts:
+      type: array
+      items:
+        $ref: "#/components/schemas/artifact"
+    array-of-artifact-versions:
+      type: array
+      items:
+        $ref: "#/components/schemas/artifact-version"
+    array-of-binaries:
+      type: array
+      items:
+        $ref: "#/components/schemas/binary"
     array-of-ca-certificates:
       type: array
       items:
@@ -1508,6 +2177,119 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/product"
+    artifact:
+      type: object
+      properties:
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/artifact-description"
+            - type: "null"
+        id:
+          $ref: "#/components/schemas/artifact-id"
+        inserted_at:
+          type: string
+          format: date-time
+        name:
+          $ref: "#/components/schemas/artifact-name"
+        updated_at:
+          type: string
+          format: date-time
+    artifact-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    artifact-id:
+      type: string
+      format: uuid
+    artifact-name:
+      type: string
+      minLength: 1
+      maxLength: 128
+    artifact-version:
+      type: object
+      properties:
+        artifact_id:
+          $ref: "#/components/schemas/artifact-id"
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/artifact-version-description"
+            - type: "null"
+        id:
+          $ref: "#/components/schemas/artifact-version-id"
+        inserted_at:
+          type: string
+          format: date-time
+        version:
+          $ref: "#/components/schemas/artifact-version-version"
+        updated_at:
+          type: string
+          format: date-time
+    artifact-version-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    artifact-version-id:
+      type: string
+      format: uuid
+    artifact-version-version:
+      type: string
+      minLength: 5
+      maxLength: 16
+    binary:
+      type: object
+      properties:
+        artifact_version_id:
+          $ref: "#/components/schemas/artifact-version-id"
+        signing_key_id:
+          oneOf:
+            - type: "null"
+            - type: string
+              format: uuid
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/binary-description"
+            - type: "null"
+        id:
+          $ref: "#/components/schemas/binary-id"
+        inserted_at:
+          type: string
+          format: date-time
+        signature:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/signature"
+        target:
+          $ref: "#/components/schemas/target-triplet"
+        updated_at:
+          type: string
+          format: date-time
+        upload_status:
+          type: string
+          enum:
+            - not_started
+            - in_progress
+            - aborted
+            - complete
+        size:
+          description: |
+            How many bytes have been uploaded for the binary. The value is subject to change until
+            `upload_status` is `complete`.
+          type: integer
+          minimum: 0
+          maximum: 10_000_000_000
+    binary-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    binary-id:
+      type: string
+      format: uuid
+    target-triplet:
+      type: string
+      minLength: 1
+      maxLength: 128
+      description: A target triplet string that restricts which devices are compatible with this binary.
+      example: arm-linux-androideabi
     ca-certificate:
       type: object
       properties:
@@ -1717,6 +2499,18 @@ components:
       type: string
     key-name:
       type: string
+    limit:
+      description: Specifies the max length of the returned results.
+      default: 10
+      maximum: 100
+      minimum: 1
+      type: integer
+    order:
+      description: Controls whether the order of results is ascending or descending by (`inserted_at`, `id`).
+      type: string
+      enum:
+        - asc
+        - desc
     organization-name:
       type: string
     organization-user:
@@ -1728,6 +2522,12 @@ components:
           $ref: "#/components/schemas/role-name"
         username:
           $ref: "#/components/schemas/user-username"
+    page:
+      description: |
+        A cursor for pagination across multiple pages of results. Don’t include this parameter on
+        the first call. Use the `next_page` value returned in a previous response to request
+        subsequent results.
+      type: string
     platform:
       type: string
     product:
@@ -1758,6 +2558,11 @@ components:
     serial:
       type: string
       example: "522154175989108335861639249273408275957749326848"
+    signature:
+      type: string
+      description: |
+        An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
+        encoded string.
     user-me:
       allOf:
         - type: object
