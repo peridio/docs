@@ -91,6 +91,7 @@ x-tagGroups:
   - name: "Endpoints"
     tags:
       - "Artifacts"
+      - "Artifact Versions"
       - "CA Certificates"
       - "Deployments"
       - "Device Certificates"
@@ -118,8 +119,7 @@ paths:
                 name:
                   $ref: "#/components/schemas/artifact-name"
                 organization_name:
-                  schema:
-                    $ref: "#/components/schemas/organization-name"
+                  $ref: "#/components/schemas/organization-name"
               required:
                 - organization_name
                 - name
@@ -162,9 +162,9 @@ paths:
             |Key|Operators|Value|
             |-|-|-|
             |`description`|`:` and `~`.|String.|
-            |`inserted_at`|`:`, `~`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
             |`name`|`:` and `~`.|String.|
-            |`updated_at`|`:`, `~`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
           schema:
             type: string
       responses:
@@ -225,6 +225,131 @@ paths:
                 properties:
                   artifact:
                     $ref: "#/components/schemas/artifact"
+  /artifact-versions:
+    post:
+      summary: create Artifact Version
+      tags:
+        - "Artifact Versions"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                artifact_id:
+                  $ref: "#/components/schemas/artifact-id"
+                description:
+                  $ref: "#/components/schemas/artifact-version-description"
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+                version:
+                  $ref: "#/components/schemas/artifact-version-version"
+              required:
+                - artifact_id
+                - organization_name
+                - version
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_version:
+                    $ref: "#/components/schemas/artifact-version"
+    get:
+      summary: list Artifact Versions
+      tags:
+        - "Artifact Versions"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`artifact_id`|`:`.|String.|
+            |`description`|`:` and `~`. |String.|
+            |`id`|`:`.|String.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`version`|`:` and `~`. |String.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_versions:
+                    $ref: "#/components/schemas/array-of-artifact-versions"
+  /artifact-versions/{artifact_version_id}:
+    get:
+      summary: get Artifact Version
+      tags:
+        - "Artifact Versions"
+      parameters:
+        - name: artifact_version_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-version-id"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_version:
+                    $ref: "#/components/schemas/artifact-version"
+    patch:
+      summary: update Artifact Version
+      tags:
+        - "Artifact Versions"
+      parameters:
+        - name: artifact_version_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/artifact-version-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/artifact-version-description"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  artifact_version:
+                    $ref: "#/components/schemas/artifact-version"
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
@@ -1672,6 +1797,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/artifact"
+    array-of-artifact-versions:
+      type: array
+      items:
+        $ref: "#/components/schemas/artifact-version"
     array-of-ca-certificates:
       type: array
       items:
@@ -1733,15 +1862,47 @@ components:
         updated_at:
           type: string
           format: date-time
+    artifact-description:
+      type: string
+      minLength: 1
+      maxLength: 256
     artifact-id:
       type: string
       format: uuid
     artifact-name:
       type: string
+      minLength: 1
       maxLength: 128
-    artifact-description:
+    artifact-version:
+      type: object
+      properties:
+        artifact_id:
+          $ref: "#/components/schemas/artifact-id"
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/artifact-version-description"
+            - type: "null"
+        id:
+          $ref: "#/components/schemas/artifact-version-id"
+        inserted_at:
+          type: string
+          format: date-time
+        version:
+          $ref: "#/components/schemas/artifact-version-version"
+        updated_at:
+          type: string
+          format: date-time
+    artifact-version-description:
       type: string
+      minLength: 1
       maxLength: 256
+    artifact-version-id:
+      type: string
+      format: uuid
+    artifact-version-version:
+      type: string
+      minLength: 5
+      maxLength: 16
     ca-certificate:
       type: object
       properties:
