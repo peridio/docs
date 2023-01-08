@@ -350,6 +350,131 @@ paths:
                 properties:
                   artifact_version:
                     $ref: "#/components/schemas/artifact-version"
+  /binaries:
+    post:
+      summary: create Binary
+      tags:
+        - "Binaries"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                artifact_version_id:
+                  $ref: "#/components/schemas/artifact-version-id"
+                description:
+                  $ref: "#/components/schemas/binary-description"
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+                target:
+                  $ref: "#/components/schemas/binary-target"
+              required:
+                - artifact_version_id
+                - organization_name
+                - target
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: "#/components/schemas/binary"
+    get:
+      summary: list Binaries
+      tags:
+        - "Binaries"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`artifact_version_id`|`:`.|String.|
+            |`description`|`:` and `~`. |String.|
+            |`id`|`:`.|String.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`target`|`:` and `~`. |String.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binaries:
+                    $ref: "#/components/schemas/array-of-binaries"
+  /binaries/{binary_id}:
+    get:
+      summary: get Binary
+      tags:
+        - "Binaries"
+      parameters:
+        - name: binary_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-id"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: "#/components/schemas/binary"
+    patch:
+      summary: update Binary
+      tags:
+        - "Binaries"
+      parameters:
+        - name: binary_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/binary-description"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: "#/components/schemas/binary"
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
@@ -1801,6 +1926,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/artifact-version"
+    array-of-binaries:
+      type: array
+      items:
+        $ref: "#/components/schemas/binary"
     array-of-ca-certificates:
       type: array
       items:
@@ -1903,6 +2032,36 @@ components:
       type: string
       minLength: 5
       maxLength: 16
+    binary:
+      type: object
+      properties:
+        artifact_version_id:
+          $ref: "#/components/schemas/artifact-version-id"
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/binary-description"
+            - type: "null"
+        id:
+          $ref: "#/components/schemas/binary-id"
+        inserted_at:
+          type: string
+          format: date-time
+        target:
+          $ref: "#/components/schemas/binary-target"
+        updated_at:
+          type: string
+          format: date-time
+    binary-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    binary-id:
+      type: string
+      format: uuid
+    binary-target:
+      type: string
+      minLength: 1
+      maxLength: 128
     ca-certificate:
       type: object
       properties:
