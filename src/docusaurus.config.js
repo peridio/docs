@@ -58,6 +58,11 @@ const config = {
             spec: 'openapi/peridio-device-openapi.yaml',
           },
         ],
+        theme: {
+          options: {
+            scrollYOffset: 60,
+          },
+        },
       },
     ],
   ],
