@@ -129,6 +129,7 @@ x-tagGroups:
       - Artifact Versions
       - Binaries
       - Bundles
+      - Cohorts
 paths:
   /artifacts:
     post:
@@ -760,6 +761,161 @@ paths:
                 properties:
                   bundle:
                     $ref: "#/components/schemas/bundle"
+  /cohorts:
+    post:
+      operationId: create-cohort
+      summary: create Cohort
+      tags:
+        - Cohorts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/cohort-description"
+                name:
+                  $ref: "#/components/schemas/cohort-name"
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+                product_name:
+                  $ref: "#/components/schemas/product-name"
+              required:
+                - name
+                - organization_name
+                - product_name
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  cohort:
+                    $ref: "#/components/schemas/cohort"
+    get:
+      operationId: list-cohorts
+      summary: list Cohorts
+      tags:
+        - "Cohorts"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            See [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`description`|`:` and `~`. |String.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`name`|`:` and `~`. |String.|
+            |`product_name`|`:`.|String.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  cohorts:
+                    $ref: "#/components/schemas/array-of-cohorts"
+  /cohorts/{cohort_id}:
+    get:
+      operationId: retrieve-cohort
+      summary: retrieve Cohort
+      tags:
+        - Cohorts
+      parameters:
+        - name: cohort_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/cohort-id"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  cohort:
+                    $ref: "#/components/schemas/cohort"
+    patch:
+      operationId: update-cohort
+      summary: update Cohort
+      tags:
+        - Cohorts
+      parameters:
+        - name: cohort_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/cohort-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/cohort-description"
+                name:
+                  $ref: "#/components/schemas/cohort-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  cohort:
+                    $ref: "#/components/schemas/cohort"
+  /cohorts/{cohort_id}/add-devices:
+    post:
+      operationId: add-devices-to-cohort
+      summary: add devices to Cohort
+      tags:
+        - Cohorts
+      parameters:
+        - name: cohort_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/cohort-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                devices_ids:
+                  $ref: "#/components/schemas/array-of-device-identifiers"
+              required:
+                - device_ids
+      responses:
+        "201":
+          description: Ok.
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
@@ -2244,6 +2400,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/ca-jitp-tag"
+    array-of-cohorts:
+      type: array
+      items:
+        $ref: "#/components/schemas/cohort"
     array-of-deployments:
       type: array
       items:
@@ -2252,6 +2412,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/device-certificate"
+    array-of-device-identifiers:
+      type: array
+      items:
+        $ref: "#/components/schemas/device-identifier"
     array-of-device-tags:
       type: array
       items:
@@ -2398,6 +2562,8 @@ components:
             representation of the `artifact_version_ids` array.
           example: 8a20a70d525e0738ab8328088c79b1278dc66dad787624af51c470e3eea0b6a8
           type: string
+          minLength: 64
+          maxLength: 64
         id:
           $ref: "#/components/schemas/binary-id"
         inserted_at:
@@ -2451,6 +2617,36 @@ components:
         - product_name
     ca-jitp-tag:
       type: string
+    cohort:
+      type: object
+      properties:
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/cohort-description"
+            - type: "null"
+        name:
+          $ref: "#/components/schemas/cohort-name"
+        id:
+          $ref: "#/components/schemas/cohort-id"
+        inserted_at:
+          type: string
+          format: date-time
+        product_name:
+          $ref: "#/components/schemas/product-name"
+        updated_at:
+          type: string
+          format: date-time
+    cohort-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    cohort-id:
+      type: string
+      format: uuid
+    cohort-name:
+      type: string
+      minLength: 1
+      maxLength: 128
     delta-updatable:
       type: boolean
     deployment:
