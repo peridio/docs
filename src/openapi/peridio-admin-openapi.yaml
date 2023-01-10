@@ -128,6 +128,7 @@ x-tagGroups:
       - Artifacts
       - Artifact Versions
       - Binaries
+      - Bundles
 paths:
   /artifacts:
     post:
@@ -665,6 +666,100 @@ paths:
                 properties:
                   binary:
                     $ref: "#/components/schemas/binary"
+  /bundles:
+    post:
+      operationId: create-bundle
+      summary: create Bundle
+      tags:
+        - Bundles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+                artifact_version_ids:
+                  $ref: "#/components/schemas/array-of-artifact-version-ids"
+              required:
+                - artifact_version_ids
+                - organization_name
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle:
+                    $ref: "#/components/schemas/bundle"
+    get:
+      operationId: list-bundles
+      summary: list Bundles
+      tags:
+        - "Bundles"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            See [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`hash`|`:`.|String.|
+            |`id`|`:`.|String.|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundles:
+                    $ref: "#/components/schemas/array-of-bundles"
+  /bundles/{bundle_id}:
+    get:
+      operationId: retrieve-bundle
+      summary: retrieve Bundle
+      tags:
+        - "Bundles"
+      parameters:
+        - name: bundle_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/bundle-id"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle:
+                    $ref: "#/components/schemas/bundle"
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
@@ -2125,6 +2220,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/artifact"
+    array-of-artifact-version-ids:
+      type: array
+      items:
+        $ref: "#/components/schemas/artifact-version-id"
     array-of-artifact-versions:
       type: array
       items:
@@ -2133,6 +2232,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/binary"
+    array-of-bundles:
+      type: array
+      items:
+        $ref: "#/components/schemas/bundle"
     array-of-ca-certificates:
       type: array
       items:
@@ -2282,6 +2385,28 @@ components:
       minLength: 1
       maxLength: 256
     binary-id:
+      type: string
+      format: uuid
+    bundle:
+      type: object
+      properties:
+        artifact_version_ids:
+          $ref: "#/components/schemas/array-of-artifact-version-ids"
+        hash:
+          description: A SHA256 hash of the
+            [canonical JSON](https://wiki.laptop.org/go/Canonical_JSON)
+            representation of the `artifact_version_ids` array.
+          example: 8a20a70d525e0738ab8328088c79b1278dc66dad787624af51c470e3eea0b6a8
+          type: string
+        id:
+          $ref: "#/components/schemas/binary-id"
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    bundle-id:
       type: string
       format: uuid
     target-triplet:
