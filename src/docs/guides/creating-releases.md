@@ -1,4 +1,4 @@
-# Creating releases
+# Creating Releases
 
 This guide describes how to create releases.
 

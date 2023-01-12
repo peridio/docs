@@ -184,6 +184,11 @@ const sidebars = {
       label: 'Experimental',
       items: [
         'guides/release-orchestration',
+        'guides/creating-artifacts',
+        'guides/creating-artifact-versions',
+        'guides/creating-binaries',
+        'guides/creating-bundles',
+        'guides/creating-releases',
       ],
       link: {
         description: 'Experimental guides are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental guides are subject to change and their promotion to general availability is not guaranteed.',
