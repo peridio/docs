@@ -76,6 +76,16 @@ info:
     summary~'zoro\'s three sword style'
     ```
 
+    ### Boolean
+
+    Boolean values are supplied either `true` or `false` without single quotes.
+
+    For example:
+
+    ```text
+    purged:true
+    ```
+
     ### Date-Time
 
     You must use single quotes when supplying a date-time and you must use the following
@@ -130,11 +140,12 @@ x-tagGroups:
       - Binaries
       - Bundles
       - Cohorts
+      - Releases
 paths:
   /artifacts:
     post:
-      operationId: create-artifact
-      summary: create Artifact
+      operationId: create-an-artifact
+      summary: Create an artifact
       tags:
         - "Artifacts"
       requestBody:
@@ -163,7 +174,7 @@ paths:
                     $ref: "#/components/schemas/artifact"
     get:
       operationId: list-artifacts
-      summary: list Artifacts
+      summary: List artifacts
       tags:
         - "Artifacts"
       parameters:
@@ -191,10 +202,10 @@ paths:
 
             |Key|Operators|Value|
             |-|-|-|
-            |`description`|`:` and `~`.|String.|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
-            |`name`|`:` and `~`.|String.|
-            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`description`|`:`, `~`|string|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+            |`name`|`:`, `~`|string|
+            |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
           schema:
             type: string
       responses:
@@ -206,10 +217,12 @@ paths:
                 properties:
                   artifacts:
                     $ref: "#/components/schemas/array-of-artifacts"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
   /artifacts/{artifact_id}:
     get:
-      operationId: retrieve-artifact
-      summary: retrieve Artifact
+      operationId: retrieve-an-artifact
+      summary: Retrieve an artifact
       tags:
         - "Artifacts"
       parameters:
@@ -228,8 +241,8 @@ paths:
                   artifact:
                     $ref: "#/components/schemas/artifact"
     patch:
-      operationId: update-artifact
-      summary: update Artifact
+      operationId: update-an-artifact
+      summary: Update an artifact
       tags:
         - "Artifacts"
       parameters:
@@ -259,8 +272,8 @@ paths:
                     $ref: "#/components/schemas/artifact"
   /artifact-versions:
     post:
-      operationId: create-artifact-version
-      summary: create Artifact Version
+      operationId: create-an-artifact-version
+      summary: Create an artifact version
       tags:
         - "Artifact Versions"
       requestBody:
@@ -292,7 +305,7 @@ paths:
                     $ref: "#/components/schemas/artifact-version"
     get:
       operationId: list-artifact-versions
-      summary: list Artifact Versions
+      summary: List artifact versions
       tags:
         - "Artifact Versions"
       parameters:
@@ -320,12 +333,12 @@ paths:
 
             |Key|Operators|Value|
             |-|-|-|
-            |`artifact_id`|`:`.|String.|
-            |`description`|`:` and `~`. |String.|
-            |`id`|`:`.|String.|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
-            |`version`|`:` and `~`. |String.|
-            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`artifact_id`|`:`|string|
+            |`description`|`:`, `~` |string|
+            |`id`|`:`|string|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+            |`version`|`:`, `~`|string|
+            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
           schema:
             type: string
       responses:
@@ -337,10 +350,12 @@ paths:
                 properties:
                   artifact_versions:
                     $ref: "#/components/schemas/array-of-artifact-versions"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
   /artifact-versions/{artifact_version_id}:
     get:
-      operationId: retrieve-artifact-version
-      summary: retrieve Artifact Version
+      operationId: retrieve-an-artifact-version
+      summary: Retrieve artifact version
       tags:
         - "Artifact Versions"
       parameters:
@@ -359,8 +374,8 @@ paths:
                   artifact_version:
                     $ref: "#/components/schemas/artifact-version"
     patch:
-      operationId: update-artifact-version
-      summary: update Artifact Version
+      operationId: update-an-artifact-version
+      summary: Update an artifact version
       tags:
         - "Artifact Versions"
       parameters:
@@ -388,13 +403,10 @@ paths:
                     $ref: "#/components/schemas/artifact-version"
   /binaries:
     post:
-      operationId: create-binary
-      summary: create Binary
+      operationId: create-a-binary
+      summary: Create a binary
       description: |
-        Create the initial record of the binary.
-
-        To upload the actual binary, use [upload Binary](#tag/Binaries/operation/upload-binary).
-        To finalize the binary for use, use [sign Binary](#tag/Binaries/operation/sign-binary).
+        Create a binary record.
       tags:
         - "Binaries"
       requestBody:
@@ -405,6 +417,8 @@ paths:
               properties:
                 artifact_version_id:
                   $ref: "#/components/schemas/artifact-version-id"
+                bytes_expected:
+                  $ref: "#/components/schemas/binary-bytes-expected"
                 description:
                   $ref: "#/components/schemas/binary-description"
                 organization_name:
@@ -413,6 +427,7 @@ paths:
                   $ref: "#/components/schemas/target-triplet"
               required:
                 - artifact_version_id
+                - bytes_expected
                 - organization_name
                 - target
       responses:
@@ -426,7 +441,7 @@ paths:
                     $ref: "#/components/schemas/binary"
     get:
       operationId: list-binaries
-      summary: list Binaries
+      summary: List binaries
       tags:
         - "Binaries"
       parameters:
@@ -454,12 +469,15 @@ paths:
 
             |Key|Operators|Value|
             |-|-|-|
-            |`artifact_version_id`|`:`.|String.|
-            |`description`|`:` and `~`. |String.|
-            |`id`|`:`.|String.|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
-            |`target`|`:` and `~`. |String.|
-            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`artifact_version_id`|`:`|string|
+            |`bytes_expected`|`:`, `>`, `>=`, `<`, `<=`|numeric|
+            |`bytes_uploaded`|`:`, `>`, `>=`, `<`, `<=`|numeric|
+            |`description`|`:`, `~` |string|
+            |`id`|`:`|string|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+            |`purged`|`:`|boolean|
+            |`target`|`:`, `~`|string|
+            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
           schema:
             type: string
       responses:
@@ -471,10 +489,12 @@ paths:
                 properties:
                   binaries:
                     $ref: "#/components/schemas/array-of-binaries"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
   /binaries/{binary_id}:
     get:
-      operationId: retrieve-binary
-      summary: retrieve Binary
+      operationId: retrieve-a-binary
+      summary: Retrieve a binary
       tags:
         - "Binaries"
       parameters:
@@ -506,8 +526,8 @@ paths:
                   binary:
                     $ref: "#/components/schemas/binary"
     patch:
-      operationId: update-binary
-      summary: update Binary
+      operationId: update-a-binary
+      summary: Update a binary
       tags:
         - "Binaries"
       parameters:
@@ -533,27 +553,16 @@ paths:
                 properties:
                   binary:
                     $ref: "#/components/schemas/binary"
-  /binaries/{binary_id}/abort-upload:
+  /binaries/{binary_id}/purge:
     post:
-      operationId: abort-upload-binary
-      summary: abort upload Binary
+      operationId: purge-a-binary
+      summary: Purge a binary
       description: |
-        Aborts the current upload of a binary.
+        Deletes the binary content from Peridio while leaving the database record intact.
 
-        To create the initial record of the binary, use
-        [create Binary](#tag/Binaries/operation/create-binary).
-        To upload the actual binary, use [upload Binary](#tag/Binaries/operation/upload-binary).
-        To finalize the binary for use, use [sign Binary](#tag/Binaries/operation/sign-binary).
-
-        The request will fail if:
-
-        - The value of `upload_status` for the specified binary is not `in_progress` prior to this
-          request.
-
-        If successful, the specified binary will be altered in the following manner:
-
-        - `upload_status` will be updated to `aborted`. Any bytes Peridio may have received up
-          till this point will be discarded. You may attempt to upload the binary again.
+        **DANGER:** This is a one-way, disruptive, and destructive action. See the
+        [binaries reference](/reference/binaries#purged-binaries) for information regarding the
+        impact of purging a binary.
       tags:
         - "Binaries"
       parameters:
@@ -562,26 +571,31 @@ paths:
           required: true
           schema:
             $ref: "#/components/schemas/binary-id"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              properties:
+                force:
+                  default: false
+                  description: |
+                    By default this endpoint will fail if the binary is associated with any
+                    bundles. This protective measure can be bypassed by supplying `force: true` to
+                    this request, allowing a binary to be purged regardless of its associations.
+                  type: boolean
       responses:
         "204":
           description: Ok.
   /binaries/{binary_id}/upload:
     post:
-      operationId: upload-binary
-      summary: upload Binary
+      operationId: upload-a-binary
+      summary: Upload a binary
       description: |
-        Upload the actual binary.
+        Upload a binary's content.
 
-        To create the initial record of the binary, use
-        [create Binary](#tag/Binaries/operation/create-binary).
-        To abort the binary upload, use
-        [abort upload Binary](#tag/Binaries/operation/abort-upload-binary).
-        To finalize the binary for use, use [sign Binary](#tag/Binaries/operation/sign-binary).
-
-        The request will fail if:
-
-        - The value of `upload_status` for the specified binary is not one of: `not_started`,
-          `in_progress`, or `aborted` prior to this request.
+        This endpoint cannot be used against a binary that is already uploaded completely, nor
+        a purged binary.
       tags:
         - "Binaries"
       parameters:
@@ -592,18 +606,13 @@ paths:
             $ref: "#/components/schemas/binary-id"
         - name: Content-Range
           description: |
-            Standard HTTP Content-Range header. Indicates what portion of the binary you are
-            uploading. Acceptable values take the form `bytes <range-start>-<range-end>/<size>`.
-            This API will return an error if supplied `*` for any of the above placeholders.
+            Indicates what portion of the binary you are uploading. Acceptable values take the
+            form `bytes <range-start>-<range-end>/<size>`, e.g., `bytes 0-1000/1000`. `*` is not
+            supported.
 
-            While this header is typically not required, it is conditionally required when a
-            portion of the binary has already been uploaded to Peridio. In that case you must
-            supply this header, and the `<range-start>` must match the `size` reported by
-            performing a [retrieve Binary](#tag/Binaries/operation/retrieve-binary) request.
-
-            See the [uploading binaries guide](/guides/uploading-binaries#resuming-uploads).
+            `<range-start>` must match the current value of the binary's `bytes_uploaded` field.
           in: header
-          required: false
+          required: true
           schema:
             type: string
       requestBody:
@@ -616,29 +625,17 @@ paths:
       responses:
         "204":
           description: Ok.
-  /binaries/{binary_id}/sign:
+  /binaries/{binary_id}/attach-signature:
     post:
-      operationId: sign-binary
-      summary: sign Binary
+      operationId: attach-signature
+      summary: Attach a signature to a binary
       tags:
         - "Binaries"
       description: |
-        Finalize the binary for use.
+        Attach a signature to a binary.
 
-        To create the initial record of the binary, use
-        [create Binary](#tag/Binaries/operation/create-binary).
-        To upload the actual binary, use [upload Binary](#tag/Binaries/operation/upload-binary).
-
-        The request will fail if:
-
-        - The `signature` is invalid for the key identified by the `signing_key_id`.
-        - The value of `upload_status` for the specified binary is not `in_progress` prior to this
-          request.
-
-        If successful, the specified binary will be altered in the following manner:
-
-        - `signing_key_id` and `signature` will be updated to the values provided.
-        - `upload_status` will be updated to `complete`.
+        This endpoint must be used against a binary that is already uploaded completely. The
+        request will fail if the signature is invalid.
       parameters:
         - name: binary_id
           in: path
@@ -669,8 +666,8 @@ paths:
                     $ref: "#/components/schemas/binary"
   /bundles:
     post:
-      operationId: create-bundle
-      summary: create Bundle
+      operationId: create-a-bundle
+      summary: Create a bundle
       tags:
         - Bundles
       requestBody:
@@ -725,10 +722,10 @@ paths:
 
             |Key|Operators|Value|
             |-|-|-|
-            |`hash`|`:`.|String.|
-            |`id`|`:`.|String.|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
-            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`hash`|`:`|string|
+            |`id`|`:`|string|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
           schema:
             type: string
       responses:
@@ -740,10 +737,12 @@ paths:
                 properties:
                   bundles:
                     $ref: "#/components/schemas/array-of-bundles"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
   /bundles/{bundle_id}:
     get:
-      operationId: retrieve-bundle
-      summary: retrieve Bundle
+      operationId: retrieve-a-bundle
+      summary: Retrieve a bundle
       tags:
         - "Bundles"
       parameters:
@@ -763,8 +762,8 @@ paths:
                     $ref: "#/components/schemas/bundle"
   /cohorts:
     post:
-      operationId: create-cohort
-      summary: create Cohort
+      operationId: create-a-cohort
+      summary: Create a cohort
       tags:
         - Cohorts
       requestBody:
@@ -824,11 +823,11 @@ paths:
 
             |Key|Operators|Value|
             |-|-|-|
-            |`description`|`:` and `~`. |String.|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
-            |`name`|`:` and `~`. |String.|
-            |`product_name`|`:`.|String.|
-            |`updated_at`|`:`, `>`, `>=`, `<`, and `<=`. |Date-time.|
+            |`description`|`:`, `~`|string|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+            |`name`|`:`, `~`|string|
+            |`product_name`|`:`|string|
+            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
           schema:
             type: string
       responses:
@@ -840,10 +839,12 @@ paths:
                 properties:
                   cohorts:
                     $ref: "#/components/schemas/array-of-cohorts"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
   /cohorts/{cohort_id}:
     get:
-      operationId: retrieve-cohort
-      summary: retrieve Cohort
+      operationId: retrieve-a-cohort
+      summary: Retrieve a cohort
       tags:
         - Cohorts
       parameters:
@@ -862,8 +863,8 @@ paths:
                   cohort:
                     $ref: "#/components/schemas/cohort"
     patch:
-      operationId: update-cohort
-      summary: update Cohort
+      operationId: update-a-cohort
+      summary: Update a cohort
       tags:
         - Cohorts
       parameters:
@@ -891,31 +892,6 @@ paths:
                 properties:
                   cohort:
                     $ref: "#/components/schemas/cohort"
-  /cohorts/{cohort_id}/add-devices:
-    post:
-      operationId: add-devices-to-cohort
-      summary: add devices to Cohort
-      tags:
-        - Cohorts
-      parameters:
-        - name: cohort_id
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/cohort-id"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                devices_ids:
-                  $ref: "#/components/schemas/array-of-device-identifiers"
-              required:
-                - device_ids
-      responses:
-        "201":
-          description: Ok.
   /orgs/{organization_name}/ca_certificates:
     get:
       summary: get CA certificates
@@ -2232,6 +2208,98 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/organization-user"
+  /releases:
+    post:
+      operationId: create-a-release
+      summary: Create a release
+      tags:
+        - Releases
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                bundle_id:
+                  $ref: "#/components/schemas/bundle-id"
+                cohort_availability:
+                  $ref: "#/components/schemas/release-cohort-availability"
+                cohort_id:
+                  $ref: "#/components/schemas/cohort-id"
+                description:
+                  $ref: "#/components/schemas/release-description"
+                organization_name:
+                  $ref: "#/components/schemas/organization-name"
+                required:
+                  $ref: "#/components/schemas/release-required"
+                schedule_availability:
+                  description:
+                    If not provided, Peridio will default it to the current date-time at the time
+                    of processing the request. This will effectively make the release available
+                    immediately.
+                  $ref: "#/components/schemas/release-schedule-availability"
+              required:
+                - bundle_id
+                - cohort_id
+                - organization_name
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  release:
+                    $ref: "#/components/schemas/release"
+    get:
+      operationId: list-releases
+      summary: list Releases
+      tags:
+        - Releases
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: "#/components/schemas/limit"
+        - name: order
+          in: query
+          schema:
+            $ref: "#/components/schemas/order"
+        - name: organization_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: page
+          in: query
+          schema:
+            $ref: "#/components/schemas/page"
+        - name: search
+          in: query
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            |Key|Operators|Value|
+            |-|-|-|
+            |`bundle_id`|`:`|string|
+            |`cohort_id`|`:`|string|
+            |`description`|`:`, `~`|string|
+            |`id`|`:`|string|
+            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+                  releases:
+                    $ref: "#/components/schemas/array-of-releases"
   /users/auth:
     post:
       summary: authenticate a user
@@ -2444,6 +2512,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/product"
+    array-of-releases:
+      type: array
+      items:
+        $ref: "#/components/schemas/release"
     artifact:
       type: object
       properties:
@@ -2507,47 +2579,43 @@ components:
       properties:
         artifact_version_id:
           $ref: "#/components/schemas/artifact-version-id"
-        signing_key_id:
-          oneOf:
-            - type: "null"
-            - type: string
-              format: uuid
         description:
           oneOf:
             - $ref: "#/components/schemas/binary-description"
             - type: "null"
+        bytes_expected:
+          $ref: "#/components/schemas/binary-bytes-expected"
         id:
           $ref: "#/components/schemas/binary-id"
         inserted_at:
           type: string
           format: date-time
-        signature:
-          oneOf:
-            - type: "null"
-            - $ref: "#/components/schemas/signature"
+        purged:
+          type: boolean
+          default: false
+        signatures:
+            $ref: "#/components/schemas/array-of-signatures"
         target:
           $ref: "#/components/schemas/target-triplet"
         updated_at:
           type: string
           format: date-time
-        upload_status:
-          type: string
-          enum:
-            - not_started
-            - in_progress
-            - aborted
-            - complete
-        size:
-          description: |
-            How many bytes have been uploaded for the binary. The value is subject to change until
-            `upload_status` is `complete`.
-          type: integer
-          minimum: 0
+        bytes_uploaded:
+          description: How many bytes have been uploaded for the binary.
+          example: 1800000
           maximum: 10_000_000_000
+          minimum: 0
+          type: integer
     binary-description:
       type: string
       minLength: 1
       maxLength: 256
+    binary-bytes-expected:
+      description: The expected size in bytes of the binary.
+      example: 1800000
+      maximum: 10_000_000_000
+      minimum: 0
+      type: integer
     binary-id:
       type: string
       format: uuid
@@ -2579,7 +2647,8 @@ components:
       type: string
       minLength: 1
       maxLength: 128
-      description: A target triplet string that restricts which devices are compatible with this binary.
+      description: |
+        A target triplet string that specifies compaitibility between binaries and products.
       example: arm-linux-androideabi
     ca-certificate:
       type: object
@@ -2826,6 +2895,8 @@ components:
       maximum: 100
       minimum: 1
       type: integer
+    next-page:
+      type: string
     order:
       description: Controls whether the order of results is ascending or descending by (`inserted_at`, `id`).
       type: string
@@ -2870,6 +2941,48 @@ components:
           $ref: "#/components/schemas/role-name"
         username:
           $ref: "#/components/schemas/user-username"
+    release:
+      type: object
+      properties:
+        bundle_id:
+          $ref: "#/components/schemas/bundle-id"
+        cohort_availability:
+          $ref: "#/components/schemas/release-cohort-availability"
+        cohort_id:
+          $ref: "#/components/schemas/cohort-id"
+        description:
+          $ref: "#/components/schemas/release-description"
+        id:
+          $ref: "#/components/schemas/release-id"
+        inserted_at:
+          type: string
+          format: date-time
+        required:
+          $ref: "#/components/schemas/release-required"
+        schedule_availability:
+          $ref: "#/components/schemas/release-schedule-availability"
+        updated_at:
+          type: string
+          format: date-time
+    release-cohort-availability:
+      default: 100
+      type: integer
+      minimum: 0
+      maximum: 100
+    release-description:
+      default: null
+      oneOf:
+        - type: string
+        - type: 'null'
+    release-id:
+      type: string
+      format: uuid
+    release-required:
+      type: boolean
+      default: true
+    release-schedule-availability:
+      type: string
+      format: date-time
     role-name:
       enum:
         - admin
@@ -2879,8 +2992,17 @@ components:
     serial:
       type: string
       example: "522154175989108335861639249273408275957749326848"
+    array-of-signatures:
+      type: array
+      items:
+        $ref: "#/components/schemas/signature"
     signature:
-      type: string
+      type: object
+      properties:
+        signing_key_id:
+          $ref: "#/components/schemas/key-key"
+        signature:
+          type: string
       description: |
         An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
         encoded string.

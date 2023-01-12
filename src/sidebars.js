@@ -118,7 +118,7 @@ const sidebars = {
     {
       collapsible: false,
       type: 'category',
-      label: 'Reference',
+      label: 'General Availability',
       items: [
         'reference/agent',
         'reference/ca-certificates',
@@ -135,8 +135,26 @@ const sidebars = {
       link: {
         type: 'generated-index',
         title: 'Reference',
-        description: 'Learn about the most important Docusaurus concepts!',
         slug: '/reference',
+      },
+    },
+    {
+      collapsible: true,
+      type: 'category',
+      label: 'Experimental',
+      items: [
+        'reference/artifacts',
+        'reference/artifact-versions',
+        'reference/binaries',
+        'reference/bundles',
+        'reference/cohorts',
+        'reference/releases',
+      ],
+      link: {
+        description: 'Experimental references are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental references are subject to change and their promotion to general availability is not guaranteed.',
+        type: 'generated-index',
+        title: 'Reference (Experimental)',
+        slug: '/reference-experimental',
       },
     },
   ],
@@ -144,7 +162,7 @@ const sidebars = {
     {
       collapsible: false,
       type: 'category',
-      label: 'Guides',
+      label: 'General Availability',
       items: [
         'guides/creating-ca-certificates',
         'guides/creating-deployments',
@@ -156,8 +174,22 @@ const sidebars = {
       ],
       link: {
         type: 'generated-index',
-        title: 'Guides',
+        title: 'General Availability',
         slug: '/guides',
+      },
+    },
+    {
+      collapsible: true,
+      type: 'category',
+      label: 'Experimental',
+      items: [
+        'guides/release-orchestration',
+      ],
+      link: {
+        description: 'Experimental guides are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental guides are subject to change and their promotion to general availability is not guaranteed.',
+        type: 'generated-index',
+        title: 'Experimental',
+        slug: '/guides-experimental',
       },
     },
   ],
