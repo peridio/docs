@@ -1,5 +1,8 @@
 openapi: 3.1.0
 info:
+  license:
+    name: Peridio
+    url: https://github.com/peridio/parasola/blob/main/LICENSE
   description: >-
     The Peridio Device API facilitates device-based operations within Peridio v1
     (Cremini).
@@ -8,14 +11,16 @@ info:
 servers:
   - url: https://device.cremini.peridio.com
 security:
-  - Mutual TLS: []
+  - MutualTLS: []
 x-tagGroups:
   - name: Endpoints
     tags:
       - Devices
+      - Release Orchestration
 paths:
   /device/me:
     get:
+      operationId: get-device-me
       summary: get device me
       description: >-
         Returns information about the device identified by the request's
@@ -38,6 +43,7 @@ paths:
                         type: boolean
   /device/update:
     get:
+      operationId: get-device-update
       summary: get device update
       description: >
         Returns information regarding whether an update is available or not.
@@ -85,9 +91,81 @@ paths:
                         oneOf:
                           - type: 'null'
                           - type: integer
+  /update:
+    get:
+      operationId: get-update
+      summary: get device update
+      description: >
+        Returns information regarding whether an update is available or not.
+
+
+        If an update is available, additional information describing the update
+        is returned including a presigned URL to acquire the update.
+      tags:
+        - Release Orchestration
+      parameters:
+        - in: header
+          name: peridio-release-id
+          schema:
+            description: The UUID of the currently active release are on the device.
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      release_prn:
+                        description: >
+                          The release PRN, if this value is null no update is
+                          available
+                        oneOf:
+                          - type: 'null'
+                          - type: string
+                      bundle_prn:
+                        description: The bundle PRN
+                        oneOf:
+                          - type: 'null'
+                          - type: string
+                      quarantined:
+                        description: Wether or not the device is quarantined
+                        oneOf:
+                          - type: 'null'
+                          - type: boolean
+                      releases:
+                        description: >-
+                          The update information including PRN and presigned
+                          URLs
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            binary_prn:
+                              type: string
+                            hash:
+                              description: the file hash
+                              type: string
+                            url:
+                              description: the presigned download URL
+                              type: string
+                            signatures:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  signing_key_prn:
+                                    type: string
+                                  signature:
+                                    type: string
 components:
   securitySchemes:
-    Mutual TLS:
+    MutualTLS:
       type: mutualTLS
       description: >-
         The provided client certificate must be signed by a [CA

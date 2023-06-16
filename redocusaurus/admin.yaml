@@ -2,6 +2,9 @@ openapi: 3.1.0
 info:
   title: Peridio Admin API
   version: v1
+  license:
+    name: Peridio
+    url: https://github.com/peridio/parasola/blob/main/LICENSE
   description: >
     # Expanding Responses
 
@@ -238,10 +241,10 @@ paths:
                   $ref: '#/components/schemas/artifact-description'
                 name:
                   $ref: '#/components/schemas/artifact-name'
-                organization_name:
-                  $ref: '#/components/schemas/organization-name'
+                organization_prn:
+                  $ref: '#/components/schemas/prn'
               required:
-                - organization_name
+                - organization_prn
                 - name
       responses:
         '201':
@@ -258,43 +261,10 @@ paths:
       tags:
         - Artifacts
       parameters:
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/limit'
-        - name: order
-          in: query
-          schema:
-            $ref: '#/components/schemas/order'
-        - name: organization_name
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/organization-name'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/page'
-        - name: search
-          in: query
-          description: >
-            A search query per the [search query
-            language](#section/Search-Query-Language).
-
-
-            |Key|Operators|Value|
-
-            |-|-|-|
-
-            |`description`|`:`, `~`|string|
-
-            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
-
-            |`name`|`:`, `~`|string|
-
-            |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
-          schema:
-            type: string
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         '200':
           description: Ok.
@@ -306,18 +276,18 @@ paths:
                     $ref: '#/components/schemas/array-of-artifacts'
                   next_page:
                     $ref: '#/components/schemas/next-page'
-  /artifacts/{artifact_id}:
+  /artifacts/{artifact_prn}:
     get:
       operationId: retrieve-an-artifact
       summary: Retrieve an artifact
       tags:
         - Artifacts
       parameters:
-        - name: artifact_id
+        - name: artifact_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/artifact-id'
+            $ref: '#/components/schemas/prn'
       responses:
         '200':
           description: Ok.
@@ -333,11 +303,11 @@ paths:
       tags:
         - Artifacts
       parameters:
-        - name: artifact_id
+        - name: artifact_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/artifact-id'
+            $ref: '#/components/schemas/prn'
       requestBody:
         required: true
         content:
@@ -369,17 +339,14 @@ paths:
           application/json:
             schema:
               properties:
-                artifact_id:
-                  $ref: '#/components/schemas/artifact-id'
+                artifact_prn:
+                  $ref: '#/components/schemas/prn'
                 description:
                   $ref: '#/components/schemas/artifact-version-description'
-                organization_name:
-                  $ref: '#/components/schemas/organization-name'
                 version:
                   $ref: '#/components/schemas/artifact-version-version'
               required:
-                - artifact_id
-                - organization_name
+                - artifact_prn
                 - version
       responses:
         '201':
@@ -396,47 +363,10 @@ paths:
       tags:
         - Artifact Versions
       parameters:
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/limit'
-        - name: order
-          in: query
-          schema:
-            $ref: '#/components/schemas/order'
-        - name: organization_name
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/organization-name'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/page'
-        - name: search
-          in: query
-          description: >
-            A search query per the [search query
-            language](#section/Search-Query-Language).
-
-
-            |Key|Operators|Value|
-
-            |-|-|-|
-
-            |`artifact_id`|`:`|string|
-
-            |`description`|`:`, `~` |string|
-
-            |`id`|`:`|string|
-
-            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-
-            |`version`|`:`, `~`|string|
-
-            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-          schema:
-            type: string
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         '200':
           description: Ok.
@@ -448,18 +378,18 @@ paths:
                     $ref: '#/components/schemas/array-of-artifact-versions'
                   next_page:
                     $ref: '#/components/schemas/next-page'
-  /artifact-versions/{artifact_version_id}:
+  /artifact-versions/{artifact_version_prn}:
     get:
       operationId: retrieve-an-artifact-version
       summary: Retrieve artifact version
       tags:
         - Artifact Versions
       parameters:
-        - name: artifact_version_id
+        - name: artifact_version_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/artifact-version-id'
+            $ref: '#/components/schemas/prn'
       responses:
         '200':
           description: Ok.
@@ -475,17 +405,19 @@ paths:
       tags:
         - Artifact Versions
       parameters:
-        - name: artifact_version_id
+        - name: artifact_version_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/artifact-version-id'
+            $ref: '#/components/schemas/prn'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               properties:
+                version:
+                  $ref: '#/components/schemas/artifact-version'
                 description:
                   $ref: '#/components/schemas/artifact-version-description'
       responses:
@@ -511,20 +443,20 @@ paths:
           application/json:
             schema:
               properties:
-                artifact_version_id:
-                  $ref: '#/components/schemas/artifact-version-id'
-                bytes_expected:
-                  $ref: '#/components/schemas/binary-bytes-expected'
+                artifact_version_prn:
+                  $ref: '#/components/schemas/prn'
                 description:
                   $ref: '#/components/schemas/binary-description'
-                organization_name:
-                  $ref: '#/components/schemas/organization-name'
+                hash:
+                  $ref: '#/components/schemas/binary-hash'
+                size:
+                  $ref: '#/components/schemas/binary-size'
                 target:
                   $ref: '#/components/schemas/target-triplet'
               required:
-                - artifact_version_id
-                - bytes_expected
-                - organization_name
+                - artifact_version_prn
+                - hash
+                - size
                 - target
       responses:
         '201':
@@ -541,41 +473,10 @@ paths:
       tags:
         - Binaries
       parameters:
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/limit'
-        - name: order
-          in: query
-          schema:
-            $ref: '#/components/schemas/order'
-        - name: organization_name
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/organization-name'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/page'
-        - name: search
-          in: query
-          description: |
-            See [search query language](#section/Search-Query-Language).
-
-            |Key|Operators|Value|
-            |-|-|-|
-            |`artifact_version_id`|`:`|string|
-            |`bytes_expected`|`:`, `>`, `>=`, `<`, `<=`|numeric|
-            |`bytes_uploaded`|`:`, `>`, `>=`, `<`, `<=`|numeric|
-            |`description`|`:`, `~` |string|
-            |`id`|`:`|string|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-            |`purged`|`:`|boolean|
-            |`target`|`:`, `~`|string|
-            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-          schema:
-            type: string
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         '200':
           description: Ok.
@@ -587,31 +488,18 @@ paths:
                     $ref: '#/components/schemas/array-of-binaries'
                   next_page:
                     $ref: '#/components/schemas/next-page'
-  /binaries/{binary_id}:
+  /binaries/{binary_prn}:
     get:
       operationId: retrieve-a-binary
       summary: Retrieve a binary
       tags:
         - Binaries
       parameters:
-        - name: binary_id
+        - name: binary_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/binary-id'
-        - name: expand
-          description: |
-            See [expanding responses](#section/Expanding-Responses).
-
-            |Field|Description|
-            |-|-|
-            |`url`|Includes a presigned URL for downloading the binary.|
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
+            $ref: '#/components/schemas/prn'
       responses:
         '200':
           description: Ok.
@@ -627,11 +515,11 @@ paths:
       tags:
         - Binaries
       parameters:
-        - name: binary_id
+        - name: binary_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/binary-id'
+            $ref: '#/components/schemas/prn'
       requestBody:
         required: true
         content:
@@ -640,6 +528,8 @@ paths:
               properties:
                 description:
                   $ref: '#/components/schemas/binary-description'
+                state:
+                  $ref: '#/components/schemas/binary-state'
       responses:
         '200':
           description: Ok.
@@ -649,101 +539,76 @@ paths:
                 properties:
                   binary:
                     $ref: '#/components/schemas/binary'
-  /binaries/{binary_id}/purge:
-    post:
-      operationId: purge-a-binary
-      summary: Purge a binary
-      description: >
-        Deletes the binary content from Peridio while leaving the database
-        record intact.
-
-
-        **DANGER:** This is a one-way, disruptive, and destructive action. See
-        the
-
-        [binaries reference](/reference/binaries#purged-binaries) for
-        information regarding the
-
-        impact of purging a binary.
+  /binaries/{binary_prn}/parts/{index}:
+    put:
+      operationId: create-a-binary-part
+      summary: Create a Binary Part
+      description: |
+        Creates a binary part, check the documentation at TODO
       tags:
         - Binaries
       parameters:
-        - name: binary_id
+        - name: binary_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/binary-id'
+            $ref: '#/components/schemas/prn'
+        - name: index
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/binary-part-index'
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               properties:
-                force:
-                  default: false
-                  description: >
-                    By default this endpoint will fail if the binary is
-                    associated with any
-
-                    bundles. This protective measure can be bypassed by
-                    supplying `force: true` to
-
-                    this request, allowing a binary to be purged regardless of
-                    its associations.
-                  type: boolean
+                expected_binary_size:
+                  $ref: '#/components/schemas/binary-part-size'
+                hash:
+                  $ref: '#/components/schemas/binary-part-hash'
+                size:
+                  $ref: '#/components/schemas/binary-part-size'
+              required:
+                - expected_binary_size
+                - hash
+                - size
       responses:
-        '204':
+        '201':
           description: Ok.
-  /binaries/{binary_id}/upload:
-    post:
-      operationId: upload-a-binary
-      summary: Upload a binary
-      description: >
-        Upload a binary's content.
-
-
-        This endpoint cannot be used against a binary that is already uploaded
-        completely, nor
-
-        a purged binary.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary:
+                    $ref: '#/components/schemas/binary-part'
+  /binaries/{binary_prn}/parts:
+    get:
+      operationId: list-binary-parts
+      summary: List binary parts
       tags:
         - Binaries
       parameters:
-        - name: binary_id
+        - name: binary_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/binary-id'
-        - name: Content-Range
-          description: >
-            Indicates what portion of the binary you are uploading. Acceptable
-            values take the
-
-            form `bytes <range-start>-<range-end>/<size>`, e.g., `bytes
-            0-1000/1000`. `*` is not
-
-            supported.
-
-
-            `<range-start>` must match the current value of the binary's
-            `bytes_uploaded` field.
-          in: header
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
+            $ref: '#/components/schemas/prn'
       responses:
-        '204':
+        '200':
           description: Ok.
-  /binaries/{binary_id}/attach-signature:
+          content:
+            application/json:
+              schema:
+                properties:
+                  binaries:
+                    $ref: '#/components/schemas/array-of-binary-parts'
+                  next_page:
+                    $ref: '#/components/schemas/next-page'
+  /binary_signatures:
     post:
-      operationId: attach-signature
+      operationId: create-binary-signature
       summary: Attach a signature to a binary
       tags:
         - Binaries
@@ -755,24 +620,21 @@ paths:
         completely. The
 
         request will fail if the signature is invalid.
-      parameters:
-        - name: binary_id
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/binary-id'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               properties:
-                signing_key_id:
-                  $ref: '#/components/schemas/key-key'
+                binary_prn:
+                  $ref: '#/components/schemas/prn'
+                signing_key_prn:
+                  $ref: '#/components/schemas/prn'
                 signature:
                   $ref: '#/components/schemas/signature'
               required:
-                - signing_key_id
+                - binary_prn
+                - signing_key_prn
                 - signature
       responses:
         '201':
@@ -782,7 +644,22 @@ paths:
               schema:
                 properties:
                   binary:
-                    $ref: '#/components/schemas/binary'
+                    $ref: '#/components/schemas/binary-signature'
+  /binary_signatures/{binary_signature_prn}:
+    delete:
+      operationId: delete-binary-signature
+      summary: Delete Binary Signature
+      tags:
+        - CA Certificates
+      parameters:
+        - name: binary_signature_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      responses:
+        '204':
+          description: Ok.
   /bundles:
     post:
       operationId: create-a-bundle
@@ -795,12 +672,12 @@ paths:
           application/json:
             schema:
               properties:
-                organization_name:
+                organization_prn:
                   $ref: '#/components/schemas/organization-name'
-                artifact_version_ids:
-                  $ref: '#/components/schemas/array-of-artifact-version-ids'
+                artifact_versions:
+                  $ref: '#/components/schemas/array-of-artifact-versions'
               required:
-                - artifact_version_ids
+                - artifact_versions
                 - organization_name
       responses:
         '201':
@@ -817,36 +694,10 @@ paths:
       tags:
         - Bundles
       parameters:
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/limit'
-        - name: order
-          in: query
-          schema:
-            $ref: '#/components/schemas/order'
-        - name: organization_name
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/organization-name'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/page'
-        - name: search
-          in: query
-          description: |
-            See [search query language](#section/Search-Query-Language).
-
-            |Key|Operators|Value|
-            |-|-|-|
-            |`hash`|`:`|string|
-            |`id`|`:`|string|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-          schema:
-            type: string
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         '200':
           description: Ok.
@@ -858,18 +709,18 @@ paths:
                     $ref: '#/components/schemas/array-of-bundles'
                   next_page:
                     $ref: '#/components/schemas/next-page'
-  /bundles/{bundle_id}:
+  /bundles/{bundle_prn}:
     get:
       operationId: retrieve-a-bundle
       summary: Retrieve a bundle
       tags:
         - Bundles
       parameters:
-        - name: bundle_id
+        - name: bundle_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/bundle-id'
+            $ref: '#/components/schemas/prn'
       responses:
         '200':
           description: Ok.
@@ -895,14 +746,14 @@ paths:
                   $ref: '#/components/schemas/cohort-description'
                 name:
                   $ref: '#/components/schemas/cohort-name'
-                organization_name:
-                  $ref: '#/components/schemas/organization-name'
-                product_name:
-                  $ref: '#/components/schemas/product-name'
+                organization_prn:
+                  $ref: '#/components/schemas/prn'
+                product_prn:
+                  $ref: '#/components/schemas/prn'
               required:
                 - name
-                - organization_name
-                - product_name
+                - organization_prn
+                - product_prn
       responses:
         '201':
           description: Ok.
@@ -918,37 +769,10 @@ paths:
       tags:
         - Cohorts
       parameters:
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/limit'
-        - name: order
-          in: query
-          schema:
-            $ref: '#/components/schemas/order'
-        - name: organization_name
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/organization-name'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/page'
-        - name: search
-          in: query
-          description: |
-            See [search query language](#section/Search-Query-Language).
-
-            |Key|Operators|Value|
-            |-|-|-|
-            |`description`|`:`, `~`|string|
-            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-            |`name`|`:`, `~`|string|
-            |`product_name`|`:`|string|
-            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-          schema:
-            type: string
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         '200':
           description: Ok.
@@ -960,18 +784,18 @@ paths:
                     $ref: '#/components/schemas/array-of-cohorts'
                   next_page:
                     $ref: '#/components/schemas/next-page'
-  /cohorts/{cohort_id}:
+  /cohorts/{cohort_prn}:
     get:
       operationId: retrieve-a-cohort
       summary: Retrieve a cohort
       tags:
         - Cohorts
       parameters:
-        - name: cohort_id
+        - name: cohort_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/cohort-id'
+            $ref: '#/components/schemas/prn'
       responses:
         '200':
           description: Ok.
@@ -987,11 +811,11 @@ paths:
       tags:
         - Cohorts
       parameters:
-        - name: cohort_id
+        - name: cohort_prn
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/cohort-id'
+            $ref: '#/components/schemas/prn'
       requestBody:
         required: true
         content:
@@ -1013,6 +837,7 @@ paths:
                     $ref: '#/components/schemas/cohort'
   /orgs/{organization_name}/ca_certificates:
     get:
+      operationId: get-ca-certificates
       summary: get CA certificates
       tags:
         - CA Certificates
@@ -2342,28 +2167,34 @@ paths:
           application/json:
             schema:
               properties:
-                bundle_id:
-                  $ref: '#/components/schemas/bundle-id'
-                cohort_availability:
-                  $ref: '#/components/schemas/release-cohort-availability'
-                cohort_id:
-                  $ref: '#/components/schemas/cohort-id'
+                bundle_prn:
+                  $ref: '#/components/schemas/prn'
+                phase_value:
+                  $ref: '#/components/schemas/release-phase-value'
+                cohort_prn:
+                  $ref: '#/components/schemas/prn'
                 description:
                   $ref: '#/components/schemas/release-description'
-                organization_name:
-                  $ref: '#/components/schemas/organization-name'
+                name:
+                  $ref: '#/components/schemas/release-name'
+                next_release_id:
+                  $ref: '#/components/schemas/release-next-release-id'
+                previous_release_id:
+                  $ref: '#/components/schemas/release-previous-release-id'
+                organization_prn:
+                  $ref: '#/components/schemas/prn'
                 required:
                   $ref: '#/components/schemas/release-required'
-                schedule_availability:
-                  description: >-
-                    If not provided, Peridio will default it to the current
-                    date-time at the time of processing the request. This will
-                    effectively make the release available immediately.
+                schedule_date:
                   $ref: '#/components/schemas/release-schedule-availability'
               required:
-                - bundle_id
-                - cohort_id
-                - organization_name
+                - bundle_prn
+                - phase_value
+                - cohort_prn
+                - name
+                - organization_prn
+                - required
+                - schedule_date
       responses:
         '201':
           description: Ok.
@@ -2379,47 +2210,10 @@ paths:
       tags:
         - Releases
       parameters:
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/limit'
-        - name: order
-          in: query
-          schema:
-            $ref: '#/components/schemas/order'
-        - name: organization_name
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/organization-name'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/page'
-        - name: search
-          in: query
-          description: >
-            A search query per the [search query
-            language](#section/Search-Query-Language).
-
-
-            |Key|Operators|Value|
-
-            |-|-|-|
-
-            |`bundle_id`|`:`|string|
-
-            |`cohort_id`|`:`|string|
-
-            |`description`|`:`, `~`|string|
-
-            |`id`|`:`|string|
-
-            |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-
-            |`updated_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
-          schema:
-            type: string
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         '200':
           description: Ok.
@@ -2431,6 +2225,63 @@ paths:
                     $ref: '#/components/schemas/next-page'
                   releases:
                     $ref: '#/components/schemas/array-of-releases'
+  /releases/{release_prn}:
+    get:
+      operationId: retrieve-a-release
+      summary: Retrieve a release
+      tags:
+        - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  cohort:
+                    $ref: '#/components/schemas/release'
+    patch:
+      operationId: update-a-release
+      summary: Update a release
+      tags:
+        - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: '#/components/schemas/release-description'
+                name:
+                  $ref: '#/components/schemas/release-name'
+                phase_value:
+                  $ref: '#/components/schemas/release-phase-value'
+                required:
+                  $ref: '#/components/schemas/release-required'
+                schedule_date:
+                  $ref: '#/components/schemas/release-schedule-availability'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  cohort:
+                    $ref: '#/components/schemas/release'
   /users/auth:
     post:
       summary: authenticate a user
@@ -2568,6 +2419,61 @@ components:
       name: Authorization
       in: header
       description: The header value must be `Token ACCESS_TOKEN_VALUE`.
+  parameters:
+    limit:
+      in: query
+      name: limit
+      description: Specifies the max length of the returned results.
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    order:
+      in: query
+      name: order
+      description: >-
+        Controls whether the order of results is ascending or descending by
+        (`inserted_at`, `id`).
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+    search:
+      in: query
+      name: search
+      description: >
+        A search query per the [search query
+        language](#section/Search-Query-Language).
+
+
+        |Key|Operators|Value|
+
+        |-|-|-|
+
+        |`description`|`:`, `~`|string|
+
+        |`inserted_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+
+        |`name`|`:`, `~`|string|
+
+        |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+      schema:
+        type: string
+    page:
+      in: query
+      name: page
+      description: >
+        A cursor for pagination across multiple pages of results. Don't include
+        this parameter on
+
+        the first call. Use the `next_page` value returned in a previous
+        response to request
+
+        subsequent results.
+      schema:
+        type: string
   schemas:
     access-token:
       type: string
@@ -2575,18 +2481,18 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/artifact'
-    array-of-artifact-version-ids:
-      type: array
-      items:
-        $ref: '#/components/schemas/artifact-version-id'
     array-of-artifact-versions:
       type: array
       items:
-        $ref: '#/components/schemas/artifact-version'
+        $ref: '#/components/schemas/artifact-version-item'
     array-of-binaries:
       type: array
       items:
         $ref: '#/components/schemas/binary'
+    array-of-binary-parts:
+      type: array
+      items:
+        $ref: '#/components/schemas/binary-part'
     array-of-bundles:
       type: array
       items:
@@ -2654,13 +2560,15 @@ components:
           oneOf:
             - $ref: '#/components/schemas/artifact-description'
             - type: 'null'
-        id:
-          $ref: '#/components/schemas/artifact-id'
         inserted_at:
           type: string
           format: date-time
         name:
           $ref: '#/components/schemas/artifact-name'
+        organization-prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
         updated_at:
           type: string
           format: date-time
@@ -2668,27 +2576,33 @@ components:
       type: string
       minLength: 1
       maxLength: 256
-    artifact-id:
-      type: string
-      format: uuid
     artifact-name:
       type: string
       minLength: 1
       maxLength: 128
+    artifact-version-item:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/artifact-version-id'
+        index:
+          type: integer
     artifact-version:
       type: object
       properties:
-        artifact_id:
-          $ref: '#/components/schemas/artifact-id'
+        artifact_prn:
+          $ref: '#/components/schemas/prn'
         description:
           oneOf:
             - $ref: '#/components/schemas/artifact-version-description'
             - type: 'null'
-        id:
-          $ref: '#/components/schemas/artifact-version-id'
         inserted_at:
           type: string
           format: date-time
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
         version:
           $ref: '#/components/schemas/artifact-version-version'
         updated_at:
@@ -2708,73 +2622,130 @@ components:
     binary:
       type: object
       properties:
-        artifact_version_id:
-          $ref: '#/components/schemas/artifact-version-id'
+        artifact_version_prn:
+          $ref: '#/components/schemas/prn'
         description:
           oneOf:
             - $ref: '#/components/schemas/binary-description'
             - type: 'null'
-        bytes_expected:
-          $ref: '#/components/schemas/binary-bytes-expected'
-        id:
-          $ref: '#/components/schemas/binary-id'
+        hash:
+          $ref: '#/components/schemas/binary-hash'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
         inserted_at:
           type: string
           format: date-time
-        purged:
-          type: boolean
-          default: false
         signatures:
           $ref: '#/components/schemas/array-of-signatures'
+        size:
+          $ref: '#/components/schemas/binary-size'
+        state:
+          $ref: '#/components/schemas/binary-state'
         target:
           $ref: '#/components/schemas/target-triplet'
         updated_at:
           type: string
           format: date-time
-        bytes_uploaded:
-          description: How many bytes have been uploaded for the binary.
-          example: 1800000
-          maximum: 10000000000
-          minimum: 0
-          type: integer
     binary-description:
       type: string
       minLength: 1
       maxLength: 256
-    binary-bytes-expected:
+    binary-hash:
+      description: The expected binary md5 hash.
+      type: string
+    binary-size:
       description: The expected size in bytes of the binary.
       example: 1800000
-      maximum: 10000000000
+      maximum: 53687091200000
       minimum: 0
       type: integer
-    binary-id:
+    binary-state:
+      description: The binary state
       type: string
-      format: uuid
-    bundle:
+      enum:
+        - uploadable
+        - hashable
+        - hashing
+        - signable
+        - signed
+        - destroyed
+    binary-signature:
       type: object
       properties:
-        artifact_version_ids:
-          $ref: '#/components/schemas/array-of-artifact-version-ids'
-        hash:
-          description: >-
-            A SHA256 hash of the [canonical
-            JSON](https://wiki.laptop.org/go/Canonical_JSON) representation of
-            the `artifact_version_ids` array.
-          example: 8a20a70d525e0738ab8328088c79b1278dc66dad787624af51c470e3eea0b6a8
-          type: string
-          minLength: 64
-          maxLength: 64
-        id:
-          $ref: '#/components/schemas/binary-id'
+        binary_prn:
+          $ref: '#/components/schemas/prn'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
+        signing_key_prn:
+          $ref: '#/components/schemas/prn'
         inserted_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
-    bundle-id:
+    binary-part:
+      type: object
+      properties:
+        hash:
+          $ref: '#/components/schemas/binary-part-hash'
+        binayr_prn:
+          $ref: '#/components/schemas/prn'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
+        index:
+          $ref: '#/components/schemas/binary-part-index'
+        inserted_at:
+          type: string
+          format: date-time
+        size:
+          $ref: '#/components/schemas/binary-part-size'
+        state:
+          $ref: '#/components/schemas/binary-part-state'
+        updated_at:
+          type: string
+          format: date-time
+    binary-part-hash:
+      description: The expected binary part md5 hash.
       type: string
-      format: uuid
+    binary-part-index:
+      description: The binary part index order
+      type: integer
+    binary-part-size:
+      description: The expected size in bytes of the binary part.
+      example: 1800000
+      maximum: 5368709120
+      minimum: 5242880
+      type: integer
+    binary-part-state:
+      description: The binary part state
+      type: string
+      enum:
+        - uploadable
+        - invalid_size
+        - invalid_hash
+        - complete
+    bundle:
+      type: object
+      properties:
+        artifact_versions:
+          $ref: '#/components/schemas/array-of-artifact-versions'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     target-triplet:
       type: string
       minLength: 1
@@ -2828,13 +2799,15 @@ components:
             - type: 'null'
         name:
           $ref: '#/components/schemas/cohort-name'
-        id:
-          $ref: '#/components/schemas/cohort-id'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
         inserted_at:
           type: string
           format: date-time
-        product_name:
-          $ref: '#/components/schemas/product-name'
+        product_prn:
+          $ref: '#/components/schemas/prn'
         updated_at:
           type: string
           format: date-time
@@ -2842,9 +2815,6 @@ components:
       type: string
       minLength: 1
       maxLength: 256
-    cohort-id:
-      type: string
-      format: uuid
     cohort-name:
       type: string
       minLength: 1
@@ -3024,22 +2994,8 @@ components:
       type: string
     key-name:
       type: string
-    limit:
-      description: Specifies the max length of the returned results.
-      default: 10
-      maximum: 100
-      minimum: 1
-      type: integer
     next-page:
       type: string
-    order:
-      description: >-
-        Controls whether the order of results is ascending or descending by
-        (`inserted_at`, `id`).
-      type: string
-      enum:
-        - asc
-        - desc
     organization-name:
       type: string
     organization-user:
@@ -3051,17 +3007,12 @@ components:
           $ref: '#/components/schemas/role-name'
         username:
           $ref: '#/components/schemas/user-username'
-    page:
-      description: >
-        A cursor for pagination across multiple pages of results. Don’t include
-        this parameter on
-
-        the first call. Use the `next_page` value returned in a previous
-        response to request
-
-        subsequent results.
-      type: string
     platform:
+      type: string
+    prn:
+      description: >
+        [Peridio Resource Names](/reference/peridio-resource-names) (PRNs)
+        uniquely identify Peridio resources.
       type: string
     product:
       type: object
@@ -3085,37 +3036,63 @@ components:
     release:
       type: object
       properties:
-        bundle_id:
-          $ref: '#/components/schemas/bundle-id'
-        cohort_availability:
-          $ref: '#/components/schemas/release-cohort-availability'
-        cohort_id:
-          $ref: '#/components/schemas/cohort-id'
+        bundle_prn:
+          $ref: '#/components/schemas/prn'
+        cohort_prn:
+          $ref: '#/components/schemas/prn'
         description:
           $ref: '#/components/schemas/release-description'
-        id:
-          $ref: '#/components/schemas/release-id'
+        name:
+          $ref: '#/components/schemas/release-name'
+        next_release_prn:
+          oneOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/prn'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        phase_type:
+          $ref: '#/components/schemas/release-phase-type'
+        phase_value:
+          $ref: '#/components/schemas/release-phase-value'
+        required:
+          $ref: '#/components/schemas/release-required'
+        schedule_date:
+          $ref: '#/components/schemas/release-schedule-availability'
+        schedule_complete:
+          $ref: '#/components/schemas/release-schedule-complete'
+        prn:
+          $ref: '#/components/schemas/prn'
         inserted_at:
           type: string
           format: date-time
-        required:
-          $ref: '#/components/schemas/release-required'
-        schedule_availability:
-          $ref: '#/components/schemas/release-schedule-availability'
         updated_at:
           type: string
           format: date-time
-    release-cohort-availability:
-      default: 100
-      type: integer
+    release-phase-value:
+      description: >
+        The phase value availability, value ranges from 0.0 to 1.0 count as
+        percentages
+
+        0.0 being 0% and 1.0 being 100%. values above 1 are static values
+      type: number
       minimum: 0
       maximum: 100
+    release-phase-type:
+      type: string
+      enum:
+        - static
+        - percent
     release-description:
       default: null
       oneOf:
         - type: string
         - type: 'null'
-    release-id:
+    release-name:
+      type: string
+    release-next-release-id:
+      type: string
+      format: uuid
+    release-previous-release-id:
       type: string
       format: uuid
     release-required:
@@ -3124,6 +3101,8 @@ components:
     release-schedule-availability:
       type: string
       format: date-time
+    release-schedule-complete:
+      type: boolean
     role-name:
       enum:
         - admin
