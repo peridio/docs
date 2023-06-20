@@ -590,12 +590,12 @@ paths:
             schema:
               properties:
                 organization_prn:
-                  $ref: "#/components/schemas/organization-name"
-                artifact_versions:
-                  $ref: "#/components/schemas/array-of-artifact-versions"
+                  $ref: "#/components/schemas/prn"
+                artifact_version_prns:
+                  $ref: "#/components/schemas/array-of-artifact-version-prns"
               required:
-                - artifact_versions
-                - organization_name
+                - artifact_version_prns
+                - organization_prn
       responses:
         "201":
           description: Ok.
@@ -2382,10 +2382,18 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/artifact"
-    array-of-artifact-versions:
+    array-of-ordered-artifact-versions:
       type: array
       items:
         $ref: "#/components/schemas/artifact-version-item"
+    array-of-artifact-versions:
+      type: array
+      items:
+        $ref: "#/components/schemas/artifact-version"
+    array-of-artifact-version-prns:
+      type: array
+      items:
+        $ref: "#/components/schemas/prn"
     array-of-binaries:
       type: array
       items:
@@ -2484,8 +2492,8 @@ components:
     artifact-version-item:
       type: object
       properties:
-        id:
-          $ref: "#/components/schemas/artifact-version-id"
+        prn:
+          $ref: "#/components/schemas/prn"
         index:
           type: integer
     artifact-version:
@@ -2636,7 +2644,7 @@ components:
       type: object
       properties:
         artifact_versions:
-          $ref: "#/components/schemas/array-of-artifact-versions"
+          $ref: "#/components/schemas/array-of-ordered-artifact-versions"
         organization_prn:
           $ref: "#/components/schemas/prn"
         prn:
