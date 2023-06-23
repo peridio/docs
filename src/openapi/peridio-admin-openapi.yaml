@@ -567,7 +567,7 @@ paths:
       operationId: delete-binary-signature
       summary: Delete Binary Signature
       tags:
-        - "CA Certificates"
+        - "Binaries"
       parameters:
         - name: binary_signature_prn
           in: path
