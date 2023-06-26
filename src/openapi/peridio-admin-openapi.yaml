@@ -2692,6 +2692,10 @@ components:
           type: string
         tags:
           $ref: "#/components/schemas/array-of-ca-jitp-tags"
+        cohort_id: 
+          $ref: "#/components/schemas/cohort-id"
+          description: |
+            Experimental field describing a linked cohort, access to it is only available through a private, closed beta group.
       required:
         - description
         - tags
@@ -2723,6 +2727,9 @@ components:
       type: string
       minLength: 1
       maxLength: 256
+    cohort-id:
+      type: string
+      format: uuid    
     cohort-name:
       type: string
       minLength: 1
