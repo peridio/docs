@@ -650,7 +650,7 @@ paths:
       operationId: delete-binary-signature
       summary: Delete Binary Signature
       tags:
-        - CA Certificates
+        - Binaries
       parameters:
         - name: binary_signature_prn
           in: path
@@ -673,12 +673,12 @@ paths:
             schema:
               properties:
                 organization_prn:
-                  $ref: '#/components/schemas/organization-name'
-                artifact_versions:
-                  $ref: '#/components/schemas/array-of-artifact-versions'
+                  $ref: '#/components/schemas/prn'
+                artifact_version_prns:
+                  $ref: '#/components/schemas/array-of-artifact-version-prns'
               required:
-                - artifact_versions
-                - organization_name
+                - artifact_version_prns
+                - organization_prn
       responses:
         '201':
           description: Ok.
@@ -2481,10 +2481,18 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/artifact'
-    array-of-artifact-versions:
+    array-of-ordered-artifact-versions:
       type: array
       items:
         $ref: '#/components/schemas/artifact-version-item'
+    array-of-artifact-versions:
+      type: array
+      items:
+        $ref: '#/components/schemas/artifact-version'
+    array-of-artifact-version-prns:
+      type: array
+      items:
+        $ref: '#/components/schemas/prn'
     array-of-binaries:
       type: array
       items:
@@ -2583,8 +2591,8 @@ components:
     artifact-version-item:
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/artifact-version-id'
+        prn:
+          $ref: '#/components/schemas/prn'
         index:
           type: integer
     artifact-version:
@@ -2735,7 +2743,7 @@ components:
       type: object
       properties:
         artifact_versions:
-          $ref: '#/components/schemas/array-of-artifact-versions'
+          $ref: '#/components/schemas/array-of-ordered-artifact-versions'
         organization_prn:
           $ref: '#/components/schemas/prn'
         prn:
@@ -2784,6 +2792,11 @@ components:
           type: string
         tags:
           $ref: '#/components/schemas/array-of-ca-jitp-tags'
+        cohort_id:
+          $ref: '#/components/schemas/cohort-id'
+          description: >
+            Experimental field describing a linked cohort, access to it is only
+            available through a private, closed beta group.
       required:
         - description
         - tags
@@ -2815,6 +2828,9 @@ components:
       type: string
       minLength: 1
       maxLength: 256
+    cohort-id:
+      type: string
+      format: uuid
     cohort-name:
       type: string
       minLength: 1
