@@ -27,6 +27,24 @@ paths:
         authentication.
       tags:
         - Devices
+      parameters:
+        - name: expand
+          description: >
+            See [expanding
+            responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
+
+
+            |Field|Description|
+
+            |-|-|
+
+            |`cohort`|Includes the cohort information associated to the device.|
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: Ok.
