@@ -28,9 +28,17 @@ By default the directory searched for these files is `$HOME/Library/Application\
 
 Contains a single object of the format:
 
-```
+```json title="Example"
 {
-  PROFILE_NAME: {
+  "my-first-profile" : {
+    "organization_name": "my-organizations-name"
+  }
+}
+```
+
+```json title="Schema"
+{
+  PROFILE_NAME: { 
     "base_url": BASE_URL,
     "ca_path": CA_PATH,
     "organization_name": ORGANIZATION_NAME
@@ -59,7 +67,14 @@ The name of a profile. Can correspond to an entry in credentials.json. A particu
 
 Contains a single object of the format:
 
+```json title="Example"
+{
+  "my-first-profile" : {
+    "api_key": "my-api-key"
+  }
+}
 ```
+```json title="Schema"
 {
   PROFILE_NAME: {
     "api_key": API_KEY
@@ -118,7 +133,7 @@ A path identifying the directory the CLI should look within to find Peridio CLI 
 
 `-o`, `--organization-name <organization-name>`, `$PERIDIO_ORGANIZATION_NAME`
 
-If applicable, the organization against which Peridio Admin API requests will be executed.
+If applicable, the case-sensitive name of the organization against which Peridio Admin API requests will be executed.
 
 Can be provided via configuration files.
 
