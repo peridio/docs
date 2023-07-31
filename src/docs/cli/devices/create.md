@@ -51,3 +51,7 @@ The name of the product.
 `--tags <tags>`
 
 The tags of the device.
+
+`--target <target>`
+
+The target of the device.
