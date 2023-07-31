@@ -1366,6 +1366,8 @@ paths:
                   $ref: "#/components/schemas/device-last-communication"
                 tags:
                   $ref: "#/components/schemas/array-of-device-tags"
+                target:
+                  $ref: "#/components/schemas/target-triplet"
               required:
                 - identifier
       responses:
@@ -1462,6 +1464,8 @@ paths:
                   $ref: "#/components/schemas/device-last-communication"
                 tags:
                   $ref: "#/components/schemas/array-of-device-tags"
+                target:
+                  $ref: "#/components/schemas/target-triplet"
       responses:
         "200":
           description: Ok.
@@ -2660,7 +2664,7 @@ components:
       minLength: 1
       maxLength: 128
       description: |
-        A target triplet string that specifies compaitibility between binaries and products.
+        A target triplet string that specifies compaitibility between binaries and devices.
       example: arm-linux-androideabi
     ca-certificate:
       type: object

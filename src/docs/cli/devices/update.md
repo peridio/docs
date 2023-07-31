@@ -30,6 +30,10 @@ The last time there was communication with the device.
 
 The tags of the device.
 
+`--target <target>`
+
+The target of the device.
+
 ### Required
 
 `--device-identifier <device-identifier>`

@@ -41,6 +41,8 @@ This is a CSV file that expects the following headers to be included in this ord
   - The name of the organization you wish to add the devices to.
 - `certificates`
   - The certificates you wish to associate with devices. Values for this field should be PEM encoded certificates. If a device has multiple certificates, separate them with `\n\n`.
+- `target`
+  - The target you wish to add to the device.
 
 It is recommended that you quote every field.
 
