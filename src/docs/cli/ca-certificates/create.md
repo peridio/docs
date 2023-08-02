@@ -32,6 +32,10 @@ The JITP product name.
 
 A comma separated set of tags to apply to affected devices.
 
+`--jitp-cohort-prn <jitp-cohort-prn>`
+
+The PRN of the cohort to apply to a device upon JITP.
+
 ### Required
 
 `--organization-name <organization-name>`
