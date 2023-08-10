@@ -3,7 +3,7 @@ openapi: 3.1.0
 info:
   title: Peridio Admin API
   version: "v1"
-  license:
+  license: 
     name: Peridio
     url: https://github.com/peridio/parasola/blob/main/LICENSE
   description: |
@@ -181,10 +181,10 @@ paths:
       tags:
         - "Artifacts"
       parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         "200":
           description: Ok.
@@ -283,10 +283,10 @@ paths:
       tags:
         - "Artifact Versions"
       parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         "200":
           description: Ok.
@@ -370,7 +370,7 @@ paths:
                 hash:
                   $ref: "#/components/schemas/binary-hash"
                 size:
-                  $ref: "#/components/schemas/binary-size"
+                  $ref: "#/components/schemas/binary-size"  
                 target:
                   $ref: "#/components/schemas/target-triplet"
               required:
@@ -393,10 +393,10 @@ paths:
       tags:
         - "Binaries"
       parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         "200":
           description: Ok.
@@ -611,10 +611,10 @@ paths:
       tags:
         - "Bundles"
       parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         "200":
           description: Ok.
@@ -686,10 +686,10 @@ paths:
       tags:
         - "Cohorts"
       parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         "200":
           description: Ok.
@@ -1207,8 +1207,8 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/deployment"
-  /orgs/{organization_name}/products/{product_name}/deployments/{deployment_name}:
-    delete:
+  ? /orgs/{organization_name}/products/{product_name}/deployments/{deployment_name}
+  : delete:
       summary: delete deployment
       tags:
         - "Deployments"
@@ -1475,8 +1475,8 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/device"
-  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates:
-    get:
+  ? /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates
+  : get:
       summary: get device certificates
       tags:
         - "Device Certificates"
@@ -1544,8 +1544,8 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/device-certificate"
-  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates/{certificate_serial}:
-    get:
+  ? /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates/{certificate_serial}
+  : get:
       summary: get device certificate
       tags:
         - "Device Certificates"
@@ -2128,10 +2128,10 @@ paths:
       tags:
         - Releases
       parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
       responses:
         "200":
           description: Ok.
@@ -2337,7 +2337,7 @@ components:
       name: Authorization
       in: "header"
       description: The header value must be `Token ACCESS_TOKEN_VALUE`.
-  parameters:
+  parameters: 
     limit:
       in: query
       name: limit
@@ -2551,7 +2551,7 @@ components:
           type: string
           format: date-time
         signatures:
-          $ref: "#/components/schemas/array-of-signatures"
+            $ref: "#/components/schemas/array-of-signatures"
         size:
           $ref: "#/components/schemas/binary-size"
         state:
@@ -2696,7 +2696,7 @@ components:
           type: string
         tags:
           $ref: "#/components/schemas/array-of-ca-jitp-tags"
-        cohort_prn:
+        cohort_prn: 
           $ref: "#/components/schemas/prn"
           description: |
             Experimental field describing a linked cohort, access to it is only available through a private, closed beta group.
@@ -2730,7 +2730,7 @@ components:
     cohort-description:
       type: string
       minLength: 1
-      maxLength: 256
+      maxLength: 256 
     cohort-name:
       type: string
       minLength: 1
@@ -2985,21 +2985,21 @@ components:
           format: date-time
     release-phase-value:
       description: |
-        The phase value availability, value ranges from 0.0 to 1.0 count as percentages
-        0.0 being 0% and 1.0 being 100%. values above 1 are static values
+       The phase value availability, value ranges from 0.0 to 1.0 count as percentages
+       0.0 being 0% and 1.0 being 100%. values above 1 are static values
       type: number
       minimum: 0.0
       maximum: 100.0
     release-phase-type:
       type: string
-      enum:
+      enum: 
         - "static"
         - "percent"
     release-description:
       default: null
       oneOf:
         - type: string
-        - type: "null"
+        - type: 'null'
     release-name:
       type: string
     release-next-release-id:
