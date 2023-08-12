@@ -2855,6 +2855,8 @@ components:
           $ref: "#/components/schemas/product-name"
         uuid:
           $ref: "#/components/schemas/firmware-uuid"
+        vcs_identifier:
+          $ref: "#/components/schemas/vcs-identifier"
         version:
           $ref: "#/components/schemas/version"
     firmware-author:
