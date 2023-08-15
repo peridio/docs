@@ -3030,12 +3030,7 @@ components:
       items:
         $ref: "#/components/schemas/signature"
     signature:
-      type: object
-      properties:
-        signing_key_id:
-          $ref: "#/components/schemas/key-key"
-        signature:
-          type: string
+      type: string
       description: |
         An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
         encoded string.
