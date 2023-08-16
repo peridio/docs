@@ -2849,10 +2849,16 @@ components:
           $ref: "#/components/schemas/product-architecture"
         author:
           $ref: "#/components/schemas/firmware-author"
+        inserted_at:
+          type: string
+          format: date-time
         platform:
           $ref: "#/components/schemas/platform"
         product:
           $ref: "#/components/schemas/product-name"
+        updated_at:
+          type: string
+          format: date-time
         uuid:
           $ref: "#/components/schemas/firmware-uuid"
         vcs_identifier:
