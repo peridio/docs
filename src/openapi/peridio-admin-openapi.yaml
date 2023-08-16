@@ -144,6 +144,7 @@ x-tagGroups:
       - Bundles
       - Cohorts
       - Releases
+      - Signing Keys
 paths:
   /artifacts:
     post:
@@ -752,6 +753,130 @@ paths:
                 properties:
                   cohort:
                     $ref: "#/components/schemas/cohort"
+  /signing_keys:
+    post:
+      operationId: create-a-signing-key
+      summary: Create a signing key
+      tags:
+        - Signing Keys
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                value:
+                  $ref: "#/components/schemas/signing-key-value"
+                name:
+                  $ref: "#/components/schemas/signing-key-name"
+                organization_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - name
+                - organization_prn
+                - value
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  signing_key:
+                    $ref: "#/components/schemas/signing-key"
+    get:
+      operationId: list--signing-keys
+      summary: List Signing Keys
+      tags:
+        - Signing Keys
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  signing_keys:
+                    $ref: "#/components/schemas/array-of-signing-keys"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /signing_keys/{signing_key_prn}:
+    get:
+      operationId: retrieve-a-signing-key
+      summary: Retrieve a signing key
+      tags:
+        - Signing Keys
+      parameters:
+        - name: signing_key_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  signing_key:
+                    $ref: "#/components/schemas/signing-key"
+    patch:
+      operationId: update-a-signing-key
+      summary: Update a signing key
+      tags:
+        - Signing Keys
+      parameters:
+        - name: signing_key_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                value:
+                  $ref: "#/components/schemas/signing-key-value"
+                name:
+                  $ref: "#/components/schemas/signing-key-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  signing_key:
+                    $ref: "#/components/schemas/signing-key"
+    delete:
+      operationId: delete-a-signing-key
+      summary: Retrieve a cohort
+      tags:
+        - Signing Keys
+      parameters:
+        - name: signing_key_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  signing_key:
+                    $ref: "#/components/schemas/signing-key"
+    
   /orgs/{organization_name}/ca_certificates:
     get:
       operationId: get-ca-certificates
@@ -2466,6 +2591,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/release"
+    array-of-signing-keys:
+      type: array
+      items:
+        $ref: "#/components/schemas/signing-key"
     artifact:
       type: object
       properties:
@@ -2769,6 +2898,31 @@ components:
       enum:
         - on
         - off
+    signing-key:
+      type: object
+      properties:
+        value:
+          $ref: "#/components/schemas/signing-key-value"
+        inserted_at:
+          type: string
+          format: date-time
+        name:
+          $ref: "#/components/schemas/artifact-name"
+        organization-prn:
+          $ref: "#/components/schemas/prn"
+        prn:
+          $ref: "#/components/schemas/prn"
+        updated_at:
+          type: string
+          format: date-time
+    signing-key-value:
+      type: string
+      minLength: 1
+      maxLength: 256
+    signing-key-name:
+      type: string
+      minLength: 1
+      maxLength: 128
     device:
       type: object
       properties:
