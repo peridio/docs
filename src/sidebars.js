@@ -113,6 +113,23 @@ const sidebars = {
         },
       ],
     },
+    {
+      collapsible: false,
+      type: 'category',
+      label: 'Experimental',
+      items: [
+        {
+          type: 'category',
+          label: 'artifacts',
+          items: [
+            'cli/artifacts/create',
+            'cli/artifacts/list',
+            'cli/artifacts/retrieve',
+            'cli/artifacts/update',
+          ],
+        },
+      ],
+    },
   ],
   reference: [
     {
