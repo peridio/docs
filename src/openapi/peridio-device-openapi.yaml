@@ -108,16 +108,15 @@ paths:
       description: |
         Returns information regarding whether an update is available or not.
 
-        If an update is available, additional information describing the update is returned including a presigned URL to acquire the update.
+        By default, only the status field is returned, but you can use the `expand` query parameter to obtain the other fields.
       tags:
         - "Release Orchestration"
       parameters:
         - in: header
-          name: peridio-release-id
+          name: peridio-release-prn
           schema:
-            description: The UUID of the currently active release are on the device.
-            type: string
-            format: uuid
+            description: The PRN of the currently active release on the device.
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
           required: true
       responses:
         "200":
@@ -126,49 +125,33 @@ paths:
             application/json:
               schema:
                 properties:
-                  data:
-                    type: object
-                    properties:
-                      release_prn:
-                        description: |
-                          The release PRN, if this value is null no update is available
-                        oneOf:
-                          - type: "null"
-                          - type: string
-                      bundle_prn:
-                        description: The bundle PRN
-                        oneOf:
-                          - type: "null"
-                          - type: string
-                      quarantined:
-                        description: Wether or not the device is quarantined
-                        oneOf:
-                          - type: "null"
-                          - type: boolean
-                      releases:
-                        description: The update information including PRN and presigned URLs
-                        type: array
-                        items: 
-                          type: object
-                          properties:
-                            binary_prn:
-                              type: string
-                            hash:
-                              description: the file hash
-                              type: string
-                            url:
-                              description: the presigned download URL
-                              type: string
-                            signatures:
-                              type: array
-                              items: 
-                                type: object
-                                properties:
-                                  signing_key_prn:
-                                    type: string
-                                  signature:
-                                    type: string
-                            
+                  status:
+                    enum:
+                      - "update"
+                      - "no_update"
+                      - "device_quarantine"
+                  release:
+                    $ref: "peridio-admin-openapi.yaml#/components/schemas/release"
+                  bundle:
+                    $ref: "peridio-admin-openapi.yaml#/components/schemas/bundle"
+                  manifest:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        artifact:
+                          $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact"
+                        artifact_version:
+                          $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact-version"
+                        prn:
+                          $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
+                        hash:
+                          type: string
+                        url:
+                          type: string
+                        signatures:
+                          $ref: "peridio-admin-openapi.yaml#/components/schemas/signature"
+
 components:
   securitySchemes:
     MutualTLS:
