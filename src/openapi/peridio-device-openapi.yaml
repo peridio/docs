@@ -108,7 +108,19 @@ paths:
       description: |
         Returns information regarding whether an update is available or not.
 
-        By default, only the status field is returned, but you can use the `expand` query parameter to obtain the other fields.
+        By default, **only the `status` field is returned**, but you can use the `expand` query parameter to obtain the other fields.
+
+        See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
+
+        |Field|Description|
+        |-|-|
+        |`release`|Includes the release record.|
+        |`bundle`|Includes the bundle associated to the release.|
+        |`manifest`|Includes the manifest including artifact, versions and the presigned url.|
+        |`manifest.artifact`|Includes the artifact for the binary.|
+        |`manifest.artifact_version`|Includes the artifact version for the binary.|
+
+        In addition to expanding records you can expand individual fields, quering `manifest.url` will return only the `url` field inside the manifest.
       tags:
         - "Release Orchestration"
       parameters:
