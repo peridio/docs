@@ -117,17 +117,42 @@ paths:
         Returns information regarding whether an update is available or not.
 
 
-        If an update is available, additional information describing the update
-        is returned including a presigned URL to acquire the update.
+        By default, **only the `status` field is returned**, but you can use the
+        `expand` query parameter to obtain the other fields.
+
+
+        See [expanding
+        responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
+
+
+        |Field|Description|
+
+        |-|-|
+
+        |`release`|Includes the release record.|
+
+        |`bundle`|Includes the bundle associated to the release.|
+
+        |`manifest`|Includes the manifest including artifact, versions and the
+        presigned url.|
+
+        |`manifest.artifact`|Includes the artifact for the binary.|
+
+        |`manifest.artifact_version`|Includes the artifact version for the
+        binary.|
+
+
+        In addition to expanding records you can expand individual fields,
+        quering `manifest.url` will return only the `url` field inside the
+        manifest.
       tags:
         - Release Orchestration
       parameters:
         - in: header
-          name: peridio-release-id
+          name: peridio-release-prn
           schema:
-            description: The UUID of the currently active release are on the device.
-            type: string
-            format: uuid
+            description: The PRN of the currently active release on the device.
+            $ref: '#/components/schemas/prn'
           required: true
       responses:
         '200':
@@ -136,51 +161,32 @@ paths:
             application/json:
               schema:
                 properties:
-                  data:
-                    type: object
-                    properties:
-                      release_prn:
-                        description: >
-                          The release PRN, if this value is null no update is
-                          available
-                        oneOf:
-                          - type: 'null'
-                          - type: string
-                      bundle_prn:
-                        description: The bundle PRN
-                        oneOf:
-                          - type: 'null'
-                          - type: string
-                      quarantined:
-                        description: Wether or not the device is quarantined
-                        oneOf:
-                          - type: 'null'
-                          - type: boolean
-                      releases:
-                        description: >-
-                          The update information including PRN and presigned
-                          URLs
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            binary_prn:
-                              type: string
-                            hash:
-                              description: the file hash
-                              type: string
-                            url:
-                              description: the presigned download URL
-                              type: string
-                            signatures:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  signing_key_prn:
-                                    type: string
-                                  signature:
-                                    type: string
+                  status:
+                    enum:
+                      - update
+                      - no_update
+                      - device_quarantine
+                  release:
+                    $ref: '#/components/schemas/release'
+                  bundle:
+                    $ref: '#/components/schemas/bundle'
+                  manifest:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        artifact:
+                          $ref: '#/components/schemas/artifact'
+                        artifact_version:
+                          $ref: '#/components/schemas/artifact-version'
+                        prn:
+                          $ref: '#/components/schemas/prn'
+                        hash:
+                          type: string
+                        url:
+                          type: string
+                        signatures:
+                          $ref: '#/components/schemas/signature'
 components:
   securitySchemes:
     MutualTLS:
@@ -247,3 +253,161 @@ components:
             - $ref: '#/components/schemas/vcs-identifier'
         version:
           $ref: '#/components/schemas/version'
+    prn:
+      description: >
+        [Peridio Resource Names](/reference/peridio-resource-names) (PRNs)
+        uniquely identify Peridio resources.
+      type: string
+    release-description:
+      default: null
+      oneOf:
+        - type: string
+        - type: 'null'
+    release-name:
+      type: string
+    release-phase-type:
+      type: string
+      enum:
+        - static
+        - percent
+    release-phase-value:
+      description: >
+        The phase value availability, value ranges from 0.0 to 1.0 count as
+        percentages
+
+        0.0 being 0% and 1.0 being 100%. values above 1 are static values
+      type: number
+      minimum: 0
+      maximum: 100
+    release-required:
+      type: boolean
+      default: true
+    release-schedule-availability:
+      type: string
+      format: date-time
+    release-schedule-complete:
+      type: boolean
+    release:
+      type: object
+      properties:
+        bundle_prn:
+          $ref: '#/components/schemas/prn'
+        cohort_prn:
+          $ref: '#/components/schemas/prn'
+        description:
+          $ref: '#/components/schemas/release-description'
+        name:
+          $ref: '#/components/schemas/release-name'
+        next_release_prn:
+          oneOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/prn'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        phase_type:
+          $ref: '#/components/schemas/release-phase-type'
+        phase_value:
+          $ref: '#/components/schemas/release-phase-value'
+        required:
+          $ref: '#/components/schemas/release-required'
+        schedule_date:
+          $ref: '#/components/schemas/release-schedule-availability'
+        schedule_complete:
+          $ref: '#/components/schemas/release-schedule-complete'
+        prn:
+          $ref: '#/components/schemas/prn'
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    artifact-version-item:
+      type: object
+      properties:
+        prn:
+          $ref: '#/components/schemas/prn'
+        index:
+          type: integer
+    array-of-ordered-artifact-versions:
+      type: array
+      items:
+        $ref: '#/components/schemas/artifact-version-item'
+    bundle:
+      type: object
+      properties:
+        artifact_versions:
+          $ref: '#/components/schemas/array-of-ordered-artifact-versions'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    artifact-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    artifact-name:
+      type: string
+      minLength: 1
+      maxLength: 128
+    artifact:
+      type: object
+      properties:
+        description:
+          oneOf:
+            - $ref: '#/components/schemas/artifact-description'
+            - type: 'null'
+        inserted_at:
+          type: string
+          format: date-time
+        name:
+          $ref: '#/components/schemas/artifact-name'
+        organization-prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
+        updated_at:
+          type: string
+          format: date-time
+    artifact-version-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    artifact-version-version:
+      type: string
+      minLength: 5
+      maxLength: 16
+    artifact-version:
+      type: object
+      properties:
+        artifact_prn:
+          $ref: '#/components/schemas/prn'
+        description:
+          oneOf:
+            - $ref: '#/components/schemas/artifact-version-description'
+            - type: 'null'
+        inserted_at:
+          type: string
+          format: date-time
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
+        version:
+          $ref: '#/components/schemas/artifact-version-version'
+        updated_at:
+          type: string
+          format: date-time
+    signature:
+      type: string
+      description: >
+        An ed25519 signature  of the SHA256 hash of the binary represented as a
+        64-byte hex
+
+        encoded string.

@@ -3197,6 +3197,8 @@ components:
       properties:
         name:
           $ref: '#/components/schemas/product-name'
+        prn:
+          $ref: '#/components/schemas/prn'
     product-architecture:
       type: string
     product-name:
