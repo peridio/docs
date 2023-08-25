@@ -155,14 +155,14 @@ paths:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact"
                         artifact_version:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact-version"
-                        prn:
+                        binary_prn:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
                         hash:
                           type: string
                         url:
                           type: string
                         signatures:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/signature"
+                          $ref: "peridio-admin-openapi.yaml#/components/schemas/array-of-signatures"
 
 components:
   securitySchemes:

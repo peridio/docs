@@ -3188,14 +3188,27 @@ components:
       type: string
       example: "522154175989108335861639249273408275957749326848"
     array-of-signatures:
-      type: array
-      items:
-        $ref: "#/components/schemas/signature"
+      default: null
+      oneOf:
+        - type: 'null'
+        - type: array
+          items:
+            $ref: "#/components/schemas/signing-signature"        
+    signing-signature:
+      type: object
+      properties:
+        signature:
+          type: string
+          description: |
+            An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
+            encoded string.
+        signing_key_prn:
+          $ref: "#/components/schemas/prn"    
     signature:
       type: string
       description: |
         An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
-        encoded string.
+        encoded string. 
     user-me:
       allOf:
         - type: object
