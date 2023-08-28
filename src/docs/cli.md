@@ -22,7 +22,13 @@ Options can be supplied in up to three ways, from highest to lowest precedence:
 
 The Peridio CLI supports profile based configuration files as a means of supplying options that are relevant to many subcommands. A particular profile can be choosen explicitly via [--profile](#profile). To use this functionality you must specify at least a `config.json` file and optionally, if you wish to specify API keys via this method, a `credentials.json` in the same directory.
 
-By default the directory searched for these files is `$HOME/Library/Application\ Support/peridio` on macOS. To override this directory, see [--config-directory](#config-directory).
+By default, the directory searched for these files is:
+
+- Linux: `$HOME/.config/peridio`
+- Windows: `{FOLDERID_RoamingAppData}/peridio/config`
+- macOS: `$HOME/Library/Application\ Support/peridio`
+
+To override this directory, see [--config-directory](#config-directory).
 
 ### config.json
 
@@ -30,7 +36,7 @@ Contains a single object of the format:
 
 ```json title="Example"
 {
-  "my-first-profile" : {
+  "my-first-profile": {
     "organization_name": "my-organizations-name"
   }
 }
@@ -38,7 +44,7 @@ Contains a single object of the format:
 
 ```json title="Schema"
 {
-  PROFILE_NAME: { 
+  PROFILE_NAME: {
     "base_url": BASE_URL,
     "ca_path": CA_PATH,
     "organization_name": ORGANIZATION_NAME
@@ -47,19 +53,19 @@ Contains a single object of the format:
 }
 ```
 
-***BASE_URL***
+**_BASE_URL_**
 
 Optional. String. See [--base-url](#base-url).
 
-***CA_PATH***
+**_CA_PATH_**
 
 Optional. String. See [--ca-path](#ca-path).
 
-***ORGANIZATION_NAME***
+**_ORGANIZATION_NAME_**
 
 Optional. String. See [--organization-name](#organization-name).
 
-***PROFILE_NAME***
+**_PROFILE_NAME_**
 
 The name of a profile. Can correspond to an entry in credentials.json. A particular profile can be choosen explicitly via [--profile](#profile).
 
@@ -69,11 +75,12 @@ Contains a single object of the format:
 
 ```json title="Example"
 {
-  "my-first-profile" : {
+  "my-first-profile": {
     "api_key": "my-api-key"
   }
 }
 ```
+
 ```json title="Schema"
 {
   PROFILE_NAME: {
@@ -83,11 +90,11 @@ Contains a single object of the format:
 }
 ```
 
-***API_KEY***
+**_API_KEY_**
 
 Optional. String. See [--api-key](#api-key).
 
-***PROFILE_NAME***
+**_PROFILE_NAME_**
 
 The name of a profile. Must correspond to an entry in `config.json`. A particular profile can be choosen explicitly via [--profile](#profile).
 
