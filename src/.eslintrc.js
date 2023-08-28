@@ -4,10 +4,11 @@ module.exports = {
   ignorePatterns: ['build'],
   rules: {
     'import/no-unresolved': [2, { ignore: ['^@theme', '^@docusaurus'] }],
+    semi: [2, 'never'],
   },
   overrides: [
     {
       files: ['*.jsx'],
     },
   ],
-};
+}

@@ -2,10 +2,10 @@
 title: Just in Time Provisioning
 ---
 
-[Configuring just in time provisioning for a CA Certificate](ca-certificates#just-in-time-provisioning) enables a [device](devices) whose [certificate](device-certificates) is signed by that CA certificate to reactively provision itself at the moment of its first connection to the [Peridio Device API](../device-api). This alleviates the burden of having to take any per device onboarding action.
+Configuring just in time provisioning for a [CA Certificate](ca-certificates) enables a [device](devices) to be automatically provisioned, "just in time", the moment of its first connection to the [Peridio Device API](../device-api). This alleviates the burden of having to take any per device onboarding action.
 
 ## Provisioning Flow
 
-1. An unprovisioned device attempts to connect to Peridio Device API for the first time ever. Typically via the [get device me](../device-api#tag/Devices/paths/~1device~1me/get) endpoint, but any endpoint will do.
-2. Peridio validates that the device's certificate is signed by a present and valid CA Certificate.
-3. Peridio provisions the device creating a record of the device as well as its certificate and automatically assigning the attributes configured against the relevant CA certificate.
+1. An unprovisioned device connects to the Peridio Device API for the first time ever.
+2. Peridio validates that the device's certificate is signed by a configured and unexpired CA Certificate.
+3. Peridio provisions the device by creating a record of it as well as its public certificate and automatically assigning the attributes configured against the relevant CA certificate's JITP config (product, cohort, tags, and description).

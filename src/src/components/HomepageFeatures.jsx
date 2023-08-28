@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './HomepageFeatures.module.css';
+import React from 'react'
+import styles from './HomepageFeatures.module.css'
 
 export default function HomepageFeatures() {
   return (
@@ -27,5 +27,5 @@ export default function HomepageFeatures() {
         </div>
       </div>
     </section>
-  );
+  )
 }
