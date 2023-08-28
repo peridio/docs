@@ -124,6 +124,16 @@ const sidebars = {
             'cli/artifacts/update',
           ],
         },
+        {
+          type: 'category',
+          label: 'cohorts',
+          items: [
+            'cli/cohorts/create',
+            'cli/cohorts/list',
+            'cli/cohorts/retrieve',
+            'cli/cohorts/update',
+          ],
+        },
       ],
     },
   ],
