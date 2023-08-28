@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './StackIndex.module.css';
+import React from 'react'
+import styles from './StackIndex.module.css'
 
 export default function Home() {
   return (
@@ -23,5 +23,5 @@ export default function Home() {
         </a>
       </div>
     </main>
-  );
+  )
 }

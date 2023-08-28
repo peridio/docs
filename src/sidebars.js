@@ -2,9 +2,7 @@
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
-  agent: [
-    'agent',
-  ],
+  agent: ['agent'],
   cli: [
     'cli',
     {
@@ -107,9 +105,7 @@ const sidebars = {
         {
           type: 'category',
           label: 'users',
-          items: [
-            'cli/users/me',
-          ],
+          items: ['cli/users/me'],
         },
       ],
     },
@@ -148,6 +144,8 @@ const sidebars = {
         'reference/organizations',
         'reference/products',
         'reference/users',
+        'reference/verification-certificates',
+        'reference/verification-codes',
       ],
       link: {
         type: 'generated-index',
@@ -168,7 +166,8 @@ const sidebars = {
         'reference/releases',
       ],
       link: {
-        description: 'Experimental references are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental references are subject to change and their promotion to general availability is not guaranteed.',
+        description:
+          'Experimental references are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental references are subject to change and their promotion to general availability is not guaranteed.',
         type: 'generated-index',
         title: 'Reference (Experimental)',
         slug: '/reference-experimental',
@@ -208,13 +207,14 @@ const sidebars = {
         'guides/creating-releases',
       ],
       link: {
-        description: 'Experimental guides are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental guides are subject to change and their promotion to general availability is not guaranteed.',
+        description:
+          'Experimental guides are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental guides are subject to change and their promotion to general availability is not guaranteed.',
         type: 'generated-index',
         title: 'Experimental',
         slug: '/guides-experimental',
       },
     },
   ],
-};
+}
 
-module.exports = sidebars;
+module.exports = sidebars

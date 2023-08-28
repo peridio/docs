@@ -1,7 +1,7 @@
-import React from 'react';
-import clsx from 'clsx';
-import Layout from '@theme/Layout';
-import styles from './index.module.css';
+import React from 'react'
+import clsx from 'clsx'
+import Layout from '@theme/Layout'
+import styles from './index.module.css'
 
 function HomepageHeader() {
   return (
@@ -11,7 +11,7 @@ function HomepageHeader() {
         <p className="hero__subtitle">Find user guides, developer guides, API references, and more.</p>
       </div>
     </header>
-  );
+  )
 }
 
 export default function Home() {
@@ -28,5 +28,5 @@ export default function Home() {
         </ul>
       </main>
     </Layout>
-  );
+  )
 }
