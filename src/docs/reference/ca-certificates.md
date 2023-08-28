@@ -6,7 +6,7 @@ Generally, a CA certificate is an X.509 certificate that signs other X.509 certi
 
 To learn more about how to use CA certificates, see the [creating CA certificates](/guides/creating-ca-certificates) guide.
 
-# Expiration
+## Expiration
 
 You cannot create a CA certificate in Peridio with an expired X.509 certificate.
 
