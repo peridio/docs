@@ -39,6 +39,7 @@ const config = {
         customCss: [require.resolve('./src/css/custom.css')],
       },
     ],
+    ['@docusaurus/theme-search-algolia', {}],
   ],
   presets: [
     [
@@ -61,6 +62,7 @@ const config = {
         theme: {
           options: {
             scrollYOffset: 60,
+            disableSearch: true,
           },
         },
       },
@@ -93,6 +95,11 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+      },
+      algolia: {
+        appId: 'EBXD92WI74',
+        apiKey: 'cc85a8afb9c77cc48205e2e73eeb0d7a',
+        indexName: 'peridio',
       },
     }),
 }

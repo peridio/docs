@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <Layout>
       <HomepageHeader />
-      <main>
+      <main className={styles.container}>
         <ul>
           <li><a href="/reference/organizations">Reference</a></li>
           <li><a href="/cli">Command Line Interface</a></li>
