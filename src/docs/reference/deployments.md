@@ -24,8 +24,8 @@ Peridio tracks metadata about the current firmware of devices. Devices themselve
 
 ### Tags
 
-When tags are specified as a condition for a deployment, a device  must have at least all of the tags specified by the deployment in order to meet the condition.
+A deployment must specify at least one tag as a condition. A device must have at least all of the tags specified by the deployment in order to meet the condition.
 
 ### Version
 
-When a version is specified as a condition for a deployment, a device must meet meet this version requirement. Firmware versions are [semantic versions](https://semver.org/spec/v2.0.0.html), for examples of what a version condition on a deployment may look like, reference https://hexdocs.pm/elixir/Version.html#module-requirements.
+A deployment may optionally specify a version requirement. When a version is specified as a condition for a deployment, a device must meet meet this version requirement. Firmware versions are [semantic versions](https://semver.org/spec/v2.0.0.html), for examples of what a version condition on a deployment may look like, reference https://hexdocs.pm/elixir/Version.html#module-requirements.
