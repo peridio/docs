@@ -3,7 +3,7 @@ openapi: 3.1.0
 info:
   title: Peridio Admin API
   version: "v1"
-  license: 
+  license:
     name: Peridio
     url: https://github.com/peridio/parasola/blob/main/LICENSE
   description: |
@@ -371,7 +371,7 @@ paths:
                 hash:
                   $ref: "#/components/schemas/binary-hash"
                 size:
-                  $ref: "#/components/schemas/binary-size"  
+                  $ref: "#/components/schemas/binary-size"
                 target:
                   $ref: "#/components/schemas/target-triplet"
               required:
@@ -876,7 +876,7 @@ paths:
                 properties:
                   signing_key:
                     $ref: "#/components/schemas/signing-key"
-    
+
   /orgs/{organization_name}/ca_certificates:
     get:
       operationId: get-ca-certificates
@@ -2464,7 +2464,7 @@ components:
       name: Authorization
       in: "header"
       description: The header value must be `Token ACCESS_TOKEN_VALUE`.
-  parameters: 
+  parameters:
     limit:
       in: query
       name: limit
@@ -2557,10 +2557,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/device-certificate"
-    array-of-device-identifiers:
-      type: array
-      items:
-        $ref: "#/components/schemas/device-identifier"
     array-of-device-tags:
       type: array
       items:
@@ -2656,9 +2652,6 @@ components:
       type: string
       minLength: 1
       maxLength: 256
-    artifact-version-id:
-      type: string
-      format: uuid
     artifact-version-version:
       type: string
       minLength: 5
@@ -2827,7 +2820,7 @@ components:
           type: string
         tags:
           $ref: "#/components/schemas/array-of-ca-jitp-tags"
-        cohort_prn: 
+        cohort_prn:
           $ref: "#/components/schemas/prn"
           description: |
             Experimental field describing a linked cohort, access to it is only available through a private, closed beta group.
@@ -2861,7 +2854,7 @@ components:
     cohort-description:
       type: string
       minLength: 1
-      maxLength: 256 
+      maxLength: 256
     cohort-name:
       type: string
       minLength: 1
@@ -3096,7 +3089,7 @@ components:
       properties:
         name:
           $ref: "#/components/schemas/product-name"
-        prn: 
+        prn:
           $ref: "#/components/schemas/prn"
     product-architecture:
       type: string
@@ -3156,7 +3149,7 @@ components:
       maximum: 100.0
     release-phase-type:
       type: string
-      enum: 
+      enum:
         - "static"
         - "percent"
     release-description:
@@ -3195,7 +3188,7 @@ components:
         - type: 'null'
         - type: array
           items:
-            $ref: "#/components/schemas/signing-signature"        
+            $ref: "#/components/schemas/signing-signature"
     signing-signature:
       type: object
       properties:
@@ -3205,12 +3198,12 @@ components:
             An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
             encoded string.
         signing_key_prn:
-          $ref: "#/components/schemas/prn"    
+          $ref: "#/components/schemas/prn"
     signature:
       type: string
       description: |
         An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
-        encoded string. 
+        encoded string.
     user-me:
       allOf:
         - type: object
