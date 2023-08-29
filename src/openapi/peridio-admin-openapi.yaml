@@ -2609,7 +2609,7 @@ components:
           format: date-time
         name:
           $ref: "#/components/schemas/artifact-name"
-        organization-prn:
+        organization_prn:
           $ref: "#/components/schemas/prn"
         prn:
           $ref: "#/components/schemas/prn"
@@ -2910,7 +2910,7 @@ components:
           format: date-time
         name:
           $ref: "#/components/schemas/artifact-name"
-        organization-prn:
+        organization_prn:
           $ref: "#/components/schemas/prn"
         prn:
           $ref: "#/components/schemas/prn"
