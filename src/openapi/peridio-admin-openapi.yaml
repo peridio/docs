@@ -1308,6 +1308,8 @@ paths:
               properties:
                 conditions:
                   $ref: "#/components/schemas/deployment-conditions"
+                  required:
+                    - tags
                 delta_updatable:
                   $ref: "#/components/schemas/delta-updatable"
                   default: false

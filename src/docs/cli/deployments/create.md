@@ -24,7 +24,7 @@ The version of the deployment. Must respect this format: https://hexdocs.pm/elix
 
 ### Required
 
-`--firmware-uuid <firmware-uuid>`
+`--firmware <firmware-uuid>`
 
 The firmare uuid.
 
