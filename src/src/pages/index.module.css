@@ -51,7 +51,7 @@
   font-weight: var(--ifm-font-weight-semibold);
 }
 
-main {
+.container {
   display: flex;
   flex-direction: row;
   align-items: top;
