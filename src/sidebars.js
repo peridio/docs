@@ -152,6 +152,7 @@ const sidebars = {
         'reference/firmwares',
         'reference/just-in-time-provisioning',
         'reference/organizations',
+        'reference/peridio-resource-names',
         'reference/products',
         'reference/users',
         'reference/verification-certificates',
