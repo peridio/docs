@@ -1,7 +1,7 @@
 ---
 openapi: 3.1.0
 info:
-  license: 
+  license:
     name: Peridio
     url: https://github.com/peridio/parasola/blob/main/LICENSE
   description: The Peridio Device API facilitates device-based operations within Peridio v1 (Cremini).
@@ -69,6 +69,22 @@ paths:
             description: The UUID of the currently active firmware on the device.
             $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-uuid"
           required: true
+        - name: preflight
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+            description: |
+              **When `false`**
+
+              The request will count towards update attempts. `firmware_url` in the response will be set to a presigned URL.
+
+              **When `true`**
+
+              The request will not count towards update attempts. `firmware_url` in the response will be `null`.
+
+              For example, one may use `true` to check if an update is available when you don't yet intend to consume the update so that a device does not rack up a number of incomplete updates and eventually get quarantined (pending the failure configuration set on the relevant deployment).
       responses:
         "200":
           description: Ok.
@@ -100,7 +116,7 @@ paths:
                         oneOf:
                           - type: "null"
                           - type: integer
-                          
+
   /update:
     get:
       operationId: get-update
@@ -148,7 +164,7 @@ paths:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/bundle"
                   manifest:
                     type: array
-                    items: 
+                    items:
                       type: object
                       properties:
                         artifact:
