@@ -2655,10 +2655,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/device-certificate'
-    array-of-device-identifiers:
-      type: array
-      items:
-        $ref: '#/components/schemas/device-identifier'
     array-of-device-tags:
       type: array
       items:
@@ -2754,9 +2750,6 @@ components:
       type: string
       minLength: 1
       maxLength: 256
-    artifact-version-id:
-      type: string
-      format: uuid
     artifact-version-version:
       type: string
       minLength: 5
@@ -3319,7 +3312,7 @@ components:
         An ed25519 signature  of the SHA256 hash of the binary represented as a
         64-byte hex
 
-        encoded string. 
+        encoded string.
     user-me:
       allOf:
         - type: object
