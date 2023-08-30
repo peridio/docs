@@ -27,16 +27,10 @@ Once you have at least one device, you must assign it to a cohort.
 
 ## Update resolution
 
-Update resolution is the process of a device making a
-[get device update](/admin-api#tag/devices/operations/get-device-update) request, and the work
-Peridio does to respond. Peridio's work is referred to as [update
-resolution](/reference/update-resolution).
+Update resolution is the process of a device making a [get device update](/admin-api#tag/devices/operations/get-device-update) request, and the work Peridio does to respond. Peridio's work is referred to as [update resolution](/reference/releases#update-resolution).
 
-When an update is resolved, the response to the device's request will include a presigned URL for
-each binary that is part of the update.
+When an update is resolved, the response to the device's request will include a presigned URL for each binary that is part of the update.
 
 ## Update consumption
 
-Having received the presigned URLs from update resolution, the update consumption is the act of
-downloading the binaries on the device and doing something with them. What exactly is done with a
-downloaded binary varies greatly and is specific to your particular use case.
+Having received the presigned URLs from update resolution, the update consumption is the act of downloading the binaries on the device and doing something with them. What exactly is done with a downloaded binary varies greatly and is specific to your particular use case.
