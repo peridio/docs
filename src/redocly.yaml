@@ -3,10 +3,7 @@ apis:
     root: ./openapi/peridio-admin-openapi.yaml
   peridio-device-api:
     root: ./openapi/peridio-device-openapi.yaml
-lint:
-  extends:
-    - recommended
-  rules:
-    operation-4xx-response: off
-    operation-operationId: off
-    info-license: off
+rules:
+  operation-4xx-response: off
+  operation-operationId: off
+  info-license: off
