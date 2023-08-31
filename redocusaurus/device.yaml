@@ -298,19 +298,46 @@ components:
         - percent
     release-phase-value:
       description: >
-        The phase value availability, value ranges from 0.0 to 1.0 count as
-        percentages
+        The phase value controls the distribution of the update to your fleet.
 
-        0.0 being 0% and 1.0 being 100%. values above 1 are static values
+
+        Decimals in `[0.0, 1.0]` are treated as percents, e.g., to allow 20% of
+        the cohort to update, you would specifiy `0.2`.
+
+
+        Integers >= 2 are treated as absolute device counts, e.g., to allow 40
+        of the cohort's devices to update, you would specifiy `40`.
+
+
+        **NOTE:** `1` is a special value in that it represents `100%` and  once
+        a release is updated to this value, the phase value can never be changed
+        again.
+
+
+        A release with a `phase_value` not equal to `1` is considered "phased".
+
+
+        **NOTE:** There can only ever be a single release that is phased at a
+        time within a cohort. Because of this, if there is already a phased
+        release, it must be "completed" by setting the phase to `1`.
       type: number
       minimum: 0
       maximum: 100
     release-required:
       type: boolean
-      default: true
+      description: >
+        If `true`, this release must be passed through if encountered by a
+        device.
+
+
+        If `false`, this release will be skipped over when possible (if there
+        are releases configured after it).
     release-schedule-availability:
       type: string
       format: date-time
+      description: >-
+        Before this date-time, the release will not be resolvable when checking
+        for updates. You may use this to schedule a future release.
     release-schedule-complete:
       type: boolean
     release:
