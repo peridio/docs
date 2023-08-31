@@ -154,6 +154,7 @@ const sidebars = {
         'reference/organizations',
         'reference/peridio-resource-names',
         'reference/products',
+        'reference/releases',
         'reference/users',
         'reference/verification-certificates',
         'reference/verification-codes',
@@ -174,7 +175,6 @@ const sidebars = {
         'reference/binaries',
         'reference/bundles',
         'reference/cohorts',
-        'reference/releases',
       ],
       link: {
         description:
@@ -197,6 +197,7 @@ const sidebars = {
         'guides/creating-firmware',
         'guides/creating-firmware-signing-keys',
         'guides/creating-products',
+        'guides/creating-releases',
         'guides/creating-x509-certificates-with-openssl',
       ],
       link: {
@@ -210,12 +211,11 @@ const sidebars = {
       type: 'category',
       label: 'Experimental',
       items: [
-        'guides/release-orchestration',
         'guides/creating-artifacts',
         'guides/creating-artifact-versions',
         'guides/creating-binaries',
         'guides/creating-bundles',
-        'guides/creating-releases',
+        'guides/release-orchestration',
       ],
       link: {
         description:

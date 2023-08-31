@@ -2,8 +2,7 @@
 
 This guide describes how to create releases.
 
-To learn more about Peridio releases in general, see the [releases](/reference/releases)
-reference.
+To learn more about Peridio releases in general, see the [releases](/reference/releases) reference.
 
 ## Prerequisites
 
@@ -14,16 +13,11 @@ reference.
 
 ### CLI
 
-```console
-peridio releases create \
-  --bundle-id uuid \
-  --cohort-id uuid
-```
+Coming soon.
 
 ### API
 
-Use the Peridio Admin API
-[Create a release](/admin-api#tag/artifacts/operations/create-a-release) endpoint.
+Use the Peridio Admin API [Create a release](/admin-api#tag/artifacts/operations/create-a-release) endpoint.
 
 ### Web Console
 

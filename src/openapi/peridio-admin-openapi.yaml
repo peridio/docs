@@ -134,6 +134,7 @@ x-tagGroups:
       - Organization Users
       - Product Users
       - Products
+      - Releases
       - Users
   - name: Experimental
     tags:
@@ -143,7 +144,6 @@ x-tagGroups:
       - Binaries
       - Bundles
       - Cohorts
-      - Releases
       - Signing Keys
 paths:
   /artifacts:
@@ -2214,20 +2214,31 @@ paths:
               properties:
                 bundle_prn:
                   $ref: "#/components/schemas/prn"
+                  description: The bundle the release will distribute to devices.
                 phase_value:
                   $ref: "#/components/schemas/release-phase-value"
                 cohort_prn:
                   $ref: "#/components/schemas/prn"
+                  description: The cohort to create the release within, and in turn the cohort it will distribute its bundle to.
                 description:
                   $ref: "#/components/schemas/release-description"
                 name:
                   $ref: "#/components/schemas/release-name"
-                next_release_id:
-                  $ref: "#/components/schemas/release-next-release-id"
-                previous_release_id:
-                  $ref: "#/components/schemas/release-previous-release-id"
+                next_release_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: |
+                    If omitted, the release will be created as latest within the cohort. If there is already at least one release in the cohort, then the latest release in that cohort would have its `next_release_prn` updated to this created release.
+
+                    If supplied, the release will be created prior to the release identified by `next_release_prn`. If you wish to insert this release between two other releases, you may additionally supply `previous_release_prn`.
+                previous_release_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: |
+                    If omitted, `next_release_prn` will dictate where to create this release within the cohort's release graph.
+
+                    If supplied, `next_release_prn` is required to be supplied as well. Together, these fields allow the caller to insert a release between two other releases.
                 organization_prn:
                   $ref: "#/components/schemas/prn"
+                  description: The organization to create the release within.
                 required:
                   $ref: "#/components/schemas/release-required"
                 schedule_date:
@@ -2289,7 +2300,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  cohort:
+                  release:
                     $ref: "#/components/schemas/release"
     patch:
       operationId: update-a-release
@@ -2325,7 +2336,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  cohort:
+                  release:
                     $ref: "#/components/schemas/release"
   /users/auth:
     post:
@@ -2477,7 +2488,7 @@ components:
     order:
       in: query
       name: order
-      description: Controls whether the order of results is ascending or descending by (`inserted_at`, `id`).
+      description: Controls whether the order of results is ascending or descending by `inserted_at`.
       schema:
         type: string
         enum:
@@ -3142,8 +3153,17 @@ components:
           format: date-time
     release-phase-value:
       description: |
-       The phase value availability, value ranges from 0.0 to 1.0 count as percentages
-       0.0 being 0% and 1.0 being 100%. values above 1 are static values
+        The phase value controls the distribution of the update to your fleet.
+
+        Decimals in `[0.0, 1.0]` are treated as percents, e.g., to allow 20% of the cohort to update, you would specifiy `0.2`.
+
+        Integers >= 2 are treated as absolute device counts, e.g., to allow 40 of the cohort's devices to update, you would specifiy `40`.
+
+        **NOTE:** `1` is a special value in that it represents `100%` and  once a release is updated to this value, the phase value can never be changed again.
+
+        A release with a `phase_value` not equal to `1` is considered "phased".
+
+        **NOTE:** There can only ever be a single release that is phased at a time within a cohort. Because of this, if there is already a phased release, it must be "completed" by setting the phase to `1`.
       type: number
       minimum: 0.0
       maximum: 100.0
@@ -3159,18 +3179,16 @@ components:
         - type: 'null'
     release-name:
       type: string
-    release-next-release-id:
-      type: string
-      format: uuid
-    release-previous-release-id:
-      type: string
-      format: uuid
     release-required:
       type: boolean
-      default: true
+      description: |
+        If `true`, this release must be passed through if encountered by a device.
+
+        If `false`, this release will be skipped over when possible (if there are releases configured after it).
     release-schedule-availability:
       type: string
       format: date-time
+      description: Before this date-time, the release will not be resolvable when checking for updates. You may use this to schedule a future release.
     release-schedule-complete:
       type: boolean
     role-name:
