@@ -58,6 +58,7 @@ info:
     |Keyword|Operation|
     |-|-|
     |`:`|equals (case-sensitive)|
+    |`-`|substring (case-insensitive)|
     |`~`|substring (case-sensitive)|
     |`<`|less than|
     |`<=`|less than or equal to|
