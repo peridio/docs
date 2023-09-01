@@ -98,6 +98,8 @@ info:
 
     |`:`|equals (case-sensitive)|
 
+    |`-`|substring (case-insensitive)|
+
     |`~`|substring (case-sensitive)|
 
     |`<`|less than|
