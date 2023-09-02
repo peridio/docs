@@ -61,6 +61,8 @@ const config = {
             scrollYOffset: 60,
             disableSearch: true,
           },
+          primaryColor: '#3424ee',
+
         },
       },
     ],
@@ -77,7 +79,7 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          { label: 'Reference', href: '/reference' },
+          { label: 'Reference', href: '/reference/organizations' },
           { label: 'Guides', href: '/guides' },
           { label: 'Admin API', href: '/admin-api' },
           { label: 'Device API', href: '/device-api' },

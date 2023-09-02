@@ -2,7 +2,11 @@
 title: Deployments
 ---
 
-A deployment makes [firmware](firmwares) available to [devices](devices) associated with the same [product](products) as the deployment and that satisfy the deployment's conditions. Deployments may be configured as active or not. Only active deployments may be considered when Peridio evaluates if an update is available for a device.
+:::info Legacy
+This functionality has been superceded by [bundles](bundles) and [releases](releases).
+:::
+
+A deployment makes [firmware](firmware) available to [devices](devices) associated with the same [product](products) as the deployment and that satisfy the deployment's conditions. Deployments may be configured as active or not. Only active deployments may be considered when Peridio evaluates if an update is available for a device.
 
 ## Deployment Eligibility
 

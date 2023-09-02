@@ -1,6 +1,8 @@
-# Getting Started
+# Peridio Command Line Interface
 
 Peridio CLI, or `peridio`, is a command-line interface to Peridio for use in your terminal or your scripts.
+
+It aims to have complete support for the [Peridio Admin API](/admin-api).
 
 ## Installation
 

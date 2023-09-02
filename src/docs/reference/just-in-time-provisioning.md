@@ -2,7 +2,7 @@
 title: Just in Time Provisioning
 ---
 
-Configuring just in time provisioning for a [CA Certificate](ca-certificates) enables a [device](devices) to be automatically provisioned, "just in time", the moment of its first connection to the [Peridio Device API](../device-api). This alleviates the burden of having to take any per device onboarding action.
+Configuring just in time provisioning for a [CA Certificate](ca-certificates) enables [devices](devices) to be automatically provisioned, "just in time", the moment of their first connection to the [Peridio Device API](../device-api). This alleviates the burden of having to take any per device onboarding action.
 
 ## Provisioning Flow
 

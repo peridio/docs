@@ -2,7 +2,7 @@
 
 This guide describes how to create firmware.
 
-To learn more about Peridio firmware in general, see the [firmwares](/reference/firmwares) reference.
+To learn more about Peridio firmware in general, see the [firmware](/reference/firmware) reference.
 
 ## Prerequisites
 
@@ -88,4 +88,4 @@ peridio firmwares create \
 
 ### API
 
-Use the Peridio Admin API [create firmware](/admin-api#tag/Firmwares/paths/~1orgs~1%7Borganization_name%7D~1products~1%7Bproduct_name%7D~1firmwares/post) endpoint.
+Use the Peridio Admin API [create a firmware](/admin-api#firmware/operation/create-a-firmware) endpoint.

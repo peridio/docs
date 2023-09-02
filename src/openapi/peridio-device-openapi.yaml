@@ -11,11 +11,13 @@ servers:
   - url: https://device.cremini.peridio.com
 security:
   - MutualTLS: []
+tags:
+    - name: Devices
+      id: devices
 x-tagGroups:
   - name: "Endpoints"
     tags:
       - "Devices"
-      - "Release Orchestration"
 paths:
   /device/me:
     get:
@@ -57,7 +59,9 @@ paths:
       operationId: get-device-update
       summary: get device update
       description: |
-        Returns information regarding whether an update is available or not.
+        This functionality has been superceded by [get update](#devices/operation/get-update).
+
+        Returns information regarding whether an update is available via a [deployment](/admin-api#deployments).
 
         If an update is available, additional information describing the update is returned including a presigned URL to acquire the update.
       tags:
@@ -120,25 +124,13 @@ paths:
   /update:
     get:
       operationId: get-update
-      summary: get device update
+      summary: get update
       description: |
-        Returns information regarding whether an update is available or not.
+        Returns information regarding whether an update is available via a [release](/admin-api#releases).
 
-        By default, **only the `status` field is returned**, but you can use the `expand` query parameter to obtain the other fields.
-
-        See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
-
-        |Field|Description|
-        |-|-|
-        |`release`|Includes the release record.|
-        |`bundle`|Includes the bundle associated to the release.|
-        |`manifest`|Includes the manifest including artifact, versions and the presigned url.|
-        |`manifest.artifact`|Includes the artifact for the binary.|
-        |`manifest.artifact_version`|Includes the artifact version for the binary.|
-
-        In addition to expanding records you can expand individual fields, quering `manifest.url` will return only the `url` field inside the manifest.
+        By default, only the `status` field is returned, but you can use the `expand` query parameter to obtain the other fields.
       tags:
-        - "Release Orchestration"
+        - "Devices"
       parameters:
         - in: header
           name: peridio-release-prn
@@ -146,6 +138,25 @@ paths:
             description: The PRN of the currently active release on the device.
             $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
           required: true
+        - name: expand
+          description: |
+            See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
+
+            |Field|Description|
+            |-|-|
+            |`release`|Includes the target release.|
+            |`bundle`|Includes the target bundle, the bundle associated with the target release.|
+            |`manifest`|Includes the manifest including artifact, versions and the presigned url.|
+            |`manifest.artifact`|Includes the artifact for the binary.|
+            |`manifest.artifact_version`|Includes the artifact version for the binary.|
+
+            In addition to expanding records, you can expand individual fields; querying `manifest.url` will return only the `url` field inside the manifest array's items.
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: Ok.
