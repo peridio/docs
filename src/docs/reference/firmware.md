@@ -1,10 +1,14 @@
 ---
-title: Firmwares
+title: Firmware
 ---
 
-Firmwares are the data you wish to distribute to devices.
+:::info Legacy
+This functionality has been superceded by [artifacts](artifacts), [artifact versions](artifact-versions), and [binaries](binaries).
+:::
 
-Peridio requires the use of [fwup](https://github.com/fwup-home/fwup) archives as the packaging format for firmwares. This means the binaries you upload to Peridio and the binaries your devices will download from Peridio are fwup archives. The contents of an archive are up to you; ranging from no files, to 1 file, to `n` files. They are capable of packaging an arbitrary stringy metadata payload. Note that fwup archives themselves are ZIP archives and can be interacted with as such.
+Firmware are the data you wish to distribute to devices.
+
+Peridio requires the use of [fwup](https://github.com/fwup-home/fwup) archives as the packaging format for firmware. This means the binaries you upload to Peridio and the binaries your devices will download from Peridio are fwup archives. The contents of an archive are up to you; ranging from no files, to 1 file, to `n` files. They are capable of packaging an arbitrary stringy metadata payload. Note that fwup archives themselves are ZIP archives and can be interacted with as such.
 
 To learn more about how to use firmware, see the [creating firmware](/guides/creating-firmware) guide.
 
@@ -31,7 +35,7 @@ The [Peridio Agent](/agent) can be used to check for updates, stream their downl
 
 ## Time to Live (TTL)
 
-Firmwares can be configured on a per-firmware basis to be deleted automatically after a set amount of seconds by configuring their `ttl` field. Firmware associated with a deployment will never be automatically deleted. Dissassociating a firmware with a configured TTL from all deployments will cause the TTL to begin counting down again from its maximum value.
+Firmware can be configured on a per-firmware basis to be deleted automatically after a set amount of seconds by configuring their `ttl` field. Firmware associated with a deployment will never be automatically deleted. Dissassociating a firmware with a configured TTL from all deployments will cause the TTL to begin counting down again from its maximum value.
 
 ### Example
 

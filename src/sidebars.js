@@ -12,6 +12,16 @@ const sidebars = {
       items: [
         {
           type: 'category',
+          label: 'artifacts',
+          items: [
+            'cli/artifacts/create',
+            'cli/artifacts/list',
+            'cli/artifacts/retrieve',
+            'cli/artifacts/update',
+          ],
+        },
+        {
+          type: 'category',
           label: 'ca certificates',
           items: [
             'cli/ca-certificates/create',
@@ -20,6 +30,16 @@ const sidebars = {
             'cli/ca-certificates/get',
             'cli/ca-certificates/list',
             'cli/ca-certificates/update',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'cohorts',
+          items: [
+            'cli/cohorts/create',
+            'cli/cohorts/list',
+            'cli/cohorts/retrieve',
+            'cli/cohorts/update',
           ],
         },
         {
@@ -109,80 +129,89 @@ const sidebars = {
         },
       ],
     },
+  ],
+  reference: [
+    // 'reference/agent',
     {
       collapsible: false,
       type: 'category',
-      label: 'Experimental',
+      label: 'Account Management',
+      items: [
+        'reference/organizations',
+        'reference/peridio-resource-names',
+        'reference/users',
+      ],
+    },
+    {
+      collapsible: false,
+      type: 'category',
+      label: 'Asset Management',
       items: [
         {
-          type: 'category',
-          label: 'artifacts',
-          items: [
-            'cli/artifacts/create',
-            'cli/artifacts/list',
-            'cli/artifacts/retrieve',
-            'cli/artifacts/update',
-          ],
+          type: 'doc',
+          label: 'Artifacts',
+          id: 'reference/artifacts',
         },
         {
-          type: 'category',
-          label: 'cohorts',
-          items: [
-            'cli/cohorts/create',
-            'cli/cohorts/list',
-            'cli/cohorts/retrieve',
-            'cli/cohorts/update',
-          ],
+          type: 'doc',
+          label: 'Artifact Versions',
+          id: 'reference/artifact-versions',
+        },
+        {
+          type: 'doc',
+          label: 'Binaries',
+          id: 'reference/binaries',
+        },
+        'reference/firmware-signing-keys',
+        {
+          type: 'doc',
+          label: 'Firmware',
+          id: 'reference/firmware',
+          customProps: { legacy: true },
         },
       ],
     },
-  ],
-  reference: [
     {
       collapsible: false,
       type: 'category',
-      label: 'General Availability',
+      label: 'Device Management',
       items: [
-        'reference/agent',
         'reference/ca-certificates',
-        'reference/deployments',
+        {
+          type: 'doc',
+          label: 'Cohorts',
+          id: 'reference/cohorts',
+        },
         'reference/device-certificates',
         'reference/devices',
-        'reference/firmware-signing-keys',
-        'reference/firmwares',
         'reference/just-in-time-provisioning',
-        'reference/organizations',
-        'reference/peridio-resource-names',
         'reference/products',
-        'reference/releases',
-        'reference/users',
         'reference/verification-certificates',
         'reference/verification-codes',
       ],
-      link: {
-        type: 'generated-index',
-        title: 'Reference',
-        slug: '/reference',
-      },
     },
     {
-      collapsible: true,
+      collapsible: false,
       type: 'category',
-      label: 'Experimental',
+      label: 'Release Mangement',
       items: [
-        'reference/artifacts',
-        'reference/artifact-versions',
-        'reference/binaries',
-        'reference/bundles',
-        'reference/cohorts',
+        {
+          type: 'doc',
+          label: 'Bundles',
+          id: 'reference/bundles',
+        },
+        {
+          type: 'doc',
+          label: 'Deployments',
+          id: 'reference/deployments',
+          customProps: { legacy: true },
+        },
+        {
+          type: 'doc',
+          label: 'Releases',
+          id: 'reference/releases',
+        },
       ],
-      link: {
-        description:
-          'Experimental references are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental references are subject to change and their promotion to general availability is not guaranteed.',
-        type: 'generated-index',
-        title: 'Reference (Experimental)',
-        slug: '/reference-experimental',
-      },
     },
   ],
   guides: [
@@ -191,6 +220,10 @@ const sidebars = {
       type: 'category',
       label: 'General Availability',
       items: [
+        'guides/creating-artifact-versions',
+        'guides/creating-artifacts',
+        'guides/creating-binaries',
+        'guides/creating-bundles',
         'guides/creating-ca-certificates',
         'guides/creating-deployments',
         'guides/creating-devices',
@@ -199,30 +232,12 @@ const sidebars = {
         'guides/creating-products',
         'guides/creating-releases',
         'guides/creating-x509-certificates-with-openssl',
+        'guides/updating-devices',
       ],
       link: {
         type: 'generated-index',
         title: 'General Availability',
         slug: '/guides',
-      },
-    },
-    {
-      collapsible: true,
-      type: 'category',
-      label: 'Experimental',
-      items: [
-        'guides/creating-artifacts',
-        'guides/creating-artifact-versions',
-        'guides/creating-binaries',
-        'guides/creating-bundles',
-        'guides/release-orchestration',
-      ],
-      link: {
-        description:
-          'Experimental guides are documented here, but access to the functionality and resources they describe may only be available through a private, closed beta group. All experimental guides are subject to change and their promotion to general availability is not guaranteed.',
-        type: 'generated-index',
-        title: 'Experimental',
-        slug: '/guides-experimental',
       },
     },
   ],

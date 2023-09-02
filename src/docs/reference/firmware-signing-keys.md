@@ -1,5 +1,5 @@
 ---
-title: Firmware Signing Keys
+title: Signing Keys
 ---
 
 Firmware signing keys are ED25519 keys which consist of a public/private key pair.
