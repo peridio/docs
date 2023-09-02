@@ -191,42 +191,75 @@ servers:
 security:
   - api_key: []
 tags:
-  - name: Experimental Overview
-    x-displayName: Overview
-    description: >
-      Experimental endpoints are documented here, but access to them is only
-      available through a
-
-      private, closed beta group.
-
-
-      All experimental endpoints are subject to change and their promotion to
-      general availability
-
-      in the Peridio Admin API is not guaranteed.
+  - name: Deployments
+    id: deployments
+    description: >-
+      This functionality has been superceded by [bundles](#bundles) and
+      [releases](#releases).
+  - name: Bundles
+    id: bundles
+  - name: Organization Users
+    id: organization-users
+  - name: Product Users
+    id: product-users
+  - name: Users
+    id: users
+  - name: Artifacts
+    id: artifacts
+  - name: Artifact Versions
+    id: artifact-versions
+  - name: Binaries
+    id: binaries
+  - name: Keys
+    id: keys
+    description: Use [signing keys](#signing-keys) instead.
+  - name: Signing Keys
+    id: signing-keys
+  - name: Firmware
+    id: firmware
+    description: >-
+      This functionality has been superceded by [artifacts](#artifacts),
+      [artifact versions](#artifact-versions), and [binaries](#binaries).
+  - name: CA Certificates
+    id: ca-certificates
+  - name: Cohorts
+    id: cohorts
+  - name: Device Certificates
+    id: device-certificates
+  - name: Devices
+    id: devices
+  - name: Products
+    id: products
+  - name: Bundles
+    id: bundles
+  - name: Releases
+    id: releases
 x-tagGroups:
-  - name: Endpoints
+  - name: Account Management
     tags:
-      - CA Certificates
-      - Deployments
-      - Device Certificates
-      - Devices
-      - Firmwares
-      - Keys
       - Organization Users
       - Product Users
-      - Products
-      - Releases
       - Users
-  - name: Experimental
+  - name: Asset Management
     tags:
-      - Experimental Overview
       - Artifacts
       - Artifact Versions
       - Binaries
-      - Bundles
-      - Cohorts
+      - Keys
       - Signing Keys
+      - Firmware
+  - name: Device Management
+    tags:
+      - CA Certificates
+      - Cohorts
+      - Device Certificates
+      - Devices
+      - Products
+  - name: Release Management
+    tags:
+      - Bundles
+      - Deployments
+      - Releases
 paths:
   /artifacts:
     post:
@@ -963,8 +996,8 @@ paths:
                     $ref: '#/components/schemas/signing-key'
   /orgs/{organization_name}/ca_certificates:
     get:
-      operationId: get-ca-certificates
-      summary: get CA certificates
+      operationId: list-ca-certificates
+      summary: list CA certificates
       tags:
         - CA Certificates
       parameters:
@@ -983,6 +1016,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-ca-certificates'
     post:
+      operationId: create-a-ca-certificate
       summary: create CA certificate
       tags:
         - CA Certificates
@@ -1026,7 +1060,8 @@ paths:
                     $ref: '#/components/schemas/ca-certificate'
   /orgs/{organization_name}/ca_certificates/{ca_certificate_serial}:
     delete:
-      summary: delete CA certificate
+      operationId: delete-a-ca-certificate
+      summary: delete a CA certificate
       tags:
         - CA Certificates
       parameters:
@@ -1044,7 +1079,8 @@ paths:
         '204':
           description: Ok.
     get:
-      summary: get CA certificate
+      operationId: retrieve-a-ca-certificate
+      summary: retrieve a CA certificate
       tags:
         - CA Certificates
       parameters:
@@ -1068,6 +1104,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/ca-certificate'
     put:
+      operationId: update-a-ca-certificate
       summary: update CA certificate
       tags:
         - CA Certificates
@@ -1103,6 +1140,7 @@ paths:
                     $ref: '#/components/schemas/ca-certificate'
   /orgs/{organization_name}/ca_certificates/verification_codes:
     post:
+      operationId: create-a-ca-verification-code
       summary: create CA verification code
       tags:
         - CA Certificates
@@ -1123,7 +1161,9 @@ paths:
                     $ref: '#/components/schemas/ca-verification-code'
   /orgs/{organization_name}/keys:
     get:
-      summary: get keys
+      operationId: list-keys
+      deprecated: true
+      summary: list keys
       tags:
         - Keys
       parameters:
@@ -1142,6 +1182,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-keys'
     post:
+      operationId: create-a-key
+      deprecated: true
       summary: create key
       tags:
         - Keys
@@ -1175,6 +1217,8 @@ paths:
                     $ref: '#/components/schemas/key'
   /orgs/{organization_name}/keys/{key_name}:
     delete:
+      operationId: delete-a-key
+      deprecated: true
       summary: delete key
       tags:
         - Keys
@@ -1193,7 +1237,9 @@ paths:
         '204':
           description: Ok.
     get:
-      summary: get key
+      operationId: retrieve-a-key
+      deprecated: true
+      summary: retrieve a key
       tags:
         - Keys
       parameters:
@@ -1218,7 +1264,8 @@ paths:
                     $ref: '#/components/schemas/key'
   /orgs/{organization_name}/products:
     get:
-      summary: get products
+      operationId: list-products
+      summary: list products
       tags:
         - Products
       parameters:
@@ -1237,6 +1284,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-products'
     post:
+      operationId: create-a-product
       summary: create product
       tags:
         - Products
@@ -1267,6 +1315,7 @@ paths:
                     $ref: '#/components/schemas/product'
   /orgs/{organization_name}/products/{product_name}:
     delete:
+      operationId: delete-a-product
       summary: delete product
       tags:
         - Products
@@ -1285,7 +1334,8 @@ paths:
         '204':
           description: Ok.
     get:
-      summary: get product
+      operationId: retrieve-a-product
+      summary: retrieve a product
       tags:
         - Products
       parameters:
@@ -1309,7 +1359,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/product'
     put:
-      summary: update product
+      operationId: update-a-product
+      summary: update a product
       tags:
         - Products
       parameters:
@@ -1347,7 +1398,8 @@ paths:
                     $ref: '#/components/schemas/product'
   /orgs/{organization_name}/products/{product_name}/deployments:
     get:
-      summary: get deployments
+      operationId: list-deployments
+      summary: list deployments
       tags:
         - Deployments
       parameters:
@@ -1371,7 +1423,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-deployments'
     post:
-      summary: create deployment
+      operationId: create-a-deployment
+      summary: create a deployment
       tags:
         - Deployments
       parameters:
@@ -1421,7 +1474,8 @@ paths:
                     $ref: '#/components/schemas/deployment'
   /orgs/{organization_name}/products/{product_name}/deployments/{deployment_name}:
     delete:
-      summary: delete deployment
+      operationId: delete-a-deployment
+      summary: delete a deployment
       tags:
         - Deployments
       parameters:
@@ -1444,7 +1498,8 @@ paths:
         '204':
           description: Ok.
     get:
-      summary: get deployment
+      operationId: retrieve-a-deployment
+      summary: retrieve deployment
       tags:
         - Deployments
       parameters:
@@ -1473,7 +1528,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/deployment'
     put:
-      summary: update deployment
+      operationId: update-deployment
+      summary: update-deployment
       tags:
         - Deployments
       parameters:
@@ -1524,7 +1580,8 @@ paths:
                     $ref: '#/components/schemas/deployment'
   /orgs/{organization_name}/products/{product_name}/devices:
     get:
-      summary: get devices
+      operationId: list-devices
+      summary: list devices
       tags:
         - Devices
       parameters:
@@ -1548,7 +1605,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-devices'
     post:
-      summary: create device
+      operationId: create-a-device
+      summary: create a device
       tags:
         - Devices
       parameters:
@@ -1591,6 +1649,7 @@ paths:
                 $ref: '#/components/schemas/device'
   /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}:
     delete:
+      operationId: delete-a-device
       summary: delete device
       tags:
         - Devices
@@ -1614,7 +1673,8 @@ paths:
         '204':
           description: Ok.
     get:
-      summary: get device
+      operationId: retrieve-a-device
+      summary: retrieve a device
       tags:
         - Devices
       parameters:
@@ -1643,7 +1703,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/device'
     put:
-      summary: update device
+      operationId: update-a-device
+      summary: update a device
       tags:
         - Devices
       parameters:
@@ -1689,7 +1750,8 @@ paths:
                     $ref: '#/components/schemas/device'
   /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates:
     get:
-      summary: get device certificates
+      operationId: list-device-certificates
+      summary: list device certificates
       tags:
         - Device Certificates
       parameters:
@@ -1718,7 +1780,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-device-certificates'
     post:
-      summary: create device certificate
+      operationId: create-a-device-certificate
+      summary: create a device certificate
       tags:
         - Device Certificates
       parameters:
@@ -1758,7 +1821,8 @@ paths:
                     $ref: '#/components/schemas/device-certificate'
   /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates/{certificate_serial}:
     get:
-      summary: get device certificate
+      operationId: retrieve-a-device-certificate
+      summary: retrieve a device certificate
       tags:
         - Device Certificates
       parameters:
@@ -1792,7 +1856,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/device-certificate'
     delete:
-      summary: delete device certificate
+      operationId: delete-a-device-certificate
+      summary: delete a device certificate
       tags:
         - Device Certificates
       parameters:
@@ -1821,6 +1886,7 @@ paths:
           description: Ok.
   /orgs/{organization_name}/products/{product_name}/devices/auth:
     post:
+      operationId: authenticate-device
       summary: authenticate device
       tags:
         - Devices
@@ -1856,9 +1922,10 @@ paths:
                     $ref: '#/components/schemas/device'
   /orgs/{organization_name}/products/{product_name}/firmwares:
     get:
-      summary: get firmwares
+      operationId: list-firmware
+      summary: list firmware
       tags:
-        - Firmwares
+        - Firmware
       parameters:
         - name: organization_name
           in: path
@@ -1878,11 +1945,12 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: '#/components/schemas/array-of-firmwares'
+                    $ref: '#/components/schemas/array-of-firmware'
     post:
-      summary: create firmware
+      operationId: create-a-firmware
+      summary: create a firmware
       tags:
-        - Firmwares
+        - Firmware
       parameters:
         - name: organization_name
           in: path
@@ -1905,7 +1973,7 @@ paths:
                   format: binary
                   description: >-
                     Reference [firmware file
-                    requirements](/reference/firmwares#firmware-file-requirements).
+                    requirements](/reference/firmware#firmware-file-requirements).
                 ttl:
                   type: integer
               required:
@@ -1936,9 +2004,10 @@ paths:
                             const: Internal Server Error
   /orgs/{organization_name}/products/{product_name}/firmwares/{firmware_uuid}:
     delete:
-      summary: delete firmware
+      operationId: delete-a-firmware
+      summary: delete a firmware
       tags:
-        - Firmwares
+        - Firmware
       parameters:
         - name: organization_name
           in: path
@@ -1963,9 +2032,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/firmware'
     get:
-      summary: get firmware
+      operationId: retrieve-a-firmware
+      summary: retrieve a firmware
       tags:
-        - Firmwares
+        - Firmware
       parameters:
         - name: organization_name
           in: path
@@ -2006,7 +2076,8 @@ paths:
                     $ref: '#/components/schemas/firmware'
   /orgs/{organization_name}/products/{product_name}/users:
     get:
-      summary: get product users
+      operationId: list-product-users
+      summary: list product users
       tags:
         - Product Users
       parameters:
@@ -2030,7 +2101,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-product-users'
     post:
-      summary: add product user
+      operationId: add-a-product-user
+      summary: add a product user
       tags:
         - Product Users
       parameters:
@@ -2068,7 +2140,8 @@ paths:
                     $ref: '#/components/schemas/product-user'
   /orgs/{organization_name}/products/{product_name}/users/{user_username}:
     delete:
-      summary: remove product user
+      operationId: remove-a-product-user
+      summary: remove a product user
       tags:
         - Product Users
       parameters:
@@ -2091,7 +2164,8 @@ paths:
         '204':
           description: Ok.
     get:
-      summary: get product user
+      operationId: retrieve-a-product-user
+      summary: retrieve a product user
       tags:
         - Product Users
       parameters:
@@ -2120,7 +2194,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/product-user'
     put:
-      summary: update product user
+      operationId: update-a-product-user
+      summary: update a product user
       tags:
         - Product Users
       parameters:
@@ -2160,7 +2235,8 @@ paths:
                     $ref: '#/components/schemas/product-user'
   /orgs/{organization_name}/users:
     get:
-      summary: get organization users
+      operationId: list-organization-users
+      summary: list organization users
       tags:
         - Organization Users
       parameters:
@@ -2179,7 +2255,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/array-of-organization-users'
     post:
-      summary: add organization user
+      operationId: add-an-organization-user
+      summary: add an organization user
       tags:
         - Organization Users
       parameters:
@@ -2212,7 +2289,8 @@ paths:
                     $ref: '#/components/schemas/organization-user'
   /orgs/{organization_name}/users/{user_username}:
     delete:
-      summary: remove organization user
+      operationId: remove-an-organization-user
+      summary: remove an organization user
       tags:
         - Organization Users
       parameters:
@@ -2230,7 +2308,8 @@ paths:
         '204':
           description: Ok.
     get:
-      summary: get organization user
+      operationId: retrieve-an-organization-user
+      summary: retrieve an organization user
       tags:
         - Organization Users
       parameters:
@@ -2254,7 +2333,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/organization-user'
     put:
-      summary: update organization user
+      operationId: update-an-organization-user
+      summary: update an organization user
       tags:
         - Organization Users
       parameters:
@@ -2440,6 +2520,7 @@ paths:
                     $ref: '#/components/schemas/release'
   /users/auth:
     post:
+      operationId: authenticate-a-user
       summary: authenticate a user
       tags:
         - Users
@@ -2473,6 +2554,7 @@ paths:
                     $ref: '#/components/schemas/user-me'
   /users/login:
     post:
+      operationId: login-a-user
       summary: login a user
       tags:
         - Users
@@ -2517,6 +2599,7 @@ paths:
                         $ref: '#/components/schemas/user-username'
   /users/me:
     get:
+      operationId: get-user-me
       summary: get user me
       tags:
         - Users
@@ -2531,6 +2614,7 @@ paths:
                     $ref: '#/components/schemas/user-me'
   /users/register:
     post:
+      operationId: register-a-user
       summary: register a user
       tags:
         - Users
@@ -2689,7 +2773,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/device'
-    array-of-firmwares:
+    array-of-firmware:
       type: array
       items:
         $ref: '#/components/schemas/firmware'
@@ -2947,9 +3031,6 @@ components:
           $ref: '#/components/schemas/array-of-ca-jitp-tags'
         cohort_prn:
           $ref: '#/components/schemas/prn'
-          description: >
-            Experimental field describing a linked cohort, access to it is only
-            available through a private, closed beta group.
       required:
         - description
         - tags
