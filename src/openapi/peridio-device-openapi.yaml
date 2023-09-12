@@ -23,7 +23,12 @@ paths:
     get:
       operationId: get-device-me
       summary: get device me
-      description: Returns information about the device identified by the request's authentication.
+      description: |
+        Returns information about the device identified by the request's authentication.
+
+        ### Expandable
+
+        This endpoint has an expandable response. See [expanding responses](#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
@@ -128,7 +133,9 @@ paths:
       description: |
         Returns information regarding whether an update is available via a [release](/admin-api#releases).
 
-        By default, only the `status` field is returned, but you can use the `expand` query parameter to obtain the other fields.
+        ### Expandable
+
+        This endpoint has an expandable response. By default, only the `status` field is returned. See [expanding responses](#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
