@@ -147,7 +147,7 @@ info:
 
     ```text
 
-    purged:true
+    archived:true
 
     ```
 
@@ -2034,6 +2034,12 @@ paths:
     get:
       operationId: retrieve-a-firmware
       summary: retrieve a firmware
+      description: >
+        ### Expandable
+
+
+        This endpoint has an expandable response. See [expanding
+        responses](#section/Expanding-Responses).
       tags:
         - Firmware
       parameters:
