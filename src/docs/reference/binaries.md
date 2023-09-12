@@ -27,26 +27,30 @@ Note in the case of [binary resolution](/reference/cohorts.md#bianry-resolution)
 
 ## Destroyed Binaries
 
-Destroying a binary deletes its content from Peridio while leaving its record intact ([content versus record](#content-versus-record)).
+Binaries with a state of signed can be destroyed. Destroying a binary deletes its content from Peridio but leaves its record mostly intact, see [content versus record](#content-versus-record).
 
 :::danger
-This is a one-way, disruptive, and destructive action.
+Destroying a binary is an irreversible and destructive action.
 
-- Destroyed binaries' content cannot be recovered from Peridio.
-- Destroyed binaries are not valid candidates for
-  [binary resolution](/reference/cohorts.md#bianry-resolution). This means purging a binary may
-  cause binary resolution to fail where it previously succeeded.  See
-  [impact on releases](#impact-on-releases).
-- The binary will be updated such that `destroyed: true, bytes_uploaded: 0`.
+- The binary's record is updated such that `destroyed: true, bytes_uploaded: 0`.
+- The binary's content is irrecoverably deleted.
+- Devices' ability to update may be interupted, see [impact on releases](#impact-on-releases).
 :::
-
 
 ### Impact on Releases
 
-A release is affected by a destroyed binary if the release is associated with a bundle that is associated with an artifact version that is associated with a destroyed binary. In this case, it is said that the release "references a destroyed binary."
+A release is affected by a destroyed binary if the release is associated with a bundle that is associated with an artifact version that is associated with a destroyed binary.
 
-For affected releases, the likelihood of a device checking for an update and encountering an error because an applicable binary cannot be resolved is dependent on how the affected release has `required` configured, whether their are additional releases configured downstream in the affected release's cohort, and whether the affected artifact version has a (non-destroyed) portable binary associated with it. See [targets and compatibility](#targets-and-compatibility).
+:::caution
+During [update resolution](/reference/cohorts.md#update-resolution), release resolution completes before binary resolution begins, but destroyed binaries are not valid candidates for binary resolution. This means that if release resolution resolves a release that then fails binary resolution, the requesting device will fail to resolve an update.
+:::
+
+
+For impacted releases, whether it causes a device to fail to resolve an update or not is dictated by:
+
+1. The impacted release's `required` and `next_release_prn` fields.
+2. Whether the impacted artifact version has a resolveable portable binary associated with it or not. See [targets and compatibility](#targets-and-compatibility).
 
 :::tip
-It is recommended to expeditiously archive affected releases regardless of whether they are causing problems or not.
+To avoid disrupting update resolution, it is recommended to archive any release that would be impacted before destroying the binary. You can see a list of releases associated with a binary most conveniently by viewing the binary in the Peridio Web Console.
 :::
