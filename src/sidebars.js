@@ -162,6 +162,16 @@ const sidebars = {
           label: 'Binaries',
           id: 'reference/binaries',
         },
+        {
+          type: 'doc',
+          label: 'Binary Parts',
+          id: 'reference/binary-parts',
+        },
+        {
+          type: 'doc',
+          label: 'Binary Signatures',
+          id: 'reference/binary-signatures',
+        },
         'reference/firmware-signing-keys',
         {
           type: 'doc',

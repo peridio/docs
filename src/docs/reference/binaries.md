@@ -1,6 +1,6 @@
 # Binaries
 
-A binary is an actual piece of data you wish to distribute to devices.
+A binary represents the data you wish to distribute to devices.
 
 ## Content Versus Record
 
@@ -24,6 +24,62 @@ Target-specific binaries are compatible with a device if their `target` field ma
 Portable binaries are universally compatible with all devices.
 
 Note in the case of [binary resolution](/reference/cohorts.md#bianry-resolution), if both a compatible target-specific binary and a portable binary exist for an artifact version, the target-specific binary will be preferred.
+
+## Lifecycle
+
+A binary's lifecycle is tracked and managed by its `state` field.
+
+### States
+
+- `uploadable`
+- `hashable`
+- `hashing`
+- `signable`
+- `signed`
+- `destroyed`
+
+<img src="/img/binary-states.png" height="200" />
+
+#### Uploadable
+
+
+The initial state that every binary is created in. The binary is awaiting data to be uploaded via [binary parts](/reference/binary-parts.md).
+
+If the binary storage backend has an initial step, like is typical in multipart upload scenarios, it is performed as part of this step.
+
+:::tip
+When you create a binary in the web console, it will be in the `uploadable` state. Note that successful upload of a file via the web console will automatically transition the binary to the `hashing` state which will eventually automatically transition to the `signable` state.
+:::
+
+#### Hashable
+
+Use this state to indicate you have completed your upload.
+
+If the binary storage backend has a final step, like is typical in multipart upload scenarios, it is performed as part of this state transition.
+
+#### Hashing
+
+Use this state to kickoff Peridio's own verification process that computes its own hash over the data and verifies it matches the user provided hash and the hash reported
+
+:::info Automatic State Transition
+Once Peridio's verification process completes, the binary will automatically transition states from `hashing` to `signable`.
+:::
+
+#### Signable
+
+This state indicates the binary as awaiting a [signature](/reference/binary-signatures.md).
+
+:::info Automatic State Transition
+Once a signature is attached to a signable binary, the binary will automatically transition states from `signable` to `signed`.
+:::
+
+#### Signed
+
+The binary is complete and ready to be attached to [bundles](/reference/bundles.md) and distributed via [releases](/reference/releases.md).
+
+#### Destroyed
+
+The binary has been destroyed and can no longer be attached to new bundles nor distributed via releases. See [destroyed binaries](#destroyed-binaries).
 
 ## Destroyed Binaries
 
