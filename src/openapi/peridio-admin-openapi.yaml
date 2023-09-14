@@ -283,7 +283,7 @@ paths:
                 properties:
                   artifact:
                     $ref: "#/components/schemas/artifact"
-  /artifact-versions:
+  /artifact_versions:
     post:
       operationId: create-an-artifact-version
       summary: Create an artifact version
@@ -334,7 +334,7 @@ paths:
                     $ref: "#/components/schemas/array-of-artifact-versions"
                   next_page:
                     $ref: "#/components/schemas/next-page"
-  /artifact-versions/{artifact_version_prn}:
+  /artifact_versions/{artifact_version_prn}:
     get:
       operationId: retrieve-an-artifact-version
       summary: Retrieve artifact version
@@ -372,8 +372,6 @@ paths:
           application/json:
             schema:
               properties:
-                version:
-                  $ref: "#/components/schemas/artifact-version"
                 description:
                   $ref: "#/components/schemas/artifact-version-description"
       responses:
