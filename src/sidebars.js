@@ -22,6 +22,16 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'artifact versions',
+          items: [
+            'cli/artifact-versions/create',
+            'cli/artifact-versions/list',
+            'cli/artifact-versions/retrieve',
+            'cli/artifact-versions/update',
+          ],
+        },
+        {
+          type: 'category',
           label: 'ca certificates',
           items: [
             'cli/ca-certificates/create',
