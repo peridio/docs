@@ -16,7 +16,7 @@ const sidebars = {
           items: [
             'cli/artifacts/create',
             'cli/artifacts/list',
-            'cli/artifacts/retrieve',
+            'cli/artifacts/get',
             'cli/artifacts/update',
           ],
         },
@@ -26,9 +26,14 @@ const sidebars = {
           items: [
             'cli/artifact-versions/create',
             'cli/artifact-versions/list',
-            'cli/artifact-versions/retrieve',
+            'cli/artifact-versions/get',
             'cli/artifact-versions/update',
           ],
+        },
+        {
+          type: 'category',
+          label: 'bundles',
+          items: ['cli/bundles/create', 'cli/bundles/list', 'cli/bundles/get'],
         },
         {
           type: 'category',
@@ -48,7 +53,7 @@ const sidebars = {
           items: [
             'cli/cohorts/create',
             'cli/cohorts/list',
-            'cli/cohorts/retrieve',
+            'cli/cohorts/get',
             'cli/cohorts/update',
           ],
         },

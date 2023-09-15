@@ -20,6 +20,6 @@ The artifact version description.
 
 ### Required
 
-`--artifact_version_prn <artifact_version_prn>`
+`--prn <prn>`
 
 The Peridio Resource Name (PRN) of the artifact version.

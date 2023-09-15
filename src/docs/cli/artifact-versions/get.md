@@ -1,8 +1,8 @@
 ---
-title: retreive
+title: get
 ---
 
-# peridio artifact-versions retrieve
+# peridio artifact-versions get
 
 Retrieve an artifact version.
 
@@ -14,6 +14,6 @@ Prints help information.
 
 ### Required
 
-`--artifact_version_prn <artifact_version_prn>`
+`--prn <prn>`
 
 The Peridio Resource Name (PRN) of the artifact version.
