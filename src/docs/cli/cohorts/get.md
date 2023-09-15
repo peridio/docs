@@ -1,8 +1,8 @@
 ---
-title: retreive
+title: get
 ---
 
-# peridio cohorts retrieve
+# peridio cohorts get
 
 Retrieve an cohort.
 
@@ -14,6 +14,6 @@ Prints help information.
 
 ### Required
 
-`--cohort_prn <cohort_prn>`
+`--prn <prn>`
 
 The Peridio Resource Name (PRN) of the cohort.

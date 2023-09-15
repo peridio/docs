@@ -24,6 +24,6 @@ The name of the artifact.
 
 ### Required
 
-`--artifact_prn <artifact_prn>`
+`--prn <prn>`
 
 The Peridio Resource Name (PRN) of the artifact.

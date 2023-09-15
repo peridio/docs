@@ -24,6 +24,6 @@ The artifact description.
 
 The name of the artifact.
 
-`--organization_prn <organization_prn>`
+`--organization-prn <organization-prn>`
 
 The Peridio Resource Name (PRN) of the organization.

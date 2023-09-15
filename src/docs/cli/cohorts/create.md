@@ -24,10 +24,10 @@ The cohort description.
 
 The name of the cohort.
 
-`--organization_prn <organization_prn>`
+`--organization-prn <organization-prn>`
 
 The Peridio Resource Name (PRN) of the organization.
 
-`--product_prn <organization_prn>`
+`--product-prn <product-prn>`
 
 The Peridio Resource Name (PRN) of the product.

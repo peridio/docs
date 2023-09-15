@@ -1,8 +1,8 @@
 ---
-title: retreive
+title: get
 ---
 
-# peridio artifacts retrieve
+# peridio artifacts get
 
 Retrieve an artifact.
 
@@ -14,6 +14,6 @@ Prints help information.
 
 ### Required
 
-`--artifact_prn <artifact_prn>`
+`--prn <prn>`
 
 The Peridio Resource Name (PRN) of the artifact.
