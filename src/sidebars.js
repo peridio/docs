@@ -129,6 +129,16 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'releases',
+          items: [
+            'cli/releases/create',
+            'cli/releases/list',
+            'cli/releases/get',
+            'cli/releases/update',
+          ],
+        },
+        {
+          type: 'category',
           label: 'signing-keys',
           items: [
             'cli/signing-keys/create',
