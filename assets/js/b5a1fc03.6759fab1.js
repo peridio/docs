@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkparasola=self.webpackChunkparasola||[]).push([[98],{7533:a=>{a.exports=JSON.parse('{"title":"General Availability","slug":"/guides","permalink":"/guides","navigation":{"next":{"title":"Creating Artifacts","permalink":"/guides/creating-artifact-versions"}}}')}}]);

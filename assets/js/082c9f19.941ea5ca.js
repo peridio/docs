@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkparasola=self.webpackChunkparasola||[]).push([[7298],{1909:a=>{a.exports=JSON.parse('{"name":"docusaurus-plugin-redoc","id":"device"}')}}]);

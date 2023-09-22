@@ -4,8 +4,8 @@ info:
     name: Peridio
     url: https://github.com/peridio/parasola/blob/main/LICENSE
   description: >-
-    The Peridio Device API facilitates device-based operations within Peridio v1
-    (Cremini).
+    The Peridio Device API facilitates device-based operations within Peridio
+    Core.
   title: Peridio Device API
   version: 1.0.0
 servers:
@@ -33,7 +33,7 @@ paths:
 
 
         This endpoint has an expandable response. See [expanding
-        responses](#section/Expanding-Responses).
+        responses](/admin-api/#section/Expanding-Responses).
       tags:
         - Devices
       parameters:
@@ -43,11 +43,13 @@ paths:
             responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
 
 
-            |Field|Description|
+            **Expandable Fields**
 
-            |-|-|
 
-            |`cohort`|Includes the cohort information associated to the device.|
+            For more information on each field, reference the response.
+
+
+            - `cohort`
           in: query
           required: false
           schema:
@@ -64,6 +66,14 @@ paths:
                   data:
                     type: object
                     properties:
+                      cohort:
+                        $ref: '#/components/schemas/cohort'
+                        description: >
+                          Expand required. See [expanding
+                          responses](#section/Expanding-Responses).
+
+
+                          The cohort the device belongs to.
                       identifier:
                         $ref: '#/components/schemas/device-identifier'
                       quarantined:
@@ -163,7 +173,7 @@ paths:
 
         This endpoint has an expandable response. By default, only the `status`
         field is returned. See [expanding
-        responses](#section/Expanding-Responses).
+        responses](/admin-api/#section/Expanding-Responses).
       tags:
         - Devices
       parameters:
@@ -179,27 +189,20 @@ paths:
             responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
 
 
-            |Field|Description|
-
-            |-|-|
-
-            |`release`|Includes the target release.|
-
-            |`bundle`|Includes the target bundle, the bundle associated with the
-            target release.|
-
-            |`manifest`|Includes the manifest including artifact, versions and
-            the presigned url.|
-
-            |`manifest.artifact`|Includes the artifact for the binary.|
-
-            |`manifest.artifact_version`|Includes the artifact version for the
-            binary.|
+            **Expandable Fields**
 
 
-            In addition to expanding records, you can expand individual fields;
-            querying `manifest.url` will return only the `url` field inside the
-            manifest array's items.
+            For more information on each field, reference the response.
+
+
+            - `bundle`
+
+            - `release`
+
+            - `manifest`
+              - `artifact`
+              - `artifact_version`
+              - `url`
           in: query
           required: false
           schema:
@@ -220,17 +223,50 @@ paths:
                       - device_quarantine
                   release:
                     $ref: '#/components/schemas/release'
+                    description: >
+                      Expand required. See [expanding
+                      responses](#section/Expanding-Responses).
+
+
+                      The target release with respect to [release
+                      resolution](/reference/releases#release-resolution).
                   bundle:
                     $ref: '#/components/schemas/bundle'
+                    description: >
+                      Expand required. See [expanding
+                      responses](#section/Expanding-Responses).
+
+
+                      The bundle associated with `release`.
                   manifest:
+                    description: >
+                      Expand required. See [expanding
+                      responses](#section/Expanding-Responses).
+
+
+                      The manifest associated with `bundle`. Includes metadata
+                      about the binaries available to download, including a
+                      presigned download url.
                     type: array
                     items:
                       type: object
                       properties:
                         artifact:
                           $ref: '#/components/schemas/artifact'
+                          description: >
+                            Expand required. See [expanding
+                            responses](#section/Expanding-Responses).
+
+
+                            The artifact associated with `artifact_version`.
                         artifact_version:
                           $ref: '#/components/schemas/artifact-version'
+                          description: >
+                            Expand required. See [expanding
+                            responses](#section/Expanding-Responses).
+
+
+                            The artifact version associated with `binary_prn`.
                         binary_prn:
                           $ref: '#/components/schemas/prn'
                         hash:
@@ -248,6 +284,40 @@ components:
         certificate](https://docs.peridio.com/reference/ca-certificates)
         registered with Peridio.
   schemas:
+    cohort-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    cohort-name:
+      type: string
+      minLength: 1
+      maxLength: 128
+    prn:
+      description: >
+        [Peridio Resource Names](/reference/peridio-resource-names) (PRNs)
+        uniquely identify Peridio resources.
+      type: string
+    cohort:
+      type: object
+      properties:
+        description:
+          oneOf:
+            - $ref: '#/components/schemas/cohort-description'
+            - type: 'null'
+        name:
+          $ref: '#/components/schemas/cohort-name'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
+        prn:
+          $ref: '#/components/schemas/prn'
+        inserted_at:
+          type: string
+          format: date-time
+        product_prn:
+          $ref: '#/components/schemas/prn'
+        updated_at:
+          type: string
+          format: date-time
     device-identifier:
       description: Uniquely identifies a device within an organization.
       type: string
@@ -305,11 +375,6 @@ components:
             - $ref: '#/components/schemas/vcs-identifier'
         version:
           $ref: '#/components/schemas/version'
-    prn:
-      description: >
-        [Peridio Resource Names](/reference/peridio-resource-names) (PRNs)
-        uniquely identify Peridio resources.
-      type: string
     release-description:
       default: null
       oneOf:
@@ -483,16 +548,16 @@ components:
         updated_at:
           type: string
           format: date-time
+    binary-signature-signature:
+      type: string
+      description: >
+        The uppercase hex encoding of the ed25519 signature of the base64
+        encoding of the SHA256 hash of the binary.
     signing-signature:
       type: object
       properties:
         signature:
-          type: string
-          description: >
-            An ed25519 signature  of the SHA256 hash of the binary represented
-            as a 64-byte hex
-
-            encoded string.
+          $ref: '#/components/schemas/binary-signature-signature'
         signing_key_prn:
           $ref: '#/components/schemas/prn'
     array-of-signatures:
