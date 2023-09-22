@@ -8,7 +8,7 @@ reference.
 ## Prerequisites
 
 - [Peridio CLI](https://github.com/peridio/morel/releases).
-  - Last tested with version 0.4.0.
+  - Last tested with version 0.8.0.
 
 ## Create Bundle
 

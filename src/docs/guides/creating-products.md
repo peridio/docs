@@ -7,7 +7,7 @@ To learn more about Peridio products in general, see the [products](/reference/p
 ## Prerequisites
 
 - [Peridio CLI](https://github.com/peridio/morel/releases).
-  - Last tested with version 0.3.0.
+  - Last tested with version 0.8.0.
 
 ## Create Product
 
@@ -24,4 +24,4 @@ peridio products create \
 
 ### API
 
-Use the Peridio Admin API [create product](/admin-api#tag/Products/paths/~1orgs~1%7Borganization_name%7D~1products/post) endpoint.
+Use the Peridio Admin API [create-a-product](/admin-api#products/operation/create-a-product) endpoint.

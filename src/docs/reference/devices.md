@@ -2,7 +2,7 @@
 title: Devices
 ---
 
-A device is a thing you wish to manage firmware for with Peridio.
+A device is a thing you wish to distribute updates to.
 
 ## Provisioning
 

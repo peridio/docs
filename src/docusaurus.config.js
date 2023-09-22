@@ -79,12 +79,12 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          { label: 'Reference', href: '/reference/organizations' },
-          { label: 'Guides', href: '/guides' },
-          { label: 'Admin API', href: '/admin-api' },
-          { label: 'Device API', href: '/device-api' },
-          { label: 'CLI', href: '/cli' },
-          { label: 'Agent', href: '/agent' },
+          { label: 'Reference', to: '/reference/organizations' },
+          { label: 'Guides', to: '/guides/overview' },
+          { label: 'Admin API', to: '/admin-api' },
+          { label: 'Device API', to: '/device-api' },
+          { label: 'CLI', to: '/cli' },
+          { label: 'Agent', to: '/agent' },
         ],
       },
       footer: {

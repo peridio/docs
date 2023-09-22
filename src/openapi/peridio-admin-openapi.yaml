@@ -9,16 +9,65 @@ info:
   description: |
     # Expanding Responses
 
-    Some endpoints are able to return more data than they normally do by expanding their response.
-    When this is possible the endpoint will specify the `expand` field and will document which
-    fields can be expanded. The `expand` field takes an array of string field names that identify
-    which fields you wish to expand.
+    Some endpoints are able to return more data than they normally do by expanding their response. When this is possible the endpoint will specify the `expand` field and will document which fields can be expanded. The expand field takes an array of string field names that identify which fields you wish to expand.
+
+    ## Expanding Fields
+
+    To expand a single field, you may specify it as part of the query.
 
     For example:
 
     ```text
-    /foo?expand[]=bar&expand[]=baz
+    /example-endpoint?expand[]=bar
     ```
+
+    This will cause the `bar` key and its value to be included in the response. If `bar` itself has expandable fields, see [path expands](#section/Expanding-Responses/Path-Expands).
+
+    ## Path Expands
+
+    If the field you wish to expand is not a top level key within the response, you may specify it using dot notation.
+
+    For example:
+
+    ```text
+    /example-endpoint?expand[]=foo.bar
+    ```
+
+    If `foo` itself is not an expandable field, this will work like a normal field expand. The `bar` key and its value will be included in the response nested under the `foo` key.
+
+    If `foo` is an expandable field, see [nested expands](#section/Expanding-Responses/Nested-Expands).
+
+    ## Expanding Multiple Fields
+
+    To expand more than one field, you may add additional expands to the query.
+
+    For example:
+
+    ```text
+    /example-endpoint?expand[]=bar&expand[]=baz
+    ```
+
+    ## Nested Expands
+
+    If you are already expanding a field, `foo`, and it has its own expandable field(s), `bar`, you may additionally expand bar as follows.
+
+    ```text
+    /example-endpoint?expand[]=foo&expand[]=foo.bar
+    ```
+
+    The `foo` key and its value will be included in the response. Additionally, The `bar` key and its value will be included in the response nested under the `foo` key.
+
+    If you wish to expand the `bar` key, but are not interested in the other keys on `foo`, see [granular expands](#section/Expanding-Responses/Granular-Expands).
+
+    ## Granular Expands
+
+    If `foo` is an expandable field whose keys you are not interested in except for its own expandable field `bar`, you may do the following.
+
+    ```text
+    /example-endpoint?expand[]=foo.bar
+    ```
+
+    The `foo` key will exist, but its value will only have the `bar` key, discluding all other sibling keys you did not explicitly ask for.
 
     # Search Query Language
 
@@ -132,6 +181,10 @@ tags:
       id: artifact-versions
     - name: Binaries
       id: binaries
+    - name: Binary Parts
+      id: binary-parts
+    - name: Binary Signatures
+      id: binary-signatures
     - name: Keys
       id: keys
       description: Use [signing keys](#signing-keys) instead.
@@ -165,6 +218,8 @@ x-tagGroups:
       - Artifacts
       - Artifact Versions
       - Binaries
+      - Binary Parts
+      - Binary Signatures
       - Keys
       - Signing Keys
       - Firmware
@@ -498,9 +553,9 @@ paths:
       operationId: create-a-binary-part
       summary: Create a Binary Part
       description: |
-        Creates a binary part, check the documentation at TODO
+        Create a binary part.
       tags:
-        - "Binaries"
+        - "Binary Parts"
       parameters:
         - name: binary_prn
           in: path
@@ -535,14 +590,14 @@ paths:
             application/json:
               schema:
                 properties:
-                  binary:
+                  binary_part:
                     $ref: "#/components/schemas/binary-part"
   /binaries/{binary_prn}/parts:
     get:
       operationId: list-binary-parts
       summary: List binary parts
       tags:
-        - "Binaries"
+        - "Binary Parts"
       parameters:
         - name: binary_prn
           in: path
@@ -556,16 +611,14 @@ paths:
             application/json:
               schema:
                 properties:
-                  binaries:
+                  binary_parts:
                     $ref: "#/components/schemas/array-of-binary-parts"
-                  next_page:
-                    $ref: "#/components/schemas/next-page"
   /binary_signatures:
     post:
-      operationId: create-binary-signature
-      summary: Attach a signature to a binary
+      operationId: create-a-binary-signature
+      summary: Create a binary signature
       tags:
-        - "Binaries"
+        - "Binary Signatures"
       description: |
         Attach a signature to a binary.
 
@@ -582,7 +635,7 @@ paths:
                 signing_key_prn:
                   $ref: "#/components/schemas/prn"
                 signature:
-                  $ref: "#/components/schemas/signature"
+                  $ref: "#/components/schemas/binary-signature-signature"
               required:
                 - binary_prn
                 - signing_key_prn
@@ -594,14 +647,14 @@ paths:
             application/json:
               schema:
                 properties:
-                  binary:
+                  binary_signature:
                     $ref: "#/components/schemas/binary-signature"
   /binary_signatures/{binary_signature_prn}:
     delete:
-      operationId: delete-binary-signature
-      summary: Delete Binary Signature
+      operationId: delete-a-binary-signature
+      summary: Delete a binary signature
       tags:
-        - "Binaries"
+        - "Binary Signatures"
       parameters:
         - name: binary_signature_prn
           in: path
@@ -641,7 +694,7 @@ paths:
                     $ref: "#/components/schemas/bundle"
     get:
       operationId: list-bundles
-      summary: list Bundles
+      summary: list bundles
       tags:
         - "Bundles"
       parameters:
@@ -716,7 +769,7 @@ paths:
                     $ref: "#/components/schemas/cohort"
     get:
       operationId: list-cohorts
-      summary: list Cohorts
+      summary: List cohorts
       tags:
         - "Cohorts"
       parameters:
@@ -819,7 +872,7 @@ paths:
                     $ref: "#/components/schemas/signing-key"
     get:
       operationId: list--signing-keys
-      summary: List Signing Keys
+      summary: List signing keys
       tags:
         - Signing Keys
       parameters:
@@ -891,7 +944,7 @@ paths:
                     $ref: "#/components/schemas/signing-key"
     delete:
       operationId: delete-a-signing-key
-      summary: Retrieve a cohort
+      summary: Delete a signing key
       tags:
         - Signing Keys
       parameters:
@@ -913,7 +966,7 @@ paths:
   /orgs/{organization_name}/ca_certificates:
     get:
       operationId: list-ca-certificates
-      summary: list CA certificates
+      summary: List CA certificates
       tags:
         - "CA Certificates"
       parameters:
@@ -933,7 +986,7 @@ paths:
                     $ref: "#/components/schemas/array-of-ca-certificates"
     post:
       operationId: create-a-ca-certificate
-      summary: create CA certificate
+      summary: Create a CA certificate
       tags:
         - "CA Certificates"
       parameters:
@@ -955,7 +1008,7 @@ paths:
                   description: >
                     Base64 encoded verification certificate.
 
-                    See: [create verification codes](#tag/CA-Certificates/paths/~1orgs~1{organization_name}~1ca_certificates~1verification_codes/post)
+                    See: [create-a-ca-verification-code](/admin-api#ca-certificates/operation/create-a-ca-verification-code)
                   type: string
                 description:
                   type: string
@@ -976,7 +1029,7 @@ paths:
   /orgs/{organization_name}/ca_certificates/{ca_certificate_serial}:
     delete:
       operationId: delete-a-ca-certificate
-      summary: delete a CA certificate
+      summary: Delete a CA certificate
       tags:
         - "CA Certificates"
       parameters:
@@ -995,7 +1048,7 @@ paths:
           description: Ok.
     get:
       operationId: retrieve-a-ca-certificate
-      summary: retrieve a CA certificate
+      summary: Retrieve a CA certificate
       tags:
         - "CA Certificates"
       parameters:
@@ -1020,7 +1073,7 @@ paths:
                     $ref: "#/components/schemas/ca-certificate"
     put:
       operationId: update-a-ca-certificate
-      summary: update CA certificate
+      summary: Update CA certificate
       tags:
         - "CA Certificates"
       parameters:
@@ -1056,7 +1109,7 @@ paths:
   /orgs/{organization_name}/ca_certificates/verification_codes:
     post:
       operationId: create-a-ca-verification-code
-      summary: create CA verification code
+      summary: Create a CA verification code
       tags:
         - "CA Certificates"
       parameters:
@@ -1078,7 +1131,7 @@ paths:
     get:
       operationId: list-keys
       deprecated: true
-      summary: list keys
+      summary: List keys
       tags:
         - "Keys"
       parameters:
@@ -1099,7 +1152,7 @@ paths:
     post:
       operationId: create-a-key
       deprecated: true
-      summary: create key
+      summary: Create a key
       tags:
         - "Keys"
       parameters:
@@ -1134,7 +1187,7 @@ paths:
     delete:
       operationId: delete-a-key
       deprecated: true
-      summary: delete key
+      summary: Delete a key
       tags:
         - "Keys"
       parameters:
@@ -1154,7 +1207,7 @@ paths:
     get:
       operationId: retrieve-a-key
       deprecated: true
-      summary: retrieve a key
+      summary: Retrieve a key
       tags:
         - "Keys"
       parameters:
@@ -1180,7 +1233,7 @@ paths:
   /orgs/{organization_name}/products:
     get:
       operationId: list-products
-      summary: list products
+      summary: List products
       tags:
         - "Products"
       parameters:
@@ -1200,7 +1253,7 @@ paths:
                     $ref: "#/components/schemas/array-of-products"
     post:
       operationId: create-a-product
-      summary: create product
+      summary: Create a product
       tags:
         - "Products"
       parameters:
@@ -1231,7 +1284,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}:
     delete:
       operationId: delete-a-product
-      summary: delete product
+      summary: Delete a product
       tags:
         - "Products"
       parameters:
@@ -1250,7 +1303,7 @@ paths:
           description: Ok.
     get:
       operationId: retrieve-a-product
-      summary: retrieve a product
+      summary: Retrieve a product
       tags:
         - "Products"
       parameters:
@@ -1275,7 +1328,7 @@ paths:
                     $ref: "#/components/schemas/product"
     put:
       operationId: update-a-product
-      summary: update a product
+      summary: Update a product
       tags:
         - "Products"
       parameters:
@@ -1314,7 +1367,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/deployments:
     get:
       operationId: list-deployments
-      summary: list deployments
+      summary: List deployments
       tags:
         - "Deployments"
       parameters:
@@ -1339,7 +1392,7 @@ paths:
                     $ref: "#/components/schemas/array-of-deployments"
     post:
       operationId: create-a-deployment
-      summary: create a deployment
+      summary: Create a deployment
       tags:
         - "Deployments"
       parameters:
@@ -1390,7 +1443,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/deployments/{deployment_name}:
     delete:
       operationId: delete-a-deployment
-      summary: delete a deployment
+      summary: Delete a deployment
       tags:
         - "Deployments"
       parameters:
@@ -1414,7 +1467,7 @@ paths:
           description: Ok.
     get:
       operationId: retrieve-a-deployment
-      summary: retrieve deployment
+      summary: Retrieve a deployment
       tags:
         - "Deployments"
       parameters:
@@ -1443,8 +1496,8 @@ paths:
                   data:
                     $ref: "#/components/schemas/deployment"
     put:
-      operationId: update-deployment
-      summary: update-deployment
+      operationId: update-a-deployment
+      summary: Update a deployment
       tags:
         - "Deployments"
       parameters:
@@ -1496,7 +1549,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/devices:
     get:
       operationId: list-devices
-      summary: list devices
+      summary: List devices
       tags:
         - "Devices"
       parameters:
@@ -1521,7 +1574,7 @@ paths:
                     $ref: "#/components/schemas/array-of-devices"
     post:
       operationId: create-a-device
-      summary: create a device
+      summary: Create a device
       tags:
         - "Devices"
       parameters:
@@ -1565,7 +1618,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}:
     delete:
       operationId: delete-a-device
-      summary: delete device
+      summary: Delete a device
       tags:
         - "Devices"
       parameters:
@@ -1589,7 +1642,7 @@ paths:
           description: Ok.
     get:
       operationId: retrieve-a-device
-      summary: retrieve a device
+      summary: Retrieve a device
       tags:
         - "Devices"
       parameters:
@@ -1619,7 +1672,7 @@ paths:
                     $ref: "#/components/schemas/device"
     put:
       operationId: update-a-device
-      summary: update a device
+      summary: Update a device
       tags:
         - "Devices"
       parameters:
@@ -1666,7 +1719,7 @@ paths:
   ? /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates
   : get:
       operationId: list-device-certificates
-      summary: list device certificates
+      summary: List device certificates
       tags:
         - "Device Certificates"
       parameters:
@@ -1696,7 +1749,7 @@ paths:
                     $ref: "#/components/schemas/array-of-device-certificates"
     post:
       operationId: create-a-device-certificate
-      summary: create a device certificate
+      summary: Create a device certificate
       tags:
         - "Device Certificates"
       parameters:
@@ -1737,7 +1790,7 @@ paths:
   ? /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates/{certificate_serial}
   : get:
       operationId: retrieve-a-device-certificate
-      summary: retrieve a device certificate
+      summary: Retrieve a device certificate
       tags:
         - "Device Certificates"
       parameters:
@@ -1772,7 +1825,7 @@ paths:
                     $ref: "#/components/schemas/device-certificate"
     delete:
       operationId: delete-a-device-certificate
-      summary: delete a device certificate
+      summary: Delete a device certificate
       tags:
         - "Device Certificates"
       parameters:
@@ -1802,7 +1855,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/devices/auth:
     post:
       operationId: authenticate-device
-      summary: authenticate device
+      summary: Authenticate device
       tags:
         - "Devices"
       parameters:
@@ -1838,7 +1891,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/firmwares:
     get:
       operationId: list-firmware
-      summary: list firmware
+      summary: List firmware
       tags:
         - "Firmware"
       parameters:
@@ -1863,7 +1916,7 @@ paths:
                     $ref: "#/components/schemas/array-of-firmware"
     post:
       operationId: create-a-firmware
-      summary: create a firmware
+      summary: Create a firmware
       tags:
         - "Firmware"
       parameters:
@@ -1918,7 +1971,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/firmwares/{firmware_uuid}:
     delete:
       operationId: delete-a-firmware
-      summary: delete a firmware
+      summary: Delete a firmware
       tags:
         - "Firmware"
       parameters:
@@ -1946,7 +1999,7 @@ paths:
                 $ref: "#/components/schemas/firmware"
     get:
       operationId: retrieve-a-firmware
-      summary: retrieve a firmware
+      summary: Retrieve a firmware
       description: |
         ### Expandable
 
@@ -1973,9 +2026,11 @@ paths:
           description: |
             See [expanding responses](#section/Expanding-Responses).
 
-            |Field|Description|
-            |-|-|
-            |`url`|Includes a presigned URL for downloading the firmware.|
+            **Expandable Fields**
+
+            For more information on each field, reference the response.
+
+            - `url`
           in: query
           required: false
           schema:
@@ -1990,11 +2045,16 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: "#/components/schemas/firmware"
+                    allOf:
+                      - $ref: "#/components/schemas/firmware"
+                      - type: object
+                        properties:
+                          url:
+                            $ref: "#/components/schemas/firmware-expand-url"
   /orgs/{organization_name}/products/{product_name}/users:
     get:
       operationId: list-product-users
-      summary: list product users
+      summary: List product users
       tags:
         - "Product Users"
       parameters:
@@ -2019,7 +2079,7 @@ paths:
                     $ref: "#/components/schemas/array-of-product-users"
     post:
       operationId: add-a-product-user
-      summary: add a product user
+      summary: Add a product user
       tags:
         - "Product Users"
       parameters:
@@ -2058,7 +2118,7 @@ paths:
   /orgs/{organization_name}/products/{product_name}/users/{user_username}:
     delete:
       operationId: remove-a-product-user
-      summary: remove a product user
+      summary: Remove a product user
       tags:
         - "Product Users"
       parameters:
@@ -2082,7 +2142,7 @@ paths:
           description: Ok.
     get:
       operationId: retrieve-a-product-user
-      summary: retrieve a product user
+      summary: Retrieve a product user
       tags:
         - "Product Users"
       parameters:
@@ -2112,7 +2172,7 @@ paths:
                     $ref: "#/components/schemas/product-user"
     put:
       operationId: update-a-product-user
-      summary: update a product user
+      summary: Update a product user
       tags:
         - "Product Users"
       parameters:
@@ -2153,7 +2213,7 @@ paths:
   /orgs/{organization_name}/users:
     get:
       operationId: list-organization-users
-      summary: list organization users
+      summary: List organization users
       tags:
         - "Organization Users"
       parameters:
@@ -2173,7 +2233,7 @@ paths:
                     $ref: "#/components/schemas/array-of-organization-users"
     post:
       operationId: add-an-organization-user
-      summary: add an organization user
+      summary: Add an organization user
       tags:
         - "Organization Users"
       parameters:
@@ -2207,7 +2267,7 @@ paths:
   /orgs/{organization_name}/users/{user_username}:
     delete:
       operationId: remove-an-organization-user
-      summary: remove an organization user
+      summary: Remove an organization user
       tags:
         - "Organization Users"
       parameters:
@@ -2226,7 +2286,7 @@ paths:
           description: Ok.
     get:
       operationId: retrieve-an-organization-user
-      summary: retrieve an organization user
+      summary: Retrieve an organization user
       tags:
         - "Organization Users"
       parameters:
@@ -2251,7 +2311,7 @@ paths:
                     $ref: "#/components/schemas/organization-user"
     put:
       operationId: update-an-organization-user
-      summary: update an organization user
+      summary: Update an organization user
       tags:
         - "Organization Users"
       parameters:
@@ -2346,7 +2406,7 @@ paths:
                     $ref: "#/components/schemas/release"
     get:
       operationId: list-releases
-      summary: list Releases
+      summary: List Releases
       tags:
         - Releases
       parameters:
@@ -2425,7 +2485,7 @@ paths:
   /users/auth:
     post:
       operationId: authenticate-a-user
-      summary: authenticate a user
+      summary: Authenticate a user
       tags:
         - "Users"
       requestBody:
@@ -2459,7 +2519,7 @@ paths:
   /users/login:
     post:
       operationId: login-a-user
-      summary: login a user
+      summary: Login a user
       tags:
         - "Users"
       requestBody:
@@ -2504,7 +2564,7 @@ paths:
   /users/me:
     get:
       operationId: get-user-me
-      summary: get user me
+      summary: Get user me
       tags:
         - "Users"
       responses:
@@ -2519,7 +2579,7 @@ paths:
   /users/register:
     post:
       operationId: register-a-user
-      summary: register a user
+      summary: Register a user
       tags:
         - "Users"
       requestBody:
@@ -2789,7 +2849,7 @@ components:
       minLength: 1
       maxLength: 256
     binary-hash:
-      description: The expected binary md5 hash.
+      description: The base64 encoding of the SHA256 hash of the binary's data.
       type: string
     binary-size:
       description: The expected size in bytes of the binary.
@@ -2807,6 +2867,10 @@ components:
         - "signable"
         - "signed"
         - "destroyed"
+    binary-signature-signature:
+      type: string
+      description: |
+        The uppercase hex encoding of the ed25519 signature of the base64 encoding of the SHA256 hash of the binary.
     binary-signature:
       type: object
       properties:
@@ -2816,6 +2880,8 @@ components:
           $ref: "#/components/schemas/prn"
         prn:
           $ref: "#/components/schemas/prn"
+        signature:
+          $ref: "#/components/schemas/binary-signature-signature"
         signing_key_prn:
           $ref: "#/components/schemas/prn"
         inserted_at:
@@ -2827,19 +2893,19 @@ components:
     binary-part:
       type: object
       properties:
+        binary_prn:
+          $ref: "#/components/schemas/prn"
         hash:
           $ref: "#/components/schemas/binary-part-hash"
-        binayr_prn:
-          $ref: "#/components/schemas/prn"
-        organization_prn:
-          $ref: "#/components/schemas/prn"
-        prn:
-          $ref: "#/components/schemas/prn"
         index:
           $ref: "#/components/schemas/binary-part-index"
         inserted_at:
           type: string
           format: date-time
+        organization_prn:
+          $ref: "#/components/schemas/prn"
+        prn:
+          $ref: "#/components/schemas/prn"
         size:
           $ref: "#/components/schemas/binary-part-size"
         state:
@@ -2848,7 +2914,7 @@ components:
           type: string
           format: date-time
     binary-part-hash:
-      description: The expected binary part md5 hash.
+      description: The base64 encoding of the SHA256 hash of the binary part's data.
       type: string
     binary-part-index:
       description: The binary part index order
@@ -2866,7 +2932,7 @@ components:
         - "uploadable"
         - "invalid_size"
         - "invalid_hash"
-        - "complete"
+        - "valid"
     bundle:
       type: object
       properties:
@@ -3151,6 +3217,13 @@ components:
       type: string
       format: uuid
       description: Uniquely identifies a firmware.
+    firmware-expand-url:
+      type: string
+      format: url
+      description: |
+        Expand required. See [expanding responses](#section/Expanding-Responses).
+
+        Presigned download url.
     key:
       type: object
       properties:
@@ -3297,17 +3370,9 @@ components:
       type: object
       properties:
         signature:
-          type: string
-          description: |
-            An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
-            encoded string.
+          $ref: "#/components/schemas/binary-signature-signature"
         signing_key_prn:
           $ref: "#/components/schemas/prn"
-    signature:
-      type: string
-      description: |
-        An ed25519 signature  of the SHA256 hash of the binary represented as a 64-byte hex
-        encoded string.
     user-me:
       allOf:
         - type: object

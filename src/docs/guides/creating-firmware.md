@@ -9,7 +9,7 @@ To learn more about Peridio firmware in general, see the [firmware](/reference/f
 - [fwup CLI](https://github.com/fwup-home/fwup).
   - Last tested with version 1.9.1.
 - [Peridio CLI](https://github.com/peridio/morel/releases).
-  - Last tested with version 0.3.0.
+  - Last tested with version 0.8.0.
 
 In order to create a firmware it must be associated with a preexisting product. To learn how to create a product, see the [creating products](/guides/creating-products) guide.
 
@@ -49,7 +49,7 @@ fwup \
 
 ### Sign the fwup Archive
 
-See [firmware signing keys](/reference/firmware-signing-keys).
+See [signing keys](/reference/signing-keys).
 
 ```text
 fwup \
