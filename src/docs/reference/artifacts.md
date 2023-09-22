@@ -1,3 +1,11 @@
 # Artifacts
 
-An artifact is the logical representation of an asset you wish to version and distribute to devices. For example, `RTX ML Model` may be the `name` of your artifact. Note that the artifact itself is neither a version nor a binary, as those are distinctly manageable resources. See [artifact versions](/reference/artifact-versions.md) and [binaries](/reference/binaries.md).
+An artifact is an asset type you wish to create [versions](artifact-versions) and [binaries](binaries) for in pursuit of distributing content to devices.
+
+The easiest example of an artifact is the complete firmware for a device. However, you can use artifacts to represent anything: a machine learning model, a Linux kernal, a file system, a piece of media, a black box, etc.
+
+## Immutable Reference
+
+Artifacts act as an immutable reference to a type of binary that remains consistent before and after any version or binaries are created for it. This enables code to perform different actions based on the type of binary.
+
+For example, your bundles may typically contain your base firmware image and a machine learning model. A device performing a Device API `get-update` request could distinguish between the two binaries by observing the artifact PRNs reported alongside the binaries in the response's manifest.

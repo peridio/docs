@@ -7,7 +7,7 @@ To learn more about Peridio deployments in general, see the [deployments](/refer
 ## Prerequisites
 
 - [Peridio CLI](https://github.com/peridio/morel/releases).
-  - Last tested with version 0.3.0.
+  - Last tested with version 0.8.0.
 
 In order to create a deployment it must be associated with a preexisting product and firmware. To learn how to create a product, see the [creating products](/guides/creating-products) guide. To learn how to create firmware, see the [creating firmware](/guides/creating-firmware) guide.
 
@@ -29,4 +29,4 @@ peridio deployments create \
 
 ### API
 
-Use the Peridio Admin API [create deployment](/admin-api#tag/Deployments/paths/~1orgs~1%7Borganization_name%7D~1products~1%7Bproduct_name%7D~1deployments/post) endpoint.
+Use the Peridio Admin API [create-a-deployment](/admin-api#deployments/operation/create-a-deployment) endpoint.

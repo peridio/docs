@@ -1,3 +1,3 @@
 # Binary Parts
 
-Binary parts are used to facilitate multipart uploads to Peridio.
+Binary parts track the chunks of a multipart upload to Peridio.

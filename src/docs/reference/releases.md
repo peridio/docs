@@ -20,9 +20,7 @@ You cannot create a new latest release while the current latest release is sched
 
 The availability of a release, the ability for devices to resolve it when checking for updates, is dictated by three concepts: graph traversal, scheduling, and phasing.
 
-### Types
-
-#### Graph Traversal
+### Graph Traversal
 
 When creating releases within a cohort, they will form a release graph.
 
@@ -40,7 +38,7 @@ In order for a release on the graph to be relevant to you, it must be between yo
 
 For example, if your current release was R4, then R5 is available with respect to graph traversal, but R2 is not. Keep in mind this is an instantaneous evaluation at it would be possible for example for the device to be factory reset to R1, at which point R2 would be traversible.
 
-#### Scheduling
+### Scheduling
 
 The latest release in a cohort can be scheduled to become available immediately, or a date in the future can be choosen. This allows you to stage a release ahead of time and have it become available automatically at a specific time.
 
@@ -52,7 +50,7 @@ When a release has been created, but its schedule date has not occurred yet, the
 
 A release ceases to be scheduled once its schedule date has passed.
 
-#### Phasing
+### Phasing
 
 The latest release in a cohort can be made available gradually by configuring its phase value. This can be used to limit how many devices are allowed to take the release to either a percent of the cohort, or an absolute threshold of devices. Once the limit is met, the release is unavailable until the phase value is increased.
 
@@ -84,13 +82,9 @@ R3---/
 
 Lets say that `R2` above is the only required release. If a device was on `R1`, it would have to update to `R2` first, even though `R6` is already available. Whereas if a device was on `R4`, it could update directly to `R6`, because `R5` is not required.
 
-## Update Resolution
+## Release Resolution
 
-When a device performs the [get device update](/admin-api#tag/devices/operations/get-device-update) request, Peridio performs update resolution, which comprises release resolution and binary resolution, to determine if there is a release to update to, and to create a set of presigned URLs to facilitate the device acquiring compatible binaries.
-
-### Release resolution
-
-Release resolution is the process of determing if, given the current release of a device, there is another release, referred to as the target release, the device can update to.
+When a device executes a Device API [get-update](/device-api#devices/operation/get-update) request, Peridio performs release resolution. Release resolution is the process of determing if, given the current release of a device, there is another release, referred to as the target release, the device can update to.
 
 This resolution is performed as follows:
 
@@ -109,7 +103,3 @@ This resolution is performed as follows:
     2. If no, release resolution succeeds with a target release.
 
 Peridio will recurse between 5.1 and 4 to skip as many not-required releases as possible.
-
-### Binary resolution
-
-In the case that release resolution succeeds with a target release, binary resolution is then performed. Binary resolution is the process of looking at the target release's [bundle](/reference/bundles.md), and then, for each of the bundle's [artifact versions](/reference/artifact-versions.md), resolving a [compatible binary](/reference/binaries.md#compatibility). If no compatible binary is found for any one or more of the artifact versions, binary resolution fails and the device will not be able to proceed.

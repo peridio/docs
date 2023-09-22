@@ -24,7 +24,7 @@ For a device to be eligible for a particular deployment, the following condition
 - The device's current firmware's platform matches the platform of the deployment's firmware.
 - The device's current firmware's UUID is not the same as the UUID of the deployment's firmware.
 
-Peridio tracks metadata about the current firmware of devices. Devices themselves dictate what Peridio considers their current firmware by supplying the `x-peridio-uuid` header to the Peridio Device API [get device update](/device-api#tag/Devices/paths/~1device~1update/get) endpoint.
+Peridio tracks metadata about the current firmware of devices. Devices themselves dictate what Peridio considers their current firmware by supplying the `x-peridio-uuid` header to the Peridio Device API [get-device-update](/device-api#devices/operation/get-device-update) endpoint.
 
 ### Tags
 

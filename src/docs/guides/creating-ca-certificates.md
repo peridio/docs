@@ -7,7 +7,7 @@ To learn more about Peridio CA certificates in general, see the [CA certificates
 ## Prerequisites
 
 - [Peridio CLI](https://github.com/peridio/morel/releases).
-  - Last tested with version 0.3.0.
+  - Last tested with version 0.8.0.
 
 ## Obtain a CA Certificate File
 

@@ -1,6 +1,7 @@
 # Artifact Versions
 
-An artifact version is a particular version of an [artifact](/reference/artifacts.md), e.g.,
-`1.0.0`.
+Artifact versions represent a distinct version of an [artifact](/reference/artifacts.md) that you
+wish to create [binaries](binaries) for.
 
-Artifact versions are the resource within which you upload [binaries](/reference/binaries.md).
+For example, if you had an artifact named "MyProject Firmware", you might create an artifact
+version for it with a version of "1.0.0".

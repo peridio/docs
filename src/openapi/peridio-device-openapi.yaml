@@ -4,7 +4,7 @@ info:
   license:
     name: Peridio
     url: https://github.com/peridio/parasola/blob/main/LICENSE
-  description: The Peridio Device API facilitates device-based operations within Peridio v1 (Cremini).
+  description: The Peridio Device API facilitates device-based operations within Peridio Core.
   title: Peridio Device API
   version: "1.0.0"
 servers:
@@ -28,7 +28,7 @@ paths:
 
         ### Expandable
 
-        This endpoint has an expandable response. See [expanding responses](#section/Expanding-Responses).
+        This endpoint has an expandable response. See [expanding responses](/admin-api/#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
@@ -36,9 +36,11 @@ paths:
           description: |
             See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
 
-            |Field|Description|
-            |-|-|
-            |`cohort`|Includes the cohort information associated to the device.|
+            **Expandable Fields**
+
+            For more information on each field, reference the response.
+
+            - `cohort`
           in: query
           required: false
           schema:
@@ -55,6 +57,12 @@ paths:
                   data:
                     type: object
                     properties:
+                      cohort:
+                        $ref: "peridio-admin-openapi.yaml#/components/schemas/cohort"
+                        description: |
+                          Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                          The cohort the device belongs to.
                       identifier:
                         $ref: "peridio-admin-openapi.yaml#/components/schemas/device-identifier"
                       quarantined:
@@ -135,7 +143,7 @@ paths:
 
         ### Expandable
 
-        This endpoint has an expandable response. By default, only the `status` field is returned. See [expanding responses](#section/Expanding-Responses).
+        This endpoint has an expandable response. By default, only the `status` field is returned. See [expanding responses](/admin-api/#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
@@ -149,15 +157,16 @@ paths:
           description: |
             See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
 
-            |Field|Description|
-            |-|-|
-            |`release`|Includes the target release.|
-            |`bundle`|Includes the target bundle, the bundle associated with the target release.|
-            |`manifest`|Includes the manifest including artifact, versions and the presigned url.|
-            |`manifest.artifact`|Includes the artifact for the binary.|
-            |`manifest.artifact_version`|Includes the artifact version for the binary.|
+            **Expandable Fields**
 
-            In addition to expanding records, you can expand individual fields; querying `manifest.url` will return only the `url` field inside the manifest array's items.
+            For more information on each field, reference the response.
+
+            - `bundle`
+            - `release`
+            - `manifest`
+              - `artifact`
+              - `artifact_version`
+              - `url`
           in: query
           required: false
           schema:
@@ -178,17 +187,37 @@ paths:
                       - "device_quarantine"
                   release:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/release"
+                    description: |
+                      Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                      The target release with respect to [release resolution](/reference/releases#release-resolution).
                   bundle:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/bundle"
+                    description: |
+                      Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                      The bundle associated with `release`.
                   manifest:
+                    description: |
+                      Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                      The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download url.
                     type: array
                     items:
                       type: object
                       properties:
                         artifact:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact"
+                          description: |
+                            Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                            The artifact associated with `artifact_version`.
                         artifact_version:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact-version"
+                          description: |
+                            Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                            The artifact version associated with `binary_prn`.
                         binary_prn:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
                         hash:
