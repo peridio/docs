@@ -1,52 +1,14 @@
----
-title: update
----
+```
+Usage: peridio ca-certificates update [OPTIONS] --ca-certificate-serial <CA_CERTIFICATE_SERIAL>
 
-# peridio ca-certificates update
+Options:
+      --ca-certificate-serial <CA_CERTIFICATE_SERIAL>  
+      --description <DESCRIPTION>                      
+      --disable-jitp                                   
+      --jitp-description <JITP_DESCRIPTION>            
+      --jitp-tags <JITP_TAGS>                          
+      --jitp-product-name <JITP_PRODUCT_NAME>          
+      --jitp-cohort-prn <JITP_COHORT_PRN>              
+  -h, --help                                           Print help
 
-Update a CA information.
-
-Supplying any of the JITP flags will enable Just in time provisioning (JITP).
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-`--description <description>`
-
-The CA description.
-
-`--disable-jitp`
-
-Use this flag if you want to disable JITP (overrides any other JITP option).
-
-`--jitp-description <jitp-description>`
-
-The JITP description.
-
-`--jitp-product-name <jitp-product-name>`
-
-The JITP product name.
-
-`--jitp-tags <jitp-tags>`
-
-A comma separated set of tags to apply to affected devices.
-
-`--jitp-cohort-prn <jitp-cohort-prn>`
-
-The PRN of the cohort to apply to a device upon JITP.
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--ca-certificate-serial <ca-certificate-serial>`
-
-The CA certificate serial.
-
+```

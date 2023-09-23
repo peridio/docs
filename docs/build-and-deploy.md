@@ -8,6 +8,14 @@ yarn --cwd src build
 
 Builds and outputs static content into the `build` directory ready to be served.
 
+## Generate Peridio CLI Docs
+
+```
+yarn --cwd src gen-cli
+```
+
+This command uses your local Peridio CLI. The script itself hardcodes a particular version requirement of the CLI to help protect against documentation regression.
+
 ## Deploy
 
 ## Production

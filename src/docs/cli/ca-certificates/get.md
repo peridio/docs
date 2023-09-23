@@ -1,26 +1,8 @@
----
-title: get
----
+```
+Usage: peridio ca-certificates get --ca-certificate-serial <CA_CERTIFICATE_SERIAL>
 
-# peridio ca-certificates get
+Options:
+      --ca-certificate-serial <CA_CERTIFICATE_SERIAL>  
+  -h, --help                                           Print help
 
-Get a CA certificate.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--ca-certificate-serial <ca-certificate-serial>`
-
-The CA certificate serial.
-
+```

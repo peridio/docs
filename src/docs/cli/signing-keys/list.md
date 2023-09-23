@@ -1,21 +1,11 @@
----
-title: list
----
+```
+Usage: peridio signing-keys list [OPTIONS] --search <SEARCH>
 
-# peridio signing-keys list
+Options:
+      --limit <LIMIT>    
+      --order <ORDER>    
+      --search <SEARCH>  
+      --page <PAGE>      
+  -h, --help             Print help
 
-List signing keys.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

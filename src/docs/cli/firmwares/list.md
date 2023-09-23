@@ -1,25 +1,8 @@
----
-title: list
----
+```
+Usage: peridio firmwares list --product-name <PRODUCT_NAME>
 
-# peridio firmwares list
+Options:
+      --product-name <PRODUCT_NAME>  
+  -h, --help                         Print help
 
-List firmwares information.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--product-name <product-name>`
-
-The name of the product.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

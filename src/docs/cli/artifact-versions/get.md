@@ -1,19 +1,8 @@
----
-title: get
----
+```
+Usage: peridio artifact-versions get --prn <PRN>
 
-# peridio artifact-versions get
+Options:
+      --prn <PRN>  
+  -h, --help       Print help
 
-Retrieve an artifact version.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-### Required
-
-`--prn <prn>`
-
-The Peridio Resource Name (PRN) of the artifact version.
+```

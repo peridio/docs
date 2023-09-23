@@ -1,25 +1,8 @@
----
-title: delete
----
+```
+Usage: peridio signing-keys delete --signing-key-prn <SIGNING_KEY_PRN>
 
-# peridio signing-keys delete
+Options:
+      --signing-key-prn <SIGNING_KEY_PRN>  
+  -h, --help                               Print help
 
-Delete a signing key.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--name <name>`
-
-The name of the key.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

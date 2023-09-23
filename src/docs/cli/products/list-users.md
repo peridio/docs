@@ -1,25 +1,8 @@
----
-title: list-users
----
+```
+Usage: peridio products list-users --product-name <PRODUCT_NAME>
 
-# peridio products list-users
+Options:
+      --product-name <PRODUCT_NAME>  
+  -h, --help                         Print help
 
-List users associated with a product.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```

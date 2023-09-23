@@ -1,19 +1,8 @@
----
-title: get
----
+```
+Usage: peridio cohorts get --prn <PRN>
 
-# peridio cohorts get
+Options:
+      --prn <PRN>  
+  -h, --help       Print help
 
-Retrieve an cohort.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-### Required
-
-`--prn <prn>`
-
-The Peridio Resource Name (PRN) of the cohort.
+```

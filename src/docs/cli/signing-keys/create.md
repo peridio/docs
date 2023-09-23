@@ -1,29 +1,10 @@
----
-title: create
----
+```
+Usage: peridio signing-keys create --value <VALUE> --name <NAME> --organization-prn <ORGANIZATION_PRN>
 
-# peridio signing-keys create
+Options:
+      --value <VALUE>                        
+      --name <NAME>                          
+      --organization-prn <ORGANIZATION_PRN>  
+  -h, --help                                 Print help
 
-Create a signing key.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--key <key>`
-
-The base64 encoding of the raw 32 byte public key.
-
-`--name <name>`
-
-The name of the key.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

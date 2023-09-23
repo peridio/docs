@@ -1,25 +1,8 @@
----
-title: delete
----
+```
+Usage: peridio products delete --product-name <PRODUCT_NAME>
 
-# peridio products delete
+Options:
+      --product-name <PRODUCT_NAME>  
+  -h, --help                         Print help
 
-Delete a product.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```

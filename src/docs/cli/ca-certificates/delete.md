@@ -1,25 +1,8 @@
----
-title: delete
----
+```
+Usage: peridio ca-certificates delete --ca-certificate-serial <CA_CERTIFICATE_SERIAL>
 
-# peridio ca-certificates delete
+Options:
+      --ca-certificate-serial <CA_CERTIFICATE_SERIAL>  
+  -h, --help                                           Print help
 
-Delete an CA certificate.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--ca-certificate-serial <ca-certificate-serial>`
-
-The CA certificate serial.
+```

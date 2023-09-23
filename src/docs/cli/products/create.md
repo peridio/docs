@@ -1,25 +1,8 @@
----
-title: create
----
+```
+Usage: peridio products create --name <NAME>
 
-# peridio products create
+Options:
+      --name <NAME>  
+  -h, --help         Print help
 
-Create a product.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--name <name>`
-
-The name of the product.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

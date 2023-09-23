@@ -1,29 +1,9 @@
----
-title: list
----
+```
+Usage: peridio device-certificates list --device-identifier <DEVICE_IDENTIFIER> --product-name <PRODUCT_NAME>
 
-# peridio device-certificates list
+Options:
+      --device-identifier <DEVICE_IDENTIFIER>  
+      --product-name <PRODUCT_NAME>            
+  -h, --help                                   Print help
 
-List device certificates.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--device-identifier <device-identifier>`
-
-The unique identifier of the device.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```
