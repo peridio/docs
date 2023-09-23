@@ -1,29 +1,9 @@
----
-title: get
----
+```
+Usage: peridio devices get --device-identifier <DEVICE_IDENTIFIER> --product-name <PRODUCT_NAME>
 
-# peridio devices get
+Options:
+      --device-identifier <DEVICE_IDENTIFIER>  
+      --product-name <PRODUCT_NAME>            
+  -h, --help                                   Print help
 
-Get a device.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--device-identifier <device-identifier>`
-
-The unique identifier of the device.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```

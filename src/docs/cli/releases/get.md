@@ -1,19 +1,8 @@
----
-title: get
----
+```
+Usage: peridio releases get --prn <PRN>
 
-# peridio releases get
+Options:
+      --prn <PRN>  
+  -h, --help       Print help
 
-Retrieve a release.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-### Required
-
-`--prn <prn>`
-
-The Peridio Resource Name (PRN) of the release.
+```

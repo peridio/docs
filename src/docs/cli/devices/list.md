@@ -1,25 +1,8 @@
----
-title: list
----
+```
+Usage: peridio devices list --product-name <PRODUCT_NAME>
 
-# peridio devices list
+Options:
+      --product-name <PRODUCT_NAME>  
+  -h, --help                         Print help
 
-List devices information.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```

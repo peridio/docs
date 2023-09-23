@@ -1,25 +1,8 @@
----
-title: get
----
+```
+Usage: peridio products get --product-name <PRODUCT_NAME>
 
-# peridio products get
+Options:
+      --product-name <PRODUCT_NAME>  
+  -h, --help                         Print help
 
-Get a product.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```

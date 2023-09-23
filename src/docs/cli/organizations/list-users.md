@@ -1,21 +1,7 @@
----
-title: list-users
----
+```
+Usage: peridio organizations list-users
 
-# peridio organizations list-users
+Options:
+  -h, --help  Print help
 
-List users associated with an organization.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

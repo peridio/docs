@@ -1,45 +1,13 @@
----
-title: create
----
+```
+Usage: peridio deployments create [OPTIONS] --firmware <FIRMWARE> --product-name <PRODUCT_NAME> --name <NAME> --tags <TAGS>
 
-# peridio deployments create
+Options:
+      --delta-updatable              
+      --firmware <FIRMWARE>          
+      --product-name <PRODUCT_NAME>  
+      --name <NAME>                  
+      --tags <TAGS>                  
+      --version <VERSION>            
+  -h, --help                         Print help
 
-Create a deployment.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-`--delta-updatable <delta-updatable>`
-
-Is the deployment delta updatable.
-
-`--version <version>`
-
-The version of the deployment. Must respect this format: https://hexdocs.pm/elixir/Version.html#module-requirements
-
-### Required
-
-`--firmware <firmware-uuid>`
-
-The firmare uuid.
-
-`--name <name>`
-
-The name of the deployment.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
-
-`--tags <tags>`
-
-The device tags list.
+```

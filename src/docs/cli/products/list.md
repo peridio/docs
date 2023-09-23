@@ -1,21 +1,7 @@
----
-title: list
----
+```
+Usage: peridio products list
 
-# peridio products list
+Options:
+  -h, --help  Print help
 
-List products.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

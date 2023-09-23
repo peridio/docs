@@ -1,22 +1,7 @@
----
-title: list
----
+```
+Usage: peridio ca-certificates list
 
-# peridio ca-certificates list
+Options:
+  -h, --help  Print help
 
-List CA certificates information.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
+```

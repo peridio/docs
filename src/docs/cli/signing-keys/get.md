@@ -1,25 +1,8 @@
----
-title: get
----
+```
+Usage: peridio signing-keys get --prn <PRN>
 
-# peridio signing-keys get
+Options:
+      --prn <PRN>  
+  -h, --help       Print help
 
-Get a signing key.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--name <name>`
-
-The name of the key.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

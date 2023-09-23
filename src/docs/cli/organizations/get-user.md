@@ -1,25 +1,8 @@
----
-title: get-user
----
+```
+Usage: peridio organizations get-user --user-username <USER_USERNAME>
 
-# peridio organizations get-user
+Options:
+      --user-username <USER_USERNAME>  
+  -h, --help                           Print help
 
-Get a user's association with an organization.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--user-username <user-username>`
-
-The organization user username.
+```

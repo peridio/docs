@@ -1,25 +1,9 @@
----
-title: update
----
+```
+Usage: peridio artifact-versions update [OPTIONS] --prn <PRN>
 
-# peridio artifact-versions update
+Options:
+      --prn <PRN>                  
+      --description <DESCRIPTION>  
+  -h, --help                       Print help
 
-Update an artifact version.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-### Options
-
-`--description <description>`
-
-The artifact version description.
-
-### Required
-
-`--prn <prn>`
-
-The Peridio Resource Name (PRN) of the artifact version.
+```

@@ -1,29 +1,9 @@
----
-title: get
----
+```
+Usage: peridio deployments get --deployment-name <DEPLOYMENT_NAME> --product-name <PRODUCT_NAME>
 
-# peridio deployments get
+Options:
+      --deployment-name <DEPLOYMENT_NAME>  
+      --product-name <PRODUCT_NAME>        
+  -h, --help                               Print help
 
-Get a deployment.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--deployment-name <deployment-name>`
-
-The name of the deployment.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```

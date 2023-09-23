@@ -1,29 +1,10 @@
----
-title: authenticate
----
+```
+Usage: peridio devices authenticate [OPTIONS] --product-name <PRODUCT_NAME>
 
-# peridio devices authenticate
+Options:
+      --product-name <PRODUCT_NAME>          
+      --certificate <CERTIFICATE>            
+      --certificate-path <CERTIFICATE_PATH>  
+  -h, --help                                 Print help
 
-Authenticate a device.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--certificate-path <certificate-path>`
-
-The certificate path.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--product-name <product-name>`
-
-The name of the product.
+```

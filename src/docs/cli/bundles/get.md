@@ -1,19 +1,8 @@
----
-title: get
----
+```
+Usage: peridio bundles get --prn <PRN>
 
-# peridio bundles get
+Options:
+      --prn <PRN>  
+  -h, --help       Print help
 
-Retrieve a bundle.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-### Required
-
-`--prn <prn>`
-
-The Peridio Resource Name (PRN) of the bundle.
+```

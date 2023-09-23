@@ -1,29 +1,9 @@
----
-title: delete
----
+```
+Usage: peridio firmwares delete --firmware-uuid <FIRMWARE_UUID> --product-name <PRODUCT_NAME>
 
-# peridio firmwares delete
+Options:
+      --firmware-uuid <FIRMWARE_UUID>  
+      --product-name <PRODUCT_NAME>    
+  -h, --help                           Print help
 
-Delete a firmware.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--firmware-uuid <firmware-uuid>`
-
-The firmware uuid to be query.
-
-`--product-name <product-name>`
-
-The name of the product.
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
+```

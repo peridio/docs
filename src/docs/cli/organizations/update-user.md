@@ -1,29 +1,9 @@
----
-title: update-user
----
+```
+Usage: peridio organizations update-user --role <ROLE> --user-username <USER_USERNAME>
 
-# peridio organizations update-user
+Options:
+      --role <ROLE>                    
+      --user-username <USER_USERNAME>  
+  -h, --help                           Print help
 
-Update a user's association with an organization.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-### Required
-
-`--organization-name <organization-name>`
-
-The organization to interact with.
-
-`--user-username <user-username>`
-
-The organization user username.
-
-`--role <role>`
-
-The organization user role.
+```

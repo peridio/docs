@@ -1,33 +1,11 @@
----
-title: create
----
+```
+Usage: peridio cohorts create [OPTIONS] --name <NAME> --organization-prn <ORGANIZATION_PRN> --product-prn <PRODUCT_PRN>
 
-# peridio cohorts create
+Options:
+      --description <DESCRIPTION>            
+      --name <NAME>                          
+      --organization-prn <ORGANIZATION_PRN>  
+      --product-prn <PRODUCT_PRN>            
+  -h, --help                                 Print help
 
-Create a cohort.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-## Options
-
-`--description <description>`
-
-The cohort description.
-
-### Required
-
-`--name <name>`
-
-The name of the cohort.
-
-`--organization-prn <organization-prn>`
-
-The Peridio Resource Name (PRN) of the organization.
-
-`--product-prn <product-prn>`
-
-The Peridio Resource Name (PRN) of the product.
+```

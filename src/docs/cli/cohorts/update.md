@@ -1,29 +1,10 @@
----
-title: update
----
+```
+Usage: peridio cohorts update [OPTIONS] --prn <PRN>
 
-# peridio cohorts update
+Options:
+      --prn <PRN>                  
+      --description <DESCRIPTION>  
+      --name <NAME>                
+  -h, --help                       Print help
 
-Update an cohort.
-
-## Flags
-
-`-h`, `--help`
-
-Prints help information.
-
-### Options
-
-`--description <description>`
-
-The cohort description.
-
-`--name <name>`
-
-The name of the cohort.
-
-### Required
-
-`--prn <prn>`
-
-The Peridio Resource Name (PRN) of the cohort.
+```
