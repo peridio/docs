@@ -80,11 +80,12 @@ const config = {
         },
         items: [
           { label: 'Reference', to: '/reference/organizations' },
-          { label: 'Guides', to: '/guides/overview' },
+          { label: 'Guides', to: '/guides/introduction-to-binary-management' },
           { label: 'Admin API', to: '/admin-api' },
           { label: 'Device API', to: '/device-api' },
           { label: 'CLI', to: '/cli' },
           { label: 'Agent', to: '/agent' },
+          { label: 'Web Console', href: 'https://console.cremini.peridio.com', position: 'right' },
         ],
       },
       footer: {

@@ -26,13 +26,15 @@ Options can be supplied in up to three ways, from highest to lowest precedence:
 
 ## Configuration Files
 
-The Peridio CLI supports profile based configuration files as a means of supplying options that are relevant to many subcommands. A particular profile can be choosen explicitly via [--profile](#profile). To use this functionality you must specify at least a `config.json` file and optionally, if you wish to specify API keys via this method, a `credentials.json` in the same directory.
+The Peridio CLI supports profile based configuration files as a means of supplying options that are relevant to many subcommands. A particular profile can be choosen explicitly via [--profile](#profile). To use this functionality you must specify at least a [config.json](#configjson) file and optionally, if you wish to specify API keys via this method, a [credentials.json](#credentialsjson) in the same directory.
 
 By default, the directory searched for these files is:
 
-- Linux: `$HOME/.config/peridio`
-- Windows: `{FOLDERID_RoamingAppData}/peridio/config`
-- macOS: `$HOME/Library/Application\ Support/peridio`
+| OS | Default Config Directory |
+| - | - |
+| Linux | `$HOME/.config/peridio` |
+| Windows | `{FOLDERID_RoamingAppData}/peridio/config`|
+| macOS | `$HOME/Library/Application\ Support/peridio` |
 
 To override this directory, see [--config-directory](#config-directory).
 
@@ -42,38 +44,99 @@ Contains a single object of the format:
 
 ```json title="Example"
 {
-  "my-first-profile": {
-    "organization_name": "my-organizations-name"
+  "version": 1,
+  "profiles": {
+    "organization_name": "organization-name"
+  },
+  "signing_key_pairs": {
+    "signing_key_prn": "prn:1:b8af964b-2736-423c-852b-a19d05e00d83:signing_key:15ba050a-82ee-4381-b461-d42181f9a81b",
+    "signing_key_private_path": "private.pem"
   }
 }
 ```
 
 ```json title="Schema"
 {
-  PROFILE_NAME: {
-    "base_url": BASE_URL,
-    "ca_path": CA_PATH,
-    "organization_name": ORGANIZATION_NAME
+  "version": VERSION,
+  "profiles": {
+    PROFILE_NAME: {
+      "base_url": BASE_URL,
+      "ca_path": CA_PATH,
+      "organization_name": ORGANIZATION_NAME
+    }
   },
+  "signing_key_pairs": {
+    SIGNING_KEY_PAIR_NAME: {
+      "signing_key_prn": SIGNING_KEY_PRN,
+      "signing_key_private_path": SIGNING_KEY_PRIVATE_PATH
+    }
+  }
   ...
 }
 ```
 
-**_BASE_URL_**
-
-Optional. String. See [--base-url](#base-url).
-
-**_CA_PATH_**
-
-Optional. String. See [--ca-path](#ca-path).
-
-**_ORGANIZATION_NAME_**
-
-Optional. String. See [--organization-name](#organization-name).
-
-**_PROFILE_NAME_**
-
-The name of a profile. Can correspond to an entry in credentials.json. A particular profile can be choosen explicitly via [--profile](#profile).
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Required</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VERSION</td>
+      <td><code>true</code></td>
+      <td>integer</td>
+      <td>
+        Should be <code>1</code>. See <a href="#versioning">versioning</a>.
+      </td>
+    </tr>
+    <tr>
+      <td>PROFILE_NAME</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>The name of a profile. Corresponds to an entry in <a href="#credentialsjson">credentials.json</a>. A particular profile can be choosen explicitly via <a href="#profile">--profile</a>.</td>
+    </tr>
+    <tr>
+      <td>BASE_URL</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>See <a href="#base-url">--base-url</a>.</td>
+    </tr>
+    <tr>
+      <td>CA_PATH</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>See <a href="#ca-path">--ca-path</a>.</td>
+    </tr>
+    <tr>
+      <td>ORGANIZATION_NAME</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>See <a href="#organization-name">--organization-name</a>.</td>
+    </tr>
+    <tr>
+      <td>SIGNING_KEY_PAIR_NAME</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>The name of a signing key pair. Some commands that make use of signing keys will let you reference this configuration by name.</td>
+    </tr>
+    <tr>
+      <td>SIGNING_KEY_PRN</td>
+      <td><code>true</code></td>
+      <td>string</td>
+      <td>The PRN of the signing key that corresponds to the private key identified by the sibling <i>SIGNING_KEY_PRIVATE_PATH</i> field.</td>
+    </tr>
+    <tr>
+      <td>SIGNING_KEY_PRIVATE_PATH</td>
+      <td><code>true</code></td>
+      <td>string</td>
+      <td>The path to a <a href="/reference/signing-keys#pem">private key's PEM file</a>.</td>
+    </tr>
+  </tbody>
+</table>
 
 ### credentials.json
 
@@ -96,13 +159,30 @@ Contains a single object of the format:
 }
 ```
 
-**_API_KEY_**
-
-Optional. String. See [--api-key](#api-key).
-
-**_PROFILE_NAME_**
-
-The name of a profile. Must correspond to an entry in `config.json`. A particular profile can be choosen explicitly via [--profile](#profile).
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Required</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PROFILE_NAME</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>The name of a profile. Must correspond to an entry in <a href="#configjson">config.json</a>. A particular profile can be choosen explicitly via <a href="#profile">--profile</a>.</td>
+    </tr>
+    <tr>
+      <td>API_KEY</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>See <a href="#api-key">--api-key</a>.</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Global Options
 
@@ -154,4 +234,16 @@ Can be provided via configuration files.
 
 `-p`, `--profile <profile>`, `$PERIDIO_PROFILE`
 
-Explicitly chooses a profile within a `config.json` to use. See [configuration files](#configuration-files).
+Explicitly chooses a profile within a [config.json](#configjson) to use. See [configuration files](#configuration-files).
+
+## Versioning
+
+The current version of the CLI is `1`.
+
+### Stale Configs
+
+Starting with version `0.8.0`, the CLI will halt and prompt you to upgrade your config if it is stale.
+
+### Unversioned Configs
+
+The very first iteration of a config file was unversioned, accordingly, that "version" is identified by a config file that does not have a `version` key.

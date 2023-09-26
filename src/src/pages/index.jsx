@@ -20,11 +20,11 @@ export default function Home() {
       <HomepageHeader />
       <main className={styles.container}>
         <ul>
-          <li><a href="/reference/organizations">Reference</a></li>
+          <li><a href="/reference/overview">Reference</a></li>
           <li><a href="/cli">Command Line Interface</a></li>
           <li><a href="/admin-api">Peridio Admin API</a></li>
           <li><a href="/device-api">Peridio Device API</a></li>
-          <li><a href="/guides/overview">Guides</a></li>
+          <li><a href="/guides/introduction-to-binary-management">Guides</a></li>
         </ul>
       </main>
     </Layout>

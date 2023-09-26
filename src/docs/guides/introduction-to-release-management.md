@@ -18,9 +18,11 @@ Release management comprises the following resources:
 
 The goal of this guide is to create a release for a signed binary.
 
-Creating a signed binary is outside the scope of this guide, see [Introduction to Asset Management](Introduction-to-Asset-Management).
+Creating a signed binary is outside the scope of this guide, see [Introduction to Binary Management](introduction-to-binary-management).
 
 ## Creating a Bundle
+
+[Create a bundle](creating-bundles) so that we have something to distribute.
 
 ```
 peridio bundles create \
@@ -29,6 +31,8 @@ peridio bundles create \
 ```
 
 ## Creating a Release
+
+[Create a release](creating-releases) to distribute the bundle to devices.
 
 ```
 peridio releases create \
