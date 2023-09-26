@@ -334,7 +334,7 @@ x-tagGroups:
       - Organization Users
       - Product Users
       - Users
-  - name: Asset Management
+  - name: Binary Management
     tags:
       - Artifacts
       - Artifact Versions
