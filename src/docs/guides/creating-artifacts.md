@@ -1,29 +1,27 @@
-# Creating Artifact Versions
+# Creating Artifacts
 
-This guide describes how to create artifact versions.
+This guide describes how to create artifacts.
 
-To learn more about Peridio artifact versions in general, see the
-[artifact versions](/reference/artifact-versions) reference.
+To learn more about Peridio artifacts in general, see the [artifacts](/reference/artifacts) reference.
 
 ## Prerequisites
 
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create Artifact Version
+## Create Artifact
 
 ### CLI
 
-```
-peridio artifact-versions create \
-  --artifact-id uuid \
-  --version 0.1.0
+```console
+peridio --profile prod artifacts create \
+  --organization-prn prn \
+  --name name
 ```
 
 ### API
 
-Use the Peridio Admin API
-[Create an artifact version](/admin-api#tag/artifacts/operations/create-an-artifact) endpoint.
+Use the Peridio Admin API [create an artifact](/admin-api#tag/artifacts/operations/create-an-artifact) endpoint.
 
 ### Web Console
 

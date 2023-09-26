@@ -11,6 +11,7 @@ const sidebars = {
     },
   ],
   reference: [
+    'reference/overview',
     // 'reference/agent',
     {
       collapsible: false,
@@ -25,7 +26,7 @@ const sidebars = {
     {
       collapsible: false,
       type: 'category',
-      label: 'Asset Management',
+      label: 'Binary Management',
       items: [
         {
           type: 'doc',
@@ -105,13 +106,12 @@ const sidebars = {
     },
   ],
   guides: [
-    'guides/overview',
     {
       collapsible: false,
       type: 'category',
-      label: 'Asset Management',
+      label: 'Binary Management',
       items: [
-        'guides/introduction-to-asset-management',
+        'guides/introduction-to-binary-management',
         'guides/multipart-uploads-with-binary-parts',
         'guides/creating-artifact-versions',
         'guides/creating-artifacts',

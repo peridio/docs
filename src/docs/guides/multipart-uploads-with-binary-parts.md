@@ -3,7 +3,7 @@
 This guide describes how to upload a binary by manually orchestrating the binary parts yourself.
 
 :::info higher level abstractions
-It is strongly recommend to avoid this complexity whenever possible by using the CLI instead as documented in the [creating a binary](introduction-to-asset-management#creating-a-binary) section of the introduction to asset management.
+It is strongly recommend to avoid this complexity whenever possible by using the CLI instead as documented in the [creating a binary](introduction-to-binary-management#creating-a-binary) section of the introduction to binary management.
 :::
 
 ## Prerequisites

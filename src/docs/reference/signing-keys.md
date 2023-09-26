@@ -8,6 +8,10 @@ The private key is used by users to sign firmware and binaries.
 
 The public key is provided to Peridio as well as devices to enable attestation of firmware and binary signatures.
 
+:::tip
+For field-level information and requirements, see the Admin API's [create-a-signing-key](/admin-api#signing-keys/operation/create-a-signing-key) endpoint.
+:::
+
 ## Format
 
 Ed25519 keys can be represented in a variety of ways in the wild.

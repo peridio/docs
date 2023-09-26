@@ -4,6 +4,10 @@ Binaries record the content you wish to distribute to devices.
 
 Once you've created an [artifact version](artifact-versions), you can create binaries for it.
 
+:::tip
+For field-level information and requirements, see the Admin API's [create-a-binary](/admin-api#binaries/operation/create-a-binary) endpoint.
+:::
+
 ## Content Versus Record
 
 When referring to binaries there are two distinct concepts: a binary's content and a binary's record.
