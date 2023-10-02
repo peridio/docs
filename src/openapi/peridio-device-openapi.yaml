@@ -153,6 +153,12 @@ paths:
             description: The PRN of the currently active release on the device.
             $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
           required: true
+        - in: header
+          name: peridio-release-version
+          schema:
+            description: The desired version of the release that the device wants to be updated to as part of the [dynamic release resolution](/reference/releases#using-the-peridio-release-version-header) process.
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
+          required: false
         - name: expand
           description: |
             See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).

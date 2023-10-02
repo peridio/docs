@@ -86,20 +86,36 @@ Lets say that `R2` above is the only required release. If a device was on `R1`, 
 
 When a device executes a Device API [get-update](/device-api#devices/operation/get-update) request, Peridio performs release resolution. Release resolution is the process of determing if, given the current release of a device, there is another release, referred to as the target release, the device can update to.
 
+Peridio currently offers two ways to perform release resolution:
+
+### Using the `peridio-release-prn` header
+
 This resolution is performed as follows:
 
-1. The device reports its current release to Peridio.
+1. The device reports its current release to Peridio through the `peridio-release-prn` header.
 2. Peridio checks if that release belongs to the cohort that the device belongs to.
-    1. If yes, go to 3.
-    2. If no, release resolution fails.
+   1. If yes, go to 3.
+   2. If no, release resolution will fallback to using the `peridio-release-version` header.
 3. Peridio checks if there is a next release.
-    1. If yes, go to 4.
-    2. If no, release resolution succeeds with no target release. The device is up to date.
+   1. If yes, go to 4.
+   2. If no, release resolution succeeds with no target release. The device is up to date.
 4. Peridio checks if the release is required.
-    1. If yes, release resolution succeeds with a target release.
-    2. If no, go to 5.
+   1. If yes, release resolution succeeds with a target release.
+   2. If no, go to 5.
 5. Peridio checks if there is a next release.
-    1. If yes, go to 4.
-    2. If no, release resolution succeeds with a target release.
+   1. If yes, go to 4.
+   2. If no, release resolution succeeds with a target release.
 
 Peridio will recurse between 5.1 and 4 to skip as many not-required releases as possible.
+
+### Using the `peridio-release-version` header
+
+If the `peridio-release-prn` header is not present or if it is present but it does not identify a release in the process previously described, Peridio will attempt to fallback to using the optional `peridio-release-version` header. This resolution is performed as follows:
+
+1. The device reports the desired release version to Peridio through the `peridio-release-version` header.
+2. Peridio checks if there's a release in the same cohort that the device belongs to with a `version` and `version-requirement` that satisfies the value provided in the header .
+   1. If yes, go to 3.
+   2. If no, release resolution fails.
+3. Peridio checks if there's more than one release that can be applied.
+   1. If yes, release resolution succeeds with the target release with the lowest version.
+   2. If no, release resolution succeeds with the only target release found.
