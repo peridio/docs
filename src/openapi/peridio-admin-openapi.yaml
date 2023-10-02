@@ -3363,11 +3363,11 @@ components:
     release-schedule-complete:
       type: boolean
     release-version:
-      description: The release version. If provided, it has to be a valid [version](https://hexdocs.pm/elixir/Version.html#content). Used in [dynamic release resolution](/reference/releases#using-the-peridio-release-version-header).
+      description: The release version. If provided, it has to be a valid [version](https://hexdocs.pm/elixir/Version.html#content). Used in [dynamic release resolution](/reference/releases#dynamic-resolution).
       example: 1.0.0
       type: string
     release-version-requirement:
-      description: The release version requirement. If provided, it has to be a valid [requirement](https://hexdocs.pm/elixir/Version.html#module-requirements). Used in [dynamic release resolution](/reference/releases#using-the-peridio-release-version-header).
+      description: The release version requirement. If provided, it has to be a valid [requirement](https://hexdocs.pm/elixir/Version.html#module-requirements). Used in [dynamic release resolution](/reference/releases#dynamic-resolution).
       example: == 1.0.0
       type: string
     role-name:
