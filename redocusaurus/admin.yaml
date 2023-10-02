@@ -2528,6 +2528,10 @@ paths:
                   $ref: '#/components/schemas/release-required'
                 schedule_date:
                   $ref: '#/components/schemas/release-schedule-availability'
+                version:
+                  $ref: '#/components/schemas/release-version'
+                version-requirement:
+                  $ref: '#/components/schemas/release-version-requirement'
               required:
                 - bundle_prn
                 - phase_value
@@ -2614,6 +2618,10 @@ paths:
                   $ref: '#/components/schemas/release-required'
                 schedule_date:
                   $ref: '#/components/schemas/release-schedule-availability'
+                version:
+                  $ref: '#/components/schemas/release-version'
+                version-requirement:
+                  $ref: '#/components/schemas/release-version-requirement'
       responses:
         '200':
           description: Ok.
@@ -3471,6 +3479,10 @@ components:
         updated_at:
           type: string
           format: date-time
+        version:
+          $ref: '#/components/schemas/release-version'
+        version_requirement:
+          $ref: '#/components/schemas/release-version-requirement'
     release-phase-value:
       description: >
         The phase value controls the distribution of the update to your fleet.
@@ -3527,6 +3539,21 @@ components:
         for updates. You may use this to schedule a future release.
     release-schedule-complete:
       type: boolean
+    release-version:
+      description: >-
+        The release version. If provided, it has to be a valid
+        [version](https://hexdocs.pm/elixir/Version.html#content). Used in
+        [dynamic release resolution](/reference/releases#dynamic-resolution).
+      example: 1.0.0
+      type: string
+    release-version-requirement:
+      description: >-
+        The release version requirement. If provided, it has to be a valid
+        [requirement](https://hexdocs.pm/elixir/Version.html#module-requirements).
+        Used in [dynamic release
+        resolution](/reference/releases#dynamic-resolution).
+      example: '== 1.0.0'
+      type: string
     role-name:
       enum:
         - admin
