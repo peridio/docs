@@ -150,9 +150,19 @@ paths:
         - in: header
           name: peridio-release-prn
           schema:
-            description: The PRN of the currently active release on the device.
+            description: |
+              See [release resolution](/reference/releases#release-resolution). Informs Peridio of what release is currently active on the device. The preference should always be to supply this header with a valid value.
+              If you supply this header, you should not supply the `peridio-release-version` header.
+            example: prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
             $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
-          required: true
+          required: false
+        - in: header
+          name: peridio-release-version
+          schema:
+            description: |
+              See [release resolution](/reference/releases#release-resolution). This header is only used in exceptional cases when you don't have a PRN to supply via `peridio-release-prn`. In that case, you may supply this header and you should not supply the `peridio-release-prn` header.
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
+          required: false
         - name: expand
           description: |
             See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).

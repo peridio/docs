@@ -84,22 +84,53 @@ Lets say that `R2` above is the only required release. If a device was on `R1`, 
 
 ## Release Resolution
 
-When a device executes a Device API [get-update](/device-api#devices/operation/get-update) request, Peridio performs release resolution. Release resolution is the process of determing if, given the current release of a device, there is another release, referred to as the target release, the device can update to.
+When a device executes a Device API [get-update](/device-api#devices/operation/get-update) request, Peridio performs release resolution. Release resolution is the process of determing if there is another release, referred to as the target release, the device can update to. To make this determination, Peridio must have some idea of determining where your device currently fits into it's cohort's release graph, since where a device currently is will determine where it needs to go. A cohort's release graph forms an [anti-arborescence](https://en.wikipedia.org/wiki/Arborescence_(graph_theory)). In other words, releases may point to exactly one next release, a release may be pointed to by zero to many releases, all releases eventually converge to a single [latest release](#latest-release).
 
-This resolution is performed as follows:
+For example:
 
-1. The device reports its current release to Peridio.
-2. Peridio checks if that release belongs to the cohort that the device belongs to.
-    1. If yes, go to 3.
-    2. If no, release resolution fails.
-3. Peridio checks if there is a next release.
-    1. If yes, go to 4.
-    2. If no, release resolution succeeds with no target release. The device is up to date.
-4. Peridio checks if the release is required.
-    1. If yes, release resolution succeeds with a target release.
-    2. If no, go to 5.
-5. Peridio checks if there is a next release.
-    1. If yes, go to 4.
-    2. If no, release resolution succeeds with a target release.
+```
+R4-------->R5---\
+                 \
+R1---\            |--->R6
+      |--->R2----/
+R3---/
+```
 
-Peridio will recurse between 5.1 and 4 to skip as many not-required releases as possible.
+### Resolution
+
+Peridio will first attempt to determine your devices current release via [static resolution](#static-resolution) if possible, and [dynamic](#dynamic-resolution) resolution if that fails.
+
+:::info prefer static resolution
+Whenever possible it is recommended to use static resolution over dynamic resolution as the former is easier to reason about and more efficent to perform. However, when required, dynamic resolution can be used in situations where your device does not or can not know the PRN of its current release, yet it still wishes to deterministically update according to its cohort's release graph.
+:::
+
+### Static Resolution
+
+Static resolution uses the `peridio-release-prn` header to define a prn that is representative of the device's current release. If it successfully identifies a release in the device's cohort, release resolution will consider it the device's current release and continue with resolution:
+
+1. checks if there is a next release.
+    1. If yes, go to #2.
+    2. If no, release resolution completes with no target release with a reason of `no_update`.
+2. checks if the release is required.
+    1. If yes, release resolution completes with a target release with a reason of `update`.
+    2. If no, go to #3.
+3. checks if there is a next release.
+    1. If yes, go to #2.
+    2. If no, release resolution completes with a target release with a reason of `update`.
+
+Peridio will recurse between #3.1 and #2 to skip as many not-required releases as possible.
+
+### Dynamic Resolution
+
+Dynamic resolution uses the `peridio-release-version` header to define a semantic version that is representative of the device's current release.
+
+Peridio then finds all releases in the device's cohort that have specified both a `version` and `version_requirement`. The found releases are filtered for those whose `version_requirement` is satisfied by the header-supplied version. From the filtered results, the release with the lowest semantic `version` is selected as the "dynamic entry point". Peridio will then consider your devices current release to be an imaginary release whose next release is the dynamic entry point and continue with resolution:
+
+1. checks if there is a next release.
+    1. There always will be because it will be the dynamic entry point, go to #2.
+2. checks if the release is required.
+    1. If yes, release resolution completes with a target release with a reason of `update`.
+    2. If no, go to #3.
+3. checks if there is a next release.
+    1. If yes, go to #2.
+    2. If no, release resolution completes with a target release with a reason of `update`.
