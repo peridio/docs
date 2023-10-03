@@ -46,11 +46,15 @@ Contains a single object of the format:
 {
   "version": 1,
   "profiles": {
-    "organization_name": "organization-name"
+    "profile-name": {
+      "organization_name": "organization-name"
+    }
   },
   "signing_key_pairs": {
-    "signing_key_prn": "prn:1:b8af964b-2736-423c-852b-a19d05e00d83:signing_key:15ba050a-82ee-4381-b461-d42181f9a81b",
-    "signing_key_private_path": "private.pem"
+    "signing-key-pair-name": {
+      "signing_key_prn": "prn:1:b8af964b-2736-423c-852b-a19d05e00d83:signing_key:15ba050a-82ee-4381-b461-d42181f9a81b",
+      "signing_key_private_path": "private.pem"
+    }
   }
 }
 ```
