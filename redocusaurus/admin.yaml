@@ -2510,7 +2510,9 @@ paths:
                     If supplied, the release will be created prior to the
                     release identified by `next_release_prn`. If you wish to
                     insert this release between two other releases, you may
-                    additionally supply `previous_release_prn`.
+                    additionally supply `previous_release_prn`. If you supply
+                    neither field, it will create the release as the latest
+                    automatically.
                 previous_release_prn:
                   $ref: '#/components/schemas/prn'
                   description: >
@@ -2518,9 +2520,10 @@ paths:
                     this release within the cohort's release graph.
 
 
-                    If supplied, `next_release_prn` is required to be supplied
-                    as well. Together, these fields allow the caller to insert a
-                    release between two other releases.
+                    In order to insert a release between two other releases,
+                    `next_release_prn` is required to be supplied as well. If
+                    you supply neither field, it will create the release as the
+                    latest automatically.
                 organization_prn:
                   $ref: '#/components/schemas/prn'
                   description: The organization to create the release within.
