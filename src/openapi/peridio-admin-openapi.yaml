@@ -1594,6 +1594,8 @@ paths:
           application/json:
             schema:
               properties:
+                cohort_prn:
+                  $ref: "#/components/schemas/device-cohort-prn"
                 description:
                   $ref: "#/components/schemas/device-description"
                 healthy:
@@ -1697,6 +1699,8 @@ paths:
           application/json:
             schema:
               properties:
+                cohort_prn:
+                  $ref: "#/components/schemas/device-cohort-prn"
                 description:
                   $ref: "#/components/schemas/device-description"
                 healthy:
@@ -2821,8 +2825,8 @@ components:
       maxLength: 256
     artifact-version-version:
       type: string
-      minLength: 5
-      maxLength: 16
+      minLength: 1
+      maxLength: 128
     binary:
       type: object
       properties:
@@ -3135,6 +3139,8 @@ components:
       type: string
     device-certificate-serial:
       $ref: "#/components/schemas/serial"
+    device-cohort-prn:
+      $ref: "#/components/schemas/prn"
     device-description:
       type: string
     device-healthy:
