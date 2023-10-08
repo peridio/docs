@@ -2475,6 +2475,9 @@ paths:
                   $ref: "#/components/schemas/release-description"
                 name:
                   $ref: "#/components/schemas/release-name"
+                next_release_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: Update the release's `next_release_prn`. Changes that would result in an invalid [release graph](/reference/cohorts#release-graph) are rejected.
                 phase_value:
                   $ref: "#/components/schemas/release-phase-value"
                 required:
