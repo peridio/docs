@@ -51,20 +51,11 @@ function processCommandHelp(cmd) {
   })
 }
 
-async function cliVersionValid() {
-  return new Promise((resolve) => {
-    exec('peridio --version', (_error, stdout) => {
-      const requiredVersion = 'peridio 0.8.0 81541cb'
-      if (stdout.includes(requiredVersion)) {
-        resolve(true)
-      } else {
-        console.error(`Your local Peridio CLI has version (${stdout.trim()}) but this script requires version (${requiredVersion})`)
-        resolve(false)
-      }
-    })
-  })
-}
-
-if (cliVersionValid()) {
-  processCommandHelp([])
-}
+exec('peridio --version', (_error, stdout) => {
+  const requiredVersion = 'peridio 0.11.0 c5b2f7e'
+  if (stdout.includes(requiredVersion)) {
+    processCommandHelp([])
+  } else {
+    console.error(`Your local Peridio CLI has version (${stdout.trim()}) but this script requires version (${requiredVersion})`)
+  }
+})
