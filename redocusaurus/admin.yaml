@@ -1718,6 +1718,8 @@ paths:
           application/json:
             schema:
               properties:
+                cohort_prn:
+                  $ref: '#/components/schemas/device-cohort-prn'
                 description:
                   $ref: '#/components/schemas/device-description'
                 healthy:
@@ -1821,6 +1823,8 @@ paths:
           application/json:
             schema:
               properties:
+                cohort_prn:
+                  $ref: '#/components/schemas/device-cohort-prn'
                 description:
                   $ref: '#/components/schemas/device-description'
                 healthy:
@@ -2615,6 +2619,12 @@ paths:
                   $ref: '#/components/schemas/release-description'
                 name:
                   $ref: '#/components/schemas/release-name'
+                next_release_prn:
+                  $ref: '#/components/schemas/prn'
+                  description: >-
+                    Update the release's `next_release_prn`. Changes that would
+                    result in an invalid [release
+                    graph](/reference/cohorts#release-graph) are rejected.
                 phase_value:
                   $ref: '#/components/schemas/release-phase-value'
                 required:
@@ -2978,8 +2988,8 @@ components:
       maxLength: 256
     artifact-version-version:
       type: string
-      minLength: 5
-      maxLength: 16
+      minLength: 1
+      maxLength: 128
     binary:
       type: object
       properties:
@@ -3296,6 +3306,8 @@ components:
       type: string
     device-certificate-serial:
       $ref: '#/components/schemas/serial'
+    device-cohort-prn:
+      $ref: '#/components/schemas/prn'
     device-description:
       type: string
     device-healthy:

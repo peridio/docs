@@ -564,8 +564,8 @@ components:
       maxLength: 256
     artifact-version-version:
       type: string
-      minLength: 5
-      maxLength: 16
+      minLength: 1
+      maxLength: 128
     artifact-version:
       type: object
       properties:
