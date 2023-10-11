@@ -871,7 +871,7 @@ paths:
                   signing_key:
                     $ref: "#/components/schemas/signing-key"
     get:
-      operationId: list--signing-keys
+      operationId: list-signing-keys
       summary: List signing keys
       tags:
         - Signing Keys
@@ -1232,6 +1232,7 @@ paths:
                     $ref: "#/components/schemas/key"
   /orgs/{organization_name}/products:
     get:
+      deprecated: true
       operationId: list-products
       summary: List products
       tags:
@@ -1252,6 +1253,7 @@ paths:
                   data:
                     $ref: "#/components/schemas/array-of-products"
     post:
+      deprecated: true
       operationId: create-a-product
       summary: Create a product
       tags:
@@ -1283,6 +1285,7 @@ paths:
                     $ref: "#/components/schemas/product"
   /orgs/{organization_name}/products/{product_name}:
     delete:
+      deprecated: true
       operationId: delete-a-product
       summary: Delete a product
       tags:
@@ -1302,6 +1305,7 @@ paths:
         "204":
           description: Ok.
     get:
+      deprecated: true
       operationId: retrieve-a-product
       summary: Retrieve a product
       tags:
@@ -1327,6 +1331,7 @@ paths:
                   data:
                     $ref: "#/components/schemas/product"
     put:
+      deprecated: true
       operationId: update-a-product
       summary: Update a product
       tags:
@@ -1364,6 +1369,126 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/product"
+  /products:
+    get:
+      operationId: list-products-v2
+      summary: List products v2
+      tags:
+        - "Products"
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            Searchable fields:
+
+            |Field|Type|Operations|
+            |-|-|-|
+            |`archived`|boolean|`:`|
+            |`inserted_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
+            |`name`|string|`:`, `~`|
+            |`organization_prn`|string|`:`|
+            |`prn`|string|`:`|
+            |`updated_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
+        - $ref: '#/components/parameters/page'
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  products:
+                    $ref: "#/components/schemas/array-of-products-v2"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+    post:
+      operationId: create-a-product-v2
+      summary: Create a product v2
+      tags:
+        - "Products"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                archived:
+                  $ref: "#/components/schemas/product-archived"
+                name:
+                  $ref: "#/components/schemas/product-name"
+                organization_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - name
+                - organization_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  product:
+                    $ref: "#/components/schemas/product-v2"
+  /products/{product_prn}:
+    get:
+      operationId: retrieve-a-product-v2
+      summary: Retrieve a product v2
+      tags:
+        - "Products"
+      parameters:
+        - name: product_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/product-v2"
+    patch:
+      operationId: update-a-product-v2
+      summary: Update a product v2
+      tags:
+        - "Products"
+      parameters:
+        - name: product_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                archived:
+                  $ref: "#/components/schemas/product-archived"
+                  description: |
+                    A product cannot be archived if any of the following are true:
+
+                    - It is associated with any firmware.
+                    - It is associated with any unarchived devices.
+                name:
+                  $ref: "#/components/schemas/product-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/product-v2"
   /orgs/{organization_name}/products/{product_name}/deployments:
     get:
       operationId: list-deployments
@@ -2759,6 +2884,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/product"
+    array-of-products-v2:
+      type: array
+      items:
+        $ref: "#/components/schemas/product-v2"
     array-of-releases:
       type: array
       items:
@@ -3278,8 +3407,26 @@ components:
           $ref: "#/components/schemas/product-name"
         prn:
           $ref: "#/components/schemas/prn"
+    product-v2:
+      type: object
+      properties:
+        archived:
+          $ref: "#/components/schemas/product-archived"
+        inserted_at:
+          type: string
+          format: date-time
+        name:
+          $ref: "#/components/schemas/product-name"
+        prn:
+          $ref: "#/components/schemas/prn"
+        updated_at:
+          type: string
+          format: date-time
     product-architecture:
       type: string
+    product-archived:
+      type: boolean
+      default: false
     product-name:
       type: string
       description: Uniquely identifies a product within an organization.
