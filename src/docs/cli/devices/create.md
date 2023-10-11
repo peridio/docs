@@ -9,6 +9,7 @@ Options:
       --product-name <PRODUCT_NAME>              
       --tags <TAGS>                              
       --target <TARGET>                          
+      --cohort-prn <COHORT_PRN>                  
   -h, --help                                     Print help
 
 ```
