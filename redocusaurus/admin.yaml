@@ -328,6 +328,8 @@ tags:
     id: bundles
   - name: Releases
     id: releases
+  - name: Webhooks
+    id: webhooks
 x-tagGroups:
   - name: Account Management
     tags:
@@ -351,6 +353,9 @@ x-tagGroups:
       - Device Certificates
       - Devices
       - Products
+  - name: Data Management
+    tags:
+      - Webhooks
   - name: Release Management
     tags:
       - Bundles
@@ -2916,6 +2921,169 @@ paths:
                   status:
                     type: string
                     const: Public signups disabled. Invite required to signup.
+  /webhooks:
+    post:
+      operationId: create-a-webhook
+      summary: Create a webhook
+      tags:
+        - Webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: '#/components/schemas/webhook-description'
+                url:
+                  $ref: '#/components/schemas/webhook-url'
+                enabled_events:
+                  $ref: '#/components/schemas/webhook-enabled-events'
+                organization_prn:
+                  $ref: '#/components/schemas/prn'
+              required:
+                - organization_prn
+      responses:
+        '201':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    $ref: '#/components/schemas/webhook'
+    get:
+      operationId: list-webhooks
+      summary: List webhooks
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhooks:
+                    $ref: '#/components/schemas/array-of-webhooks'
+                  next_page:
+                    $ref: '#/components/schemas/next-page'
+  /webhooks/{webhook_prn}:
+    get:
+      operationId: retrieve-a-webhook
+      summary: Retrieve a webhook
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    $ref: '#/components/schemas/webhook'
+    patch:
+      operationId: update-a-webhook
+      summary: Update a webhook
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/webhook-prn'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: '#/components/schemas/webhook-description'
+                url:
+                  $ref: '#/components/schemas/webhook-url'
+                enabled_events:
+                  $ref: '#/components/schemas/webhook-enabled-events'
+                state:
+                  $ref: '#/components/schemas/webhook-state'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    $ref: '#/components/schemas/webhook'
+    delete:
+      operationId: delete-a-webhook
+      summary: Delete a webhook
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/webhook-prn'
+      responses:
+        '204':
+          description: Ok.
+  /webhooks/{webhook_prn}/roll-secret:
+    post:
+      operationId: roll-secret-webhook
+      summary: Roll a webhook's secret
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    $ref: '#/components/schemas/webhook'
+  /webhooks/{webhook_prn}/test-fire:
+    post:
+      operationId: test-fire-webhook
+      summary: Test fire a webhook
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  event:
+                    $ref: '#/components/schemas/events-webhooks-test-fire'
 components:
   securitySchemes:
     api_key:
@@ -3065,10 +3233,21 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/release'
+    array-of-signatures:
+      default: null
+      oneOf:
+        - type: 'null'
+        - type: array
+          items:
+            $ref: '#/components/schemas/signing-signature'
     array-of-signing-keys:
       type: array
       items:
         $ref: '#/components/schemas/signing-key'
+    array-of-webhooks:
+      type: array
+      items:
+        $ref: '#/components/schemas/webhook'
     artifact:
       type: object
       properties:
@@ -3377,6 +3556,11 @@ components:
       enum:
         - 'on'
         - 'off'
+    event-prn:
+      allOf:
+        - $ref: '#/components/schemas/prn'
+        - example: >-
+            prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:event:e0040f63-4e1c-43e7-880a-d6986a35c499
     signing-key:
       type: object
       properties:
@@ -3477,6 +3661,31 @@ components:
     email:
       type: string
       format: email
+    events-webhooks-test-fire:
+      type: object
+      properties:
+        version:
+          enum:
+            - 1
+        type:
+          enum:
+            - webhook
+        data:
+          type: object
+          properties:
+            type:
+              enum:
+                - test_fire
+            data:
+              type: object
+              properties:
+                webhook_prn:
+                  $ref: '#/components/schemas/webhook-prn'
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: '#/components/schemas/event-prn'
     firmware:
       type: object
       properties:
@@ -3738,13 +3947,6 @@ components:
     serial:
       type: string
       example: '522154175989108335861639249273408275957749326848'
-    array-of-signatures:
-      default: null
-      oneOf:
-        - type: 'null'
-        - type: array
-          items:
-            $ref: '#/components/schemas/signing-signature'
     signing-signature:
       type: object
       properties:
@@ -3771,3 +3973,41 @@ components:
       description: Reference https://hexdocs.pm/elixir/Version.html#module-versions.
       example: 1.0.0-alpha.3
       type: string
+    webhook:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/webhook-state'
+        inserted_at:
+          type: string
+          format: date-time
+        url:
+          $ref: '#/components/schemas/webhook-url'
+        description:
+          $ref: '#/components/schemas/webhook-description'
+        enabled_events:
+          $ref: '#/components/schemas/webhook-enabled-events'
+        prn:
+          $ref: '#/components/schemas/webhook-prn'
+        updated_at:
+          type: string
+          format: date-time
+    webhook-description:
+      type: string
+    webhook-url:
+      type: string
+    webhook-state:
+      enum:
+        - enabled
+        - disabled
+    webhook-enabled-events:
+      type: array
+      items:
+        enum:
+          - device.release_changed
+          - webhook.test_fire
+    webhook-prn:
+      allOf:
+        - $ref: '#/components/schemas/prn'
+        - example: >-
+            prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:webhook:b3f1f699-3bc8-4c77-bda2-b974595d5e3f
