@@ -65,6 +65,14 @@ const sidebars = {
     {
       collapsible: false,
       type: 'category',
+      label: 'Data Management',
+      items: [
+        'reference/webhooks',
+      ],
+    },
+    {
+      collapsible: false,
+      type: 'category',
       label: 'Device Management',
       items: [
         'reference/ca-certificates',
