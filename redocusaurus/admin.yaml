@@ -3042,7 +3042,7 @@ paths:
       responses:
         '204':
           description: Ok.
-  /webhooks/{webhook_prn}/roll-secret:
+  /webhooks/{webhook_prn}/roll_secret:
     post:
       operationId: roll-secret-webhook
       summary: Roll a webhook's secret
@@ -3063,7 +3063,7 @@ paths:
                 properties:
                   webhook:
                     $ref: '#/components/schemas/webhook'
-  /webhooks/{webhook_prn}/test-fire:
+  /webhooks/{webhook_prn}/test_fire:
     post:
       operationId: test-fire-webhook
       summary: Test fire a webhook
