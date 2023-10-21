@@ -26,14 +26,14 @@ To calculate the signature, you need the following data:
   - `peridio-published-at` header.
   - body.
 
-:::caution
+:::caution sensitive operations
 It is critical that your own code as well as any tools you use do not alter the headers or body in any way prior to signature verification as doing so will cause it to fail.
 :::
 
 **Verification process**
 
 :::info dual signatures
-When you roll a webhook's secret, depending on whether you provide a TTL or not and what the value is, there may be up to two active secrets at once. When this happens, the value of the signature header will include two signatures seperated by a comma ( `s1,s2`) instead of the normal one (`s1`).
+When you roll a webhook's secret, depending on whether you provide a TTL or not and what the value is, there may be up to two active secrets at once. When this happens, the value of the signature header will include two signatures seperated by a comma like `<sig1>,<sig2>` instead of just one like `<sig1>`.
 :::
 
 1. Obtain value of `peridio-signature` header.
@@ -88,7 +88,7 @@ During URL verification, Peridio will execute a webhook request that publishes a
 
 ## Deduplication
 
-The events that webhooks publish have a `prn` field that can be used for deduplication.
+The events that webhooks publish have a [PRN](/reference/peridio-resource-names) field that can be used for deduplication.
 
 ## Client endpoint requirements
 
@@ -96,7 +96,7 @@ The client endpoint in this context is a webhook's `url` field.
 
 - Must be prefixed with `https://`.
 - Must immediately return a `200` upon receipt and signature verification. For example, you must return a `200` response before updating a record in your system.
-- Must be operational at the time of enabling a webhook or at the time of the update, if updating the `url` of an enabled webhook.
+- Must be operational at the time of enabling a webhook, or at the time of the update if updating the `url` of an enabled webhook.
 - HTTP method:  `POST`.
 - Max `url` length: `1028`.
 
@@ -109,16 +109,43 @@ Peridio will retry webhook delivery for up to 3 days with a jittered backoff.
 Peridio supports Peridio-side event filtering. This means that only the events that you are interested in are published. Leverage the enabled events options in the API and CLI to control this.
 
 :::tip
-[Test fire events](#test_fire) created as part of URL verification are published regardless of the webhook's `state` and `enabled_events`. Test fire events created with the Peridio API [test-fire-webhook](/admin-api#webhooks/operation/test-fire-webhook) endpoint are published regardless of the webhook's state, but they do require the event's `state` to be `enabled`.
+`webhook.test_fire` events created as part of URL verification are published regardless of the webhook's `state` and `enabled_events`. Test fire events created with the Peridio API [test-fire-webhook](/admin-api#webhooks/operation/test-fire-webhook) endpoint are published regardless of the webhook's state, but they require the webhook's `state` to be `enabled`.
 :::
 
 ## Supported events
 
+All events have the following top level structure:
+
+```json
+{
+  "version": 1,
+  "prn": "<prn of the event>",
+  "type": "<type of the event",
+  "data": <data structure depends on the type>,
+  "inserted_at": "2023-09-14T20:23:30Z"
+}
+```
+
+The possible values for `type` and the associated structure for their `data` fields are documented below.
+
 ### device
+
+Events with a `type` of `device` have the following `data` structure:
+
+```json
+{
+  "type": "<subtype of the event>",
+  "data": <data structure depends on the type>,
+}
+```
+
+The possible values for `type` and the associated structure for their `data` fields are documented below.
 
 #### release_changed
 
-This event is created when a device informs Peridio that its current release is different than what Peridio Cloud had on record currently.
+This event is created when a device informs Peridio of its current release, and that release is different than the one Peridio currently had on record. For example, if Peridio thought the device was on release 1, but then the device informed Peridio it was on release 2, then this event would be created going from 1 to 2.
+
+`device` events with a `type` of `release_changed` have the following `data` structure:
 
 ```json
 {
@@ -127,24 +154,35 @@ This event is created when a device informs Peridio that its current release is 
     "prn": "<prn of the device>",
   },
   "from_release": {
-    "prn": "<prn of the release>",
+    "prn": "<prn of the release the device is udpating off of>",
     "version": "<semver of the release>",
   },
   "to_release": {
-    "prn": "<prn of the release>",
-    "version": "semver of the release",
+    "prn": "<prn of the release the device is updating to>",
+    "version": "<semver of the release>",
   }
 }
 ```
 
 ### webhook
 
+Events with a `type` of `webhook` have the following `data` structure:
+
+```json
+{
+  "type": "<subtype of the event>",
+  "data": <data structure depends on the type>,
+}
+```
+
 #### test_fire
 
 This event is created by the Peridio API [test-fire-webhook](/admin-api#webhooks/operation/test-fire-webhook) endpoint as well as during [URL verification](/reference/webhooks#url-verification).
 
+`webhook` events with a `type` of `test_fire` have the following `data` structure:
+
 ```json
 {
-  "webhook_prn": "prn of the webhook"
+  "webhook_prn": "<prn of the webhook>"
 }
 ```
