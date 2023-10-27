@@ -74,6 +74,10 @@ info:
     Some endpoints specify a `search` parameter. The value of this parameter must be a string that
     contains a valid query as defined by this search query language.
 
+    **IMPORTANT NOTICE**
+
+    Every list-type endpoint that accepts a `search` parameter requires that the search parameter is supplied, and furthermore that an organization PRN clause is provided in the search like so: `organization_prn:'value'`.
+
     ## Queries
 
     A query consists of at least one and at most five clauses joined by the `and` keyword.
@@ -274,6 +278,20 @@ paths:
     get:
       operationId: list-artifacts
       summary: List artifacts
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`description`||`:`, `~`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
       tags:
         - "Artifacts"
       parameters:
@@ -376,6 +394,21 @@ paths:
     get:
       operationId: list-artifact-versions
       summary: List artifact versions
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`artifact_prn`||`:`|string|
+        |`description`||`:`, `~`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
       tags:
         - "Artifact Versions"
       parameters:
@@ -484,6 +517,23 @@ paths:
     get:
       operationId: list-binaries
       summary: List binaries
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`artifact_version_prn`||`:`|string|
+        |`description`||`:`, `~`|string|
+        |`hash`||`:`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`size`||`:`, `>`, `>=`, `<`, `<=` |integer|
+        |`target`||`:`, `~`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
       tags:
         - "Binaries"
       parameters:
@@ -700,6 +750,18 @@ paths:
     get:
       operationId: list-bundles
       summary: list bundles
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
       tags:
         - "Bundles"
       parameters:
@@ -775,6 +837,20 @@ paths:
     get:
       operationId: list-cohorts
       summary: List cohorts
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`description`||`:`, `~`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
       tags:
         - "Cohorts"
       parameters:
@@ -878,6 +954,20 @@ paths:
     get:
       operationId: list-signing-keys
       summary: List signing keys
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+        |`value`||`:`|string|
+
       tags:
         - Signing Keys
       parameters:
@@ -1378,6 +1468,20 @@ paths:
     get:
       operationId: list-products-v2
       summary: List products v2
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`deleted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
       tags:
         - "Products"
       parameters:
@@ -2545,6 +2649,25 @@ paths:
     get:
       operationId: list-releases
       summary: List Releases
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`cohort_prn`||`:`|string|
+        |`deleted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`description`||`:`, `~`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`next_release_prn`||`:`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+        |`version_requirement`||`:`, `-`|string|
+        |`version`||`:`, `-`|string|
+
       tags:
         - Releases
       parameters:
@@ -2795,6 +2918,19 @@ paths:
     get:
       operationId: list-webhooks
       summary: List webhooks
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`description`||`:`, `~`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
       tags:
         - "Webhooks"
       parameters:
@@ -2953,15 +3089,9 @@ components:
     search:
       in: query
       name: search
+      required: true
       description: |
         A search query per the [search query language](#section/Search-Query-Language).
-
-        |Key|Operators|Value|
-        |-|-|-|
-        |`description`|`:`, `~`|string|
-        |`inserted_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
-        |`name`|`:`, `~`|string|
-        |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
       schema:
         type: string
     page:
