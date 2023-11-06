@@ -3070,7 +3070,12 @@ paths:
               schema:
                 properties:
                   webhook:
-                    $ref: '#/components/schemas/webhook'
+                    allOf:
+                      - $ref: '#/components/schemas/webhook'
+                      - type: object
+                        properties:
+                          secret:
+                            $ref: '#/components/schemas/webhook-secret'
     get:
       operationId: list-webhooks
       summary: List webhooks
@@ -3185,6 +3190,14 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/prn'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              properties:
+                webhook_ttl:
+                  $ref: '#/components/schemas/webhook-ttl'
       responses:
         '200':
           description: Ok.
@@ -3193,7 +3206,12 @@ paths:
               schema:
                 properties:
                   webhook:
-                    $ref: '#/components/schemas/webhook'
+                    allOf:
+                      - $ref: '#/components/schemas/webhook'
+                      - type: object
+                        properties:
+                          secret:
+                            $ref: '#/components/schemas/webhook-secret'
   /webhooks/{webhook_prn}/test_fire:
     post:
       operationId: test-fire-webhook
@@ -4113,6 +4131,10 @@ components:
           format: date-time
     webhook-description:
       type: string
+    webhook-secret:
+      type: string
+      example: C4FE345F29EF6156BD40B6DF73625243
+      description: The secret used to create and verify webhook signatures.
     webhook-url:
       type: string
     webhook-state:
@@ -4130,3 +4152,11 @@ components:
         - $ref: '#/components/schemas/prn'
         - example: >-
             prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:webhook:b3f1f699-3bc8-4c77-bda2-b974595d5e3f
+    webhook-ttl:
+      type: integer
+      default: 0
+      description: >-
+        The amount of time in seconds that the old secret and the new secret
+        will co-exist. While they do, dual signature values will be provided
+        with webhook executions. See the [webhooks
+        reference](/reference/webhooks).
