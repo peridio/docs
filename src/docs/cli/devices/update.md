@@ -2,13 +2,21 @@
 Usage: peridio devices update [OPTIONS] --device-identifier <DEVICE_IDENTIFIER> --product-name <PRODUCT_NAME>
 
 Options:
-      --description <DESCRIPTION>                
-      --device-identifier <DEVICE_IDENTIFIER>    
-      --healthy <HEALTHY>                        [possible values: true, false]
-      --last-communication <LAST_COMMUNICATION>  
-      --product-name <PRODUCT_NAME>              
-      --tags <TAGS>                              
-      --target <TARGET>                          
-  -h, --help                                     Print help
+      --description <DESCRIPTION>
+          An arbitrary string attached to the resource. Often useful for displaying to users
+      --device-identifier <DEVICE_IDENTIFIER>
+          The identifier of the device you wish to update
+      --healthy <HEALTHY>
+          Whether or not the device is healthy (quarantined or not) [possible values: true, false]
+      --last-communication <LAST_COMMUNICATION>
+          The device's last communication time
+      --product-name <PRODUCT_NAME>
+          The name of the product you wish to update the resource within
+      --tags <TAGS>
+          A list of tags to attach to the device
+      --target <TARGET>
+          The target of the device
+  -h, --help
+          Print help
 
 ```

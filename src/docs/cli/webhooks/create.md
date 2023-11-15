@@ -2,10 +2,21 @@
 Usage: peridio webhooks create [OPTIONS] --url <URL> --organization-prn <ORGANIZATION_PRN>
 
 Options:
-      --description <DESCRIPTION>            
-      --enabled-events <ENABLED_EVENTS>      
-      --url <URL>                            
-      --organization-prn <ORGANIZATION_PRN>  
-  -h, --help                                 Print help
+      --description <DESCRIPTION>
+          An arbitrary string attached to the resource. Often useful for displaying to users
+
+      --enabled-events <ENABLED_EVENTS>
+          The events that will trigger the webhook.
+          
+          Supply the flag multiple times to add multiple events.
+
+      --url <URL>
+          The URL that the webhook will send a POST request to
+
+      --organization-prn <ORGANIZATION_PRN>
+          The PRN of the organization you wish to create the resource within
+
+  -h, --help
+          Print help (see a summary with '-h')
 
 ```
