@@ -30,7 +30,7 @@ Options:
           [default: 5242880]
 
       --concurrency <CONCURRENCY>
-          Limit the concurrency of jobs that create and upload binary parts. [default: 2x the core count]
+          Limit the concurrency of jobs that create and upload binary parts. [default: 2x the core count, to a maximum of 16]
 
   -s, --signing-key-pair <SIGNING_KEY_PAIR>
           The name of a signing key pair in your Peridio CLI config. This will dictate both the private key to create a binary signature with as well as the signing key Peridio will use to verify the binary signature

@@ -114,75 +114,14 @@ Peridio supports Peridio-side event filtering. This means that only the events t
 
 ## Supported events
 
-All events have the following top level structure:
+- device
+  - [checked-for-release](/admin-api#device-events/operation/device-checked-for-release)
+  - [claimed-release](/admin-api#device-events/operation/device-claimed-release)
+  - [connected](/admin-api#device-events/operation/device-connected)
+  - [release-changed](/admin-api#device-events/operation/device-release-changed)
+- webhook
+  - [test-fire](/admin-api#webhook-events/operation/webhook-test-fire)
 
-```json
-{
-  "version": 1,
-  "prn": "<prn of the event>",
-  "type": "<type of the event",
-  "data": <data structure depends on the type>,
-  "inserted_at": "2023-09-14T20:23:30Z"
-}
-```
-
-The possible values for `type` and the associated structure for their `data` fields are documented below.
-
-### device
-
-Events with a `type` of `device` have the following `data` structure:
-
-```json
-{
-  "type": "<subtype of the event>",
-  "data": <data structure depends on the type>,
-}
-```
-
-The possible values for `type` and the associated structure for their `data` fields are documented below.
-
-#### release_changed
-
-This event is created when a device informs Peridio of its current release, and that release is different than the one Peridio currently had on record. For example, if Peridio thought the device was on release 1, but then the device informed Peridio it was on release 2, then this event would be created going from 1 to 2.
-
-`device` events with a `type` of `release_changed` have the following `data` structure:
-
-```json
-{
-  "device": {
-    "identifier": "<identifier of the device>",
-    "prn": "<prn of the device>",
-  },
-  "from_release": {
-    "prn": "<prn of the release the device is udpating off of>",
-    "version": "<semver of the release>",
-  },
-  "to_release": {
-    "prn": "<prn of the release the device is updating to>",
-    "version": "<semver of the release>",
-  }
-}
-```
-
-### webhook
-
-Events with a `type` of `webhook` have the following `data` structure:
-
-```json
-{
-  "type": "<subtype of the event>",
-  "data": <data structure depends on the type>,
-}
-```
-
-#### test_fire
-
-This event is created by the Peridio API [test-fire-webhook](/admin-api#webhooks/operation/test-fire-webhook) endpoint as well as during [URL verification](/reference/webhooks#url-verification).
-
-`webhook` events with a `type` of `test_fire` have the following `data` structure:
-
-```json
-{
-  "webhook_prn": "<prn of the webhook>"
-}
-```
+:::info request failed
+The webhook [request-failed](/admin-api#webhook-events/operation/webhook-request-failed) event is *not* supported - Peridio does not publish webhook request-failed events as it facilitates cascading recursive failures.
+:::
