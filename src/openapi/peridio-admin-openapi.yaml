@@ -211,8 +211,12 @@ tags:
       id: bundles
     - name: Releases
       id: releases
-    - name: Webhooks
-      id: webhooks
+    - name: Device Events
+      id: device-events
+      description: Events created due to device activity.
+    - name: Webhook Events
+      id: webhook-events
+      description: Events created due to webhook activity.
 x-tagGroups:
   - name: Account Management
     tags:
@@ -244,6 +248,10 @@ x-tagGroups:
       - Bundles
       - Deployments
       - Releases
+  - name: Events
+    tags:
+      - Device Events
+      - Webhook Events
 paths:
   /artifacts:
     post:
@@ -3077,7 +3085,7 @@ paths:
               schema:
                 properties:
                   event:
-                    $ref: "#/components/schemas/events-webhooks-test-fire"
+                    $ref: "#/components/schemas/webhook-test-fire-event"
 components:
   securitySchemes:
     api_key:
@@ -3121,6 +3129,26 @@ components:
         subsequent results.
       schema:
         type: string
+    peridio-signature:
+      name: peridio-signature
+      in: header
+      description: The webhook signature. See [signature verification](/reference/webhooks#signature-verification).
+      schema:
+        type: string
+        examples:
+          one:
+            value: FC825FCAA2E4C2688F075144105B75C2943D8B88AC4B5FAB134F2676A63FB6EF
+            summary: One signature.
+          two:
+            value: FC825FCAA2E4C2688F075144105B75C2943D8B88AC4B5FAB134F2676A63FB6EF,AC4B5FAB134F2676A63FB6EAAC825FCEA2E4C23B8F045134155B55C2943D8B51
+            summary: Two signatures while secrets are being rolled.
+    peridio-published-at:
+      name: peridio-published-at
+      in: header
+      description: The timestamp of when the event was published (not created). See [signature verification](/reference/webhooks#signature-verification).
+      schema:
+        type: string
+        format: date-time
   schemas:
     access-token:
       type: string
@@ -3614,6 +3642,10 @@ components:
     device-last-communication:
       type: string
       format: date-time
+    device-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:device:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     device-status:
       enum:
         - offline
@@ -3631,15 +3663,219 @@ components:
     email:
       type: string
       format: email
-    events-webhooks-test-fire:
+    device-checked-for-release-event:
       type: object
       properties:
-        version:
-          enum:
-            - 1
+        data:
+          type: object
+          properties:
+            type:
+              enum:
+                - checked_for_release
+            data:
+              type: object
+              properties:
+                device:
+                  type: object
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/device-prn"
+                    identifier:
+                      $ref: "#/components/schemas/device-identifier"
+                release:
+                  type: object
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/release-prn"
+                    version:
+                      $ref: "#/components/schemas/release-version"
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: "#/components/schemas/event-prn"
         type:
           enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
+    device-claimed-release-event:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              enum:
+                - claimed_release
+            data:
+              type: object
+              properties:
+                device:
+                  type: object
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/device-prn"
+                    identifier:
+                      $ref: "#/components/schemas/device-identifier"
+                release:
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: "#/components/schemas/release-prn"
+                        version:
+                          $ref: "#/components/schemas/release-version"
+                    - type: null
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: "#/components/schemas/event-prn"
+        type:
+          enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
+    device-connected-event:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - connected
+            data:
+              type: object
+              properties:
+                device:
+                  type: object
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/device-prn"
+                    identifier:
+                      $ref: "#/components/schemas/device-identifier"
+                headers:
+                  description: |
+                    Monitored headers that a device supplies during connection will be recorded in this array.
+
+                    Monitored Headers:
+
+                    - `peridio-release-prn`
+                    - `peridio-release-version`
+
+                    This list can grow, integrations must account for unexpected headers.
+                  type: object
+                  example:
+                    peridio-release-prn: prn:1:4b8c3b41-f1ce-4c09-83ee-9cb60eb71483:release:d39587b9-4445-4e91-8952-4af83b97fea6
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: "#/components/schemas/event-prn"
+        type:
+          type: string
+          enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
+    device-release-changed-event:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - release_changed
+            data:
+              type: object
+              properties:
+                device:
+                  type: object
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/device-prn"
+                    identifier:
+                      $ref: "#/components/schemas/device-identifier"
+                from_release:
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: "#/components/schemas/release-prn"
+                        version:
+                          $ref: "#/components/schemas/release-version"
+                    - type: null
+                to_release:
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: "#/components/schemas/release-prn"
+                        version:
+                          $ref: "#/components/schemas/release-version"
+                        known:
+                          $ref: "#/components/schemas/release-known"
+                    - type: null
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: "#/components/schemas/event-prn"
+        type:
+          type: string
+          enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
+    webhook-request-failed-event:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - request_failed
+            data:
+              type: object
+              properties:
+                type:
+                  $ref: "#/components/schemas/webhook-request-failed-event-type"
+                data:
+                  oneOf:
+                    - $ref: "#/components/schemas/webhook-request-failed-host-resolution-failed-event"
+                    - $ref: "#/components/schemas/webhook-request-failed-response-timeout-event"
+                    - $ref: "#/components/schemas/webhook-request-failed-response-status-event"
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: "#/components/schemas/event-prn"
+        type:
+          type: string
+          enum:
             - webhook
+        version:
+          type: integer
+          enum:
+            - 1
+    webhook-test-fire-event:
+      type: object
+      properties:
         data:
           type: object
           properties:
@@ -3656,6 +3892,63 @@ components:
           format: date-time
         prn:
           $ref: "#/components/schemas/event-prn"
+        type:
+          type: string
+          enum:
+            - webhook
+        version:
+          type: integer
+          enum:
+            - 1
+    event-type:
+      type: string
+      enum:
+        - device
+        - webhook
+    device-event-type:
+      type: string
+      enum:
+        - checked_for_release
+        - claimed_release
+        - connected
+        - release_changed
+    webhook-event-type:
+      type: string
+      enum:
+        - request_failed
+        - test_fire
+    webhook-request-failed-host-resolution-failed-event:
+      type: object
+      properties:
+        webhook:
+          type: object
+          properties:
+            prn:
+              $ref: "#/components/schemas/webhook-prn"
+    webhook-request-failed-response-timeout-event:
+      type: object
+      properties:
+        webhook:
+          type: object
+          properties:
+            prn:
+              $ref: "#/components/schemas/webhook-prn"
+    webhook-request-failed-response-status-event:
+      type: object
+      properties:
+        webhook:
+          type: object
+          properties:
+            prn:
+              $ref: "#/components/schemas/webhook-prn"
+        status:
+          type: integer
+    webhook-request-failed-event-type:
+      type: string
+      enum:
+        - host_resolution_failed
+        - response_timeout
+        - response_status
     firmware:
       type: object
       properties:
@@ -3855,6 +4148,10 @@ components:
       enum:
         - "static"
         - "percent"
+    release-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:release:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     release-description:
       default: null
       oneOf:
@@ -3878,6 +4175,10 @@ components:
       description: The release version. If provided, it has to be a valid [version](https://hexdocs.pm/elixir/Version.html#content). Used in [dynamic release resolution](/reference/releases#dynamic-resolution).
       example: 1.0.0
       type: string
+    release-known:
+      description: Whether the release is known to Peridio or not.
+      example: true
+      type: boolean
     release-version-requirement:
       description: The release version requirement. If provided, it has to be a valid [requirement](https://hexdocs.pm/elixir/Version.html#module-requirements). Used in [dynamic release resolution](/reference/releases#dynamic-resolution).
       example: == 1.0.0
@@ -3962,3 +4263,130 @@ components:
       type: integer
       default: 0
       description: The amount of time in seconds that the old secret and the new secret will co-exist. While they do, dual signature values will be provided with webhook executions. See the [webhooks reference](/reference/webhooks).
+webhooks:
+  device_checked_for_release:
+    post:
+      security: []
+      summary: Checked for release
+      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      operationId: device-checked-for-release
+      tags:
+        - Device Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/device-checked-for-release-event"
+      responses:
+        200:
+          description: Ok.
+  device_claimed_release:
+    post:
+      security: []
+      summary: Claimed release
+      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      operationId: device-claimed-release
+      tags:
+        - Device Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/device-claimed-release-event"
+      responses:
+        200:
+          description: Ok.
+  device_connected:
+    post:
+      security: []
+      summary: Connected
+      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      operationId: device-connected
+      tags:
+        - Device Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/device-connected-event"
+      responses:
+        200:
+          description: Ok.
+  device_release_changed:
+    post:
+      security: []
+      summary: Release changed
+      description: |
+        See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+
+        This event is created when a device informs Peridio of its current release via the `peridio-release-prn` header, and that release is different than the one Peridio currently had on record. For example, if Peridio thought the device was on release 1, but then the device informed Peridio it was on release 2, then this event would be created going from 1 to 2.
+      operationId: device-release-changed
+      tags:
+        - Device Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/device-release-changed-event"
+      responses:
+        200:
+          description: Ok.
+  webhook_request_failed:
+    post:
+      security: []
+      summary: Request failed
+      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      operationId: webhook-request-failed
+      tags:
+        - Webhook Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/webhook-request-failed-event"
+      responses:
+        200:
+          description: Ok.
+  webhook_test_fire:
+    post:
+      security: []
+      summary: Test fire
+      description: |
+        See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+
+        This event is created by the Peridio API [test-fire-webhook](/admin-api#webhooks/operation/test-fire-webhook) endpoint as well as during [URL verification](/reference/webhooks#url-verification).
+      operationId: webhook-test-fire
+      tags:
+        - Webhook Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/webhook-test-fire-event"
+      responses:
+        200:
+          description: Ok.

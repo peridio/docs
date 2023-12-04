@@ -4,7 +4,18 @@ info:
   license:
     name: Peridio
     url: https://github.com/peridio/parasola/blob/main/LICENSE
-  description: The Peridio Device API facilitates device-based operations within Peridio Core.
+  description: |
+    The Peridio Device API is the primary way for devices to interact with Peridio.
+
+    # Global Headers
+
+    The following headers may be supplied when requesting any endpoint.
+
+    |key|value|description|
+    |-|-|-|
+    |peridio-release-prn|A release PRN.|See [release resolution](/reference/releases#release-resolution). Informs Peridio of what release is currently active on the device. The preference should always be to supply this header with a valid value. If you supply this header, you should not supply the `peridio-release-version` header.|
+    |peridio-release-version|A release version.|See [release resolution](/reference/releases#release-resolution). This header is only used in exceptional cases when you don't have a PRN to supply via `peridio-release-prn`. In that case, you may supply this header and you should not supply the `peridio-release-prn` header.|
+    |x-peridio-uuid|A firmware UUID.|Legacy. See [deployment eligibility](/reference/deployments#deployment-eligibility). The UUID of the device's currently active firmware.|
   title: Peridio Device API
   version: "1.0.0"
 servers:
@@ -32,6 +43,19 @@ paths:
       tags:
         - "Devices"
       parameters:
+        - in: header
+          name: peridio-release-prn
+          schema:
+            description: See [global headers](#global-headers).
+            example: prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
+          required: false
+        - in: header
+          name: peridio-release-version
+          schema:
+            description: See [global headers](#global-headers).
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
+          required: false
         - name: expand
           description: |
             See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
@@ -83,9 +107,22 @@ paths:
         - in: header
           name: x-peridio-uuid
           schema:
-            description: The UUID of the currently active firmware on the device.
+            description: See [global headers](#global-headers).
             $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-uuid"
           required: true
+        - in: header
+          name: peridio-release-prn
+          schema:
+            description: See [global headers](#global-headers).
+            example: prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
+          required: false
+        - in: header
+          name: peridio-release-version
+          schema:
+            description: See [global headers](#global-headers).
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
+          required: false
         - name: preflight
           in: query
           required: false
@@ -150,17 +187,14 @@ paths:
         - in: header
           name: peridio-release-prn
           schema:
-            description: |
-              See [release resolution](/reference/releases#release-resolution). Informs Peridio of what release is currently active on the device. The preference should always be to supply this header with a valid value.
-              If you supply this header, you should not supply the `peridio-release-version` header.
+            description: See [global headers](#global-headers).
             example: prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
             $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
           required: false
         - in: header
           name: peridio-release-version
           schema:
-            description: |
-              See [release resolution](/reference/releases#release-resolution). This header is only used in exceptional cases when you don't have a PRN to supply via `peridio-release-prn`. In that case, you may supply this header and you should not supply the `peridio-release-prn` header.
+            description: See [global headers](#global-headers).
             $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
           required: false
         - name: expand
