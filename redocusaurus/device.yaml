@@ -30,9 +30,30 @@ info:
     `peridio-release-prn`. In that case, you may supply this header and you
     should not supply the `peridio-release-prn` header.|
 
+    |x-peridio-architecture|A firmware architecture.|Legacy. See [deployment
+    eligibility](/reference/deployments#deployment-eligibility). The
+    architecture of the device's currently active firmware. When supplying any
+    `x-peridio` header, you should supply all `x-peridio` headers.|
+
+    |x-peridio-platform|A firmware platform.|Legacy. See [deployment
+    eligibility](/reference/deployments#deployment-eligibility). The platform of
+    the device's currently active firmware. When supplying any `x-peridio`
+    header, you should supply all `x-peridio` headers.|
+
+    |x-peridio-product|A firmware product.|Legacy. See [deployment
+    eligibility](/reference/deployments#deployment-eligibility). The product of
+    the device's currently active firmware. When supplying any `x-peridio`
+    header, you should supply all `x-peridio` headers.|
+
     |x-peridio-uuid|A firmware UUID.|Legacy. See [deployment
     eligibility](/reference/deployments#deployment-eligibility). The UUID of the
-    device's currently active firmware.|
+    device's currently active firmware. When supplying any `x-peridio` header,
+    you should supply all `x-peridio` headers.|
+
+    |x-peridio-version|A firmware version.|Legacy. See [deployment
+    eligibility](/reference/deployments#deployment-eligibility). The version of
+    the device's currently active firmware. When supplying any `x-peridio`
+    header, you should supply all `x-peridio` headers.|
   title: Peridio Device API
   version: 1.0.0
 servers:
