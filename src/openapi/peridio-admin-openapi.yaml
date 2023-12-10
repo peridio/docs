@@ -3668,14 +3668,17 @@ components:
       properties:
         data:
           type: object
+          description: Data associated with the `device` event type.
           properties:
             type:
               enum:
                 - checked_for_release
             data:
+              description: Data associated with the `checked_for_release` subevent type.
               type: object
               properties:
                 device:
+                  description: The device that checked for a release.
                   type: object
                   properties:
                     prn:
@@ -3683,12 +3686,16 @@ components:
                     identifier:
                       $ref: "#/components/schemas/device-identifier"
                 release:
-                  type: object
-                  properties:
-                    prn:
-                      $ref: "#/components/schemas/release-prn"
-                    version:
-                      $ref: "#/components/schemas/release-version"
+                  description: The release the device was told was available to update to, or `null` if no release is available.
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: "#/components/schemas/release-prn"
+                        version:
+                          $ref: "#/components/schemas/release-version"
+                    - type: null
+                      description: " "
         inserted_at:
           type: string
           format: date-time
@@ -3706,29 +3713,31 @@ components:
       properties:
         data:
           type: object
+          description: Data associated with the `device` event type.
           properties:
             type:
               enum:
                 - claimed_release
             data:
               type: object
+              description: Data associated with the `claimed_release` subevent type.
               properties:
                 device:
                   type: object
+                  description: The device that claimed the release.
                   properties:
                     prn:
                       $ref: "#/components/schemas/device-prn"
                     identifier:
                       $ref: "#/components/schemas/device-identifier"
                 release:
-                  oneOf:
-                    - type: object
-                      properties:
-                        prn:
-                          $ref: "#/components/schemas/release-prn"
-                        version:
-                          $ref: "#/components/schemas/release-version"
-                    - type: null
+                  type: object
+                  description: The release the device claimed.
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/release-prn"
+                    version:
+                      $ref: "#/components/schemas/release-version"
         inserted_at:
           type: string
           format: date-time
@@ -3746,6 +3755,7 @@ components:
       properties:
         data:
           type: object
+          description: Data associated with the `device` event type.
           properties:
             type:
               type: string
@@ -3753,9 +3763,11 @@ components:
                 - connected
             data:
               type: object
+              description: Data associated with the `connected` subevent type.
               properties:
                 device:
                   type: object
+                  description: The device that connected.
                   properties:
                     prn:
                       $ref: "#/components/schemas/device-prn"
@@ -3769,8 +3781,13 @@ components:
 
                     - `peridio-release-prn`
                     - `peridio-release-version`
+                    - `x-peridio-architecture` (legacy)
+                    - `x-peridio-platform` (legacy)
+                    - `x-peridio-product` (legacy)
+                    - `x-peridio-uuid` (legacy)
+                    - `x-peridio-version` (legacy)
 
-                    This list can grow, integrations must account for unexpected headers.
+                    This list can grow, integrations must account for unexpected headers. See [Device API global headers](/device-api#section/Global-Headers).
                   type: object
                   example:
                     peridio-release-prn: prn:1:4b8c3b41-f1ce-4c09-83ee-9cb60eb71483:release:d39587b9-4445-4e91-8952-4af83b97fea6
@@ -3792,6 +3809,7 @@ components:
       properties:
         data:
           type: object
+          description: Data associated with the `device` event type.
           properties:
             type:
               type: string
@@ -3799,6 +3817,7 @@ components:
                 - release_changed
             data:
               type: object
+              description: Data associated with the `release_changed` subevent type.
               properties:
                 device:
                   type: object
@@ -3844,6 +3863,7 @@ components:
       type: object
       properties:
         data:
+          description: Data associated with the `webhook` event type.
           type: object
           properties:
             type:
@@ -3852,10 +3872,12 @@ components:
                 - request_failed
             data:
               type: object
+              description: Data associated with the `request_failed` subevent type.
               properties:
                 type:
                   $ref: "#/components/schemas/webhook-request-failed-event-type"
                 data:
+                  description: Data associated with the subevent.
                   oneOf:
                     - $ref: "#/components/schemas/webhook-request-failed-host-resolution-failed-event"
                     - $ref: "#/components/schemas/webhook-request-failed-response-timeout-event"
@@ -3878,12 +3900,14 @@ components:
       properties:
         data:
           type: object
+          description: Data associated with the `webhook` event type.
           properties:
             type:
               enum:
                 - test_fire
             data:
               type: object
+              description: Data associated with the `test_fire` subevent type.
               properties:
                 webhook_prn:
                   $ref: "#/components/schemas/webhook-prn"
@@ -4268,7 +4292,10 @@ webhooks:
     post:
       security: []
       summary: Checked for release
-      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      description: |
+        See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+
+        This event is created when a device checks for an update with [get-update](/device-api#devices/operation/get-update).
       operationId: device-checked-for-release
       tags:
         - Device Events
@@ -4288,7 +4315,10 @@ webhooks:
     post:
       security: []
       summary: Claimed release
-      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      description: |
+        See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+
+        This event is created when a device claims access to a phased release during a [get-update](/device-api#devices/operation/get-update).
       operationId: device-claimed-release
       tags:
         - Device Events
@@ -4308,7 +4338,10 @@ webhooks:
     post:
       security: []
       summary: Connected
-      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      description: |
+        See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+
+        This event is created when a device successfully completes a TLS handshake while connecting to the Peridio Device API.
       operationId: device-connected
       tags:
         - Device Events
@@ -4351,7 +4384,10 @@ webhooks:
     post:
       security: []
       summary: Request failed
-      description: See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+      description: |
+        See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
+
+        This event is created when an attempt to publish an event via a webhook fails.
       operationId: webhook-request-failed
       tags:
         - Webhook Events
