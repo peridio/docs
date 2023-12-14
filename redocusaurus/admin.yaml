@@ -3759,6 +3759,8 @@ components:
     device:
       type: object
       properties:
+        cohort_prn:
+          $ref: '#/components/schemas/device-cohort-prn'
         description:
           oneOf:
             - type: 'null'
