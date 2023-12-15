@@ -412,6 +412,7 @@ components:
     device-identifier:
       description: Uniquely identifies a device within an organization.
       type: string
+      example: sn1234
     firmware-uuid:
       type: string
       format: uuid
