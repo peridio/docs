@@ -217,6 +217,8 @@ tags:
     - name: Webhook Events
       id: webhook-events
       description: Events created due to webhook activity.
+    - name: Web Console
+      id: web-console
 x-tagGroups:
   - name: Account Management
     tags:
@@ -233,6 +235,9 @@ x-tagGroups:
       - Keys
       - Signing Keys
       - Firmware
+  - name: Remote Shell
+    tags:
+      - Web Console
   - name: Device Management
     tags:
       - CA Certificates
@@ -253,6 +258,55 @@ x-tagGroups:
       - Device Events
       - Webhook Events
 paths:
+  /web-console-shells:
+    post:
+      operationId: create-a-web-console-shell
+      summary: Create a web console shell
+      description: |
+        Create a self-authenticating, one-time use, expiring URL to a device remote shell in the Peridio web console.
+
+        Once a request is made to the returned URL, it cannot be used again. For example, refreshing the page will fail.
+      tags:
+        - "Web Console"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                device_identifier:
+                  $ref: "#/components/schemas/device-identifier"
+                  description: |
+                    Identifies which device to create a web console shell for.
+
+                    Mutually exclusive with `device_prn`.
+                device_prn:
+                  $ref: "#/components/schemas/device-prn"
+                  description: |
+                    Identifies which device to create a web console shell for.
+
+                    Mutually exclusive with `device_identifier`.
+                ttl:
+                  type: integer
+                  default: 3600
+                  description: The amount of time in seconds that the URL is valid for. Open connections are closed automatically upon expiration.
+                  minimum: 0
+                  maximum: 86400
+              required:
+                - organization_prn
+                - name
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    format: uri
+                    example: https://console.peridio.com/organizations/20301a4f-edca-46ea-89c0-2e92c3dcb0b9/devices/5b615a57-3712-481c-80bb-281f79b1533e/shell/aa63c5e7-d8c7-43e6-a7f5-9f8b63c91ed6
+                    description: This value is sensitive. Anyone with access to a self-authenticating URL can use it until it has been consumed or expired.
   /artifacts:
     post:
       operationId: create-an-artifact
@@ -3641,6 +3695,7 @@ components:
     device-identifier:
       description: Uniquely identifies a device within an organization.
       type: string
+      example: sn1234
     device-last-communication:
       type: string
       format: date-time
