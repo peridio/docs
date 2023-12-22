@@ -266,6 +266,14 @@ paths:
         Create a self-authenticating, one-time use, expiring URL to a device remote shell in the Peridio web console.
 
         Once a request is made to the returned URL, it cannot be used again. For example, refreshing the page will fail.
+
+        You must supply either:
+
+          - `device_prn`
+
+        Or:
+
+          - `device_identifier` and `organization_prn`
       tags:
         - "Web Console"
       requestBody:
@@ -286,6 +294,12 @@ paths:
                     Identifies which device to create a web console shell for.
 
                     Mutually exclusive with `device_identifier`.
+                organization_prn:
+                  $ref: "#/components/schemas/device-prn"
+                  description: |
+                    Identifies which organization the device belongs to if supplying `device_identifier`. This param is unnecessary if you supply the `device_prn` param.
+
+                    Mutually exclusive with `device_prn`.
                 ttl:
                   type: integer
                   default: 3600
@@ -302,6 +316,10 @@ paths:
             application/json:
               schema:
                 properties:
+                  expires_at:
+                    type: string
+                    format: date-time
+                    description: When the `url` expires, after which it will be invalid.
                   url:
                     type: string
                     format: uri
