@@ -440,9 +440,6 @@ paths:
                     Open connections are closed automatically upon expiration.
                   minimum: 0
                   maximum: 86400
-              required:
-                - organization_prn
-                - name
       responses:
         '201':
           description: Ok.
