@@ -3921,6 +3921,16 @@ components:
     email:
       type: string
       format: email
+    device-event-cohort:
+      oneOf:
+        - type: object
+          properties:
+            cohort_prn:
+              $ref: '#/components/schemas/device-cohort-prn'
+            cohort_name:
+              $ref: '#/components/schemas/cohort-name'
+        - type: 'null'
+      description: The cohort of which the device is part of
     device-checked-for-release-event:
       type: object
       properties:
@@ -3943,6 +3953,8 @@ components:
                       $ref: '#/components/schemas/device-prn'
                     identifier:
                       $ref: '#/components/schemas/device-identifier'
+                    cohort:
+                      $ref: '#/components/schemas/device-event-cohort'
                 release:
                   description: >-
                     The release the device was told was available to update to,
@@ -3990,6 +4002,8 @@ components:
                       $ref: '#/components/schemas/device-prn'
                     identifier:
                       $ref: '#/components/schemas/device-identifier'
+                    cohort:
+                      $ref: '#/components/schemas/device-event-cohort'
                 release:
                   type: object
                   description: The release the device claimed.
@@ -4033,6 +4047,8 @@ components:
                       $ref: '#/components/schemas/device-prn'
                     identifier:
                       $ref: '#/components/schemas/device-identifier'
+                    cohort:
+                      $ref: '#/components/schemas/device-event-cohort'
                 headers:
                   description: >
                     Monitored headers that a device supplies during connection
@@ -4099,6 +4115,8 @@ components:
                       $ref: '#/components/schemas/device-prn'
                     identifier:
                       $ref: '#/components/schemas/device-identifier'
+                    cohort:
+                      $ref: '#/components/schemas/device-event-cohort'
                 from_release:
                   oneOf:
                     - type: object
