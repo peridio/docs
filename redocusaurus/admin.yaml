@@ -3892,6 +3892,8 @@ components:
       type: string
     device-healthy:
       type: boolean
+    device-quarantined:
+      type: boolean
     device-identifier:
       description: Uniquely identifies a device within an organization.
       type: string
@@ -3931,6 +3933,77 @@ components:
               $ref: '#/components/schemas/cohort-name'
         - type: 'null'
       description: The cohort of which the device is part of
+    device-event-firmware:
+      oneOf:
+        - type: object
+          properties:
+            prn:
+              $ref: '#/components/schemas/firmware-prn'
+            vcs_identifier:
+              oneOf:
+                - type: 'null'
+                - $ref: '#/components/schemas/vcs-identifier'
+            version:
+              $ref: '#/components/schemas/version'
+        - type: 'null'
+      description: The firmware associated to the device
+    device-updated-event:
+      type: object
+      properties:
+        data:
+          type: object
+          description: Data associated with the `device` event type.
+          properties:
+            type:
+              enum:
+                - updated
+            data:
+              description: Data associated with the `updated` subevent type.
+              type: object
+              properties:
+                device:
+                  description: The device that was updated.
+                  type: object
+                  properties:
+                    prn:
+                      $ref: '#/components/schemas/device-prn'
+                    identifier:
+                      $ref: '#/components/schemas/device-identifier'
+                    cohort:
+                      $ref: '#/components/schemas/device-event-cohort'
+                    description:
+                      $ref: '#/components/schemas/device-description'
+                    quarantined:
+                      $ref: '#/components/schemas/device-quarantined'
+                    tags:
+                      oneOf:
+                        - type: 'null'
+                        - $ref: '#/components/schemas/array-of-device-tags'
+                    firmware:
+                      $ref: '#/components/schemas/device-event-firmware'
+                    release:
+                      description: The release of the device.
+                      oneOf:
+                        - type: object
+                          properties:
+                            prn:
+                              $ref: '#/components/schemas/release-prn'
+                            version:
+                              $ref: '#/components/schemas/release-version'
+                        - type: 'null'
+                          description: ' '
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: '#/components/schemas/event-prn'
+        type:
+          enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
     device-checked-for-release-event:
       type: object
       properties:
@@ -4339,6 +4412,10 @@ components:
 
 
         Presigned download url.
+    firmware-prn:
+      $ref: '#/components/schemas/prn'
+      example: >-
+        prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:firmware:e0040f63-4e1c-43e7-880a-d6986a35c499
     key:
       type: object
       properties:
@@ -4719,6 +4796,31 @@ webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/device-release-changed-event'
+      responses:
+        '200':
+          description: Ok.
+  device_updated:
+    post:
+      security: []
+      summary: Updated
+      description: >
+        See the [webhooks reference](/reference/webhooks#supported-events) for a
+        list of supported events.
+
+
+        This event is created when a device database record is updated.
+      operationId: device-updated
+      tags:
+        - Device Events
+      parameters:
+        - $ref: '#/components/parameters/peridio-signature'
+        - $ref: '#/components/parameters/peridio-published-at'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/device-updated-event'
       responses:
         '200':
           description: Ok.
