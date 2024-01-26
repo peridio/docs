@@ -4549,7 +4549,7 @@ webhooks:
   device_updated:
     post:
       security: []
-      summary: Device record updated
+      summary: Updated
       description: |
         See the [webhooks reference](/reference/webhooks#supported-events) for a list of supported events.
 
