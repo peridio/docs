@@ -170,10 +170,8 @@ paths:
                           - type: "null"
                           - $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-metadata"
                       deployment_id:
-                        description: Uniquely identifies a deployment.
-                        oneOf:
-                          - type: "null"
-                          - type: integer
+                        description: This is a vestigial field whose value is always `null`.
+                        type: "null"
 
   /update:
     get:
