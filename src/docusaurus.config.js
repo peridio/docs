@@ -17,22 +17,28 @@ const config = {
   trailingSlash: false,
   plugins: [
     [
-      '@docusaurus/plugin-content-docs', {
+      '@docusaurus/plugin-content-docs',
+      {
         breadcrumbs: false,
         path: 'docs',
         routeBasePath: '/',
         sidebarPath: require.resolve('./sidebars.js'),
       },
     ],
+    ['@docusaurus/plugin-content-pages', {}],
     [
-      '@docusaurus/plugin-content-pages', {
-
-      },
+      '@docusaurus/plugin-google-gtag',
+      /** @type {import('@docusaurus/plugin-google-gtag').Options} */
+      ({
+        trackingID: 'G-XN33JD9H3F',
+        anonymizeIP: true,
+      }),
     ],
   ],
   themes: [
     [
-      '@docusaurus/theme-classic', {
+      '@docusaurus/theme-classic',
+      {
         customCss: [require.resolve('./src/css/custom.css')],
       },
     ],
@@ -62,7 +68,6 @@ const config = {
             disableSearch: true,
           },
           primaryColor: '#3424ee',
-
         },
       },
     ],
