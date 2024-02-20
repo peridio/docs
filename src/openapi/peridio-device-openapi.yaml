@@ -13,13 +13,13 @@ info:
 
     |key|value|description|
     |-|-|-|
-    |peridio-release-prn|A release PRN.|See [release resolution](/reference/releases#release-resolution). Informs Peridio of what release is currently active on the device. The preference should always be to supply this header with a valid value. If you supply this header, you should not supply the `peridio-release-version` header.|
-    |peridio-release-version|A release version.|See [release resolution](/reference/releases#release-resolution). This header is only used in exceptional cases when you don't have a PRN to supply via `peridio-release-prn`. In that case, you may supply this header and you should not supply the `peridio-release-prn` header.|
-    |x-peridio-architecture|A firmware architecture.|Legacy. See [deployment eligibility](/reference/deployments#deployment-eligibility). The architecture of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-platform|A firmware platform.|Legacy. See [deployment eligibility](/reference/deployments#deployment-eligibility). The platform of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-product|A firmware product.|Legacy. See [deployment eligibility](/reference/deployments#deployment-eligibility). The product of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-uuid|A firmware UUID.|Legacy. See [deployment eligibility](/reference/deployments#deployment-eligibility). The UUID of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-version|A firmware version.|Legacy. See [deployment eligibility](/reference/deployments#deployment-eligibility). The version of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |peridio-release-prn|A release PRN.|See [release resolution](/platform/reference/releases#release-resolution). Informs Peridio of what release is currently active on the device. The preference should always be to supply this header with a valid value. If you supply this header, you should not supply the `peridio-release-version` header.|
+    |peridio-release-version|A release version.|See [release resolution](/platform/reference/releases#release-resolution). This header is only used in exceptional cases when you don't have a PRN to supply via `peridio-release-prn`. In that case, you may supply this header and you should not supply the `peridio-release-prn` header.|
+    |x-peridio-architecture|A firmware architecture.|Legacy. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The architecture of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-platform|A firmware platform.|Legacy. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The platform of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-product|A firmware product.|Legacy. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The product of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-uuid|A firmware UUID.|Legacy. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The UUID of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-version|A firmware version.|Legacy. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The version of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
   title: Peridio Device API
   version: "1.0.0"
 servers:
@@ -43,7 +43,7 @@ paths:
 
         ### Expandable
 
-        This endpoint has an expandable response. See [expanding responses](/admin-api/#section/Expanding-Responses).
+        This endpoint has an expandable response. See [expanding responses](/admin-api#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
@@ -182,7 +182,7 @@ paths:
 
         ### Expandable
 
-        This endpoint has an expandable response. By default, only the `status` field is returned. See [expanding responses](/admin-api/#section/Expanding-Responses).
+        This endpoint has an expandable response. By default, only the `status` field is returned. See [expanding responses](/admin-api#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
@@ -236,7 +236,7 @@ paths:
                     description: |
                       Expand required. See [expanding responses](#section/Expanding-Responses).
 
-                      The target release with respect to [release resolution](/reference/releases#release-resolution).
+                      The target release with respect to [release resolution](/platform/reference/releases#release-resolution).
                   bundle:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/bundle"
                     description: |

@@ -84,13 +84,11 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          { label: 'Reference', to: '/reference/organizations' },
-          { label: 'Guides', to: '/guides/introduction-to-binary-management' },
+          { label: 'Platform', to: '/platform/reference/overview' },
           { label: 'Admin API', to: '/admin-api' },
           { label: 'Device API', to: '/device-api' },
           { label: 'CLI', to: '/cli' },
-          { label: 'Agent', to: '/agent' },
-          { label: 'Web Console', href: 'https://console.cremini.peridio.com', position: 'right' },
+          { label: 'Web Console', href: 'https://console.peridio.com', position: 'right' },
         ],
       },
       footer: {
