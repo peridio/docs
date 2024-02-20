@@ -1,11 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
-import { ThemeClassNames } from '@docusaurus/theme-common';
-import { isActiveSidebarItem } from '@docusaurus/theme-common/internal';
+import {ThemeClassNames} from '@docusaurus/theme-common';
+import {isActiveSidebarItem} from '@docusaurus/theme-common/internal';
 import Link from '@docusaurus/Link';
 import isInternalUrl from '@docusaurus/isInternalUrl';
 import IconExternalLink from '@theme/Icon/ExternalLink';
+import type {Props} from '@theme/DocSidebarItem/Link';
+
 import styles from './styles.module.css';
+
 export default function DocSidebarItemLink({
   item,
   onItemClick,
@@ -13,8 +16,8 @@ export default function DocSidebarItemLink({
   level,
   index,
   ...props
-}) {
-  const { customProps, href, label, className, autoAddBaseUrl } = item;
+}: Props): JSX.Element {
+  const {customProps, href, label, className, autoAddBaseUrl} = item;
   const isActive = isActiveSidebarItem(item, activePath);
   const isInternalLink = isInternalUrl(href);
   return (
