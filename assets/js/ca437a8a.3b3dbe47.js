@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkparasola=self.webpackChunkparasola||[]).push([[1205],{7055:a=>{a.exports={title:"API"}}}]);
