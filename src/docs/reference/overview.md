@@ -6,4 +6,4 @@
 
 [Releases](/reference/releases) are what ties together devices and binaries. Within a cohort of devices you can create graphs of releases to define the update paths available to your devices. Each release is associated with a bundle, and that is what determines the content of the update when a device resolves that release.
 
-<img src="/img/guides-overview.png" height="200" />
+<img src="/img/guides-overview.png" width="auto" />
