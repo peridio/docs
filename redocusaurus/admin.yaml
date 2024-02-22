@@ -2403,7 +2403,7 @@ paths:
                   format: binary
                   description: >-
                     Reference [firmware file
-                    requirements](/reference/firmware#firmware-file-requirements).
+                    requirements](/platform/reference/firmware#firmware-file-requirements).
                 ttl:
                   type: integer
               required:
@@ -2976,7 +2976,8 @@ paths:
                   description: >-
                     Update the release's `next_release_prn`. Changes that would
                     result in an invalid [release
-                    graph](/reference/cohorts#release-graph) are rejected.
+                    graph](/platform/reference/cohorts#release-graph) are
+                    rejected.
                 phase_value:
                   $ref: '#/components/schemas/release-phase-value'
                 required:
@@ -3378,7 +3379,7 @@ components:
       in: header
       description: >-
         The webhook signature. See [signature
-        verification](/reference/webhooks#signature-verification).
+        verification](/platform/reference/webhooks#signature-verification).
       schema:
         type: string
         examples:
@@ -3394,7 +3395,8 @@ components:
       in: header
       description: >-
         The timestamp of when the event was published (not created). See
-        [signature verification](/reference/webhooks#signature-verification).
+        [signature
+        verification](/platform/reference/webhooks#signature-verification).
       schema:
         type: string
         format: date-time
@@ -4444,8 +4446,8 @@ components:
       type: string
     prn:
       description: >
-        [Peridio Resource Names](/reference/peridio-resource-names) (PRNs)
-        uniquely identify Peridio resources.
+        [Peridio Resource Names](/platform/reference/peridio-resource-names)
+        (PRNs) uniquely identify Peridio resources.
       type: string
     product:
       type: object
@@ -4590,7 +4592,8 @@ components:
       description: >-
         The release version. If provided, it has to be a valid
         [version](https://hexdocs.pm/elixir/Version.html#content). Used in
-        [dynamic release resolution](/reference/releases#dynamic-resolution).
+        [dynamic release
+        resolution](/platform/reference/releases#dynamic-resolution).
       example: 1.0.0
       type: string
     release-known:
@@ -4602,7 +4605,7 @@ components:
         The release version requirement. If provided, it has to be a valid
         [requirement](https://hexdocs.pm/elixir/Version.html#module-requirements).
         Used in [dynamic release
-        resolution](/reference/releases#dynamic-resolution).
+        resolution](/platform/reference/releases#dynamic-resolution).
       example: '== 1.0.0'
       type: string
     role-name:
@@ -4689,15 +4692,16 @@ components:
         The amount of time in seconds that the old secret and the new secret
         will co-exist. While they do, dual signature values will be provided
         with webhook executions. See the [webhooks
-        reference](/reference/webhooks).
+        reference](/platform/reference/webhooks).
 webhooks:
   device_checked_for_release:
     post:
       security: []
       summary: Checked for release
       description: >
-        See the [webhooks reference](/reference/webhooks#supported-events) for a
-        list of supported events.
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
 
 
         This event is created when a device checks for an update with
@@ -4722,8 +4726,9 @@ webhooks:
       security: []
       summary: Claimed release
       description: >
-        See the [webhooks reference](/reference/webhooks#supported-events) for a
-        list of supported events.
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
 
 
         This event is created when a device claims access to a phased release
@@ -4748,8 +4753,9 @@ webhooks:
       security: []
       summary: Connected
       description: >
-        See the [webhooks reference](/reference/webhooks#supported-events) for a
-        list of supported events.
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
 
 
         This event is created when a device successfully completes a TLS
@@ -4774,8 +4780,9 @@ webhooks:
       security: []
       summary: Release changed
       description: >
-        See the [webhooks reference](/reference/webhooks#supported-events) for a
-        list of supported events.
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
 
 
         This event is created when a device informs Peridio of its current
@@ -4804,8 +4811,9 @@ webhooks:
       security: []
       summary: Updated
       description: >
-        See the [webhooks reference](/reference/webhooks#supported-events) for a
-        list of supported events.
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
 
 
         This event is created when a device database record is updated.
@@ -4829,8 +4837,9 @@ webhooks:
       security: []
       summary: Request failed
       description: >
-        See the [webhooks reference](/reference/webhooks#supported-events) for a
-        list of supported events.
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
 
 
         This event is created when an attempt to publish an event via a webhook
@@ -4855,14 +4864,15 @@ webhooks:
       security: []
       summary: Test fire
       description: >
-        See the [webhooks reference](/reference/webhooks#supported-events) for a
-        list of supported events.
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
 
 
         This event is created by the Peridio API
         [test-fire-webhook](/admin-api#webhooks/operation/test-fire-webhook)
         endpoint as well as during [URL
-        verification](/reference/webhooks#url-verification).
+        verification](/platform/reference/webhooks#url-verification).
       operationId: webhook-test-fire
       tags:
         - Webhook Events

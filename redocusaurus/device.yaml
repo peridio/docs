@@ -19,41 +19,41 @@ info:
     |-|-|-|
 
     |peridio-release-prn|A release PRN.|See [release
-    resolution](/reference/releases#release-resolution). Informs Peridio of what
-    release is currently active on the device. The preference should always be
-    to supply this header with a valid value. If you supply this header, you
-    should not supply the `peridio-release-version` header.|
+    resolution](/platform/reference/releases#release-resolution). Informs
+    Peridio of what release is currently active on the device. The preference
+    should always be to supply this header with a valid value. If you supply
+    this header, you should not supply the `peridio-release-version` header.|
 
     |peridio-release-version|A release version.|See [release
-    resolution](/reference/releases#release-resolution). This header is only
-    used in exceptional cases when you don't have a PRN to supply via
+    resolution](/platform/reference/releases#release-resolution). This header is
+    only used in exceptional cases when you don't have a PRN to supply via
     `peridio-release-prn`. In that case, you may supply this header and you
     should not supply the `peridio-release-prn` header.|
 
     |x-peridio-architecture|A firmware architecture.|Legacy. See [deployment
-    eligibility](/reference/deployments#deployment-eligibility). The
+    eligibility](/platform/reference/deployments#deployment-eligibility). The
     architecture of the device's currently active firmware. When supplying any
     `x-peridio` header, you should supply all `x-peridio` headers.|
 
     |x-peridio-platform|A firmware platform.|Legacy. See [deployment
-    eligibility](/reference/deployments#deployment-eligibility). The platform of
-    the device's currently active firmware. When supplying any `x-peridio`
-    header, you should supply all `x-peridio` headers.|
+    eligibility](/platform/reference/deployments#deployment-eligibility). The
+    platform of the device's currently active firmware. When supplying any
+    `x-peridio` header, you should supply all `x-peridio` headers.|
 
     |x-peridio-product|A firmware product.|Legacy. See [deployment
-    eligibility](/reference/deployments#deployment-eligibility). The product of
-    the device's currently active firmware. When supplying any `x-peridio`
-    header, you should supply all `x-peridio` headers.|
+    eligibility](/platform/reference/deployments#deployment-eligibility). The
+    product of the device's currently active firmware. When supplying any
+    `x-peridio` header, you should supply all `x-peridio` headers.|
 
     |x-peridio-uuid|A firmware UUID.|Legacy. See [deployment
-    eligibility](/reference/deployments#deployment-eligibility). The UUID of the
-    device's currently active firmware. When supplying any `x-peridio` header,
-    you should supply all `x-peridio` headers.|
+    eligibility](/platform/reference/deployments#deployment-eligibility). The
+    UUID of the device's currently active firmware. When supplying any
+    `x-peridio` header, you should supply all `x-peridio` headers.|
 
     |x-peridio-version|A firmware version.|Legacy. See [deployment
-    eligibility](/reference/deployments#deployment-eligibility). The version of
-    the device's currently active firmware. When supplying any `x-peridio`
-    header, you should supply all `x-peridio` headers.|
+    eligibility](/platform/reference/deployments#deployment-eligibility). The
+    version of the device's currently active firmware. When supplying any
+    `x-peridio` header, you should supply all `x-peridio` headers.|
   title: Peridio Device API
   version: 1.0.0
 servers:
@@ -81,7 +81,7 @@ paths:
 
 
         This endpoint has an expandable response. See [expanding
-        responses](/admin-api/#section/Expanding-Responses).
+        responses](/admin-api#section/Expanding-Responses).
       tags:
         - Devices
       parameters:
@@ -249,7 +249,7 @@ paths:
 
         This endpoint has an expandable response. By default, only the `status`
         field is returned. See [expanding
-        responses](/admin-api/#section/Expanding-Responses).
+        responses](/admin-api#section/Expanding-Responses).
       tags:
         - Devices
       parameters:
@@ -313,7 +313,7 @@ paths:
 
 
                       The target release with respect to [release
-                      resolution](/reference/releases#release-resolution).
+                      resolution](/platform/reference/releases#release-resolution).
                   bundle:
                     $ref: '#/components/schemas/bundle'
                     description: >
@@ -370,14 +370,15 @@ components:
   schemas:
     prn:
       description: >
-        [Peridio Resource Names](/reference/peridio-resource-names) (PRNs)
-        uniquely identify Peridio resources.
+        [Peridio Resource Names](/platform/reference/peridio-resource-names)
+        (PRNs) uniquely identify Peridio resources.
       type: string
     release-version:
       description: >-
         The release version. If provided, it has to be a valid
         [version](https://hexdocs.pm/elixir/Version.html#content). Used in
-        [dynamic release resolution](/reference/releases#dynamic-resolution).
+        [dynamic release
+        resolution](/platform/reference/releases#dynamic-resolution).
       example: 1.0.0
       type: string
     cohort-description:
@@ -528,7 +529,7 @@ components:
         The release version requirement. If provided, it has to be a valid
         [requirement](https://hexdocs.pm/elixir/Version.html#module-requirements).
         Used in [dynamic release
-        resolution](/reference/releases#dynamic-resolution).
+        resolution](/platform/reference/releases#dynamic-resolution).
       example: '== 1.0.0'
       type: string
     release:
