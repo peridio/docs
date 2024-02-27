@@ -85,6 +85,7 @@ const config = {
         },
         items: [
           { label: 'Platform', to: '/platform/reference/overview' },
+          { label: 'Integration', to: '/integration/introduction' },
           { label: 'Admin API', to: '/admin-api' },
           { label: 'Device API', to: '/device-api' },
           { label: 'CLI', to: '/cli' },
@@ -98,6 +99,7 @@ const config = {
       prism: {
         theme: themes.github,
         darkTheme: themes.dracula,
+        additionalLanguages: ['bash'],
       },
       algolia: {
         appId: 'EBXD92WI74',
