@@ -837,6 +837,7 @@ paths:
         |Key|Required|Operators|Value|
         |-|-|-|-|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
         |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
@@ -3536,7 +3537,7 @@ components:
       properties:
         artifact_versions:
           $ref: "#/components/schemas/array-of-ordered-artifact-versions"
-        name: 
+        name:
           $ref: "#/components/schemas/bundle-name"
         organization_prn:
           $ref: "#/components/schemas/prn"
@@ -3549,7 +3550,7 @@ components:
           type: string
           format: date-time
     bundle-name:
-      oneOf: 
+      oneOf:
         - type: "null"
         - type: string
           minLength: 1
