@@ -975,6 +975,7 @@ paths:
         |Key|Required|Operators|Value|
         |-|-|-|-|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
         |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
