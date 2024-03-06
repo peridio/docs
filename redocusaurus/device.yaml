@@ -582,11 +582,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/artifact-version-item'
+    bundle-name:
+      oneOf:
+        - type: 'null'
+        - type: string
+          minLength: 1
+          maxLength: 128
     bundle:
       type: object
       properties:
         artifact_versions:
           $ref: '#/components/schemas/array-of-ordered-artifact-versions'
+        name:
+          $ref: '#/components/schemas/bundle-name'
         organization_prn:
           $ref: '#/components/schemas/prn'
         prn:

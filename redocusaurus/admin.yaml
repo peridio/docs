@@ -950,6 +950,8 @@ paths:
                   $ref: '#/components/schemas/prn'
                 artifact_version_prns:
                   $ref: '#/components/schemas/array-of-artifact-version-prns'
+                name:
+                  $ref: '#/components/schemas/bundle-name'
               required:
                 - artifact_version_prns
                 - organization_prn
@@ -1006,6 +1008,34 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/prn'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle:
+                    $ref: '#/components/schemas/bundle'
+    patch:
+      operationId: update-a-bundle
+      summary: Update a bundle
+      tags:
+        - Bundles
+      parameters:
+        - name: bundle_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  $ref: '#/components/schemas/bundle-name'
       responses:
         '200':
           description: Ok.
@@ -3689,6 +3719,8 @@ components:
       properties:
         artifact_versions:
           $ref: '#/components/schemas/array-of-ordered-artifact-versions'
+        name:
+          $ref: '#/components/schemas/bundle-name'
         organization_prn:
           $ref: '#/components/schemas/prn'
         prn:
@@ -3699,6 +3731,12 @@ components:
         updated_at:
           type: string
           format: date-time
+    bundle-name:
+      oneOf:
+        - type: 'null'
+        - type: string
+          minLength: 1
+          maxLength: 128
     target-triplet:
       type: string
       minLength: 1
