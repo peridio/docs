@@ -69,7 +69,7 @@ Building and connecting a reference design system to Peridio requires some addit
 
 ### Development Machine Requirements
 
-Peridio reference designs for Linux are maintained with the Yocto build system. You will need access to a Linux environment ot build Yocto based systems. You can choose to use direct Linux installations, virtual machines, or docker.
+Peridio reference designs for Linux are maintained with the Yocto build system. You will need access to a Linux environment to build Yocto based systems. You can choose to use direct Linux installations, virtual machines, or docker.
 
 Building and configuring reference designs will require access to a development machine with the following tools and services installed:
 
