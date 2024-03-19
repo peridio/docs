@@ -219,6 +219,8 @@ tags:
       description: Events created due to webhook activity.
     - name: Web Console
       id: web-console
+    - name: Tunnels
+      id: tunnels
 x-tagGroups:
   - name: Account Management
     tags:
@@ -235,6 +237,9 @@ x-tagGroups:
       - Keys
       - Signing Keys
       - Firmware
+  - name: Remote Access [CLOSED BETA]
+    tags:
+      - Tunnels
   - name: Remote Shell
     tags:
       - Web Console
@@ -258,6 +263,59 @@ x-tagGroups:
       - Device Events
       - Webhook Events
 paths:
+  /tunnels:
+    post:
+      operationId: create-a-tunnel
+      summary: Create a tunnel
+      description: |
+        Create a tunnel to a device for remote access.
+
+        The tunnel is available via a public IP address and port for a configurable amount of time. Anyone can send data through the tunnel and it is your responsibility to enforce authentication and authorization if desired.
+      tags:
+        - "Tunnels"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                device_prn:
+                  $ref: "#/components/schemas/device-prn"
+                  description: |
+                    Identifies which device to create a tunnel for.
+                ttl:
+                  type: integer
+                  default: 3600
+                  description: The amount of time in seconds that the tunnel is available for.
+                  minimum: 0
+                  maximum: 3600
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  expires_at:
+                    type: string
+                    format: date-time
+                    description: The point in time at which the tunnel's TTL will expire and render the tunnel unavailable.
+                  ip_address:
+                    type: string
+                    example: 10.0.0.1
+                    description: The tunnel's IP address.
+                    anyOf:
+                      - format: ipv4
+                        description: An IPv4 address.
+                      - format: ipv6
+                        description: An IPv6 address.
+                  port:
+                    type: integer
+                    format: port
+                    example: 51083
+                    description: The tunnel's port.
+                  prn:
+                    $ref: "#/components/schemas/tunnel-prn"
   /web-console-shells:
     post:
       operationId: create-a-web-console-shell
@@ -4428,6 +4486,10 @@ components:
           $ref: "#/components/schemas/binary-signature-signature"
         signing_key_prn:
           $ref: "#/components/schemas/prn"
+    tunnel-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:tunnel:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     user-me:
       allOf:
         - type: object
