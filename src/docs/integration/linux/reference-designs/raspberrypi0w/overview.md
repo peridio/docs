@@ -20,10 +20,10 @@ export PERIDIO_PRIVATE_KEY_FILE=/path/to/end-entity-private-key.pem
 
 #### Create working directory
 
-Create a working directory for building the `raspberrypi0-2w` machine.
+Create a working directory for building the `raspberrypi0-2w-64` machine.
 
 ```bash
-mkdir build-avocado-raspberrypi0-2w && cd build-avocado-raspberrypi0-2w
+mkdir build-avocado-raspberrypi0-2w-64 && cd build-avocado-raspberrypi0-2w-64
 ```
 
 Checkout the `meta-avocado` project to your build directory
@@ -37,7 +37,7 @@ git clone git@github.com:peridio/meta-avocado
 You can build the project using kas. The product will have the device identity included as part of the runtime environment. Building this system may take a long time to complete depending on your build machine resources.
 
 ```bash
-kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/raspberrypi0-2w.yml
+kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/raspberrypi0-2w-64.yml
 ```
 
 ## Testing
@@ -45,7 +45,7 @@ kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/raspberryp
 Insert a microSD card and execute the following command to write the image:
 
 ```shell
-fwup build/tmp/deploy/images/raspberrypi0-2w/avocado-image-base-raspberrypi0-2w.fw
+fwup build/tmp/deploy/images/raspberrypi0-2w-64/avocado-image-base-raspberrypi0-2w-64.fw
 ```
 
 Connect a serial console cable to the UART pins on the Raspberry Pi header
