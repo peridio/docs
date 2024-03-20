@@ -4,7 +4,7 @@ Artifacts define a type for your [binaries](binaries).
 
 Artifacts can represent anything: a machine learning model, a Linux kernal, a file system, a piece of media, a black box, etc.
 
-For example, you may create an artifact "ML-Model". Within that artifact you would create [artifact versions](artifact-versions). Within versions you would create target-specific binaries.
+For example, you may create an artifact "ML-Model". Within that artifact you would create [artifact versions](artifact-versions). Within versions you would create binaries.
 
 :::tip
 For field-level information and requirements, see the Admin API's [create-an-artifact](/admin-api#artifacts/operation/create-an-artifact) endpoint.

@@ -18,12 +18,7 @@ This distinction is important because a binary's content and record are stored i
 
 ## Targets and Compatibility
 
-Binaries indicate their compatibility via their `target` field. The value of this field is expected to be either:
-
-1. A target triplet like `arm-linux-androidabi`.
-    - The binary in this case is said to be target-specific.
-2. The reserved value `portable`.
-    - The binary in this case is said to be portable.
+Binaries may indicate their intended compatibility via their `target` field. The value of this field is expected to be a target triplet like `arm-linux-androidabi`.
 
 :::info Artifact Versions
 An artifact version can have zero to many binaries associated with it as long as each binary has a unique target.
@@ -31,27 +26,22 @@ An artifact version can have zero to many binaries associated with it as long as
 [Destroyed binaries](#destroyed-binaries) do not count towards this conflict.
 :::
 
-### Devices
-Target-specific binaries are compatible with a device if their `target` field matches the device's product's `target` field.
-
-Portable binaries are universally compatible with all devices.
-
-Note in the case of binary resolution, if both a compatible target-specific binary and a portable binary exist for an artifact version, the target-specific binary will be preferred.
-
 ## Lifecycle
 
 A binary's lifecycle is tracked and managed by its `state` field.
 
 ### States
 
-- `uploadable`
-- `hashable`
-- `hashing`
-- `signable`
-- `signed`
-- `destroyed`
+A binary's possible states include:
 
-<img src="/img/binary-states.png" height="200" />
+- Uploadable
+- Hashable
+- Hashing
+- Signable
+- Signed
+- Destroyed
+
+<img src="/img/lifecycle.png" width="600" />
 
 #### Uploadable
 

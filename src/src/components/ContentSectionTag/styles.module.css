@@ -1,0 +1,27 @@
+.legacy {
+  align-items: center;
+  background: chocolate;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 4px;
+  width: fit-content;
+}
+
+.labs {
+  align-items: center;
+  background: purple;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 4px;
+  width: fit-content;
+}
+
+.labs svg, .legacy svg {
+  margin-right: 0.4em
+}
