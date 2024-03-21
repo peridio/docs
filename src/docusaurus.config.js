@@ -17,6 +17,15 @@ const config = {
   trailingSlash: false,
   plugins: [
     [
+      '@docusaurus/plugin-sitemap',
+      {
+        changefreq: 'weekly',
+        priority: 0.5,
+        ignorePatterns: ['/tags/**'],
+        filename: 'sitemap.xml',
+      },
+    ],
+    [
       '@docusaurus/plugin-content-docs',
       {
         breadcrumbs: false,
