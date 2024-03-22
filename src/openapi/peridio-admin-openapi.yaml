@@ -2763,6 +2763,10 @@ paths:
                 bundle_prn:
                   $ref: "#/components/schemas/prn"
                   description: The bundle the release will distribute to devices.
+                phase_mode: 
+                  $ref: "#/components/schemas/release-phase-mode"
+                phase_tags: 
+                  $ref: "#/components/schemas/release-phase-tags"
                 phase_value:
                   $ref: "#/components/schemas/release-phase-value"
                 cohort_prn:
@@ -2795,14 +2799,24 @@ paths:
                   $ref: "#/components/schemas/release-version"
                 version-requirement:
                   $ref: "#/components/schemas/release-version-requirement"
-              required:
-                - bundle_prn
-                - phase_value
-                - cohort_prn
-                - name
-                - organization_prn
-                - required
-                - schedule_date
+              anyOf: 
+                - required: 
+                  - bundle_prn
+                  - phase_mode
+                  - phase_tags
+                  - cohort_prn
+                  - name
+                  - organization_prn
+                  - required
+                  - schedule_date
+                - required:
+                  - bundle_prn
+                  - phase_value
+                  - cohort_prn
+                  - name
+                  - organization_prn
+                  - required
+                  - schedule_date
       responses:
         "201":
           description: Ok.
@@ -4392,6 +4406,10 @@ components:
             - $ref: "#/components/schemas/prn"
         organization_prn:
           $ref: "#/components/schemas/prn"
+        phase_mode: 
+          $ref: "#/components/schemas/release-phase-mode"
+        phase_tags: 
+          $ref: "#/components/schemas/release-phase-tags"
         phase_type:
           $ref: "#/components/schemas/release-phase-type"
         phase_value:
@@ -4414,6 +4432,16 @@ components:
           $ref: "#/components/schemas/release-version"
         version_requirement:
           $ref: "#/components/schemas/release-version-requirement"
+    release-phase-mode:
+      description: Describes if this release is using tags or phase value for resolution
+      type: string
+      default: phase_value
+      enum:
+        - "phase_tags"
+        - "phase_value"
+    release-phase-tags:
+      description: The list of tags where updating devices tags must overlap (has elements in common)
+      $ref: "#/components/schemas/array-of-device-tags"
     release-phase-value:
       description: |
         The phase value controls the distribution of the update to your fleet.
