@@ -2765,6 +2765,7 @@ paths:
                   description: The bundle the release will distribute to devices.
                 phase_mode:
                   $ref: "#/components/schemas/release-phase-mode"
+                  default: "numeric"
                 phase_tags:
                   $ref: "#/components/schemas/release-phase-tags"
                 phase_value:
@@ -2799,24 +2800,13 @@ paths:
                   $ref: "#/components/schemas/release-version"
                 version-requirement:
                   $ref: "#/components/schemas/release-version-requirement"
-              anyOf:
-                - required:
-                  - bundle_prn
-                  - phase_mode
-                  - phase_tags
-                  - cohort_prn
-                  - name
-                  - organization_prn
-                  - required
-                  - schedule_date
-                - required:
-                  - bundle_prn
-                  - phase_value
-                  - cohort_prn
-                  - name
-                  - organization_prn
-                  - required
-                  - schedule_date
+              required:
+                - bundle_prn
+                - cohort_prn
+                - name
+                - organization_prn
+                - required
+                - schedule_date
       responses:
         "201":
           description: Ok.
@@ -4433,22 +4423,34 @@ components:
         version_requirement:
           $ref: "#/components/schemas/release-version-requirement"
     release-phase-mode:
-      description: Describes if this release is using tags or phase value for resolution
+      description: |
+        Describes if this release is using tag or numeric based phasing. tags or phase value for resolution
+
+        - `tags` - Phases rollout of the release according to the `phase_tags` field.
+        - `numeric` - Phases rollout of the release according to the `phase_value` field.
       type: string
-      default: numeric
       enum:
         - "tags"
         - "numeric"
     release-phase-tags:
-      description: The list of tags where updating devices tags must overlap (has elements in common)
+      description: |
+        Limits by tags the devices that are allowed to update to this release.
+
+        **Required if:** `phase_mode` is `tags`.
+
+        When `phase_mode` is `tags`, this field only allows devices to update to this release if they have at least one of these tags.
+
       $ref: "#/components/schemas/array-of-device-tags"
     release-phase-value:
       description: |
-        The phase value controls the distribution of the update to your fleet.
+        Limits by percent or static count the number of devices that are allowed to update to this release.
 
-        Decimals in `[0.0, 1.0]` are treated as percents, e.g., to allow 20% of the cohort to update, you would specifiy `0.2`.
+        **Required if:** `phase_mode` is `numeric`.
 
-        Integers >= 2 are treated as absolute device counts, e.g., to allow 40 of the cohort's devices to update, you would specifiy `40`.
+        When `phase_mode` is `numeric`, this field only allows devices to update to this release if fewer than a certain number have already updated.
+
+        - Decimals and integers in the range [0, 1] are treated as percents, e.g., to allow 20% of the cohort to update, you would specifiy a `phase_value` of `0.2`.
+        - Integers in the range [2, 1,000,000,000] are treated as absolute device counts, e.g., to allow 40 of the cohort's devices to update, you would specifiy a `phase_value` of `40`.
 
         **NOTE:** `1` is a special value in that it represents `100%` and  once a release is updated to this value, the phase value can never be changed again.
 
@@ -4457,7 +4459,7 @@ components:
         **NOTE:** There can only ever be a single release that is phased at a time within a cohort. Because of this, if there is already a phased release, it must be "completed" by setting the phase to `1`.
       type: number
       minimum: 0.0
-      maximum: 100.0
+      maximum: 1_000_000_000
     release-phase-type:
       type: string
       enum:
