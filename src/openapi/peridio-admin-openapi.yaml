@@ -2763,9 +2763,9 @@ paths:
                 bundle_prn:
                   $ref: "#/components/schemas/prn"
                   description: The bundle the release will distribute to devices.
-                phase_mode: 
+                phase_mode:
                   $ref: "#/components/schemas/release-phase-mode"
-                phase_tags: 
+                phase_tags:
                   $ref: "#/components/schemas/release-phase-tags"
                 phase_value:
                   $ref: "#/components/schemas/release-phase-value"
@@ -2799,8 +2799,8 @@ paths:
                   $ref: "#/components/schemas/release-version"
                 version-requirement:
                   $ref: "#/components/schemas/release-version-requirement"
-              anyOf: 
-                - required: 
+              anyOf:
+                - required:
                   - bundle_prn
                   - phase_mode
                   - phase_tags
@@ -4406,9 +4406,9 @@ components:
             - $ref: "#/components/schemas/prn"
         organization_prn:
           $ref: "#/components/schemas/prn"
-        phase_mode: 
+        phase_mode:
           $ref: "#/components/schemas/release-phase-mode"
-        phase_tags: 
+        phase_tags:
           $ref: "#/components/schemas/release-phase-tags"
         phase_type:
           $ref: "#/components/schemas/release-phase-type"
@@ -4435,10 +4435,10 @@ components:
     release-phase-mode:
       description: Describes if this release is using tags or phase value for resolution
       type: string
-      default: phase_value
+      default: numeric
       enum:
-        - "phase_tags"
-        - "phase_value"
+        - "tags"
+        - "numeric"
     release-phase-tags:
       description: The list of tags where updating devices tags must overlap (has elements in common)
       $ref: "#/components/schemas/array-of-device-tags"
