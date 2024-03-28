@@ -1,3 +1,3 @@
 # Prerequisites
 
-- NodeJS 16.15.1
+- NodeJS 20.11.1

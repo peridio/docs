@@ -1,11 +1,11 @@
 # Development
 
-Yarn commands are executed in the `src` directory
+npm commands are executed in the `src` directory.
 
 ## Installation
 
 ```console
-yarn --cwd src
+npm --prefix src install
 ```
 
 This command installs dependencies defined in `src/package.json`.
@@ -13,7 +13,7 @@ This command installs dependencies defined in `src/package.json`.
 ## Development Server
 
 ```console
-yarn --cwd src start
+npm --prefix src start
 ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.

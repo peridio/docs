@@ -2,11 +2,13 @@
 title: Deployments
 ---
 
-:::info Legacy
-This functionality has been superceded by [bundles](bundles) and [releases](releases).
-:::
-
 A deployment makes [firmware](firmware) conditionally available to [devices](devices).
+
+:::legacy
+
+Superceded by [bundles](bundles) and [releases](releases).
+
+:::
 
 ## Deployment eligibility
 

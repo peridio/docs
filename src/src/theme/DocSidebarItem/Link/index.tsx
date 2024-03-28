@@ -1,11 +1,12 @@
+import ContentSectionTag from '@site/src/components/ContentSectionTag';
+import IconExternalLink from '@theme/Icon/ExternalLink';
+import Link from '@docusaurus/Link';
 import React from 'react';
 import clsx from 'clsx';
-import {ThemeClassNames} from '@docusaurus/theme-common';
-import {isActiveSidebarItem} from '@docusaurus/theme-common/internal';
-import Link from '@docusaurus/Link';
 import isInternalUrl from '@docusaurus/isInternalUrl';
-import IconExternalLink from '@theme/Icon/ExternalLink';
-import type {Props} from '@theme/DocSidebarItem/Link';
+import type { Props } from '@theme/DocSidebarItem/Link';
+import { ThemeClassNames } from '@docusaurus/theme-common';
+import { isActiveSidebarItem } from '@docusaurus/theme-common/internal';
 
 import styles from './styles.module.css';
 
@@ -17,7 +18,7 @@ export default function DocSidebarItemLink({
   index,
   ...props
 }: Props): JSX.Element {
-  const {customProps, href, label, className, autoAddBaseUrl} = item;
+  const { customProps, href, label, className, autoAddBaseUrl } = item;
   const isActive = isActiveSidebarItem(item, activePath);
   const isInternalLink = isInternalUrl(href);
   return (
@@ -47,7 +48,8 @@ export default function DocSidebarItemLink({
         {label}
         {!isInternalLink && <IconExternalLink />}
         &nbsp;
-        {customProps && customProps.legacy && <span className={styles.legacy}>Legacy</span>}
+        {customProps && customProps.legacy && <ContentSectionTag type='legacy' />}
+        {customProps && customProps.labs && <ContentSectionTag type='labs' />}
         {customProps && customProps.new && <span className={styles.new}>New</span>}
       </Link>
     </li>

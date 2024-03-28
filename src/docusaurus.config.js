@@ -6,35 +6,20 @@ const { themes } = require('prism-react-renderer')
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Docs',
-  tagline: 'From our minds to yours.',
   url: 'https://docs.peridio.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.svg',
   organizationName: 'peridio', // Usually your GitHub org/user name.
-  projectName: 'parasola', // Usually your repo name.
+  projectName: 'peridio-docs', // Usually your repo name.
   trailingSlash: false,
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en'],
+  },
   plugins: [
-    [
-      '@docusaurus/plugin-sitemap',
-      {
-        changefreq: 'weekly',
-        priority: 0.5,
-        ignorePatterns: ['/tags/**'],
-        filename: 'sitemap.xml',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        breadcrumbs: false,
-        path: 'docs',
-        routeBasePath: '/',
-        sidebarPath: require.resolve('./sidebars.js'),
-      },
-    ],
-    ['@docusaurus/plugin-content-pages', {}],
+    'docusaurus-plugin-image-zoom',
     [
       '@docusaurus/plugin-google-gtag',
       /** @type {import('@docusaurus/plugin-google-gtag').Options} */
@@ -44,40 +29,41 @@ const config = {
       }),
     ],
   ],
-  themes: [
-    [
-      '@docusaurus/theme-classic',
-      {
+  presets: [
+    ['classic', {
+      docs: {
+        admonitions: {
+          keywords: ['labs', 'legacy'],
+          extendDefaults: true,
+        },
+        breadcrumbs: false,
+        path: 'docs',
+        routeBasePath: '/',
+        sidebarPath: require.resolve('./sidebars.js'),
+        id: 'docs1',
+      },
+      theme: {
         customCss: [require.resolve('./src/css/custom.css')],
       },
-    ],
-    ['@docusaurus/theme-search-algolia', {}],
-  ],
-  presets: [
+    }],
     [
       'redocusaurus',
       {
         specs: [
           {
-            route: '/admin-api',
-            id: 'admin',
-            layout: { title: 'API' },
+            id: 'peridio-admin-api',
+            layout: { title: 'Admin API' },
             spec: 'openapi/peridio-admin-openapi.yaml',
+            route: 'admin-api',
           },
           {
-            route: '/device-api',
-            id: 'device',
-            layout: { title: 'API' },
+            id: 'peridio-device-api',
+            layout: { title: 'Device API' },
             spec: 'openapi/peridio-device-openapi.yaml',
+            route: 'device-api',
           },
         ],
-        theme: {
-          options: {
-            scrollYOffset: 60,
-            disableSearch: true,
-          },
-          primaryColor: '#3424ee',
-        },
+        config: './redocly/redocly.yaml',
       },
     ],
   ],
@@ -93,7 +79,7 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          { label: 'Platform', to: '/platform/reference/overview' },
+          { label: 'Platform', to: '/platform/introduction' },
           { label: 'Integration', to: '/integration/introduction' },
           { label: 'Admin API', to: '/admin-api' },
           { label: 'Device API', to: '/device-api' },
@@ -115,7 +101,17 @@ const config = {
         apiKey: 'cc85a8afb9c77cc48205e2e73eeb0d7a',
         indexName: 'peridio',
       },
+      zoom: {
+        selector: '.markdown > img',
+        background: {
+          light: 'rgb(255, 255, 255)',
+          dark: 'rgb(50, 50, 50)',
+        },
+        config: {
+          // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
+        },
+      },
     }),
 }
 
-module.exports = config
+export default config

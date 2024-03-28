@@ -1,5 +1,5 @@
 {
-  "name": "parasola",
+  "name": "peridio-docs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,12 +19,13 @@
     "@algolia/client-search": ">= 4.9.1 < 6",
     "@docusaurus/core": "3.1.1",
     "@docusaurus/preset-classic": "3.1.1",
-    "@docusaurus/theme-common": "^3.0.0",
-    "@docusaurus/utils": "^3.0.0",
+    "@docusaurus/theme-common": "^3.1.1",
+    "@docusaurus/utils": "^3.1.1",
     "@mdx-js/react": "^3.0.0",
     "@svgr/webpack": "^8.1.0",
     "@types/react": ">=16",
     "clsx": "^2.1.0",
+    "docusaurus-plugin-image-zoom": "^2.0.0",
     "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.29.1",
@@ -32,6 +33,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "file-loader": "^6.2.0",
+    "jsdom": "^24.0.0",
     "mobx": "^6.1.0",
     "prism-react-renderer": "^2.1.0",
     "react": "^18.2.0",
@@ -39,8 +41,7 @@
     "react-loadable": "*",
     "redocusaurus": "^2.0.1",
     "search-insights": ">= 1 < 3",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.0.0"
+    "url-loader": "^4.1.1"
   },
   "browserslist": {
     "production": [
@@ -58,10 +59,10 @@
     "@docusaurus/eslint-plugin": "3.1.1",
     "@docusaurus/module-type-aliases": "3.1.1",
     "@docusaurus/types": "3.1.1",
-    "@redocly/cli": "^1.9.1",
+    "@redocly/cli": "^1.10.6",
     "typescript": "~5.3.3"
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.0"
   }
 }

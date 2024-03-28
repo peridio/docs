@@ -11,17 +11,17 @@ jobs:
     name: Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20.11.1
-          cache: yarn
-          cache-dependency-path: src/yarn.lock
+          cache-dependency-path: src/package-lock.json
+          cache: 'npm'
       - name: Install dependencies
-        run: yarn --cwd src install --frozen-lockfile
+        run: npm --prefix src ci
       - name: OpenAPI Lint
-        run: yarn --cwd src openapi lint
+        run: npm --prefix src exec --no -- redocly lint --config src/redocly.yaml
       - name: ESLint
-        run: yarn --cwd src lint
+        run: npm --prefix src run lint
       - name: Docusaurus Build
-        run: yarn --cwd src build
+        run: npm --prefix src run build

@@ -7,3 +7,11 @@ rules:
   operation-4xx-response: off
   operation-operationId: off
   info-license: off
+theme:
+  openapi:
+    scrollYOffset: 60
+    disableSearch: true
+    theme:
+      colors:
+        primary:
+          main: '#3424ee'

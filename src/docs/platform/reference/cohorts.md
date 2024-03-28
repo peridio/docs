@@ -1,15 +1,13 @@
 # Cohorts
 
-Cohorts are created within [products](/platform/reference/products.md) and are a means to group devices.
-[Releases](/platform/reference/releases.md) are created within cohorts to orchestrate the delivery of
-[binaries](/platform/reference/binaries.md) to devices.
+Cohorts are created within [products](/platform/reference/products.md) and are a means to group devices. [Releases](/platform/reference/releases.md) are created within cohorts to orchestrate the delivery of [bundles](/platform/reference/bundles.md) to devices.
 
 ## Release Graph
 
 Within a cohort, releases form a particular type of graph, an
 [anti-arborescence](https://en.wikipedia.org/wiki/Arborescence_(graph_theory)). In other words,
 releases may point to exactly one next release, a release may be pointed to by zero to many
-releases, all releases eventually converge to a single "[latest release](releases#latest-release)"
+releases, all releases eventually converge to a single [latest release](releases#latest-release).
 
 For example:
 

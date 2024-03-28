@@ -2,29 +2,21 @@
 title: Firmware
 ---
 
-:::info Legacy
-This functionality has been superceded by [artifacts](artifacts), [artifact versions](artifact-versions), and [binaries](binaries).
-:::
-
 Firmware are the data you wish to distribute to devices.
 
-Peridio requires the use of [fwup](https://github.com/fwup-home/fwup) archives as the packaging format for firmware. This means the binaries you upload to Peridio and the binaries your devices will download from Peridio are fwup archives. The contents of an archive are up to you; ranging from no files, to 1 file, to `n` files. They are capable of packaging an arbitrary stringy metadata payload. Note that fwup archives themselves are ZIP archives and can be interacted with as such.
+:::legacy
 
-To learn more about how to use firmware, see the [creating firmware](/platform/guides/creating-firmware) guide.
+Superceded by [artifacts](artifacts), [artifact versions](artifact-versions), and [binaries](binaries).
 
-## Firmware Installation
+:::
 
-It is possible to perform firmware installation with Peridio in a self-managed or Peridio-managed fashion.
+Find additional information in the Admin API [firmware section](/admin-api#firmware) and the [creating firmware](/platform/guides/creating-firmware) guide.
 
-### Self-Managed
+## Format
 
-This approach means you are responsible for all device-side interactions with Peridio as well as executing any device-side operation thereafter. This buys absolute flexibility at the cost of owning the complexity yourself.
+Firmware require the use of [fwup](https://github.com/fwup-home/fwup) archives as their packaging format. This means the data you upload to Peridio and the data your devices will download from Peridio are fwup archives. They are capable of packaging an arbitrary stringy metadata payload alongside the primary contents. Note that fwup archives themselves are ZIP archives and their contents can be extracted as such.
 
-### Peridio Managed
-
-The [Peridio Agent](/platform/agent) can be used to check for updates, stream their download (including automated delta updates), verify their signature, and install their contents. This buys efficient simplicity at the cost of flexibility.
-
-## Firmware File Requirements
+### Requirements
 
 - Firmware files are signed fwup archives.
 - The following [global scope](https://github.com/fwup-home/fwup#global-scope) options must be specified:
@@ -33,9 +25,14 @@ The [Peridio Agent](/platform/agent) can be used to check for updates, stream th
   - `meta-product` must exactly match the name of a [product](/platform/reference/products) in your [organization](/platform/reference/organizations). Defines the product within which the firmware will be scoped.
   - `meta-version` must be a valid [semantic version](https://semver.org/spec/v2.0.0.html). Defines the version of the firmware.
 
+## Installation
+
+When a device downloads a firmware it may extract from it like a ZIP, or apply a fwup task, or do whatever it sees fit to install or process the firmware. The code responsible for this functionality is the [agent](/integration/introduction#agent).
+
+
 ## Time to Live (TTL)
 
-Firmware can be configured on a per-firmware basis to be deleted automatically after a set amount of seconds by configuring their `ttl` field. Firmware associated with a deployment will never be automatically deleted. Dissassociating a firmware with a configured TTL from all deployments will cause the TTL to begin counting down again from its maximum value.
+All firmware will be deleted automatically after a set amount of seconds by configuring their `ttl` field. Firmware associated with a deployment will never be automatically deleted. Dissassociating a firmware with a configured TTL from all deployments will cause the TTL to begin counting down again from its maximum value.
 
 ### Example
 

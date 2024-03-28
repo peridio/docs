@@ -4,13 +4,17 @@
 export default {
   platform: [
     {
+      type: 'doc',
+      label: 'Introduction',
+      id: 'platform/introduction',
+    },
+    {
       collapsible: true,
       type: 'category',
       label: 'Reference',
       items: [
         'platform/reference/overview',
         {
-          collapsible: false,
           type: 'category',
           label: 'Account Management',
           items: [
@@ -20,7 +24,6 @@ export default {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'Binary Management',
           items: [
@@ -59,18 +62,14 @@ export default {
           ],
         },
         {
-          collapsible: false,
-          type: 'category',
-          label: 'Data Management',
-          items: [
-            'platform/reference/webhooks',
-          ],
-        },
-        {
-          collapsible: false,
           type: 'category',
           label: 'Device Management',
           items: [
+            {
+              type: 'doc',
+              label: 'Agent',
+              id: 'platform/reference/agent',
+            },
             'platform/reference/ca-certificates',
             {
               type: 'doc',
@@ -86,7 +85,13 @@ export default {
           ],
         },
         {
-          collapsible: false,
+          type: 'category',
+          label: 'Integration Management',
+          items: [
+            'platform/reference/webhooks',
+          ],
+        },
+        {
           type: 'category',
           label: 'Release Mangement',
           items: [
@@ -109,19 +114,20 @@ export default {
           ],
         },
         {
-          type: 'doc',
-          label: 'Agent',
-          id: 'platform/reference/agent',
+          type: 'category',
+          label: 'Remote Access',
+          items: [
+            'platform/reference/tunnels',
+          ],
+          customProps: { labs: true },
         },
       ],
     },
     {
-      collapsible: true,
       type: 'category',
       label: 'Guides',
       items: [
         {
-          collapsible: false,
           type: 'category',
           label: 'Binary Management',
           items: [
@@ -137,7 +143,6 @@ export default {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'Device Management',
           items: [
@@ -148,7 +153,6 @@ export default {
           ],
         },
         {
-          collapsible: false,
           type: 'category',
           label: 'Release Management',
           items: [
@@ -158,12 +162,15 @@ export default {
             'platform/guides/creating-releases',
           ],
         },
+        {
+          type: 'category',
+          label: 'Remote Access',
+          items: [
+            'platform/guides/creating-tunnels',
+          ],
+          customProps: { labs: true },
+        },
       ],
-    },
-    {
-      type: 'doc',
-      label: 'Agent',
-      id: 'platform/agent',
     },
   ],
   integration: [

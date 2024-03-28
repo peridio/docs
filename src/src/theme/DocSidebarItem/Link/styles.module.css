@@ -2,15 +2,6 @@
   align-items: center;
 }
 
-.legacy {
-  background: rgb(76, 179, 212);
-  color: white;
-  border-radius: 5px;
-  padding: 1px 4px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
 .new {
   background: lightgreen;
   color: white;
