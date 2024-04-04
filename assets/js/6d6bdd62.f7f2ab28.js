@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkperidio_docs=self.webpackChunkperidio_docs||[]).push([[4965],{67665:s=>{s.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"docs1"}')}}]);
