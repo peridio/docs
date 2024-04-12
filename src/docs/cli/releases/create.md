@@ -1,5 +1,5 @@
 ```
-Usage: peridio releases create [OPTIONS] --bundle-prn <BUNDLE_PRN> --cohort-prn <COHORT_PRN> --name <NAME> --organization-prn <ORGANIZATION_PRN> --phase-value <PHASE_VALUE> --schedule-date <SCHEDULE_DATE>
+Usage: peridio releases create [OPTIONS] --bundle-prn <BUNDLE_PRN> --cohort-prn <COHORT_PRN> --name <NAME> --organization-prn <ORGANIZATION_PRN> --schedule-date <SCHEDULE_DATE>
 
 Options:
       --bundle-prn <BUNDLE_PRN>
@@ -24,10 +24,13 @@ Options:
       --organization-prn <ORGANIZATION_PRN>
           The PRN of the organization you wish to create the resource within
 
+      --phase-tags <PHASE_TAGS>
+          Limits by tags the devices that are allowed to update to this release. When phase_mode is tags, this field only allows devices to update to this release if they have at least one of these tags
+
       --phase-value <PHASE_VALUE>
           The phase value controls the distribution of the update to your fleet.
           
-          Decimals in [0.0, 1.0] are treated as percents, e.g., to allow 20% of the cohort to update, you would specifiy 0.2.
+          Decimals in [0.0, 1.0] are treated as percents, e.g., to allow 20% of the cohort to update, you would specify 0.2.
           
           Integers >= 2 are treated as absolute device counts, e.g., to allow 40 of the cohort's devices to update, you would specifiy 40.
           

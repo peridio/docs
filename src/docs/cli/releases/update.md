@@ -18,10 +18,18 @@ Options:
           
           If supplied, the release will be created prior to the release identified by next_release_prn. If you wish to insert this release between two other releases, you may additionally supply previous_release_prn. If you supply neither field, it will create the release as the latest automatically.
 
+      --phase-mode <PHASE_MODE>
+          Enum: "tags" "numeric"
+          
+          Describes if this release is using tag or numeric based phasing. tags or phase value for resolution - tags - Phases rollout of the release according to the phase_tags field. - numeric - Phases rollout of the release according to the phase_value field.
+
+      --phase-tags <PHASE_TAGS>
+          Limits by tags the devices that are allowed to update to this release. When phase_mode is tags, this field only allows devices to update to this release if they have at least one of these tags
+
       --phase-value <PHASE_VALUE>
           The phase value controls the distribution of the update to your fleet.
           
-          Decimals in [0.0, 1.0] are treated as percents, e.g., to allow 20% of the cohort to update, you would specifiy 0.2.
+          Decimals in [0.0, 1.0] are treated as percents, e.g., to allow 20% of the cohort to update, you would specify 0.2.
           
           Integers >= 2 are treated as absolute device counts, e.g., to allow 40 of the cohort's devices to update, you would specifiy 40.
           
