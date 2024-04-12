@@ -3108,6 +3108,10 @@ paths:
                     result in an invalid [release
                     graph](/platform/reference/cohorts#release-graph) are
                     rejected.
+                phase_mode:
+                  $ref: '#/components/schemas/release-phase-mode'
+                phase_tags:
+                  $ref: '#/components/schemas/release-phase-tags'
                 phase_value:
                   $ref: '#/components/schemas/release-phase-value'
                 required:
