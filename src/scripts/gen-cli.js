@@ -52,7 +52,7 @@ function processCommandHelp(cmd) {
 }
 
 exec('peridio --version', (_error, stdout) => {
-  const requiredVersion = 'peridio 0.17.0 dc90106'
+  const requiredVersion = 'peridio 0.19.1 1d620b7'
 
   if (stdout.includes(requiredVersion)) {
     processCommandHelp([])

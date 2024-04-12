@@ -6,6 +6,8 @@ Options:
           The PRNs of the artifact versions to include binaries from in the bundle
       --organization-prn <ORGANIZATION_PRN>
           The PRN of the organization to create the bundle for
+      --name <NAME>
+          The name of the bundle
   -h, --help
           Print help
 
