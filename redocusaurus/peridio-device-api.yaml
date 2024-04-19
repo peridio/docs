@@ -63,10 +63,21 @@ security:
 tags:
   - name: Devices
     id: devices
+  - name: Tunnels
+    id: tunnels
+    description: >
+      <div style="16px; border-left: 5px solid purple; background: lavender;
+      border-radius: 5px; width: fit-content; padding: 16px;">
+        <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs</h5>
+        <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
+        <p>Subject to breaking changes prior to general availability.</p>
+        <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
+      </div>
 x-tagGroups:
   - name: Endpoints
     tags:
       - Devices
+      - Tunnels
 paths:
   /device/me:
     get:
@@ -89,8 +100,9 @@ paths:
           name: peridio-release-prn
           schema:
             description: See [global headers](#global-headers).
-            example: >-
-              prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
+            examples:
+              - >-
+                prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
             $ref: '#/components/schemas/prn'
           required: false
         - in: header
@@ -168,8 +180,9 @@ paths:
           name: peridio-release-prn
           schema:
             description: See [global headers](#global-headers).
-            example: >-
-              prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
+            examples:
+              - >-
+                prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
             $ref: '#/components/schemas/prn'
           required: false
         - in: header
@@ -257,8 +270,9 @@ paths:
           name: peridio-release-prn
           schema:
             description: See [global headers](#global-headers).
-            example: >-
-              prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
+            examples:
+              - >-
+                prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0
             $ref: '#/components/schemas/prn'
           required: false
         - in: header
@@ -359,6 +373,89 @@ paths:
                           type: string
                         signatures:
                           $ref: '#/components/schemas/array-of-signatures'
+  /tunnels/configure:
+    post:
+      operationId: configure-a-tunnel
+      summary: Configure a tunnel
+      description: >
+        Configures a tunnel with device networking data.
+
+
+        <a style="display: flex; margin-bottom: 16px; background: purple; color:
+        white; border-radius: 5px; padding: 2px 4px; width: fit-content;"
+        href="/device-api#tunnels">
+          <svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs
+        </a>
+
+
+        If successful, the tunnel's state will be `open`. Only tunnels with a
+        state of `requested` can be configured.
+      tags:
+        - Tunnels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                tunnel_prn:
+                  $ref: '#/components/schemas/tunnel-prn'
+                cidr_blocks:
+                  $ref: '#/components/schemas/cidrs'
+                  examples:
+                    - - 10.0.0.1/16
+                      - 172.154.0.1/16
+                  description: >
+                    A set of CIDR blocks that the device has available for use
+                    with remote access. The device's wireguard peer IP as well
+                    as wireguard interface IP will be choosen from this set so
+                    it must contain at least two distinct IPs.
+                port_ranges:
+                  $ref: '#/components/schemas/port-ranges'
+                  examples:
+                    - - 45000-46000
+                      - 47000-48000
+                  description: >
+                    A set of port ranges that the device has available for use
+                    with remote access. The device can use this to constrain the
+                    pool of ports from which Peridio will choose the wireguard
+                    server listen port, that is, the port on which the server is
+                    listening for wireguard UDP traffic.
+                device_proxy_port:
+                  type: number
+                  description: >-
+                    The port on which the device is listening for wireguard UDP
+                    traffic.
+                  examples:
+                    - 530000
+                device_tunnel_port:
+                  type: number
+                  description: >-
+                    The port to which wireguard will forward traffic to on the
+                    device.
+                  examples:
+                    - 22
+                device_public_key:
+                  type: string
+                  examples:
+                    - Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=
+                  description: The device's public key for wireguard.
+              required:
+                - cidr_blocks
+                - device_proxy_port
+                - device_public_key
+                - device_tunnel_port
+                - port_ranges
+                - tunnel_prn
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: '#/components/schemas/tunnel'
 components:
   securitySchemes:
     MutualTLS:
@@ -368,6 +465,14 @@ components:
         certificate](https://docs.peridio.com/reference/ca-certificates)
         registered with Peridio.
   schemas:
+    cidrs:
+      type: array
+      items:
+        type: string
+    port-ranges:
+      type: array
+      items:
+        type: string
     prn:
       description: >
         [Peridio Resource Names](/platform/reference/peridio-resource-names)
@@ -714,3 +819,69 @@ components:
         - type: array
           items:
             $ref: '#/components/schemas/signing-signature'
+    tunnel-prn:
+      allOf:
+        - $ref: '#/components/schemas/prn'
+        - example: >-
+            prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:tunnel:b3f1f699-3bc8-4c77-bda2-b974595d5e3f
+    tunnel:
+      type: object
+      properties:
+        device_proxy_ip_address:
+          type: string
+          examples:
+            - 10.0.1.1
+          description: The wireguard interface IP address for the device.
+        device_proxy_port:
+          type: number
+          examples:
+            - 47539
+          description: The port on which the device is listening for wireguard UDP traffic.
+        device_public_key:
+          type: string
+          description: The device's public key for wireguard.
+          examples:
+            - Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=
+        device_tunnel_port:
+          type: number
+          examples:
+            - 22
+          description: The port on which the device is listening for wireguard UDP traffic.
+        server_proxy_ip_address:
+          type: string
+          examples:
+            - 10.0.0.1
+          description: The wireguard peer IP address for the Peridio proxy server.
+        server_proxy_port:
+          type: number
+          examples:
+            - 49293
+          description: The port on which the server is listening for wireguard UDP traffic.
+        server_tunnel_ip_address:
+          type: string
+          examples:
+            - 3.82.23.99
+          description: >-
+            The IP address of the Peridio proxy server through which traffic
+            will be routed. Both the device and the accessor will use this IP
+            address.
+        server_tunnel_port:
+          type: number
+          examples:
+            - 47532
+          description: >-
+            The port of the Peridio proxy server through which traffic will be
+            routed.
+        server_public_key:
+          type: string
+          description: The Peridio proxy server public key for wireguard.
+          examples:
+            - 2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=
+        expires_at:
+          type: string
+          format: date-time
+          description: >-
+            The point in time at which the tunnel's TTL will expire and the
+            tunnel will automatically move to the `closed` state.
+        prn:
+          $ref: '#/components/schemas/tunnel-prn'

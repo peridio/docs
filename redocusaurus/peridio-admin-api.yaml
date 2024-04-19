@@ -455,29 +455,7 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  expires_at:
-                    type: string
-                    format: date-time
-                    description: >-
-                      The point in time at which the tunnel's TTL will expire
-                      and render the tunnel unavailable.
-                  ip_address:
-                    type: string
-                    example: 10.0.0.1
-                    description: The tunnel's IP address.
-                    anyOf:
-                      - format: ipv4
-                        description: An IPv4 address.
-                      - format: ipv6
-                        description: An IPv6 address.
-                  port:
-                    type: integer
-                    format: port
-                    example: 51083
-                    description: The tunnel's port.
-                  prn:
-                    $ref: '#/components/schemas/tunnel-prn'
+                $ref: '#/components/schemas/tunnel'
   /web-console-shells:
     post:
       operationId: create-a-web-console-shell
@@ -4805,6 +4783,67 @@ components:
           $ref: '#/components/schemas/binary-signature-signature'
         signing_key_prn:
           $ref: '#/components/schemas/prn'
+    tunnel:
+      type: object
+      properties:
+        device_proxy_ip_address:
+          type: string
+          examples:
+            - 10.0.1.1
+          description: The wireguard interface IP address for the device.
+        device_proxy_port:
+          type: number
+          examples:
+            - 47539
+          description: The port on which the device is listening for wireguard UDP traffic.
+        device_public_key:
+          type: string
+          description: The device's public key for wireguard.
+          examples:
+            - Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=
+        device_tunnel_port:
+          type: number
+          examples:
+            - 22
+          description: The port on which the device is listening for wireguard UDP traffic.
+        server_proxy_ip_address:
+          type: string
+          examples:
+            - 10.0.0.1
+          description: The wireguard peer IP address for the Peridio proxy server.
+        server_proxy_port:
+          type: number
+          examples:
+            - 49293
+          description: The port on which the server is listening for wireguard UDP traffic.
+        server_tunnel_ip_address:
+          type: string
+          examples:
+            - 3.82.23.99
+          description: >-
+            The IP address of the Peridio proxy server through which traffic
+            will be routed. Both the device and the accessor will use this IP
+            address.
+        server_tunnel_port:
+          type: number
+          examples:
+            - 47532
+          description: >-
+            The port of the Peridio proxy server through which traffic will be
+            routed.
+        server_public_key:
+          type: string
+          description: The Peridio proxy server public key for wireguard.
+          examples:
+            - 2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=
+        expires_at:
+          type: string
+          format: date-time
+          description: >-
+            The point in time at which the tunnel's TTL will expire and the
+            tunnel will automatically move to the `closed` state.
+        prn:
+          $ref: '#/components/schemas/tunnel-prn'
     tunnel-prn:
       allOf:
         - $ref: '#/components/schemas/prn'
