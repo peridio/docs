@@ -168,75 +168,75 @@ servers:
 security:
   - api_key: []
 tags:
-    - name: Deployments
-      id: deployments
-      description: This functionality has been superceded by [bundles](#bundles) and [releases](#releases).
-    - name: Bundles
-      id: bundles
-    - name: Organization Users
-      id: organization-users
-    - name: Product Users
-      id: product-users
-    - name: Users
-      id: users
-    - name: Artifacts
-      id: artifacts
-    - name: Artifact Versions
-      id: artifact-versions
-    - name: Binaries
-      id: binaries
-    - name: Binary Parts
-      id: binary-parts
-    - name: Binary Signatures
-      id: binary-signatures
-    - name: Keys
-      id: keys
-      description: Use [signing keys](#signing-keys) instead.
-    - name: Signing Keys
-      id: signing-keys
-    - name: Firmware
-      id: firmware
-      description: |
-        <div style="16px; border-left: 5px solid chocolate; background: burlywood; border-radius: 5px; width: fit-content; padding: 16px;">
-        <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="19.6px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>Legacy</h5>
-          <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
-          <p>Subject to breaking changes prior to general availability.</p>
-          <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
-        </div>
-        This functionality has been superceded by [artifacts](#artifacts), [artifact versions](#artifact-versions), and [binaries](#binaries).
-    - name: CA Certificates
-      id: ca-certificates
-    - name: Cohorts
-      id: cohorts
-    - name: Device Certificates
-      id: device-certificates
-    - name: Devices
-      id: devices
-    - name: Products
-      id: products
-    - name: Bundles
-      id: bundles
-    - name: Releases
-      id: releases
-    - name: Tunnels
-      id: tunnels
-      description: |
-        <div style="16px; border-left: 5px solid purple; background: lavender; border-radius: 5px; width: fit-content; padding: 16px;">
-          <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs</h5>
-          <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
-          <p>Subject to breaking changes prior to general availability.</p>
-          <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
-        </div>
-    - name: Device Events
-      id: device-events
-      description: Events created due to device activity.
-    - name: Webhook Events
-      id: webhook-events
-      description: Events created due to webhook activity.
-    - name: Webhooks
-      id: webhooks
-    - name: Web Console
-      id: web-console
+  - name: Deployments
+    id: deployments
+    description: This functionality has been superceded by [bundles](#bundles) and [releases](#releases).
+  - name: Bundles
+    id: bundles
+  - name: Organization Users
+    id: organization-users
+  - name: Product Users
+    id: product-users
+  - name: Users
+    id: users
+  - name: Artifacts
+    id: artifacts
+  - name: Artifact Versions
+    id: artifact-versions
+  - name: Binaries
+    id: binaries
+  - name: Binary Parts
+    id: binary-parts
+  - name: Binary Signatures
+    id: binary-signatures
+  - name: Keys
+    id: keys
+    description: Use [signing keys](#signing-keys) instead.
+  - name: Signing Keys
+    id: signing-keys
+  - name: Firmware
+    id: firmware
+    description: |
+      <div style="16px; border-left: 5px solid chocolate; background: burlywood; border-radius: 5px; width: fit-content; padding: 16px;">
+      <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="19.6px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>Legacy</h5>
+        <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
+        <p>Subject to breaking changes prior to general availability.</p>
+        <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
+      </div>
+      This functionality has been superceded by [artifacts](#artifacts), [artifact versions](#artifact-versions), and [binaries](#binaries).
+  - name: CA Certificates
+    id: ca-certificates
+  - name: Cohorts
+    id: cohorts
+  - name: Device Certificates
+    id: device-certificates
+  - name: Devices
+    id: devices
+  - name: Products
+    id: products
+  - name: Bundles
+    id: bundles
+  - name: Releases
+    id: releases
+  - name: Tunnels
+    id: tunnels
+    description: |
+      <div style="16px; border-left: 5px solid purple; background: lavender; border-radius: 5px; width: fit-content; padding: 16px;">
+        <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs</h5>
+        <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
+        <p>Subject to breaking changes prior to general availability.</p>
+        <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
+      </div>
+  - name: Device Events
+    id: device-events
+    description: Events created due to device activity.
+  - name: Webhook Events
+    id: webhook-events
+    description: Events created due to webhook activity.
+  - name: Webhooks
+    id: webhooks
+  - name: Web Console
+    id: web-console
 x-tagGroups:
   - name: Account Management
     tags:
@@ -313,27 +313,7 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  expires_at:
-                    type: string
-                    format: date-time
-                    description: The point in time at which the tunnel's TTL will expire and render the tunnel unavailable.
-                  ip_address:
-                    type: string
-                    example: 10.0.0.1
-                    description: The tunnel's IP address.
-                    anyOf:
-                      - format: ipv4
-                        description: An IPv4 address.
-                      - format: ipv6
-                        description: An IPv6 address.
-                  port:
-                    type: integer
-                    format: port
-                    example: 51083
-                    description: The tunnel's port.
-                  prn:
-                    $ref: "#/components/schemas/tunnel-prn"
+                $ref: "#/components/schemas/tunnel"
   /web-console-shells:
     post:
       operationId: create-a-web-console-shell
@@ -448,10 +428,10 @@ paths:
       tags:
         - "Artifacts"
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -565,10 +545,10 @@ paths:
       tags:
         - "Artifact Versions"
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -690,10 +670,10 @@ paths:
       tags:
         - "Binaries"
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -921,10 +901,10 @@ paths:
       tags:
         - "Bundles"
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -1038,10 +1018,10 @@ paths:
       tags:
         - "Cohorts"
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -1155,10 +1135,10 @@ paths:
       tags:
         - Signing Keys
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -1669,9 +1649,9 @@ paths:
       tags:
         - "Products"
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
           description: |
             A search query per the [search query language](#section/Search-Query-Language).
 
@@ -1685,7 +1665,7 @@ paths:
             |`organization_prn`|string|`:`|
             |`prn`|string|`:`|
             |`updated_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -2138,8 +2118,8 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/device"
-  ? /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates
-  : get:
+  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates:
+    get:
       operationId: list-device-certificates
       summary: List device certificates
       tags:
@@ -2209,8 +2189,8 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/device-certificate"
-  ? /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates/{certificate_serial}
-  : get:
+  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates/{certificate_serial}:
+    get:
       operationId: retrieve-a-device-certificate
       summary: Retrieve a device certificate
       tags:
@@ -2859,10 +2839,10 @@ paths:
       tags:
         - Releases
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -3131,10 +3111,10 @@ paths:
       tags:
         - "Webhooks"
       parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/page'
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Ok.
@@ -3423,7 +3403,7 @@ components:
     array-of-signatures:
       default: null
       oneOf:
-        - type: 'null'
+        - type: "null"
         - type: array
           items:
             $ref: "#/components/schemas/signing-signature"
@@ -3517,7 +3497,7 @@ components:
           type: string
           format: date-time
         signatures:
-            $ref: "#/components/schemas/array-of-signatures"
+          $ref: "#/components/schemas/array-of-signatures"
         size:
           $ref: "#/components/schemas/binary-size"
         state:
@@ -4495,7 +4475,7 @@ components:
       default: null
       oneOf:
         - type: string
-        - type: 'null'
+        - type: "null"
     release-name:
       type: string
     release-required:
@@ -4538,6 +4518,52 @@ components:
           $ref: "#/components/schemas/binary-signature-signature"
         signing_key_prn:
           $ref: "#/components/schemas/prn"
+
+    tunnel:
+      type: object
+      properties:
+        device_proxy_ip_address:
+          type: string
+          examples: [10.0.1.1]
+          description: The wireguard interface IP address for the device.
+        device_proxy_port:
+          type: number
+          examples: [47539]
+          description: The port on which the device is listening for wireguard UDP traffic.
+        device_public_key:
+          type: string
+          description: The device's public key for wireguard.
+          examples: [Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=]
+        device_tunnel_port:
+          type: number
+          examples: [22]
+          description: The port on which the device is listening for wireguard UDP traffic.
+        server_proxy_ip_address:
+          type: string
+          examples: [10.0.0.1]
+          description: The wireguard peer IP address for the Peridio proxy server.
+        server_proxy_port:
+          type: number
+          examples: [49293]
+          description: The port on which the server is listening for wireguard UDP traffic.
+        server_tunnel_ip_address:
+          type: string
+          examples: [3.82.23.99]
+          description: The IP address of the Peridio proxy server through which traffic will be routed. Both the device and the accessor will use this IP address.
+        server_tunnel_port:
+          type: number
+          examples: [47532]
+          description: The port of the Peridio proxy server through which traffic will be routed.
+        server_public_key:
+          type: string
+          description: The Peridio proxy server public key for wireguard.
+          examples: [2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=]
+        expires_at:
+          type: string
+          format: date-time
+          description: The point in time at which the tunnel's TTL will expire and the tunnel will automatically move to the `closed` state.
+        prn:
+          $ref: "#/components/schemas/tunnel-prn"
     tunnel-prn:
       allOf:
         - $ref: "#/components/schemas/prn"
