@@ -307,6 +307,8 @@ paths:
                   description: The amount of time in seconds that the tunnel is available for.
                   minimum: 0
                   maximum: 3600
+              required:
+                - device_prn
       responses:
         "201":
           description: Ok.
