@@ -449,6 +449,8 @@ paths:
                     for.
                   minimum: 0
                   maximum: 3600
+              required:
+                - device_prn
       responses:
         '201':
           description: Ok.
