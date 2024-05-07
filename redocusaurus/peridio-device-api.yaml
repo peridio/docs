@@ -622,6 +622,11 @@ components:
       oneOf:
         - type: string
         - type: 'null'
+    release-disabled:
+      description: >
+        If a release is marked as disabled it cannot be resolved during release
+        resolution.
+      type: boolean
     release-name:
       type: string
     release-phase-mode:
@@ -720,6 +725,8 @@ components:
           $ref: '#/components/schemas/prn'
         description:
           $ref: '#/components/schemas/release-description'
+        disabled:
+          $ref: '#/components/schemas/release-disabled'
         name:
           $ref: '#/components/schemas/release-name'
         next_release_prn:
@@ -927,5 +934,10 @@ components:
           description: >-
             The point in time at which the tunnel's TTL will expire and the
             tunnel will automatically move to the `closed` state.
+        state:
+          enum:
+            - requested
+            - open
+            - closed
         prn:
           $ref: '#/components/schemas/tunnel-prn'
