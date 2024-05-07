@@ -4576,6 +4576,11 @@ components:
           type: string
           format: date-time
           description: The point in time at which the tunnel's TTL will expire and the tunnel will automatically move to the `closed` state.
+        state:
+          enum:
+            - "requested"
+            - "open"
+            - "closed"
         prn:
           $ref: "#/components/schemas/tunnel-prn"
     tunnel-prn:
