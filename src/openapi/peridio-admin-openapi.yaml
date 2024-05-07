@@ -2775,6 +2775,8 @@ paths:
                   description: The cohort to create the release within, and in turn the cohort it will distribute its bundle to.
                 description:
                   $ref: "#/components/schemas/release-description"
+                disabled:
+                  $ref: "#/components/schemas/release-disabled"
                 name:
                   $ref: "#/components/schemas/release-name"
                 next_release_prn:
@@ -2896,6 +2898,8 @@ paths:
               properties:
                 description:
                   $ref: "#/components/schemas/release-description"
+                disabled:
+                  $ref: "#/components/schemas/release-disabled"
                 name:
                   $ref: "#/components/schemas/release-name"
                 next_release_prn:
@@ -3782,6 +3786,8 @@ components:
             - enum:
                 - never
             - $ref: "#/components/schemas/device-last-communication"
+        prn:
+          $ref: "#/components/schemas/device-prn"
         status:
           $ref: "#/components/schemas/device-status"
         tags:
@@ -4392,6 +4398,8 @@ components:
           $ref: "#/components/schemas/prn"
         description:
           $ref: "#/components/schemas/release-description"
+        disabled:
+          $ref: "#/components/schemas/release-disabled"
         name:
           $ref: "#/components/schemas/release-name"
         next_release_prn:
@@ -4426,6 +4434,10 @@ components:
           $ref: "#/components/schemas/release-version"
         version_requirement:
           $ref: "#/components/schemas/release-version-requirement"
+    release-disabled:
+      description: |
+        If a release is marked as disabled it cannot be resolved during release resolution.
+      type: boolean
     release-phase-mode:
       description: |
         Describes if this release is using tag or numeric based phasing. tags or phase value for resolution
