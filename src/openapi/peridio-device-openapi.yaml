@@ -351,7 +351,12 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: "peridio-admin-openapi.yaml#/components/schemas/tunnel"
+                    allOf:
+                      - $ref: "peridio-admin-openapi.yaml#/components/schemas/tunnel"
+                      - type: object
+                        properties:
+                          state:
+                            examples: ["open"]
   /tunnels/{tunnel_prn}:
     patch:
       operationId: update-a-tunnel
@@ -388,8 +393,12 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: "peridio-admin-openapi.yaml#/components/schemas/tunnel"
-
+                    allOf:
+                      - $ref: "peridio-admin-openapi.yaml#/components/schemas/tunnel"
+                      - type: object
+                        properties:
+                          state:
+                            examples: ["closed"]
 components:
   securitySchemes:
     MutualTLS:
