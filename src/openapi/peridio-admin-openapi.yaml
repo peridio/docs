@@ -3417,6 +3417,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/signing-key"
+    array-of-tunnels:
+      type: array
+      items:
+        $ref: "#/components/schemas/tunnel"
     array-of-webhooks:
       type: array
       items:
