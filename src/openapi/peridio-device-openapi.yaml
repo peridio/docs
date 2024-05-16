@@ -354,11 +354,7 @@ paths:
                 device_proxy_port:
                   type: number
                   description: The port on which the device is listening for wireguard UDP traffic.
-                  examples: [530000]
-                device_tunnel_port:
-                  type: number
-                  description: The port to which wireguard will forward traffic to on the device.
-                  examples: [22]
+                  examples: [53000]
                 device_public_key:
                   type: string
                   examples: [Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=]
@@ -367,7 +363,6 @@ paths:
                 - cidr_blocks
                 - device_proxy_port
                 - device_public_key
-                - device_tunnel_port
                 - port_ranges
                 - tunnel_prn
       responses:
