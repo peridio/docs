@@ -4635,7 +4635,7 @@ components:
         device_tunnel_port:
           type: number
           examples: [22]
-          description: The port on which the device is listening for wireguard UDP traffic.
+          description: The port on which the device is listening for service traffic (e.g. ssh).
         server_proxy_ip_address:
           type: string
           examples: [10.0.0.1]
