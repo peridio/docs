@@ -214,8 +214,6 @@ tags:
     id: devices
   - name: Products
     id: products
-  - name: Bundles
-    id: bundles
   - name: Releases
     id: releases
   - name: Tunnels
@@ -339,14 +337,17 @@ paths:
                   $ref: "#/components/schemas/device-prn"
                   description: |
                     Identifies which device to create a tunnel for.
+                device_tunnel_port:
+                  $ref: "#/components/schemas/device-tunnel-port"
                 ttl:
-                  type: integer
+                  type: number
                   default: 3600
                   description: The amount of time in seconds that the tunnel is available for.
                   minimum: 0
                   maximum: 3600
               required:
                 - device_prn
+                - device_tunnel_port
       responses:
         "201":
           description: Ok.
@@ -3817,6 +3818,10 @@ components:
       enum:
         - on
         - off
+    device-tunnel-port:
+      type: number
+      examples: [22]
+      description: The port on which the device is listening for service traffic (e.g. ssh).
     event-prn:
       allOf:
         - $ref: "#/components/schemas/prn"
@@ -4633,9 +4638,7 @@ components:
           description: The device's public key for wireguard.
           examples: [Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=]
         device_tunnel_port:
-          type: number
-          examples: [22]
-          description: The port on which the device is listening for service traffic (e.g. ssh).
+          $ref: "#/components/schemas/device-tunnel-port"
         server_proxy_ip_address:
           type: string
           examples: [10.0.0.1]
@@ -4665,8 +4668,18 @@ components:
             - "requested"
             - "open"
             - "closed"
+        device_prn:
+          $ref: "#/components/schemas/device-prn"
+        organization_prn:
+          $ref: "#/components/schemas/prn"
         prn:
           $ref: "#/components/schemas/tunnel-prn"
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     tunnel-prn:
       allOf:
         - $ref: "#/components/schemas/prn"
