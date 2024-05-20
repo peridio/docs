@@ -342,8 +342,7 @@ paths:
                 tunnel_prn:
                   $ref: "peridio-admin-openapi.yaml#/components/schemas/tunnel-prn"
                 cidr_blocks:
-                  $ref: "#/components/schemas/cidrs"
-                  examples: [[10.0.0.1/16, 172.154.0.1/16]]
+                  $ref: "peridio-admin-openapi.yaml#/components/schemas/cidrs"
                   description: |
                     A set of CIDR blocks that the device has available for use with remote access. The device's wireguard peer IP as well as wireguard interface IP will be choosen from this set so it must contain at least two distinct IPs.
                 port_ranges:
@@ -427,10 +426,6 @@ components:
       type: mutualTLS
       description: The provided client certificate must be signed by a [CA certificate](https://docs.peridio.com/reference/ca-certificates) registered with Peridio.
   schemas:
-    cidrs:
-      type: array
-      items:
-        type: string
     port-ranges:
       type: array
       items:
