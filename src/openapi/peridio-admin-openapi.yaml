@@ -339,6 +339,8 @@ paths:
                     Identifies which device to create a tunnel for.
                 device_tunnel_port:
                   $ref: "#/components/schemas/device-tunnel-port"
+                cidr_block_allowlist:
+                  $ref: "#/components/schemas/cidr-block-allowlist"
                 ttl:
                   type: number
                   default: 3600
@@ -3755,6 +3757,15 @@ components:
         - product_name
     ca-jitp-tag:
       type: string
+    cidrs:
+      type: array
+      examples: [[10.0.0.1/16, 172.154.0.1/16]]
+      items:
+        type: string
+    cidr-block-allowlist:
+      $ref: "#/components/schemas/cidrs"
+      description: |
+        A set of CIDR blocks that are allowed to connect to the tunnel.
     cohort:
       type: object
       properties:
@@ -4625,6 +4636,8 @@ components:
     tunnel:
       type: object
       properties:
+        cidr_block_allowlist:
+          $ref: "#/components/schemas/cidr-block-allowlist"
         device_proxy_ip_address:
           type: string
           examples: [10.0.1.1]
