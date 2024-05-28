@@ -14,7 +14,9 @@ function getSection(section, str) {
 function getSubCommands(help) {
   const commandsSection = getSection('Commands', help)
   const reCommandNames = /([\w-]+).*/g
-  return [...commandsSection.matchAll(reCommandNames)].map(([, subCommand]) => subCommand).filter((subCommand) => subCommand !== 'help')
+  return [...commandsSection.matchAll(reCommandNames)]
+    .map(([, subCommand]) => subCommand)
+    .filter((subCommand) => subCommand !== 'help')
 }
 
 function writeCommandGroup(cmd, subCommands) {
@@ -52,11 +54,13 @@ function processCommandHelp(cmd) {
 }
 
 exec('peridio --version', (_error, stdout) => {
-  const requiredVersion = 'peridio 0.19.1 1d620b7'
+  const requiredVersion = 'peridio 0.21.2 46345c1'
 
   if (stdout.includes(requiredVersion)) {
     processCommandHelp([])
   } else {
-    console.error(`Your local Peridio CLI has version (${stdout.trim()}) but this script requires version (${requiredVersion})`)
+    console.error(
+      `Your local Peridio CLI has version (${stdout.trim()}) but this script requires version (${requiredVersion})`,
+    )
   }
 })

@@ -10,7 +10,7 @@ Options:
           Pass this option to disable JITP for this CA certificate
       --jitp-description <JITP_DESCRIPTION>
           An arbitrary string attached to the jitp resource. Often useful for displaying to users
-      --jitp-tags <JITP_TAGS>
+      --jitp-tags [<JITP_TAGS>...]
           Tags that will be automatically applied to devices that JITP with this CA certificate
       --jitp-product-name <JITP_PRODUCT_NAME>
           The product that will be automatically applied to devices that JITP with this CA certificate

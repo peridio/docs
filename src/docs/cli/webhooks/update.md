@@ -14,7 +14,7 @@ Options:
       --state <STATE>
           The state of the webhook
 
-      --enabled-events <ENABLED_EVENTS>
+      --enabled-events [<ENABLED_EVENTS>...]
           The events that will trigger the webhook.
           
           Supply the flag multiple times to add multiple events.

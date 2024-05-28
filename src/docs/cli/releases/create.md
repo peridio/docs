@@ -11,6 +11,11 @@ Options:
       --description <DESCRIPTION>
           An arbitrary string attached to the resource. Often useful for displaying to users
 
+      --disabled <DISABLED>
+          If a release is marked as disabled it cannot be resolved during release resolution
+          
+          [possible values: true, false]
+
       --name <NAME>
           The resource's name, meant to be displayable to users
 
@@ -24,7 +29,7 @@ Options:
       --organization-prn <ORGANIZATION_PRN>
           The PRN of the organization you wish to create the resource within
 
-      --phase-tags <PHASE_TAGS>
+      --phase-tags [<PHASE_TAGS>...]
           Limits by tags the devices that are allowed to update to this release. When phase_mode is tags, this field only allows devices to update to this release if they have at least one of these tags
 
       --phase-value <PHASE_VALUE>
@@ -37,8 +42,6 @@ Options:
           NOTE: 1 is a special value in that it represents 100% and once a release is updated to this value, the phase value can never be changed again.
           
           A release with a phase_value not equal to 1 is considered "phased".
-          
-          NOTE: There can only ever be a single release that is phased at a time within a cohort. Because of this, if there is already a phased release, it must be "completed" by setting the phase to 1.
 
       --previous-release-prn <PREVIOUS_RELEASE_PRN>
           The PRN of the release you wish to create this release after.
