@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkperidio_docs=self.webpackChunkperidio_docs||[]).push([[9601],{96116:e=>{e.exports=JSON.parse('{"title":"Device API"}')}}]);

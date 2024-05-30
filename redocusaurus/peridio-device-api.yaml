@@ -433,9 +433,6 @@ paths:
                   $ref: '#/components/schemas/tunnel-prn'
                 cidr_blocks:
                   $ref: '#/components/schemas/cidrs'
-                  examples:
-                    - - 10.0.0.1/16
-                      - 172.154.0.1/16
                   description: >
                     A set of CIDR blocks that the device has available for use
                     with remote access. The device's wireguard peer IP as well
@@ -458,14 +455,7 @@ paths:
                     The port on which the device is listening for wireguard UDP
                     traffic.
                   examples:
-                    - 530000
-                device_tunnel_port:
-                  type: number
-                  description: >-
-                    The port to which wireguard will forward traffic to on the
-                    device.
-                  examples:
-                    - 22
+                    - 53000
                 device_public_key:
                   type: string
                   examples:
@@ -475,7 +465,6 @@ paths:
                 - cidr_blocks
                 - device_proxy_port
                 - device_public_key
-                - device_tunnel_port
                 - port_ranges
                 - tunnel_prn
       responses:
@@ -552,10 +541,6 @@ components:
         certificate](https://docs.peridio.com/reference/ca-certificates)
         registered with Peridio.
   schemas:
-    cidrs:
-      type: array
-      items:
-        type: string
     port-ranges:
       type: array
       items:
@@ -913,6 +898,25 @@ components:
         - type: array
           items:
             $ref: '#/components/schemas/signing-signature'
+    cidrs:
+      type: array
+      examples:
+        - - 10.0.0.1/16
+          - 172.154.0.1/16
+      items:
+        type: string
+    device-tunnel-port:
+      type: number
+      examples:
+        - 22
+      description: >-
+        The port on which the device is listening for service traffic (e.g.
+        ssh).
+    device-prn:
+      allOf:
+        - $ref: '#/components/schemas/prn'
+        - example: >-
+            prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:device:b3f1f699-3bc8-4c77-bda2-b974595d5e3f
     tunnel-prn:
       allOf:
         - $ref: '#/components/schemas/prn'
@@ -921,6 +925,8 @@ components:
     tunnel:
       type: object
       properties:
+        cidr_block_allowlist:
+          $ref: '#/components/schemas/cidrs'
         device_proxy_ip_address:
           type: string
           examples:
@@ -937,10 +943,7 @@ components:
           examples:
             - Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=
         device_tunnel_port:
-          type: number
-          examples:
-            - 22
-          description: The port on which the device is listening for wireguard UDP traffic.
+          $ref: '#/components/schemas/device-tunnel-port'
         server_proxy_ip_address:
           type: string
           examples:
@@ -982,8 +985,18 @@ components:
             - requested
             - open
             - closed
+        device_prn:
+          $ref: '#/components/schemas/device-prn'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
         prn:
           $ref: '#/components/schemas/tunnel-prn'
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     array-of-tunnels:
       type: array
       items:

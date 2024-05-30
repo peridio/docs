@@ -346,8 +346,6 @@ tags:
     id: devices
   - name: Products
     id: products
-  - name: Bundles
-    id: bundles
   - name: Releases
     id: releases
   - name: Tunnels
@@ -488,8 +486,12 @@ paths:
                   $ref: '#/components/schemas/device-prn'
                   description: |
                     Identifies which device to create a tunnel for.
+                device_tunnel_port:
+                  $ref: '#/components/schemas/device-tunnel-port'
+                cidr_block_allowlist:
+                  $ref: '#/components/schemas/cidr-block-allowlist'
                 ttl:
-                  type: integer
+                  type: number
                   default: 3600
                   description: >-
                     The amount of time in seconds that the tunnel is available
@@ -498,6 +500,7 @@ paths:
                   maximum: 3600
               required:
                 - device_prn
+                - device_tunnel_port
       responses:
         '201':
           description: Ok.
@@ -3972,6 +3975,17 @@ components:
         - product_name
     ca-jitp-tag:
       type: string
+    cidrs:
+      type: array
+      examples:
+        - - 10.0.0.1/16
+          - 172.154.0.1/16
+      items:
+        type: string
+    cidr-block-allowlist:
+      $ref: '#/components/schemas/cidrs'
+      description: |
+        A set of CIDR blocks that are allowed to connect to the tunnel.
     cohort:
       type: object
       properties:
@@ -4037,6 +4051,13 @@ components:
       enum:
         - 'on'
         - 'off'
+    device-tunnel-port:
+      type: number
+      examples:
+        - 22
+      description: >-
+        The port on which the device is listening for service traffic (e.g.
+        ssh).
     event-prn:
       allOf:
         - $ref: '#/components/schemas/prn'
@@ -4902,6 +4923,8 @@ components:
     tunnel:
       type: object
       properties:
+        cidr_block_allowlist:
+          $ref: '#/components/schemas/cidr-block-allowlist'
         device_proxy_ip_address:
           type: string
           examples:
@@ -4918,10 +4941,7 @@ components:
           examples:
             - Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=
         device_tunnel_port:
-          type: number
-          examples:
-            - 22
-          description: The port on which the device is listening for wireguard UDP traffic.
+          $ref: '#/components/schemas/device-tunnel-port'
         server_proxy_ip_address:
           type: string
           examples:
@@ -4963,8 +4983,18 @@ components:
             - requested
             - open
             - closed
+        device_prn:
+          $ref: '#/components/schemas/device-prn'
+        organization_prn:
+          $ref: '#/components/schemas/prn'
         prn:
           $ref: '#/components/schemas/tunnel-prn'
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     tunnel-prn:
       allOf:
         - $ref: '#/components/schemas/prn'

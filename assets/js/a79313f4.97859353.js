@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkperidio_docs=self.webpackChunkperidio_docs||[]).push([[529],{67907:e=>{e.exports=JSON.parse('{"name":"docusaurus-plugin-redoc","id":"peridio-device-api"}')}}]);
