@@ -303,6 +303,14 @@ paths:
         - $ref: "#/components/parameters/order"
         - $ref: "#/components/parameters/search"
         - $ref: "#/components/parameters/page"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                search:
+                  $ref: "#/components/schemas/search-with-org"
       responses:
         "200":
           description: Ok.
@@ -4622,6 +4630,11 @@ components:
         - read
         - read
         - write
+    search-with-org:
+      type: string
+      description: |
+        The `organization_prn` is required as part of the search.
+      example: organization_prn:'prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef'
     serial:
       type: string
       example: "522154175989108335861639249273408275957749326848"
