@@ -3,9 +3,6 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 jobs:
   checks:
     name: Checks
@@ -16,7 +13,7 @@ jobs:
         with:
           node-version: 20.11.1
           cache-dependency-path: src/package-lock.json
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm --prefix src ci
       - name: OpenAPI Lint
