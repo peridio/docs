@@ -5,7 +5,7 @@ Options:
       --description <DESCRIPTION>
           An arbitrary string attached to the resource. Often useful for displaying to users
 
-      --enabled-events <ENABLED_EVENTS>
+      --enabled-events [<ENABLED_EVENTS>...]
           The events that will trigger the webhook.
           
           Supply the flag multiple times to add multiple events.

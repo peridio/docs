@@ -12,7 +12,7 @@ Options:
           The device's last communication time
       --product-name <PRODUCT_NAME>
           The name of the product you wish to update the resource within
-      --tags <TAGS>
+      --tags [<TAGS>...]
           A list of tags to attach to the device
       --target <TARGET>
           The target of the device

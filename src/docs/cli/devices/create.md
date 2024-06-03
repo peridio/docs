@@ -19,7 +19,7 @@ Options:
       --product-name <PRODUCT_NAME>
           The name of the product you wish to create the resource within
 
-      --tags <TAGS>
+      --tags [<TAGS>...]
           A list of tags to attach to the device.
           
           If using firmwares and deployments, tags can be used to target devices.

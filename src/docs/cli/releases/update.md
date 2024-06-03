@@ -8,6 +8,11 @@ Options:
       --description <DESCRIPTION>
           An arbitrary string attached to the resource. Often useful for displaying to users
 
+      --disabled <DISABLED>
+          If a release is marked as disabled it cannot be resolved during release resolution
+          
+          [possible values: true, false]
+
       --name <NAME>
           The resource's name, meant to be displayable to users
 
@@ -19,11 +24,15 @@ Options:
           If supplied, the release will be created prior to the release identified by next_release_prn. If you wish to insert this release between two other releases, you may additionally supply previous_release_prn. If you supply neither field, it will create the release as the latest automatically.
 
       --phase-mode <PHASE_MODE>
-          Enum: "tags" "numeric"
+          Describes if this release is using tag or numeric based phasing. tags or phase value for resolution
           
-          Describes if this release is using tag or numeric based phasing. tags or phase value for resolution - tags - Phases rollout of the release according to the phase_tags field. - numeric - Phases rollout of the release according to the phase_value field.
+          - tags - Phases rollout of the release according to the phase_tags field.
+          
+          - numeric - Phases rollout of the release according to the phase_value field.
+          
+          [possible values: tags, numeric]
 
-      --phase-tags <PHASE_TAGS>
+      --phase-tags [<PHASE_TAGS>...]
           Limits by tags the devices that are allowed to update to this release. When phase_mode is tags, this field only allows devices to update to this release if they have at least one of these tags
 
       --phase-value <PHASE_VALUE>
@@ -36,8 +45,6 @@ Options:
           NOTE: 1 is a special value in that it represents 100% and once a release is updated to this value, the phase value can never be changed again.
           
           A release with a phase_value not equal to 1 is considered "phased".
-          
-          NOTE: There can only ever be a single release that is phased at a time within a cohort. Because of this, if there is already a phased release, it must be "completed" by setting the phase to 1.
 
       --required <REQUIRED>
           Whether the release is required.
