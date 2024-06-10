@@ -92,7 +92,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Peridio.`,
       },
       prism: {
-        theme: themes.github,
+        theme: themes.dracula,
         darkTheme: themes.dracula,
         additionalLanguages: ['bash'],
       },
@@ -112,6 +112,30 @@ const config = {
         },
       },
     }),
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'true',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap',
+      },
+    },
+  ],
 }
 
 export default config
