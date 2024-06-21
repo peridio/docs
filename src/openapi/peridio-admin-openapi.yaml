@@ -3862,6 +3862,9 @@ components:
         updated_at:
           type: string
           format: date-time
+    signing-key-value-pem:
+      description: PEM encoded version of the signing key value
+      type: string
     signing-key-value:
       type: string
       minLength: 1
@@ -4645,6 +4648,8 @@ components:
           $ref: "#/components/schemas/binary-signature-signature"
         signing_key_prn:
           $ref: "#/components/schemas/prn"
+        public_value:
+          $ref: "#/components/schemas/signing-key-value-pem"
 
     tunnel:
       type: object
