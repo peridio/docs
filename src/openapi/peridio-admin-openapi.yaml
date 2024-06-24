@@ -483,6 +483,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: "#/components/schemas/custom-metadata"
                 description:
                   $ref: "#/components/schemas/artifact-description"
                 name:
@@ -574,6 +576,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: "#/components/schemas/custom-metadata"
                 description:
                   $ref: "#/components/schemas/artifact-description"
                 name:
@@ -601,6 +605,8 @@ paths:
               properties:
                 artifact_prn:
                   $ref: "#/components/schemas/prn"
+                custom_metadata:
+                  $ref: "#/components/schemas/custom-metadata"
                 description:
                   $ref: "#/components/schemas/artifact-version-description"
                 version:
@@ -691,6 +697,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: "#/components/schemas/custom-metadata"
                 description:
                   $ref: "#/components/schemas/artifact-version-description"
       responses:
@@ -718,6 +726,8 @@ paths:
               properties:
                 artifact_version_prn:
                   $ref: "#/components/schemas/prn"
+                custom_metadata:
+                  $ref: "#/components/schemas/custom-metadata"
                 description:
                   $ref: "#/components/schemas/binary-description"
                 hash:
@@ -816,6 +826,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: "#/components/schemas/custom-metadata"
                 description:
                   $ref: "#/components/schemas/binary-description"
                 state:
@@ -3519,6 +3531,10 @@ components:
     artifact:
       type: object
       properties:
+        custom_metadata:
+          oneOf:
+            - $ref: "#/components/schemas/custom-metadata"
+            - type: "null"
         description:
           oneOf:
             - $ref: "#/components/schemas/artifact-description"
@@ -3555,6 +3571,10 @@ components:
       properties:
         artifact_prn:
           $ref: "#/components/schemas/prn"
+        custom_metadata:
+          oneOf:
+            - $ref: "#/components/schemas/custom-metadata"
+            - type: "null"
         description:
           oneOf:
             - $ref: "#/components/schemas/artifact-version-description"
@@ -3584,6 +3604,10 @@ components:
       properties:
         artifact_version_prn:
           $ref: "#/components/schemas/prn"
+        custom_metadata:
+          oneOf:
+            - $ref: "#/components/schemas/custom-metadata"
+            - type: "null"
         description:
           oneOf:
             - $ref: "#/components/schemas/binary-description"
@@ -3803,6 +3827,8 @@ components:
       type: string
       minLength: 1
       maxLength: 128
+    custom-metadata:
+      type: object
     delta-updatable:
       type: boolean
     deployment:
