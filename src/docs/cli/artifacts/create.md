@@ -2,6 +2,8 @@
 Usage: peridio artifacts create [OPTIONS] --name <NAME> --organization-prn <ORGANIZATION_PRN>
 
 Options:
+      --custom-metadata <CUSTOM_METADATA>
+          A JSON object that informs the metadata that will be associated with this artifact's binaries when they are included in bundles
       --description <DESCRIPTION>
           An arbitrary string attached to the resource. Often useful for displaying to users
       --name <NAME>

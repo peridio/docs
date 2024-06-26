@@ -484,7 +484,7 @@ paths:
             schema:
               properties:
                 custom_metadata:
-                  $ref: "#/components/schemas/custom-metadata"
+                  $ref: "#/components/schemas/custom-metadata-artifact"
                 description:
                   $ref: "#/components/schemas/artifact-description"
                 name:
@@ -577,7 +577,7 @@ paths:
             schema:
               properties:
                 custom_metadata:
-                  $ref: "#/components/schemas/custom-metadata"
+                  $ref: "#/components/schemas/custom-metadata-artifact"
                 description:
                   $ref: "#/components/schemas/artifact-description"
                 name:
@@ -606,7 +606,7 @@ paths:
                 artifact_prn:
                   $ref: "#/components/schemas/prn"
                 custom_metadata:
-                  $ref: "#/components/schemas/custom-metadata"
+                  $ref: "#/components/schemas/custom-metadata-artifact-version"
                 description:
                   $ref: "#/components/schemas/artifact-version-description"
                 version:
@@ -698,7 +698,7 @@ paths:
             schema:
               properties:
                 custom_metadata:
-                  $ref: "#/components/schemas/custom-metadata"
+                  $ref: "#/components/schemas/custom-metadata-artifact-version"
                 description:
                   $ref: "#/components/schemas/artifact-version-description"
       responses:
@@ -727,7 +727,7 @@ paths:
                 artifact_version_prn:
                   $ref: "#/components/schemas/prn"
                 custom_metadata:
-                  $ref: "#/components/schemas/custom-metadata"
+                  $ref: "#/components/schemas/custom-metadata-binary"
                 description:
                   $ref: "#/components/schemas/binary-description"
                 hash:
@@ -827,7 +827,7 @@ paths:
             schema:
               properties:
                 custom_metadata:
-                  $ref: "#/components/schemas/custom-metadata"
+                  $ref: "#/components/schemas/custom-metadata-binary"
                 description:
                   $ref: "#/components/schemas/binary-description"
                 state:
@@ -3533,7 +3533,7 @@ components:
       properties:
         custom_metadata:
           oneOf:
-            - $ref: "#/components/schemas/custom-metadata"
+            - $ref: "#/components/schemas/custom-metadata-artifact"
             - type: "null"
         description:
           oneOf:
@@ -3573,7 +3573,7 @@ components:
           $ref: "#/components/schemas/prn"
         custom_metadata:
           oneOf:
-            - $ref: "#/components/schemas/custom-metadata"
+            - $ref: "#/components/schemas/custom-metadata-artifact-version"
             - type: "null"
         description:
           oneOf:
@@ -3606,7 +3606,7 @@ components:
           $ref: "#/components/schemas/prn"
         custom_metadata:
           oneOf:
-            - $ref: "#/components/schemas/custom-metadata"
+            - $ref: "#/components/schemas/custom-metadata-binary"
             - type: "null"
         description:
           oneOf:
@@ -3829,6 +3829,25 @@ components:
       maxLength: 128
     custom-metadata:
       type: object
+      maxLength: 1000000
+    custom-metadata-artifact:
+      $ref: "#/components/schemas/custom-metadata"
+      description: |
+        A JSON object that informs the metadata that will be associated with this artifact's binaries when they are included in bundles.
+
+        Max size is 1,000,000 bytes (1 MB).
+    custom-metadata-artifact-version:
+      $ref: "#/components/schemas/custom-metadata"
+      description: |
+        A JSON object that informs the metadata that will be associated with this artifact version's binaries when they are included in bundles.
+
+        Max size is 1,000,000 bytes (1 MB).
+    custom-metadata-binary:
+      $ref: "#/components/schemas/custom-metadata"
+      description: |
+        A JSON object that informs the metadata that will be associated with this binary when it is included in bundles.
+
+        Max size is 1,000,000 bytes (1 MB).
     delta-updatable:
       type: boolean
     deployment:
