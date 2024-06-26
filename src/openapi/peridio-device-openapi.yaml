@@ -232,6 +232,10 @@ paths:
             - `manifest`
               - `artifact`
               - `artifact_version`
+              - `binary_prn`
+              - `hash`
+              - `signatures`
+              - `size`
               - `url`
           in: query
           required: false
@@ -288,10 +292,12 @@ paths:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
                         hash:
                           type: string
-                        url:
-                          type: string
                         signatures:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/array-of-signatures"
+                        size:
+                          $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-size"
+                        url:
+                          type: string
   /tunnels:
     get:
       operationId: list-tunnels
