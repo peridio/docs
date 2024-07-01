@@ -4009,6 +4009,82 @@ components:
               $ref: "#/components/schemas/version"
         - type: "null"
       description: The firmware associated to the device
+    device-event-certificate:
+      oneOf:
+        - type: object
+          properties:
+            authority_key_identifier:
+              $ref: "#/components/schemas/authority-key-identifier"
+            common_name:
+              $ref: "#/components/schemas/common-name"
+            fingerprint:
+              $ref: "#/components/schemas/fingerprint"
+        - type: "null"
+    device-event-ca-certificate:
+      oneOf:
+        - type: object
+          properties:
+            common_name:
+              $ref: "#/components/schemas/common-name"
+            fingerprint:
+              $ref: "#/components/schemas/fingerprint"
+        - type: "null"
+      description: The device's cretificate offered for authentication.
+    device-authentication-failed-event:
+      type: object
+      properties:
+        data:
+          type: object
+          description: Data associated with the `device` event type.
+          properties:
+            type:
+              type: string
+              enum:
+                - authentication_failed
+            data:
+              type: object
+              description: Data associated with the `authentication_failed` subevent type.
+              properties:
+                reason:
+                  type: string
+                  enum:
+                    - device_is_archived
+                    - multi_cert_jitr_disabled
+                    - jitp_disabled
+                    - jitp_failed
+                ip_address:
+                  oneOf:
+                    - type: string
+                      format: ipv4
+                    - type: string
+                      format: ipv6
+                certificate:
+                  $ref: "#/components/schemas/device-event-certificate"
+                ca_certificate:
+                  $ref: "#/components/schemas/device-event-ca-certificate"
+                device:
+                  type: object
+                  description: The device that connected.
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/device-prn"
+                    identifier:
+                      $ref: "#/components/schemas/device-identifier"
+                    cohort:
+                      $ref: "#/components/schemas/device-event-cohort"
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: "#/components/schemas/event-prn"
+        type:
+          type: string
+          enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
     device-updated-event:
       type: object
       properties:
@@ -4060,6 +4136,7 @@ components:
         prn:
           $ref: "#/components/schemas/event-prn"
         type:
+          type: string
           enum:
             - device
         version:
@@ -4107,6 +4184,7 @@ components:
         prn:
           $ref: "#/components/schemas/event-prn"
         type:
+          type: string
           enum:
             - device
         version:
@@ -4151,6 +4229,7 @@ components:
         prn:
           $ref: "#/components/schemas/event-prn"
         type:
+          type: string
           enum:
             - device
         version:
@@ -4182,6 +4261,16 @@ components:
                       $ref: "#/components/schemas/device-identifier"
                     cohort:
                       $ref: "#/components/schemas/device-event-cohort"
+                ip_address:
+                  oneOf:
+                    - type: string
+                      format: ipv4
+                    - type: string
+                      format: ipv6
+                certificate:
+                  $ref: "#/components/schemas/device-event-certificate"
+                ca_certificate:
+                  $ref: "#/components/schemas/device-event-ca-certificate"
                 headers:
                   description: |
                     Monitored headers that a device supplies during connection will be recorded in this array.
@@ -4347,6 +4436,21 @@ components:
         - claimed_release
         - connected
         - release_changed
+    authority-key-identifier:
+      type: string
+      description: The authority key identifier of the certificate.
+      minLength: 1
+      maxLength: 256
+    common-name:
+      type: string
+      description: The common name of the certificate.
+      minLength: 1
+      maxLength: 64
+    fingerprint:
+      type: string
+      description: The upcased hex encoding of the SHA-256 fingerprint of the certificate.
+      minLength: 64
+      maxLength: 64
     webhook-event-type:
       type: string
       enum:
@@ -4806,6 +4910,29 @@ components:
       default: 0
       description: The amount of time in seconds that the old secret and the new secret will co-exist. While they do, dual signature values will be provided with webhook executions. See the [webhooks reference](/platform/reference/webhooks).
 webhooks:
+  device_authentication_failed:
+    post:
+      security: []
+      summary: Authentication failed
+      description: |
+        See the [webhooks reference](/platform/reference/webhooks#supported-events) for a list of supported events.
+
+        This event is created when a device fails to authenticate to the [Device API](/device-api).
+      operationId: device-authentication-failed
+      tags:
+        - Device Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/device-authentication-failed-event"
+      responses:
+        200:
+          description: Ok.
   device_checked_for_release:
     post:
       security: []
