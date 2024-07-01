@@ -115,11 +115,12 @@ Peridio supports Peridio-side event filtering. This means that only the events t
 ## Supported events
 
 - device
+  - [authentication-failed](/admin-api#device-events/operation/device-authentication-failed)
   - [checked-for-release](/admin-api#device-events/operation/device-checked-for-release)
   - [claimed-release](/admin-api#device-events/operation/device-claimed-release)
   - [connected](/admin-api#device-events/operation/device-connected)
   - [release-changed](/admin-api#device-events/operation/device-release-changed)
-  - [device-updated](/admin-api#device-events/operation/device-updated)
+  - [updated](/admin-api#device-events/operation/device-updated)
 - webhook
   - [test-fire](/admin-api#webhook-events/operation/webhook-test-fire)
 
