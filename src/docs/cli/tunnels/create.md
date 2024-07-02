@@ -10,6 +10,8 @@ Options:
           The port of the device that being used for the service
       --ttl <TTL>
           The length of time in seconds for the tunnel to live
+      --wait <WAIT>
+          Number of seconds to wait for a state other than "requested" (1..3600)
   -h, --help
           Print help
 

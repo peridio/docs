@@ -87,9 +87,7 @@ export default {
         {
           type: 'category',
           label: 'Integration Management',
-          items: [
-            'platform/reference/webhooks',
-          ],
+          items: ['platform/reference/webhooks'],
         },
         {
           type: 'category',
@@ -116,9 +114,7 @@ export default {
         {
           type: 'category',
           label: 'Remote Access',
-          items: [
-            'platform/reference/tunnels',
-          ],
+          items: ['platform/reference/tunnels'],
           customProps: { labs: true },
         },
       ],
@@ -166,6 +162,7 @@ export default {
           type: 'category',
           label: 'Remote Access',
           items: [
+            'platform/guides/introduction-to-remote-access',
             'platform/guides/creating-tunnels',
           ],
           customProps: { labs: true },
@@ -190,10 +187,7 @@ export default {
           collapsible: true,
           type: 'category',
           label: 'Build Tools',
-          items: [
-            'integration/linux/build-tools/yocto',
-            'integration/linux/build-tools/buildroot',
-          ],
+          items: ['integration/linux/build-tools/yocto', 'integration/linux/build-tools/buildroot'],
         },
         {
           collapsible: true,
