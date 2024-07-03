@@ -364,8 +364,48 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/tunnel"
+                properties:
+                  tunnel:
+                    allOf:
+                      - $ref: "#/components/schemas/tunnel"
+                      - type: object
+                        properties:
+                          device_proxy_ip_address:
+                            type: null
+                          device_proxy_port:
+                            type: null
+                          device_public_key:
+                            type: null
+                          server_proxy_ip_address:
+                            type: null
+                          server_proxy_port:
+                            type: null
+                          server_public_key:
+                            type: null
+                          server_tunnel_port:
+                            type: null
+
   /tunnels/{tunnel_prn}:
+    get:
+      operationId: retrieve-a-tunnel
+      summary: Retrieve a tunnel
+      tags:
+        - "Tunnels"
+      parameters:
+        - name: tunnel_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  tunnel:
+                    $ref: "#/components/schemas/tunnel"
     patch:
       operationId: update-a-tunnel
       summary: Update a tunnel
@@ -4827,6 +4867,10 @@ components:
           type: number
           examples: [49293]
           description: The port on which the server is listening for wireguard UDP traffic.
+        server_public_key:
+          type: string
+          description: The Peridio proxy server public key for wireguard.
+          examples: [2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=]
         server_tunnel_ip_address:
           type: string
           examples: [3.82.23.99]
@@ -4835,10 +4879,6 @@ components:
           type: number
           examples: [47532]
           description: The port of the Peridio proxy server through which traffic will be routed.
-        server_public_key:
-          type: string
-          description: The Peridio proxy server public key for wireguard.
-          examples: [2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=]
         expires_at:
           type: string
           format: date-time
