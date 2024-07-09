@@ -34,7 +34,7 @@ peridio tunnels create \
 
 ### Checking to see if a tunnel is `open`
 
-Because the create tunnel call is asynchronous, we need to check to see if the tunnel is ready for us to use. We would recommend waiting at least 3 seconds between retries.
+Because the create tunnel call is asynchronous, we need to check to see if the tunnel is ready for us to use. We would recommend waiting 2-3 seconds after create to make the first attempt. Then subsequent requests should backoff incrementally up to a total elapsed time of 30 seconds to reduce network strain. For example, our CLI uses the formula `(x + 2) ^ 2`. That means our second attempt is 4 seconds after the first, and the third attempt is 9 seconds after the second.
 
 ```
 peridio tunnels get \
