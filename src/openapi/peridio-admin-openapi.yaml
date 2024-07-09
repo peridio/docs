@@ -3830,6 +3830,8 @@ components:
           $ref: "#/components/schemas/array-of-ca-jitp-tags"
         cohort_prn:
           $ref: "#/components/schemas/prn"
+        target:
+          type: string
       required:
         - description
         - tags
