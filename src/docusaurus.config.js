@@ -84,6 +84,7 @@ const config = {
           { label: 'Admin API', to: '/admin-api' },
           { label: 'Device API', to: '/device-api' },
           { label: 'CLI', to: '/cli' },
+          { label: 'EVK', to: '/evk' },
           { label: 'Web Console', href: 'https://console.peridio.com', position: 'right' },
         ],
       },
