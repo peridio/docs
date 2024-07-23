@@ -10,6 +10,7 @@ export default {
     },
     {
       collapsible: true,
+      collapsed: false,
       type: 'category',
       label: 'Reference',
       items: [
@@ -122,6 +123,8 @@ export default {
     {
       type: 'category',
       label: 'Guides',
+      collapsible: true,
+      collapsed: false,
       items: [
         {
           type: 'category',
@@ -178,11 +181,22 @@ export default {
     },
     {
       collapsible: true,
+      collapsed: false,
       type: 'category',
       label: 'Linux',
       items: [
         'integration/linux/overview',
-        'integration/linux/peridiod',
+        {
+          collapsible: true,
+          type: 'category',
+          label: 'Peridio Daemon',
+          items: [
+            'integration/linux/peridiod/getting-started',
+            'integration/linux/peridiod/configuration',
+            'integration/linux/peridiod/updates',
+            'integration/linux/peridiod/containers',
+          ],
+        },
         {
           collapsible: true,
           type: 'category',

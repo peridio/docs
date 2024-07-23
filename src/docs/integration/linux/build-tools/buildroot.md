@@ -14,7 +14,7 @@ make BR2_EXTERNAL=/path/to/buildroot-external-peridio menuconfig
 
 ## Configuring peridiod
 
-The `peridiod` package in `buildroot-external-peridio` will install a systemd service and configure the location of the [peridiod configuration file](/integration/linux/peridiod#configuring) to the path `/etc/peridiod/peridio.json`. This file can be included as part of the including a overlay directory path to `BR2_ROOTFS_OVERLAY`. An example of this implementation can be found in the [buildroot-external-peridio repo](https://github.com/peridio/buildroot-external-peridio/blob/main/configs/peridio_qemu_aarch64_virt_defconfig) with the included QEmu target.
+The `peridiod` package in `buildroot-external-peridio` will install a systemd service and configure the location of the [peridiod configuration file](/integration/linux/peridiod/configuration) to the path `/etc/peridiod/peridio.json`. This file can be included as part of the including a overlay directory path to `BR2_ROOTFS_OVERLAY`. An example of this implementation can be found in the [buildroot-external-peridio repo](https://github.com/peridio/buildroot-external-peridio/blob/main/configs/peridio_qemu_aarch64_virt_defconfig) with the included QEmu target.
 
 ## Building FWUP archives
 

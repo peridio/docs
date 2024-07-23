@@ -23,7 +23,7 @@ This command uses your local Peridio CLI. The script itself hardcodes a particul
 Use the deploy command to deploy to production:
 
 ```
-GIT_USER=<Your GitHub username> USE_SSH=true npm --prefix src deploy
+GIT_USER=<Your GitHub username> USE_SSH=true npm --prefix src run deploy
 ```
 
 Builds the website and pushes to the `gh-pages` branch.

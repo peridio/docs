@@ -9,7 +9,7 @@ Peridio can be integrated with virtually any embedded / desktop Linux runtime. T
 * [yocto](build-tools/yocto)
 * [buildroot](build-tools/buildroot)
 
-For more information about the reference Linux agent, see [peridiod](peridiod#configuring).
+For more information about the reference Linux agent, see [peridiod](peridiod/getting-started).
 
 ## Reference Designs
 
