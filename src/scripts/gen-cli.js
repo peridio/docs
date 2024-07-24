@@ -53,14 +53,14 @@ function processCommandHelp(cmd) {
   })
 }
 
-exec('peridio --version', (_error, stdout) => {
-  const requiredVersion = 'peridio 0.22.0 56a27bc'
+exec('peridio upgrade', (_error, stdout) => {
+  const latest = 'CLI already up to date'
 
-  if (stdout.includes(requiredVersion)) {
+  if (stdout.includes(latest)) {
     processCommandHelp([])
   } else {
     console.error(
-      `Your local Peridio CLI has version (${stdout.trim()}) but this script requires version (${requiredVersion})`,
+      `You must update your Peridio CLI before generating docs`,
     )
   }
 })

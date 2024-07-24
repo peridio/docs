@@ -3,7 +3,7 @@
 ## Build
 
 ```
-npm --prefix src build
+npm --prefix src run build
 ```
 
 Builds and outputs static content into the `build` directory ready to be served.
@@ -11,7 +11,7 @@ Builds and outputs static content into the `build` directory ready to be served.
 ## Generate Peridio CLI Docs
 
 ```
-npm --prefix src gen-cli
+npm --prefix src run gen-cli
 ```
 
 This command uses your local Peridio CLI. The script itself hardcodes a particular version requirement of the CLI to help protect against documentation regression.
