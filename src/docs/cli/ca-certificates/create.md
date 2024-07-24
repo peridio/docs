@@ -12,6 +12,8 @@ Options:
           An arbitrary string attached to the jitp resource. Often useful for displaying to users
       --jitp-tags [<JITP_TAGS>...]
           Tags that will be automatically applied to devices that JITP with this CA certificate
+      --jitp-target <JITP_TARGET>
+          The target that will be automatically applied to devices that JITP with this CA certificate
       --jitp-product-name <JITP_PRODUCT_NAME>
           The product that will be automatically applied to devices that JITP with this CA certificate
       --jitp-cohort-prn <JITP_COHORT_PRN>

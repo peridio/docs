@@ -60,7 +60,7 @@ exec('peridio upgrade', (_error, stdout) => {
     processCommandHelp([])
   } else {
     console.error(
-      `You must update your Peridio CLI before generating docs`,
+      'You must update your Peridio CLI before generating docs',
     )
   }
 })
