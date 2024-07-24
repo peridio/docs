@@ -445,6 +445,14 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/page'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                search:
+                  $ref: '#/components/schemas/search-with-org'
       responses:
         '200':
           description: Ok.
@@ -496,7 +504,7 @@ paths:
                   description: >-
                     The amount of time in seconds that the tunnel is available
                     for.
-                  minimum: 0
+                  minimum: 1
                   maximum: 3600
               required:
                 - device_prn
@@ -507,15 +515,54 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/tunnel'
+                properties:
+                  tunnel:
+                    allOf:
+                      - $ref: '#/components/schemas/tunnel'
+                      - type: object
+                        properties:
+                          device_proxy_ip_address:
+                            type: null
+                          device_proxy_port:
+                            type: null
+                          device_public_key:
+                            type: null
+                          server_proxy_ip_address:
+                            type: null
+                          server_proxy_port:
+                            type: null
+                          server_public_key:
+                            type: null
+                          server_tunnel_port:
+                            type: null
   /tunnels/{tunnel_prn}:
+    get:
+      operationId: retrieve-a-tunnel
+      summary: Retrieve a tunnel
+      tags:
+        - Tunnels
+      parameters:
+        - name: tunnel_prn
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/prn'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  tunnel:
+                    $ref: '#/components/schemas/tunnel'
     patch:
       operationId: update-a-tunnel
       summary: Update a tunnel
       description: >
-        Update a tunnel currently only allows changing a tunnel to a closed
-        state.
-
+        Update a tunnel
+          - allows changing a tunnel to a closed state.
+          - allows extending the expiration (the number of seconds from current time).
 
         <a style="display: flex; margin-bottom: 16px; background: purple; color:
         white; border-radius: 5px; padding: 2px 4px; width: fit-content;"
@@ -543,6 +590,11 @@ paths:
                   description: >-
                     The state we want the tunnel to be in. Only accepts
                     "closed".
+                ttl:
+                  type: number
+                  description: The amount of time in seconds to extend the tunnel for.
+                  minimum: 1
+                  maximum: 3600
       responses:
         '200':
           description: Ok.
@@ -647,6 +699,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: '#/components/schemas/custom-metadata-artifact'
                 description:
                   $ref: '#/components/schemas/artifact-description'
                 name:
@@ -737,6 +791,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: '#/components/schemas/custom-metadata-artifact'
                 description:
                   $ref: '#/components/schemas/artifact-description'
                 name:
@@ -764,6 +820,8 @@ paths:
               properties:
                 artifact_prn:
                   $ref: '#/components/schemas/prn'
+                custom_metadata:
+                  $ref: '#/components/schemas/custom-metadata-artifact-version'
                 description:
                   $ref: '#/components/schemas/artifact-version-description'
                 version:
@@ -853,6 +911,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: '#/components/schemas/custom-metadata-artifact-version'
                 description:
                   $ref: '#/components/schemas/artifact-version-description'
       responses:
@@ -880,6 +940,8 @@ paths:
               properties:
                 artifact_version_prn:
                   $ref: '#/components/schemas/prn'
+                custom_metadata:
+                  $ref: '#/components/schemas/custom-metadata-binary'
                 description:
                   $ref: '#/components/schemas/binary-description'
                 hash:
@@ -977,6 +1039,8 @@ paths:
           application/json:
             schema:
               properties:
+                custom_metadata:
+                  $ref: '#/components/schemas/custom-metadata-binary'
                 description:
                   $ref: '#/components/schemas/binary-description'
                 state:
@@ -3727,6 +3791,10 @@ components:
     artifact:
       type: object
       properties:
+        custom_metadata:
+          oneOf:
+            - $ref: '#/components/schemas/custom-metadata-artifact'
+            - type: 'null'
         description:
           oneOf:
             - $ref: '#/components/schemas/artifact-description'
@@ -3763,6 +3831,10 @@ components:
       properties:
         artifact_prn:
           $ref: '#/components/schemas/prn'
+        custom_metadata:
+          oneOf:
+            - $ref: '#/components/schemas/custom-metadata-artifact-version'
+            - type: 'null'
         description:
           oneOf:
             - $ref: '#/components/schemas/artifact-version-description'
@@ -3792,6 +3864,10 @@ components:
       properties:
         artifact_version_prn:
           $ref: '#/components/schemas/prn'
+        custom_metadata:
+          oneOf:
+            - $ref: '#/components/schemas/custom-metadata-binary'
+            - type: 'null'
         description:
           oneOf:
             - $ref: '#/components/schemas/binary-description'
@@ -3969,6 +4045,8 @@ components:
           $ref: '#/components/schemas/array-of-ca-jitp-tags'
         cohort_prn:
           $ref: '#/components/schemas/prn'
+        target:
+          type: string
       required:
         - description
         - tags
@@ -4015,6 +4093,33 @@ components:
       type: string
       minLength: 1
       maxLength: 128
+    custom-metadata:
+      type: object
+      maxLength: 1000000
+    custom-metadata-artifact:
+      $ref: '#/components/schemas/custom-metadata'
+      description: >
+        A JSON object that informs the metadata that will be associated with
+        this artifact's binaries when they are included in bundles.
+
+
+        Max size is 1,000,000 bytes (1 MB).
+    custom-metadata-artifact-version:
+      $ref: '#/components/schemas/custom-metadata'
+      description: >
+        A JSON object that informs the metadata that will be associated with
+        this artifact version's binaries when they are included in bundles.
+
+
+        Max size is 1,000,000 bytes (1 MB).
+    custom-metadata-binary:
+      $ref: '#/components/schemas/custom-metadata'
+      description: >
+        A JSON object that informs the metadata that will be associated with
+        this binary when it is included in bundles.
+
+
+        Max size is 1,000,000 bytes (1 MB).
     delta-updatable:
       type: boolean
     deployment:
@@ -4080,6 +4185,9 @@ components:
         updated_at:
           type: string
           format: date-time
+    signing-key-value-pem:
+      description: PEM encoded version of the signing key value
+      type: string
     signing-key-value:
       type: string
       minLength: 1
@@ -4199,6 +4307,82 @@ components:
               $ref: '#/components/schemas/version'
         - type: 'null'
       description: The firmware associated to the device
+    device-event-certificate:
+      oneOf:
+        - type: object
+          properties:
+            authority_key_identifier:
+              $ref: '#/components/schemas/authority-key-identifier'
+            common_name:
+              $ref: '#/components/schemas/common-name'
+            fingerprint:
+              $ref: '#/components/schemas/fingerprint'
+        - type: 'null'
+    device-event-ca-certificate:
+      oneOf:
+        - type: object
+          properties:
+            common_name:
+              $ref: '#/components/schemas/common-name'
+            fingerprint:
+              $ref: '#/components/schemas/fingerprint'
+        - type: 'null'
+      description: The device's cretificate offered for authentication.
+    device-authentication-failed-event:
+      type: object
+      properties:
+        data:
+          type: object
+          description: Data associated with the `device` event type.
+          properties:
+            type:
+              type: string
+              enum:
+                - authentication_failed
+            data:
+              type: object
+              description: Data associated with the `authentication_failed` subevent type.
+              properties:
+                reason:
+                  type: string
+                  enum:
+                    - device_is_archived
+                    - multi_cert_jitr_disabled
+                    - jitp_disabled
+                    - jitp_failed
+                ip_address:
+                  oneOf:
+                    - type: string
+                      format: ipv4
+                    - type: string
+                      format: ipv6
+                certificate:
+                  $ref: '#/components/schemas/device-event-certificate'
+                ca_certificate:
+                  $ref: '#/components/schemas/device-event-ca-certificate'
+                device:
+                  type: object
+                  description: The device that connected.
+                  properties:
+                    prn:
+                      $ref: '#/components/schemas/device-prn'
+                    identifier:
+                      $ref: '#/components/schemas/device-identifier'
+                    cohort:
+                      $ref: '#/components/schemas/device-event-cohort'
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: '#/components/schemas/event-prn'
+        type:
+          type: string
+          enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
     device-updated-event:
       type: object
       properties:
@@ -4250,6 +4434,7 @@ components:
         prn:
           $ref: '#/components/schemas/event-prn'
         type:
+          type: string
           enum:
             - device
         version:
@@ -4299,6 +4484,7 @@ components:
         prn:
           $ref: '#/components/schemas/event-prn'
         type:
+          type: string
           enum:
             - device
         version:
@@ -4343,6 +4529,7 @@ components:
         prn:
           $ref: '#/components/schemas/event-prn'
         type:
+          type: string
           enum:
             - device
         version:
@@ -4374,6 +4561,16 @@ components:
                       $ref: '#/components/schemas/device-identifier'
                     cohort:
                       $ref: '#/components/schemas/device-event-cohort'
+                ip_address:
+                  oneOf:
+                    - type: string
+                      format: ipv4
+                    - type: string
+                      format: ipv6
+                certificate:
+                  $ref: '#/components/schemas/device-event-certificate'
+                ca_certificate:
+                  $ref: '#/components/schemas/device-event-ca-certificate'
                 headers:
                   description: >
                     Monitored headers that a device supplies during connection
@@ -4555,6 +4752,21 @@ components:
         - claimed_release
         - connected
         - release_changed
+    authority-key-identifier:
+      type: string
+      description: The authority key identifier of the certificate.
+      minLength: 1
+      maxLength: 256
+    common-name:
+      type: string
+      description: The common name of the certificate.
+      minLength: 1
+      maxLength: 64
+    fingerprint:
+      type: string
+      description: The upcased hex encoding of the SHA-256 fingerprint of the certificate.
+      minLength: 64
+      maxLength: 64
     webhook-event-type:
       type: string
       enum:
@@ -4910,6 +5122,11 @@ components:
         - read
         - read
         - write
+    search-with-org:
+      type: string
+      description: |
+        The `organization_prn` is required as part of the search.
+      example: organization_prn:'prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef'
     serial:
       type: string
       example: '522154175989108335861639249273408275957749326848'
@@ -4920,6 +5137,8 @@ components:
           $ref: '#/components/schemas/binary-signature-signature'
         signing_key_prn:
           $ref: '#/components/schemas/prn'
+        public_value:
+          $ref: '#/components/schemas/signing-key-value-pem'
     tunnel:
       type: object
       properties:
@@ -4952,6 +5171,11 @@ components:
           examples:
             - 49293
           description: The port on which the server is listening for wireguard UDP traffic.
+        server_public_key:
+          type: string
+          description: The Peridio proxy server public key for wireguard.
+          examples:
+            - 2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=
         server_tunnel_ip_address:
           type: string
           examples:
@@ -4967,11 +5191,6 @@ components:
           description: >-
             The port of the Peridio proxy server through which traffic will be
             routed.
-        server_public_key:
-          type: string
-          description: The Peridio proxy server public key for wireguard.
-          examples:
-            - 2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=
         expires_at:
           type: string
           format: date-time
@@ -5070,6 +5289,33 @@ components:
         with webhook executions. See the [webhooks
         reference](/platform/reference/webhooks).
 webhooks:
+  device_authentication_failed:
+    post:
+      security: []
+      summary: Authentication failed
+      description: >
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
+
+
+        This event is created when a device fails to authenticate to the [Device
+        API](/device-api).
+      operationId: device-authentication-failed
+      tags:
+        - Device Events
+      parameters:
+        - $ref: '#/components/parameters/peridio-signature'
+        - $ref: '#/components/parameters/peridio-published-at'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/device-authentication-failed-event'
+      responses:
+        '200':
+          description: Ok.
   device_checked_for_release:
     post:
       security: []

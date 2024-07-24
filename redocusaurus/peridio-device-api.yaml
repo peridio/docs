@@ -300,6 +300,12 @@ paths:
             - `manifest`
               - `artifact`
               - `artifact_version`
+              - `binary_prn`
+              - `custom_metadata`
+              - `hash`
+              - `signatures`
+              - `size`
+              - `target`
               - `url`
           in: query
           required: false
@@ -336,6 +342,19 @@ paths:
 
 
                       The bundle associated with `release`.
+                  custom_metadata:
+                    $ref: '#/components/schemas/custom-metadata'
+                    description: >
+                      Expand required. See [expanding
+                      responses](#section/Expanding-Responses).
+
+
+                      A JSON object that device's may use to inform decisions
+                      regarding last mile application of the binary including:
+                      downloading, persisting, installing, and custom use cases.
+
+
+                      Max size is 1,000,000 bytes (1 MB).
                   manifest:
                     description: >
                       Expand required. See [expanding
@@ -369,10 +388,14 @@ paths:
                           $ref: '#/components/schemas/prn'
                         hash:
                           type: string
-                        url:
-                          type: string
                         signatures:
                           $ref: '#/components/schemas/array-of-signatures'
+                        size:
+                          $ref: '#/components/schemas/binary-size'
+                        target:
+                          $ref: '#/components/schemas/target-triplet'
+                        url:
+                          type: string
   /tunnels:
     get:
       operationId: list-tunnels
@@ -823,6 +846,9 @@ components:
         updated_at:
           type: string
           format: date-time
+    custom-metadata:
+      type: object
+      maxLength: 1000000
     artifact-description:
       type: string
       minLength: 1
@@ -834,6 +860,10 @@ components:
     artifact:
       type: object
       properties:
+        custom_metadata:
+          oneOf:
+            - $ref: '#/components/schemas/custom-metadata'
+            - type: 'null'
         description:
           oneOf:
             - $ref: '#/components/schemas/artifact-description'
@@ -863,6 +893,10 @@ components:
       properties:
         artifact_prn:
           $ref: '#/components/schemas/prn'
+        custom_metadata:
+          oneOf:
+            - $ref: '#/components/schemas/custom-metadata'
+            - type: 'null'
         description:
           oneOf:
             - $ref: '#/components/schemas/artifact-version-description'
@@ -884,6 +918,9 @@ components:
       description: >
         The uppercase hex encoding of the ed25519 signature of the base64
         encoding of the SHA256 hash of the binary.
+    signing-key-value-pem:
+      description: PEM encoded version of the signing key value
+      type: string
     signing-signature:
       type: object
       properties:
@@ -891,6 +928,8 @@ components:
           $ref: '#/components/schemas/binary-signature-signature'
         signing_key_prn:
           $ref: '#/components/schemas/prn'
+        public_value:
+          $ref: '#/components/schemas/signing-key-value-pem'
     array-of-signatures:
       default: null
       oneOf:
@@ -898,6 +937,20 @@ components:
         - type: array
           items:
             $ref: '#/components/schemas/signing-signature'
+    binary-size:
+      description: The expected size in bytes of the binary.
+      example: 1800000
+      maximum: 53687091200000
+      minimum: 0
+      type: integer
+    target-triplet:
+      type: string
+      minLength: 1
+      maxLength: 128
+      description: >
+        A target triplet string that specifies compaitibility between binaries
+        and devices.
+      example: arm-linux-androideabi
     cidrs:
       type: array
       examples:
@@ -954,6 +1007,11 @@ components:
           examples:
             - 49293
           description: The port on which the server is listening for wireguard UDP traffic.
+        server_public_key:
+          type: string
+          description: The Peridio proxy server public key for wireguard.
+          examples:
+            - 2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=
         server_tunnel_ip_address:
           type: string
           examples:
@@ -969,11 +1027,6 @@ components:
           description: >-
             The port of the Peridio proxy server through which traffic will be
             routed.
-        server_public_key:
-          type: string
-          description: The Peridio proxy server public key for wireguard.
-          examples:
-            - 2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=
         expires_at:
           type: string
           format: date-time
