@@ -1,49 +1,27 @@
 # Creating X.509 Certificates with OpenSSL
 
-This guide describes how to create X.509 certificates with [OpenSSL](https://www.openssl.org/).
+This guide describes how to create [X.509](/platform/reference/x509) certificates with [OpenSSL](https://www.openssl.org/).
+
+:::tip more speed less flexibility
+For a more streamlined workflow, see [creating X.509 certificates with Peridio](/platform/guides/creating-x509-certificates-with-peridio).
+:::
 
 ## Prerequisites
 
 - [OpenSSL CLI](https://www.openssl.org/).
   - Last tested with version 3.0.4 21 Jun 2022.
 
-## Hardware Constraints
-
-For nearly every production scenario, Peridio recommends storing your sensitive credentials in a hardware security module. It is common for hardware security modules to impose constraints on the credentials they store. For example, Microchip's [ATECC608B](https://www.microchip.com/en-us/product/ATECC608B) stores certificates [in a novel fashion](https://ww1.microchip.com/downloads/en/Appnotes/20006367A.pdf). One can use this guide to create certificates that are compatible with the ATECC608B so long as the start dates have a resolution of hours (minute and second must be 0) and end dates are a set number of years from the issue date (must have identical month, day, hour, minute and second as corresponding issue date).
-
-While this guide is useful for quickly creating certificates for non-production runs, one should be mindful that the choices you make with respect to production hardware, firmware, and software can impose constraints upon your public key infrastructure. To avoid unexpected delays in development and manufacturing and ensure you have the time and resources available to operate securely, it is best to make the decisions that dictate these constraints as soon as possible.
-
-## Private and Public Keys
-
-Every X.509 certificate has a public key within it. The public key is derived from a private key. When considered together they are referred to as an asymetric key pair. Generally, this field is refered to as [public-key cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography) or asymmetric cryptography.
-
-To create an asymmetric key pair, one must first decide on a public key algorithm to use, this choice dictates:
-
-- The cryptographic properties of the keys and in turn their capabilities and security guarantees.
-- The processes required to create and interact with the keys.
-
-This guide will use the [ECDSA](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm) public key algorithm, but RSA and DSA are other common choices.
-
-Effective security requires keeping the private key private; the public key can be openly distributed without compromising security.
-
-***WARNING:*** Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is fundamentally compromised.
-
-### Inspect a Private Key
-
-To inspect any private key created later in this guide:
-
-```console
-openssl ecparam \
-  -in key.pem \
-  -text \
-  -noout
-```
+:::tip inspect created resources
+To inspect any private key, certificate signing request, or certificate you create in this guide, reference [X.509](/platform/reference/x509).
+:::
 
 ## Create Certificates
 
+:::info openssl config
 Some of the commands below will reference an `openssl.cnf` file, you must create this with the contents described at [Appendix A](#a---opensslcnf).
+:::
 
-The aforementioned config requires one additional file to track created certificates and one additional directory to store certificates historically. You must create them:
+The `openssl.cnf` file requires, and points to the paths of, one additional file to track created certificates and one additional directory to store certificates historically. You must create them:
 
 ```console
 touch database.txt
@@ -52,38 +30,23 @@ mkdir certificates
 
 Note that when creating certificates with the `openssl ca` command that it will write the same created certificate file twice, once to the `certificates` directory where the name will be the serial number in hex with *.pem* appended, and once to the calling directory with the name specified by the `-out` option of the command.
 
-### Inspect a Certificate Signing Request
+:::warning sensitive private keys
+Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is compromised.
+:::
 
-To inspect any certificate signing request created later in this guide:
+:::warning certificate validity period
+The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it.
 
-```console
-openssl req \
-  -in certificate-signing-request.pem \
-  -text \
-  -noout
-```
-
-### Inspect a Certificate
-
-To inspect any certificate created later in this guide:
-
-```console
-openssl x509 \
-  -in certificate.pem \
-  -text \
-  -noout
-```
+For information regarding how Peridio interacts with certificates reference [CA Certificates](/platform/reference/ca-certificates) and [Device Certificates](/platform/reference/device-certificates).
+:::
 
 ### Root
 
-Generally speaking, a root certificate authority is a certificate that:
-
-- is self-signed
-- is capable of signing certificates
+For context, reference [X.509](/platform/reference/x509#root).
 
 #### Create a Private Key
 
-Reference [openssl-ecparam](#openssl-ecparam).
+For context, reference [cli-x509-create](/cli/x509/create).
 
 ```console
 openssl ecparam \
@@ -92,11 +55,9 @@ openssl ecparam \
   -out root-private-key.pem
 ```
 
-***WARNING:*** Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is fundamentally compromised.
-
 #### Create a Certificate Signing Request
 
-Reference [openssl-req](#openssl-req).
+For context, reference [openssl-req](#openssl-req).
 
 ```console
 openssl req \
@@ -110,7 +71,7 @@ openssl req \
 
 #### Create a Certificate
 
-Reference [openssl-ca](#openssl-ca).
+For context, reference [openssl-ca](#openssl-ca).
 
 You must fill in the `-startdate` and `-enddate` values.
 
@@ -127,23 +88,13 @@ openssl ca \
   -startdate YYYYMMDDHHMMSSZ
 ```
 
-***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/platform/reference/ca-certificates) and [Device Certificates](/platform/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
-
-You may retain or delete the certificate signing request depending on your use case.
-
-The certificate can be openly distributed without compromising security.
-
 ### Intermediate
 
-Generally speaking, an intermediate certificate authority is a certificate that:
-
-- is not self signed
-- is signed either by an intermediate certificate authority or a root certificate authority
-- is capable of signing certificates
+For context, reference [X.509 intermediate](/platform/reference/x509#intermediate).
 
 #### Create a Private Key
 
-Reference [openssl-ecparam](#openssl-ecparam).
+For context, reference [openssl-ecparam](#openssl-ecparam).
 
 ```console
 openssl ecparam \
@@ -152,11 +103,9 @@ openssl ecparam \
   -out intermediate-private-key.pem
 ```
 
-***WARNING:*** Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is fundamentally compromised.
-
 #### Create a Certificate Signing Request
 
-Reference [openssl-req](#openssl-req).
+For context, reference [openssl-req](#openssl-req).
 
 ```console
 openssl req \
@@ -168,7 +117,7 @@ openssl req \
 
 #### Create a Certificate
 
-Reference [openssl-ca](#openssl-ca).
+For context, reference [openssl-ca](#openssl-ca).
 
 You must fill in the `-startdate` and `-enddate` values.
 
@@ -185,23 +134,13 @@ openssl ca \
   -startdate YYYYMMDDHHMMSSZ
 ```
 
-***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/platform/reference/ca-certificates) and [Device Certificates](/platform/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
+### End-Entity Certificate
 
-You may retain or delete the certificate signing request depending on your use case.
-
-The certificate can be openly distributed without compromising security.
-
-### End-entity Certificate
-
-Generally speaking, an end-entity certificate is a certificate that:
-
-- is not self signed
-- is signed by either an intermediate certificate authority or a root certificate authority
-- is not capable of signing certificates
+For context, reference [X.509 end entity](/platform/reference/x509#end-entity).
 
 #### Create a Private Key
 
-Reference [openssl-ecparam](#openssl-ecparam).
+For context, reference [openssl-ecparam](#openssl-ecparam).
 
 ```console
 openssl ecparam \
@@ -210,11 +149,9 @@ openssl ecparam \
   -out end-entity-private-key.pem
 ```
 
-***WARNING:*** Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is fundamentally compromised.
-
 #### Create a Certificate Signing Request
 
-Reference [openssl-req](#openssl-req).
+For context, reference [openssl-req](#openssl-req).
 
 ```console
 openssl req \
@@ -226,7 +163,7 @@ openssl req \
 
 #### Create a Certificate
 
-Reference [openssl-ca](#openssl-ca).
+For context, reference [openssl-ca](#openssl-ca).
 
 You must fill in the `-startdate` and `-enddate` values.
 
@@ -242,12 +179,6 @@ openssl ca \
   -out end-entity-certificate.pem \
   -startdate YYYYMMDDHHMMSSZ
 ```
-
-***WARNING:*** The `-startdate` and `-enddate` options should be specified cautiously as they dictate when the certificate will be valid for. The impact of a certificate not being valid yet or having already expired is dependent on the parties interacting with it. For information regarding how Peridio interacts with certificates reference [CA Certificates](/platform/reference/ca-certificates) and [Device Certificates](/platform/reference/device-certificates). It is also common for hardware security modules to require these dates to be specified in a very particular manner, see [Hardware Constraints](#hardware-constraints).
-
-You may retain or delete the certificate signing request depending on your use case.
-
-The certificate can be openly distributed without compromising security.
 
 ## Appendix
 

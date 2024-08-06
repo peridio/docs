@@ -1,4 +1,6 @@
 ```
+Upgrade the CLI
+
 Usage: peridio upgrade
 
 Options:

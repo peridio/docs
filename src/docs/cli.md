@@ -55,6 +55,12 @@ Contains a single object of the format:
       "signing_key_prn": "prn:1:b8af964b-2736-423c-852b-a19d05e00d83:signing_key:15ba050a-82ee-4381-b461-d42181f9a81b",
       "signing_key_private_path": "private.pem"
     }
+  },
+  "ca_certificates": {
+    "ca-certificate-name": {
+      "certificate": "certificate.pem",
+      "private_key": "private-key.pem"
+    }
   }
 }
 ```
@@ -73,6 +79,12 @@ Contains a single object of the format:
     SIGNING_KEY_PAIR_NAME: {
       "signing_key_prn": SIGNING_KEY_PRN,
       "signing_key_private_path": SIGNING_KEY_PRIVATE_PATH
+    }
+  },
+  "ca_certificates": {
+    CA_CERTIFICATE_NAME: {
+      "certificate": CA_CERTIFICATE_PATH,
+      "private_key": PRIVATE_KEY_PATH
     }
   }
   ...
@@ -138,6 +150,24 @@ Contains a single object of the format:
       <td><code>true</code></td>
       <td>string</td>
       <td>The path to a <a href="/reference/signing-keys#pem">private key's PEM file</a>.</td>
+    </tr>
+    <tr>
+      <td>CA_CERTIFICATE_NAME</td>
+      <td><code>false</code></td>
+      <td>string</td>
+      <td>The name of a CA certificate. Some commands that make use of CA certificates will let you reference this configuration by name.</td>
+    </tr>
+    <tr>
+      <td>CA_CERTIFICATE_PATH</td>
+      <td><code>true</code></td>
+      <td>string</td>
+      <td>The path to a <a href="/platform/reference/ca-certificates">CA certificate's</a> PEM file.</td>
+    </tr>
+    <tr>
+      <td>PRIVATE_KEY_PATH</td>
+      <td><code>true</code></td>
+      <td>string</td>
+      <td>The path to a <a href="/platform/reference/ca-certificates">CA certificate's</a> private key's PEM file.</td>
     </tr>
   </tbody>
 </table>
