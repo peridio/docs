@@ -29,7 +29,7 @@ Options:
 
       --binary-part-size <BINARY_PART_SIZE>
           The size to use when creating binary parts. All binary parts will be equal to this size, except the last one which will be less than or equal to this size
-          
+
           [default: 5242880]
 
       --concurrency <CONCURRENCY>
