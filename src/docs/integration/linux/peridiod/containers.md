@@ -13,7 +13,7 @@ Peridiod can be run from within a container for testing, development, and produc
 
 ## Running a container
 
-You can run peridiod from a container using any OCI container orchestration engine such as podman, docker, and kubernetes. Container images are produced for every peridiod tagged release for amd64 (x86_64) and arm64 architectures and uploaded to docker-hub. peridiod will need to store state between reboots and therefore it is advised to either attach a instance specific volume or bind mount an instance specific host directory to the container.
+You can run peridiod from a container using any OCI container orchestration engine such as docker and kubernetes. Container images are produced for every peridiod tagged release for amd64 (x86_64) and arm64 architectures and uploaded to docker-hub. peridiod will need to store state between reboots and therefore it is advised to either attach a instance specific volume or bind mount an instance specific host directory to the container.
 
 A simple and common approach to getting started with containers is to bind mount a host directory over `/etc/peridiod`. Peridiod containers are configured to look in this directory for the `peridio.json` configuration file.
 
@@ -63,7 +63,7 @@ In this example, we configure the node to use the certificate and private key fi
 To run the container we would execute the following command:
 
 ```bash
-podman run -it --rm -v "EI-ML-0001":/etc/peridiod:z --cap-add=NET_ADMIN --entrypoint /etc/peridiod/entrypoint.sh peridio/peridiod:latest
+docker run -it --rm -v "EI-ML-0001":/etc/peridiod:z --cap-add=NET_ADMIN --entrypoint /etc/peridiod/entrypoint.sh peridio/peridiod:latest
 ```
 
 ## Overriding the entrypoint
@@ -96,5 +96,5 @@ exec "$@"
 When we run the container, we need to both override the entrypoint and pass the original command:
 
 ```bash
-podman run -it --rm -v "EI-ML-0001":/etc/peridiod:z --cap-add=NET_ADMIN --entrypoint /etc/peridiod/entrypoint.sh peridio/peridiod:latest /opt/peridiod/bin/peridiod start_iex
+docker run -it --rm -v "EI-ML-0001":/etc/peridiod:z --cap-add=NET_ADMIN --entrypoint /etc/peridiod/entrypoint.sh peridio/peridiod:latest /opt/peridiod/bin/peridiod start_iex
 ```
