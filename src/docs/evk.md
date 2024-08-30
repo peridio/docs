@@ -8,7 +8,7 @@ To get started with the Peridio EVK you will need access to a workstation with t
 
 * Python 3.6+
 * [Peridio CLI](/cli)
-* podman or docker
+* docker
 
 ## Getting Started
 
@@ -183,10 +183,10 @@ The Peridio EVK simulates an environment where you have six devices, where four 
 
 ### Running Virtual Devices
 
-Peridio EVK can create, launch, and attach containerized devices using podman or docker to demonstrate device updates and test remote capabilities.
+Peridio EVK can create, launch, and attach containerized devices using docker to demonstrate device updates and test remote capabilities.
 
 :::info Remote Access Tunnels
-Testing remote access tunnels using the Peridio EVK containerized devices will require running podman or docker on a linux host with the wireguard kernel module enabled. Using remote access tunnels with Podman Desktop or Docker Desktop from a Mac, Windows, or Linux desktop will executed the containers inside a VM where the wireguard kernel extensions will not be enabled and will not function properly. You can still connect to these devices using the web based remote shell functionality.
+Testing remote access tunnels using the Peridio EVK containerized devices will require running docker on a linux host with the wireguard kernel module enabled. Using remote access tunnels with Docker Desktop from a Mac, Windows, or Linux desktop will execute the containers inside a VM where the wireguard kernel extensions will not be enabled and will not function properly. You can still connect to these devices using the web based remote shell functionality.
 :::
 
 Peridio EVK will generate Identities for six devices. Two of the six devices are already known to Peridio Cloud as they are registered during the initialization process. These devices are tagged with the `canary` tag. Once the next release is "enabled" these two devices will receive the update first. The remaining four device identities were signed with an intermediate certificate that Peridio Cloud is configured with Just-In-Time-Provisioning to register these devices as they come online. This resembles a common production strategy where the certificates of devices may not be known to peridio at the time of manufacture and will instead be registered when they connect for the first time. You can observe this behavior by opening a web browser and navigating to the device list by clicking devices in the Peridio Cloud navigation.
@@ -222,10 +222,10 @@ peridio-evk device-attach <DEVICE_IDENTIFIER>
 Replace the token `<DEVICE_IDENTIFIER>` with the Peridio device identifier of the device that you want to attach your terminal to. For example `EI-ML-0001`. Once connected, you will receive a bash prompt where you can navigate and interact with the running container. Type `exit` to detach from the running container.
 
 :::tip Trouble Attaching?
-If you are having trouble attaching to a container using this command you can attach using podman or docker directly with the following command:
+If you are having trouble attaching to a container using this command you can attach using docker directly with the following command:
 
 ```bash
-{podman | docker} exec -it peridio-<DEVICE_IDENTIFIER> /bin/bash
+docker exec -it peridio-<DEVICE_IDENTIFIER> /bin/bash
 ```
 
 :::
