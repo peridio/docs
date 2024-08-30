@@ -196,7 +196,7 @@ Peridio EVK will generate Identities for six devices. Two of the six devices are
 To start the virtual devices execute the following:
 
 ```bash
-peridio-evk devices-start
+peridio-evk devices-start --tag v3.0.0-rc.1
 ```
 
 Peridio EVK will first pull the latest container image from docker-hub for `peridio/peridiod:latest` and launch six containers with unique identities. These devices will appear in Peridio Cloud device list once running. If you have already "enabled" the staged `release-r1002`, the canary devices will immediately start updating.
