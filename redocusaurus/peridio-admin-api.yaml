@@ -358,6 +358,9 @@ tags:
         <p>Subject to breaking changes prior to general availability.</p>
         <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
       </div>
+  - name: API Key Events
+    id: api-key-events
+    description: Events created due to API Key activity.
   - name: Device Events
     id: device-events
     description: Events created due to device activity.
@@ -405,6 +408,7 @@ x-tagGroups:
       - Releases
   - name: Events
     tags:
+      - API Key Events
       - Device Events
       - Webhook Events
 paths:
@@ -851,7 +855,6 @@ paths:
         |`artifact_prn`||`:`|string|
         |`description`||`:`, `~`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`name`||`:`, `~`|string|
         |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
@@ -3685,6 +3688,43 @@ components:
   schemas:
     access-token:
       type: string
+    api-key-created-event:
+      type: object
+      properties:
+        data:
+          type: object
+          description: Data associated with the `api-key` event type.
+          properties:
+            type:
+              type: string
+              enum:
+                - created
+            data:
+              type: object
+              description: Data associated with the `created` subevent type.
+              properties:
+                api_key_prn:
+                  $ref: '#/components/schemas/api-key-prn'
+                creator_key_prn:
+                  $ref: '#/components/schemas/user-prn'
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: '#/components/schemas/event-prn'
+        type:
+          type: string
+          enum:
+            - api_key
+        version:
+          type: integer
+          enum:
+            - 1
+    api-key-prn:
+      allOf:
+        - $ref: '#/components/schemas/prn'
+        - example: >-
+            prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:api_key:b3f1f699-3bc8-4c77-bda2-b974595d5e3f
     array-of-artifacts:
       type: array
       items:
@@ -5229,6 +5269,10 @@ components:
               type: string
     user-password:
       type: string
+    user-prn:
+      allOf:
+        - $ref: '#/components/schemas/prn'
+        - example: prn:1:user:b3f1f699-3bc8-4c77-bda2-b974595d5e3f
     user-username:
       type: string
     vcs-identifier:
@@ -5289,6 +5333,32 @@ components:
         with webhook executions. See the [webhooks
         reference](/platform/reference/webhooks).
 webhooks:
+  api_key_created:
+    post:
+      security: []
+      summary: Created
+      description: >
+        See the [webhooks
+        reference](/platform/reference/webhooks#supported-events) for a list of
+        supported events.
+
+
+        This event is created when an api key is created.
+      operationId: api-key-created
+      tags:
+        - API Key Events
+      parameters:
+        - $ref: '#/components/parameters/peridio-signature'
+        - $ref: '#/components/parameters/peridio-published-at'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api-key-created-event'
+      responses:
+        '200':
+          description: Ok.
   device_authentication_failed:
     post:
       security: []
