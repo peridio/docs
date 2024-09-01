@@ -16,7 +16,7 @@ Options:
           An arbitrary string attached to the resource. Often useful for displaying to users
 
       --hash <HASH>
-          The base64 encoding of the SHA256 hash of the binary's content
+          The lowercase hex encoding of the SHA256 hash of the binary's content
 
       --size <SIZE>
           The expected size in bytes of the binary
@@ -29,7 +29,7 @@ Options:
 
       --binary-part-size <BINARY_PART_SIZE>
           The size to use when creating binary parts. All binary parts will be equal to this size, except the last one which will be less than or equal to this size
-
+          
           [default: 5242880]
 
       --concurrency <CONCURRENCY>

@@ -11,7 +11,7 @@ Options:
       --state <STATE>
           The state to transition the binary to [possible values: destroyed, hashable, hashing, signable, signed, uploadable]
       --hash <HASH>
-          The base64 encoding of the SHA256 hash of the binary's content
+          The lowercase hex encoding of the SHA256 hash of the binary's content
       --size <SIZE>
           The size of the binary in bytes
   -h, --help
