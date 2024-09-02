@@ -3723,7 +3723,7 @@ components:
       minLength: 1
       maxLength: 256
     binary-hash:
-      description: The base64 encoding of the SHA256 hash of the binary's data.
+      description: The lowercase hex encoding of the SHA256 hash of the binary's data.
       type: string
     binary-size:
       description: The expected size in bytes of the binary.
@@ -3744,7 +3744,7 @@ components:
     binary-signature-signature:
       type: string
       description: |
-        The uppercase hex encoding of the ed25519 signature of the base64 encoding of the SHA256 hash of the binary.
+        The lowercase hex encoding of the ed25519 signature of the base16 encoding of the SHA256 hash of the binary.
     binary-signature:
       type: object
       properties:
@@ -3788,7 +3788,7 @@ components:
           type: string
           format: date-time
     binary-part-hash:
-      description: The base64 encoding of the SHA256 hash of the binary part's data.
+      description: The lowercase hex encoding of the SHA256 hash of the binary part's data.
       type: string
     binary-part-index:
       description: The binary part index order

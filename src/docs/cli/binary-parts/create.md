@@ -13,7 +13,7 @@ Options:
           The total size of the binary's content
 
       --hash <HASH>
-          The base64 encoding of the SHA256 hash of the binary part's data
+          The lowercase hex encoding of the SHA256 hash of the binary part's data
 
       --index <INDEX>
           Uniquely identifies a binary part and defines its position within the binary being created. Can be any number from 1 to 10,000, inclusive. If you create a binary part using the same index that was used with a previous binary part, the previously uploaded binary part is overwritten

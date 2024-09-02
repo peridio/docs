@@ -16,7 +16,7 @@ Options:
           An arbitrary string attached to the resource. Often useful for displaying to users
 
       --hash <HASH>
-          The base64 encoding of the SHA256 hash of the binary's content
+          The lowercase hex encoding of the SHA256 hash of the binary's content
 
       --size <SIZE>
           The expected size in bytes of the binary

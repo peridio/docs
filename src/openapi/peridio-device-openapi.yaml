@@ -301,7 +301,7 @@ paths:
                         binary_prn:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
                         hash:
-                          type: string
+                          $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-hash"
                         signatures:
                           $ref: "peridio-admin-openapi.yaml#/components/schemas/array-of-signatures"
                         size:
