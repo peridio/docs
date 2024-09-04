@@ -387,7 +387,7 @@ paths:
                         binary_prn:
                           $ref: '#/components/schemas/prn'
                         hash:
-                          type: string
+                          $ref: '#/components/schemas/binary-hash'
                         signatures:
                           $ref: '#/components/schemas/array-of-signatures'
                         size:
@@ -913,10 +913,13 @@ components:
         updated_at:
           type: string
           format: date-time
+    binary-hash:
+      description: The lowercase hex encoding of the SHA256 hash of the binary's data.
+      type: string
     binary-signature-signature:
       type: string
       description: >
-        The uppercase hex encoding of the ed25519 signature of the base64
+        The lowercase hex encoding of the ed25519 signature of the base16
         encoding of the SHA256 hash of the binary.
     signing-key-value-pem:
       description: PEM encoded version of the signing key value
