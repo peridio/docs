@@ -18,6 +18,9 @@ Options:
       --hash <HASH>
           The lowercase hex encoding of the SHA256 hash of the binary's content
 
+      --id <ID>
+          A user provided custom UUID id for the binary database record
+
       --size <SIZE>
           The expected size in bytes of the binary
 
