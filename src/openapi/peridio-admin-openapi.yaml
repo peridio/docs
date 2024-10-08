@@ -3500,7 +3500,7 @@ components:
               properties:
                 api_key_prn:
                   $ref: "#/components/schemas/api-key-prn"
-                creator_key_prn:
+                creator_prn:
                   $ref: "#/components/schemas/user-prn"
         inserted_at:
           type: string
