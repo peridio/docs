@@ -238,6 +238,8 @@ tags:
     id: webhooks
   - name: Web Console
     id: web-console
+  - name: Events
+    id: events
 x-tagGroups:
   - name: Account Management
     tags:
@@ -275,10 +277,40 @@ x-tagGroups:
       - Releases
   - name: Events
     tags:
+      - Events
       - API Key Events
       - Device Events
       - Webhook Events
 paths:
+  /events:
+    get:
+      operationId: list-events
+      summary: List events
+      description: |
+        List all possible events (Device, Webhooks, API Key, etc.) within the specified time range. 
+      tags:
+        - "Events"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/event_inserted_at_lt"
+        - $ref: "#/components/parameters/event_inserted_at_gte"
+        - $ref: "#/components/parameters/event_actor_prn"
+        - $ref: "#/components/parameters/event_resource_prn"
+        - $ref: "#/components/parameters/event_type"
+        - $ref: "#/components/parameters/event_subtype"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  events:
+                    $ref: "#/components/schemas/array-of-events"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
   /tunnels:
     get:
       operationId: list-tunnels
@@ -3480,6 +3512,66 @@ components:
       schema:
         type: string
         format: date-time
+    event_inserted_at_lt:
+      name: inserted_at_lt
+      in: query
+      description: |
+        The ending date point of the range of the query
+
+        Must be greater than event_inserted_at_gte. The duration they specify must be <= 24 hours.
+      schema:
+        type: date-time
+    event_inserted_at_gte:
+      name: inserted_at_gte
+      in: query
+      description: |
+        The starting date point of the range of the query
+
+        Must be lower than event_inserted_at_lt. The duration they specify must be <= 24 hours.
+      schema:
+        type: date-time
+    event_actor_prn:
+      name: actor_prn
+      in: query
+      description: |
+        The event Actor PRN.
+      schema: 
+        $ref: "#/components/schemas/prn"
+    event_resource_prn: 
+      name: resource_prn
+      in: query
+      description: | 
+        The event resource PRN.
+      schema: 
+        $ref: "#/components/schemas/prn"
+    event_type:
+      name: event_type
+      in: query
+      description: | 
+        The kind of event
+      schema: 
+        type: string
+        enum:
+          - device
+          - webhook
+          - api_key
+    event_subtype:
+      name: event_subtype 
+      in: query
+      description: | 
+        The action for the given event type
+      schema: 
+        type: string
+        enum:
+          - release_changed
+          - claimed_release
+          - checked_for_release
+          - connected
+          - updated
+          - authentication_failed
+          - created
+          - request_failed
+          - test_fire
   schemas:
     access-token:
       type: string
@@ -3575,6 +3667,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/device"
+    array-of-events:
+      type: array
+      items:
+        $ref: "#/components/schemas/event"
     array-of-firmware:
       type: array
       items:
@@ -3986,6 +4082,36 @@ components:
       allOf:
         - $ref: "#/components/schemas/prn"
         - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:event:e0040f63-4e1c-43e7-880a-d6986a35c499"
+    event:
+      allOf:
+        - oneOf: 
+          - $ref: "#/components/schemas/api-key-created-event"
+          - $ref: "#/components/schemas/device-updated-event"
+          - $ref: "#/components/schemas/device-connected-event"
+          - $ref: "#/components/schemas/device-release-changed-event"
+          - $ref: "#/components/schemas/device-claimed-release-event"
+          - $ref: "#/components/schemas/device-checked-for-release-event"
+          - $ref: "#/components/schemas/device-authentication-failed-event"
+          - $ref: "#/components/schemas/webhook-request-failed-event"
+          - $ref: "#/components/schemas/webhook-test-fire-event"
+        - type: object
+          properties:
+            actor_prn:
+              $ref: "#/components/schemas/prn"
+            resource_prn:
+              $ref: "#/components/schemas/prn"
+            event_subtype:
+              type: string
+              enum:
+                - release_changed
+                - claimed_release
+                - checked_for_release
+                - connected
+                - updated
+                - authentication_failed
+                - created
+                - request_failed
+                - test_fire
     signing-key:
       type: object
       properties:
