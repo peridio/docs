@@ -69,11 +69,18 @@ Static resolution uses the `peridio-release-prn` header to supply its current re
 
 Dynamic resolution uses the `peridio-release-version` header to supply a [SemVer](https://semver.org/) version that is representative of the device's current release so that release version requirements can be leveraged to dynamically enter the release graph. If the cohort contains releases with a `version` and `version_requirement` specified, where the header supplied version satisfies the version requirements, then of those releases the one with the lowest version is considered the next release and resolution continues.
 
+Another variation of dynamic resolution uses the `peridio-bundle-prn` header, which supplies a bundle's PRN. This is relevant when using [bundle overrides](#bundle-overrides). When a device takes a bundle override, there will be no release or version to report back to Peridio. If this header successfully identifies a bundle, we attempt to identify the most appropriate corresponding release, then enter the release graph. When multiple releases in the device's cohort use the same bundle, we will try to select the release with the lowest [SemVer](https://semver.org/) version. As release versions are not required, release options for a bundle may or may not have versions. In the case that some matching releases have versions, and some do not, releases without a version will be discarded and version ranking will proceed. If none of the matching releases have a version, the earliest-created release will be selected.
+
 :::info prefer static resolution
 
 Static resolution should be used whenever possible as it is easier to reason about and more efficent to perform than dynamic resolution. However, when required, dynamic resolution can be used in situations where your device does not or can not know the PRN of its current release, yet it still wishes to deterministically update according to its cohort's release graph. For example, this can be useful when moving devices across cohorts.
 
 :::
+
+#### Bundle Overrides
+
+An active bundle override may exist for a device. In this case, all resolution is skipped, and the configured bundle override's bundle will be returned. A bundle override is applicable when the time of resolution falls within the override's configured start and end times. In cases where multiple bundle overrides may apply, the most-recently starting override will be selected.
+
 
 #### Skip Unrequired Releases
 
