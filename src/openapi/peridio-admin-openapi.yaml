@@ -287,7 +287,7 @@ paths:
       operationId: list-events
       summary: List events
       description: |
-        List all possible events (Device, Webhooks, API Key, etc.) within the specified time range. 
+        List all possible events (Device, Webhooks, API Key, etc.) within the specified time range.
       tags:
         - "Events"
       parameters:
@@ -570,7 +570,7 @@ paths:
                   $ref: "#/components/schemas/custom-metadata-artifact"
                 description:
                   $ref: "#/components/schemas/artifact-description"
-                id: 
+                id:
                   $ref: "#/components/schemas/custom-id"
                 name:
                   $ref: "#/components/schemas/artifact-name"
@@ -694,7 +694,7 @@ paths:
                   $ref: "#/components/schemas/custom-metadata-artifact-version"
                 description:
                   $ref: "#/components/schemas/artifact-version-description"
-                id: 
+                id:
                   $ref: "#/components/schemas/custom-id"
                 version:
                   $ref: "#/components/schemas/artifact-version-version"
@@ -818,7 +818,7 @@ paths:
                   $ref: "#/components/schemas/binary-description"
                 hash:
                   $ref: "#/components/schemas/binary-hash"
-                id: 
+                id:
                   $ref: "#/components/schemas/custom-id"
                 size:
                   $ref: "#/components/schemas/binary-size"
@@ -1061,7 +1061,7 @@ paths:
                   $ref: "#/components/schemas/prn"
                 artifact_version_prns:
                   $ref: "#/components/schemas/array-of-artifact-version-prns"
-                id: 
+                id:
                   $ref: "#/components/schemas/custom-id"
                 name:
                   $ref: "#/components/schemas/bundle-name"
@@ -3535,32 +3535,32 @@ components:
       in: query
       description: |
         The event Actor PRN.
-      schema: 
+      schema:
         $ref: "#/components/schemas/prn"
-    event_resource_prn: 
+    event_resource_prn:
       name: resource_prn
       in: query
-      description: | 
+      description: |
         The event resource PRN.
-      schema: 
+      schema:
         $ref: "#/components/schemas/prn"
     event_type:
       name: event_type
       in: query
-      description: | 
+      description: |
         The kind of event
-      schema: 
+      schema:
         type: string
         enum:
           - device
           - webhook
           - api_key
     event_subtype:
-      name: event_subtype 
+      name: event_subtype
       in: query
-      description: | 
+      description: |
         The action for the given event type
-      schema: 
+      schema:
         type: string
         enum:
           - release_changed
@@ -3928,6 +3928,14 @@ components:
         updated_at:
           type: string
           format: date-time
+    bundle-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:bundle:c0c25d62-26d4-40b8-b9ab-609936d5d6d0"
+    bundle-known:
+      description: Whether the bundle is known to Peridio or not.
+      example: true
+      type: boolean
     bundle-name:
       oneOf:
         - type: "null"
@@ -4084,7 +4092,7 @@ components:
         - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:event:e0040f63-4e1c-43e7-880a-d6986a35c499"
     event:
       allOf:
-        - oneOf: 
+        - oneOf:
           - $ref: "#/components/schemas/api-key-created-event"
           - $ref: "#/components/schemas/device-updated-event"
           - $ref: "#/components/schemas/device-connected-event"
@@ -4371,6 +4379,17 @@ components:
                               $ref: "#/components/schemas/release-version"
                         - type: "null"
                           description: " "
+                    bundle:
+                      description: The bundle of the device.
+                      oneOf:
+                        - type: object
+                          properties:
+                            prn:
+                              $ref: "#/components/schemas/bundle-prn"
+                            name:
+                              $ref: "#/components/schemas/bundle-name"
+                        - type: "null"
+                          description: " "
         inserted_at:
           type: string
           format: date-time
@@ -4417,6 +4436,17 @@ components:
                           $ref: "#/components/schemas/release-prn"
                         version:
                           $ref: "#/components/schemas/release-version"
+                    - type: null
+                      description: " "
+                bundle:
+                  description: The bundle the device was told was available to update to, or `null` if no release or bundle override is available.
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: "#/components/schemas/bundle-prn"
+                        name:
+                          $ref: "#/components/schemas/bundle-name"
                     - type: null
                       description: " "
         inserted_at:
@@ -4520,6 +4550,7 @@ components:
 
                     - `peridio-release-prn`
                     - `peridio-release-version`
+                    - `peridio-bundle-prn`
                     - `x-peridio-architecture` (legacy)
                     - `x-peridio-platform` (legacy)
                     - `x-peridio-product` (legacy)
@@ -4586,6 +4617,21 @@ components:
                           $ref: "#/components/schemas/release-version"
                         known:
                           $ref: "#/components/schemas/release-known"
+                from_bundle:
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: "#/components/schemas/bundle-prn"
+                    - type: null
+                to_bundle:
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: "#/components/schemas/bundle-prn"
+                        known:
+                          $ref: "#/components/schemas/bundle-known"
                     - type: null
         inserted_at:
           type: string
@@ -5284,7 +5330,9 @@ webhooks:
       description: |
         See the [webhooks reference](/platform/reference/webhooks#supported-events) for a list of supported events.
 
-        This event is created when a device informs Peridio of its current release via the `peridio-release-prn` header, and that release is different than the one Peridio currently had on record. For example, if Peridio thought the device was on release 1, but then the device informed Peridio it was on release 2, then this event would be created going from 1 to 2.
+        This event is created when a device informs Peridio of its current release or bundle via the `peridio-release-prn` or `peridio-bundle-prn` headers, and that release or bundle is different than the one Peridio currently had on record. In cases where a `peridio-bundle-prn` header is supplied, the `to_release` property will be `null`.
+
+        For example, if Peridio thought the device was on release 1, but then the device informed Peridio it was on release 2, then this event would be created going from 1 to 2 along with the new release's bundle. Similarly, if Peridio thought the device was on bundle 1, but then the device informed Peridio it was on bundle 2, then this event would be created going from bundle 1 to 2, with a `to_release` of `null`.
       operationId: device-release-changed
       tags:
         - Device Events
