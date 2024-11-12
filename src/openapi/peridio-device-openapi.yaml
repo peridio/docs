@@ -228,6 +228,7 @@ paths:
 
             For more information on each field, reference the response.
 
+            - `source_type`
             - `bundle`
             - `release`
             - `manifest`
@@ -258,6 +259,15 @@ paths:
                       - "update"
                       - "no_update"
                       - "device_quarantine"
+                  source_type:
+                    enum:
+                      - "release"
+                      - "bundle_override"
+                      - null
+                    description: |
+                      Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                      The "source" of the bundle update - from a release, or a bundle override.
                   release:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/release"
                     description: |
