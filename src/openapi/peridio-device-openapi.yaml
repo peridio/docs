@@ -84,6 +84,16 @@ paths:
             For more information on each field, reference the response.
 
             - `cohort`
+            - `manifest`
+              - `artifact`
+              - `artifact_version`
+              - `binary_prn`
+              - `custom_metadata`
+              - `hash`
+              - `signatures`
+              - `size`
+              - `target`
+              - `url`
           in: query
           required: false
           schema:
@@ -106,6 +116,12 @@ paths:
                           Expand required. See [expanding responses](#section/Expanding-Responses).
 
                           The cohort the device belongs to.
+                      manifest:
+                        description: |
+                          Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                          The manifest associated with the device's current bundle. Includes metadata about the binaries available to download, including a presigned download URL.
+                        $ref: "#/components/schemas/manifest"
                       identifier:
                         $ref: "peridio-admin-openapi.yaml#/components/schemas/device-identifier"
                       quarantined:
@@ -289,38 +305,7 @@ paths:
 
                       Max size is 1,000,000 bytes (1 MB).
                   manifest:
-                    description: |
-                      Expand required. See [expanding responses](#section/Expanding-Responses).
-
-                      The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download url.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        artifact:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact"
-                          description: |
-                            Expand required. See [expanding responses](#section/Expanding-Responses).
-
-                            The artifact associated with `artifact_version`.
-                        artifact_version:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact-version"
-                          description: |
-                            Expand required. See [expanding responses](#section/Expanding-Responses).
-
-                            The artifact version associated with `binary_prn`.
-                        binary_prn:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
-                        hash:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-hash"
-                        signatures:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/array-of-signatures"
-                        size:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-size"
-                        target:
-                          $ref: "peridio-admin-openapi.yaml#/components/schemas/target-triplet"
-                        url:
-                          type: string
+                    $ref: "#/components/schemas/manifest"
   /tunnels:
     get:
       operationId: list-tunnels
@@ -459,3 +444,36 @@ components:
       type: array
       items:
         type: string
+    manifest:
+      description: |
+        Expand required. See [expanding responses](#section/Expanding-Responses).
+
+        The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download URL.
+      type: array
+      items:
+        type: object
+        properties:
+          artifact:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact"
+            description: |
+              Expand required. See [expanding responses](#section/Expanding-Responses).
+
+              The artifact associated with `artifact_version`.
+          artifact_version:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact-version"
+            description: |
+              Expand required. See [expanding responses](#section/Expanding-Responses).
+
+              The artifact version associated with `binary_prn`.
+          binary_prn:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
+          hash:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-hash"
+          signatures:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/array-of-signatures"
+          size:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-size"
+          target:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/target-triplet"
+          url:
+            type: string
