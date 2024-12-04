@@ -288,6 +288,8 @@ paths:
       summary: List events
       description: |
         List all possible events (Device, Webhooks, API Key, etc.) within the specified time range.
+
+        By default, events in the last 24 hours are considered. That range may be adjusted via query parameters.
       tags:
         - "Events"
       parameters:
@@ -3519,6 +3521,8 @@ components:
         The ending date point of the range of the query
 
         Must be greater than event_inserted_at_gte. The duration they specify must be <= 24 hours.
+
+        Defaults to now.
       schema:
         type: date-time
     event_inserted_at_gte:
@@ -3528,27 +3532,29 @@ components:
         The starting date point of the range of the query
 
         Must be lower than event_inserted_at_lt. The duration they specify must be <= 24 hours.
+
+        Defaults to 24 hours ago.
       schema:
         type: date-time
     event_actor_prn:
       name: actor_prn
       in: query
       description: |
-        The event Actor PRN.
+        Filter events by actor PRN.
       schema:
         $ref: "#/components/schemas/prn"
     event_resource_prn:
       name: resource_prn
       in: query
       description: |
-        The event resource PRN.
+        Filter events by resource PRN.
       schema:
         $ref: "#/components/schemas/prn"
     event_type:
       name: event_type
       in: query
       description: |
-        The kind of event
+        Filter events by type.
       schema:
         type: string
         enum:
@@ -3559,7 +3565,7 @@ components:
       name: event_subtype
       in: query
       description: |
-        The action for the given event type
+        Filter events by subtype.
       schema:
         type: string
         enum:
@@ -4093,15 +4099,15 @@ components:
     event:
       allOf:
         - oneOf:
-          - $ref: "#/components/schemas/api-key-created-event"
-          - $ref: "#/components/schemas/device-updated-event"
-          - $ref: "#/components/schemas/device-connected-event"
-          - $ref: "#/components/schemas/device-release-changed-event"
-          - $ref: "#/components/schemas/device-claimed-release-event"
-          - $ref: "#/components/schemas/device-checked-for-release-event"
-          - $ref: "#/components/schemas/device-authentication-failed-event"
-          - $ref: "#/components/schemas/webhook-request-failed-event"
-          - $ref: "#/components/schemas/webhook-test-fire-event"
+            - $ref: "#/components/schemas/api-key-created-event"
+            - $ref: "#/components/schemas/device-updated-event"
+            - $ref: "#/components/schemas/device-connected-event"
+            - $ref: "#/components/schemas/device-release-changed-event"
+            - $ref: "#/components/schemas/device-claimed-release-event"
+            - $ref: "#/components/schemas/device-checked-for-release-event"
+            - $ref: "#/components/schemas/device-authentication-failed-event"
+            - $ref: "#/components/schemas/webhook-request-failed-event"
+            - $ref: "#/components/schemas/webhook-test-fire-event"
         - type: object
           properties:
             actor_prn:
