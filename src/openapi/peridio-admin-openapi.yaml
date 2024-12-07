@@ -2198,6 +2198,7 @@ paths:
                 identifier:
                   $ref: "#/components/schemas/device-identifier"
                 last_communication:
+                  description: This field is ignored and has no effect.
                   $ref: "#/components/schemas/device-last-communication"
                 tags:
                   $ref: "#/components/schemas/array-of-device-tags"
@@ -2301,6 +2302,7 @@ paths:
                 healthy:
                   $ref: "#/components/schemas/device-healthy"
                 last_communication:
+                  description: This field is ignored and has no effect.
                   $ref: "#/components/schemas/device-last-communication"
                 tags:
                   $ref: "#/components/schemas/array-of-device-tags"
