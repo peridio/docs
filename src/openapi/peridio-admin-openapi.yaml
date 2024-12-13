@@ -4550,6 +4550,9 @@ components:
                   $ref: "#/components/schemas/device-event-certificate"
                 ca_certificate:
                   $ref: "#/components/schemas/device-event-ca-certificate"
+                route:
+                  type: string
+                  description: The route, i.e., the URL path to which the device connected.
                 headers:
                   description: |
                     Monitored headers that a device supplies during connection will be recorded in this array.
