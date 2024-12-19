@@ -4,6 +4,8 @@ Usage: peridio artifacts create [OPTIONS] --name <NAME> --organization-prn <ORGA
 Options:
       --custom-metadata <CUSTOM_METADATA>
           A JSON object that informs the metadata that will be associated with this artifact's binaries when they are included in bundles
+      --custom-metadata-path <CUSTOM_METADATA_PATH>
+          The path to the JSON file value for custom_metadata
       --description <DESCRIPTION>
           An arbitrary string attached to the resource. Often useful for displaying to users
       --id <ID>
