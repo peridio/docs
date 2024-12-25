@@ -11,7 +11,7 @@ To learn more about Peridio CA certificates in general, see the [CA certificates
 
 ## Obtain a CA Certificate File
 
-There are many ways to obtain a CA certificate file including but not limited to generating your own or purchasing one from a company that specializes in certificate management. For the sake of example you may see the [creating X.509 certificates with OpenSSL](creating-x509-certificates-with-openssl) guide. If you follow that guide, use an intermediate certificate as your CA certificate for the purpose of this guide.
+There are many ways to obtain a CA certificate file including but not limited to generating your own or purchasing one from a company that specializes in certificate management. For the sake of example you may see the [creating X.509 certificates with Peridio](creating-x509-certificates-with-peridio) guide. If you follow that guide, use an intermediate certificate as your CA certificate for the purpose of this guide.
 
 ## Obtain a Verification Certificate File
 
@@ -40,7 +40,7 @@ peridio ca-certificates create-verification-code
 
 ### Create a Verification Certificate File
 
-See the [creating X.509 certificates with OpenSSL](creating-x509-certificates-with-openssl) guide and create an end entity certificate whose common name is the verification code you obtained earlier.
+See the [creating X.509 certificates with Peridio](creating-x509-certificates-with-peridio) guide and create an end entity certificate whose common name is the verification code you obtained earlier.
 
 ## Submit the CA Certificate and Verification Certificate to Peridio
 
