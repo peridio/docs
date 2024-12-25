@@ -133,13 +133,13 @@ export default {
           items: [
             'platform/guides/introduction-to-binary-management',
             'platform/guides/multipart-uploads-with-binary-parts',
-            'platform/guides/creating-artifact-versions',
             'platform/guides/creating-artifacts',
+            'platform/guides/creating-artifact-versions',
+            'platform/guides/creating-signing-keys',
             'platform/guides/creating-binaries',
             'platform/guides/creating-binary-parts',
             'platform/guides/creating-binary-signatures',
             'platform/guides/creating-firmware',
-            'platform/guides/creating-signing-keys',
           ],
         },
         {
