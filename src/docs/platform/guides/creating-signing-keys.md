@@ -17,13 +17,13 @@ Signing keys can be formatted in the recommended [PEM](/platform/reference/signi
 
 Create a PEM private key:
 
-```
+```bash
 openssl genpkey -algorithm Ed25519 -out private.pem
 ```
 
 Derive a PEM public key from the PEM private key:
 
-```
+```bash
 openssl pkey -in private.pem -pubout -out public.pem
 ```
 
@@ -37,20 +37,21 @@ See the [Peridio Web Console](https://console.peridio.com).
 
 ### CLI
 
-```
-peridio signing-keys create \
-  --value value \
-  --name value
-```
+The CLI to create a signing key expects the value to be in raw format, which is not what `openssl`
+above would have output. To convert a PEM public key to a raw public key, you may use the following snippet. For more information, see the [convert keys](/platform/reference/signing-keys#convert-keys) section of the signing keys reference.
 
-The `--value` option expects your public key in raw format.
-
-To convert a PEM public key to a raw public key, see the [convert keys](/platform/reference/signing-keys#convert-keys) section of the signing keys reference.
-
-```
+```bash
 openssl pkey -outform DER -pubin -in public.pem -pubout \
   | tail -c +13 \
   | base64 > public.raw
+```
+
+Submit the key to Peridio.
+
+```bash
+peridio signing-keys create \
+  --value $(cat public.raw) \
+  --name signing-key-name
 ```
 
 The submitted key may now be used to sign [binaries](/platform/guides/creating-binary-signatures) and [firmware](/platform/guides/creating-firmware#sign-the-fwup-archive).
