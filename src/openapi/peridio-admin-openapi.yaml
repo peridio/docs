@@ -289,7 +289,7 @@ paths:
       description: |
         List all possible events (Device, Webhooks, API Key, etc.) within the specified time range.
 
-        By default, events in the last 24 hours are considered. That range may be adjusted via query parameters.
+        The date range may be adjusted via query parameters.
       tags:
         - "Events"
       parameters:
@@ -3522,9 +3522,7 @@ components:
       description: |
         The ending date point of the range of the query
 
-        Must be greater than event_inserted_at_gte. The duration they specify must be <= 24 hours.
-
-        Defaults to now.
+        Must be greater than event_inserted_at_gte.
       schema:
         type: date-time
     event_inserted_at_gte:
@@ -3533,9 +3531,7 @@ components:
       description: |
         The starting date point of the range of the query
 
-        Must be lower than event_inserted_at_lt. The duration they specify must be <= 24 hours.
-
-        Defaults to 24 hours ago.
+        Must be lower than event_inserted_at_lt.
       schema:
         type: date-time
     event_actor_prn:
@@ -3553,7 +3549,7 @@ components:
       schema:
         $ref: "#/components/schemas/prn"
     event_type:
-      name: event_type
+      name: type
       in: query
       description: |
         Filter events by type.
@@ -3564,7 +3560,7 @@ components:
           - webhook
           - api_key
     event_subtype:
-      name: event_subtype
+      name: subtype
       in: query
       description: |
         Filter events by subtype.
