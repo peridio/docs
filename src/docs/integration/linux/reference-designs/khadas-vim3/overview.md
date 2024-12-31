@@ -2,7 +2,7 @@
 
 <img src="/img/integration/linux/reference-designs/khadas-vim3.jpg" />
 
-## Getting Started
+## Getting started
 
 This guide depends on the following requirements:
 
@@ -11,7 +11,7 @@ This guide depends on the following requirements:
 
 ### Configuration
 
-#### Generate Device Identity
+#### Generate device identity
 
 Export the environment variables `PERIDIO_CERTIFICATE_FILE` and `PERIDIO_PRIVATE_KEY_FILE` to the location of the PEM files generated when configuring your signing PKI. For more information about device signing PKI, see [creating CA certificates](/platform/guides/creating-x509-certificates-with-openssl).
 
@@ -34,7 +34,7 @@ Checkout the `meta-avocado` project to your build directory
 git clone git@github.com:peridio/meta-avocado
 ```
 
-### Build the System
+### Build the system
 
 You can build the project using kas. The product will have the device identity included as part of the runtime environment. Building this system may take a long time to complete depending on your build machine resources.
 

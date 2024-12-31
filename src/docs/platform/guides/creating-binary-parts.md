@@ -1,4 +1,4 @@
-# Creating Binary Parts
+# Creating binary parts
 
 This guide describes how to create binary parts.
 
@@ -9,7 +9,7 @@ To learn more about Peridio binary parts in general, see the [binary parts](/pla
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create Binary Part
+## Create binary part
 
 ### CLI
 

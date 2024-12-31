@@ -1,4 +1,4 @@
-# Binary Parts
+# Binary parts
 
 Binary parts track the chunks of a multipart upload to Peridio.
 

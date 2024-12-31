@@ -1,4 +1,4 @@
-# Containerizing Peridiod
+# Containerizing peridiod
 
 Peridiod can be run from within a container for testing, development, and production use cases. For example, [Peridio EVK](/evk) leverages containerized peridiod for managing virtual devices. Running peridiod in a container orchestrator requires several considerations.
 

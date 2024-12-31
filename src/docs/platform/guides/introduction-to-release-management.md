@@ -1,4 +1,4 @@
-# Introduction to Release Management
+# Introduction to release management
 
 This guide serves as a comprehensive introduction to release management that will cover bundles and releases.
 
@@ -7,20 +7,20 @@ This guide serves as a comprehensive introduction to release management that wil
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Release Management Resources
+## Release management resources
 
 Release management comprises the following resources:
 
 - [Bundles](/platform/reference/bundles) - define ordered sets of [binaries](/platform/reference/binaries) that can be distributed to [devices](/platform/reference/devices) via [releases](/platform/reference/releases).
 - [Releases](/platform/reference/releases) - publish bundles to devices and form the [release graph](/platform/reference/releases#graph-traversal).
 
-## Getting Started
+## Getting started
 
 The goal of this guide is to create a release for a signed binary.
 
 Creating a signed binary is outside the scope of this guide, see [Introduction to Binary Management](introduction-to-binary-management).
 
-## Creating a Bundle
+## Creating a bundle
 
 [Create a bundle](creating-bundles) so that we have something to distribute.
 
@@ -30,7 +30,7 @@ peridio bundles create \
   --artifact-version-prns $PERIDIO_ARTIFACT_VERSION_PRNS
 ```
 
-## Creating a Release
+## Creating a release
 
 [Create a release](creating-releases) to distribute the bundle to devices.
 

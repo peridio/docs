@@ -1,4 +1,4 @@
-# Creating Bundles
+# Creating bundles
 
 This guide describes how to create bundles.
 
@@ -10,7 +10,7 @@ reference.
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create Bundle
+## Create bundle
 
 ### CLI
 

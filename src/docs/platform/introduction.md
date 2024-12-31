@@ -1,10 +1,10 @@
 import ContentSectionTag from '@site/src/components/ContentSectionTag';
 
-# Cloud Platform
+# Cloud platform
 
 The Peridio Cloud platform provides the [Admin API](/admin-api), [Device API](/device-api), [Web Console](https://console.peridio.com/), and Remote Access services.
 
-## Content Sections
+## Content sections
 
 The cloud platform documentation is split into references and guides. The reference specifies the
 concepts and resources that make up Peridio. If you wish to explore Peridio conceptually, or know exactly what
@@ -21,7 +21,7 @@ The [reference](/platform/reference/overview) section enumerates and describes a
 The [guides](/platform/guides/introduction-to-binary-management) section demonstrates how to manage Peridio resources.
 
 
-## Content Subsections
+## Content subsections
 
 Sections across the reference and guides typically group content into the following subsections:
 
@@ -32,7 +32,7 @@ Sections across the reference and guides typically group content into the follow
 - **Release Management:** Bundling and distributing digital assets.
 - **Remote Access:** Tunnels.
 
-## Content Labels
+## Content labels
 
 Labels are used to denote special content. They typically are specified as admonitions and tags within content.
 

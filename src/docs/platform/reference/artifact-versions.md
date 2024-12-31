@@ -1,4 +1,4 @@
-# Artifact Versions
+# Artifact versions
 
 Artifact versions define a version for your [binaries](binaries).
 

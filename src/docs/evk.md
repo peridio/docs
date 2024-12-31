@@ -10,7 +10,7 @@ To get started with the Peridio EVK you will need access to a workstation with t
 * [Peridio CLI](/cli)
 * docker
 
-## Getting Started
+## Getting started
 
 You can install the `peridio-evk` from PyPI
 
@@ -28,7 +28,7 @@ This should be an organization that you have administrative rights to create new
 
 You can generate a new API key in Peridio from the [API Authentication](https://console.peridio.com/settings/api-authentication) page. The generated token will only be displayed to you once, be sure to copy it down for the next steps.
 
-### Initializing the EVK Demo Product
+### Initializing the EVK demo product
 
 Initializing the Peridio EVK demo product is easy and can be done in a single step. From your command line execute the following
 
@@ -68,7 +68,7 @@ As the Peridio EVK program executes, you'll notice a lot of output being present
 
 Tasks are top level items, They illustrate what part of the system is currently being configured
 
-#### Sub Tasks
+#### Sub tasks
 
 ```bash
   ℹ edge-inference-os: v1.12.1
@@ -87,7 +87,7 @@ Subtasks provide more information about the data that is being used during the c
 
 Rendered any time the Peridio EVK modifies a local file. Useful for tracking where Peridio EVK is storing data.
 
-#### CLI Commands
+#### CLI commands
 
 ```bash
 ⬆️  CLI command: peridio --profile peridio-evk devices create --identifier EI-ML-0001 --product-name edge-inference --cohort-prn prn:1:70c48079-0c40-4668-a7c2-3a15e003bc6b:cohort:96686516-e2c0-4690-8405-343429cd9714 --tags canary --target arm64-v8
@@ -97,7 +97,7 @@ When Peridio EVK executes a Peridio CLI command, the command will be rendered to
 
 CLI responses will be rendered just below the CLI command. For streaming operations, such as uploading binaries to Peridio Cloud, The test will be output in realtime as the CLI executes.
 
-### EVK Demo Product Overview
+### EVK demo product overview
 
 The Peridio EVK deploys a demo product called `edge-inference` into your organization which illustrates a common way to configure Peridio Cloud for use with an embedded device. The following resources are deployed into the organization:
 
@@ -181,7 +181,7 @@ Releases:
 
 The Peridio EVK simulates an environment where you have six devices, where four of the devices are Just-In-Time-Provisioned. These devices are in the release cohort and start on release-r1001. There is a release that has been staged for the release cohort titled release-r1002. This release will update the edge-inference-service and edge-inference-model to the latest version. The release is initially staged in a disabled state, and it is configured to deploy to only devices tagged with `canary`. Once you enable the release, and start virtual devices, the `canary` devices will begin to take an update.
 
-### Running Virtual Devices
+### Running virtual devices
 
 Peridio EVK can create, launch, and attach containerized devices using docker to demonstrate device updates and test remote capabilities.
 
@@ -191,7 +191,7 @@ Testing remote access tunnels using the Peridio EVK containerized devices will r
 
 Peridio EVK will generate Identities for six devices. Two of the six devices are already known to Peridio Cloud as they are registered during the initialization process. These devices are tagged with the `canary` tag. Once the next release is "enabled" these two devices will receive the update first. The remaining four device identities were signed with an intermediate certificate that Peridio Cloud is configured with Just-In-Time-Provisioning to register these devices as they come online. This resembles a common production strategy where the certificates of devices may not be known to peridio at the time of manufacture and will instead be registered when they connect for the first time. You can observe this behavior by opening a web browser and navigating to the device list by clicking devices in the Peridio Cloud navigation.
 
-#### Starting Virtual Devices
+#### Starting virtual devices
 
 To start the virtual devices execute the following:
 
@@ -201,7 +201,7 @@ peridio-evk devices-start --tag v3.0.0-rc.4
 
 Peridio EVK will first pull the latest container image from docker-hub for `peridio/peridiod:latest` and launch six containers with unique identities. These devices will appear in Peridio Cloud device list once running. If you have already "enabled" the staged `release-r1002`, the canary devices will immediately start updating.
 
-#### Stopping Virtual Devices
+#### Stopping virtual devices
 
 To stop virtual devices execute the following command
 
@@ -211,7 +211,7 @@ peridio-evk devices-stop
 
 Peridio EVK will stop all running container images.
 
-#### Attaching to a Virtual Device Container
+#### Attaching to a virtual device container
 
 You can attach to a virtual device container to inspect the process of placing release files by executing the following:
 

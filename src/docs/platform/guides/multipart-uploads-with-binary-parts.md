@@ -1,4 +1,4 @@
-# Multipart Uploads With Binary Parts
+# Multipart uploads with binary parts
 
 This guide describes how to upload a binary by manually orchestrating the binary parts yourself.
 
@@ -11,7 +11,7 @@ It is strongly recommend to avoid this complexity whenever possible by using the
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Picking a Target Part Size
+## Picking a target part size
 
 Assuming you have already [created a binary](creating-binaries), the next step in using binary parts to perform a multipart upload is deciding on a target part size. The target part size is the size that you will try to make all binary parts.
 
@@ -33,7 +33,7 @@ It is likely that your binary's size is not an exact multiple of your target par
 The 101st part would be `0.003 GB` or `3 MB` in size.
 :::
 
-## Creating a Part
+## Creating a part
 
 ```console
 peridio binary-parts create \
@@ -50,7 +50,7 @@ peridio binary-parts create \
 
 If successful, this command will return a presigned URL you can use to upload the binary part's content.
 
-## Uploading a Part
+## Uploading a part
 
 The following is an example curl command for uploading a binary part.
 
@@ -65,7 +65,7 @@ curl $PERIDIO_PRESIGNED_URL \
 
 Every specified header in that example is required.
 
-## Listing Parts
+## Listing parts
 
 
 ```console

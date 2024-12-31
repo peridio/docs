@@ -2,7 +2,7 @@
 title: Getting started
 ---
 
-# Peridio Command Line Interface Overview
+# Peridio command line interface overview
 
 Peridio CLI, or `peridio`, is a command-line interface to Peridio for use in your terminal or your scripts.
 
@@ -16,7 +16,7 @@ It aims to have complete support for the [Peridio Admin API](/admin-api).
 
 The CLI can upgrade itself in place via `peridio upgrade`.
 
-## Precedence of Supplied Values
+## Precedence of supplied values
 
 Options can be supplied in up to three ways, from highest to lowest precedence:
 
@@ -24,7 +24,7 @@ Options can be supplied in up to three ways, from highest to lowest precedence:
 2. Environment variables
 3. Configuration files
 
-## Configuration Files
+## Configuration files
 
 The Peridio CLI supports profile based configuration files as a means of supplying options that are relevant to many subcommands. A particular profile can be choosen explicitly via [--profile](#profile). To use this functionality you must specify at least a [config.json](#configjson) file and optionally, if you wish to specify API keys via this method, a [credentials.json](#credentialsjson) in the same directory.
 
@@ -218,11 +218,11 @@ Contains a single object of the format:
   </tbody>
 </table>
 
-## Global Options
+## Global options
 
 Global options are options that are relevant to many commands. They are supplied after `peridio` but before a command, e.g., `peridio --profile foo products list`.
 
-### API Key
+### API key
 
 `-a`, `--api-key <api-key>`, `$PERIDIO_API_KEY`
 
@@ -240,7 +240,7 @@ The base URL of the Peridio Admin API.
 
 Can be provided via configuration files.
 
-### CA Path
+### CA path
 
 `-c`, `--ca-path <ca-path>`, `$PERIDIO_CA_PATH`
 
@@ -248,7 +248,7 @@ A path identifying a file containing PEM encoded CA certificates to additionally
 
 Can be provided via configuration files.
 
-### Config Directory
+### Config directory
 
 `-d`, `--config-directory <config-directory>`, `$PERIDIO_CONFIG_DIRECTORY`
 
@@ -256,7 +256,7 @@ Defaults to `$HOME/Library/Application\ Support/peridio` on macOS.
 
 A path identifying the directory the CLI should look within to find Peridio CLI configuration files.
 
-### Organization Name
+### Organization name
 
 `-o`, `--organization-name <organization-name>`, `$PERIDIO_ORGANIZATION_NAME`
 
@@ -274,10 +274,10 @@ Explicitly chooses a profile within a [config.json](#configjson) to use. See [co
 
 The current version of the CLI is `1`.
 
-### Stale Configs
+### Stale configs
 
 Starting with version `0.8.0`, the CLI will halt and prompt you to upgrade your config if it is stale.
 
-### Unversioned Configs
+### Unversioned configs
 
 The very first iteration of a config file was unversioned, accordingly, that "version" is identified by a config file that does not have a `version` key.

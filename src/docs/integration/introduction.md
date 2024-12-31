@@ -1,9 +1,9 @@
-# System Integrations
+# System integrations
 
 Peridio provides agents and reference designs for the following systems:
 
 * [Linux](linux/overview)
-* Android (private beta)
+* [Android](android/overview)
 * RTOS (private beta)
 
 ## Agent

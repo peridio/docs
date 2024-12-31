@@ -1,4 +1,4 @@
-# Creating Releases
+# Creating releases
 
 This guide describes how to create releases.
 
@@ -9,7 +9,7 @@ To learn more about Peridio releases in general, see the [releases](/platform/re
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create Release
+## Create release
 
 ### CLI
 

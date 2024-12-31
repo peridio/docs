@@ -1,4 +1,4 @@
-# Creating X.509 Certificates with Peridio
+# Creating X.509 certificates with Peridio
 
 This guide describes how to create X.509 certificates with the Peridio CLI.
 
@@ -11,7 +11,7 @@ For more control over key and certificate details, see [creating X.509 certifica
 - [Peridio CLI](/cli).
   - Last tested with version 0.24.0.
 
-## Create Certificates
+## Create certificates
 
 :::warning sensitive private keys
 Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is compromised.
@@ -57,7 +57,7 @@ peridio x509 create \
   --signer-cert root-ca-certificate.pem
 ```
 
-### End-Entity Certificate
+### End-entity certificate
 
 For context, reference [X.509 end entity](/platform/reference/x509#end-entity).
 

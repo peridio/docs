@@ -30,7 +30,7 @@ Firmware require the use of [fwup](https://github.com/fwup-home/fwup) archives a
 When a device downloads a firmware it may extract from it like a ZIP, or apply a fwup task, or do whatever it sees fit to install or process the firmware. The code responsible for this functionality is the [agent](/integration/introduction#agent).
 
 
-## Time to Live (TTL)
+## Time to live (TTL)
 
 All firmware will be deleted automatically after a set amount of seconds by configuring their `ttl` field. Firmware associated with a deployment will never be automatically deleted. Dissassociating a firmware with a configured TTL from all deployments will cause the TTL to begin counting down again from its maximum value.
 
@@ -47,11 +47,11 @@ All firmware will be deleted automatically after a set amount of seconds by conf
 5. Deployment (C) is deleted.
     - Firmware (A) is associated with zero deployments, its TTL begins counting down from its maximum value of `60` and it will be automatically deleted once it runs out.
 
-## Delta Updates
+## Delta updates
 
 It is possible to ship delta updates with Peridio in a self-managed or Peridio-managed fashion.
 
-### Self-Managed
+### Self-managed
 
 This approach yields the greatest flexibility, but comes at the cost of complexity. It would mean you would be responsible for:
 
@@ -61,7 +61,7 @@ This approach yields the greatest flexibility, but comes at the cost of complexi
 
 Note that with this approach you would not actually enable delta updates features in Peridio (check boxes in the Web Console nor fields in the API/CLI), as that is used only in the Peridio-Managed case.
 
-### Peridio-Managed
+### Peridio-managed
 
 This approach has Peridio automatically generate, serve, and apply patch files for you, but comes at the cost of flexibility and customization. In particular, the following requirements are imposed:
 

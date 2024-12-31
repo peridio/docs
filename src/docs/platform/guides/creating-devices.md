@@ -1,4 +1,4 @@
-# Creating Devices
+# Creating devices
 
 This guide describes how to create devices.
 
@@ -9,7 +9,7 @@ To learn more about Peridio devices in general, see the [devices](/platform/refe
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create One Device
+## Create one device
 
 Devices may be created one at a time using the Peridio CLI, Peridio Admin API, or the Peridio Web Console.
 
@@ -19,13 +19,13 @@ peridio devices create \
   --product-name my-product
 ```
 
-## Create Devices in Bulk
+## Create devices in bulk
 
 Devices may be created in bulk using the Peridio Web Console.
 
 Peridio supports two file formats for creating devices in bulk, the Peridio Device Import Manifest and the Microchip TrustPlatform Manifest.
 
-### Peridio Device Import Manifest
+### Peridio device import manifest
 
 This is a CSV file that expects the following headers to be included in this order:
 
@@ -46,6 +46,6 @@ This is a CSV file that expects the following headers to be included in this ord
 
 It is recommended that you quote every field.
 
-### Microchip TrustPlatform Manifest
+### Microchip TrustPlatform manifest
 
-This is a file format defined by Microchip and provided to their customers following a purchase of select hardware security modules. Relevant documentation is available [here](https://www.microchip.com/content/dam/mchp/documents/SCBU/ProductDocuments/SupportingCollateral/TrustPlatformManifestFileFormat_2019-09-26_A.pdf).
+This is a file format defined by Microchip and provided to their customers following a purchase of select hardware security modules. Relevant documentation is available [here](https://ww1.microchip.com/downloads/aemDocuments/documents/SCBU/ProductDocuments/ReferenceManuals/Trust-Platform-Manifest-File-Format-60001759.pdf).

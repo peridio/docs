@@ -34,7 +34,7 @@ ROOTFS="$BINARIES_DIR/rootfs.squashfs" fwup \
   -o "$BINARIES_DIR/$fw_filename"
 ```
 
-## Testing with QEmu
+## Testing with QEMU
 
 The buildroot integration can be tested using the included build configuration for qemu aarch64. Check out the latest buildroot tag and include the peridio external tree using `BR2_EXTERNAL`.
 

@@ -1,4 +1,4 @@
-# Creating Artifacts
+# Creating artifacts
 
 This guide describes how to create artifacts.
 
@@ -9,7 +9,7 @@ To learn more about Peridio artifacts in general, see the [artifacts](/platform/
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create Artifact
+## Create artifact
 
 ### CLI
 

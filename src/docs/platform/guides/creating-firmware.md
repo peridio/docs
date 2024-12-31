@@ -1,4 +1,4 @@
-# Creating Firmware
+# Creating firmware
 
 This guide describes how to create firmware.
 
@@ -13,9 +13,9 @@ To learn more about Peridio firmware in general, see the [firmware](/platform/re
 
 In order to create a firmware it must be associated with a preexisting product. To learn how to create a product, see the [creating products](/platform/guides/creating-products) guide.
 
-## fwup Archive Creation
+## fwup archive creation
 
-### Create a Dummy Asset
+### Create a dummy asset
 
 ```
 echo "russet" > tuber.txt
@@ -38,7 +38,7 @@ file-resource tuber.txt {
 }
 ```
 
-### Create a fwup Archive
+### Create a fwup archive
 
 ```text
 fwup \
@@ -47,7 +47,7 @@ fwup \
   -o demo.fw
 ```
 
-### Sign the fwup Archive
+### Sign the fwup archive
 
 See [signing keys](/platform/reference/signing-keys).
 
@@ -59,7 +59,7 @@ fwup \
   -o signed-demo.fw
 ```
 
-### Verify the fwup Archive is Signed
+### Verify the fwup archive is signed
 
 ```text
 fwup \

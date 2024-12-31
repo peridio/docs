@@ -1,4 +1,4 @@
-# Creating Products
+# Creating products
 
 This guide describes how to create produts.
 
@@ -8,7 +8,7 @@ To learn more about Peridio products in general, see the [products](/platform/re
 
 - [Peridio CLI](https://github.com/peridio/morel/releases) >= 0.11.0.
 
-## Create Product
+## Create product
 
 ### Web Console
 
