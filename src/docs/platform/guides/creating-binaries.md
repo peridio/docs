@@ -1,4 +1,4 @@
-# Creating Binaries
+# Creating binaries
 
 This guide describes how to create binaries.
 
@@ -10,11 +10,11 @@ reference.
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create Binary
+## Create binary
 
 ### CLI
 
-#### Create, Upload, and Sign
+#### Create, upload, and sign
 
 To create, upload, and sign a binary all at once:
 

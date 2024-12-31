@@ -1,4 +1,4 @@
-# Packaging Updates
+# Packaging updates
 
 Peridiod supports installing updates from both Peridio Distributions and Peridio Releases.
 

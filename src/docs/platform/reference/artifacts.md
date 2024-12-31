@@ -10,7 +10,7 @@ For example, you may create an artifact "ML-Model". Within that artifact you wou
 For field-level information and requirements, see the Admin API's [create-an-artifact](/admin-api#artifacts/operation/create-an-artifact) endpoint.
 :::
 
-## Immutable Reference
+## Immutable reference
 
 Artifacts act as an immutable reference to a type of binary that remains consistent before and after any version or binaries are created for it. This enables code to perform different actions based on the type of binary.
 

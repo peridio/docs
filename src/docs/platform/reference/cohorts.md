@@ -24,7 +24,7 @@ One of the key benefits of using device cohorts is the ability to view and analy
 
 Only devices within a cohort are compatible with using [releases](/platform/reference/releases.md) for updates.
 
-### Release Graph
+### Release graph
 
 Releases are created within cohorts to orchestrate the delivery of [bundles](/platform/reference/bundles.md) to devices. Within a cohort, releases form an [anti-arborescence](https://en.wikipedia.org/wiki/Arborescence_(graph_theory)) graph. In other words, releases may point to exactly one next release, a release may be pointed to by zero to many releases, and all releases eventually converge to a single [latest release](releases#latest-release).
 

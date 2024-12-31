@@ -107,7 +107,7 @@ The following keys inform how the use of distributions will be applied in the sy
 
 See the [introduction to remote access](/platform/guides/introduction-to-remote-access) for more information on configuring and using remote access tunnels.
 
-## Node Configurations
+## Node configurations
 
 Filesystem
 
@@ -151,7 +151,7 @@ PKCS11 Identity using ATECC608B TrustAndGo
 
 ## Examples
 
-### Minimal Releases
+### Minimal releases
 
 ```json
 {
@@ -165,7 +165,7 @@ PKCS11 Identity using ATECC608B TrustAndGo
 }
 ```
 
-### Minimal with Remote Access for SSH
+### Minimal with remote access for SSH
 
 ```json
 {
@@ -205,7 +205,7 @@ config :peridiod,
   remote_iex: true,
 ```
 
-### U-Boot Environment additions
+### U-Boot environment additions
 
 peridiod releases will track and expose release metadata in the uboot environment under the following new keys
 

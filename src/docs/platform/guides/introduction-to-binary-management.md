@@ -1,4 +1,4 @@
-# Introduction to Binary Management
+# Introduction to binary management
 
 This guide serves as a comprehensive introduction to binary management that will cover artifacts, artifact versions, binaries, binary parts, binary signatures, and signing keys.
 
@@ -7,7 +7,7 @@ This guide serves as a comprehensive introduction to binary management that will
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Binary Management Resources
+## Binary management resources
 
 Binary management comprises the following resources:
 
@@ -18,11 +18,11 @@ Binary management comprises the following resources:
 - [Binary Signatures](/platform/reference/binary-signatures) - represent signatures.
 - [Signing Keys](/platform/reference/signing-keys) - verify signatures.
 
-## Getting Started
+## Getting started
 
 We need to create an artifact so that our binary can have a type and be reasoned about categorically. We need to create artifact versions so that the binaries we create can be versioned. Artifacts and artifact versions are seperate resources so that versions can be tracked across artifacts. Binaries record the content you wish to disitribute to devices. Binary parts, binary signatures, and signing keys will help us upload and sign our binary so that Peridio and downstream consumers of the binary can verify that you created it.
 
-### Create an Artifact
+### Create an artifact
 
 [Create an artifact](creating-artifacts) so that we have a type for our binary.
 
@@ -32,7 +32,7 @@ peridio artifacts create \
   --name "ML-Model"
 ```
 
-### Create an Artifact Version
+### Create an artifact version
 
 [Create an artifact version](creating-artifact-versions) for that artifact.
 
@@ -42,7 +42,7 @@ peridio artifact-versions create \
   --version "1.0.0"
 ```
 
-### Create Signing Keys
+### Create signing keys
 
 [Create a signing key](creating-signing-keys) if you don't have one already.
 
@@ -78,7 +78,7 @@ peridio signing-keys create \
   --name prod
 ```
 
-### Create a Binary
+### Create a binary
 
 Create a binary for that version.
 

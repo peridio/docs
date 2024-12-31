@@ -1,4 +1,4 @@
-# Creating X.509 Certificates with OpenSSL
+# Creating X.509 certificates with OpenSSL
 
 This guide describes how to create [X.509](/platform/reference/x509) certificates with [OpenSSL](https://www.openssl.org/).
 
@@ -15,7 +15,7 @@ For a more streamlined workflow, see [creating X.509 certificates with Peridio](
 To inspect any private key, certificate signing request, or certificate you create in this guide, reference [X.509](/platform/reference/x509).
 :::
 
-## Create Certificates
+## Create certificates
 
 :::info openssl config
 Some of the commands below will reference an `openssl.cnf` file, you must create this with the contents described at [Appendix A](#a---opensslcnf).
@@ -44,7 +44,7 @@ For information regarding how Peridio interacts with certificates reference [CA 
 
 For context, reference [X.509](/platform/reference/x509#root).
 
-#### Create a Private Key
+#### Create a private key
 
 For context, reference [cli-x509-create](/cli/x509/create).
 
@@ -55,7 +55,7 @@ openssl ecparam \
   -out root-private-key.pem
 ```
 
-#### Create a Certificate Signing Request
+#### Create a certificate signing request
 
 For context, reference [openssl-req](#openssl-req).
 
@@ -69,7 +69,7 @@ openssl req \
   -subj "/CN=unique-root-name"
 ```
 
-#### Create a Certificate
+#### Create a certificate
 
 For context, reference [openssl-ca](#openssl-ca).
 
@@ -92,7 +92,7 @@ openssl ca \
 
 For context, reference [X.509 intermediate](/platform/reference/x509#intermediate).
 
-#### Create a Private Key
+#### Create a private key
 
 For context, reference [openssl-ecparam](#openssl-ecparam).
 
@@ -103,7 +103,7 @@ openssl ecparam \
   -out intermediate-private-key.pem
 ```
 
-#### Create a Certificate Signing Request
+#### Create a certificate signing request
 
 For context, reference [openssl-req](#openssl-req).
 
@@ -115,7 +115,7 @@ openssl req \
   -subj "/CN=unique-intermediate-name"
 ```
 
-#### Create a Certificate
+#### Create a certificate
 
 For context, reference [openssl-ca](#openssl-ca).
 
@@ -134,11 +134,11 @@ openssl ca \
   -startdate YYYYMMDDHHMMSSZ
 ```
 
-### End-Entity Certificate
+### End-entity certificate
 
 For context, reference [X.509 end entity](/platform/reference/x509#end-entity).
 
-#### Create a Private Key
+#### Create a private key
 
 For context, reference [openssl-ecparam](#openssl-ecparam).
 
@@ -149,7 +149,7 @@ openssl ecparam \
   -out end-entity-private-key.pem
 ```
 
-#### Create a Certificate Signing Request
+#### Create a certificate signing request
 
 For context, reference [openssl-req](#openssl-req).
 
@@ -161,7 +161,7 @@ openssl req \
   -subj "/CN=unique-end-entity-name"
 ```
 
-#### Create a Certificate
+#### Create a certificate
 
 For context, reference [openssl-ca](#openssl-ca).
 

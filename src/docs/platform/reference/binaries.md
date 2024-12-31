@@ -8,7 +8,7 @@ Once you've created an [artifact version](artifact-versions), you can create bin
 For field-level information and requirements, see the Admin API's [create-a-binary](/admin-api#binaries/operation/create-a-binary) endpoint.
 :::
 
-## Content Versus Record
+## Content versus record
 
 When referring to binaries there are two distinct concepts: a binary's content and a binary's record.
 
@@ -16,7 +16,7 @@ A binary's record is the meta information Peridio stores regarding a binary, e.g
 
 This distinction is important because a binary's content and record are stored independently from each other for a variety of reasons including the efficient distribution of content to devices and the efficient queryability of records. It is especially relevant to [destroyed binaries](#destroyed-binaries).
 
-## Targets and Compatibility
+## Targets and compatibility
 
 Binaries may indicate their intended compatibility via their `target` field. The value of this field is expected to be a target triplet like `arm-linux-androidabi`.
 
@@ -83,11 +83,11 @@ The binary is complete and ready to be attached to [bundles](/platform/reference
 
 The binary has been destroyed and can no longer be attached to new bundles nor distributed via releases. See [destroyed binaries](#destroyed-binaries).
 
-### Resetting Binaries
+### Resetting binaries
 
 Hashable, hashing, and signable binaries can be reset to the uploadable state. This is achieved with an Admin API [update-a-binary](/admin-api#binaries/operation/update-a-binary) request that sets the state to uploadable. Doing this will delete associated binary parts and a new attempt at uploading may be made.
 
-## Destroyed Binaries
+## Destroyed binaries
 
 Binaries with a state of signed can be destroyed. Destroying a binary deletes its content from Peridio and alters its record, to understand the difference between the two see [content versus record](#content-versus-record).
 
@@ -99,7 +99,7 @@ Destroying a binary is an irreversible and destructive action.
 - Devices' ability to update may be interupted, see [impact on releases](#impact-on-releases).
 :::
 
-### Impact on Releases
+### Impact on releases
 
 A release is affected by a destroyed binary if the release is associated with a bundle that is associated with an artifact version that is associated with a destroyed binary.
 

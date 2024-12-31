@@ -1,4 +1,4 @@
-# Introduction to Remote Access
+# Introduction to remote access
 
 This guide serves as a comprehensive introduction to remote access that will cover tunnels and their **asynchronous** nature.
 
@@ -12,17 +12,17 @@ To learn more about Peridio tunnels in general, see the [tunnels](/platform/refe
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.22.1.
 
-## Remote Access Resources
+## Remote access resources
 
 Remote access comprises the following resources:
 
 - [Tunnels](/platform/reference/tunnels) - used to securely connect users to devices
 
-## Getting Started
+## Getting started
 
 The goal of this guide is to create a tunnel for a device.
 
-### Creating a Tunnel
+### Creating a tunnel
 
 [Create a tunnel](creating-tunnels) so that we can connect to devices.
 

@@ -1,5 +1,5 @@
 ---
-title: Signing Keys
+title: Signing keys
 ---
 
 Signing keys are ED25519 keys which consist of a public/private key pair.
@@ -52,27 +52,27 @@ Example `public.raw`:
 yDl5AUC5LMfgeVF1HMSEA/MX4OAIqCxXmQ62fFUCH2U=
 ```
 
-## Useful Commands
+## Useful commands
 
-### Create Keys
+### Create keys
 
-#### Create a PEM Private Key
+#### Create a PEM private key
 
 ```
 openssl genpkey -algorithm Ed25519 -out private.pem
 ```
 
-#### Derive a PEM Public key From a PEM Private Key
+#### Derive a PEM public key From a PEM private key
 
 ```
 openssl pkey -in private.pem -pubout -out public.pem
 ```
 
-### Create Hashes and Signatures
+### Create hashes and signatures
 
 These commands are unnecessary if you use the Peridio CLI as it will handle hashing and signatures for you.
 
-#### Create a Hash
+#### Create a hash
 
 ```
 cat to-be-hashed | sha256sum | grep -o '^\w\+' | tr -d "\n" > hash
@@ -80,7 +80,7 @@ cat to-be-hashed | sha256sum | grep -o '^\w\+' | tr -d "\n" > hash
 
 The hash is in the format you'd, for example, supply to the Peridio Admin API [create-a-binary](/admin-api#binaries/operation/create-a-binary) endpoint.
 
-#### Create a Signature
+#### Create a signature
 
 ```
 openssl pkeyutl -sign -inkey private.pem -rawin -in hash > raw-signature
@@ -89,15 +89,15 @@ cat raw-signature | xxd -ps -c 0 | tr a-z A-Z > encoded-signature
 
 The encoded signature is in the format you'd, for example, supply to the Peridio Admin API [create-a-binary-signature](/admin-api#binary-signatures/operation/create-a-binary-signature) endpoint.
 
-#### Verify a Signature
+#### Verify a signature
 
 ```
 openssl pkeyutl -verify -pubin -inkey public.pem -rawin -in hash -sigfile raw-signature
 ```
 
-### Convert Keys
+### Convert keys
 
-#### Convert a Raw Private Key Into a PEM Private Key
+#### Convert a raw private key into a PEM private key
 
 ```
 echo -n "\x30\x2e\x02\x01\x00\x30\x05\x06\x03\x2b\x65\x70\x04\x22\x04\x20$(cat private.raw | base64 -d)" \
@@ -112,7 +112,7 @@ cat private.pem | openssl pkey -outform DER -in private.pem | hexdump -C
 
 You will see the same sequence of bytes at the beginning of the output.
 
-#### Convert a Raw Public Key Into a PEM Public Key
+#### Convert a raw public key into a PEM public key
 
 
 ```
@@ -128,13 +128,13 @@ cat public.pem | openssl pkey -outform DER -pubin -in public.pem -pubout | hexdu
 
 You will see the same sequence of bytes at the beginning of the output.
 
-#### Convert a PEM Private Key Into a Raw Private Key
+#### Convert a PEM private key into a raw private key
 
 ```
 openssl pkey -outform DER -in private.pem | tail -c +17 | base64 > private.raw
 ```
 
-#### Convert a PEM Public Key Into a Raw Public Key
+#### Convert a PEM public key into a raw public key
 
 ```
 openssl pkey -outform DER -pubin -in public.pem -pubout | tail -c +13 | base64 > public.raw

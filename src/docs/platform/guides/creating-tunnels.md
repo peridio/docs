@@ -1,4 +1,4 @@
-# Creating Tunnels
+# Creating tunnels
 
 This guide describes how to create tunnels.
 
@@ -12,7 +12,7 @@ To learn more about Peridio tunnels in general, see the [tunnels](/platform/refe
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.21.0.
 
-## Create Tunnel
+## Create tunnel
 
 ### CLI
 

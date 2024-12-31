@@ -1,10 +1,10 @@
 ---
-title: Peridio Resource Names
+title: Peridio resource names
 ---
 
 Peridio Resource Names (PRNs) uniquely identify Peridio resources. We require a PRN when you need to specify a resource unambiguously across all of Peridio, such as in authorization policies and API calls.
 
-## PRN Format
+## PRN format
 
 The following are the general formats for PRNs.
 

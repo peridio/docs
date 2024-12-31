@@ -1,4 +1,4 @@
-# Creating Artifact Versions
+# Creating artifact versions
 
 This guide describes how to create artifact versions.
 
@@ -9,7 +9,7 @@ To learn more about Peridio artifact versions in general, see the [artifact vers
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Create Artifact Version
+## Create artifact version
 
 ### CLI
 

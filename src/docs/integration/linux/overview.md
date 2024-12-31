@@ -2,7 +2,7 @@
 
 Peridio can be integrated with virtually any embedded / desktop Linux runtime. The quickest way to get started with Peridio is to deploy one of our [reference designs](overview#reference-designs). Our references are a subset of boards we maintain which we have found to be common / interesting deployment targets. While deploying a reference example is the easiest path running Peridio, it is also the most opinionated about the workflow, as the remainder of this document goes on to describe. The opinions expressed in the reference designs are not requirements to use Peridio. If you require greater flexibility and control in your environment, Peridio can be integrated by leveraging an SDK or by programming against the [Device API](/device-api).
 
-## Reference Agent
+## Reference agent
 
 `peridiod` is a reference implementation of a Peridio Agent for Embedded Linux. Peridio offers several ways to integrate peridiod into your build workflow via several integration paths:
 
@@ -11,13 +11,13 @@ Peridio can be integrated with virtually any embedded / desktop Linux runtime. T
 
 For more information about the reference Linux agent, see [peridiod](peridiod/getting-started).
 
-## Reference Designs
+## Reference designs
 
 Peridio maintains opinionated reference implementations for a variety of development kits and evaluation boards. These designs apply a series of opinions to help produce a secure, robust, fault tolerant platform for designing connected products. These opinions are not requirements to implement Peridio into your product, Peridio is an extensible, modular core that can be integrated into a variety of systems and platforms. The Peridio reference designs for Linux implement the following opinions on structuring the platform which will prescribe a development workflow and update strategy.
 
-### Runtime Structure
+### Runtime structure
 
-#### Partition Structure
+#### Partition structure
 
 Peridio reference designs will implement an A/B update strategy by default This requires that you have enough space for storing two times the size of your included assets. The partition structure is completely customizable, the following opinions were chosen as a general base line for producing fault tolerant embedded systems.
 
@@ -59,7 +59,7 @@ peridio_init=\
 bootcmd=run peridio_init my_boot_command
 ```
 
-### Peridio Cloud Requirements
+### Peridio Cloud requirements
 
 Building and connecting a reference design system to Peridio requires some additional configuration to your Peridio Cloud organization. The following steps will prepare your Peridio Cloud organization to connect devices running the default reference platform.
 
@@ -67,7 +67,7 @@ Building and connecting a reference design system to Peridio requires some addit
 * [Generate a Certificate Authority](/platform/guides/creating-x509-certificates-with-openssl) for signing trusted device identities.
 * [Configure Peridio Cloud to trust your Certificate Authority](/platform/guides/creating-ca-certificates)
 
-### Development Machine Requirements
+### Development machine requirements
 
 Peridio reference designs for Linux are maintained with the Yocto build system. You will need access to a Linux environment to build Yocto based systems. You can choose to use direct Linux installations, virtual machines, or docker.
 
