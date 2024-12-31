@@ -22,7 +22,7 @@ The implication of the above is that while the surface area of the Peridio Devic
 
 ## Reference designs
 
-While Android-specific hardware reference designs are still in private beta, the following optionas are available:
+While Android-specific hardware reference designs are still in private beta, the following options are available:
 
 - [Direct API integration](/integration/android/reference-designs/direct-api-integration).
 - Peridio maintains opinionated reference implementations for a variety of development kits and evaluation boards with respect to Embedded Linux platforms. These will still serve as a helpful context when reasoning about system design with Peridio. For more information, refer to the [Linux reference designs](/integration/linux/overview#reference-designs).
