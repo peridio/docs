@@ -12,7 +12,7 @@ export default {
         'platform/reference/overview',
         {
           type: 'category',
-          label: 'Account Management',
+          label: 'Account management',
           items: [
             'platform/reference/organizations',
             'platform/reference/peridio-resource-names',
@@ -21,7 +21,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Binary Management',
+          label: 'Binary management',
           items: [
             {
               type: 'doc',
@@ -49,16 +49,11 @@ export default {
               id: 'platform/reference/binary-signatures',
             },
             'platform/reference/signing-keys',
-            {
-              type: 'doc',
-              label: 'Firmware',
-              id: 'platform/reference/firmware',
-            },
           ],
         },
         {
           type: 'category',
-          label: 'Device Management',
+          label: 'Device management',
           items: [
             {
               type: 'doc',
@@ -82,12 +77,12 @@ export default {
         },
         {
           type: 'category',
-          label: 'Integration Management',
+          label: 'Integration management',
           items: ['platform/reference/webhooks'],
         },
         {
           type: 'category',
-          label: 'Release Mangement',
+          label: 'Bundle mangement',
           items: [
             {
               type: 'doc',
@@ -96,21 +91,46 @@ export default {
             },
             {
               type: 'doc',
-              label: 'Deployments',
-              id: 'platform/reference/deployments',
+              label: 'Releases',
+              id: 'platform/reference/releases',
             },
             {
               type: 'doc',
-              label: 'Releases',
-              id: 'platform/reference/releases',
+              label: 'Release channels',
+              id: 'platform/reference/release-channels',
+            },
+            {
+              type: 'doc',
+              label: 'Bundle overrides',
+              id: 'platform/reference/bundle-overrides',
+            },
+            {
+              type: 'doc',
+              label: 'Bundle distribution',
+              id: 'platform/reference/bundle-distribution',
             },
           ],
         },
         {
           type: 'category',
-          label: 'Remote Access',
+          label: 'Remote access',
           items: ['platform/reference/tunnels'],
-          customProps: { labs: true },
+        },
+        {
+          type: 'category',
+          label: 'Deprecated',
+          items: [
+            {
+              type: 'doc',
+              label: 'Firmware',
+              id: 'platform/reference/firmware',
+            },
+            {
+              type: 'doc',
+              label: 'Deployments',
+              id: 'platform/reference/deployments',
+            },
+          ],
         },
       ],
     },
@@ -122,7 +142,7 @@ export default {
       items: [
         {
           type: 'category',
-          label: 'Binary Management',
+          label: 'Binary management',
           items: [
             'platform/guides/introduction-to-binary-management',
             'platform/guides/multipart-uploads-with-binary-parts',
@@ -132,12 +152,11 @@ export default {
             'platform/guides/creating-binaries',
             'platform/guides/creating-binary-parts',
             'platform/guides/creating-binary-signatures',
-            'platform/guides/creating-firmware',
           ],
         },
         {
           type: 'category',
-          label: 'Device Management',
+          label: 'Device management',
           items: [
             'platform/guides/creating-ca-certificates',
             'platform/guides/creating-devices',
@@ -148,22 +167,28 @@ export default {
         },
         {
           type: 'category',
-          label: 'Release Management',
+          label: 'Bundle management',
           items: [
-            'platform/guides/introduction-to-release-management',
+            'platform/guides/introduction-to-bundle-management',
             'platform/guides/creating-bundles',
-            'platform/guides/creating-deployments',
             'platform/guides/creating-releases',
           ],
         },
         {
           type: 'category',
-          label: 'Remote Access',
+          label: 'Remote access',
           items: [
             'platform/guides/introduction-to-remote-access',
             'platform/guides/creating-tunnels',
           ],
-          customProps: { labs: true },
+        },
+        {
+          type: 'category',
+          label: 'Deprecated',
+          items: [
+            'platform/guides/creating-firmware',
+            'platform/guides/creating-deployments',
+          ],
         },
       ],
     },

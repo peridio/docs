@@ -102,5 +102,4 @@ The above command will:
 
 At this point you will have a signed binary that is ready to be included in [bundles](/platform/reference/bundles) and distributed via [releases](/platform/reference/releases).
 
-To get started on that, checkout the [Introduction to Release
-Management](introduction-to-release-management) guide.
+To get started on that, checkout the [introduction to bundle management](introduction-to-bundle-management) guide.

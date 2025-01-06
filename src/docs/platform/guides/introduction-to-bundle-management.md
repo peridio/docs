@@ -1,15 +1,15 @@
-# Introduction to release management
+# Introduction to bundle management
 
-This guide serves as a comprehensive introduction to release management that will cover bundles and releases.
+This guide serves as a comprehensive introduction to bundle management that will cover bundles and releases.
 
 ## Prerequisites
 
 - [Peridio CLI](https://github.com/peridio/morel/releases).
   - Last tested with version 0.8.0.
 
-## Release management resources
+## Bundle management resources
 
-Release management comprises the following resources:
+Bundle management comprises the following resources:
 
 - [Bundles](/platform/reference/bundles) - define ordered sets of [binaries](/platform/reference/binaries) that can be distributed to [devices](/platform/reference/devices) via [releases](/platform/reference/releases).
 - [Releases](/platform/reference/releases) - publish bundles to devices and form the [release graph](/platform/reference/releases#graph-traversal).
