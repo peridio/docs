@@ -4,11 +4,9 @@ title: Deployments
 
 A deployment makes [firmware](firmware) conditionally available to [devices](devices).
 
-:::legacy
+**Deprecated**
 
 Superceded by [bundles](bundles) and [releases](releases).
-
-:::
 
 ## Deployment eligibility
 

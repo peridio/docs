@@ -32,10 +32,6 @@ const config = {
   presets: [
     ['classic', {
       docs: {
-        admonitions: {
-          keywords: ['labs', 'legacy'],
-          extendDefaults: true,
-        },
         breadcrumbs: false,
         path: 'docs',
         routeBasePath: '/',
@@ -63,7 +59,7 @@ const config = {
             route: 'device-api',
           },
         ],
-        config: './redocly/redocly.yaml',
+        config: './redocly.yaml',
       },
     ],
   ],
@@ -79,7 +75,7 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          { label: 'Platform', to: '/platform/introduction' },
+          { label: 'Platform', to: '/platform/reference/overview' },
           { label: 'Integration', to: '/integration/introduction' },
           { label: 'Admin API', to: '/admin-api' },
           { label: 'Device API', to: '/device-api' },

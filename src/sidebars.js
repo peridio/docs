@@ -4,11 +4,6 @@
 export default {
   platform: [
     {
-      type: 'doc',
-      label: 'Introduction',
-      id: 'platform/introduction',
-    },
-    {
       collapsible: true,
       collapsed: false,
       type: 'category',
@@ -58,7 +53,6 @@ export default {
               type: 'doc',
               label: 'Firmware',
               id: 'platform/reference/firmware',
-              customProps: { legacy: true },
             },
           ],
         },
@@ -104,7 +98,6 @@ export default {
               type: 'doc',
               label: 'Deployments',
               id: 'platform/reference/deployments',
-              customProps: { legacy: true },
             },
             {
               type: 'doc',
