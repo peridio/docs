@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.1.1
 info:
   title: Peridio Admin API
   version: v1
@@ -320,19 +320,8 @@ tags:
   - name: Firmware
     id: firmware
     description: >
-      <div style="16px; border-left: 5px solid chocolate; background: burlywood;
-      border-radius: 5px; width: fit-content; padding: 16px;">
+      **Deprecated**
 
-      <h5 style="color: black !important; text-transform: uppercase; display:
-      flex; align-items: center;"><svg style="margin-right: 0.4em"
-      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-      stroke-width="1.5" stroke="currentColor" width="19.6px"><path
-      stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0
-      1 1-18 0 9 9 0 0 1 18 0Z" /></svg>Legacy</h5>
-        <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
-        <p>Subject to breaking changes prior to general availability.</p>
-        <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
-      </div>
 
       This functionality has been superceded by [artifacts](#artifacts),
       [artifact versions](#artifact-versions), and [binaries](#binaries).
@@ -350,14 +339,6 @@ tags:
     id: releases
   - name: Tunnels
     id: tunnels
-    description: >
-      <div style="16px; border-left: 5px solid purple; background: lavender;
-      border-radius: 5px; width: fit-content; padding: 16px;">
-        <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs</h5>
-        <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
-        <p>Subject to breaking changes prior to general availability.</p>
-        <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
-      </div>
   - name: API Key Events
     id: api-key-events
     description: Events created due to API Key activity.
@@ -371,6 +352,8 @@ tags:
     id: webhooks
   - name: Web Console
     id: web-console
+  - name: Events
+    id: events
 x-tagGroups:
   - name: Account Management
     tags:
@@ -408,38 +391,58 @@ x-tagGroups:
       - Releases
   - name: Events
     tags:
+      - Events
       - API Key Events
       - Device Events
       - Webhook Events
 paths:
+  /events:
+    get:
+      operationId: list-events
+      summary: List events
+      description: >
+        List all possible events (Device, Webhooks, API Key, etc.) within the
+        specified time range.
+
+
+        The date range may be adjusted via query parameters.
+      tags:
+        - Events
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/event_inserted_at_lt'
+        - $ref: '#/components/parameters/event_inserted_at_gte'
+        - $ref: '#/components/parameters/event_actor_prn'
+        - $ref: '#/components/parameters/event_resource_prn'
+        - $ref: '#/components/parameters/event_type'
+        - $ref: '#/components/parameters/event_subtype'
+      responses:
+        '200':
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  events:
+                    $ref: '#/components/schemas/array-of-events'
+                  next_page:
+                    $ref: '#/components/schemas/next-page'
   /tunnels:
     get:
       operationId: list-tunnels
       summary: List tunnels
-      description: >
-        <a style="display: flex; margin-bottom: 16px; background: purple; color:
-        white; border-radius: 5px; padding: 2px 4px; width: fit-content;"
-        href="/device-api#tunnels">
-          <svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs
-        </a>
-
-
+      description: |
         **Search**
-
 
         This resource has the following searchable fields.
 
-
         |Key|Required|Operators|Value|
-
         |-|-|-|-|
-
         |`state`||`:`|string|
-
         |`device_prn`||`:`|prn|
-
         |`organization_prn`|X|`:`|prn|
-
 
         `state` can be one of `requested`, `open`, `closed`.
       tags:
@@ -473,13 +476,6 @@ paths:
       summary: Create a tunnel
       description: >
         Create a tunnel to a device for remote access.
-
-
-        <a style="display: flex; margin-bottom: 16px; background: purple; color:
-        white; border-radius: 5px; padding: 2px 4px; width: fit-content;"
-        href="/admin-api#tunnels">
-          <svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs
-        </a>
 
 
         The tunnel is available via a public IP address and port for a
@@ -521,24 +517,7 @@ paths:
               schema:
                 properties:
                   tunnel:
-                    allOf:
-                      - $ref: '#/components/schemas/tunnel'
-                      - type: object
-                        properties:
-                          device_proxy_ip_address:
-                            type: null
-                          device_proxy_port:
-                            type: null
-                          device_public_key:
-                            type: null
-                          server_proxy_ip_address:
-                            type: null
-                          server_proxy_port:
-                            type: null
-                          server_public_key:
-                            type: null
-                          server_tunnel_port:
-                            type: null
+                    $ref: '#/components/schemas/tunnel'
   /tunnels/{tunnel_prn}:
     get:
       operationId: retrieve-a-tunnel
@@ -563,16 +542,11 @@ paths:
     patch:
       operationId: update-a-tunnel
       summary: Update a tunnel
-      description: >
+      description: |
         Update a tunnel
+
           - allows changing a tunnel to a closed state.
           - allows extending the expiration (the number of seconds from current time).
-
-        <a style="display: flex; margin-bottom: 16px; background: purple; color:
-        white; border-radius: 5px; padding: 2px 4px; width: fit-content;"
-        href="/device-api#tunnels">
-          <svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs
-        </a>
       tags:
         - Tunnels
       parameters:
@@ -707,6 +681,8 @@ paths:
                   $ref: '#/components/schemas/custom-metadata-artifact'
                 description:
                   $ref: '#/components/schemas/artifact-description'
+                id:
+                  $ref: '#/components/schemas/custom-id'
                 name:
                   $ref: '#/components/schemas/artifact-name'
                 organization_prn:
@@ -828,6 +804,8 @@ paths:
                   $ref: '#/components/schemas/custom-metadata-artifact-version'
                 description:
                   $ref: '#/components/schemas/artifact-version-description'
+                id:
+                  $ref: '#/components/schemas/custom-id'
                 version:
                   $ref: '#/components/schemas/artifact-version-version'
               required:
@@ -949,6 +927,8 @@ paths:
                   $ref: '#/components/schemas/binary-description'
                 hash:
                   $ref: '#/components/schemas/binary-hash'
+                id:
+                  $ref: '#/components/schemas/custom-id'
                 size:
                   $ref: '#/components/schemas/binary-size'
                 target:
@@ -1192,6 +1172,8 @@ paths:
                   $ref: '#/components/schemas/prn'
                 artifact_version_prns:
                   $ref: '#/components/schemas/array-of-artifact-version-prns'
+                id:
+                  $ref: '#/components/schemas/custom-id'
                 name:
                   $ref: '#/components/schemas/bundle-name'
               required:
@@ -2334,6 +2316,7 @@ paths:
                 identifier:
                   $ref: '#/components/schemas/device-identifier'
                 last_communication:
+                  description: This field is ignored and has no effect.
                   $ref: '#/components/schemas/device-last-communication'
                 tags:
                   $ref: '#/components/schemas/array-of-device-tags'
@@ -2437,6 +2420,7 @@ paths:
                 healthy:
                   $ref: '#/components/schemas/device-healthy'
                 last_communication:
+                  description: This field is ignored and has no effect.
                   $ref: '#/components/schemas/device-last-communication'
                 tags:
                   $ref: '#/components/schemas/array-of-device-tags'
@@ -3685,6 +3669,66 @@ components:
       schema:
         type: string
         format: date-time
+    event_inserted_at_lt:
+      name: inserted_at_lt
+      in: query
+      description: |
+        The ending date point of the range of the query
+
+        Must be greater than event_inserted_at_gte.
+      schema:
+        type: date-time
+    event_inserted_at_gte:
+      name: inserted_at_gte
+      in: query
+      description: |
+        The starting date point of the range of the query
+
+        Must be lower than event_inserted_at_lt.
+      schema:
+        type: date-time
+    event_actor_prn:
+      name: actor_prn
+      in: query
+      description: |
+        Filter events by actor PRN.
+      schema:
+        $ref: '#/components/schemas/prn'
+    event_resource_prn:
+      name: resource_prn
+      in: query
+      description: |
+        Filter events by resource PRN.
+      schema:
+        $ref: '#/components/schemas/prn'
+    event_type:
+      name: type
+      in: query
+      description: |
+        Filter events by type.
+      schema:
+        type: string
+        enum:
+          - device
+          - webhook
+          - api_key
+    event_subtype:
+      name: subtype
+      in: query
+      description: |
+        Filter events by subtype.
+      schema:
+        type: string
+        enum:
+          - release_changed
+          - claimed_release
+          - checked_for_release
+          - connected
+          - updated
+          - authentication_failed
+          - created
+          - request_failed
+          - test_fire
   schemas:
     access-token:
       type: string
@@ -3705,7 +3749,7 @@ components:
               properties:
                 api_key_prn:
                   $ref: '#/components/schemas/api-key-prn'
-                creator_key_prn:
+                creator_prn:
                   $ref: '#/components/schemas/user-prn'
         inserted_at:
           type: string
@@ -3781,6 +3825,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/device'
+    array-of-events:
+      type: array
+      items:
+        $ref: '#/components/schemas/event'
     array-of-firmware:
       type: array
       items:
@@ -4039,6 +4087,15 @@ components:
         updated_at:
           type: string
           format: date-time
+    bundle-prn:
+      allOf:
+        - $ref: '#/components/schemas/prn'
+        - example: >-
+            prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:bundle:c0c25d62-26d4-40b8-b9ab-609936d5d6d0
+    bundle-known:
+      description: Whether the bundle is known to Peridio or not.
+      example: true
+      type: boolean
     bundle-name:
       oneOf:
         - type: 'null'
@@ -4208,6 +4265,36 @@ components:
         - $ref: '#/components/schemas/prn'
         - example: >-
             prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:event:e0040f63-4e1c-43e7-880a-d6986a35c499
+    event:
+      allOf:
+        - oneOf:
+            - $ref: '#/components/schemas/api-key-created-event'
+            - $ref: '#/components/schemas/device-updated-event'
+            - $ref: '#/components/schemas/device-connected-event'
+            - $ref: '#/components/schemas/device-release-changed-event'
+            - $ref: '#/components/schemas/device-claimed-release-event'
+            - $ref: '#/components/schemas/device-checked-for-release-event'
+            - $ref: '#/components/schemas/device-authentication-failed-event'
+            - $ref: '#/components/schemas/webhook-request-failed-event'
+            - $ref: '#/components/schemas/webhook-test-fire-event'
+        - type: object
+          properties:
+            actor_prn:
+              $ref: '#/components/schemas/prn'
+            resource_prn:
+              $ref: '#/components/schemas/prn'
+            event_subtype:
+              type: string
+              enum:
+                - release_changed
+                - claimed_release
+                - checked_for_release
+                - connected
+                - updated
+                - authentication_failed
+                - created
+                - request_failed
+                - test_fire
     signing-key:
       type: object
       properties:
@@ -4468,6 +4555,17 @@ components:
                               $ref: '#/components/schemas/release-version'
                         - type: 'null'
                           description: ' '
+                    bundle:
+                      description: The bundle of the device.
+                      oneOf:
+                        - type: object
+                          properties:
+                            prn:
+                              $ref: '#/components/schemas/bundle-prn'
+                            name:
+                              $ref: '#/components/schemas/bundle-name'
+                        - type: 'null'
+                          description: ' '
         inserted_at:
           type: string
           format: date-time
@@ -4516,6 +4614,19 @@ components:
                           $ref: '#/components/schemas/release-prn'
                         version:
                           $ref: '#/components/schemas/release-version'
+                    - type: null
+                      description: ' '
+                bundle:
+                  description: >-
+                    The bundle the device was told was available to update to,
+                    or `null` if no release or bundle override is available.
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: '#/components/schemas/bundle-prn'
+                        name:
+                          $ref: '#/components/schemas/bundle-name'
                     - type: null
                       description: ' '
         inserted_at:
@@ -4611,6 +4722,9 @@ components:
                   $ref: '#/components/schemas/device-event-certificate'
                 ca_certificate:
                   $ref: '#/components/schemas/device-event-ca-certificate'
+                route:
+                  type: string
+                  description: The route, i.e., the URL path to which the device connected.
                 headers:
                   description: >
                     Monitored headers that a device supplies during connection
@@ -4624,15 +4738,17 @@ components:
 
                     - `peridio-release-version`
 
-                    - `x-peridio-architecture` (legacy)
+                    - `peridio-bundle-prn`
 
-                    - `x-peridio-platform` (legacy)
+                    - `x-peridio-architecture` (deprecated)
 
-                    - `x-peridio-product` (legacy)
+                    - `x-peridio-platform` (deprecated)
 
-                    - `x-peridio-uuid` (legacy)
+                    - `x-peridio-product` (deprecated)
 
-                    - `x-peridio-version` (legacy)
+                    - `x-peridio-uuid` (deprecated)
+
+                    - `x-peridio-version` (deprecated)
 
 
                     This list can grow, integrations must account for unexpected
@@ -4698,6 +4814,21 @@ components:
                           $ref: '#/components/schemas/release-version'
                         known:
                           $ref: '#/components/schemas/release-known'
+                from_bundle:
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: '#/components/schemas/bundle-prn'
+                    - type: null
+                to_bundle:
+                  oneOf:
+                    - type: object
+                      properties:
+                        prn:
+                          $ref: '#/components/schemas/bundle-prn'
+                        known:
+                          $ref: '#/components/schemas/bundle-known'
                     - type: null
         inserted_at:
           type: string
@@ -4946,6 +5077,16 @@ components:
           $ref: '#/components/schemas/user-username'
     platform:
       type: string
+    custom-id:
+      description: >
+        A user provided custom UUID id for the resource database record. This
+        overrides peridio's autogenerated ID for
+
+        the user provided one.
+
+
+        Use with caution.
+      type: string
     prn:
       description: >
         [Peridio Resource Names](/platform/reference/peridio-resource-names)
@@ -5189,16 +5330,19 @@ components:
           examples:
             - 10.0.1.1
           description: The wireguard interface IP address for the device.
+          nullable: true
         device_proxy_port:
           type: number
           examples:
             - 47539
           description: The port on which the device is listening for wireguard UDP traffic.
+          nullable: true
         device_public_key:
           type: string
           description: The device's public key for wireguard.
           examples:
             - Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=
+          nullable: true
         device_tunnel_port:
           $ref: '#/components/schemas/device-tunnel-port'
         server_proxy_ip_address:
@@ -5206,16 +5350,19 @@ components:
           examples:
             - 10.0.0.1
           description: The wireguard peer IP address for the Peridio proxy server.
+          nullable: true
         server_proxy_port:
           type: number
           examples:
             - 49293
           description: The port on which the server is listening for wireguard UDP traffic.
+          nullable: true
         server_public_key:
           type: string
           description: The Peridio proxy server public key for wireguard.
           examples:
             - 2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=
+          nullable: true
         server_tunnel_ip_address:
           type: string
           examples:
@@ -5231,6 +5378,7 @@ components:
           description: >-
             The port of the Peridio proxy server through which traffic will be
             routed.
+          nullable: true
         expires_at:
           type: string
           format: date-time
@@ -5478,11 +5626,18 @@ webhooks:
 
 
         This event is created when a device informs Peridio of its current
-        release via the `peridio-release-prn` header, and that release is
-        different than the one Peridio currently had on record. For example, if
-        Peridio thought the device was on release 1, but then the device
-        informed Peridio it was on release 2, then this event would be created
-        going from 1 to 2.
+        release or bundle via the `peridio-release-prn` or `peridio-bundle-prn`
+        headers, and that release or bundle is different than the one Peridio
+        currently had on record. In cases where a `peridio-bundle-prn` header is
+        supplied, the `to_release` property will be `null`.
+
+
+        For example, if Peridio thought the device was on release 1, but then
+        the device informed Peridio it was on release 2, then this event would
+        be created going from 1 to 2 along with the new release's bundle.
+        Similarly, if Peridio thought the device was on bundle 1, but then the
+        device informed Peridio it was on bundle 2, then this event would be
+        created going from bundle 1 to 2, with a `to_release` of `null`.
       operationId: device-release-changed
       tags:
         - Device Events
