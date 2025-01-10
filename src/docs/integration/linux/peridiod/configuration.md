@@ -5,6 +5,7 @@ Peridiod is configured via a json formatted file on the filesystem. The location
 The peridiod configuration has the following top level keys:
 
 * `version`: The configuration version number. Currently this is 1.
+* `cache_dir`: A location on disk where peridiod can store intermediate files. This directory needs to be writable. Defaults to `/var/peridiod`
 * `device_api`: Configuration for the device api endpoint
 * `fwup`: Global keys related to the use of fwup.
 * `remote_shell`: Enable or disable the remote getty feature.
@@ -13,6 +14,7 @@ The peridiod configuration has the following top level keys:
 * `release_poll_enabled`: (true | false) Enable or Disable release server polling
 * `release_poll_interval`: (non negative integer) The interval in which the release server should poll for updates. Defaults to every 30 min.
 * `trusted_signing_keys`: (list of strings) A list of raw ed25519 public signing keys. Binaries in peridio are signed by private keys that you own, this list should contain the public parts of the signing keys this device should trust installing.
+* `targets`: (list of strings) A list of binary target strings. When peridiod received a bundle, it will install only binaries with target strings in this list. Defaults to `["portable"]`
 * `node`: Node configuration settings
 
 For more information about X509 certificates, see [creating CA certificates](/platform/guides/creating-x509-certificates-with-openssl).
@@ -99,6 +101,7 @@ The following keys inform how the use of distributions will be applied in the sy
 
 * `enabled` (true | false): Enable or disable remote access tunnels for the device.
 * `service_ports` ([integer]): A list of device side service ports that remote access tunnels can be opened for.
+* `persistent_keepalive` (integer): number in seconds keep alives should be sent for tunnels. Defaults to `25`.
 * `hooks`:
   * `pre_up` (path): A path to an executable script to be executed before bringing up the tunnel network interface.
   * `post_up` (path): A path to an executable script to be executed after bringing up the tunnel network interface.
