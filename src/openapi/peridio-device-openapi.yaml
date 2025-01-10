@@ -10,13 +10,17 @@ info:
 
     # Global Headers
 
-    The following headers may be supplied when requesting any endpoint.
+    The following headers may be supplied when requesting any route.
+
+    For critical context about how Peridio Cloud will interpret these headers, refer to the [device integration](/platform/reference/bundle-distribution#device-integration) section of the [bundle distribution](/platform/reference/bundle-distribution) reference.
+
+    For context regarding deprecated headers, see [deployment eligibility](/platform/reference/deployments#deployment-eligibility).
 
     |key|value|description|
     |-|-|-|
-    |peridio-release-prn|A release PRN.|See [release resolution](/platform/reference/releases#release-resolution). Informs Peridio of what release is currently active on the device. The preference should always be to supply this header with a valid value. If you supply this header, you should not supply the `peridio-release-version` header.|
-    |peridio-release-version|A release version.|See [release resolution](/platform/reference/releases#release-resolution). This header is only used in exceptional cases when you don't have a PRN to supply via `peridio-release-prn`. In that case, you may supply this header and you should not supply the `peridio-release-prn` header.|
-    |peridio-bundle-prn|A bundle PRN.|See [release resolution](/platform/reference/releases#release-resolution). Informs Peridio of what bundle is currently active on the device. This header is used when the device has a bundle override, and therefore no release. If you supply this header, you should not supply the `peridio-release-prn` or `peridio-release-version` header.|
+    |peridio-release-prn|A release PRN.|Informs Peridio of what release is currently active on the device.|
+    |peridio-bundle-prn|A bundle PRN.|Informs Peridio of what bundle is currently active on the device.|
+    |peridio-release-version|A release version.|Informs Peridio of what release version is representative of the device's state.|
     |x-peridio-architecture|A firmware architecture.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The architecture of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
     |x-peridio-platform|A firmware platform.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The platform of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
     |x-peridio-product|A firmware product.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The product of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
@@ -205,7 +209,7 @@ paths:
       operationId: get-update
       summary: get update
       description: |
-        Returns information regarding whether an update is available via a [release](/admin-api#releases).
+        Returns information regarding whether an update is available via a [release](/platform/reference/releases) or [bundle override](/platform/reference/bundle-overrides).
 
         ### Expandable
 
@@ -216,7 +220,7 @@ paths:
         - in: header
           name: peridio-release-prn
           schema:
-            description: See [global headers](#global-headers).
+            description: See [global headers](#section/Global-Headers).
             examples:
               [
                 prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0,
@@ -224,9 +228,20 @@ paths:
             $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
           required: false
         - in: header
+          name: peridio-bundle-prn
+          schema:
+            description: See [global headers](#section/Global-Headers).
+            examples:
+              [
+                prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:bundle:ddd32c59-fc35-4202-a520-a4eddaa11fb3,
+              ]
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
+          required: false
+        - in: header
           name: peridio-release-version
           schema:
-            description: See [global headers](#global-headers).
+            description: See [global headers](#section/Global-Headers).
+            examples: [1.0.0]
             $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
           required: false
         - name: expand
