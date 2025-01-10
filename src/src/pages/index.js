@@ -1,20 +1,23 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import CodeBlock from '@theme/CodeBlock';
+import CodeBlock from '@theme/CodeBlock'
 import Layout from '@theme/Layout'
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import styles from './index.module.css';
-import CodeBracket from '@site/static/img/homepage/code-bracket.svg';
-import CommandLine from '@site/static/img/homepage/command-line.svg';
-import ComputerDesktop from '@site/static/img/homepage/computer-desktop.svg';
-import CpuChip from '@site/static/img/homepage/cpu-chip.svg';
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import styles from './index.module.css'
+import CodeBracket from '@site/static/img/homepage/code-bracket.svg'
+import CommandLine from '@site/static/img/homepage/command-line.svg'
+import ComputerDesktop from '@site/static/img/homepage/computer-desktop.svg'
+import CpuChip from '@site/static/img/homepage/cpu-chip.svg'
+import Heading from '@theme/Heading'
+import Link from '@docusaurus/Link'
 
 function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className={clsx("hero__title", styles.hero_title)}>Documentation</h1>
+        <Heading as='h1' className={clsx("hero__title", styles.hero_title)}>Documentation</Heading>
         <p className={clsx("hero__subtitle", styles.hero_subtitle)}>Find user guides, developer guides, API references, and more.</p>
       </div>
     </header>
@@ -38,11 +41,16 @@ function BashPreview({ command, children }) {
   )
 }
 
+BashPreview.propTypes = {
+  command: PropTypes.string.isRequired, // `command` should be a required string
+  children: PropTypes.node, // `children` can be any valid React node
+};
+
 function HomepageCodeBlock() {
   return (
     <div className={clsx('container', styles.homepage_code_block_container)}>
       <div className={styles.homepage_code_block}>
-        <h2 className={styles.homepage_code_block_title}>Try it Out</h2>
+        <Heading as="h2" className={styles.homepage_code_block_title}>Try it Out</Heading>
         <Tabs className={styles.custom_tabs}>
           <TabItem value="binary" label="Create a Binary" attributes={{ className: styles.tab_item_selected }} default>
             <div className={styles.tab_item_container}>
@@ -113,29 +121,46 @@ function HomepageCodeBlock() {
 
 function SvgLink({ url, text, icon }) {
   if (icon == "cmd") {
-    return (<><a href={url}><CommandLine className={styles.svg_link} />{text}</a></>)
+    return (<><Link href={url}><CommandLine className={styles.svg_link} />{text}</Link></>)
   } else if (icon == "code") {
-    return (<><a href={url}><CodeBracket className={styles.svg_link} />{text}</a></>)
+    return (<><Link href={url}><CodeBracket className={styles.svg_link} />{text}</Link></>)
   } else if (icon == "desktop") {
-    return (<><a href={url}><ComputerDesktop className={styles.svg_link} />{text}</a></>)
+    return (<><Link href={url}><ComputerDesktop className={styles.svg_link} />{text}</Link></>)
   } else if (icon == "cpu") {
-    return (<><a href={url}><CpuChip className={styles.svg_link} />{text}</a></>)
+    return (<><Link href={url}><CpuChip className={styles.svg_link} />{text}</Link></>)
   }
 }
 
+SvgLink.propTypes = {
+  url: PropTypes.string.isRequired, // The URL for the link, required
+  text: PropTypes.string, // The text to display, optional
+  icon: PropTypes.oneOf(['cmd', 'code', 'desktop', 'cpu']).isRequired, // Restrict icon to specific values
+};
+
 function Section({ title, subsections }) {
-  const subsectionItems = subsections.map(subsection =>
-    <li>
+  const subsectionItems = subsections.map((subsection, index) =>
+    <li key={index}>
       <SvgLink url={subsection.url} text={subsection.text} icon={subsection.icon} />
     </li>
   );
   return (
     <div>
-      <h3 className={styles.reference_title}>{title}</h3>
+      <Heading as="h3" className={styles.reference_title}>{title}</Heading>
       <ul className={styles.reference_container}>{subsectionItems}</ul>
     </div>
   )
 }
+
+Section.propTypes = {
+  title: PropTypes.string.isRequired, // `title` should be a required string
+  subsections: PropTypes.arrayOf(
+    PropTypes.shape({
+      url: PropTypes.string.isRequired, // Each subsection must have a required `url`
+      text: PropTypes.string, // Optional text for the subsection
+      icon: PropTypes.oneOf(['cmd', 'code', 'desktop', 'cpu']).isRequired, // Icon must be one of the defined values
+    })
+  ).isRequired, // `subsections` is required and must be an array of objects
+};
 
 export default function Home() {
   return (
@@ -144,7 +169,7 @@ export default function Home() {
       <HomepageCodeBlock />
       <main className={clsx('container', styles.container)}>
         <div>
-          <Section title={"Getting Started"} subsections={[{ url: "/platform/introduction", text: "The Peridio Platform", icon: "cmd" }]} />
+          <Section title={"Getting Started"} subsections={[{ url: "/platform/reference/overview", text: "The Peridio Platform", icon: "cmd" }]} />
           <Section title={"System Integrations"} subsections={[{ url: "/integration/linux/overview", text: "Linux", icon: "code" }]} />
           <Section title={"Tools"} subsections={[{ url: "/cli", text: "Peridio CLI", icon: "cmd" }, { url: "https://console.peridio.com/", text: "Web Console", icon: "desktop" }]} />
         </div>

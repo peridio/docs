@@ -1,5 +1,5 @@
 ---
-openapi: 3.1.0
+openapi: 3.1.1
 info:
   title: Peridio Admin API
   version: "v1"
@@ -197,12 +197,8 @@ tags:
   - name: Firmware
     id: firmware
     description: |
-      <div style="16px; border-left: 5px solid chocolate; background: burlywood; border-radius: 5px; width: fit-content; padding: 16px;">
-      <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="19.6px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>Legacy</h5>
-        <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
-        <p>Subject to breaking changes prior to general availability.</p>
-        <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
-      </div>
+      **Deprecated**
+
       This functionality has been superceded by [artifacts](#artifacts), [artifact versions](#artifact-versions), and [binaries](#binaries).
   - name: CA Certificates
     id: ca-certificates
@@ -218,13 +214,6 @@ tags:
     id: releases
   - name: Tunnels
     id: tunnels
-    description: |
-      <div style="16px; border-left: 5px solid purple; background: lavender; border-radius: 5px; width: fit-content; padding: 16px;">
-        <h5 style="color: black !important; text-transform: uppercase; display: flex; align-items: center;"><svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs</h5>
-        <p>This functionality is only available to select organizations participating in the Peridio closed beta program.</p>
-        <p>Subject to breaking changes prior to general availability.</p>
-        <p>For more information, see <a style="color: #1C1E21; text-decoration: underline;" href="/platform/introduction#labs">content labels</a>.</p>
-      </div>
   - name: API Key Events
     id: api-key-events
     description: Events created due to API Key activity.
@@ -318,10 +307,6 @@ paths:
       operationId: list-tunnels
       summary: List tunnels
       description: |
-        <a style="display: flex; margin-bottom: 16px; background: purple; color: white; border-radius: 5px; padding: 2px 4px; width: fit-content;" href="/device-api#tunnels">
-          <svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs
-        </a>
-
         **Search**
 
         This resource has the following searchable fields.
@@ -366,10 +351,6 @@ paths:
       description: |
         Create a tunnel to a device for remote access.
 
-        <a style="display: flex; margin-bottom: 16px; background: purple; color: white; border-radius: 5px; padding: 2px 4px; width: fit-content;" href="/admin-api#tunnels">
-          <svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs
-        </a>
-
         The tunnel is available via a public IP address and port for a configurable amount of time. Anyone can send data through the tunnel and it is your responsibility to enforce authentication and authorization if desired.
       tags:
         - Tunnels
@@ -404,24 +385,7 @@ paths:
               schema:
                 properties:
                   tunnel:
-                    allOf:
-                      - $ref: "#/components/schemas/tunnel"
-                      - type: object
-                        properties:
-                          device_proxy_ip_address:
-                            type: null
-                          device_proxy_port:
-                            type: null
-                          device_public_key:
-                            type: null
-                          server_proxy_ip_address:
-                            type: null
-                          server_proxy_port:
-                            type: null
-                          server_public_key:
-                            type: null
-                          server_tunnel_port:
-                            type: null
+                    $ref: "#/components/schemas/tunnel"
 
   /tunnels/{tunnel_prn}:
     get:
@@ -449,12 +413,9 @@ paths:
       summary: Update a tunnel
       description: |
         Update a tunnel
+
           - allows changing a tunnel to a closed state.
           - allows extending the expiration (the number of seconds from current time).
-
-        <a style="display: flex; margin-bottom: 16px; background: purple; color: white; border-radius: 5px; padding: 2px 4px; width: fit-content;" href="/device-api#tunnels">
-          <svg style="margin-right: 0.4em;" width="19.6px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>Labs
-        </a>
       tags:
         - "Tunnels"
       parameters:
@@ -4558,11 +4519,11 @@ components:
                     - `peridio-release-prn`
                     - `peridio-release-version`
                     - `peridio-bundle-prn`
-                    - `x-peridio-architecture` (legacy)
-                    - `x-peridio-platform` (legacy)
-                    - `x-peridio-product` (legacy)
-                    - `x-peridio-uuid` (legacy)
-                    - `x-peridio-version` (legacy)
+                    - `x-peridio-architecture` (deprecated)
+                    - `x-peridio-platform` (deprecated)
+                    - `x-peridio-product` (deprecated)
+                    - `x-peridio-uuid` (deprecated)
+                    - `x-peridio-version` (deprecated)
 
                     This list can grow, integrations must account for unexpected headers. See [Device API global headers](/device-api#section/Global-Headers).
                   type: object
@@ -5091,28 +5052,34 @@ components:
           type: string
           examples: [10.0.1.1]
           description: The wireguard interface IP address for the device.
+          nullable: true
         device_proxy_port:
           type: number
           examples: [47539]
           description: The port on which the device is listening for wireguard UDP traffic.
+          nullable: true
         device_public_key:
           type: string
           description: The device's public key for wireguard.
           examples: [Y4nCIXdpb+f3WgPi0377FDPCAfP+st82s98lTRepHEk=]
+          nullable: true
         device_tunnel_port:
           $ref: "#/components/schemas/device-tunnel-port"
         server_proxy_ip_address:
           type: string
           examples: [10.0.0.1]
           description: The wireguard peer IP address for the Peridio proxy server.
+          nullable: true
         server_proxy_port:
           type: number
           examples: [49293]
           description: The port on which the server is listening for wireguard UDP traffic.
+          nullable: true
         server_public_key:
           type: string
           description: The Peridio proxy server public key for wireguard.
           examples: [2+h9vwIwg/1zTW9XLFzUmiTwCRRq7mzLgDnZfWEislY=]
+          nullable: true
         server_tunnel_ip_address:
           type: string
           examples: [3.82.23.99]
@@ -5121,6 +5088,7 @@ components:
           type: number
           examples: [47532]
           description: The port of the Peridio proxy server through which traffic will be routed.
+          nullable: true
         expires_at:
           type: string
           format: date-time

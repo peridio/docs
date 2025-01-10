@@ -4,11 +4,9 @@ title: Firmware
 
 Firmware are the data you wish to distribute to devices.
 
-:::legacy
+**Deprecated**
 
 Superceded by [artifacts](artifacts), [artifact versions](artifact-versions), and [binaries](binaries).
-
-:::
 
 Find additional information in the Admin API [firmware section](/admin-api#firmware) and the [creating firmware](/platform/guides/creating-firmware) guide.
 

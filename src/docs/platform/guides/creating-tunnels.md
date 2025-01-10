@@ -2,9 +2,6 @@
 
 This guide describes how to create tunnels.
 
-:::labs
-:::
-
 To learn more about Peridio tunnels in general, see the [tunnels](/platform/reference/tunnels) reference.
 
 ## Prerequisites
