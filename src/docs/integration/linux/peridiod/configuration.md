@@ -5,15 +5,16 @@ Peridiod is configured via a json formatted file on the filesystem. The location
 The peridiod configuration has the following top level keys:
 
 * `version`: The configuration version number. Currently this is 1.
-* `device_api`: Configuration for the device api endpoint
+* `device_api`: Configuration for the device api endpoint.
 * `fwup`: Global keys related to the use of fwup.
 * `remote_shell`: Enable or disable the remote getty feature.
-* `remote_iex`: Enable or disable the remote IEx feature. Useful if you are deploying a Nerves distribution. Enabling this takes precedence over `remote_shell`
-* `remote_access_tunnels`
-* `release_poll_enabled`: (true | false) Enable or Disable release server polling
-* `release_poll_interval`: (non negative integer) The interval in which the release server should poll for updates. Defaults to every 30 min.
+* `remote_iex`: Enable or disable the remote IEx feature. Useful if you are deploying a Nerves distribution. Enabling this takes precedence over `remote_shell`.
+* `remote_access_tunnels`: Remote access tunnel options.
+* `update_poll_enabled`: (true | false) Enable or Disable update server polling.
+* `update_poll_interval`: (non negative integer) The interval in which the update server should poll for updates. Defaults to every 30 min.
 * `trusted_signing_keys`: (list of strings) A list of raw ed25519 public signing keys. Binaries in peridio are signed by private keys that you own, this list should contain the public parts of the signing keys this device should trust installing.
-* `node`: Node configuration settings
+* `targets`: (list of strings) A list of binary target strings. When peridiod receives a bundle, it will only install binaries for these target strings.
+* `node`: Node configuration settings.
 
 For more information about X509 certificates, see [creating CA certificates](/platform/guides/creating-x509-certificates-with-openssl).
 
@@ -209,10 +210,7 @@ config :peridiod,
 
 peridiod releases will track and expose release metadata in the uboot environment under the following new keys
 
-* `peridiod_rel_current`: the PRN of the current installed release
-* `peridiod_rel_previous`: the PRN of the previous installed release
-* `peridiod_rel_progress`: the PRN of the release in progress
-* `peridiod_vsn_current`: the semantic version of the current installed release
-* `peridiod_vsn_previous`: the semantic version of the previous installed release
-* `peridiod_vsn_progress`: the semantic version of the release in progress
-* `peridiod_bin_current`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from release to release
+* `peridiod_src_{progress | current | previous}`: the PRN of the update strategy source that provided the bundle.
+* `peridiod_bun_{progress | current | previous}`: the PRN of the bundle
+* `peridiod_vsn_{progress | current | previous}`: the semantic version of the release
+* `peridiod_bin_{progress | current | previous}`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from release to release
