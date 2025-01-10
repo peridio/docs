@@ -73,10 +73,14 @@ When supplying multiple headers, Peridio prioritizes them in the order noted bel
 Supplied:
 
   - `peridio-release-prn` malformed and does not identify a release in the device's current cohort
-  - `peridio-bundle-prn` well formed and does identify a bundle served by a release in the device's current cohort
+  - `peridio-bundle-prn` well formed and does not identify a bundle served by a release in the device's current cohort
   - `peridio-release-version` well formed and does identify a bundle served by a release in the device's current cohort
 
-First, the `peridio-release-prn` header is considered, but is discarded immediately due to being malformed. Second, the `peridio-bundle-prn` is considered, it is well formed, but is discarded still because it fails to identify a bundle served by a release in the device's current cohort. Finally, the `peridio-release-version` is considered, it is well formed, and successfully identifies a release in the device's current cohort.
+Therefore:
+
+  1. First, the `peridio-release-prn` header is considered, but is discarded immediately due to being malformed.
+  2. Second, the `peridio-bundle-prn` is considered, it is well formed, but is discarded still because it fails to identify a bundle served by a release in the device's current cohort.
+  3. Finally, the `peridio-release-version` is considered, it is well formed, and successfully identifies a release in the device's current cohort.
 
 ## Resolution algorithm
 
