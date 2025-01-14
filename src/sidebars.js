@@ -118,6 +118,17 @@ export default {
         },
         {
           type: 'category',
+          label: 'Web Console',
+          items: [
+            {
+              type: 'doc',
+              label: 'Fleet View',
+              id: 'platform/reference/fleet-view',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Deprecated',
           items: [
             {
@@ -185,10 +196,7 @@ export default {
         {
           type: 'category',
           label: 'Deprecated',
-          items: [
-            'platform/guides/creating-firmware',
-            'platform/guides/creating-deployments',
-          ],
+          items: ['platform/guides/creating-firmware', 'platform/guides/creating-deployments'],
         },
       ],
     },
