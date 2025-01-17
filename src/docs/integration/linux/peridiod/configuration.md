@@ -11,8 +11,8 @@ The peridiod configuration has the following top level keys:
 * `remote_shell`: Enable or disable the remote getty feature.
 * `remote_iex`: Enable or disable the remote IEx feature. Useful if you are deploying a Nerves distribution. Enabling this takes precedence over `remote_shell`
 * `remote_access_tunnels`
-* `release_poll_enabled`: (true | false) Enable or Disable release server polling
-* `release_poll_interval`: (non negative integer) The interval in which the release server should poll for updates. Defaults to every 30 min.
+* `update_poll_enabled`: (true | false) Enable or Disable update server polling
+* `update_poll_interval`: (non negative integer) The interval in which the update server should poll for updates. Defaults to every 30 min.
 * `trusted_signing_keys`: (list of strings) A list of raw ed25519 public signing keys. Binaries in peridio are signed by private keys that you own, this list should contain the public parts of the signing keys this device should trust installing.
 * `targets`: (list of strings) A list of binary target strings. When peridiod received a bundle, it will install only binaries with target strings in this list. Defaults to `["portable"]`
 * `node`: Node configuration settings
@@ -90,7 +90,7 @@ The device api options will default to enable connecting peridiod to the Peridio
 
 ## `fwup` options
 
-The following keys inform how the use of distributions will be applied in the system. They will also act as a global default when using releases fwup installer. You can override these settings on a per binary basis by passing them in `installer_opts` for the [fwup installer](updates#installers)
+The following keys inform how the use of distributions will be applied in the system. They will also act as a global default when using fwup installer. You can override these settings on a per binary basis by passing them in `installer_opts` for the [fwup installer](updates#installers)
 
 * `devpath`: The block storage device path to use for applying firmware updates.
 * `public_keys`: A list of authorized public keys used when verifying update archives.
@@ -154,13 +154,13 @@ PKCS11 Identity using ATECC608B TrustAndGo
 
 ## Examples
 
-### Minimal releases
+### Minimal keys required for cohort workflows
 
 ```json
 {
   "version": 1,
-  "release_poll_enabled": true,
-  "release_poll_interval": 1800000,
+  "update_poll_enabled": true,
+  "update_poll_interval": 1800000,
   "trusted_signing_keys": ["I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="],
   "node": {
     // ... see Node Configuration
@@ -173,8 +173,8 @@ PKCS11 Identity using ATECC608B TrustAndGo
 ```json
 {
   "version": 1,
-  "release_poll_enabled": true,
-  "release_poll_interval": 1800000,
+  "update_poll_enabled": true,
+  "update_poll_interval": 1800000,
   "trusted_signing_keys": ["I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="],
   "remote_shell": true,
   "remote_access_tunnels": {
@@ -210,12 +210,14 @@ config :peridiod,
 
 ### U-Boot environment additions
 
-peridiod releases will track and expose release metadata in the uboot environment under the following new keys
+peridiod will track and expose update metadata in the uboot environment under the following new keys
 
-* `peridiod_rel_current`: the PRN of the current installed release
-* `peridiod_rel_previous`: the PRN of the previous installed release
-* `peridiod_rel_progress`: the PRN of the release in progress
+* `peridiod_via_current`: the PRN of the current installed release or bundle override
+* `peridiod_via_previous`: the PRN of the previous installed release or bundle override
+* `peridiod_via_progress`: the PRN of the release or bundle override in progress
 * `peridiod_vsn_current`: the semantic version of the current installed release
 * `peridiod_vsn_previous`: the semantic version of the previous installed release
 * `peridiod_vsn_progress`: the semantic version of the release in progress
-* `peridiod_bin_current`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from release to release
+* `peridiod_bin_current`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
+* `peridiod_bin_previous`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
+* `peridiod_bin_progress`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
