@@ -212,12 +212,12 @@ config :peridiod,
 
 peridiod will track and expose update metadata in the uboot environment under the following new keys
 
-* `peridiod_via_current`: the PRN of the current installed release or bundle override
-* `peridiod_via_previous`: the PRN of the previous installed release or bundle override
-* `peridiod_via_progress`: the PRN of the release or bundle override in progress
-* `peridiod_vsn_current`: the semantic version of the current installed release
-* `peridiod_vsn_previous`: the semantic version of the previous installed release
-* `peridiod_vsn_progress`: the semantic version of the release in progress
-* `peridiod_bin_current`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
-* `peridiod_bin_previous`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
-* `peridiod_bin_progress`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
+* `peridio_via_current`: the PRN of the current installed release or bundle override
+* `peridio_via_previous`: the PRN of the previous installed release or bundle override
+* `peridio_via_progress`: the PRN of the release or bundle override in progress
+* `peridio_vsn_current`: the semantic version of the current installed release
+* `peridio_vsn_previous`: the semantic version of the previous installed release
+* `peridio_vsn_progress`: the semantic version of the release in progress
+* `peridio_bin_current`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
+* `peridio_bin_previous`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
+* `peridio_bin_progress`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
