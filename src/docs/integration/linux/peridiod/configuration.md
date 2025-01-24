@@ -221,3 +221,6 @@ peridiod will track and expose update metadata in the uboot environment under th
 * `peridio_bin_current`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
 * `peridio_bin_previous`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
 * `peridio_bin_progress`: an concatenated key / value paired encoded string of `<binary_id><custom_metadata_sha256_hash>` internally used to diff installed binaries from bundle to bundle
+* `peridio_bun_current`: the PRN of the current installed bundle
+* `peridio_bun_previous`: the PRN of the previous installed bundle
+* `peridio_bun_progress`: the PRN of the bundle install in progress
