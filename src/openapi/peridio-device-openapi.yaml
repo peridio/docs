@@ -253,8 +253,9 @@ paths:
             For more information on each field, reference the response.
 
             - `source_type`
-            - `bundle`
+            - `cohort`
             - `release`
+            - `bundle`
             - `manifest`
               - `artifact`
               - `artifact_version`
@@ -292,6 +293,12 @@ paths:
                       Expand required. See [expanding responses](#section/Expanding-Responses).
 
                       The "source" of the bundle update - from a release, or a bundle override.
+                  cohort:
+                    $ref: "peridio-admin-openapi.yaml#/components/schemas/cohort"
+                    description: |
+                      Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                      The cohort the device belongs to.
                   release:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/release"
                     description: |
