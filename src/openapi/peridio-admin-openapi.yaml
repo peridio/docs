@@ -167,6 +167,7 @@ servers:
   - url: https://api.cremini.peridio.com
 security:
   - api_key: []
+    api_key_v2: []
 tags:
   - name: Deployments
     id: deployments
@@ -2102,6 +2103,84 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/deployment"
+  /devices/{device_prn}/update:
+    post:
+      security:
+        - api_key_v2: []
+      operationId: devices-get-update
+      summary: Get device update
+      description: |
+        Returns information regarding whether an update is available via a [release](/platform/reference/releases) or [bundle override](/platform/reference/bundle-overrides).
+      tags:
+        - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            description: The PRN of the device you wish to check for an update for.
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                release_prn:
+                  examples:
+                    [
+                      prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0,
+                    ]
+                  description: The PRN of the release to consider as the device's current release during bundle resolution.
+                  $ref: "#/components/schemas/prn"
+                bundle_prn:
+                  examples:
+                    [
+                      prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:bundle:ddd32c59-fc35-4202-a520-a4eddaa11fb3,
+                    ]
+                  description: The PRN of the bundle to consider as the device's current bundle during bundle resolution.
+                  $ref: "#/components/schemas/prn"
+                release_version:
+                  examples: [1.0.0]
+                  description: The version to consider as the device's current release version during bundle resolution.
+                  $ref: "#/components/schemas/release-version"
+                write:
+                  description: Whether the server's record of what the device's current state is will be updated in reaction to the release PRN, bundle PRN, and release version parameters if they are also supplied.
+                  type: boolean
+                  default: false
+              anyOf:
+                - required: [release_prn]
+                - required: [bundle_prn]
+                - required: [release_version]
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    enum:
+                      - "update"
+                      - "no_update"
+                      - "device_quarantine"
+                  source_type:
+                    enum:
+                      - "release"
+                      - "bundle_override"
+                      - null
+                    description: |
+                      The "source" of the bundle update - from a release, or a bundle override.
+                  source_prn: 
+                    $ref: "#/components/schemas/prn"
+                    description: |
+                      The "source" prn, could be either a release prn or a bundle override prn
+                  bundle_prn:
+                    $ref: "#/components/schemas/prn"
+                    description: |
+                      The bundle associated with `source`.
+                  manifest:
+                    $ref: "#/components/schemas/manifest"
   /orgs/{organization_name}/products/{product_name}/devices:
     get:
       operationId: list-devices
@@ -3421,6 +3500,11 @@ components:
       name: Authorization
       in: "header"
       description: The header value must be `Token ACCESS_TOKEN_VALUE`.
+    api_key_v2:
+      type: apiKey
+      name: Authorization
+      in: "header"
+      description: Version 2 API Keys. The header value must be `Token ACCESS_TOKEN_VALUE`.
   parameters:
     limit:
       in: query
@@ -5042,6 +5126,49 @@ components:
           $ref: "#/components/schemas/prn"
         public_value:
           $ref: "#/components/schemas/signing-key-value-pem"
+    manifest:
+      description: |
+        The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download URL.
+      type: array
+      items:
+        type: object
+        properties:
+          artifact_prn:
+            $ref: "#/components/schemas/prn"
+            description: |
+              The artifact prn associated with `artifact_version_prn`.
+          artifact_version:
+            $ref: "#/components/schemas/prn"
+            description: |
+              The artifact version associated with `binary_prn`.
+          binary_prn:
+            $ref: "#/components/schemas/prn"
+          custom_metadata:
+            $ref: "#/components/schemas/custom-metadata"
+            description: |
+              A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
+
+              Max size is 1,000,000 bytes (1 MB).
+          hash:
+            $ref: "#/components/schemas/binary-hash"
+          signatures:
+            default: null
+            oneOf:
+              - type: "null"
+              - type: array
+                items:
+                  type: object
+                  properties:
+                    signature:
+                      $ref: "#/components/schemas/binary-signature-signature"
+                    signing_key_prn:
+                      $ref: "#/components/schemas/prn"
+          size:
+            $ref: "#/components/schemas/binary-size"
+          target:
+            $ref: "#/components/schemas/target-triplet"
+          url:
+            type: string
 
     tunnel:
       type: object
