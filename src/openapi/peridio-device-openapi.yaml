@@ -304,14 +304,6 @@ paths:
                       Expand required. See [expanding responses](#section/Expanding-Responses).
 
                       The bundle associated with `release`.
-                  custom_metadata:
-                    $ref: "peridio-admin-openapi.yaml#/components/schemas/custom-metadata"
-                    description: |
-                      Expand required. See [expanding responses](#section/Expanding-Responses).
-
-                      A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
-
-                      Max size is 1,000,000 bytes (1 MB).
                   manifest:
                     $ref: "#/components/schemas/manifest"
   /tunnels:
@@ -463,6 +455,14 @@ components:
               The artifact version associated with `binary_prn`.
           binary_prn:
             $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
+          custom_metadata:
+            $ref: "peridio-admin-openapi.yaml#/components/schemas/custom-metadata"
+            description: |
+              Expand required. See [expanding responses](#section/Expanding-Responses).
+
+              A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
+
+              Max size is 1,000,000 bytes (1 MB).
           hash:
             $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-hash"
           signatures:
