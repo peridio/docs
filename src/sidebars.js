@@ -153,6 +153,13 @@ export default {
       items: [
         {
           type: 'category',
+          label: 'Cloud integration',
+          items: [
+            'platform/guides/cloud-delegated-updates',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Binary management',
           items: [
             'platform/guides/introduction-to-binary-management',
