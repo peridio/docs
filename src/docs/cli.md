@@ -149,7 +149,7 @@ Contains a single object of the format:
       <td>SIGNING_KEY_PRIVATE_PATH</td>
       <td><code>true</code></td>
       <td>string</td>
-      <td>The path to a <a href="/reference/signing-keys#pem">private key's PEM file</a>.</td>
+      <td>The path to a <a href="/platform/reference/signing-keys#pem">private key's PEM file</a>.</td>
     </tr>
     <tr>
       <td>CA_CERTIFICATE_NAME</td>
