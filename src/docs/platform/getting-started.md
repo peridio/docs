@@ -210,7 +210,7 @@ If you happen to be prompted for `--organization-prn <ORGANIZATION_PRN>` you can
 
 ### Configuring signing keys into the CLI
 
-Now that your signing keys are registered, we inform the CLI where they live locally so that it can leverage them during binary upload. This is accomplished by updating your `configuration.json` file to point to the correct location (remember when I said we'd come back to this earlier?).
+Now that your signing keys are registered, we inform the CLI where they live locally so that it can leverage them during binary upload. This is accomplished by updating your `config.json` file to point to the correct location (remember when I said we'd come back to this earlier?).
 
 Three items are important here:
 
@@ -325,7 +325,7 @@ We can now sign and upload our binary, note that we are providing a few key piec
 
 - `target`: any
 - `content-path`: the location of the binary we are uploading
-- `signing-key-pair`: the signing key we are referencing in our `configuration.json`
+- `signing-key-pair`: the signing key we are referencing in our `config.json`
 - `artifact-version-prn` : the artifact version that we are association this with
 
 ```bash
