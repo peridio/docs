@@ -169,7 +169,7 @@ export default function Home() {
       <HomepageCodeBlock />
       <main className={clsx('container', styles.container)}>
         <div>
-          <Section title={"Getting Started"} subsections={[{ url: "/platform/reference/overview", text: "The Peridio Platform", icon: "cmd" }]} />
+          <Section title={"Getting Started"} subsections={[{ url: "/platform/getting-started", text: "The Peridio Platform", icon: "cmd" }]} />
           <Section title={"System Integrations"} subsections={[{ url: "/integration/linux/overview", text: "Linux", icon: "code" }]} />
           <Section title={"Tools"} subsections={[{ url: "/cli", text: "Peridio CLI", icon: "cmd" }, { url: "https://console.peridio.com/", text: "Web Console", icon: "desktop" }]} />
         </div>
