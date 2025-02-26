@@ -4,6 +4,11 @@
 export default {
   platform: [
     {
+      type: 'doc',
+      label: 'Getting started',
+      id: 'platform/getting-started',
+    },
+    {
       collapsible: true,
       collapsed: false,
       type: 'category',
