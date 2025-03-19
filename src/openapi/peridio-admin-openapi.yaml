@@ -2241,42 +2241,6 @@ paths:
       responses:
         "204":
           description: Ok.
-  /orgs/{organization_name}/products/{product_name}/devices/auth:
-    post:
-      operationId: authenticate-device
-      summary: Authenticate device
-      tags:
-        - "Devices"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                certificate:
-                  $ref: "#/components/schemas/device-certificate-pem-base64"
-              required:
-                - certificate
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/device"
   /orgs/{organization_name}/products/{product_name}/firmwares:
     get:
       operationId: list-firmware
@@ -4659,29 +4623,6 @@ webhooks:
           application/json:
             schema:
               $ref: "#/components/schemas/api-key-created-event"
-      responses:
-        200:
-          description: Ok.
-  device_authentication_failed:
-    post:
-      security: []
-      summary: Authentication failed
-      description: |
-        See the [webhooks reference](/platform/reference/webhooks#supported-events) for a list of supported events.
-
-        This event is created when a device fails to authenticate to the [Device API](/device-api).
-      operationId: device-authentication-failed
-      tags:
-        - Device Events
-      parameters:
-        - $ref: "#/components/parameters/peridio-signature"
-        - $ref: "#/components/parameters/peridio-published-at"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/device-authentication-failed-event"
       responses:
         200:
           description: Ok.
