@@ -2853,46 +2853,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/user-me"
-  /users/register:
-    post:
-      operationId: register-a-user
-      summary: Register a user
-      tags:
-        - "Users"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                email:
-                  $ref: "#/components/schemas/email"
-                password:
-                  $ref: "#/components/schemas/user-password"
-                username:
-                  $ref: "#/components/schemas/user-username"
-              required:
-                - email
-                - password
-                - username
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/user-me"
-        "403":
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                properties:
-                  status:
-                    type: string
-                    const: "Public signups disabled. Invite required to signup."
   /webhooks:
     post:
       operationId: create-a-webhook
