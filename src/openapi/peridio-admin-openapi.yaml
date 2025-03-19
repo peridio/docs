@@ -186,9 +186,6 @@ tags:
     id: binary-parts
   - name: Binary Signatures
     id: binary-signatures
-  - name: Keys
-    id: keys
-    description: Use [signing keys](#signing-keys) instead.
   - name: Signing Keys
     id: signing-keys
   - name: Firmware
@@ -237,7 +234,6 @@ x-tagGroups:
       - Binaries
       - Binary Parts
       - Binary Signatures
-      - Keys
       - Signing Keys
       - Firmware
   - name: Remote Access
@@ -1539,109 +1535,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ca-verification-code"
-  /orgs/{organization_name}/keys:
-    get:
-      operationId: list-keys
-      deprecated: true
-      summary: List keys
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/array-of-keys"
-    post:
-      operationId: create-a-key
-      deprecated: true
-      summary: Create a key
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                key:
-                  $ref: "#/components/schemas/key-key"
-                name:
-                  $ref: "#/components/schemas/key-name"
-              required:
-                - key
-                - name
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/key"
-  /orgs/{organization_name}/keys/{key_name}:
-    delete:
-      operationId: delete-a-key
-      deprecated: true
-      summary: Delete a key
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: key_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/key-name"
-      responses:
-        "204":
-          description: Ok.
-    get:
-      operationId: retrieve-a-key
-      deprecated: true
-      summary: Retrieve a key
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: key_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/key-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/key"
   /orgs/{organization_name}/products:
     get:
       deprecated: true
@@ -3425,10 +3318,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/firmware"
-    array-of-keys:
-      type: array
-      items:
-        $ref: "#/components/schemas/key"
     array-of-products:
       type: array
       items:
