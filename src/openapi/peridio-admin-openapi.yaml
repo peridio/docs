@@ -1535,149 +1535,10 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ca-verification-code"
-  /orgs/{organization_name}/products:
-    get:
-      deprecated: true
-      operationId: list-products
-      summary: List products
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/array-of-products"
-    post:
-      deprecated: true
-      operationId: create-a-product
-      summary: Create a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                name:
-                  $ref: "#/components/schemas/product-name"
-              required:
-                - name
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
-  /orgs/{organization_name}/products/{product_name}:
-    delete:
-      deprecated: true
-      operationId: delete-a-product
-      summary: Delete a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      responses:
-        "204":
-          description: Ok.
-    get:
-      deprecated: true
-      operationId: retrieve-a-product
-      summary: Retrieve a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
-    put:
-      deprecated: true
-      operationId: update-a-product
-      summary: Update a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                product:
-                  type: object
-                  properties:
-                    name:
-                      $ref: "#/components/schemas/product-name"
-              required:
-                - product
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
   /products:
     get:
-      operationId: list-products-v2
-      summary: List products v2
+      operationId: list-products
+      summary: List products
       description: |
         **Search**
 
@@ -1720,12 +1581,12 @@ paths:
               schema:
                 properties:
                   products:
-                    $ref: "#/components/schemas/array-of-products-v2"
+                    $ref: "#/components/schemas/array-of-products"
                   next_page:
                     $ref: "#/components/schemas/next-page"
     post:
-      operationId: create-a-product-v2
-      summary: Create a product v2
+      operationId: create-a-product
+      summary: Create a product
       tags:
         - "Products"
       requestBody:
@@ -1751,11 +1612,11 @@ paths:
               schema:
                 properties:
                   product:
-                    $ref: "#/components/schemas/product-v2"
+                    $ref: "#/components/schemas/product"
   /products/{product_prn}:
     get:
-      operationId: retrieve-a-product-v2
-      summary: Retrieve a product v2
+      operationId: retrieve-a-product
+      summary: Retrieve a product
       tags:
         - "Products"
       parameters:
@@ -1772,10 +1633,10 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: "#/components/schemas/product-v2"
+                    $ref: "#/components/schemas/product"
     patch:
-      operationId: update-a-product-v2
-      summary: Update a product v2
+      operationId: update-a-product
+      summary: Update a product
       tags:
         - "Products"
       parameters:
@@ -1807,7 +1668,7 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: "#/components/schemas/product-v2"
+                    $ref: "#/components/schemas/product"
   /orgs/{organization_name}/products/{product_name}/deployments:
     get:
       operationId: list-deployments
@@ -3237,10 +3098,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/product"
-    array-of-products-v2:
-      type: array
-      items:
-        $ref: "#/components/schemas/product-v2"
     array-of-releases:
       type: array
       items:
@@ -4426,13 +4283,6 @@ components:
         [Peridio Resource Names](/platform/reference/peridio-resource-names) (PRNs) uniquely identify Peridio resources.
       type: string
     product:
-      type: object
-      properties:
-        name:
-          $ref: "#/components/schemas/product-name"
-        prn:
-          $ref: "#/components/schemas/prn"
-    product-v2:
       type: object
       properties:
         archived:
