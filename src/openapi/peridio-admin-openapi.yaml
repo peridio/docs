@@ -2171,7 +2171,7 @@ paths:
                       - null
                     description: |
                       The "source" of the bundle update - from a release, or a bundle override.
-                  source_prn: 
+                  source_prn:
                     $ref: "#/components/schemas/prn"
                     description: |
                       The "source" prn, could be either a release prn or a bundle override prn
@@ -2180,7 +2180,48 @@ paths:
                     description: |
                       The bundle associated with `source`.
                   manifest:
-                    $ref: "#/components/schemas/manifest"
+                    type: array
+                    description: |
+                      The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download URL.
+                    items:
+                      type: object
+                      properties:
+                        artifact_prn:
+                          $ref: "#/components/schemas/prn"
+                          description: |
+                            The PRN of the artifact associated with `artifact_version_prn`.
+                        artifact_version_prn:
+                          $ref: "#/components/schemas/prn"
+                          description: |
+                            The PRN of the artifact version associated with `binary_prn`.
+                        binary_prn:
+                          $ref: "#/components/schemas/prn"
+                        custom_metadata:
+                          $ref: "#/components/schemas/custom-metadata"
+                          description: |
+                            A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
+
+                            Max size is 1,000,000 bytes (1 MB).
+                        hash:
+                          $ref: "#/components/schemas/binary-hash"
+                        signatures:
+                          default: null
+                          oneOf:
+                            - type: "null"
+                            - type: array
+                              items:
+                                type: object
+                                properties:
+                                  signature:
+                                    $ref: "#/components/schemas/binary-signature-signature"
+                                  signing_key_prn:
+                                    $ref: "#/components/schemas/prn"
+                        size:
+                          $ref: "#/components/schemas/binary-size"
+                        target:
+                          $ref: "#/components/schemas/target-triplet"
+                        url:
+                          type: string
   /orgs/{organization_name}/products/{product_name}/devices:
     get:
       operationId: list-devices
@@ -3991,6 +4032,10 @@ components:
         - type: string
           minLength: 1
           maxLength: 128
+    bundle-override-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:bundle_override:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     target-triplet:
       type: string
       minLength: 1
@@ -5126,50 +5171,6 @@ components:
           $ref: "#/components/schemas/prn"
         public_value:
           $ref: "#/components/schemas/signing-key-value-pem"
-    manifest:
-      description: |
-        The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download URL.
-      type: array
-      items:
-        type: object
-        properties:
-          artifact_prn:
-            $ref: "#/components/schemas/prn"
-            description: |
-              The artifact prn associated with `artifact_version_prn`.
-          artifact_version:
-            $ref: "#/components/schemas/prn"
-            description: |
-              The artifact version associated with `binary_prn`.
-          binary_prn:
-            $ref: "#/components/schemas/prn"
-          custom_metadata:
-            $ref: "#/components/schemas/custom-metadata"
-            description: |
-              A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
-
-              Max size is 1,000,000 bytes (1 MB).
-          hash:
-            $ref: "#/components/schemas/binary-hash"
-          signatures:
-            default: null
-            oneOf:
-              - type: "null"
-              - type: array
-                items:
-                  type: object
-                  properties:
-                    signature:
-                      $ref: "#/components/schemas/binary-signature-signature"
-                    signing_key_prn:
-                      $ref: "#/components/schemas/prn"
-          size:
-            $ref: "#/components/schemas/binary-size"
-          target:
-            $ref: "#/components/schemas/target-triplet"
-          url:
-            type: string
-
     tunnel:
       type: object
       properties:
