@@ -82,15 +82,6 @@ paths:
 
             - `cohort`
             - `manifest`
-              - `artifact`
-              - `artifact_version`
-              - `binary_prn`
-              - `custom_metadata`
-              - `hash`
-              - `signatures`
-              - `size`
-              - `target`
-              - `url`
           in: query
           required: false
           schema:
@@ -252,20 +243,12 @@ paths:
 
             For more information on each field, reference the response.
 
-            - `source_type`
-            - `cohort`
-            - `release`
+            - `bundle_override`
             - `bundle`
+            - `cohort`
             - `manifest`
-              - `artifact`
-              - `artifact_version`
-              - `binary_prn`
-              - `custom_metadata`
-              - `hash`
-              - `signatures`
-              - `size`
-              - `target`
-              - `url`
+            - `release`
+            - `source_type`
           in: query
           required: false
           schema:
@@ -299,12 +282,33 @@ paths:
                       Expand required. See [expanding responses](#section/Expanding-Responses).
 
                       The cohort the device belongs to.
+                  bundle_override:
+                    type: object
+                    description: |
+                      Expand required. See [expanding responses](#section/Expanding-Responses).
+
+                      The source bundle override of the pending bundle.
+                    properties:
+                      ends_at:
+                        type: string
+                        format: date-time
+                      inserted_at:
+                        type: string
+                        format: date-time
+                      prn:
+                        $ref: "peridio-admin-openapi.yaml#/components/schemas/bundle-override-prn"
+                      starts_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
                   release:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/release"
                     description: |
                       Expand required. See [expanding responses](#section/Expanding-Responses).
 
-                      The target release with respect to [release resolution](/platform/reference/releases#release-resolution).
+                      The source release of the pending bundle.
                   bundle:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/bundle"
                     description: |
@@ -451,25 +455,21 @@ components:
           artifact:
             $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact"
             description: |
-              Expand required. See [expanding responses](#section/Expanding-Responses).
-
               The artifact associated with `artifact_version`.
           artifact_version:
             $ref: "peridio-admin-openapi.yaml#/components/schemas/artifact-version"
             description: |
-              Expand required. See [expanding responses](#section/Expanding-Responses).
-
               The artifact version associated with `binary_prn`.
           binary_prn:
             $ref: "peridio-admin-openapi.yaml#/components/schemas/prn"
           custom_metadata:
-            $ref: "peridio-admin-openapi.yaml#/components/schemas/custom-metadata"
-            description: |
-              Expand required. See [expanding responses](#section/Expanding-Responses).
+            oneOf:
+              - type: "null"
+              - $ref: "peridio-admin-openapi.yaml#/components/schemas/custom-metadata"
+                description: |
+                  A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
 
-              A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
-
-              Max size is 1,000,000 bytes (1 MB).
+                  Max size is 1,000,000 bytes (1 MB).
           hash:
             $ref: "peridio-admin-openapi.yaml#/components/schemas/binary-hash"
           signatures:
