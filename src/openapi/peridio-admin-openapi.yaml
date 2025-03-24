@@ -188,8 +188,8 @@ tags:
     id: binary-signatures
   - name: Signing Keys
     id: signing-keys
-  - name: Firmware
-    id: firmware
+  - name: Firmware v2
+    id: firmware-v2
     description: |
       **Deprecated**
 
@@ -223,6 +223,12 @@ tags:
     id: web-console
   - name: Events
     id: events
+  - name: Firmware
+    id: firmware
+    description: |
+      **Deprecated**
+
+      This functionality has been superceded by [artifacts](#artifacts), [artifact versions](#artifact-versions), and [binaries](#binaries).
 x-tagGroups:
   - name: Account Management
     tags:
@@ -235,7 +241,6 @@ x-tagGroups:
       - Binary Parts
       - Binary Signatures
       - Signing Keys
-      - Firmware
   - name: Remote Access
     tags:
       - Tunnels
@@ -261,253 +266,11 @@ x-tagGroups:
       - API Key Events
       - Device Events
       - Webhook Events
+  - name: Legacy
+    tags:
+      - Firmware
+      - Firmware v2
 paths:
-  /events:
-    get:
-      operationId: list-events
-      summary: List events
-      description: |
-        List all possible events (Device, Webhooks, API Key, etc.) within the specified time range.
-
-        The date range may be adjusted via query parameters.
-      tags:
-        - "Events"
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/event_inserted_at_lt"
-        - $ref: "#/components/parameters/event_inserted_at_gte"
-        - $ref: "#/components/parameters/event_actor_prn"
-        - $ref: "#/components/parameters/event_resource_prn"
-        - $ref: "#/components/parameters/event_type"
-        - $ref: "#/components/parameters/event_subtype"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  events:
-                    $ref: "#/components/schemas/array-of-events"
-                  next_page:
-                    $ref: "#/components/schemas/next-page"
-  /tunnels:
-    get:
-      operationId: list-tunnels
-      summary: List tunnels
-      description: |
-        **Search**
-
-        This resource has the following searchable fields.
-
-        |Key|Required|Operators|Value|
-        |-|-|-|-|
-        |`state`||`:`|string|
-        |`device_prn`||`:`|prn|
-        |`organization_prn`|X|`:`|prn|
-
-        `state` can be one of `requested`, `open`, `closed`.
-
-      tags:
-        - "Tunnels"
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                search:
-                  $ref: "#/components/schemas/search-with-org"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  tunnels:
-                    $ref: "#/components/schemas/array-of-tunnels"
-                  next_page:
-                    $ref: "#/components/schemas/next-page"
-    post:
-      operationId: create-a-tunnel
-      summary: Create a tunnel
-      description: |
-        Create a tunnel to a device for remote access.
-
-        The tunnel is available via a public IP address and port for a configurable amount of time. Anyone can send data through the tunnel and it is your responsibility to enforce authentication and authorization if desired.
-      tags:
-        - Tunnels
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                device_prn:
-                  $ref: "#/components/schemas/device-prn"
-                  description: |
-                    Identifies which device to create a tunnel for.
-                device_tunnel_port:
-                  $ref: "#/components/schemas/device-tunnel-port"
-                cidr_block_allowlist:
-                  $ref: "#/components/schemas/cidr-block-allowlist"
-                ttl:
-                  type: number
-                  default: 3600
-                  description: The amount of time in seconds that the tunnel is available for.
-                  minimum: 1
-                  maximum: 3600
-              required:
-                - device_prn
-                - device_tunnel_port
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  tunnel:
-                    $ref: "#/components/schemas/tunnel"
-
-  /tunnels/{tunnel_prn}:
-    get:
-      operationId: retrieve-a-tunnel
-      summary: Retrieve a tunnel
-      tags:
-        - "Tunnels"
-      parameters:
-        - name: tunnel_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  tunnel:
-                    $ref: "#/components/schemas/tunnel"
-    patch:
-      operationId: update-a-tunnel
-      summary: Update a tunnel
-      description: |
-        Update a tunnel
-
-          - allows changing a tunnel to a closed state.
-          - allows extending the expiration (the number of seconds from current time).
-      tags:
-        - "Tunnels"
-      parameters:
-        - name: tunnel_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/tunnel-prn"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                state:
-                  type: string
-                  examples: [closed]
-                  description: The state we want the tunnel to be in. Only accepts "closed".
-                ttl:
-                  type: number
-                  description: The amount of time in seconds to extend the tunnel for.
-                  minimum: 1
-                  maximum: 3600
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    allOf:
-                      - $ref: "#/components/schemas/tunnel"
-                      - type: object
-                        properties:
-                          state:
-                            examples: ["closed"]
-  /web-console-shells:
-    post:
-      operationId: create-a-web-console-shell
-      summary: Create a web console shell
-      description: |
-        Create a self-authenticating, one-time use, expiring URL to a device remote shell in the Peridio web console.
-
-        Once a request is made to the returned URL, it cannot be used again. For example, refreshing the page will fail.
-
-        You must supply either:
-
-          - `device_prn`
-
-        Or:
-
-          - `device_identifier` and `organization_prn`
-      tags:
-        - "Web Console"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                device_identifier:
-                  $ref: "#/components/schemas/device-identifier"
-                  description: |
-                    Identifies which device to create a web console shell for.
-
-                    Mutually exclusive with `device_prn`.
-                device_prn:
-                  $ref: "#/components/schemas/device-prn"
-                  description: |
-                    Identifies which device to create a web console shell for.
-
-                    Mutually exclusive with `device_identifier`.
-                organization_prn:
-                  $ref: "#/components/schemas/device-prn"
-                  description: |
-                    Identifies which organization the device belongs to if supplying `device_identifier`. This param is unnecessary if you supply the `device_prn` param.
-
-                    Mutually exclusive with `device_prn`.
-                ttl:
-                  type: integer
-                  default: 3600
-                  description: The amount of time in seconds that the URL is valid for. Open connections are closed automatically upon expiration.
-                  minimum: 0
-                  maximum: 86400
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  expires_at:
-                    type: string
-                    format: date-time
-                    description: When the `url` expires, after which it will be invalid.
-                  url:
-                    type: string
-                    format: uri
-                    example: https://console.peridio.com/organizations/20301a4f-edca-46ea-89c0-2e92c3dcb0b9/devices/5b615a57-3712-481c-80bb-281f79b1533e/shell/aa63c5e7-d8c7-43e6-a7f5-9f8b63c91ed6
-                    description: This value is sensitive. Anyone with access to a self-authenticating URL can use it until it has been consumed or expired.
   /artifacts:
     post:
       operationId: create-an-artifact
@@ -1233,6 +996,429 @@ paths:
                 properties:
                   cohort:
                     $ref: "#/components/schemas/cohort"
+  /devices/{device_prn}/update:
+    post:
+      security:
+        - api_key_v2: []
+      operationId: devices-get-update
+      summary: Get device update
+      description: |
+        Returns information regarding whether an update is available via a [release](/platform/reference/releases) or [bundle override](/platform/reference/bundle-overrides).
+      tags:
+        - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            description: The PRN of the device you wish to check for an update for.
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                release_prn:
+                  examples:
+                    [
+                      prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0,
+                    ]
+                  description: The PRN of the release to consider as the device's current release during bundle resolution.
+                  $ref: "#/components/schemas/prn"
+                bundle_prn:
+                  examples:
+                    [
+                      prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:bundle:ddd32c59-fc35-4202-a520-a4eddaa11fb3,
+                    ]
+                  description: The PRN of the bundle to consider as the device's current bundle during bundle resolution.
+                  $ref: "#/components/schemas/prn"
+                release_version:
+                  examples: [1.0.0]
+                  description: The version to consider as the device's current release version during bundle resolution.
+                  $ref: "#/components/schemas/release-version"
+                write:
+                  description: Whether the server's record of what the device's current state is will be updated in reaction to the release PRN, bundle PRN, and release version parameters if they are also supplied.
+                  type: boolean
+                  default: false
+              anyOf:
+                - required: [release_prn]
+                - required: [bundle_prn]
+                - required: [release_version]
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    enum:
+                      - "update"
+                      - "no_update"
+                      - "device_quarantine"
+                  source_type:
+                    enum:
+                      - "release"
+                      - "bundle_override"
+                      - null
+                    description: |
+                      The "source" of the bundle update - from a release, or a bundle override.
+                  source_prn:
+                    $ref: "#/components/schemas/prn"
+                    description: |
+                      The "source" prn, could be either a release prn or a bundle override prn
+                  bundle_prn:
+                    $ref: "#/components/schemas/prn"
+                    description: |
+                      The bundle associated with `source`.
+                  manifest:
+                    $ref: "#/components/schemas/manifest"
+  /events:
+    get:
+      operationId: list-events
+      summary: List events
+      description: |
+        List all possible events (Device, Webhooks, API Key, etc.) within the specified time range.
+
+        The date range may be adjusted via query parameters.
+      tags:
+        - "Events"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/event_inserted_at_lt"
+        - $ref: "#/components/parameters/event_inserted_at_gte"
+        - $ref: "#/components/parameters/event_actor_prn"
+        - $ref: "#/components/parameters/event_resource_prn"
+        - $ref: "#/components/parameters/event_type"
+        - $ref: "#/components/parameters/event_subtype"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  events:
+                    $ref: "#/components/schemas/array-of-events"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /products:
+    get:
+      operationId: list-products
+      summary: List products
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`deleted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
+      tags:
+        - "Products"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+          description: |
+            A search query per the [search query language](#section/Search-Query-Language).
+
+            Searchable fields:
+
+            |Field|Type|Operations|
+            |-|-|-|
+            |`archived`|boolean|`:`|
+            |`inserted_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
+            |`name`|string|`:`, `~`|
+            |`organization_prn`|string|`:`|
+            |`prn`|string|`:`|
+            |`updated_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  products:
+                    $ref: "#/components/schemas/array-of-products"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+    post:
+      operationId: create-a-product
+      summary: Create a product
+      tags:
+        - "Products"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                archived:
+                  $ref: "#/components/schemas/product-archived"
+                name:
+                  $ref: "#/components/schemas/product-name"
+                organization_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - name
+                - organization_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  product:
+                    $ref: "#/components/schemas/product"
+  /products/{product_prn}:
+    get:
+      operationId: retrieve-a-product
+      summary: Retrieve a product
+      tags:
+        - "Products"
+      parameters:
+        - name: product_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/product"
+    patch:
+      operationId: update-a-product
+      summary: Update a product
+      tags:
+        - "Products"
+      parameters:
+        - name: product_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                archived:
+                  $ref: "#/components/schemas/product-archived"
+                  description: |
+                    A product cannot be archived if any of the following are true:
+
+                    - It is associated with any firmware.
+                    - It is associated with any unarchived devices.
+                name:
+                  $ref: "#/components/schemas/product-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/product"
+  /releases:
+    post:
+      operationId: create-a-release
+      summary: Create a release
+      tags:
+        - Releases
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                bundle_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: The bundle the release will distribute to devices.
+                phase_mode:
+                  $ref: "#/components/schemas/release-phase-mode"
+                  default: "numeric"
+                phase_tags:
+                  $ref: "#/components/schemas/release-phase-tags"
+                phase_value:
+                  $ref: "#/components/schemas/release-phase-value"
+                cohort_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: The cohort to create the release within, and in turn the cohort it will distribute its bundle to.
+                description:
+                  $ref: "#/components/schemas/release-description"
+                disabled:
+                  $ref: "#/components/schemas/release-disabled"
+                name:
+                  $ref: "#/components/schemas/release-name"
+                next_release_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: |
+                    If omitted, the release will be created as latest within the cohort. If there is already at least one release in the cohort, then the latest release in that cohort would have its `next_release_prn` updated to this created release.
+
+                    If supplied, the release will be created prior to the release identified by `next_release_prn`. If you wish to insert this release between two other releases, you may additionally supply `previous_release_prn`. If you supply neither field, it will create the release as the latest automatically.
+                previous_release_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: |
+                    If omitted, `next_release_prn` will dictate where to create this release within the cohort's release graph.
+
+                    In order to insert a release between two other releases, `next_release_prn` is required to be supplied as well. If you supply neither field, it will create the release as the latest automatically.
+                organization_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: The organization to create the release within.
+                required:
+                  $ref: "#/components/schemas/release-required"
+                schedule_date:
+                  $ref: "#/components/schemas/release-schedule-availability"
+                version:
+                  $ref: "#/components/schemas/release-version"
+                version-requirement:
+                  $ref: "#/components/schemas/release-version-requirement"
+              required:
+                - bundle_prn
+                - cohort_prn
+                - name
+                - organization_prn
+                - required
+                - schedule_date
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  release:
+                    $ref: "#/components/schemas/release"
+    get:
+      operationId: list-releases
+      summary: List Releases
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`cohort_prn`||`:`|string|
+        |`deleted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`description`||`:`, `~`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`|string|
+        |`next_release_prn`||`:`|string|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+        |`version_requirement`||`:`, `-`|string|
+        |`version`||`:`, `-`|string|
+
+      tags:
+        - Releases
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+                  releases:
+                    $ref: "#/components/schemas/array-of-releases"
+  /releases/{release_prn}:
+    get:
+      operationId: retrieve-a-release
+      summary: Retrieve a release
+      tags:
+        - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  release:
+                    $ref: "#/components/schemas/release"
+    patch:
+      operationId: update-a-release
+      summary: Update a release
+      tags:
+        - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/release-description"
+                disabled:
+                  $ref: "#/components/schemas/release-disabled"
+                name:
+                  $ref: "#/components/schemas/release-name"
+                next_release_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: Update the release's `next_release_prn`. Changes that would result in an invalid [release graph](/platform/reference/cohorts#release-graph) are rejected.
+                phase_mode:
+                  $ref: "#/components/schemas/release-phase-mode"
+                phase_tags:
+                  $ref: "#/components/schemas/release-phase-tags"
+                phase_value:
+                  $ref: "#/components/schemas/release-phase-value"
+                required:
+                  $ref: "#/components/schemas/release-required"
+                schedule_date:
+                  $ref: "#/components/schemas/release-schedule-availability"
+                version:
+                  $ref: "#/components/schemas/release-version"
+                version-requirement:
+                  $ref: "#/components/schemas/release-version-requirement"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  release:
+                    $ref: "#/components/schemas/release"
   /signing_keys:
     post:
       operationId: create-a-signing-key
@@ -1363,14 +1549,608 @@ paths:
             $ref: "#/components/schemas/prn"
       responses:
         "204":
+          description: No Content.
+  /tunnels:
+    get:
+      operationId: list-tunnels
+      summary: List tunnels
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`state`||`:`|string|
+        |`device_prn`||`:`|prn|
+        |`organization_prn`|X|`:`|prn|
+
+        `state` can be one of `requested`, `open`, `closed`.
+
+      tags:
+        - "Tunnels"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                search:
+                  $ref: "#/components/schemas/search-with-org"
+      responses:
+        "200":
           description: Ok.
           content:
             application/json:
               schema:
                 properties:
-                  signing_key:
-                    $ref: "#/components/schemas/signing-key"
+                  tunnels:
+                    $ref: "#/components/schemas/array-of-tunnels"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+    post:
+      operationId: create-a-tunnel
+      summary: Create a tunnel
+      description: |
+        Create a tunnel to a device for remote access.
 
+        The tunnel is available via a public IP address and port for a configurable amount of time. Anyone can send data through the tunnel and it is your responsibility to enforce authentication and authorization if desired.
+      tags:
+        - Tunnels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                device_prn:
+                  $ref: "#/components/schemas/device-prn"
+                  description: |
+                    Identifies which device to create a tunnel for.
+                device_tunnel_port:
+                  $ref: "#/components/schemas/device-tunnel-port"
+                cidr_block_allowlist:
+                  $ref: "#/components/schemas/cidr-block-allowlist"
+                ttl:
+                  type: number
+                  default: 3600
+                  description: The amount of time in seconds that the tunnel is available for.
+                  minimum: 1
+                  maximum: 3600
+              required:
+                - device_prn
+                - device_tunnel_port
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  tunnel:
+                    $ref: "#/components/schemas/tunnel"
+  /tunnels/{tunnel_prn}:
+    get:
+      operationId: retrieve-a-tunnel
+      summary: Retrieve a tunnel
+      tags:
+        - "Tunnels"
+      parameters:
+        - name: tunnel_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  tunnel:
+                    $ref: "#/components/schemas/tunnel"
+    patch:
+      operationId: update-a-tunnel
+      summary: Update a tunnel
+      description: |
+        Update a tunnel
+
+          - allows changing a tunnel to a closed state.
+          - allows extending the expiration (the number of seconds from current time).
+      tags:
+        - "Tunnels"
+      parameters:
+        - name: tunnel_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/tunnel-prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                state:
+                  type: string
+                  examples: [closed]
+                  description: The state we want the tunnel to be in. Only accepts "closed".
+                ttl:
+                  type: number
+                  description: The amount of time in seconds to extend the tunnel for.
+                  minimum: 1
+                  maximum: 3600
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/tunnel"
+                      - type: object
+                        properties:
+                          state:
+                            examples: ["closed"]
+  /users/auth:
+    post:
+      operationId: authenticate-a-user
+      summary: Authenticate a user
+      tags:
+        - "Users"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  $ref: "#/components/schemas/email"
+                password:
+                  $ref: "#/components/schemas/user-password"
+                username:
+                  type: string
+              anyOf:
+                - required:
+                    - password
+                    - username
+                - required:
+                    - email
+                    - password
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/user-me"
+  /users/me:
+    get:
+      operationId: get-user-me
+      summary: Get user me
+      tags:
+        - "Users"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/user-me"
+  /web-console-shells:
+    post:
+      operationId: create-a-web-console-shell
+      summary: Create a web console shell
+      description: |
+        Create a self-authenticating, one-time use, expiring URL to a device remote shell in the Peridio web console.
+
+        Once a request is made to the returned URL, it cannot be used again. For example, refreshing the page will fail.
+
+        You must supply either:
+
+          - `device_prn`
+
+        Or:
+
+          - `device_identifier` and `organization_prn`
+      tags:
+        - "Web Console"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                device_identifier:
+                  $ref: "#/components/schemas/device-identifier"
+                  description: |
+                    Identifies which device to create a web console shell for.
+
+                    Mutually exclusive with `device_prn`.
+                device_prn:
+                  $ref: "#/components/schemas/device-prn"
+                  description: |
+                    Identifies which device to create a web console shell for.
+
+                    Mutually exclusive with `device_identifier`.
+                organization_prn:
+                  $ref: "#/components/schemas/device-prn"
+                  description: |
+                    Identifies which organization the device belongs to if supplying `device_identifier`. This param is unnecessary if you supply the `device_prn` param.
+
+                    Mutually exclusive with `device_prn`.
+                ttl:
+                  type: integer
+                  default: 3600
+                  description: The amount of time in seconds that the URL is valid for. Open connections are closed automatically upon expiration.
+                  minimum: 0
+                  maximum: 86400
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  expires_at:
+                    type: string
+                    format: date-time
+                    description: When the `url` expires, after which it will be invalid.
+                  url:
+                    type: string
+                    format: uri
+                    example: https://console.peridio.com/organizations/20301a4f-edca-46ea-89c0-2e92c3dcb0b9/devices/5b615a57-3712-481c-80bb-281f79b1533e/shell/aa63c5e7-d8c7-43e6-a7f5-9f8b63c91ed6
+                    description: This value is sensitive. Anyone with access to a self-authenticating URL can use it until it has been consumed or expired.
+  /webhooks:
+    post:
+      operationId: create-a-webhook
+      summary: Create a webhook
+      tags:
+        - "Webhooks"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/webhook-description"
+                url:
+                  $ref: "#/components/schemas/webhook-url"
+                enabled_events:
+                  $ref: "#/components/schemas/webhook-enabled-events"
+                organization_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - organization_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    allOf:
+                      - $ref: "#/components/schemas/webhook"
+                      - type: object
+                        properties:
+                          secret:
+                            $ref: "#/components/schemas/webhook-secret"
+    get:
+      operationId: list-webhooks
+      summary: List webhooks
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`description`||`:`, `~`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`organization_prn`|X|`:`|prn|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
+
+      tags:
+        - "Webhooks"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhooks:
+                    $ref: "#/components/schemas/array-of-webhooks"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /webhooks/{webhook_prn}:
+    get:
+      operationId: retrieve-a-webhook
+      summary: Retrieve a webhook
+      tags:
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    $ref: "#/components/schemas/webhook"
+    patch:
+      operationId: update-a-webhook
+      summary: Update a webhook
+      tags:
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/webhook-prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  $ref: "#/components/schemas/webhook-description"
+                url:
+                  $ref: "#/components/schemas/webhook-url"
+                enabled_events:
+                  $ref: "#/components/schemas/webhook-enabled-events"
+                state:
+                  $ref: "#/components/schemas/webhook-state"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    $ref: "#/components/schemas/webhook"
+    delete:
+      operationId: delete-a-webhook
+      summary: Delete a webhook
+      tags:
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/webhook-prn"
+      responses:
+        "204":
+          description: Ok.
+  /webhooks/{webhook_prn}/roll_secret:
+    post:
+      operationId: roll-secret-webhook
+      summary: Roll a webhook's secret
+      tags:
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              properties:
+                webhook_ttl:
+                  $ref: "#/components/schemas/webhook-ttl"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  webhook:
+                    allOf:
+                      - $ref: "#/components/schemas/webhook"
+                      - type: object
+                        properties:
+                          secret:
+                            $ref: "#/components/schemas/webhook-secret"
+  /webhooks/{webhook_prn}/test_fire:
+    post:
+      operationId: test-fire-webhook
+      summary: Test fire a webhook
+      tags:
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  event:
+                    $ref: "#/components/schemas/webhook-test-fire-event"
+  # legacy routes
+  /firmwares:
+    post:
+      operationId: create-a-firmware
+      summary: Create a firmware
+      tags:
+        - "Firmware v2"
+      parameters:
+        - name: product_prn
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/prn"
+                firmware:
+                  type: string
+                  format: binary
+                  description: Reference [firmware file requirements](/platform/reference/firmware#firmware-file-requirements).
+                ttl:
+                  type: integer
+              required:
+                - firmware
+                - product_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  firmware:
+                    $ref: "#/components/schemas/firmware"
+        "422":
+          description: Unprocessable Content.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    get:
+      operationId: list-firmware
+      summary: List firmware
+      tags:
+        - "Firmware v2"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  firmwares:
+                    $ref: "#/components/schemas/array-of-firmware"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /firmwares/{firmware_uuid}:
+    delete:
+      operationId: delete-a-firmware
+      summary: Delete a firmware
+      tags:
+        - "Firmware v2"
+      parameters:
+        - name: firmware_uuid
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/firmware-uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - product_prn
+      responses:
+        "204":
+          description: No Content.
+    get:
+      operationId: retrieve-a-firmware
+      summary: Retrieve a firmware
+      description: |
+        ### Expandable
+
+        This endpoint has an expandable response. See [expanding responses](#section/Expanding-Responses).
+      tags:
+        - "Firmware v2"
+      parameters:
+        - name: firmware_uuid
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/firmware-uuid"
+        - name: expand
+          description: |
+            See [expanding responses](#section/Expanding-Responses).
+
+            **Expandable Fields**
+
+            For more information on each field, reference the response.
+
+            - `url`
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - product_prn
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  firmware:
+                    allOf:
+                      - $ref: "#/components/schemas/firmware"
+                      - type: object
+                        properties:
+                          url:
+                            $ref: "#/components/schemas/firmware-expand-url"
   /orgs/{organization_name}/ca_certificates:
     get:
       operationId: list-ca-certificates
@@ -1535,140 +2315,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ca-verification-code"
-  /products:
-    get:
-      operationId: list-products
-      summary: List products
-      description: |
-        **Search**
-
-        This resource has the following searchable fields.
-
-        |Key|Required|Operators|Value|
-        |-|-|-|-|
-        |`deleted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`name`||`:`, `~`|string|
-        |`organization_prn`|X|`:`|prn|
-        |`prn`||`:`|string|
-        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
-
-      tags:
-        - "Products"
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-          description: |
-            A search query per the [search query language](#section/Search-Query-Language).
-
-            Searchable fields:
-
-            |Field|Type|Operations|
-            |-|-|-|
-            |`archived`|boolean|`:`|
-            |`inserted_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
-            |`name`|string|`:`, `~`|
-            |`organization_prn`|string|`:`|
-            |`prn`|string|`:`|
-            |`updated_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
-        - $ref: "#/components/parameters/page"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  products:
-                    $ref: "#/components/schemas/array-of-products"
-                  next_page:
-                    $ref: "#/components/schemas/next-page"
-    post:
-      operationId: create-a-product
-      summary: Create a product
-      tags:
-        - "Products"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                archived:
-                  $ref: "#/components/schemas/product-archived"
-                name:
-                  $ref: "#/components/schemas/product-name"
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
-              required:
-                - name
-                - organization_prn
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  product:
-                    $ref: "#/components/schemas/product"
-  /products/{product_prn}:
-    get:
-      operationId: retrieve-a-product
-      summary: Retrieve a product
-      tags:
-        - "Products"
-      parameters:
-        - name: product_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
-    patch:
-      operationId: update-a-product
-      summary: Update a product
-      tags:
-        - "Products"
-      parameters:
-        - name: product_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                archived:
-                  $ref: "#/components/schemas/product-archived"
-                  description: |
-                    A product cannot be archived if any of the following are true:
-
-                    - It is associated with any firmware.
-                    - It is associated with any unarchived devices.
-                name:
-                  $ref: "#/components/schemas/product-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
   /orgs/{organization_name}/products/{product_name}/deployments:
     get:
       operationId: list-deployments
@@ -1851,125 +2497,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/deployment"
-  /devices/{device_prn}/update:
-    post:
-      security:
-        - api_key_v2: []
-      operationId: devices-get-update
-      summary: Get device update
-      description: |
-        Returns information regarding whether an update is available via a [release](/platform/reference/releases) or [bundle override](/platform/reference/bundle-overrides).
-      tags:
-        - "Devices"
-      parameters:
-        - name: device_prn
-          in: path
-          required: true
-          schema:
-            description: The PRN of the device you wish to check for an update for.
-            $ref: "#/components/schemas/prn"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                release_prn:
-                  examples:
-                    [
-                      prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0,
-                    ]
-                  description: The PRN of the release to consider as the device's current release during bundle resolution.
-                  $ref: "#/components/schemas/prn"
-                bundle_prn:
-                  examples:
-                    [
-                      prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:bundle:ddd32c59-fc35-4202-a520-a4eddaa11fb3,
-                    ]
-                  description: The PRN of the bundle to consider as the device's current bundle during bundle resolution.
-                  $ref: "#/components/schemas/prn"
-                release_version:
-                  examples: [1.0.0]
-                  description: The version to consider as the device's current release version during bundle resolution.
-                  $ref: "#/components/schemas/release-version"
-                write:
-                  description: Whether the server's record of what the device's current state is will be updated in reaction to the release PRN, bundle PRN, and release version parameters if they are also supplied.
-                  type: boolean
-                  default: false
-              anyOf:
-                - required: [release_prn]
-                - required: [bundle_prn]
-                - required: [release_version]
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  status:
-                    enum:
-                      - "update"
-                      - "no_update"
-                      - "device_quarantine"
-                  source_type:
-                    enum:
-                      - "release"
-                      - "bundle_override"
-                      - null
-                    description: |
-                      The "source" of the bundle update - from a release, or a bundle override.
-                  source_prn:
-                    $ref: "#/components/schemas/prn"
-                    description: |
-                      The "source" prn, could be either a release prn or a bundle override prn
-                  bundle_prn:
-                    $ref: "#/components/schemas/prn"
-                    description: |
-                      The bundle associated with `source`.
-                  manifest:
-                    type: array
-                    description: |
-                      The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download URL.
-                    items:
-                      type: object
-                      properties:
-                        artifact_prn:
-                          $ref: "#/components/schemas/prn"
-                          description: |
-                            The PRN of the artifact associated with `artifact_version_prn`.
-                        artifact_version_prn:
-                          $ref: "#/components/schemas/prn"
-                          description: |
-                            The PRN of the artifact version associated with `binary_prn`.
-                        binary_prn:
-                          $ref: "#/components/schemas/prn"
-                        custom_metadata:
-                          $ref: "#/components/schemas/custom-metadata"
-                          description: |
-                            A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
-
-                            Max size is 1,000,000 bytes (1 MB).
-                        hash:
-                          $ref: "#/components/schemas/binary-hash"
-                        signatures:
-                          default: null
-                          oneOf:
-                            - type: "null"
-                            - type: array
-                              items:
-                                type: object
-                                properties:
-                                  signature:
-                                    $ref: "#/components/schemas/binary-signature-signature"
-                                  signing_key_prn:
-                                    $ref: "#/components/schemas/prn"
-                        size:
-                          $ref: "#/components/schemas/binary-size"
-                        target:
-                          $ref: "#/components/schemas/target-triplet"
-                        url:
-                          type: string
   /orgs/{organization_name}/products/{product_name}/devices:
     get:
       operationId: list-devices
@@ -2386,11 +2913,7 @@ paths:
             $ref: "#/components/schemas/firmware-uuid"
       responses:
         "204":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/firmware"
+          description: No Content.
     get:
       operationId: retrieve-a-firmware
       summary: Retrieve a firmware
@@ -2445,429 +2968,6 @@ paths:
                         properties:
                           url:
                             $ref: "#/components/schemas/firmware-expand-url"
-  /releases:
-    post:
-      operationId: create-a-release
-      summary: Create a release
-      tags:
-        - Releases
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                bundle_prn:
-                  $ref: "#/components/schemas/prn"
-                  description: The bundle the release will distribute to devices.
-                phase_mode:
-                  $ref: "#/components/schemas/release-phase-mode"
-                  default: "numeric"
-                phase_tags:
-                  $ref: "#/components/schemas/release-phase-tags"
-                phase_value:
-                  $ref: "#/components/schemas/release-phase-value"
-                cohort_prn:
-                  $ref: "#/components/schemas/prn"
-                  description: The cohort to create the release within, and in turn the cohort it will distribute its bundle to.
-                description:
-                  $ref: "#/components/schemas/release-description"
-                disabled:
-                  $ref: "#/components/schemas/release-disabled"
-                name:
-                  $ref: "#/components/schemas/release-name"
-                next_release_prn:
-                  $ref: "#/components/schemas/prn"
-                  description: |
-                    If omitted, the release will be created as latest within the cohort. If there is already at least one release in the cohort, then the latest release in that cohort would have its `next_release_prn` updated to this created release.
-
-                    If supplied, the release will be created prior to the release identified by `next_release_prn`. If you wish to insert this release between two other releases, you may additionally supply `previous_release_prn`. If you supply neither field, it will create the release as the latest automatically.
-                previous_release_prn:
-                  $ref: "#/components/schemas/prn"
-                  description: |
-                    If omitted, `next_release_prn` will dictate where to create this release within the cohort's release graph.
-
-                    In order to insert a release between two other releases, `next_release_prn` is required to be supplied as well. If you supply neither field, it will create the release as the latest automatically.
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
-                  description: The organization to create the release within.
-                required:
-                  $ref: "#/components/schemas/release-required"
-                schedule_date:
-                  $ref: "#/components/schemas/release-schedule-availability"
-                version:
-                  $ref: "#/components/schemas/release-version"
-                version-requirement:
-                  $ref: "#/components/schemas/release-version-requirement"
-              required:
-                - bundle_prn
-                - cohort_prn
-                - name
-                - organization_prn
-                - required
-                - schedule_date
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  release:
-                    $ref: "#/components/schemas/release"
-    get:
-      operationId: list-releases
-      summary: List Releases
-      description: |
-        **Search**
-
-        This resource has the following searchable fields.
-
-        |Key|Required|Operators|Value|
-        |-|-|-|-|
-        |`cohort_prn`||`:`|string|
-        |`deleted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`description`||`:`, `~`|string|
-        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`name`||`:`, `~`|string|
-        |`next_release_prn`||`:`|string|
-        |`organization_prn`|X|`:`|prn|
-        |`prn`||`:`|string|
-        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
-        |`version_requirement`||`:`, `-`|string|
-        |`version`||`:`, `-`|string|
-
-      tags:
-        - Releases
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  next_page:
-                    $ref: "#/components/schemas/next-page"
-                  releases:
-                    $ref: "#/components/schemas/array-of-releases"
-  /releases/{release_prn}:
-    get:
-      operationId: retrieve-a-release
-      summary: Retrieve a release
-      tags:
-        - Releases
-      parameters:
-        - name: release_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  release:
-                    $ref: "#/components/schemas/release"
-    patch:
-      operationId: update-a-release
-      summary: Update a release
-      tags:
-        - Releases
-      parameters:
-        - name: release_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                description:
-                  $ref: "#/components/schemas/release-description"
-                disabled:
-                  $ref: "#/components/schemas/release-disabled"
-                name:
-                  $ref: "#/components/schemas/release-name"
-                next_release_prn:
-                  $ref: "#/components/schemas/prn"
-                  description: Update the release's `next_release_prn`. Changes that would result in an invalid [release graph](/platform/reference/cohorts#release-graph) are rejected.
-                phase_mode:
-                  $ref: "#/components/schemas/release-phase-mode"
-                phase_tags:
-                  $ref: "#/components/schemas/release-phase-tags"
-                phase_value:
-                  $ref: "#/components/schemas/release-phase-value"
-                required:
-                  $ref: "#/components/schemas/release-required"
-                schedule_date:
-                  $ref: "#/components/schemas/release-schedule-availability"
-                version:
-                  $ref: "#/components/schemas/release-version"
-                version-requirement:
-                  $ref: "#/components/schemas/release-version-requirement"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  release:
-                    $ref: "#/components/schemas/release"
-  /users/auth:
-    post:
-      operationId: authenticate-a-user
-      summary: Authenticate a user
-      tags:
-        - "Users"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                email:
-                  $ref: "#/components/schemas/email"
-                password:
-                  $ref: "#/components/schemas/user-password"
-                username:
-                  type: string
-              anyOf:
-                - required:
-                    - password
-                    - username
-                - required:
-                    - email
-                    - password
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/user-me"
-  /users/me:
-    get:
-      operationId: get-user-me
-      summary: Get user me
-      tags:
-        - "Users"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/user-me"
-  /webhooks:
-    post:
-      operationId: create-a-webhook
-      summary: Create a webhook
-      tags:
-        - "Webhooks"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                description:
-                  $ref: "#/components/schemas/webhook-description"
-                url:
-                  $ref: "#/components/schemas/webhook-url"
-                enabled_events:
-                  $ref: "#/components/schemas/webhook-enabled-events"
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
-              required:
-                - organization_prn
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  webhook:
-                    allOf:
-                      - $ref: "#/components/schemas/webhook"
-                      - type: object
-                        properties:
-                          secret:
-                            $ref: "#/components/schemas/webhook-secret"
-    get:
-      operationId: list-webhooks
-      summary: List webhooks
-      description: |
-        **Search**
-
-        This resource has the following searchable fields.
-
-        |Key|Required|Operators|Value|
-        |-|-|-|-|
-        |`description`||`:`, `~`|string|
-        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`organization_prn`|X|`:`|prn|
-        |`prn`||`:`|string|
-        |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
-
-      tags:
-        - "Webhooks"
-      parameters:
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
-        - $ref: "#/components/parameters/page"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  webhooks:
-                    $ref: "#/components/schemas/array-of-webhooks"
-                  next_page:
-                    $ref: "#/components/schemas/next-page"
-  /webhooks/{webhook_prn}:
-    get:
-      operationId: retrieve-a-webhook
-      summary: Retrieve a webhook
-      tags:
-        - "Webhooks"
-      parameters:
-        - name: webhook_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  webhook:
-                    $ref: "#/components/schemas/webhook"
-    patch:
-      operationId: update-a-webhook
-      summary: Update a webhook
-      tags:
-        - "Webhooks"
-      parameters:
-        - name: webhook_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/webhook-prn"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                description:
-                  $ref: "#/components/schemas/webhook-description"
-                url:
-                  $ref: "#/components/schemas/webhook-url"
-                enabled_events:
-                  $ref: "#/components/schemas/webhook-enabled-events"
-                state:
-                  $ref: "#/components/schemas/webhook-state"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  webhook:
-                    $ref: "#/components/schemas/webhook"
-    delete:
-      operationId: delete-a-webhook
-      summary: Delete a webhook
-      tags:
-        - "Webhooks"
-      parameters:
-        - name: webhook_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/webhook-prn"
-      responses:
-        "204":
-          description: Ok.
-  /webhooks/{webhook_prn}/roll_secret:
-    post:
-      operationId: roll-secret-webhook
-      summary: Roll a webhook's secret
-      tags:
-        - "Webhooks"
-      parameters:
-        - name: webhook_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              properties:
-                webhook_ttl:
-                  $ref: "#/components/schemas/webhook-ttl"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  webhook:
-                    allOf:
-                      - $ref: "#/components/schemas/webhook"
-                      - type: object
-                        properties:
-                          secret:
-                            $ref: "#/components/schemas/webhook-secret"
-  /webhooks/{webhook_prn}/test_fire:
-    post:
-      operationId: test-fire-webhook
-      summary: Test fire a webhook
-      tags:
-        - "Webhooks"
-      parameters:
-        - name: webhook_prn
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/prn"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  event:
-                    $ref: "#/components/schemas/webhook-test-fire-event"
 components:
   securitySchemes:
     api_key:
@@ -3646,6 +3746,14 @@ components:
     email:
       type: string
       format: email
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The type of error
+        context:
+          type: object
     device-event-cohort:
       oneOf:
         - type: object
@@ -4464,6 +4572,49 @@ components:
           $ref: "#/components/schemas/prn"
         public_value:
           $ref: "#/components/schemas/signing-key-value-pem"
+    manifest:
+      description: |
+        The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download URL.
+      type: array
+      items:
+        type: object
+        properties:
+          artifact_prn:
+            $ref: "#/components/schemas/prn"
+            description: |
+              The artifact prn associated with `artifact_version_prn`.
+          artifact_version:
+            $ref: "#/components/schemas/prn"
+            description: |
+              The artifact version associated with `binary_prn`.
+          binary_prn:
+            $ref: "#/components/schemas/prn"
+          custom_metadata:
+            $ref: "#/components/schemas/custom-metadata"
+            description: |
+              A JSON object that device's may use to inform decisions regarding last mile application of the binary including: downloading, persisting, installing, and custom use cases.
+
+              Max size is 1,000,000 bytes (1 MB).
+          hash:
+            $ref: "#/components/schemas/binary-hash"
+          signatures:
+            default: null
+            oneOf:
+              - type: "null"
+              - type: array
+                items:
+                  type: object
+                  properties:
+                    signature:
+                      $ref: "#/components/schemas/binary-signature-signature"
+                    signing_key_prn:
+                      $ref: "#/components/schemas/prn"
+          size:
+            $ref: "#/components/schemas/binary-size"
+          target:
+            $ref: "#/components/schemas/target-triplet"
+          url:
+            type: string
     tunnel:
       type: object
       properties:
