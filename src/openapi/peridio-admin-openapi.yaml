@@ -174,10 +174,6 @@ tags:
     description: This functionality has been superceded by [bundles](#bundles) and [releases](#releases).
   - name: Bundles
     id: bundles
-  - name: Organization Users
-    id: organization-users
-  - name: Product Users
-    id: product-users
   - name: Users
     id: users
   - name: Artifacts
@@ -190,9 +186,6 @@ tags:
     id: binary-parts
   - name: Binary Signatures
     id: binary-signatures
-  - name: Keys
-    id: keys
-    description: Use [signing keys](#signing-keys) instead.
   - name: Signing Keys
     id: signing-keys
   - name: Firmware
@@ -233,8 +226,6 @@ tags:
 x-tagGroups:
   - name: Account Management
     tags:
-      - Organization Users
-      - Product Users
       - Users
   - name: Binary Management
     tags:
@@ -243,7 +234,6 @@ x-tagGroups:
       - Binaries
       - Binary Parts
       - Binary Signatures
-      - Keys
       - Signing Keys
       - Firmware
   - name: Remote Access
@@ -1545,252 +1535,10 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ca-verification-code"
-  /orgs/{organization_name}/keys:
-    get:
-      operationId: list-keys
-      deprecated: true
-      summary: List keys
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/array-of-keys"
-    post:
-      operationId: create-a-key
-      deprecated: true
-      summary: Create a key
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                key:
-                  $ref: "#/components/schemas/key-key"
-                name:
-                  $ref: "#/components/schemas/key-name"
-              required:
-                - key
-                - name
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/key"
-  /orgs/{organization_name}/keys/{key_name}:
-    delete:
-      operationId: delete-a-key
-      deprecated: true
-      summary: Delete a key
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: key_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/key-name"
-      responses:
-        "204":
-          description: Ok.
-    get:
-      operationId: retrieve-a-key
-      deprecated: true
-      summary: Retrieve a key
-      tags:
-        - "Keys"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: key_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/key-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/key"
-  /orgs/{organization_name}/products:
-    get:
-      deprecated: true
-      operationId: list-products
-      summary: List products
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/array-of-products"
-    post:
-      deprecated: true
-      operationId: create-a-product
-      summary: Create a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                name:
-                  $ref: "#/components/schemas/product-name"
-              required:
-                - name
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
-  /orgs/{organization_name}/products/{product_name}:
-    delete:
-      deprecated: true
-      operationId: delete-a-product
-      summary: Delete a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      responses:
-        "204":
-          description: Ok.
-    get:
-      deprecated: true
-      operationId: retrieve-a-product
-      summary: Retrieve a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
-    put:
-      deprecated: true
-      operationId: update-a-product
-      summary: Update a product
-      tags:
-        - "Products"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                product:
-                  type: object
-                  properties:
-                    name:
-                      $ref: "#/components/schemas/product-name"
-              required:
-                - product
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product"
   /products:
     get:
-      operationId: list-products-v2
-      summary: List products v2
+      operationId: list-products
+      summary: List products
       description: |
         **Search**
 
@@ -1833,12 +1581,12 @@ paths:
               schema:
                 properties:
                   products:
-                    $ref: "#/components/schemas/array-of-products-v2"
+                    $ref: "#/components/schemas/array-of-products"
                   next_page:
                     $ref: "#/components/schemas/next-page"
     post:
-      operationId: create-a-product-v2
-      summary: Create a product v2
+      operationId: create-a-product
+      summary: Create a product
       tags:
         - "Products"
       requestBody:
@@ -1864,11 +1612,11 @@ paths:
               schema:
                 properties:
                   product:
-                    $ref: "#/components/schemas/product-v2"
+                    $ref: "#/components/schemas/product"
   /products/{product_prn}:
     get:
-      operationId: retrieve-a-product-v2
-      summary: Retrieve a product v2
+      operationId: retrieve-a-product
+      summary: Retrieve a product
       tags:
         - "Products"
       parameters:
@@ -1885,10 +1633,10 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: "#/components/schemas/product-v2"
+                    $ref: "#/components/schemas/product"
     patch:
-      operationId: update-a-product-v2
-      summary: Update a product v2
+      operationId: update-a-product
+      summary: Update a product
       tags:
         - "Products"
       parameters:
@@ -1920,7 +1668,7 @@ paths:
               schema:
                 properties:
                   data:
-                    $ref: "#/components/schemas/product-v2"
+                    $ref: "#/components/schemas/product"
   /orgs/{organization_name}/products/{product_name}/deployments:
     get:
       operationId: list-deployments
@@ -2534,42 +2282,6 @@ paths:
       responses:
         "204":
           description: Ok.
-  /orgs/{organization_name}/products/{product_name}/devices/auth:
-    post:
-      operationId: authenticate-device
-      summary: Authenticate device
-      tags:
-        - "Devices"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                certificate:
-                  $ref: "#/components/schemas/device-certificate-pem-base64"
-              required:
-                - certificate
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/device"
   /orgs/{organization_name}/products/{product_name}/firmwares:
     get:
       operationId: list-firmware
@@ -2733,299 +2445,6 @@ paths:
                         properties:
                           url:
                             $ref: "#/components/schemas/firmware-expand-url"
-  /orgs/{organization_name}/products/{product_name}/users:
-    get:
-      operationId: list-product-users
-      summary: List product users
-      tags:
-        - "Product Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/array-of-product-users"
-    post:
-      operationId: add-a-product-user
-      summary: Add a product user
-      tags:
-        - "Product Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                role:
-                  $ref: "#/components/schemas/role-name"
-                username:
-                  $ref: "#/components/schemas/user-username"
-              required:
-                - role
-                - username
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product-user"
-  /orgs/{organization_name}/products/{product_name}/users/{user_username}:
-    delete:
-      operationId: remove-a-product-user
-      summary: Remove a product user
-      tags:
-        - "Product Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-        - name: user_username
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/user-username"
-      responses:
-        "204":
-          description: Ok.
-    get:
-      operationId: retrieve-a-product-user
-      summary: Retrieve a product user
-      tags:
-        - "Product Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-        - name: user_username
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/user-username"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product-user"
-    put:
-      operationId: update-a-product-user
-      summary: Update a product user
-      tags:
-        - "Product Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: product_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/product-name"
-        - name: user_username
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/user-username"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                role:
-                  $ref: "#/components/schemas/role-name"
-              required:
-                - role
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/product-user"
-  /orgs/{organization_name}/users:
-    get:
-      operationId: list-organization-users
-      summary: List organization users
-      tags:
-        - "Organization Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/array-of-organization-users"
-    post:
-      operationId: add-an-organization-user
-      summary: Add an organization user
-      tags:
-        - "Organization Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                role:
-                  $ref: "#/components/schemas/role-name"
-                username:
-                  $ref: "#/components/schemas/user-username"
-              required:
-                - role
-                - username
-      responses:
-        "201":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/organization-user"
-  /orgs/{organization_name}/users/{user_username}:
-    delete:
-      operationId: remove-an-organization-user
-      summary: Remove an organization user
-      tags:
-        - "Organization Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: user_username
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/user-username"
-      responses:
-        "204":
-          description: Ok.
-    get:
-      operationId: retrieve-an-organization-user
-      summary: Retrieve an organization user
-      tags:
-        - "Organization Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: user_username
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/user-username"
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/organization-user"
-    put:
-      operationId: update-an-organization-user
-      summary: Update an organization user
-      tags:
-        - "Organization Users"
-      parameters:
-        - name: organization_name
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/organization-name"
-        - name: user_username
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/user-username"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                role:
-                  $ref: "#/components/schemas/role-name"
-              required:
-                - role
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/organization-user"
   /releases:
     post:
       operationId: create-a-release
@@ -3240,51 +2659,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/user-me"
-  /users/login:
-    post:
-      operationId: login-a-user
-      summary: Login a user
-      tags:
-        - "Users"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                email:
-                  $ref: "#/components/schemas/email"
-                note:
-                  type: string
-                password:
-                  $ref: "#/components/schemas/user-password"
-                username:
-                  type: string
-              oneOf:
-                - required:
-                    - note
-                    - password
-                    - username
-                - required:
-                    - email
-                    - note
-                    - password
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      email:
-                        $ref: "#/components/schemas/email"
-                      token:
-                        $ref: "#/components/schemas/access-token"
-                      username:
-                        $ref: "#/components/schemas/user-username"
   /users/me:
     get:
       operationId: get-user-me
@@ -3300,46 +2674,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/user-me"
-  /users/register:
-    post:
-      operationId: register-a-user
-      summary: Register a user
-      tags:
-        - "Users"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                email:
-                  $ref: "#/components/schemas/email"
-                password:
-                  $ref: "#/components/schemas/user-password"
-                username:
-                  $ref: "#/components/schemas/user-username"
-              required:
-                - email
-                - password
-                - username
-      responses:
-        "200":
-          description: Ok.
-          content:
-            application/json:
-              schema:
-                properties:
-                  data:
-                    $ref: "#/components/schemas/user-me"
-        "403":
-          description: Forbidden.
-          content:
-            application/json:
-              schema:
-                properties:
-                  status:
-                    type: string
-                    const: "Public signups disabled. Invite required to signup."
   /webhooks:
     post:
       operationId: create-a-webhook
@@ -3765,26 +3099,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/firmware"
-    array-of-keys:
-      type: array
-      items:
-        $ref: "#/components/schemas/key"
-    array-of-organization-users:
-      type: array
-      items:
-        $ref: "#/components/schemas/organization-user"
-    array-of-product-users:
-      type: array
-      items:
-        $ref: "#/components/schemas/product-user"
     array-of-products:
       type: array
       items:
         $ref: "#/components/schemas/product"
-    array-of-products-v2:
-      type: array
-      items:
-        $ref: "#/components/schemas/product-v2"
     array-of-releases:
       type: array
       items:
@@ -4960,15 +4278,6 @@ components:
       type: string
     organization-name:
       type: string
-    organization-user:
-      type: object
-      properties:
-        email:
-          $ref: "#/components/schemas/email"
-        role:
-          $ref: "#/components/schemas/role-name"
-        username:
-          $ref: "#/components/schemas/user-username"
     platform:
       type: string
     custom-id:
@@ -4983,13 +4292,6 @@ components:
         [Peridio Resource Names](/platform/reference/peridio-resource-names) (PRNs) uniquely identify Peridio resources.
       type: string
     product:
-      type: object
-      properties:
-        name:
-          $ref: "#/components/schemas/product-name"
-        prn:
-          $ref: "#/components/schemas/prn"
-    product-v2:
       type: object
       properties:
         archived:
@@ -5012,15 +4314,6 @@ components:
     product-name:
       type: string
       description: Uniquely identifies a product within an organization.
-    product-user:
-      type: object
-      properties:
-        email:
-          $ref: "#/components/schemas/email"
-        role:
-          $ref: "#/components/schemas/role-name"
-        username:
-          $ref: "#/components/schemas/user-username"
     release:
       type: object
       properties:
@@ -5331,29 +4624,6 @@ webhooks:
           application/json:
             schema:
               $ref: "#/components/schemas/api-key-created-event"
-      responses:
-        200:
-          description: Ok.
-  device_authentication_failed:
-    post:
-      security: []
-      summary: Authentication failed
-      description: |
-        See the [webhooks reference](/platform/reference/webhooks#supported-events) for a list of supported events.
-
-        This event is created when a device fails to authenticate to the [Device API](/device-api).
-      operationId: device-authentication-failed
-      tags:
-        - Device Events
-      parameters:
-        - $ref: "#/components/parameters/peridio-signature"
-        - $ref: "#/components/parameters/peridio-published-at"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/device-authentication-failed-event"
       responses:
         200:
           description: Ok.
