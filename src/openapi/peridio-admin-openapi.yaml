@@ -219,6 +219,8 @@ tags:
     id: events
   - name: Legacy Devices
     id: legacy-devices
+  - name: Legacy CA Certificates
+    id: legacy-ca-firmware
   - name: Firmware
     id: firmware
     description: |
@@ -270,6 +272,7 @@ x-tagGroups:
       - Webhook Events
   - name: Legacy
     tags:
+      - Legacy CA Certificates
       - Legacy Devices
       - Firmware
       - Firmware v2
@@ -880,6 +883,149 @@ paths:
                 properties:
                   bundle:
                     $ref: "#/components/schemas/bundle"
+  /ca_certificates:
+    post:
+      operationId: create-a-ca-certificate
+      summary: Create a CA certificate
+      tags:
+        - "CA Certificates"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                certificate:
+                  description: Base64 encoded CA certificate.
+                  type: string
+                verification_certificate:
+                  description: >
+                    Base64 encoded verification certificate.
+
+                    See: [create-a-ca-verification-code](/admin-api#ca-certificates/operation/create-a-ca-verification-code)
+                  type: string
+                description:
+                  type: string
+              required:
+                - certificate
+                - verification_certificate
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  ca_certificate:
+                    $ref: "#/components/schemas/ca-certificate"
+    get:
+      operationId: list-ca-certificates
+      summary: List CA certificates
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Operators|Value|
+        |-|-|-|
+        |`description`|`:`, `~`|string|
+        |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`prn`|`:`|string|
+        |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+      tags:
+        - "CA Certificates"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  ca_certificates:
+                    $ref: "#/components/schemas/array-of-ca-certificates"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /ca_certificates/{ca_certificate_prn}:
+    delete:
+      operationId: delete-a-ca-certificate
+      summary: Delete a CA certificate
+      tags:
+        - "CA Certificates"
+      parameters:
+        - name: ca_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: No Content.
+    get:
+      operationId: retrieve-a-ca-certificate
+      summary: Retrieve a CA certificate
+      tags:
+        - "CA Certificates"
+      parameters:
+        - name: ca_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  ca_certificate:
+                    $ref: "#/components/schemas/ca-certificate"
+    put:
+      operationId: update-a-ca-certificate
+      summary: Update CA certificate
+      tags:
+        - "CA Certificates"
+      parameters:
+        - name: ca_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  ca_certificate:
+                    $ref: "#/components/schemas/ca-certificate"
+  /ca_certificates/verification_codes:
+    post:
+      operationId: create-a-ca-verification-code
+      summary: Create a CA verification code
+      tags:
+        - "CA Certificates"
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ca-verification-code"
   /cohorts:
     post:
       operationId: create-a-cohort
@@ -2308,7 +2454,7 @@ paths:
       operationId: list-ca-certificates
       summary: List CA certificates
       tags:
-        - "CA Certificates"
+        - "Legacy CA Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -2328,7 +2474,7 @@ paths:
       operationId: create-a-ca-certificate
       summary: Create a CA certificate
       tags:
-        - "CA Certificates"
+        - "Legacy CA Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -2352,8 +2498,6 @@ paths:
                   type: string
                 description:
                   type: string
-                jitp:
-                  $ref: "#/components/schemas/ca-jitp"
               required:
                 - certificate
                 - verification_certificate
@@ -2371,7 +2515,7 @@ paths:
       operationId: delete-a-ca-certificate
       summary: Delete a CA certificate
       tags:
-        - "CA Certificates"
+        - "Legacy CA Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -2390,7 +2534,7 @@ paths:
       operationId: retrieve-a-ca-certificate
       summary: Retrieve a CA certificate
       tags:
-        - "CA Certificates"
+        - "Legacy CA Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -2415,7 +2559,7 @@ paths:
       operationId: update-a-ca-certificate
       summary: Update CA certificate
       tags:
-        - "CA Certificates"
+        - "Legacy CA Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -2451,7 +2595,7 @@ paths:
       operationId: create-a-ca-verification-code
       summary: Create a CA verification code
       tags:
-        - "CA Certificates"
+        - "Legacy CA Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -3624,8 +3768,14 @@ components:
         not_before:
           type: string
           format: date-time
+        prn:
+          $ref: "#/components/schemas/ca-certificate-prn"
         serial:
           $ref: "#/components/schemas/ca-certificate-serial"
+    ca-certificate-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:ca_certificate:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     ca-certificate-serial:
       $ref: "#/components/schemas/serial"
     ca-verification-code:
