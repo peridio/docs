@@ -320,7 +320,7 @@ paths:
         |-|-|-|-|
         |`description`||`:`, `~`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`name`||`:`, `~`|string|
+        |`name`||`:`, `~`, `-`|string|
         |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
