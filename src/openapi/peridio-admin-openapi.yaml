@@ -188,12 +188,6 @@ tags:
     id: binary-signatures
   - name: Signing Keys
     id: signing-keys
-  - name: Firmware v2
-    id: firmware-v2
-    description: |
-      **Deprecated**
-
-      This functionality has been superceded by [artifacts](#artifacts), [artifact versions](#artifact-versions), and [binaries](#binaries).
   - name: CA Certificates
     id: ca-certificates
   - name: Cohorts
@@ -223,8 +217,16 @@ tags:
     id: web-console
   - name: Events
     id: events
+  - name: Legacy Devices
+    id: legacy-devices
   - name: Firmware
     id: firmware
+    description: |
+      **Deprecated**
+
+      This functionality has been superceded by [artifacts](#artifacts), [artifact versions](#artifact-versions), and [binaries](#binaries).
+  - name: Firmware v2
+    id: firmware-v2
     description: |
       **Deprecated**
 
@@ -268,6 +270,7 @@ x-tagGroups:
       - Webhook Events
   - name: Legacy
     tags:
+      - Legacy Devices
       - Firmware
       - Firmware v2
 paths:
@@ -926,7 +929,6 @@ paths:
         |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
-
       tags:
         - "Cohorts"
       parameters:
@@ -996,6 +998,156 @@ paths:
                 properties:
                   cohort:
                     $ref: "#/components/schemas/cohort"
+  /devices:
+    post:
+      operationId: create-a-device
+      summary: Create a device
+      tags:
+        - "Devices"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/product-prn"
+                cohort_prn:
+                  $ref: "#/components/schemas/device-cohort-prn"
+                description:
+                  $ref: "#/components/schemas/device-description"
+                quarantined:
+                  $ref: "#/components/schemas/device-quarantined"
+                identifier:
+                  $ref: "#/components/schemas/device-identifier"
+                tags:
+                  $ref: "#/components/schemas/array-of-device-tags"
+                target:
+                  $ref: "#/components/schemas/target-triplet"
+              required:
+                - identifier
+                - product_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  device:
+                    $ref: "#/components/schemas/device"
+    get:
+      operationId: list-devices
+      summary: List devices
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Operators|Value|
+        |-|-|-|
+        |`cohort_prn`|`:`|string|
+        |`description`|`:`, `~`|string|
+        |`identifier`|`:`, `~`|string|
+        |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`prn`|`:`|string|
+        |`product_prn`|`:`|string|
+        |`reported_bundle_prn`|`:`|string|
+        |`reported_release_prn`|`:`|string|
+        |`reported_release_version`|`:`, `~`|string|
+        |`target`|`:`, `~`|string|
+        |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+      tags:
+        - "Devices"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  devices:
+                    $ref: "#/components/schemas/array-of-devices"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /devices/{device_prn}:
+    get:
+      operationId: retrieve-a-device
+      summary: Retrieve a device
+      tags:
+        - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  device:
+                    $ref: "#/components/schemas/device"
+    patch:
+      operationId: update-a-device
+      summary: Update a device
+      tags:
+        - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/product-prn"
+                cohort_prn:
+                  $ref: "#/components/schemas/device-cohort-prn"
+                description:
+                  $ref: "#/components/schemas/device-description"
+                quarantined:
+                  $ref: "#/components/schemas/device-quarantined"
+                tags:
+                  $ref: "#/components/schemas/array-of-device-tags"
+                target:
+                  $ref: "#/components/schemas/target-triplet"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  device:
+                    $ref: "#/components/schemas/device"
+    delete:
+      operationId: delete-a-device
+      summary: Delete a device
+      tags:
+        - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: No Content.
   /devices/{device_prn}/update:
     post:
       security:
@@ -2502,7 +2654,7 @@ paths:
       operationId: list-devices
       summary: List devices
       tags:
-        - "Devices"
+        - "Legacy Devices"
       parameters:
         - name: organization_name
           in: path
@@ -2527,7 +2679,7 @@ paths:
       operationId: create-a-device
       summary: Create a device
       tags:
-        - "Devices"
+        - "Legacy Devices"
       parameters:
         - name: organization_name
           in: path
@@ -2574,7 +2726,7 @@ paths:
       operationId: delete-a-device
       summary: Delete a device
       tags:
-        - "Devices"
+        - "Legacy Devices"
       parameters:
         - name: organization_name
           in: path
@@ -2598,7 +2750,7 @@ paths:
       operationId: retrieve-a-device
       summary: Retrieve a device
       tags:
-        - "Devices"
+        - "Legacy Devices"
       parameters:
         - name: organization_name
           in: path
@@ -2628,7 +2780,7 @@ paths:
       operationId: update-a-device
       summary: Update a device
       tags:
-        - "Devices"
+        - "Legacy Devices"
       parameters:
         - name: organization_name
           in: path
@@ -3663,6 +3815,33 @@ components:
     device:
       type: object
       properties:
+        product_prn:
+          $ref: "#/components/schemas/product-prn"
+        cohort_prn:
+          $ref: "#/components/schemas/device-cohort-prn"
+        description:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/device-description"
+        quarantined:
+          $ref: "#/components/schemas/device-quarantined"
+        identifier:
+          $ref: "#/components/schemas/device-identifier"
+        prn:
+          $ref: "#/components/schemas/device-prn"
+        tags:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/array-of-device-tags"
+        reported_release_prn:
+          $ref: "#/components/schemas/release-prn"
+        reported_release_version:
+          $ref: "#/components/schemas/release-version"
+        reported_bundle_prn:
+          $ref: "#/components/schemas/bundle-prn"
+    legacy-device:
+      type: object
+      properties:
         cohort_prn:
           $ref: "#/components/schemas/device-cohort-prn"
         description:
@@ -3718,6 +3897,7 @@ components:
       type: boolean
     device-quarantined:
       type: boolean
+      example: false
     device-identifier:
       description: Uniquely identifies a device within an organization.
       type: string
@@ -4422,6 +4602,10 @@ components:
     product-name:
       type: string
       description: Uniquely identifies a product within an organization.
+    product-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:product:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     release:
       type: object
       properties:
