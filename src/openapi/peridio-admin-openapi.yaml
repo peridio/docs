@@ -221,6 +221,8 @@ tags:
     id: legacy-devices
   - name: Legacy CA Certificates
     id: legacy-ca-firmware
+  - name: Legacy Device Certificates
+    id: legacy-device-certificates
   - name: Firmware
     id: firmware
     description: |
@@ -273,6 +275,7 @@ x-tagGroups:
   - name: Legacy
     tags:
       - Legacy CA Certificates
+      - Legacy Device Certificates
       - Legacy Devices
       - Firmware
       - Firmware v2
@@ -1144,6 +1147,102 @@ paths:
                 properties:
                   cohort:
                     $ref: "#/components/schemas/cohort"
+  /device_certificates:
+    post:
+      operationId: create-a-device-certificate
+      summary: Create a device certificate
+      tags:
+        - "Device Certificates"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                device_prn:
+                  $ref: "#/components/schemas/device-prn"
+                certificate:
+                  $ref: "#/components/schemas/device-certificate-pem-base64"
+              required:
+                - certificate
+                - device_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  device_certificate:
+                    $ref: "#/components/schemas/device-certificate"
+    get:
+      operationId: list-device-certificates
+      summary: List device certificates
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Operators|Value|
+        |-|-|-|
+        |`device_prn`|`:`|string|
+        |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`prn`|`:`|string|
+        |`product_prn`|`:`|string|
+        |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+      tags:
+        - "Device Certificates"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  device_certificates:
+                    $ref: "#/components/schemas/array-of-device-certificates"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /device_certificates/{device_certificate_prn}:
+    get:
+      operationId: retrieve-a-device-certificate
+      summary: Retrieve a device certificate
+      tags:
+        - "Device Certificates"
+      parameters:
+        - name: device_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-certificate-prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  device_certificate:
+                    $ref: "#/components/schemas/device-certificate"
+    delete:
+      operationId: delete-a-device-certificate
+      summary: Delete a device certificate
+      tags:
+        - "Device Certificates"
+      parameters:
+        - name: device_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-certificate-prn"
+      responses:
+        "204":
+          description: No Content.
   /devices:
     post:
       operationId: create-a-device
@@ -1159,7 +1258,7 @@ paths:
                 product_prn:
                   $ref: "#/components/schemas/product-prn"
                 cohort_prn:
-                  $ref: "#/components/schemas/device-cohort-prn"
+                  $ref: "#/components/schemas/cohort-prn"
                 description:
                   $ref: "#/components/schemas/device-description"
                 quarantined:
@@ -1262,7 +1361,7 @@ paths:
                 product_prn:
                   $ref: "#/components/schemas/product-prn"
                 cohort_prn:
-                  $ref: "#/components/schemas/device-cohort-prn"
+                  $ref: "#/components/schemas/cohort-prn"
                 description:
                   $ref: "#/components/schemas/device-description"
                 quarantined:
@@ -2842,7 +2941,7 @@ paths:
             schema:
               properties:
                 cohort_prn:
-                  $ref: "#/components/schemas/device-cohort-prn"
+                  $ref: "#/components/schemas/cohort-prn"
                 description:
                   $ref: "#/components/schemas/device-description"
                 healthy:
@@ -2948,7 +3047,7 @@ paths:
             schema:
               properties:
                 cohort_prn:
-                  $ref: "#/components/schemas/device-cohort-prn"
+                  $ref: "#/components/schemas/cohort-prn"
                 description:
                   $ref: "#/components/schemas/device-description"
                 healthy:
@@ -2974,7 +3073,7 @@ paths:
       operationId: list-device-certificates
       summary: List device certificates
       tags:
-        - "Device Certificates"
+        - "Legacy Device Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -3004,7 +3103,7 @@ paths:
       operationId: create-a-device-certificate
       summary: Create a device certificate
       tags:
-        - "Device Certificates"
+        - "Legacy Device Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -3045,7 +3144,7 @@ paths:
       operationId: retrieve-a-device-certificate
       summary: Retrieve a device certificate
       tags:
-        - "Device Certificates"
+        - "Legacy Device Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -3080,7 +3179,7 @@ paths:
       operationId: delete-a-device-certificate
       summary: Delete a device certificate
       tags:
-        - "Device Certificates"
+        - "Legacy Device Certificates"
       parameters:
         - name: organization_name
           in: path
@@ -3841,6 +3940,10 @@ components:
       type: string
       minLength: 1
       maxLength: 128
+    cohort-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:cohort:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     custom-metadata:
       type: object
       maxLength: 1000000
@@ -3968,7 +4071,7 @@ components:
         product_prn:
           $ref: "#/components/schemas/product-prn"
         cohort_prn:
-          $ref: "#/components/schemas/device-cohort-prn"
+          $ref: "#/components/schemas/cohort-prn"
         description:
           oneOf:
             - type: "null"
@@ -3993,7 +4096,7 @@ components:
       type: object
       properties:
         cohort_prn:
-          $ref: "#/components/schemas/device-cohort-prn"
+          $ref: "#/components/schemas/cohort-prn"
         description:
           oneOf:
             - type: "null"
@@ -4032,15 +4135,19 @@ components:
         not_before:
           type: string
           format: date-time
+        prn:
+          $ref: "#/components/schemas/device-certificate-prn"
         serial:
           $ref: "#/components/schemas/device-certificate-serial"
     device-certificate-pem-base64:
       description: Base64 encoded device certificate pem.
       type: string
+    device-certificate-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:device_certificate:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     device-certificate-serial:
       $ref: "#/components/schemas/serial"
-    device-cohort-prn:
-      $ref: "#/components/schemas/prn"
     device-description:
       type: string
     device-healthy:
@@ -4089,7 +4196,7 @@ components:
         - type: object
           properties:
             cohort_prn:
-              $ref: "#/components/schemas/device-cohort-prn"
+              $ref: "#/components/schemas/cohort-prn"
             cohort_name:
               $ref: "#/components/schemas/cohort-name"
         - type: "null"
