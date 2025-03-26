@@ -217,12 +217,15 @@ tags:
     id: web-console
   - name: Events
     id: events
-  - name: Legacy Devices
-    id: legacy-devices
   - name: Legacy CA Certificates
     id: legacy-ca-firmware
+  - name: Legacy Deployments
+    id: legacy-deployments
+    description: This functionality has been superceded by [bundles](#bundles) and [releases](#releases).
   - name: Legacy Device Certificates
     id: legacy-device-certificates
+  - name: Legacy Devices
+    id: legacy-devices
   - name: Firmware
     id: firmware
     description: |
@@ -275,6 +278,7 @@ x-tagGroups:
   - name: Legacy
     tags:
       - Legacy CA Certificates
+      - Legacy Deployments
       - Legacy Device Certificates
       - Legacy Devices
       - Firmware
@@ -1147,6 +1151,168 @@ paths:
                 properties:
                   cohort:
                     $ref: "#/components/schemas/cohort"
+  /deployments:
+    post:
+      operationId: create-a-deployment
+      summary: Create a deployment
+      tags:
+        - "Deployments"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                conditions:
+                  $ref: "#/components/schemas/deployment-conditions"
+                  required:
+                    - tags
+                delta_updatable:
+                  $ref: "#/components/schemas/delta-updatable"
+                  default: false
+                firmware_uuid:
+                  $ref: "#/components/schemas/firmware-uuid"
+                name:
+                  $ref: "#/components/schemas/deployment-name"
+                product_prn:
+                  $ref: "#/components/schemas/product-prn"
+              required:
+                - conditions
+                - firmware_uuid
+                - name
+                - product_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployment:
+                    $ref: "#/components/schemas/deployment"
+    get:
+      operationId: list-deployments
+      summary: List deployments
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Operators|Value|
+        |-|-|-|
+        |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`is_active`|`:`|boolean|
+        |`name`|`:`, `~`|string|
+        |`prn`|`:`|string|
+        |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+      tags:
+        - "Deployments"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployments:
+                    $ref: "#/components/schemas/array-of-deployments"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /deployments/{deployment_prn}:
+    get:
+      operationId: retrieve-a-deployment
+      summary: Retrieve a deployment
+      tags:
+        - "Deployments"
+      parameters:
+        - name: deployment_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployment:
+                    $ref: "#/components/schemas/deployment"
+    patch:
+      operationId: update-a-deployment
+      summary: Update a deployment
+      description: |
+        When updating a deployment, you can modify its `firmware_uuid` only if you also pass its associated `product_prn`
+      tags:
+        - "Deployments"
+      parameters:
+        - prn: deployment_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                deployment:
+                  type: object
+                  properties:
+                    name:
+                      $ref: "#/components/schemas/deployment-name"
+                    conditions:
+                      $ref: "#/components/schemas/deployment-conditions"
+                    delta_updatable:
+                      $ref: "#/components/schemas/delta-updatable"
+                    firmware_uuid:
+                      $ref: "#/components/schemas/firmware-uuid"
+                    is_active:
+                      $ref: "#/components/schemas/deployment-is-active"
+                    product_prn:
+                      $ref: "#/components/schemas/product-prn"
+              required:
+                - deployment
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployment:
+                    $ref: "#/components/schemas/deployment"
+    delete:
+      operationId: delete-a-deployment
+      summary: Delete a deployment
+      tags:
+        - "Deployments"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: deployment_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-name"
+      responses:
+        "204":
+          description: Ok.
   /device_certificates:
     post:
       operationId: create-a-device-certificate
@@ -2715,7 +2881,7 @@ paths:
       operationId: list-deployments
       summary: List deployments
       tags:
-        - "Deployments"
+        - "Legacy Deployments"
       parameters:
         - name: organization_name
           in: path
@@ -2740,7 +2906,7 @@ paths:
       operationId: create-a-deployment
       summary: Create a deployment
       tags:
-        - "Deployments"
+        - "Legacy Deployments"
       parameters:
         - name: organization_name
           in: path
@@ -2791,7 +2957,7 @@ paths:
       operationId: delete-a-deployment
       summary: Delete a deployment
       tags:
-        - "Deployments"
+        - "Legacy Deployments"
       parameters:
         - name: organization_name
           in: path
@@ -2815,7 +2981,7 @@ paths:
       operationId: retrieve-a-deployment
       summary: Retrieve a deployment
       tags:
-        - "Deployments"
+        - "Legacy Deployments"
       parameters:
         - name: organization_name
           in: path
@@ -2845,7 +3011,7 @@ paths:
       operationId: update-a-deployment
       summary: Update a deployment
       tags:
-        - "Deployments"
+        - "Legacy Deployments"
       parameters:
         - name: organization_name
           in: path
@@ -3980,8 +4146,6 @@ components:
           $ref: "#/components/schemas/deployment-is-active"
         name:
           $ref: "#/components/schemas/deployment-name"
-        state:
-          $ref: "#/components/schemas/deployment-state"
     deployment-conditions:
       type: object
       properties:
@@ -3993,8 +4157,13 @@ components:
           type: string
     deployment-is-active:
       type: boolean
+      example: false
     deployment-name:
       type: string
+    deployment-prn:
+      allOf:
+        - $ref: "#/components/schemas/prn"
+        - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:deployment:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
     deployment-state:
       enum:
         - on
