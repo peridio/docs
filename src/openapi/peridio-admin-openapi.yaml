@@ -4249,6 +4249,12 @@ components:
           $ref: "#/components/schemas/device-quarantined"
         identifier:
           $ref: "#/components/schemas/device-identifier"
+        inserted_at:
+          type: string
+          format: date-time
+        last_connected_at:
+          type: string
+          format: date-time
         prn:
           $ref: "#/components/schemas/device-prn"
         tags:
@@ -4261,6 +4267,9 @@ components:
           $ref: "#/components/schemas/release-version"
         reported_bundle_prn:
           $ref: "#/components/schemas/bundle-prn"
+        updated_at:
+          type: string
+          format: date-time
     legacy-device:
       type: object
       properties:
