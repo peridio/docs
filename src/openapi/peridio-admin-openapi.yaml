@@ -1299,6 +1299,7 @@ paths:
         |`description`|`:`, `~`|string|
         |`identifier`|`:`, `~`|string|
         |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`last_connected_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`prn`|`:`|string|
         |`product_prn`|`:`|string|
         |`reported_bundle_prn`|`:`|string|
