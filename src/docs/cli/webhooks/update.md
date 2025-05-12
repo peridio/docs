@@ -18,6 +18,8 @@ Options:
           The events that will trigger the webhook.
           
           Supply the flag multiple times to add multiple events.
+          
+          Values can be provided by passing each value in a flag or by delimiting all values with ","
 
   -h, --help
           Print help (see a summary with '-h')

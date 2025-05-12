@@ -23,6 +23,8 @@ Options:
           A list of tags to attach to the device.
           
           If using firmwares and deployments, tags can be used to target devices.
+          
+          Values can be provided by passing each value in a flag or by delimiting all values with ","
 
       --target <TARGET>
           The target of the device.
