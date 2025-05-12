@@ -30,7 +30,9 @@ Options:
           The PRN of the organization you wish to create the resource within
 
       --phase-tags [<PHASE_TAGS>...]
-          Limits by tags the devices that are allowed to update to this release. When phase_mode is tags, this field only allows devices to update to this release if they have at least one of these tags
+          Limits by tags the devices that are allowed to update to this release. When phase_mode is tags, this field only allows devices to update to this release if they have at least one of these tags.
+          
+          Values can be provided by passing each value in a flag or by delimiting all values with ","
 
       --phase-value <PHASE_VALUE>
           The phase value controls the distribution of the update to your fleet.

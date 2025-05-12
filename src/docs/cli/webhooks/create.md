@@ -9,6 +9,8 @@ Options:
           The events that will trigger the webhook.
           
           Supply the flag multiple times to add multiple events.
+          
+          Values can be provided by passing each value in a flag or by delimiting all values with ","
 
       --url <URL>
           The URL that the webhook will send a POST request to
