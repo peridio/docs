@@ -406,6 +406,20 @@ paths:
                 properties:
                   artifact:
                     $ref: "#/components/schemas/artifact"
+    delete:
+      operationId: delete-an-artifact
+      summary: Delete an artifact
+      tags:
+        - "Artifacts"
+      parameters:
+        - name: artifact_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: No Content.
   /artifact_versions:
     post:
       operationId: create-an-artifact-version
@@ -526,6 +540,20 @@ paths:
                 properties:
                   artifact_version:
                     $ref: "#/components/schemas/artifact-version"
+    delete:
+      operationId: delete-an-artifact-version
+      summary: Delete an artifact version
+      tags:
+        - "Artifact Versions"
+      parameters:
+        - name: artifact_version_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: No Content.
   /binaries:
     post:
       operationId: create-a-binary
@@ -659,6 +687,20 @@ paths:
                 properties:
                   binary:
                     $ref: "#/components/schemas/binary"
+    delete:
+      operationId: delete-a-binary
+      summary: Delete a binary
+      tags:
+        - "Binaries"
+      parameters:
+        - name: binary_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: No Content.
   /binaries/{binary_prn}/parts/{index}:
     put:
       operationId: create-a-binary-part
@@ -809,7 +851,7 @@ paths:
                     $ref: "#/components/schemas/bundle"
     get:
       operationId: list-bundles
-      summary: list bundles
+      summary: List bundles
       description: |
         **Search**
 
@@ -890,6 +932,20 @@ paths:
                 properties:
                   bundle:
                     $ref: "#/components/schemas/bundle"
+    delete:
+      operationId: delete-a-bundle
+      summary: Delete a bundle
+      tags:
+        - "Bundles"
+      parameters:
+        - name: bundle_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: No Content.
   /ca_certificates:
     post:
       operationId: create-a-ca-certificate
@@ -1821,6 +1877,20 @@ paths:
                 properties:
                   release:
                     $ref: "#/components/schemas/release"
+    delete:
+      operationId: delete-a-release
+      summary: Delete a release
+      tags:
+        - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      responses:
+        "204":
+          description: No Content.
   /signing_keys:
     post:
       operationId: create-a-signing-key
