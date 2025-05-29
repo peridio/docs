@@ -1,23 +1,23 @@
 ```
-Usage: peridio devices update [OPTIONS] --device-identifier <DEVICE_IDENTIFIER> --product-name <PRODUCT_NAME>
+Usage: peridio devices update [OPTIONS] --prn <PRN>
 
 Options:
       --description <DESCRIPTION>
           An arbitrary string attached to the resource. Often useful for displaying to users
 
-      --device-identifier <DEVICE_IDENTIFIER>
+      --prn <PRN>
           The identifier of the device you wish to update
 
-      --healthy <HEALTHY>
-          Whether or not the device is healthy (quarantined or not)
+      --quarantined <QUARANTINED>
+          Whether or not the device is quarantined or not
           
           [possible values: true, false]
 
-      --last-communication <LAST_COMMUNICATION>
-          The device's last communication time
+      --cohort-prn <COHORT_PRN>
+          The prn of the cohort you wish to update the resource within
 
-      --product-name <PRODUCT_NAME>
-          The name of the product you wish to update the resource within
+      --product-prn <PRODUCT_PRN>
+          The prn of the product you wish to update the resource within
 
       --tags [<TAGS>...]
           A list of tags to attach to the device.

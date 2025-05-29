@@ -1,12 +1,11 @@
 ```
-Usage: peridio device-certificates list --device-identifier <DEVICE_IDENTIFIER> --product-name <PRODUCT_NAME>
+Usage: peridio device-certificates list [OPTIONS]
 
 Options:
-      --device-identifier <DEVICE_IDENTIFIER>
-          The identifier of the device you wish to list certificates for
-      --product-name <PRODUCT_NAME>
-          The name of the product you wish to list the resource within
-  -h, --help
-          Print help
+      --limit <LIMIT>    Limit the length of the page
+      --order <ORDER>    Specify whether the query is ordered ascending or descending
+      --search <SEARCH>  A search query per the Peridio API's search query language. It is recommended to quote the value of this option
+      --page <PAGE>      A cursor for pagination across multiple pages of results. Don't include this parameter on the first call. Use the next_page value returned in a previous response (if not null) to request subsequent results
+  -h, --help             Print help
 
 ```

@@ -1,5 +1,5 @@
 ```
-Usage: peridio artifacts list [OPTIONS] --search <SEARCH>
+Usage: peridio artifacts list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page

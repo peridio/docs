@@ -1,5 +1,5 @@
 ```
-Usage: peridio webhooks list [OPTIONS] --search <SEARCH>
+Usage: peridio webhooks list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page
