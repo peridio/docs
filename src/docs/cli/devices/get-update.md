@@ -1,8 +1,8 @@
 ```
-Usage: peridio devices get-update [OPTIONS] --device-prn <DEVICE_PRN>
+Usage: peridio devices get-update [OPTIONS] --prn <PRN>
 
 Options:
-      --device-prn <DEVICE_PRN>
+      --prn <PRN>
           The PRN of the device you wish to check for an update for
       --release-prn <RELEASE_PRN>
           The PRN of the release to consider as the device's current release during bundle resolution
