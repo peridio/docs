@@ -189,14 +189,30 @@ Peridio EVK can create, launch, and attach containerized devices using docker to
 Testing remote access tunnels using the Peridio EVK containerized devices will require running docker on a linux host with the wireguard kernel module enabled. Using remote access tunnels with Docker Desktop from a Mac, Windows, or Linux desktop will execute the containers inside a VM where the wireguard kernel extensions will not be enabled and will not function properly. You can still connect to these devices using the web based remote shell functionality.
 :::
 
-Peridio EVK will generate Identities for six devices. Two of the six devices are already known to Peridio Cloud as they are registered during the initialization process. These devices are tagged with the `canary` tag. Once the next release is "enabled" these two devices will receive the update first. The remaining four device identities were signed with an intermediate certificate that Peridio Cloud is configured with Just-In-Time-Provisioning to register these devices as they come online. This resembles a common production strategy where the certificates of devices may not be known to peridio at the time of manufacture and will instead be registered when they connect for the first time. You can observe this behavior by opening a web browser and navigating to the device list by clicking devices in the Peridio Cloud navigation.
+Peridio EVK will generate Identities for six devices.
+
+Two of the six devices are already known to Peridio Cloud as they are registered during the initialization process. These devices are tagged with the `canary` tag. Once the next release is "enabled" these two devices will receive the update first.
+
+The remaining four device identities are intended to demonstrate Just-In-Time-Provisioning to register these devices as they come online. This resembles a common production strategy where the certificates of devices may not be known to peridio at the time of manufacture and will instead be registered when they connect for the first time. After initial execution of the EVK, when you subsequently start these devices they will not be able to connect. This is because JITP is disabled. To allow these devices to be JITP'd and connect successfully you must enable JITP for the relevant CA certificate in the web console.
+
+#### Enabling JITP
+
+In the left side-bar of the web console navigate to the CA Certificates section to view the certificates, there will be four. The one we want to click into has a description that starts with `Intermediate CA: edge-inference:release.` (not debug or daily). Edit that certificate, check the box to enable JITP, and enter the following information:
+
+- Description: `JITP`
+- Product: `edge-inference`
+- Cohort: `release`
+- Target: `arm64-v8`
+- Tags: `JITP`
+
+Note that once you hit save devices 3, 4, 5, and 6 will be able to successfully JITP. If you have already started the virtual devices it may take a minute for their re-connection attempt to occur. If you haven't started them yet, read on.
 
 #### Starting virtual devices
 
 To start the virtual devices execute the following:
 
 ```bash
-peridio-evk devices-start --tag v3.0.0-rc.4
+peridio-evk devices-start --tag latest
 ```
 
 Peridio EVK will first pull the latest container image from docker-hub for `peridio/peridiod:latest` and launch six containers with unique identities. These devices will appear in Peridio Cloud device list once running. If you have already "enabled" the staged `release-r1002`, the canary devices will immediately start updating.
