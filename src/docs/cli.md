@@ -46,9 +46,7 @@ Contains a single object of the format:
 {
   "version": 1,
   "profiles": {
-    "my-profile-name": {
-      "organization_name": "my-organization-name"
-    }
+    "my-profile-name": {}
   },
   "signing_key_pairs": {
     "my-signing-key-pair-name": {
@@ -71,8 +69,7 @@ Contains a single object of the format:
   "profiles": {
     PROFILE_NAME: {
       "base_url": BASE_URL,
-      "ca_path": CA_PATH,
-      "organization_name": ORGANIZATION_NAME
+      "ca_path": CA_PATH
     }
   },
   "signing_key_pairs": {
@@ -126,12 +123,6 @@ Contains a single object of the format:
       <td><code>false</code></td>
       <td>string</td>
       <td>See <a href="#ca-path">--ca-path</a>.</td>
-    </tr>
-    <tr>
-      <td>ORGANIZATION_NAME</td>
-      <td><code>false</code></td>
-      <td>string</td>
-      <td>See <a href="#organization-name">--organization-name</a>.</td>
     </tr>
     <tr>
       <td>SIGNING_KEY_PAIR_NAME</td>
@@ -255,14 +246,6 @@ Can be provided via configuration files.
 Defaults to `$HOME/Library/Application\ Support/peridio` on macOS.
 
 A path identifying the directory the CLI should look within to find Peridio CLI configuration files.
-
-### Organization name
-
-`-o`, `--organization-name <organization-name>`, `$PERIDIO_ORGANIZATION_NAME`
-
-If applicable, the case-sensitive name of the organization against which Peridio Admin API requests will be executed.
-
-Can be provided via configuration files.
 
 ### Profile
 
