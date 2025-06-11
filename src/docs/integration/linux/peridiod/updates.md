@@ -8,12 +8,12 @@ Releases allow greater control and flexibility to managing devices in the field.
 
 To use releases, binaries must be configured to use an installer. An Installer is a module that can handle the last mile of deploying your binary onto your device. The following installer modules are currently supported:
 
-* `fwup`: Binary in the (fwup)[https://github.com/fwup-home/fwup] format.
+* `fwup`: Binary in the [fwup](https://github.com/fwup-home/fwup) format.
 * `file`: Writes individual files to a writeable location on the system.
-* `deb`: (Debian package manager)[https://www.debian.org/doc/manuals/debian-faq/pkg-basics.en.html] install format.
-* `rpm`: (RPM Package manager)[https://rpm.org/] install format.
-* `opkg`: (OPkg Package manager)[https://openwrt.org/docs/guide-user/additional-software/opkg] installer format.
-* `swupdate`: (SWUpdate)[https://sbabic.github.io/swupdate/swupdate.html] package format.
+* `deb`: [Debian package manager](https://www.debian.org/doc/manuals/debian-faq/pkg-basics.en.html) install format.
+* `rpm`: [RPM Package manager](https://rpm.org/) install format.
+* `opkg`: [OPkg Package manager](https://openwrt.org/docs/guide-user/additional-software/opkg) installer format.
+* `swupdate`: [SWUpdate](https://sbabic.github.io/swupdate/swupdate.html) package format.
 
 Binaries that you compose into bundles can each specify their own installer format with different options. The installer and installer optioins are specified in the `custom_metadata`. When adding binaries to bundles, you have the option to override the custom_metadata or inherit it from the most specific to least specific location from bundle, binary, artifact version, or artifact.
 
@@ -105,14 +105,14 @@ Example:
 
 ```json
 {
-    "peridiod": {
-      "installer": "deb",
-      "installer_opts": {
-        "extra_args": []
-      },
-      "reboot_required": false
-    }
+  "peridiod": {
+    "installer": "deb",
+    "installer_opts": {
+      "extra_args": []
+    },
+    "reboot_required": false
   }
+}
 ```
 
 ### `rpm`
@@ -129,14 +129,14 @@ Example:
 
 ```json
 {
-    "peridiod": {
-      "installer": "rpm",
-      "installer_opts": {
-        "extra_args": []
-      },
-      "reboot_required": false
-    }
+  "peridiod": {
+    "installer": "rpm",
+    "installer_opts": {
+      "extra_args": []
+    },
+    "reboot_required": false
   }
+}
 ```
 
 ### `opkg`
@@ -153,14 +153,14 @@ Example:
 
 ```json
 {
-    "peridiod": {
-      "installer": "opkg",
-      "installer_opts": {
-        "extra_args": []
-      },
-      "reboot_required": false
-    }
+  "peridiod": {
+    "installer": "opkg",
+    "installer_opts": {
+      "extra_args": []
+    },
+    "reboot_required": false
   }
+}
 ```
 
 ### `swupdate`
@@ -177,14 +177,14 @@ Example:
 
 ```json
 {
-    "peridiod": {
-      "installer": "swupdate",
-      "installer_opts": {
-        "extra_args": ["-p", "custom_post_action"]
-      },
-      "reboot_required": true
-    }
+  "peridiod": {
+    "installer": "swupdate",
+    "installer_opts": {
+      "extra_args": ["-p", "custom_post_action"]
+    },
+    "reboot_required": true
   }
+}
 ```
 
 You can add this custom metadata to these records using [Peridio CLI](/cli) v0.22.0 or later or directly through the [Peridio Admin API](/admin-api).

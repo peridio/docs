@@ -53,6 +53,15 @@ Options:
       --skip-upload
           Create the binary record but do not upload its content nor sign it
 
+      --bundle-override-prn <BUNDLE_OVERRIDE_PRN>
+          The PRN of the bundle override to associate with this binary
+
+      --device-prn <DEVICE_PRN>
+          The PRN of the device to associate with this binary
+
+      --cohort-prn <COHORT_PRN>
+          The PRN of the cohort to associate with this binary
+
   -h, --help
           Print help (see a summary with '-h')
 

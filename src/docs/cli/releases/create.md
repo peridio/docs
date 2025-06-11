@@ -1,5 +1,5 @@
 ```
-Usage: peridio releases create [OPTIONS] --bundle-prn <BUNDLE_PRN> --cohort-prn <COHORT_PRN> --name <NAME> --organization-prn <ORGANIZATION_PRN> --schedule-date <SCHEDULE_DATE>
+Usage: peridio releases create [OPTIONS] --bundle-prn <BUNDLE_PRN> --cohort-prn <COHORT_PRN> --name <NAME> --schedule-date <SCHEDULE_DATE>
 
 Options:
       --bundle-prn <BUNDLE_PRN>
@@ -25,9 +25,6 @@ Options:
           If omitted, the release will be created as latest within the cohort. If there is already at least one release in the cohort, then the latest release in that cohort would have its next_release_prn updated to this created release.
           
           If supplied, the release will be created prior to the release identified by next_release_prn. If you wish to insert this release between two other releases, you may additionally supply previous_release_prn. If you supply neither field, it will create the release as the latest automatically.
-
-      --organization-prn <ORGANIZATION_PRN>
-          The PRN of the organization you wish to create the resource within
 
       --phase-tags [<PHASE_TAGS>...]
           Limits by tags the devices that are allowed to update to this release. When phase_mode is tags, this field only allows devices to update to this release if they have at least one of these tags.

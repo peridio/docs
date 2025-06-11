@@ -1,5 +1,5 @@
 ```
-Usage: peridio webhooks create [OPTIONS] --url <URL> --organization-prn <ORGANIZATION_PRN>
+Usage: peridio webhooks create [OPTIONS] --url <URL>
 
 Options:
       --description <DESCRIPTION>
@@ -14,9 +14,6 @@ Options:
 
       --url <URL>
           The URL that the webhook will send a POST request to
-
-      --organization-prn <ORGANIZATION_PRN>
-          The PRN of the organization you wish to create the resource within
 
   -h, --help
           Print help (see a summary with '-h')
