@@ -54,13 +54,29 @@ Options:
           Create the binary record but do not upload its content nor sign it
 
       --bundle-override-prn <BUNDLE_OVERRIDE_PRN>
-          The PRN of the bundle override to associate with this binary
+          The PRN of the bundle override to associate with this binary.
+          
+          A bundle will be created for the newly-created binary.
+          
+          The given bundle override will be updated to this bundle.
 
       --device-prn <DEVICE_PRN>
-          The PRN of the device to associate with this binary
+          The PRN of the device to stage this binary for.
+          
+          A bundle will be created for the newly-created binary.
+          
+          A bundle override will be created with this bundle.
+          
+          The given device will be added to the bundle override.
 
       --cohort-prn <COHORT_PRN>
-          The PRN of the cohort to associate with this binary
+          The PRN of a cohort, in which to create a release for.
+          
+          A bundle will be created for the newly-created binary.
+          
+          A release will be created for the given cohort with this bundle.
+          
+          The created release is not required, has scheduled availability of "now", and 100% availability.
 
   -h, --help
           Print help (see a summary with '-h')

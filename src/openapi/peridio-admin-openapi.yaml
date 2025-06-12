@@ -74,10 +74,6 @@ info:
     Some endpoints specify a `search` parameter. The value of this parameter must be a string that
     contains a valid query as defined by this search query language.
 
-    **IMPORTANT NOTICE**
-
-    Every list-type endpoint that accepts a `search` parameter requires that the search parameter is supplied, and furthermore that an organization PRN clause is provided in the search like so: `organization_prn:'value'`.
-
     ## Queries
 
     A query consists of at least one and at most five clauses joined by the `and` keyword.
@@ -304,10 +300,7 @@ paths:
                   $ref: "#/components/schemas/custom-id"
                 name:
                   $ref: "#/components/schemas/artifact-name"
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
               required:
-                - organization_prn
                 - name
       responses:
         "201":
@@ -331,7 +324,6 @@ paths:
         |`description`||`:`, `~`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`name`||`:`, `~`, `-`|string|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
 
@@ -467,7 +459,6 @@ paths:
         |`artifact_prn`||`:`|string|
         |`description`||`:`, `~`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
 
@@ -610,7 +601,6 @@ paths:
         |`description`||`:`, `~`|string|
         |`hash`||`:`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`size`||`:`, `>`, `>=`, `<`, `<=` |integer|
         |`target`||`:`, `~`|string|
@@ -829,8 +819,6 @@ paths:
           application/json:
             schema:
               properties:
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
                 artifact_version_prns:
                   $ref: "#/components/schemas/array-of-artifact-version-prns"
                 id:
@@ -839,7 +827,6 @@ paths:
                   $ref: "#/components/schemas/bundle-name"
               required:
                 - artifact_version_prns
-                - organization_prn
       responses:
         "201":
           description: Ok.
@@ -861,7 +848,6 @@ paths:
         |-|-|-|-|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`name`||`:`, `~`, `-`|string|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
 
@@ -1105,13 +1091,10 @@ paths:
                   $ref: "#/components/schemas/cohort-description"
                 name:
                   $ref: "#/components/schemas/cohort-name"
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
                 product_prn:
                   $ref: "#/components/schemas/prn"
               required:
                 - name
-                - organization_prn
                 - product_prn
       responses:
         "201":
@@ -1135,7 +1118,6 @@ paths:
         |`description`||`:`, `~`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`name`||`:`, `~`|string|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
       tags:
@@ -1577,7 +1559,6 @@ paths:
         |`deleted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`name`||`:`, `~`|string|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
 
@@ -1597,7 +1578,6 @@ paths:
             |`archived`|boolean|`:`|
             |`inserted_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
             |`name`|string|`:`, `~`|
-            |`organization_prn`|string|`:`|
             |`prn`|string|`:`|
             |`updated_at`|date-time|`:`, `>`, `>=`, `<`, `<=` |
         - $ref: "#/components/parameters/page"
@@ -1627,11 +1607,8 @@ paths:
                   $ref: "#/components/schemas/product-archived"
                 name:
                   $ref: "#/components/schemas/product-name"
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
               required:
                 - name
-                - organization_prn
       responses:
         "201":
           description: Ok.
@@ -1740,9 +1717,6 @@ paths:
                     If omitted, `next_release_prn` will dictate where to create this release within the cohort's release graph.
 
                     In order to insert a release between two other releases, `next_release_prn` is required to be supplied as well. If you supply neither field, it will create the release as the latest automatically.
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
-                  description: The organization to create the release within.
                 required:
                   $ref: "#/components/schemas/release-required"
                 schedule_date:
@@ -1755,7 +1729,6 @@ paths:
                 - bundle_prn
                 - cohort_prn
                 - name
-                - organization_prn
                 - required
                 - schedule_date
       responses:
@@ -1783,7 +1756,6 @@ paths:
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`name`||`:`, `~`|string|
         |`next_release_prn`||`:`|string|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
         |`version_requirement`||`:`, `-`|string|
@@ -1907,11 +1879,8 @@ paths:
                   $ref: "#/components/schemas/signing-key-value"
                 name:
                   $ref: "#/components/schemas/signing-key-name"
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
               required:
                 - name
-                - organization_prn
                 - value
       responses:
         "201":
@@ -1934,7 +1903,6 @@ paths:
         |-|-|-|-|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`name`||`:`, `~`|string|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
         |`value`||`:`|string|
@@ -2035,7 +2003,6 @@ paths:
         |-|-|-|-|
         |`state`||`:`|string|
         |`device_prn`||`:`|prn|
-        |`organization_prn`|X|`:`|prn|
 
         `state` can be one of `requested`, `open`, `closed`.
 
@@ -2303,10 +2270,6 @@ paths:
                   $ref: "#/components/schemas/webhook-url"
                 enabled_events:
                   $ref: "#/components/schemas/webhook-enabled-events"
-                organization_prn:
-                  $ref: "#/components/schemas/prn"
-              required:
-                - organization_prn
       responses:
         "201":
           description: Ok.
@@ -2333,7 +2296,6 @@ paths:
         |-|-|-|-|
         |`description`||`:`, `~`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`organization_prn`|X|`:`|prn|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
 
