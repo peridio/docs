@@ -52,7 +52,7 @@ peridio x509 create \
   --common-name intermediate-ca \
   --is-ca \
   --start-date YYYY-MM-DD \
-  --end-date YYYY-MM-DD
+  --end-date YYYY-MM-DD \
   --signer-key root-ca-private-key.pem \
   --signer-cert root-ca-certificate.pem
 ```
@@ -67,7 +67,7 @@ You must fill in the `--start-date` and `--end-date` values.
 peridio x509 create \
   --common-name end-entity \
   --start-date YYYY-MM-DD \
-  --end-date YYYY-MM-DD
+  --end-date YYYY-MM-DD \
   --signer-key intermediate-ca-private-key.pem \
   --signer-cert intermediate-ca-certificate.pem
 ```
