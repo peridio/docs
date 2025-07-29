@@ -42,7 +42,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.stack}>
-          <Link to="/docs/quick-start" className={styles.header}>
+          <Link to="/docs/evk" className={styles.header}>
             <Heading as="h2">Quick Start</Heading>
             <p className={styles.subtitle}>Achieve first success in &lt;30 min</p>
           </Link>
@@ -55,7 +55,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.stack}>
-          <Link to="/docs/develop" className={styles.header}>
+          <Link to="/docs/integration/introduction" className={styles.header}>
             <Heading as="h2">Develop</Heading>
             <p className={styles.subtitle}>Guide day-to-day engineering work</p>
           </Link>
@@ -70,7 +70,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.stack}>
-          <Link to="/docs/operate" className={styles.header}>
+          <Link to="/docs/platform/reference/fleet-view" className={styles.header}>
             <Heading as="h2">Operate</Heading>
             <p className={styles.subtitle}>Show fleet-scale workflows</p>
           </Link>
@@ -84,7 +84,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.stack}>
-          <Link to="/docs/security-and-compliance" className={styles.header}>
+          <Link to="/docs/platform/reference/x509" className={styles.header}>
             <Heading as="h2">Security & Compliance</Heading>
             <p className={styles.subtitle}>Address risk & governance</p>
           </Link>
@@ -98,7 +98,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.stack}>
-          <Link to="/docs/reference" className={styles.header}>
+          <Link to="/docs/cli" className={styles.header}>
             <Heading as="h2">Reference</Heading>
             <p className={styles.subtitle}>Definitive, factual resources</p>
           </Link>
