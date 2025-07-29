@@ -5,6 +5,7 @@ import styles from './index.module.css'
 import Heading from '@theme/Heading'
 import Link from '@docusaurus/Link'
 import SearchBar from '@theme/SearchBar'
+import HardwareCarousel from '../components/HardwareCarousel'
 
 function HomepageHeader() {
   return (
@@ -30,8 +31,8 @@ export default function Home() {
     <Layout>
       <HomepageHeader />
       <main className={clsx('container', styles.container)}>
-        {/* Avocado OS - Featured */}
-        <div className={clsx(styles.stack, styles.featured)}>
+        {/* Avocado OS */}
+        <div className={styles.stack}>
           <div className={styles.header}>
             <div className={styles.iconContainer}>
               🥑
@@ -81,6 +82,25 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Peridio Core (Platform) */}
+        <div className={styles.stack}>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>🏗️</div>
+            <Heading as="h2">Peridio Core</Heading>
+            <p className={styles.subtitle}>Artifact & Device Platform</p>
+          </div>
+          <div className={styles.body}>
+            <ul>
+              <li>Artifact & binary management</li>
+              <li>Device provisioning & cohorts</li>
+              <li>Fleet view & OTA deployments</li>
+            </ul>
+            <Link to="/platform/reference/overview" className={styles.ctaButton}>
+              Platform Overview →
+            </Link>
+          </div>
+        </div>
+
         {/* EVK Quick Start */}
         <div className={styles.stack}>
           <div className={styles.header}>
@@ -102,73 +122,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Supported Hardware - i.MX8MP */}
-        <div className={styles.stack}>
-          <div className={styles.header}>
-            <div className={styles.iconContainer}>
-              💻
-            </div>
-            <Heading as="h2">i.MX8MP</Heading>
-            <p className={styles.subtitle}>NXP High-Performance SoC</p>
-          </div>
-          <div className={styles.body}>
-            <div className={styles.badge}>Production Ready</div>
-            <ul>
-              <li>Quad-core ARM Cortex-A53</li>
-              <li>Neural Processing Unit</li>
-              <li>4K video processing</li>
-              <li>Industrial temperature range</li>
-            </ul>
-            <Link to="/integration/linux/reference-designs/imx6ullevk/overview" className={styles.ctaButton}>
-              View Reference →
-            </Link>
-          </div>
-        </div>
-
-        {/* Supported Hardware - Raspberry Pi */}
-        <div className={styles.stack}>
-          <div className={styles.header}>
-            <div className={styles.iconContainer}>
-              🍓
-            </div>
-            <Heading as="h2">Raspberry Pi</Heading>
-            <p className={styles.subtitle}>Popular Development Platform</p>
-          </div>
-          <div className={styles.body}>
-            <div className={styles.badge}>Production Ready</div>
-            <ul>
-              <li>Pi 3, 4, and 5 supported</li>
-              <li>Compute Module variants</li>
-              <li>GPIO and peripheral access</li>
-              <li>Camera and display support</li>
-            </ul>
-            <Link to="/integration/linux/reference-designs/raspberrypi4/overview" className={styles.ctaButton}>
-              View Reference →
-            </Link>
-          </div>
-        </div>
-
-        {/* Supported Hardware - NVIDIA Jetson */}
-        <div className={styles.stack}>
-          <div className={styles.header}>
-            <div className={styles.iconContainer}>
-              ⚡
-            </div>
-            <Heading as="h2">NVIDIA Jetson</Heading>
-            <p className={styles.subtitle}>AI/ML Edge Computing</p>
-          </div>
-          <div className={styles.body}>
-            <div className={styles.badge}>Production Ready</div>
-            <ul>
-              <li>GPU-accelerated inference</li>
-              <li>CUDA and TensorRT support</li>
-              <li>Computer vision pipelines</li>
-              <li>Edge AI applications</li>
-            </ul>
-            <Link to="/integration/introduction" className={styles.ctaButton}>
-              View Integration →
-            </Link>
-          </div>
+        {/* Supported Hardware Carousel */}
+        <div className={styles.fullWidth}>
+          <HardwareCarousel />
         </div>
 
         {/* Build Tools */}
