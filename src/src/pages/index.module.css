@@ -4,25 +4,36 @@
  */
 
 .heroBanner {
-  padding: 4rem 1rem;
+  padding: 6rem 1rem;
   position: relative;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), url("/img/hero.png") lightgray -13px -1669.396px / 101.458% 1124.387% no-repeat;
-  text-align: center;
+  text-align: left;
+  color: white;
 }
 
 @media screen and (max-width: 966px) {
   .heroBanner {
-    padding: 2rem;
+    padding: 4rem 1rem;
   }
 }
 
 .hero_title {
+  font-size: 3.5rem;
   font-weight: bold;
+  color: white;
 }
 
 .hero_subtitle {
   margin-bottom: 0px;
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: white;
+}
+
+.logo {
+  max-width: 250px;
+  margin-bottom: 1rem;
 }
 
 .buttons {

@@ -9,11 +9,12 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
+        <img src="/img/peridio-white.svg" alt="Peridio Logo" className={styles.logo} />
         <Heading as='h1' className={clsx("hero__title", styles.hero_title)}>
-          Peridio Documentation
+          Developer Center
         </Heading>
         <p className={clsx("hero__subtitle", styles.hero_subtitle)}>
-          Explore the future of embedded systems with Peridio. Whether you&apos;re an engineer building innovative devices or a decision-maker driving product strategy, our comprehensive documentation provides the insights and tools you need to succeed.
+          Launch faster with field-proven infrastructure and Avocado OS.
         </p>
       </div>
     </header>
@@ -79,6 +80,60 @@ export default function Home() {
               <li>Device monitoring</li>
               <li>Fleet management</li>
               <li>CI/CD patterns</li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.stack}>
+          <Link to="/docs/security-and-compliance" className={styles.header}>
+            <Heading as="h2">Security & Compliance</Heading>
+            <p className={styles.subtitle}>Address risk & governance</p>
+          </Link>
+          <div className={styles.body}>
+            <ul>
+              <li>Secure boot</li>
+              <li>SBOM</li>
+              <li>CVE handling</li>
+              <li>Audit logs</li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.stack}>
+          <Link to="/docs/reference" className={styles.header}>
+            <Heading as="h2">Reference</Heading>
+            <p className={styles.subtitle}>Definitive, factual resources</p>
+          </Link>
+          <div className={styles.body}>
+            <ul>
+              <li>CLI / API docs</li>
+              <li>Schemas & file formats</li>
+              <li>Release notes & changelogs</li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.stack}>
+          <Link to="/docs/solutions" className={styles.header}>
+            <Heading as="h2">Solutions</Heading>
+            <p className={styles.subtitle}>Vertical & performance examples</p>
+          </Link>
+          <div className={styles.body}>
+            <ul>
+              <li>Industry examples</li>
+              <li>BOMs</li>
+              <li>Performance tuning (engineers + PMMs)</li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.stack}>
+          <Link to="/docs/community-and-support" className={styles.header}>
+            <Heading as="h2">Community & Support</Heading>
+            <p className={styles.subtitle}>Ongoing help & engagement</p>
+          </Link>
+          <div className={styles.body}>
+            <ul>
+              <li>Forum</li>
+              <li>Slack</li>
+              <li>Ticket portal</li>
+              <li>Consulting offers</li>
             </ul>
           </div>
         </div>

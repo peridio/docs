@@ -194,24 +194,12 @@ The `--out` directory is where your keys will be stored, and this path will be w
 :::
 
 
-Now that your signing keys are registered, we inform the CLI where they live locally so that it can leverage them during binary upload. This is accomplished by updating your `config.json` file to point to the correct location (remember when I said we'd come back to this earlier?).
-
-Three items are important here:
-
-1. The key-name will need to match the name of the key that you created in the last step. Ensure that this matches by going to Signing Keys in the left hand nav, and copy `name` from the key you provided.
-2. The `signing_key_prn` is available in at console.peridio.com. Simply go to Signing Keys in the left hand nav, and copy the `prn` from the key you just uploaded.
-3. The `signing_key_private_path` will need to point to the private certificate you generated earlier.
-
-Your configuration should now look similar to the following:
-
-```json
 ```bash
 peridio --profile peridio-demo signing-keys create \
   --name 'demo key' \
   --algorithm Ed25519 \
   --config peridio-demo \
   --out .
->>>>>>> main
 {
   "signing_key": {
     "value": "DIU8Zhf20Gr4n6vzDxCG2eupglynQ1Q6j19UKA4Mf88=",
@@ -333,7 +321,6 @@ We will provide a few key pieces of information to the `binaries create` command
 - `target`: a human-friendly identifier for platform/architecture (does **NOT** impact device update resolution)
 - `content-path`: the location of the binary we are uploading
 - `signing-key-pair`: the signing key we are referencing in our `config.json`
-<<<<<<< HEAD
 - `artifact-version-prn` : the artifact version this binary will be associated with
 - `device-prn` : the device that this binary will be available to, via a bundle override
 
