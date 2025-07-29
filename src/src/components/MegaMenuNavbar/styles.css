@@ -112,13 +112,17 @@ html[data-theme='dark'] .mega-menu-link:hover {
 
 /* Mobile responsiveness */
 @media (max-width: 996px) {
-    .mega-menu-container {
+.mega-menu-container {
         display: none;
     }
-
-    /* Show a mobile menu button or fallback */
-    .navbar__toggle {
-        display: block;
+  /* Show the hamburger menu on mobile */
+  .navbar__toggle {
+    display: block !important;
+    }
+    
+    /* Hide the Web Console link on mobile to make room */
+    .navbar__items--right .navbar__link {
+        display: none;
     }
 }
 
@@ -168,29 +172,30 @@ html[data-theme='dark'] .mega-menu-link:hover {
 
 /* Mobile Menu Styles */
 .navbar__toggle {
-    display: none;
+display: none;
     background: none;
     border: none;
     padding: 0.5rem;
     cursor: pointer;
+margin-left: 1rem;
 }
 
 .navbar__toggle-icon {
-    display: block;
+display: block;
     width: 20px;
     height: 2px;
-    background: var(--ifm-navbar-link-color);
+background: var(--ifm-navbar-link-color, #000);
     position: relative;
     transition: background 0.3s;
 }
 
 .navbar__toggle-icon::before,
 .navbar__toggle-icon::after {
-    content: '';
+content: '';
     position: absolute;
     width: 20px;
     height: 2px;
-    background: var(--ifm-navbar-link-color);
+background: var(--ifm-navbar-link-color, #000);
     transition: transform 0.3s;
 }
 
@@ -308,7 +313,13 @@ html[data-theme='dark'] .mobile-menu-items {
 }
 
 @media (max-width: 996px) {
-    .navbar__toggle {
-        display: block;
+.navbar__toggle {
+    display: block !important;
+    }
+    
+    /* Ensure proper spacing on mobile */
+    .navbar__items--right {
+        display: flex;
+        align-items: center;
     }
 }

@@ -105,13 +105,7 @@ footer {
   z-index: 9999;
 }
 
-/* Mobile fallback - show standard mobile menu */
+/* Mobile fallback - handled by mega menu component */
 @media (max-width: 996px) {
-  .navbar__items {
-    display: none;
-  }
-
-  .navbar__toggle {
-    display: block !important;
-  }
+  /* Mobile styles are handled in the MegaMenuNavbar component */
 }
