@@ -36,6 +36,45 @@
   margin-bottom: 1rem;
 }
 
+.heroSearch {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 650px;
+}
+
+.heroSearch :global(.navbar__search) {
+  flex: none;
+  width: 100%;
+}
+
+.heroSearch :global(.DocSearch-Button) {
+  background: white !important;
+  border: 2px solid black !important;
+  border-radius: 8px !important;
+  color: black !important;
+  font-size: 1rem !important;
+  height: 48px !important;
+  width: 100% !important;
+  transition: all 0.2s ease !important;
+  margin: 0 !important;
+}
+
+.heroSearch :global(.DocSearch-Button:hover) {
+  background: #f8f9fa !important;
+  border-color: black !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.heroSearch :global(.DocSearch-Button-Placeholder) {
+  font-size: 1rem !important;
+  color: #666 !important;
+}
+
+.heroSearch :global(.DocSearch-Search-Icon) {
+  color: black !important;
+  width: 20px !important;
+  height: 20px !important;
+}
 .buttons {
   display: flex;
   align-items: center;

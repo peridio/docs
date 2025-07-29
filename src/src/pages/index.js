@@ -4,6 +4,7 @@ import Layout from '@theme/Layout'
 import styles from './index.module.css'
 import Heading from '@theme/Heading'
 import Link from '@docusaurus/Link'
+import SearchBar from '@theme/SearchBar'
 
 function HomepageHeader() {
   return (
@@ -16,6 +17,9 @@ function HomepageHeader() {
         <p className={clsx("hero__subtitle", styles.hero_subtitle)}>
           Launch faster with field-proven infrastructure and Avocado OS.
         </p>
+        <div className={styles.heroSearch}>
+          <SearchBar />
+        </div>
       </div>
     </header>
   )
