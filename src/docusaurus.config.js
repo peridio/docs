@@ -75,13 +75,7 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          { label: 'Platform', to: '/platform/reference/overview' },
-          { label: 'Integration', to: '/integration/introduction' },
-          { label: 'Admin API', to: '/admin-api' },
-          { label: 'Device API', to: '/device-api' },
-          { label: 'CLI', to: '/cli' },
-          { label: 'EVK', to: '/evk' },
-          { label: 'Web Console', href: 'https://console.peridio.com', position: 'right' },
+          // Items are now handled by the custom MegaMenuNavbar component
         ],
       },
       footer: {

@@ -88,3 +88,30 @@ footer {
   margin-top: 0px !important;
   overflow: scroll;
 }
+
+/* Mega Menu Integration Styles */
+.navbar {
+  position: relative;
+}
+
+.navbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Ensure proper z-index stacking */
+.mega-menu-dropdown {
+  z-index: 9999;
+}
+
+/* Mobile fallback - show standard mobile menu */
+@media (max-width: 996px) {
+  .navbar__items {
+    display: none;
+  }
+
+  .navbar__toggle {
+    display: block !important;
+  }
+}
