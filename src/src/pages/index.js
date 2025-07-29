@@ -21,120 +21,163 @@ function HomepageHeader() {
   )
 }
 
-
-
 export default function Home() {
   return (
     <Layout>
       <HomepageHeader />
       <main className={clsx('container', styles.container)}>
-        <div className={styles.stack}>
-          <Link to="/docs/platform/getting-started" className={styles.header}>
-            <Heading as="h2">Overview</Heading>
-            <p className={styles.subtitle}>Platform value and positioning</p>
-          </Link>
+        {/* Avocado OS - Featured */}
+        <div className={clsx(styles.stack, styles.featured)}>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              🥑
+            </div>
+            <Heading as="h2">Avocado OS</Heading>
+            <p className={styles.subtitle}>Production-Ready Embedded Linux</p>
+          </div>
           <div className={styles.body}>
-            <ul>
-              <li>Platform value prop</li>
-              <li>High-level architecture diagram</li>
-              <li>2-min explainer video</li>
-            </ul>
+            <p className={styles.description}>
+              A secure, updatable Linux distribution built for embedded devices.
+              Get to production faster with pre-configured security, OTA updates, and container support.
+            </p>
+            <div className={styles.linkGrid}>
+              <Link
+                to="https://avocadolinux.org"
+                className={styles.externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                🌐 Website
+              </Link>
+              <Link
+                to="https://docs.avocadolinux.org"
+                className={styles.externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                📚 Developer Docs
+              </Link>
+              <Link
+                to="https://avocadolinux.org/community"
+                className={styles.externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                💬 Community
+              </Link>
+            </div>
           </div>
         </div>
+
+        {/* EVK Quick Start */}
         <div className={styles.stack}>
-          <Link to="/evk" className={styles.header}>
-            <Heading as="h2">Quick Start</Heading>
-            <p className={styles.subtitle}>Achieve first success in &lt;30 min</p>
-          </Link>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              🚀
+            </div>
+            <Heading as="h2">Get Started</Heading>
+            <p className={styles.subtitle}>EVK Demo in &lt;30 minutes</p>
+          </div>
           <div className={styles.body}>
             <ul>
-              <li>Flash Avocado</li>
+              <li>Flash Avocado OS</li>
               <li>Register with Peridio</li>
-              <li>OTA first update</li>
+              <li>Deploy your first OTA update</li>
             </ul>
+            <Link to="/evk" className={styles.ctaButton}>
+              Start Demo →
+            </Link>
           </div>
         </div>
+
+        {/* Supported Hardware - i.MX8MP */}
         <div className={styles.stack}>
-          <Link to="/integration/introduction" className={styles.header}>
-            <Heading as="h2">Develop</Heading>
-            <p className={styles.subtitle}>Guide day-to-day engineering work</p>
-          </Link>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              💻
+            </div>
+            <Heading as="h2">i.MX8MP</Heading>
+            <p className={styles.subtitle}>NXP High-Performance SoC</p>
+          </div>
           <div className={styles.body}>
+            <div className={styles.badge}>Production Ready</div>
             <ul>
-              <li>Board bring-up</li>
-              <li>Yocto layers</li>
-              <li>SDK / CLI</li>
-              <li>Container workflows</li>
-              <li>Sample apps</li>
+              <li>Quad-core ARM Cortex-A53</li>
+              <li>Neural Processing Unit</li>
+              <li>4K video processing</li>
+              <li>Industrial temperature range</li>
             </ul>
+            <Link to="/integration/linux/reference-designs/imx6ullevk/overview" className={styles.ctaButton}>
+              View Reference →
+            </Link>
           </div>
         </div>
+
+        {/* Supported Hardware - Raspberry Pi */}
         <div className={styles.stack}>
-          <Link to="/platform/reference/fleet-view" className={styles.header}>
-            <Heading as="h2">Operate</Heading>
-            <p className={styles.subtitle}>Show fleet-scale workflows</p>
-          </Link>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              🍓
+            </div>
+            <Heading as="h2">Raspberry Pi</Heading>
+            <p className={styles.subtitle}>Popular Development Platform</p>
+          </div>
           <div className={styles.body}>
+            <div className={styles.badge}>Production Ready</div>
             <ul>
-              <li>OTA pipelines</li>
-              <li>Device monitoring</li>
-              <li>Fleet management</li>
-              <li>CI/CD patterns</li>
+              <li>Pi 3, 4, and 5 supported</li>
+              <li>Compute Module variants</li>
+              <li>GPIO and peripheral access</li>
+              <li>Camera and display support</li>
             </ul>
+            <Link to="/integration/linux/reference-designs/raspberrypi4/overview" className={styles.ctaButton}>
+              View Reference →
+            </Link>
           </div>
         </div>
+
+        {/* Supported Hardware - NVIDIA Jetson */}
         <div className={styles.stack}>
-          <Link to="/platform/reference/x509" className={styles.header}>
-            <Heading as="h2">Security & Compliance</Heading>
-            <p className={styles.subtitle}>Address risk & governance</p>
-          </Link>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              ⚡
+            </div>
+            <Heading as="h2">NVIDIA Jetson</Heading>
+            <p className={styles.subtitle}>AI/ML Edge Computing</p>
+          </div>
           <div className={styles.body}>
+            <div className={styles.badge}>Production Ready</div>
             <ul>
-              <li>Secure boot</li>
-              <li>SBOM</li>
-              <li>CVE handling</li>
-              <li>Audit logs</li>
+              <li>GPU-accelerated inference</li>
+              <li>CUDA and TensorRT support</li>
+              <li>Computer vision pipelines</li>
+              <li>Edge AI applications</li>
             </ul>
+            <Link to="/integration/introduction" className={styles.ctaButton}>
+              View Integration →
+            </Link>
           </div>
         </div>
+
+        {/* Build Tools */}
         <div className={styles.stack}>
-          <Link to="/cli" className={styles.header}>
-            <Heading as="h2">Reference</Heading>
-            <p className={styles.subtitle}>Definitive, factual resources</p>
-          </Link>
-          <div className={styles.body}>
-            <ul>
-              <li>CLI / API docs</li>
-              <li>Schemas & file formats</li>
-              <li>Release notes & changelogs</li>
-            </ul>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              🔧
+            </div>
+            <Heading as="h2">Build Tools</Heading>
+            <p className={styles.subtitle}>Yocto & Buildroot Integration</p>
           </div>
-        </div>
-        <div className={styles.stack}>
-          <Link to="/docs/solutions" className={styles.header}>
-            <Heading as="h2">Solutions</Heading>
-            <p className={styles.subtitle}>Vertical & performance examples</p>
-          </Link>
           <div className={styles.body}>
             <ul>
-              <li>Industry examples</li>
-              <li>BOMs</li>
-              <li>Performance tuning (engineers + PMMs)</li>
+              <li>Pre-configured Yocto layers</li>
+              <li>Buildroot external trees</li>
+              <li>Custom board bring-up</li>
+              <li>CI/CD pipeline templates</li>
             </ul>
-          </div>
-        </div>
-        <div className={styles.stack}>
-          <Link to="/docs/community-and-support" className={styles.header}>
-            <Heading as="h2">Community & Support</Heading>
-            <p className={styles.subtitle}>Ongoing help & engagement</p>
-          </Link>
-          <div className={styles.body}>
-            <ul>
-              <li>Forum</li>
-              <li>Slack</li>
-              <li>Ticket portal</li>
-              <li>Consulting offers</li>
-            </ul>
+            <Link to="/integration/linux/build-tools/yocto" className={styles.ctaButton}>
+              Learn More →
+            </Link>
           </div>
         </div>
       </main>
