@@ -4,12 +4,11 @@
  */
 
 .heroBanner {
-  padding: 6rem 1rem;
+  padding: 4rem 1rem;
   position: relative;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), url("/img/hero.png") lightgray -13px -1669.396px / 101.458% 1124.387% no-repeat;
-  padding-top: 3rem;
-  padding-bottom: 9rem;
+  text-align: center;
 }
 
 @media screen and (max-width: 966px) {
@@ -34,8 +33,16 @@
 
 .stack {
   border: 1px solid var(--ifm-color-emphasis-300);
-  width: 15rem;
-  border-radius: 5px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 20rem;
+  background-color: var(--ifm-card-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.stack:hover {
+  transform: translateY(-5px);
 }
 
 .stack .header {
@@ -47,10 +54,11 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
+  padding: 1rem;
 }
 
 .stack .body {
-  padding-top: 15px;
+  padding: 1rem;
   font-size: 14px;
 }
 
@@ -58,13 +66,28 @@
   color: var(--ifm-color-content-secondary);
   font-size: var(--ifm-h5-font-size);
   font-weight: var(--ifm-font-weight-semibold);
+  text-align: center;
 }
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
   padding: 2rem;
   font-family: 'Space Grotesk';
+}
+
+@media screen and (max-width: 996px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
 }
 
 .homepage_code_block_container {
