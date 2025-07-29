@@ -42,7 +42,7 @@ export default function Home() {
             </p>
             <div className={styles.linkGrid}>
               <Link
-                to="https://avocadolinux.org"
+                to="https://avocadolinux.org" 
                 className={styles.externalLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -50,20 +50,28 @@ export default function Home() {
                 🌐 Website
               </Link>
               <Link
-                to="https://docs.avocadolinux.org"
+                to="https://docs.avocadolinux.org" 
                 className={styles.externalLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 📚 Developer Docs
               </Link>
-              <Link
-                to="https://avocadolinux.org/community"
+              <Link 
+                to="https://github.com/avocado-linux" 
                 className={styles.externalLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                💬 Community
+                🛠️ Get Involved
+              </Link>
+              <Link
+                to="https://discord.com/invite/rH77fKpKAj"
+                className={styles.externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                💬 Join Discord
               </Link>
             </div>
           </div>
