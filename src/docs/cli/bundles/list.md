@@ -1,5 +1,5 @@
 ```
-Usage: peridio bundles list [OPTIONS] --search <SEARCH>
+Usage: peridio bundles list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page

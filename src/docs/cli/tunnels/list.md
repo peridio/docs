@@ -1,5 +1,5 @@
 ```
-Usage: peridio tunnels list [OPTIONS] --search <SEARCH>
+Usage: peridio tunnels list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page

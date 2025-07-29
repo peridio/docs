@@ -1,5 +1,5 @@
 ```
-Usage: peridio cohorts list [OPTIONS] --search <SEARCH>
+Usage: peridio cohorts list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page

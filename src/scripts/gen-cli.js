@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { exec } = require('node:child_process')
 const fs = require('node:fs')
 const path = require('node:path')
@@ -59,8 +61,6 @@ exec('peridio upgrade', (_error, stdout) => {
   if (stdout.includes(latest)) {
     processCommandHelp([])
   } else {
-    console.error(
-      'You must update your Peridio CLI before generating docs',
-    )
+    console.error('You must update your Peridio CLI before generating docs')
   }
 })

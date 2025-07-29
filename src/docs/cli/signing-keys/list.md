@@ -1,5 +1,5 @@
 ```
-Usage: peridio signing-keys list [OPTIONS] --search <SEARCH>
+Usage: peridio signing-keys list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page

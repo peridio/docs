@@ -1,8 +1,8 @@
 ```
-Usage: peridio ca-certificates get --ca-certificate-serial <CA_CERTIFICATE_SERIAL>
+Usage: peridio ca-certificates get --prn <PRN>
 
 Options:
-      --ca-certificate-serial <CA_CERTIFICATE_SERIAL>  
-  -h, --help                                           Print help
+      --prn <PRN>  
+  -h, --help       Print help
 
 ```

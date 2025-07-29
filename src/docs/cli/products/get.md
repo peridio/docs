@@ -1,8 +1,8 @@
 ```
-Usage: peridio products get --product-name <PRODUCT_NAME>
+Usage: peridio products get --prn <PRN>
 
 Options:
-      --product-name <PRODUCT_NAME>  The name of the resource to get
-  -h, --help                         Print help
+      --prn <PRN>  The PRN of the resource to get
+  -h, --help       Print help
 
 ```

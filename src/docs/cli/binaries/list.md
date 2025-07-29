@@ -1,5 +1,5 @@
 ```
-Usage: peridio binaries list [OPTIONS] --search <SEARCH>
+Usage: peridio binaries list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page

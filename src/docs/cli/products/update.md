@@ -1,9 +1,10 @@
 ```
-Usage: peridio products update [OPTIONS] --product-name <PRODUCT_NAME>
+Usage: peridio products update [OPTIONS] --prn <PRN>
 
 Options:
-      --name <NAME>                  The resource's name, meant to be displayable to users
-      --product-name <PRODUCT_NAME>  The name (currently) of the resource to update
-  -h, --help                         Print help
+      --prn <PRN>            The PRN of the resource to update
+      --name <NAME>          The resource's name, meant to be displayable to users
+      --archived <ARCHIVED>  Whether the product is archived [possible values: true, false]
+  -h, --help                 Print help
 
 ```

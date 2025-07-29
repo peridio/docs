@@ -1,5 +1,5 @@
 ```
-Usage: peridio releases list [OPTIONS] --search <SEARCH>
+Usage: peridio releases list [OPTIONS]
 
 Options:
       --limit <LIMIT>    Limit the length of the page

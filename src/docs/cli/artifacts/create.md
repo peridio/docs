@@ -1,5 +1,5 @@
 ```
-Usage: peridio artifacts create [OPTIONS] --name <NAME> --organization-prn <ORGANIZATION_PRN>
+Usage: peridio artifacts create [OPTIONS] --name <NAME>
 
 Options:
       --custom-metadata <CUSTOM_METADATA>
@@ -12,8 +12,6 @@ Options:
           A user provided custom UUID id for the artifact database record
       --name <NAME>
           The resource's name, meant to be displayable to users
-      --organization-prn <ORGANIZATION_PRN>
-          The PRN of the organization you wish to create the resource within
   -h, --help
           Print help
 

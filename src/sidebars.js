@@ -159,9 +159,7 @@ export default {
         {
           type: 'category',
           label: 'Cloud integration',
-          items: [
-            'platform/guides/cloud-delegated-updates',
-          ],
+          items: ['platform/guides/cloud-delegated-updates'],
         },
         {
           type: 'category',
@@ -175,6 +173,7 @@ export default {
             'platform/guides/creating-binaries',
             'platform/guides/creating-binary-parts',
             'platform/guides/creating-binary-signatures',
+            'platform/guides/custom-binary-backends',
           ],
         },
         {
