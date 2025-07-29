@@ -9,7 +9,6 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <img src="/img/peridio-white.svg" alt="Peridio Logo" className={styles.logo} />
         <Heading as='h1' className={clsx("hero__title", styles.hero_title)}>
           Developer Center
         </Heading>
