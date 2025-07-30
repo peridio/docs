@@ -178,7 +178,13 @@ const MegaMenuNavbar = () => {
         <nav className="navbar navbar--fixed-top">
             <div className="navbar__inner">
                 <div className="navbar__items">
-
+                    <Link to="/" className="navbar__brand">
+                        <img
+                            src={`/${navbar.logo.src}`}
+                            alt={navbar.logo.alt}
+                            className="navbar__logo"
+                        />
+                    </Link>
                     <div className="mega-menu-container">
                         {Object.entries(megaMenuItems).map(([key, menu]) => (
                             <div
