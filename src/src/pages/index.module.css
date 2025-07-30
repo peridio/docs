@@ -5,6 +5,7 @@
 
 .heroBanner {
   padding: 6rem 1rem;
+  padding-left: 2.5rem;
   position: relative;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), url("/img/hero.png") lightgray -13px -1669.396px / 101.458% 1124.387% no-repeat;
@@ -19,7 +20,7 @@
 }
 
 .hero_title {
-  font-size: 3.5rem;
+  font-size: 2.1rem;
   font-weight: bold;
   color: white;
   margin-bottom: 0.125rem;
@@ -27,7 +28,7 @@
 
 .hero_subtitle {
   margin-bottom: 0px;
-  font-size: 1.75rem;
+  font-size: 1.05rem;
   font-weight: 500;
   color: white;
 }
@@ -92,9 +93,9 @@
   transition: transform 0.2s;
 }
 
-.stack:hover {
+/* .stack:hover {
   transform: translateY(-5px);
-}
+} */
 
 .stack .header {
   font-size: 18px;
@@ -120,13 +121,23 @@
   text-align: center;
 }
 
+.body ul {
+  color: #606770;
+}
+
 .container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   padding: 2rem;
   font-family: 'Space Grotesk';
-  justify-items: center;
+  justify-content: center;
+}
+
+.stack {
+  flex: 1;
+  min-width: 300px;
+  max-width: none;
 }
 
 @media screen and (max-width: 996px) {
@@ -268,35 +279,42 @@
 }
 
 .description {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.6rem;
   line-height: 1.6;
   color: var(--ifm-color-emphasis-700);
 }
 
 .linkGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 1rem 0;
 }
 
 .externalLink {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  background: var(--ifm-color-primary);
-  color: white !important;
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: #5B5BF6 !important;
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  padding: 0.5rem 0 0.5rem 1rem;
   text-decoration: none;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  border-bottom: 1px solid #e0e0e0;
+  transition: color 0.2s;
 }
 
-.externalLink:hover {
-  background: var(--ifm-color-primary-dark);
-  text-decoration: none;
-  color: white !important;
+.externalLink:last-child {
+  border-bottom: none;
+}
+
+.externalLink:hover, .externalLink:focus {
+  color: #3737d6 !important;
+  text-decoration: underline;
+  outline: none;
 }
 
 .badge {
@@ -389,4 +407,51 @@
 .stackHeaderSub {
   color: #bbb;
   margin-top: 0.5rem;
+}
+
+.ctaButtonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 1rem 0;
+}
+
+.ctaButtonMinimal {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: #5B5BF6 !important;
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  padding: 0.5rem 0 0.5rem 1rem;
+  text-decoration: none;
+  border-bottom: 1px solid #e0e0e0;
+  transition: color 0.2s;
+}
+
+.ctaButtonMinimal:last-child {
+  border-bottom: none;
+}
+
+.ctaButtonMinimal:hover, .ctaButtonMinimal:focus {
+  color: #3737d6 !important;
+  text-decoration: underline;
+  outline: none;
+}
+
+.buildToolsStack {
+  flex: 0 0 33.333%;
+  max-width: 33.333%;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+  .buildToolsStack {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin: 0;
+  }
 }

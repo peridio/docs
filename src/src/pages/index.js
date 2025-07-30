@@ -30,6 +30,7 @@ export default function Home() {
     <Layout>
       <HomepageHeader />
       <main className={clsx('container', styles.container)}>
+        
         {/* Avocado OS */}
         <div className={styles.stack}>
           <div className={styles.stackHeader}>
@@ -40,40 +41,41 @@ export default function Home() {
               A secure, updatable Linux distribution built for embedded devices.
               Get to production faster with pre-configured security, OTA updates, and container support.
             </p>
-            <div className={styles.linkGrid}>
-              <Link
-                to="https://avocadolinux.org" 
-                className={styles.externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                🌐 Website
-              </Link>
-              <Link
-                to="https://docs.avocadolinux.org" 
-                className={styles.externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                📚 Developer Docs
-              </Link>
-              <Link 
-                to="https://github.com/avocado-linux" 
-                className={styles.externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                🛠️ Get Involved
-              </Link>
-              <Link
-                to="https://discord.com/invite/rH77fKpKAj"
-                className={styles.externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                💬 Join Discord
-              </Link>
-            </div>
+            {/* Avocado OS Links Section */}
+              <div className={styles.linkGrid}>
+                <Link
+                  to="https://avocadolinux.org"
+                  className={styles.externalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Website
+                </Link>
+                <Link
+                  to="https://docs.avocadolinux.org"
+                  className={styles.externalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Developer Docs
+                </Link>
+                <Link
+                  to="https://github.com/avocado-linux"
+                  className={styles.externalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Get involved
+                </Link>
+                <Link
+                  to="https://discord.com/invite/rH77fKpKAj"
+                  className={styles.externalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Join Discord
+                </Link>
+              </div>
           </div>
         </div>
 
@@ -88,9 +90,12 @@ export default function Home() {
               <li>Device provisioning & cohorts</li>
               <li>Fleet view & OTA deployments</li>
             </ul>
-            <Link to="/platform/reference/overview" className={styles.ctaButton}>
-              Platform Overview →
-            </Link>
+            {/* Platform Overview Button Group */}
+            <div className={styles.ctaButtonGroup}>
+              <Link to="/platform/reference/overview" className={styles.ctaButtonMinimal}>
+                Platform Overview →
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -105,9 +110,12 @@ export default function Home() {
               <li>Register with Peridio</li>
               <li>Deploy your first OTA update</li>
             </ul>
-            <Link to="/evk" className={styles.ctaButton}>
-              Start Demo →
-            </Link>
+            {/* Start Demo Button Group */}
+            <div className={styles.ctaButtonGroup}>
+              <Link to="/evk" className={styles.ctaButtonMinimal}>
+                Start Demo →
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -117,7 +125,7 @@ export default function Home() {
         </div>
 
         {/* Build Tools */}
-        <div className={styles.stack}>
+        <div className={`${styles.stack} ${styles.buildToolsStack}`}>
           <div className={styles.header}>
             <div className={styles.iconContainer}>
               🔧
@@ -132,9 +140,12 @@ export default function Home() {
               <li>Custom board bring-up</li>
               <li>CI/CD pipeline templates</li>
             </ul>
-            <Link to="/integration/linux/build-tools/yocto" className={styles.ctaButton}>
-              Learn More →
-            </Link>
+            {/* Build Tools Button Group */}
+            <div className={styles.ctaButtonGroup}>
+              <Link to="/integration/linux/build-tools/yocto" className={styles.ctaButtonMinimal}>
+                Learn More →
+              </Link>
+            </div>
           </div>
         </div>
       </main>

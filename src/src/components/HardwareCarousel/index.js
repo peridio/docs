@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
@@ -7,7 +7,7 @@ const slides = [
     {
         vendor: 'NVIDIA',
         target: 'Jetson Xavier / Orin',
-        image: '/img/raspberry-pi.jpg', // TODO: replace with real Jetson image
+        image: '/img/nvidia-jetson-orin.jpg', // TODO: replace with real Jetson image
         link: '/solutions/nvidia/jetson-orin-nano-overview',
     },
     {
@@ -18,18 +18,75 @@ const slides = [
     {
         vendor: 'NXP',
         target: 'i.MX8MP EVK',
-        image: '/img/raspberry-pi.jpg', // TODO: replace with real i.MX8 image
+        image: '/img/nxp-imx8p.jpg', // TODO: replace with real i.MX8 image
         link: '/solutions/nxp/imx8mp-solution-overview',
     },
 ];
 
 export default function HardwareCarousel() {
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+            setProgress(0);
+        }, 7500);
+
+        const progressInterval = setInterval(() => {
+            setProgress((prev) => {
+                if (prev >= 100) {
+                    return 0;
+                }
+                return prev + 1.33; // Increment by 1.33% every 100ms (7.5 seconds total)
+            });
+        }, 100);
+
+        return () => {
+            clearInterval(interval);
+            clearInterval(progressInterval);
+        };
+    }, []);
+
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+        setProgress(0);
+    };
+
     return (
         <section className={styles.carouselSection}>
             <Heading as="h2" className={styles.sectionTitle}>Avocado Linux – Supported Hardware</Heading>
+            
             <div className={styles.carousel}>
+                {/* Navigation Dots - Top Right */}
+                <div className={styles.navigationDots}>
+                    {slides.map((_, idx) => (
+                        <button
+                            key={idx}
+                            className={`${styles.dot} ${idx === currentSlide ? styles.activeDot : ''}`}
+                            onClick={() => goToSlide(idx)}
+                            aria-label={`Go to slide ${idx + 1}`}
+                        >
+                            {idx === currentSlide && (
+                                <div className={styles.progressRing}>
+                                    <svg className={styles.progressSvg} viewBox="0 0 36 36">
+                                        <path
+                                            className={styles.progressPath}
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            strokeDasharray={`${progress}, 100`}
+                                        />
+                                    </svg>
+                                </div>
+                            )}
+                        </button>
+                    ))}
+                </div>
+
                 {slides.map((slide, idx) => (
-                    <div className={styles.slide} key={idx}>
+                    <div 
+                        key={idx} 
+                        className={`${styles.slide} ${idx === currentSlide ? styles.activeSlide : styles.hiddenSlide}`}
+                    >
                         <img src={slide.image} alt={`${slide.vendor} ${slide.target}`} className={styles.slideImg} />
                         <div className={styles.slideContent}>
                             <Heading as="h3" className={styles.vendor}>{slide.vendor}</Heading>
