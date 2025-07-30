@@ -33,12 +33,8 @@ export default function Home() {
       <main className={clsx('container', styles.container)}>
         {/* Avocado OS */}
         <div className={styles.stack}>
-          <div className={styles.header}>
-            <div className={styles.iconContainer}>
-              🥑
-            </div>
-            <Heading as="h2">Avocado OS</Heading>
-            <p className={styles.subtitle}>Production-Ready Embedded Linux</p>
+          <div className={styles.stackHeader}>
+            <img src="/img/avocado-linux-lock-up.png" alt="Avocado Linux" className={styles.lockup} />
           </div>
           <div className={styles.body}>
             <p className={styles.description}>
@@ -84,10 +80,8 @@ export default function Home() {
 
         {/* Peridio Core (Platform) */}
         <div className={styles.stack}>
-          <div className={styles.header}>
-            <div className={styles.iconContainer}>🏗️</div>
-            <Heading as="h2">Peridio Core</Heading>
-            <p className={styles.subtitle}>Artifact & Device Platform</p>
+          <div className={styles.stackHeader}>
+            <img src="/img/peridio-core-lock-up.png" alt="Peridio Core" className={styles.lockup} />
           </div>
           <div className={styles.body}>
             <ul>
@@ -103,12 +97,8 @@ export default function Home() {
 
         {/* EVK Quick Start */}
         <div className={styles.stack}>
-          <div className={styles.header}>
-            <div className={styles.iconContainer}>
-              🚀
-            </div>
-            <Heading as="h2">Get Started</Heading>
-            <p className={styles.subtitle}>EVK Demo in &lt;30 minutes</p>
+          <div className={styles.stackHeader}>
+            <Heading as="h2" style={{ margin: 0 }}>Get Started</Heading>
           </div>
           <div className={styles.body}>
             <ul>

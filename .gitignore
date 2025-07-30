@@ -1,3 +1,6 @@
 .DS_Store
 .tool-versions
 screenshots/
+./spec-sheets
+content-master/
+content-master

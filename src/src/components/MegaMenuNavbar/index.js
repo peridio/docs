@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useThemeConfig } from '@docusaurus/theme-common';
 import MobileMenu from './MobileMenu';
+import Heading from '@theme/Heading';
 import './styles.css';
 
 const MegaMenuNavbar = () => {
@@ -42,6 +43,18 @@ const MegaMenuNavbar = () => {
                     items: [
                         { label: 'EVK Demo', to: '/evk' },
                         { label: 'Platform Getting Started', to: '/platform/getting-started' },
+                    ]
+                }
+            ]
+        },
+        solutions: {
+            label: 'Solutions',
+            sections: [
+                {
+                    title: 'Featured',
+                    items: [
+                        { label: 'i.MX 8M Plus', to: '/solutions/nxp/imx8mp-solution-overview' },
+                        { label: 'NVIDIA Jetson Orin Nano', to: '/solutions/nvidia/jetson-orin-nano-overview' },
                     ]
                 }
             ]
@@ -205,7 +218,7 @@ const MegaMenuNavbar = () => {
                                         <div className="mega-menu-content">
                                             {menu.sections.map((section, sectionIndex) => (
                                                 <div key={sectionIndex} className="mega-menu-section">
-                                                    <h4 className="mega-menu-section-title">{section.title}</h4>
+                                                    <Heading as="h4" className="mega-menu-section-title">{section.title}</Heading>
                                                     <ul className="mega-menu-links">
                                                         {section.items.map((item, itemIndex) => (
                                                             <li key={itemIndex}>

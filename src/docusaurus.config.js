@@ -28,6 +28,17 @@ const config = {
         anonymizeIP: true,
       }),
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'solutions',
+        path: '../solutions',
+        routeBasePath: 'solutions',
+        sidebarPath: require.resolve('./sidebars-solutions.js'),
+        routeBasePath: 'solutions',
+        sidebarPath: require.resolve('./sidebars-solutions.js'),
+      },
+    ],
   ],
   presets: [
     ['classic', {

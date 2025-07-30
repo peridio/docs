@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from '@docusaurus/Link';
+import PropTypes from 'prop-types';
 
 const MobileMenu = ({ isOpen, onClose }) => {
     const [expandedSection, setExpandedSection] = useState(null);
