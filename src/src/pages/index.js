@@ -98,7 +98,7 @@ export default function Home() {
         {/* EVK Quick Start */}
         <div className={styles.stack}>
           <div className={styles.stackHeader}>
-            <Heading as="h2" style={{ margin: 0 }}>Get Started</Heading>
+            <Heading as="h2" style={{ margin: 0, fontSize: '2rem' }}>Get Started</Heading>
           </div>
           <div className={styles.body}>
             <ul>

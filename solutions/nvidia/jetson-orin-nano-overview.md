@@ -2,7 +2,9 @@
 
 **Platform:** NVIDIA Jetson Orin Nano (8 GB LPDDR5 / 4 GB LPDDR5) System-on-Module  
 **Target Buyer:** Industrial camera OEMs, vision-system integrators, robotics & automation vendors
+
 ---
+
 ## Accelerate Industrial AI on NVIDIA Jetson Orin Nano with Peridio & Avocado OS
 
 Jetson Orin Nano delivers up to 67 TOPS of AI performance in a tiny 7–25 W form factor (8 GB model). It enables industrial-grade AI and robotics in devices as small as a camera or autonomous sensor. However, turning a developer kit into a field-ready product still requires months of embedded Linux work, device management infrastructure, and rigorous security. **Peridio + Avocado OS eliminate that friction:**
