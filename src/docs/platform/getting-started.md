@@ -1,14 +1,8 @@
 # Getting started
 
-Hello, and welcome to Peridio.
+This guide provides a technical introduction to the Peridio Core Platform, designed for developers evaluating the system or starting an integration.
 
-If you're reading this, you're either evaluating our platform for use in your project, looking for a reasonable starting point for how to go about integration, or hoping to replicate our functionality and launch a competing product.
-
-Either way, we're glad you're here
-
-Peridio, at its core, is a CI/CD platform for embedded devices. We support multiple device types and integration strategies, and give our customers high-level tools and control to enable safe collaboration for software built for embedded or distributed environments. Additionally, in the case of embedded linux environments, we even provide the ability to remotely connect to and access remote systems via wireguard.
-
-We consider ourselves the #1 solution for generalized software distribution to the edge.
+The Peridio Core Platform is a CI/CD platform for embedded devices. It supports multiple device types and integration strategies, providing high-level tools and control to enable safe collaboration for software built for embedded or distributed environments. Additionally, for embedded Linux environments, the Peridio Core Platform provides the ability to remotely connect to and access remote systems via WireGuard.
 
 ## FAQs
 

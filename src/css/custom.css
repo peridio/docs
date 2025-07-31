@@ -1,0 +1,10 @@
+
+.image-tile-layout {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.markdown .image-tile-layout .image-tile {
+  width: 30%;
+}

@@ -5,6 +5,8 @@
 
 ---
 
+![NVIDIA Jetson Orin Nano](/img/nvidia-jetson-orin.jpg)
+
 ## Accelerate Industrial AI on NVIDIA Jetson Orin Nano with Peridio & Avocado OS
 
 Jetson Orin Nano delivers up to 67 TOPS of AI performance in a tiny 7–25 W form factor (8 GB model). It enables industrial-grade AI and robotics in devices as small as a camera or autonomous sensor. However, turning a developer kit into a field-ready product still requires months of embedded Linux work, device management infrastructure, and rigorous security. **Peridio + Avocado OS eliminate that friction:**
@@ -45,6 +47,12 @@ Together, Jetson Orin Nano’s compute power and Peridio/Avocado’s software st
 * **Industrial smart cameras —** Use multi-camera CSI input for AI tasks like object detection or quality inspection. OTA supports model updates.
 * **Autonomous mobile robots —** Real-time processing of sensor fusion and navigation. Avocado OS supports ROS2 and containers; Peridio Fleet enables scalable rollouts.
 * **Edge AI gateways —** Run generative AI or LLMs locally with NVMe and optional 10-GbE. Managed Linux keeps them secure in harsh environments.
+
+<div className="image-tile-layout">
+    <img src="/img/pedestrian-monitoring.png" alt="Pedestrian Monitoring" className="image-tile" />
+    <img src="/img/traffic-flow-optimization.png" alt="Traffic Flow Optimization" className="image-tile" />
+    <img src="/img/workplace-safety.png" alt="Workplace Safety" className="image-tile" />
+</div>
 
 ## Next steps
 Peridio and Avocado OS transform Jetson Orin Nano from a developer kit into a secure, deployable industrial AI platform.
