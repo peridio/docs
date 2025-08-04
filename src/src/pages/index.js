@@ -6,6 +6,7 @@ import Heading from '@theme/Heading'
 import Link from '@docusaurus/Link'
 import SearchBar from '@theme/SearchBar'
 import HardwareCarousel from '../components/HardwareCarousel'
+import IndustriesBar from '../components/IndustriesBar'
 
 function HomepageHeader() {
   return (
@@ -182,6 +183,60 @@ export default function Home() {
             </Link>
             </div>
           </div>
+        </div>
+
+        {/* Security */}
+        <div className={`${styles.stack} ${styles.buildToolsStack}`}>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              🔒
+            </div>
+            <Heading as="h2">Security</Heading>
+            <p className={styles.subtitle}>End-to-End Device Security</p>
+          </div>
+          <div className={styles.body}>
+            <ul>
+              <li>Secure boot & verified signatures</li>
+              <li>Device identity & authentication</li>
+              <li>Encrypted OTA updates</li>
+              <li>Hardware security modules</li>
+            </ul>
+            {/* Security Button Group */}
+            <div className={styles.ctaButtonGroup}>
+              <Link to="/platform/reference/overview" className={styles.ctaButtonMinimal}>
+                Learn More →
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Integrations */}
+        <div className={`${styles.stack} ${styles.buildToolsStack}`}>
+          <div className={styles.header}>
+            <div className={styles.iconContainer}>
+              🔗
+            </div>
+            <Heading as="h2">Integrations</Heading>
+            <p className={styles.subtitle}>Connect Your Ecosystem</p>
+          </div>
+          <div className={styles.body}>
+            <ul>
+              <li>REST API & GraphQL</li>
+              <li>Webhook notifications</li>
+              <li>Third-party cloud services</li>
+              <li>Custom application integrations</li>
+            </ul>
+            {/* Integrations Button Group */}
+            <div className={styles.ctaButtonGroup}>
+              <Link to="/admin-api" className={styles.ctaButtonMinimal}>
+                Learn More →
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.fullWidth}>
+          <IndustriesBar />
         </div>
       </main>
     </Layout>

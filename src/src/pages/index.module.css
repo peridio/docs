@@ -358,6 +358,8 @@
   width: 100%;
 }
 
+
+
 .carousel {
   display: flex;
   overflow-x: auto;
@@ -452,6 +454,7 @@
   flex: 0 0 33.333%;
   max-width: 33.333%;
   margin: 0 auto;
+  margin-bottom: 2rem;
 }
 
 @media screen and (max-width: 768px) {

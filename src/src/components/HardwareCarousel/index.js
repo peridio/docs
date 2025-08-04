@@ -8,7 +8,7 @@ const slides = [
         vendor: 'NVIDIA',
         target: 'Jetson Xavier / Orin',
         image: '/img/nvidia-jetson-orin.jpg', // TODO: replace with real Jetson image
-        link: '/solutions/nvidia/jetson-orin-nano-overview',
+        link: '/solutions/nvidia/jetson-orin-nano',
     },
     {
         vendor: 'Raspberry Pi',
@@ -19,7 +19,7 @@ const slides = [
         vendor: 'NXP',
         target: 'i.MX8MP EVK',
         image: '/img/nxp-imx8p.jpg', // TODO: replace with real i.MX8 image
-        link: '/solutions/nxp/imx8mp-solution-overview',
+        link: '/solutions/nxp/imx8mp',
     },
 ];
 
