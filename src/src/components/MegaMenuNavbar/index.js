@@ -253,7 +253,21 @@ const MegaMenuNavbar = () => {
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         aria-label="Toggle navigation"
                     >
-                        <span className="navbar__toggle-icon"></span>
+                        <svg 
+                            width="24" 
+                            height="24" 
+                            viewBox="0 0 24 24" 
+                            className="navbar__toggle-icon"
+                            aria-hidden="true"
+                        >
+                            <path 
+                                d="M3 6h18M3 12h18M3 18h18" 
+                                stroke="currentColor" 
+                                strokeWidth="2" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                            />
+                        </svg>
                     </button>
                 </div>
             </div>

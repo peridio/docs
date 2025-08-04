@@ -8,7 +8,7 @@
   padding-left: 2.5rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), url("/img/hero.png") lightgray -13px -1669.396px / 101.458% 1124.387% no-repeat;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), url("/img/hero.png") lightgray center / cover no-repeat;
   text-align: left;
   color: white;
 }
@@ -138,6 +138,12 @@
   flex: 1;
   min-width: 300px;
   max-width: none;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  width: 100%;
+  background-color: var(--ifm-card-background-color);
+  box-shadow: none;
+  transition: transform 0.2s;
 }
 
 @media screen and (max-width: 996px) {
@@ -275,7 +281,6 @@
 
 .iconContainer {
   font-size: 2.5rem;
-  margin-bottom: 0.5rem;
 }
 
 .description {
@@ -289,6 +294,7 @@
   flex-direction: column;
   gap: 0;
   margin: 1rem 0;
+  margin-bottom: 0;
 }
 
 .externalLink {
@@ -301,7 +307,7 @@
   border-radius: 0;
   font-size: 0.9rem;
   font-weight: 400;
-  padding: 0.5rem 0 0.5rem 1rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
   text-decoration: none;
   border-bottom: 1px solid #e0e0e0;
   transition: color 0.2s;
@@ -382,8 +388,7 @@
 }
 
 .lockup {
-  width: 200px;
-  margin-bottom: 1rem;
+  width: 160px;
 }
 
 .stack.black .body {
@@ -391,11 +396,12 @@
 }
 
 .stackHeader {
-  background: #000;
-  color: white;
+  background: #F8F9FA;
+  color: var(--ifm-color-emphasis-800);
   padding: 1.5rem;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
   text-align: center;
   min-height: 120px;
   display: flex;

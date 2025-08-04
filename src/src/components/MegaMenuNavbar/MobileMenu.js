@@ -75,9 +75,15 @@ const MobileMenu = ({ isOpen, onClose }) => {
                                 onClick={() => toggleSection(index)}
                             >
                                 {section.title}
-                                <span className={`mobile-menu-arrow ${expandedSection === index ? 'expanded' : ''}`}>
-                                    ▼
-                                </span>
+                                <svg 
+                                    width="12" 
+                                    height="8" 
+                                    viewBox="0 0 12 8" 
+                                    className={`mobile-menu-arrow ${expandedSection === index ? 'expanded' : ''}`}
+                                    aria-hidden="true"
+                                >
+                                    <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                                </svg>
                             </button>
                             {expandedSection === index && (
                                 <div className="mobile-menu-items">
@@ -98,12 +104,12 @@ const MobileMenu = ({ isOpen, onClose }) => {
                     <div className="mobile-menu-section">
                         <Link
                             to="https://console.peridio.com"
-                            className="mobile-menu-link mobile-menu-external"
+                            className="mobile-menu-section-title"
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={onClose}
                         >
-                            Web Console
+                            Log in to Web Console
                         </Link>
                     </div>
                 </div>
