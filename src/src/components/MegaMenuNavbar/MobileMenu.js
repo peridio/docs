@@ -118,4 +118,9 @@ const MobileMenu = ({ isOpen, onClose }) => {
     );
 };
 
+MobileMenu.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+};
+
 export default MobileMenu; 
