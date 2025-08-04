@@ -28,17 +28,9 @@ const config = {
         anonymizeIP: true,
       }),
     ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'solutions',
-        path: '../solutions',
-        routeBasePath: 'solutions',
-        sidebarPath: require.resolve('./sidebars-solutions.js'),
-        routeBasePath: 'solutions',
-        sidebarPath: require.resolve('./sidebars-solutions.js'),
-      },
-    ],
+  ],
+  clientModules: [
+    require.resolve('./src/clientModules/gtagInit.js'),
   ],
   presets: [
     ['classic', {
@@ -135,6 +127,13 @@ const config = {
       attributes: {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
       },
     },
   ],

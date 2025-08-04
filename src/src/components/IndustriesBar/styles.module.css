@@ -1,0 +1,31 @@
+.industries-bar {
+  background-color: #000;
+  color: #fff;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.industries-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.industries-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.industry-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.industry-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}

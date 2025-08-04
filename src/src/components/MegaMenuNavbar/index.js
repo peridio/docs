@@ -48,13 +48,15 @@ const MegaMenuNavbar = () => {
             ]
         },
         solutions: {
-            label: 'Solutions',
+            label: 'Featured Hardware',
             sections: [
                 {
-                    title: 'Featured',
+                    title: 'Production-Ready Platforms',
                     items: [
-                        { label: 'i.MX 8M Plus', to: '/solutions/nxp/imx8mp-solution-overview' },
-                        { label: 'NVIDIA Jetson Orin Nano', to: '/solutions/nvidia/jetson-orin-nano-overview' },
+                        { label: 'NXP i.MX 8M Plus', to: '/solutions/nxp/imx8mp' },
+                        { label: 'NVIDIA Jetson Orin Nano', to: '/solutions/nvidia/jetson-orin-nano' },
+                        { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
+                        { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
                     ]
                 }
             ]

@@ -1,0 +1,581 @@
+/* IQ-9 Landing Page - Peridio Brand Styles */
+
+/* Hero Section - Matching Peridio Design */
+.hero {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), url("/img/hero.png") lightgray -13px -1669.396px / 101.458% 1124.387% no-repeat;
+  color: white;
+  padding: 6rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+
+.heroContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.heroContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.heroTitle {
+  font-size: 2.1rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 0.125rem;
+  font-family: 'Avenir', sans-serif;
+  color: white;
+}
+
+.highlight {
+  color: var(--ifm-color-primary);
+}
+
+.heroSubtitle {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.heroStats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  justify-content: flex-start;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--ifm-color-primary);
+  line-height: 1;
+  font-family: 'Avenir', sans-serif;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #bbb;
+  margin-top: 4px;
+}
+
+.heroCta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  font-family: 'Avenir', sans-serif;
+}
+
+.ctaPrimary:hover {
+  background: var(--ifm-color-primary-dark);
+  color: white;
+  text-decoration: none;
+}
+
+.ctaSecondary {
+  background: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: 1px solid #525860;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-family: 'Avenir', sans-serif;
+}
+
+.ctaSecondary:hover {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.heroImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.productImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Problem/Solution Section */
+.problemSolution {
+  padding: 2rem;
+  background: var(--ifm-card-background-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.problemSolution .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.problem,
+.solution {
+  flex: 1;
+  min-width: 300px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: var(--ifm-card-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.problem h2,
+.solution h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+}
+
+.problem h2 {
+  color: #dc2626;
+}
+
+.solution h2 {
+  color: #16a34a;
+}
+
+.problemList,
+.solutionList {
+  list-style: none;
+  padding: 0;
+  color: #606770;
+}
+
+.problemList li,
+.solutionList li {
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  font-size: 14px;
+}
+
+.problemList li:last-child,
+.solutionList li:last-child {
+  border-bottom: none;
+}
+
+.problemList li::before {
+  content: '❌';
+  position: absolute;
+  left: 0;
+}
+
+.solutionList li::before {
+  content: '✅';
+  position: absolute;
+  left: 0;
+}
+
+/* Features Section */
+.features {
+  padding: 2rem;
+  background: var(--ifm-card-background-color);
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+  color: var(--ifm-font-color-base);
+}
+
+.featureGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.feature {
+  flex: 1;
+  min-width: 300px;
+  max-width: 350px;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-card-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.feature:hover {
+  transform: translateY(-2px);
+}
+
+.featureIcon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-font-color-base);
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+}
+
+.feature p {
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* Hardware Specs */
+.specs {
+  padding: 2rem;
+  background: #000;
+  color: white;
+}
+
+.specs .sectionTitle {
+  color: white;
+}
+
+.specsTable {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.specsRow {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #222;
+  align-items: center;
+}
+
+.specLabel {
+  font-weight: bold;
+  color: var(--ifm-color-primary);
+  font-family: 'Avenir', sans-serif;
+}
+
+.specValue {
+  font-weight: bold;
+  font-family: 'Avenir', sans-serif;
+}
+
+.specNote {
+  color: #bbb;
+  font-size: 0.875rem;
+  font-family: 'Avenir', sans-serif;
+}
+
+/* Performance Benchmarks */
+.benchmarks {
+  padding: 2rem;
+  background: var(--ifm-card-background-color);
+}
+
+.benchmarkGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.benchmark {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-card-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.benchmark h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-color-primary);
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+}
+
+.benchmark p {
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* Use Cases */
+.useCases {
+  padding: 2rem;
+  background: var(--ifm-card-background-color);
+}
+
+.useCaseGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.useCase {
+  flex: 1;
+  min-width: 300px;
+  max-width: 350px;
+  background: var(--ifm-card-background-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.useCase:hover {
+  transform: translateY(-2px);
+}
+
+.useCaseImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.useCase h3 {
+  font-size: 1.25rem;
+  margin: 1rem 1rem 0.5rem;
+  color: var(--ifm-font-color-base);
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+}
+
+.useCase p {
+  margin: 0 1rem 1rem;
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* CTA Section */
+.cta {
+  padding: 2rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  text-align: center;
+}
+
+.ctaContent h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+}
+
+.ctaContent p {
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  font-family: 'Avenir', sans-serif;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta .ctaPrimary {
+  background: white;
+  color: var(--ifm-color-primary);
+}
+
+.cta .ctaPrimary:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
+.cta .ctaSecondary {
+  background: transparent;
+  border-color: white;
+}
+
+/* Resources Section */
+.resources {
+  padding: 2rem;
+  background: var(--ifm-card-background-color);
+}
+
+.resourceGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.resourceCard {
+  flex: 1;
+  min-width: 280px;
+  max-width: 300px;
+  display: block;
+  padding: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  position: relative;
+  background: var(--ifm-card-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.resourceCard:hover {
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: inherit;
+}
+
+.resourceCard h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-font-color-base);
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+}
+
+.resourceCard p {
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.resourceArrow {
+  color: var(--ifm-color-primary);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 1rem;
+  }
+  
+  .heroContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+  
+  .heroStats {
+    justify-content: center;
+  }
+  
+  .problemSolution .container {
+    flex-direction: column;
+  }
+  
+  .problem,
+  .solution {
+    min-width: 100%;
+  }
+  
+  .featureGrid {
+    flex-direction: column;
+  }
+  
+  .feature {
+    min-width: 100%;
+    max-width: none;
+  }
+  
+  .specsRow {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .benchmarkGrid {
+    flex-direction: column;
+  }
+  
+  .benchmark {
+    min-width: 100%;
+    max-width: none;
+  }
+  
+  .useCaseGrid {
+    flex-direction: column;
+  }
+  
+  .useCase {
+    min-width: 100%;
+    max-width: none;
+  }
+  
+  .resourceGrid {
+    flex-direction: column;
+  }
+  
+  .resourceCard {
+    min-width: 100%;
+    max-width: none;
+  }
+  
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+}
