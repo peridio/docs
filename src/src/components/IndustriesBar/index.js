@@ -1,4 +1,5 @@
 import React from 'react';
+import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
 const industries = [
@@ -13,7 +14,7 @@ const industries = [
 function IndustriesBar() {
   return (
     <div className={styles['industries-bar']}>
-      <h2 className={styles['industries-main-title']}>Built for your industry</h2>
+      <Heading as="h2" className={styles['industries-main-title']}>Built for your industry</Heading>
       <div className={styles['industries-title']}>Solutions for every sector</div>
       <div className={styles['industries-container']}>
         {industries.map((industry) => (
