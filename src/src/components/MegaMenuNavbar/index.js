@@ -58,7 +58,7 @@ const MegaMenuNavbar = () => {
                         // { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
                         // { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
                         // { label: 'Raspberry Pi 4', to: '/solutions/raspberry-pi/raspberry-pi-4' },
-                        // { label: 'ST Micro STM32MP157D-DK1', to: '/solutions/stmicro/stm32mp157d-dk1' },
+                        { label: 'ST Micro STM32MP257F-DK', to: '/solutions/stmicro/stm32mp157d-dk' },
                     ]
                 }
             ]
