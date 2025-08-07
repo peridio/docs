@@ -1,31 +1,84 @@
 .industries-bar {
-  background-color: #000;
-  color: #fff;
-  padding: 2rem 0;
+  padding: 4rem 1rem;
   text-align: center;
+  font-family: "Avenir", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #F5F5F7;
+  border-radius: 12px;
 }
 
 .industries-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 2.5rem;
+  color: #202124;
+  letter-spacing: -0.01em;
+}
+
+.industries-main-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #202124;
 }
 
 .industries-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1rem;
+  overflow-x: auto;
 }
 
 .industry-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  width: 120px;
+  height: 100px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .industry-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #5f6368;
+}
+
+.industry-item span:last-child {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #3c4043;
+  line-height: 1.4;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .industries-container {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .industry-item {
+    width: 100px;
+    height: 80px;
+    padding: 0.75rem;
+  }
+  
+  .industry-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .industry-item span:last-child {
+    font-size: 0.75rem;
+  }
 }

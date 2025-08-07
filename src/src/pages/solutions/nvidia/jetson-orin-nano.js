@@ -3,6 +3,16 @@ import Layout from '@theme/Layout'
 import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import styles from './jetson-orin-nano.module.css'
+import { 
+  RocketLaunchIcon, 
+  LockClosedIcon, 
+  WifiIcon, 
+  WrenchScrewdriverIcon, 
+  GlobeAltIcon, 
+  ShieldCheckIcon,
+  XMarkIcon,
+  CheckIcon
+} from '@heroicons/react/24/outline'
 
 export default function JetsonOrinNanoSolution() {
   return (
@@ -68,17 +78,17 @@ export default function JetsonOrinNanoSolution() {
                 </div>
               </div>
               <div className={styles.heroCta}>
-                <Link to="/evk" className={styles.ctaPrimary}>
-                  Start Free Demo →
+                <Link to="https://docs.avocadolinux.org/supported-hardware/jetson-orin-nano" className={styles.ctaPrimary} target="_blank">
+                  Get Started
                 </Link>
                 <Link to="/platform/reference/overview" className={styles.ctaSecondary}>
-                  View Documentation
+                  Datasheet
                 </Link>
               </div>
             </div>
             <div className={styles.heroImage}>
               <img 
-                src="/img/nvidia-jetson-orin.jpg" 
+                src="/img/jetson-nano.png" 
                 alt="NVIDIA Jetson Orin Nano development kit" 
                 className={styles.productImage}
               />
@@ -87,75 +97,10 @@ export default function JetsonOrinNanoSolution() {
         </div>
       </section>
 
-      {/* Problem/Solution Section */}
-      <section className={styles.problemSolution}>
-        <div className={styles.container}>
-          <div className={styles.problem}>
-            <h2>The Jetson Production Challenge</h2>
-            <ul className={styles.problemList}>
-              <li>Developer kits aren't production-ready</li>
-              <li>Custom Yocto builds take 6-18 months</li>
-              <li>OTA infrastructure requires dedicated teams</li>
-              <li>Security compliance adds complexity</li>
-              <li>Fleet management built from scratch</li>
-            </ul>
-          </div>
-          <div className={styles.solution}>
-            <h2>Peridio + Avocado OS Solution</h2>
-            <ul className={styles.solutionList}>
-              <li>Production-ready OS in minutes</li>
-              <li>Pre-integrated Jetson BSPs</li>
-              <li>Enterprise OTA orchestration</li>
-              <li>Built-in security compliance</li>
-              <li>Managed fleet operations</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Key Features */}
-      <section className={styles.features}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Why Choose Peridio for Jetson Development</h2>
-          <div className={styles.featureGrid}>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🚀</div>
-              <h3>Rapid Deployment</h3>
-              <p>Boot deterministic Linux on Jetson in minutes. Hardware-in-the-loop tools reduce iteration from weeks to hours.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🔒</div>
-              <h3>Production Security</h3>
-              <p>Secure boot, dm-verity, and LUKS encryption across all architectures. Reproducible images simplify certification.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>📡</div>
-              <h3>Fleet Management</h3>
-              <p>Register and manage devices in Peridio Fleet. Phased releases, cohort targeting, SBOM, and CVE patching.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🔧</div>
-              <h3>Composable Architecture</h3>
-              <p>Build systems using modular layers and standard secure components. Avoid the fragility of DIY Yocto.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🌐</div>
-              <h3>Cross-Platform</h3>
-              <p>Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio, NXP i.MX8MP).</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🛡️</div>
-              <h3>Long-term Support</h3>
-              <p>10+ years of kernel/security maintenance. Combined with Jetson's industrial lifecycle ensures device longevity.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Hardware Specs */}
       <section className={styles.specs}>
         <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Jetson Orin Nano Hardware Highlights</h2>
+          <h2 className={styles.sectionTitle}>Hardware Specifications</h2>
           <div className={styles.specsTable}>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>AI Performance</div>
@@ -183,7 +128,7 @@ export default function JetsonOrinNanoSolution() {
               <div className={styles.specNote}>Scalable to battery-powered devices</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Operating Temp</div>
+              <div className={styles.specLabel}>Operating Temperature</div>
               <div className={styles.specValue}>-40°C to +70°C</div>
               <div className={styles.specNote}>Rugged industrial environments</div>
             </div>
@@ -215,6 +160,109 @@ export default function JetsonOrinNanoSolution() {
         </div>
       </section>
 
+      {/* Problem/Solution Section */}
+      <section className={styles.problemSolution}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <h2>From Challenge to Solution</h2>
+            <p>Transform your Jetson development workflow with enterprise-grade infrastructure</p>
+          </div>
+          
+          <div className={styles.comparisonContainer}>
+            <div className={styles.challengeCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.challengeIcon}>
+                  <XMarkIcon />
+                </div>
+                <h3>The Challenge</h3>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Developer kits aren't production-ready</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Custom Yocto builds take 6-18 months</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>OTA infrastructure requires dedicated teams</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Security compliance adds complexity</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Fleet management built from scratch</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.solutionCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.solutionIcon}>
+                  <CheckIcon />
+                </div>
+                <h3>The Solution</h3>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Production-ready OS in minutes</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Pre-integrated Jetson BSPs</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Enterprise OTA orchestration</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Built-in security compliance</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Managed fleet operations</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features */}
+      <section className={styles.features}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Why Choose Peridio for Jetson Development</h2>
+          <div className={styles.featureGrid}>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><RocketLaunchIcon /></div>
+              <h3>Rapid Deployment</h3>
+              <p>Boot deterministic Linux on Jetson in minutes. Hardware-in-the-loop tools reduce iteration from weeks to hours.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><LockClosedIcon /></div>
+              <h3>Production Security</h3>
+              <p>Secure boot, dm-verity, and LUKS encryption across all architectures. Reproducible images simplify certification.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><WifiIcon /></div>
+              <h3>Fleet Management</h3>
+              <p>Register and manage devices in Peridio Fleet. Phased releases, cohort targeting, SBOM, and CVE patching.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><WrenchScrewdriverIcon /></div>
+              <h3>Composable Architecture</h3>
+              <p>Build systems using modular layers and standard secure components. Avoid the fragility of DIY Yocto.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><GlobeAltIcon /></div>
+              <h3>Cross-Platform</h3>
+              <p>Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio, NXP i.MX8MP).</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><ShieldCheckIcon /></div>
+              <h3>Long-term Support</h3>
+              <p>10+ years of kernel/security maintenance. Combined with Jetson's industrial lifecycle ensures device longevity.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className={styles.cta}>
         <div className={styles.container}>
@@ -222,8 +270,8 @@ export default function JetsonOrinNanoSolution() {
             <h2>Ready to Accelerate Your Jetson Development?</h2>
             <p>Transform your NVIDIA Jetson Orin Nano from developer kit to secure, deployable industrial AI platform.</p>
             <div className={styles.ctaButtons}>
-              <Link to="/evk" className={styles.ctaPrimary}>
-                Start Free Demo
+              <Link to="https://docs.avocadolinux.org/supported-hardware/jetson-orin-nano" className={styles.ctaPrimary} target="_blank">
+                Get Started
               </Link>
               <Link to="https://avocadolinux.org" className={styles.ctaSecondary} target="_blank">
                 Visit Avocado Linux
@@ -241,22 +289,18 @@ export default function JetsonOrinNanoSolution() {
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
               <h3>Yocto Integration Guide</h3>
               <p>Step-by-step Yocto build configuration for Jetson Orin Nano</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
               <h3>Device Security</h3>
               <p>Device certificates, secure boot, and fleet security management</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
               <h3>Platform Overview</h3>
               <p>Complete Peridio platform architecture and capabilities</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/admin-api" className={styles.resourceCard}>
               <h3>API Documentation</h3>
               <p>REST API and GraphQL integration for fleet management</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
           </div>
         </div>

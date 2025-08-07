@@ -13,7 +13,8 @@ const industries = [
 function IndustriesBar() {
   return (
     <div className={styles['industries-bar']}>
-      <div className={styles['industries-title']}>Industries We Serve</div>
+      <h2 className={styles['industries-main-title']}>Built for your industry</h2>
+      <div className={styles['industries-title']}>Solutions for every sector</div>
       <div className={styles['industries-container']}>
         {industries.map((industry) => (
           <div key={industry.name} className={styles['industry-item']}>

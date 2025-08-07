@@ -55,8 +55,10 @@ const MegaMenuNavbar = () => {
                     items: [
                         { label: 'NXP i.MX 8M Plus', to: '/solutions/nxp/imx8mp' },
                         { label: 'NVIDIA Jetson Orin Nano', to: '/solutions/nvidia/jetson-orin-nano' },
-                        { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
-                        { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
+                        // { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
+                        // { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
+                        // { label: 'Raspberry Pi 4', to: '/solutions/raspberry-pi/raspberry-pi-4' },
+                        // { label: 'ST Micro STM32MP157D-DK1', to: '/solutions/stmicro/stm32mp157d-dk1' },
                     ]
                 }
             ]
@@ -224,9 +226,21 @@ const MegaMenuNavbar = () => {
                                                     <ul className="mega-menu-links">
                                                         {section.items.map((item, itemIndex) => (
                                                             <li key={itemIndex}>
-                                                                <Link to={item.to} className="mega-menu-link">
-                                                                    {item.label}
-                                                                </Link>
+                                                                {item.disabled ? (
+                                                                    <span
+                                                                        className="mega-menu-link disabled"
+                                                                        style={{ cursor: 'not-allowed', opacity: 0.6 }}
+                                                                    >
+                                                                        {item.label}
+                                                                    </span>
+                                                                ) : (
+                                                                    <Link
+                                                                        to={item.to}
+                                                                        className="mega-menu-link"
+                                                                    >
+                                                                        {item.label}
+                                                                    </Link>
+                                                                )}
                                                             </li>
                                                         ))}
                                                     </ul>

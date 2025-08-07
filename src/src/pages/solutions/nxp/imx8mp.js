@@ -3,6 +3,16 @@ import Layout from '@theme/Layout'
 import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import styles from './imx8mp.module.css'
+import { 
+  BuildingOfficeIcon, 
+  CameraIcon, 
+  CpuChipIcon, 
+  BoltIcon, 
+  GlobeAltIcon, 
+  WrenchScrewdriverIcon,
+  XMarkIcon,
+  CheckIcon
+} from '@heroicons/react/24/outline'
 
 export default function IMX8MPSolution() {
   return (
@@ -68,85 +78,20 @@ export default function IMX8MPSolution() {
                 </div>
               </div>
               <div className={styles.heroCta}>
-                <Link to="/evk" className={styles.ctaPrimary}>
-                  Start Free Demo →
+                <Link to="https://docs.avocadolinux.org/supported-hardware/imx-8m-plus" className={styles.ctaPrimary} target="_blank">
+                  Get Started
                 </Link>
                 <Link to="/platform/reference/overview" className={styles.ctaSecondary}>
-                  View Documentation
+                  Datasheet
                 </Link>
               </div>
             </div>
             <div className={styles.heroImage}>
               <img 
-                src="/img/nxp-imx8mp.jpg" 
+                src="/img/nxp_iMX8M_Plus.png" 
                 alt="NXP i.MX 8M Plus development board" 
                 className={styles.productImage}
               />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Problem/Solution Section */}
-      <section className={styles.problemSolution}>
-        <div className={styles.container}>
-          <div className={styles.problem}>
-            <h2>The Industrial Vision Challenge</h2>
-            <ul className={styles.problemList}>
-              <li>Complex multi-core integration (A53 + M7)</li>
-              <li>NPU optimization for vision workloads</li>
-              <li>Dual camera synchronization</li>
-              <li>Real-time processing requirements</li>
-              <li>Industrial-grade reliability needs</li>
-            </ul>
-          </div>
-          <div className={styles.solution}>
-            <h2>Peridio + Avocado OS Solution</h2>
-            <ul className={styles.solutionList}>
-              <li>Pre-integrated multi-core support</li>
-              <li>Optimized NPU drivers and ML runtime</li>
-              <li>Synchronized camera pipeline</li>
-              <li>Deterministic real-time performance</li>
-              <li>Industrial-grade OS and fleet management</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Key Features */}
-      <section className={styles.features}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Why Choose Peridio for i.MX 8M Plus Development</h2>
-          <div className={styles.featureGrid}>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🏭</div>
-              <h3>Industrial-Grade OS</h3>
-              <p>Avocado OS provides deterministic builds optimized for industrial applications with secure boot and verified boot capabilities.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>📷</div>
-              <h3>Dual Camera Vision</h3>
-              <p>Supports dual MIPI CSI cameras at up to 12MP/375MP/s for stereo vision, multi-angle capture, or simultaneous RGB+IR processing.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🧠</div>
-              <h3>NPU AI Acceleration</h3>
-              <p>2.3 TOPS of on-device AI acceleration enables real-time vision and ML workloads without relying on cloud compute.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>⚡</div>
-              <h3>Real-Time Processing</h3>
-              <p>Cortex-M7 real-time core at 800 MHz handles latency-sensitive tasks like motor control and sensor polling.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🌐</div>
-              <h3>TSN Networking</h3>
-              <p>Time-sensitive networking with dual Gigabit Ethernet supports deterministic control and multi-device synchronization.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🔧</div>
-              <h3>Long-Term Support</h3>
-              <p>10-15 year availability with enterprise maintenance ensures supply stability for long-lived industrial products.</p>
             </div>
           </div>
         </div>
@@ -191,6 +136,133 @@ export default function IMX8MPSolution() {
         </div>
       </section>
 
+      {/* Use Cases */}
+      <section className={styles.useCases}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Industrial Use Cases</h2>
+          <div className={styles.useCaseGrid}>
+            <div className={styles.useCase}>
+              <img src="/img/factory-quality-inspection.png" alt="Smart Industrial Camera" className={styles.useCaseImage} />
+              <h3>Smart Industrial Camera</h3>
+              <p>Dual-camera stereo vision with real-time inference for defect detection and classification. NPU accelerates ResNet/YOLO models at the edge.</p>
+            </div>
+            <div className={styles.useCase}>
+              <img src="/img/environmental-inspection.png" alt="Autonomous Inspection System" className={styles.useCaseImage} />
+              <h3>Autonomous Inspection System</h3>
+              <p>Low-latency TSN-based Gigabit connection enables synchronized multi-sensor deployments with persistent vision monitoring.</p>
+            </div>
+            <div className={styles.useCase}>
+              <img src="/img/workplace-safety.png" alt="Voice-Controlled Gateway" className={styles.useCaseImage} />
+              <h3>Voice-Controlled Industrial Gateway</h3>
+              <p>Audio streaming and voice recognition via HiFi 4 DSP with wake-word detection handled on-chip for operator assistance.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Problem/Solution Section */}
+      <section className={styles.problemSolution}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <h2>From Challenge to Solution</h2>
+            <p>Transform your i.MX 8M Plus development workflow with enterprise-grade infrastructure</p>
+          </div>
+          
+          <div className={styles.comparisonContainer}>
+            <div className={styles.challengeCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.challengeIcon}>
+                  <XMarkIcon />
+                </div>
+                <h3>The Challenge</h3>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Complex multi-core integration (A53 + M7)</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>NPU optimization for vision workloads</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Dual camera synchronization</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Real-time processing requirements</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Industrial-grade reliability needs</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.solutionCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.solutionIcon}>
+                  <CheckIcon />
+                </div>
+                <h3>The Solution</h3>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Pre-integrated multi-core support</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Optimized NPU drivers and ML runtime</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Synchronized camera pipeline</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Deterministic real-time performance</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Industrial-grade OS and fleet management</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features */}
+      <section className={styles.features}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Why Choose Peridio for i.MX 8M Plus Development</h2>
+          <div className={styles.featureGrid}>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><BuildingOfficeIcon /></div>
+              <h3>Industrial-Grade OS</h3>
+              <p>Avocado OS provides deterministic builds optimized for industrial applications with secure boot and verified boot capabilities.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><CameraIcon /></div>
+              <h3>Dual Camera Vision</h3>
+              <p>Supports dual MIPI CSI cameras at up to 12MP/375MP/s for stereo vision, multi-angle capture, or simultaneous RGB+IR processing.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><CpuChipIcon /></div>
+              <h3>NPU AI Acceleration</h3>
+              <p>2.3 TOPS of on-device AI acceleration enables real-time vision and ML workloads without relying on cloud compute.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><BoltIcon /></div>
+              <h3>Real-Time Processing</h3>
+              <p>Cortex-M7 real-time core at 800 MHz handles latency-sensitive tasks like motor control and sensor polling.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><GlobeAltIcon /></div>
+              <h3>TSN Networking</h3>
+              <p>Time-sensitive networking with dual Gigabit Ethernet supports deterministic control and multi-device synchronization.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><WrenchScrewdriverIcon /></div>
+              <h3>Long-Term Support</h3>
+              <p>10-15 year availability with enterprise maintenance ensures supply stability for long-lived industrial products.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Productization Benefits */}
       <section className={styles.benefits}>
         <div className={styles.container}>
@@ -216,30 +288,6 @@ export default function IMX8MPSolution() {
         </div>
       </section>
 
-      {/* Use Cases */}
-      <section className={styles.useCases}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Industrial Use Cases</h2>
-          <div className={styles.useCaseGrid}>
-            <div className={styles.useCase}>
-              <img src="/img/factory-quality-inspection.png" alt="Smart Industrial Camera" className={styles.useCaseImage} />
-              <h3>Smart Industrial Camera</h3>
-              <p>Dual-camera stereo vision with real-time inference for defect detection and classification. NPU accelerates ResNet/YOLO models at the edge.</p>
-            </div>
-            <div className={styles.useCase}>
-              <img src="/img/environmental-inspection.png" alt="Autonomous Inspection System" className={styles.useCaseImage} />
-              <h3>Autonomous Inspection System</h3>
-              <p>Low-latency TSN-based Gigabit connection enables synchronized multi-sensor deployments with persistent vision monitoring.</p>
-            </div>
-            <div className={styles.useCase}>
-              <img src="/img/workplace-safety.png" alt="Voice-Controlled Gateway" className={styles.useCaseImage} />
-              <h3>Voice-Controlled Industrial Gateway</h3>
-              <p>Audio streaming and voice recognition via HiFi 4 DSP with wake-word detection handled on-chip for operator assistance.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className={styles.cta}>
         <div className={styles.container}>
@@ -250,7 +298,7 @@ export default function IMX8MPSolution() {
               <Link to="/evk" className={styles.ctaPrimary}>
                 Request Evaluation
               </Link>
-              <Link to="https://avocadolinux.org" className={styles.ctaSecondary} target="_blank">
+              <Link to="https://docs.avocadolinux.org/supported-hardware/imx-8m-plus" className={styles.ctaSecondary} target="_blank">
                 Visit Avocado Linux
               </Link>
             </div>
@@ -266,22 +314,18 @@ export default function IMX8MPSolution() {
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
               <h3>Industrial Yocto Configuration</h3>
               <p>Multi-core optimization and NPU integration for i.MX 8M Plus industrial applications</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
               <h3>Device Security</h3>
               <p>Industrial security with device certificates and fleet management</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
               <h3>Fleet Management</h3>
               <p>Industrial device operations with remote diagnostics and secure OTA updates</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/admin-api" className={styles.resourceCard}>
               <h3>Industrial Integration APIs</h3>
               <p>REST API and GraphQL for industrial automation and camera system integration</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
           </div>
         </div>

@@ -3,6 +3,145 @@
  * and scoped locally.
  */
 
+/* Promo Bar Styles */
+.promoBar {
+  background: linear-gradient(135deg, #5b5bf6 0%, #667eea 50%, #0d1492 100%);
+  color: white;
+  padding: 0.75rem 0;
+  position: relative;
+  z-index: 100;
+}
+
+.promoContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.promoMarquee {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.promoMessage {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 2rem;
+}
+
+
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.promoBadge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.promoMessage {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.promoLink {
+  color: white !important;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.promoLink:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  color: white !important;
+}
+
+.promoActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.promoDismiss {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 300;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.promoDismiss:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+  .promoBar {
+    padding: 0.375rem 0;
+  }
+  
+  .promoContent {
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+  
+  .promoMarquee {
+    flex: 0.8;
+  }
+  
+  .promoMessage {
+    font-size: 0.75rem;
+    animation: marquee 15s linear infinite;
+  }
+  
+  .promoLink {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .promoDismiss {
+    font-size: 1.125rem;
+    min-width: 24px;
+    height: 24px;
+  }
+}
+
 .heroBanner {
   padding: 6rem 1rem;
   padding-left: 2.5rem;
@@ -84,22 +223,23 @@
 }
 
 .stack {
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 10px;
-  width: 100%;
-  max-width: 20rem;
-  background-color: var(--ifm-card-background-color);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 300px;
+  background-color: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
-/* .stack:hover {
-  transform: translateY(-5px);
-} */
+.stack:hover {
+  box-shadow: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+}
 
 .stack .header {
   font-size: 18px;
-  border-bottom: 1px solid var(--ifm-color-emphasis-300);
   text-decoration: none;
   display: flex;
   justify-content: center;
@@ -110,8 +250,11 @@
 }
 
 .stack .body {
-  padding: 1rem;
+  padding: 1.5rem;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .stack .header .subtitle {
@@ -123,6 +266,9 @@
 
 .body ul {
   color: #606770;
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: auto;
 }
 
 .container {
@@ -131,19 +277,6 @@
   gap: 2rem;
   padding: 2rem;
   font-family: 'Space Grotesk';
-  justify-content: center;
-}
-
-.stack {
-  flex: 1;
-  min-width: 300px;
-  max-width: none;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 10px;
-  width: 100%;
-  background-color: var(--ifm-card-background-color);
-  box-shadow: none;
-  transition: transform 0.2s;
 }
 
 @media screen and (max-width: 996px) {
@@ -284,33 +417,35 @@
 }
 
 .description {
-  margin-bottom: 0.6rem;
+  margin-bottom: 1rem;
   line-height: 1.6;
-  color: var(--ifm-color-emphasis-700);
+  color: #5f6368;
+  font-size: 0.9rem;
 }
 
 .linkGrid {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  margin: 1rem 0;
-  margin-bottom: 0;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
 .externalLink {
-  display: block;
-  width: 100%;
-  text-align: left;
+  display: inline-flex;
+  align-items: center;
   color: #5B5BF6 !important;
-  background: none;
-  border: none;
-  border-radius: 0;
   font-size: 0.9rem;
   font-weight: 400;
-  padding: 0.5rem 0 0.5rem 0.5rem;
   text-decoration: none;
+  padding: 0.5rem 0;
   border-bottom: 1px solid #e0e0e0;
   transition: color 0.2s;
+}
+
+.externalLink svg {
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 .externalLink:last-child {
@@ -398,7 +533,7 @@
 }
 
 .stackHeader {
-  background: #F8F9FA;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%);
   color: var(--ifm-color-emphasis-800);
   padding: 1.5rem;
   border-top-left-radius: 10px;
@@ -418,10 +553,8 @@
 }
 
 .ctaButtonGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 1rem 0;
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
 .ctaButtonMinimal {
@@ -457,10 +590,81 @@
   margin-bottom: 2rem;
 }
 
+/* Resource Card Styling (matching Jetson page features) */
+.resourceCardsSection {
+  gap: 0;
+}
+
+.resourceCardsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.resourceCard {
+  flex: 1;
+  min-width: 300px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2.25rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  position: relative;
+  background: #F5F5F7;
+  text-align: center;
+}
+
+.resourceCard:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: inherit;
+}
+
+.resourceCard h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+  color: #333333;
+  font-family: 'Avenir', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.resourceCard p {
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Feature Icon Styling (matching Jetson page) */
+.featureIcon {
+  width: 4.25rem;
+  height: 4.25rem;
+  margin: 0 auto 1.25rem auto;
+  display: block;
+  color: #666666;
+}
+
 @media screen and (max-width: 768px) {
   .buildToolsStack {
     flex: 0 0 100%;
     max-width: 100%;
     margin: 0;
+  }
+  
+  .resourceCard {
+    min-width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 250px;
   }
 }

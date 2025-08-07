@@ -3,6 +3,16 @@ import Layout from '@theme/Layout'
 import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import styles from './iq-9.module.css'
+import { 
+  RocketLaunchIcon, 
+  CpuChipIcon, 
+  BoltIcon, 
+  LockClosedIcon, 
+  WifiIcon, 
+  GlobeAltIcon,
+  XMarkIcon,
+  CheckIcon
+} from '@heroicons/react/24/outline'
 
 export default function IQ9Solution() {
   return (
@@ -69,84 +79,19 @@ export default function IQ9Solution() {
               </div>
               <div className={styles.heroCta}>
                 <Link to="/evk" className={styles.ctaPrimary}>
-                  Start Free Demo →
+                  Get Started
                 </Link>
                 <Link to="/platform/reference/overview" className={styles.ctaSecondary}>
-                  View Documentation
+                  Datasheet
                 </Link>
               </div>
             </div>
             <div className={styles.heroImage}>
               <img 
-                src="/img/iq-9.jpeg" 
+                src="/img/Qualcomm-IQ9.png" 
                 alt="Qualcomm IQ-9 QCS8550 development platform" 
                 className={styles.productImage}
               />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Problem/Solution Section */}
-      <section className={styles.problemSolution}>
-        <div className={styles.container}>
-          <div className={styles.problem}>
-            <h2>The Premium Edge AI Challenge</h2>
-            <ul className={styles.problemList}>
-              <li>Complex flagship SoC integration</li>
-              <li>Multi-model inference orchestration</li>
-              <li>Thermal management at scale</li>
-              <li>Enterprise-grade security requirements</li>
-              <li>Long development cycles for premium platforms</li>
-            </ul>
-          </div>
-          <div className={styles.solution}>
-            <h2>Peridio + Avocado OS Solution</h2>
-            <ul className={styles.solutionList}>
-              <li>Fully optimized QCS8550 drivers</li>
-              <li>Dynamic resource allocation</li>
-              <li>Advanced thermal controls</li>
-              <li>Hardware-backed security</li>
-              <li>Rapid premium platform deployment</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Key Features */}
-      <section className={styles.features}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Why Choose Peridio for IQ-9 Development</h2>
-          <div className={styles.featureGrid}>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🚀</div>
-              <h3>Flagship Optimization</h3>
-              <p>Fully utilizes QCS8550's AI capabilities with optimized drivers for Hexagon NPU, Adreno GPU compute, and advanced ISP processing.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🧠</div>
-              <h3>Multi-Model Inference</h3>
-              <p>Support for concurrent execution of multiple AI models with dynamic resource allocation and thermal management.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>⚡</div>
-              <h3>Hardware Acceleration</h3>
-              <p>Native integration with Qualcomm AI Engine Direct SDK for maximum performance and efficiency at flagship scale.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🔒</div>
-              <h3>Enterprise Security</h3>
-              <p>Hardware-backed security with Qualcomm Secure Processing Unit, secure boot chain, and encrypted storage.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>📡</div>
-              <h3>Advanced Fleet Operations</h3>
-              <p>Sophisticated device management with A/B update partitions, rollback protection, and remote diagnostics.</p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🌐</div>
-              <h3>Future-Ready Connectivity</h3>
-              <p>5G and Wi-Fi 7 support enables ultra-low latency edge-to-cloud coordination for premium applications.</p>
             </div>
           </div>
         </div>
@@ -240,6 +185,109 @@ export default function IQ9Solution() {
         </div>
       </section>
 
+      {/* Problem/Solution Section */}
+      <section className={styles.problemSolution}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <h2>From Challenge to Solution</h2>
+            <p>Transform your IQ-9 development workflow with enterprise-grade infrastructure</p>
+          </div>
+          
+          <div className={styles.comparisonContainer}>
+            <div className={styles.challengeCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.challengeIcon}>
+                  <XMarkIcon />
+                </div>
+                <h3>The Challenge</h3>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Complex flagship SoC integration</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Multi-model inference orchestration</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Thermal management at scale</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Enterprise-grade security requirements</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Long development cycles for premium platforms</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.solutionCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.solutionIcon}>
+                  <CheckIcon />
+                </div>
+                <h3>The Solution</h3>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Fully optimized QCS8550 drivers</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Dynamic resource allocation</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Advanced thermal controls</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Hardware-backed security</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Rapid premium platform deployment</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features */}
+      <section className={styles.features}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Why Choose Peridio for IQ-9 Development</h2>
+          <div className={styles.featureGrid}>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><RocketLaunchIcon /></div>
+              <h3>Flagship Optimization</h3>
+              <p>Fully utilizes QCS8550's AI capabilities with optimized drivers for Hexagon NPU, Adreno GPU compute, and advanced ISP processing.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><CpuChipIcon /></div>
+              <h3>Multi-Model Inference</h3>
+              <p>Support for concurrent execution of multiple AI models with dynamic resource allocation and thermal management.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><BoltIcon /></div>
+              <h3>Hardware Acceleration</h3>
+              <p>Native integration with Qualcomm AI Engine Direct SDK for maximum performance and efficiency at flagship scale.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><LockClosedIcon /></div>
+              <h3>Enterprise Security</h3>
+              <p>Hardware-backed security with Qualcomm Secure Processing Unit, secure boot chain, and encrypted storage.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><WifiIcon /></div>
+              <h3>Advanced Fleet Operations</h3>
+              <p>Sophisticated device management with A/B update partitions, rollback protection, and remote diagnostics.</p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}><GlobeAltIcon /></div>
+              <h3>Future-Ready Connectivity</h3>
+              <p>5G and Wi-Fi 7 support enables ultra-low latency edge-to-cloud coordination for premium applications.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className={styles.cta}>
         <div className={styles.container}>
@@ -266,22 +314,18 @@ export default function IQ9Solution() {
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
               <h3>Advanced Yocto Configuration</h3>
               <p>Flagship SoC optimization and multi-model inference setup for QCS8550</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
               <h3>Device Security</h3>
               <p>Enterprise security with device certificates and fleet management</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
               <h3>Premium Platform Features</h3>
               <p>Advanced fleet management and enterprise-grade device operations</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
             <Link to="/admin-api" className={styles.resourceCard}>
               <h3>Advanced API Integration</h3>
               <p>REST API and GraphQL for sophisticated automotive and industrial applications</p>
-              <span className={styles.resourceArrow}>→</span>
             </Link>
           </div>
         </div>
