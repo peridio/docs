@@ -75,13 +75,7 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          { label: 'Platform', to: '/platform/reference/overview' },
-          { label: 'Integration', to: '/integration/introduction' },
-          { label: 'Admin API', to: '/admin-api' },
-          { label: 'Device API', to: '/device-api' },
-          { label: 'CLI', to: '/cli' },
-          { label: 'EVK', to: '/evk' },
-          { label: 'Web Console', href: 'https://console.peridio.com', position: 'right' },
+          // Items are now handled by the custom MegaMenuNavbar component
         ],
       },
       footer: {
@@ -130,6 +124,13 @@ const config = {
       attributes: {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
       },
     },
   ],

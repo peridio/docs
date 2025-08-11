@@ -88,3 +88,93 @@ footer {
   margin-top: 0px !important;
   overflow: scroll;
 }
+
+/* Mega Menu Integration Styles */
+.navbar {
+  position: relative;
+}
+
+.navbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Ensure proper z-index stacking */
+.mega-menu-dropdown {
+  z-index: 9999;
+}
+
+/* Mobile fallback - handled by mega menu component */
+@media (max-width: 996px) {
+  /* Mobile styles are handled in the MegaMenuNavbar component */
+}
+
+/* Sidebar Styles */
+/* Remove border radius from all menu items for straight edges */
+.menu__link {
+  border-radius: 0 !important;
+}
+
+/* Active sidebar items - bold with left border */
+.menu__link--active {
+  font-weight: bold;
+  border-left: 3px solid var(--ifm-color-primary);
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
+  border-radius: 0 !important;
+}
+
+/* Active category labels that are also links */
+.menu__list-item--collapsed .menu__link--active,
+.menu__list-item .menu__link--active {
+  font-weight: bold;
+  border-left: 3px solid var(--ifm-color-primary);
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
+  border-radius: 0 !important;
+}
+
+/* Hover state - light purple for all menu items */
+.menu__link:hover,
+.menu__list .menu__list-item-collapsible:hover,
+.menu__list-item-collapsible:hover > .menu__link,
+.menu__list-item-collapsible:hover > .menu__link--sublist {
+  background-color: rgba(52, 36, 238, 0.1); /* Light purple based on primary color */
+  color: var(--ifm-color-primary);
+  border-radius: 0 !important;
+}
+
+/* Category labels hover state - including caret */
+.menu__caret:hover,
+.menu__link--sublist:hover,
+.menu__link--sublist-caret:hover {
+  background-color: rgba(52, 36, 238, 0.1);
+  color: var(--ifm-color-primary);
+}
+
+/* Master category items hover (Getting Started, Avocado OS, etc.) */
+.theme-doc-sidebar-menu > .menu__list > .menu__list-item > .menu__link:hover,
+.theme-doc-sidebar-menu > .menu__list > .menu__list-item > .menu__link--sublist:hover,
+.menu__list > .menu__list-item > .menu__list-item-collapsible:hover > .menu__link {
+  background-color: rgba(52, 36, 238, 0.1);
+  color: var(--ifm-color-primary);
+}
+
+/* Ensure active items stay bold with border even on hover */
+.menu__link--active:hover {
+  font-weight: bold;
+  border-left: 3px solid var(--ifm-color-primary);
+  background-color: rgba(52, 36, 238, 0.15); /* Slightly darker purple for active hover */
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
+  border-radius: 0 !important;
+}
+
+/* Dark mode adjustments */
+html[data-theme='dark'] .menu__link:hover,
+html[data-theme='dark'] .menu__list-item-collapsible:hover > .menu__link,
+html[data-theme='dark'] .menu__list-item-collapsible:hover > .menu__link--sublist {
+  background-color: rgba(52, 36, 238, 0.2);
+}
+
+html[data-theme='dark'] .menu__link--active:hover {
+  background-color: rgba(52, 36, 238, 0.25);
+}

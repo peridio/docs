@@ -283,4 +283,204 @@ export default {
       dirName: 'cli',
     },
   ],
+  'dev-center': [
+    {
+      type: 'category',
+      label: '🚧 Getting Started',
+      link: {
+        type: 'doc',
+        id: 'dev-center/index',
+      },
+      collapsible: true,
+      collapsed: false,
+      items: [
+        { type: 'doc', id: 'dev-center/getting-started/provision-device', label: '🚧 Provision Device' },
+        { type: 'doc', id: 'dev-center/getting-started/program-device', label: '🚧 Program Device' },
+        { type: 'doc', id: 'dev-center/getting-started/first-ota-update', label: '🚧 First OTA Update' },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Avocado OS',
+      link: {
+        type: 'doc',
+        id: 'dev-center/avocado-linux/introduction',
+      },
+      collapsible: true,
+      collapsed: true,
+      items: [
+        'dev-center/avocado-linux/getting-started',
+        'dev-center/avocado-linux/development-environment',
+        'dev-center/avocado-linux/sdk-architecture',
+        'dev-center/avocado-linux/building-system-extensions',
+        'dev-center/avocado-linux/using-containers',
+        'dev-center/avocado-linux/device-tree-overlays',
+        'dev-center/avocado-linux/hardware-in-the-loop',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Peridio Core',
+      link: {
+        type: 'doc',
+        id: 'dev-center/peridio-core/introduction',
+      },
+      collapsible: true,
+      collapsed: true,
+      items: [
+        'dev-center/peridio-core/device-management',
+        {
+          type: 'category',
+          label: 'Tunnels (Remote Access)',
+          link: {
+            type: 'doc',
+            id: 'dev-center/tunnels/overview',
+          },
+          items: [
+            'dev-center/tunnels/getting-started',
+            'dev-center/tunnels/ssh-tunnels',
+            'dev-center/tunnels/http-tunnels',
+            'dev-center/tunnels/security',
+            'dev-center/tunnels/troubleshooting',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Firmware Management',
+          link: {
+            type: 'doc',
+            id: 'dev-center/peridio-core/firmware-management/overview',
+          },
+          items: [
+            'dev-center/peridio-core/firmware-management/artifacts',
+            'dev-center/peridio-core/firmware-management/artifact-versions',
+            'dev-center/peridio-core/firmware-management/binaries',
+            'dev-center/peridio-core/firmware-management/binary-parts',
+            'dev-center/peridio-core/firmware-management/binary-signatures',
+            'dev-center/peridio-core/firmware-management/signing-keys',
+          ],
+        },
+        { type: 'doc', id: 'dev-center/peridio-core/system-architecture', label: 'System Architecture' },
+        { type: 'doc', id: 'dev-center/peridio-core/organization-management', label: 'Organization Management' },
+        { type: 'doc', id: 'dev-center/peridio-core/onboarding-flow', label: 'Onboarding Flow' },
+      ],
+    },
+    {
+      type: 'category',
+      label: '🚧 Supported Hardware',
+      link: {
+        type: 'doc',
+        id: 'dev-center/hardware/supported-hardware',
+      },
+      collapsible: true,
+      collapsed: true,
+      items: [
+        {
+          type: 'category',
+          label: 'Production Ready',
+          link: {
+            type: 'doc',
+            id: 'dev-center/hardware/production-ready/index',
+          },
+          items: [
+            { type: 'doc', id: 'dev-center/hardware/production-ready/seeed-reterminal', label: '🚧 Seeed reTerminal' },
+            { type: 'doc', id: 'dev-center/hardware/production-ready/icam540', label: '🚧 iCam540' },
+            { type: 'doc', id: 'dev-center/hardware/production-ready/onlogic-factor', label: '🚧 OnLogic Factor 201/202' },
+          ],
+        },
+        { type: 'doc', id: 'dev-center/hardware/nvidia/jetson-orin-nano-evk', label: '🚧 NVIDIA Jetson Orin Nano EVK' },
+        { type: 'doc', id: 'dev-center/hardware/nxp/frdm-imx-93', label: '🚧 NXP i.MX 93 FRDM SBC' },
+        { type: 'doc', id: 'dev-center/hardware/nxp/imx8mp', label: '🚧 NXP i.MX 8MP EVK' },
+        { type: 'doc', id: 'dev-center/hardware/raspberry-pi/compute-module-4', label: '🚧 Raspberry Pi Compute Module 4' },
+        { type: 'doc', id: 'dev-center/hardware/qemu', label: '🚧 QEMU (Virtual Machine)' },
+        { type: 'doc', id: 'dev-center/hardware/coming-soon', label: '🚀 Coming Soon' },
+      ],
+    },
+    {
+      type: 'category',
+      label: '🚧 Integration / Guides',
+      link: {
+        type: 'doc',
+        id: 'dev-center/integration/index',
+      },
+      collapsible: true,
+      collapsed: true,
+      items: [
+        'dev-center/integration/peridiod-agent',
+        'dev-center/integration/evk',
+        'dev-center/integration/cloud-delegated-updates',
+        {
+          type: 'category',
+          label: 'Webhooks',
+          link: {
+            type: 'doc',
+            id: 'dev-center/integration/webhooks/overview',
+          },
+          items: [
+            'dev-center/integration/webhooks/configuration',
+            'dev-center/integration/webhooks/events-and-payloads',
+            'dev-center/integration/webhooks/security',
+            'dev-center/integration/webhooks/troubleshooting',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'External CDN',
+          link: {
+            type: 'doc',
+            id: 'dev-center/integration/external-cdn/overview',
+          },
+          items: [
+            'dev-center/integration/external-cdn/aws-s3-setup',
+            'dev-center/integration/external-cdn/aws-cloudfront-setup',
+            'dev-center/integration/external-cdn/geographic-distribution',
+            'dev-center/integration/external-cdn/cost-optimization',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Certificates',
+          link: {
+            type: 'doc',
+            id: 'dev-center/integration/certificates/overview',
+          },
+          items: [
+            'dev-center/integration/certificates/certificate-types',
+            'dev-center/integration/certificates/certificate-lifecycle',
+            'dev-center/integration/certificates/creation-methods',
+            'dev-center/integration/certificates/security-best-practices',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Tools',
+      link: {
+        type: 'doc',
+        id: 'dev-center/tools/index',
+      },
+      collapsible: true,
+      collapsed: true,
+      items: [
+        { type: 'doc', id: 'dev-center/tools/cli', label: 'Peridio CLI' },
+        { type: 'doc', id: 'dev-center/tools/device-api', label: 'Device API' },
+        { type: 'doc', id: 'dev-center/tools/admin-api', label: 'Admin API' },
+      ],
+    },
+    {
+      type: 'category',
+      label: '🚧 Policies',
+      link: {
+        type: 'doc',
+        id: 'dev-center/policies/index',
+      },
+      collapsible: true,
+      collapsed: true,
+      items: [
+        { type: 'doc', id: 'dev-center/policies/coc', label: 'Code of Conduct' },
+        { type: 'doc', id: 'dev-center/policies/privacy', label: 'Privacy Statement' },
+      ],
+    },
+  ],
 }
