@@ -2,9 +2,9 @@
 
 Peridio provides agents and reference designs for the following systems:
 
+* [Avocado Linux](/dev-center/avocado-linux/getting-started)
 * [Linux](linux/overview)
 * [Android](android/overview)
-* RTOS (private beta)
 
 ## Agent
 
