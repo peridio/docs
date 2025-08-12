@@ -6,12 +6,7 @@
   "printWidth": 100,
   "overrides": [
     {
-      "files": [
-        "**/*.css",
-        "**/*.scss",
-        "**/*.html",
-        "**/*.yaml"
-      ],
+      "files": ["**/*.css", "**/*.scss", "**/*.html", "**/*.yaml"],
       "options": {
         "singleQuote": false
       }

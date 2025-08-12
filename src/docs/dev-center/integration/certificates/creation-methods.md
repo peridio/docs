@@ -7,6 +7,7 @@ Different approaches for generating certificates in Peridio.
 Manual certificate creation using the OpenSSL toolkit.
 
 ### Prerequisites
+
 ```bash
 # Install OpenSSL
 apt-get install openssl        # Debian/Ubuntu
@@ -17,6 +18,7 @@ brew install openssl           # macOS
 ### Basic Certificate Creation
 
 #### 1. Generate Private Key
+
 ```bash
 # RSA key
 openssl genrsa -out device.key 4096
@@ -26,6 +28,7 @@ openssl ecparam -name prime256v1 -genkey -out device.key
 ```
 
 #### 2. Create Certificate Signing Request
+
 ```bash
 # Interactive CSR creation
 openssl req -new -key device.key -out device.csr
@@ -36,6 +39,7 @@ openssl req -new -key device.key -out device.csr \
 ```
 
 #### 3. Self-Signed Certificate (Testing)
+
 ```bash
 openssl req -x509 -new -nodes \
   -key device.key \
@@ -46,6 +50,7 @@ openssl req -x509 -new -nodes \
 ### CA-Signed Certificates
 
 #### Create CA Certificate
+
 ```bash
 # Generate CA key
 openssl genrsa -out ca.key 4096
@@ -58,6 +63,7 @@ openssl req -x509 -new -nodes \
 ```
 
 #### Sign Device Certificate
+
 ```bash
 # Sign CSR with CA
 openssl x509 -req -in device.csr \
@@ -70,6 +76,7 @@ openssl x509 -req -in device.csr \
 ### Advanced Configuration
 
 #### OpenSSL Configuration File
+
 ```ini
 # openssl.cnf
 [req]
@@ -95,6 +102,7 @@ IP.1 = 192.168.1.100
 ```
 
 #### Using Configuration File
+
 ```bash
 openssl req -new -key device.key \
   -out device.csr \
@@ -108,6 +116,7 @@ Platform-managed certificate generation and lifecycle.
 ### Web Console
 
 #### Certificate Wizard
+
 1. Navigate to **Certificates** → **Create**
 2. Select certificate type:
    - CA Certificate
@@ -120,6 +129,7 @@ Platform-managed certificate generation and lifecycle.
 4. Generate and download
 
 #### Bulk Generation
+
 1. Go to **Certificates** → **Bulk Create**
 2. Upload device list (CSV)
 3. Select template configuration
@@ -129,6 +139,7 @@ Platform-managed certificate generation and lifecycle.
 ### CLI Method
 
 #### Install Peridio CLI
+
 ```bash
 # Download and install
 curl -L https://github.com/peridio/cli/releases/latest/download/peridio-linux-amd64 -o peridio
@@ -137,6 +148,7 @@ sudo mv peridio /usr/local/bin/
 ```
 
 #### Generate Certificates
+
 ```bash
 # Create CA certificate
 peridio ca-certificates create \
@@ -158,6 +170,7 @@ peridio signing-keys create \
 ### API Method
 
 #### REST API
+
 ```bash
 # Create device certificate via API
 curl -X POST https://api.peridio.com/v1/device-certificates \
@@ -175,6 +188,7 @@ curl -X POST https://api.peridio.com/v1/device-certificates \
 ```
 
 #### SDK Integration
+
 ```python
 # Python SDK example
 from peridio import PeridioClient
@@ -201,6 +215,7 @@ print(f"Certificate PEM: {cert.pem}")
 ### Just-in-Time Provisioning
 
 #### Device-Side Generation
+
 ```bash
 #!/bin/bash
 # Device provisioning script
@@ -227,6 +242,7 @@ curl -X POST https://api.peridio.com/v1/jit-provision \
 ```
 
 #### Manufacturing Integration
+
 ```python
 # Factory provisioning system
 import subprocess
@@ -236,34 +252,34 @@ class DeviceProvisioner:
     def __init__(self, api_key, ca_id):
         self.api_key = api_key
         self.ca_id = ca_id
-    
+
     def provision_device(self, serial_number):
         # Generate key pair
         key = self.generate_key()
-        
+
         # Create CSR
         csr = self.create_csr(key, serial_number)
-        
+
         # Submit to Peridio
         cert = self.sign_certificate(csr)
-        
+
         # Flash to device
         self.flash_credentials(serial_number, key, cert)
-        
+
         return cert
-    
+
     def generate_key(self):
         # Key generation logic
         pass
-    
+
     def create_csr(self, key, serial):
         # CSR creation logic
         pass
-    
+
     def sign_certificate(self, csr):
         # API call to Peridio
         pass
-    
+
     def flash_credentials(self, serial, key, cert):
         # Device programming logic
         pass
@@ -271,23 +287,25 @@ class DeviceProvisioner:
 
 ## Comparison Matrix
 
-| Method | Pros | Cons | Best For |
-|--------|------|------|----------|
-| **OpenSSL Manual** | Full control, No dependencies | Manual process, Error-prone | Development, Testing |
-| **Web Console** | User-friendly, Visual feedback | Manual process, Not scriptable | Small deployments |
-| **CLI** | Scriptable, Reproducible | Requires CLI setup | Automation, CI/CD |
-| **API** | Fully automated, Integrable | Requires development | Production, Scale |
-| **JIT Provisioning** | Scalable, Secure | Complex setup | Manufacturing, Field deployment |
+| Method               | Pros                           | Cons                           | Best For                        |
+| -------------------- | ------------------------------ | ------------------------------ | ------------------------------- |
+| **OpenSSL Manual**   | Full control, No dependencies  | Manual process, Error-prone    | Development, Testing            |
+| **Web Console**      | User-friendly, Visual feedback | Manual process, Not scriptable | Small deployments               |
+| **CLI**              | Scriptable, Reproducible       | Requires CLI setup             | Automation, CI/CD               |
+| **API**              | Fully automated, Integrable    | Requires development           | Production, Scale               |
+| **JIT Provisioning** | Scalable, Secure               | Complex setup                  | Manufacturing, Field deployment |
 
 ## Security Considerations
 
 ### Key Protection
+
 - Never commit private keys to version control
 - Use hardware security modules when available
 - Implement key encryption at rest
 - Rotate keys regularly
 
 ### Certificate Validation
+
 ```bash
 # Verify certificate chain
 openssl verify -CAfile ca.crt device.crt
@@ -301,6 +319,7 @@ openssl rsa -noout -modulus -in device.key | openssl md5
 ```
 
 ### Automation Security
+
 - Use secure channels for CSR submission
 - Implement rate limiting
 - Validate device identity before signing
@@ -311,6 +330,7 @@ openssl rsa -noout -modulus -in device.key | openssl md5
 ### Common Issues
 
 #### "Unable to load private key"
+
 ```bash
 # Check key format
 file device.key
@@ -319,12 +339,14 @@ openssl rsa -in device.key -out device-rsa.key
 ```
 
 #### "Certificate verify failed"
+
 ```bash
 # Check certificate chain
 openssl verify -CAfile ca.crt -untrusted intermediate.crt device.crt
 ```
 
 #### "CSR signature did not match"
+
 ```bash
 # Verify CSR
 openssl req -in device.csr -verify -noout

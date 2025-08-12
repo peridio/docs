@@ -5,6 +5,7 @@ Artifact versions represent specific iterations or releases of an artifact. They
 ## Understanding Versions
 
 Each artifact version:
+
 - Belongs to exactly one artifact
 - Has a unique version identifier
 - Can contain multiple target-specific binaries
@@ -13,13 +14,16 @@ Each artifact version:
 ## Version Naming Strategies
 
 ### Semantic Versioning (Recommended)
+
 Follow [SemVer](https://semver.org/) principles:
+
 - **Major**: Breaking changes (1.0.0 → 2.0.0)
-- **Minor**: New features (1.0.0 → 1.1.0)  
+- **Minor**: New features (1.0.0 → 1.1.0)
 - **Patch**: Bug fixes (1.0.0 → 1.0.1)
 - **Pre-release**: Beta/RC versions (1.0.0-beta.1)
 
 Examples:
+
 ```
 1.0.0
 1.1.0
@@ -31,7 +35,9 @@ Examples:
 ```
 
 ### Date-Based Versioning
+
 Use timestamps for continuous delivery:
+
 ```
 2024.01.15
 2024.01.15.1
@@ -40,7 +46,9 @@ Use timestamps for continuous delivery:
 ```
 
 ### Build-Based Versioning
+
 Use CI/CD build numbers:
+
 ```
 build-1234
 jenkins-5678
@@ -48,7 +56,9 @@ ci-2024.01.15.1234
 ```
 
 ### Git-Based Versioning
+
 Use git commits or tags:
+
 ```
 git-abc123def
 v1.2.3-10-gabc123d
@@ -58,12 +68,14 @@ main-abc123def
 ## Creating Artifact Versions
 
 ### Via Web Console
+
 1. Navigate to your artifact
 2. Click **Create Version**
 3. Enter version identifier
 4. Add optional description and metadata
 
 ### Via CLI
+
 ```bash
 peridio artifact-versions create \
   --artifact-prn $ARTIFACT_PRN \
@@ -72,6 +84,7 @@ peridio artifact-versions create \
 ```
 
 ### Via API
+
 ```bash
 curl -X POST https://api.peridio.com/v1/artifact-versions \
   -H "Authorization: Bearer $API_KEY" \
@@ -100,6 +113,7 @@ Enhance versions with metadata:
 ## Version Lifecycle
 
 ### Development Phase
+
 ```
 1.2.0-dev.1
 1.2.0-dev.2
@@ -107,6 +121,7 @@ Enhance versions with metadata:
 ```
 
 ### Testing Phase
+
 ```
 1.2.0-beta.1
 1.2.0-beta.2
@@ -114,6 +129,7 @@ Enhance versions with metadata:
 ```
 
 ### Release Phase
+
 ```
 1.2.0
 1.2.1 (hotfix)
@@ -121,7 +137,9 @@ Enhance versions with metadata:
 ```
 
 ### End of Life
+
 Mark in metadata:
+
 ```json
 {
   "status": "deprecated",
@@ -144,6 +162,7 @@ main-firmware/
 ```
 
 ### Target Selection
+
 Devices automatically receive the appropriate binary based on their target architecture.
 
 ## Version Comparison
@@ -151,13 +170,17 @@ Devices automatically receive the appropriate binary based on their target archi
 Peridio supports version comparison for updates:
 
 ### Natural Ordering
+
 Versions are sorted naturally:
+
 ```
 1.0.0 < 1.0.1 < 1.1.0 < 2.0.0
 ```
 
 ### Pre-release Precedence
+
 Pre-releases have lower precedence:
+
 ```
 1.0.0-alpha < 1.0.0-beta < 1.0.0
 ```
@@ -167,7 +190,9 @@ Pre-releases have lower precedence:
 Map versions to channels:
 
 ### Stable Channel
+
 Production-ready versions:
+
 ```
 1.0.0
 1.1.0
@@ -175,14 +200,18 @@ Production-ready versions:
 ```
 
 ### Beta Channel
+
 Testing versions:
+
 ```
 1.1.0-beta.1
 2.0.0-rc.1
 ```
 
 ### Edge Channel
+
 Development versions:
+
 ```
 1.1.0-dev.123
 main-latest
@@ -207,6 +236,7 @@ Model dependencies through metadata:
 ## Rollback Strategies
 
 ### Previous Version Reference
+
 ```json
 {
   "rollback_version": "1.1.5",
@@ -215,22 +245,26 @@ Model dependencies through metadata:
 ```
 
 ### Automatic Rollback
+
 Configure in deployment policies:
+
 - Roll back if >X% devices fail
 - Roll back if critical metrics exceed thresholds
 
 ## Version Validation
 
 ### Pre-release Testing
+
 1. Create beta version
 2. Deploy to test cohort
 3. Monitor metrics
 4. Promote to stable
 
 ### Staged Rollout
+
 ```
 1.2.0-canary → 1% of fleet
-1.2.0-beta → 10% of fleet  
+1.2.0-beta → 10% of fleet
 1.2.0-rc → 50% of fleet
 1.2.0 → 100% of fleet
 ```
@@ -240,6 +274,7 @@ Configure in deployment policies:
 ### Automated Version Creation
 
 #### GitHub Actions
+
 ```yaml
 - name: Create Version
   run: |
@@ -250,6 +285,7 @@ Configure in deployment policies:
 ```
 
 #### Jenkins
+
 ```groovy
 stage('Create Version') {
   steps {
@@ -271,18 +307,21 @@ stage('Create Version') {
 ## Version Management Best Practices
 
 ### Planning
+
 1. Define versioning strategy upfront
 2. Document version semantics
 3. Plan for rollback scenarios
 4. Consider hardware compatibility
 
 ### Implementation
+
 1. Use consistent version formats
 2. Add comprehensive metadata
 3. Test before promoting
 4. Maintain upgrade paths
 
 ### Maintenance
+
 1. Archive old versions appropriately
 2. Document breaking changes
 3. Communicate deprecation schedules
@@ -291,7 +330,9 @@ stage('Create Version') {
 ## Common Patterns
 
 ### Feature Flags
+
 Use versions to enable features:
+
 ```json
 {
   "features": {
@@ -302,7 +343,9 @@ Use versions to enable features:
 ```
 
 ### Regional Versions
+
 Deploy region-specific versions:
+
 ```
 1.2.3-us
 1.2.3-eu
@@ -310,7 +353,9 @@ Deploy region-specific versions:
 ```
 
 ### Hardware-Specific Versions
+
 Target specific hardware revisions:
+
 ```
 1.2.3-hw1
 1.2.3-hw2
@@ -320,18 +365,21 @@ Target specific hardware revisions:
 ## Querying Versions
 
 ### List All Versions
+
 ```bash
 peridio artifact-versions list \
   --artifact-prn $ARTIFACT_PRN
 ```
 
 ### Get Specific Version
+
 ```bash
 peridio artifact-versions get \
   --prn $VERSION_PRN
 ```
 
 ### Filter by Metadata
+
 ```bash
 peridio artifact-versions list \
   --metadata stability=stable
@@ -347,16 +395,19 @@ peridio artifact-versions list \
 ## Troubleshooting
 
 ### Version Conflicts
+
 - Ensure unique version identifiers
 - Check for typos in version strings
 - Verify artifact PRN is correct
 
 ### Missing Versions
+
 - Confirm artifact exists
 - Check permissions
 - Verify organization context
 
 ### Update Failures
+
 - Validate version compatibility
 - Check device constraints
 - Review deployment policies

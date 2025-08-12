@@ -4,15 +4,15 @@ import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import styles from './iq-9.module.css'
-import { 
-  HiOutlineRocketLaunch as RocketLaunchIcon, 
-  HiOutlineCpuChip as CpuChipIcon, 
-  HiOutlineBolt as BoltIcon, 
-  HiOutlineLockClosed as LockClosedIcon, 
-  HiOutlineWifi as WifiIcon, 
+import {
+  HiOutlineRocketLaunch as RocketLaunchIcon,
+  HiOutlineCpuChip as CpuChipIcon,
+  HiOutlineBolt as BoltIcon,
+  HiOutlineLockClosed as LockClosedIcon,
+  HiOutlineWifi as WifiIcon,
   HiOutlineGlobeAlt as GlobeAltIcon,
   HiOutlineXMark as XMarkIcon,
-  HiOutlineCheck as CheckIcon
+  HiOutlineCheck as CheckIcon,
 } from 'react-icons/hi2'
 
 export default function IQ9Solution() {
@@ -20,35 +20,45 @@ export default function IQ9Solution() {
     <Layout>
       <Head>
         <title>Qualcomm IQ-9 Premium Edge AI | Flagship Performance | Peridio</title>
-        <meta 
-          name="description" 
-          content="Deploy Qualcomm IQ-9 (QCS8550) flagship edge AI platform with 45 TOPS performance. Production-ready with Peridio Fleet + Avocado OS for automotive and premium applications." 
+        <meta
+          name="description"
+          content="Deploy Qualcomm IQ-9 (QCS8550) flagship edge AI platform with 45 TOPS performance. Production-ready with Peridio Fleet + Avocado OS for automotive and premium applications."
         />
-        <meta name="keywords" content="qualcomm iq-9, qcs8550, flagship edge ai, 45 tops, automotive ai, premium edge computing, device management, ota updates" />
-        <meta property="og:title" content="Qualcomm IQ-9 Premium Edge AI | Flagship Performance | Peridio" />
-        <meta property="og:description" content="Deploy Qualcomm IQ-9 flagship edge AI platform with 45 TOPS performance. Production-ready with Peridio Fleet + Avocado OS." />
+        <meta
+          name="keywords"
+          content="qualcomm iq-9, qcs8550, flagship edge ai, 45 tops, automotive ai, premium edge computing, device management, ota updates"
+        />
+        <meta
+          property="og:title"
+          content="Qualcomm IQ-9 Premium Edge AI | Flagship Performance | Peridio"
+        />
+        <meta
+          property="og:description"
+          content="Deploy Qualcomm IQ-9 flagship edge AI platform with 45 TOPS performance. Production-ready with Peridio Fleet + Avocado OS."
+        />
         <meta property="og:image" content="/img/iq-9.jpeg" />
         <meta property="og:type" content="product" />
         <link rel="canonical" href="https://docs.peridio.com/solutions/qualcomm/iq-9" />
-        
+
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "Peridio + Avocado OS for Qualcomm IQ-9",
-            "description": "Premium edge AI platform with flagship performance for automotive and high-performance applications",
-            "manufacturer": {
-              "@type": "Organization",
-              "name": "Peridio"
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: 'Peridio + Avocado OS for Qualcomm IQ-9',
+            description:
+              'Premium edge AI platform with flagship performance for automotive and high-performance applications',
+            manufacturer: {
+              '@type': 'Organization',
+              name: 'Peridio',
             },
-            "category": "Premium Edge AI Platform",
-            "offers": {
-              "@type": "Offer",
-              "availability": "https://schema.org/InStock"
+            category: 'Premium Edge AI Platform',
+            offers: {
+              '@type': 'Offer',
+              availability: 'https://schema.org/InStock',
             },
-            "applicationCategory": "Automotive AI, Premium Edge Computing, Advanced Manufacturing",
-            "operatingSystem": "Yocto Linux, Avocado OS"
+            applicationCategory: 'Automotive AI, Premium Edge Computing, Advanced Manufacturing',
+            operatingSystem: 'Yocto Linux, Avocado OS',
           })}
         </script>
       </Head>
@@ -59,10 +69,12 @@ export default function IQ9Solution() {
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <Heading as="h1" className={styles.heroTitle}>
-                <span className={styles.highlight}>Premium Edge AI</span> Performance with Qualcomm IQ-9
+                <span className={styles.highlight}>Premium Edge AI</span> Performance with Qualcomm
+                IQ-9
               </Heading>
               <p className={styles.heroSubtitle}>
-                Flagship-grade edge AI with 45 TOPS compute power, production-ready with Peridio Fleet + Avocado OS
+                Flagship-grade edge AI with 45 TOPS compute power, production-ready with Peridio
+                Fleet + Avocado OS
               </p>
               <div className={styles.heroStats}>
                 <div className={styles.stat}>
@@ -88,9 +100,9 @@ export default function IQ9Solution() {
               </div>
             </div>
             <div className={styles.heroImage}>
-              <img 
-                src="/img/Qualcomm-IQ9.png" 
-                alt="Qualcomm IQ-9 QCS8550 development platform" 
+              <img
+                src="/img/Qualcomm-IQ9.png"
+                alt="Qualcomm IQ-9 QCS8550 development platform"
                 className={styles.productImage}
               />
             </div>
@@ -101,7 +113,9 @@ export default function IQ9Solution() {
       {/* Hardware Specs */}
       <section className={styles.specs}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>IQ-9 Hardware Highlights</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            IQ-9 Hardware Highlights
+          </Heading>
           <div className={styles.specsTable}>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>AI Performance</div>
@@ -111,7 +125,9 @@ export default function IQ9Solution() {
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>SoC</div>
               <div className={styles.specValue}>Qualcomm QCS8550</div>
-              <div className={styles.specNote}>Premium 4nm process with advanced AI architecture</div>
+              <div className={styles.specNote}>
+                Premium 4nm process with advanced AI architecture
+              </div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>CPU</div>
@@ -140,11 +156,16 @@ export default function IQ9Solution() {
       {/* Performance Benchmarks */}
       <section className={styles.benchmarks}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Performance Benchmarks</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Performance Benchmarks
+          </Heading>
           <div className={styles.benchmarkGrid}>
             <div className={styles.benchmark}>
               <Heading as="h3">Multi-Model Inference</Heading>
-              <p>Simultaneously run object detection, semantic segmentation, and classification models</p>
+              <p>
+                Simultaneously run object detection, semantic segmentation, and classification
+                models
+              </p>
             </div>
             <div className={styles.benchmark}>
               <Heading as="h3">Real-Time Processing</Heading>
@@ -165,22 +186,45 @@ export default function IQ9Solution() {
       {/* Use Cases */}
       <section className={styles.useCases}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Premium Use Cases</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Premium Use Cases
+          </Heading>
           <div className={styles.useCaseGrid}>
             <div className={styles.useCase}>
-              <img src="/img/traffic-flow-optimization.png" alt="Autonomous Vehicles" className={styles.useCaseImage} />
+              <img
+                src="/img/traffic-flow-optimization.png"
+                alt="Autonomous Vehicles"
+                className={styles.useCaseImage}
+              />
               <Heading as="h3">Autonomous Vehicles</Heading>
-              <p>Real-time sensor fusion, object detection, and path planning with multiple AI models running simultaneously for ADAS and autonomous driving.</p>
+              <p>
+                Real-time sensor fusion, object detection, and path planning with multiple AI models
+                running simultaneously for ADAS and autonomous driving.
+              </p>
             </div>
             <div className={styles.useCase}>
-              <img src="/img/workplace-safety.png" alt="Advanced Manufacturing" className={styles.useCaseImage} />
+              <img
+                src="/img/workplace-safety.png"
+                alt="Advanced Manufacturing"
+                className={styles.useCaseImage}
+              />
               <Heading as="h3">Advanced Manufacturing</Heading>
-              <p>High-speed quality inspection with multi-camera systems and complex AI models for defect detection and classification.</p>
+              <p>
+                High-speed quality inspection with multi-camera systems and complex AI models for
+                defect detection and classification.
+              </p>
             </div>
             <div className={styles.useCase}>
-              <img src="/img/factory-quality-inspection.png" alt="Smart City Infrastructure" className={styles.useCaseImage} />
+              <img
+                src="/img/factory-quality-inspection.png"
+                alt="Smart City Infrastructure"
+                className={styles.useCaseImage}
+              />
               <Heading as="h3">Smart City Infrastructure</Heading>
-              <p>Multi-modal AI for traffic optimization, security monitoring, and environmental sensing with 5G coordination.</p>
+              <p>
+                Multi-modal AI for traffic optimization, security monitoring, and environmental
+                sensing with 5G coordination.
+              </p>
             </div>
           </div>
         </div>
@@ -193,7 +237,7 @@ export default function IQ9Solution() {
             <Heading as="h2">From Challenge to Solution</Heading>
             <p>Transform your IQ-9 development workflow with enterprise-grade infrastructure</p>
           </div>
-          
+
           <div className={styles.comparisonContainer}>
             <div className={styles.challengeCard}>
               <div className={styles.cardHeader}>
@@ -213,10 +257,14 @@ export default function IQ9Solution() {
                   <span className={styles.challengeText}>Thermal management at scale</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Enterprise-grade security requirements</span>
+                  <span className={styles.challengeText}>
+                    Enterprise-grade security requirements
+                  </span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Long development cycles for premium platforms</span>
+                  <span className={styles.challengeText}>
+                    Long development cycles for premium platforms
+                  </span>
                 </div>
               </div>
             </div>
@@ -253,37 +301,69 @@ export default function IQ9Solution() {
       {/* Key Features */}
       <section className={styles.features}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Why Choose Peridio for IQ-9 Development</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Why Choose Peridio for IQ-9 Development
+          </Heading>
           <div className={styles.featureGrid}>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><RocketLaunchIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <RocketLaunchIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Flagship Optimization</Heading>
-              <p>Fully utilizes QCS8550&apos;s AI capabilities with optimized drivers for Hexagon NPU, Adreno GPU compute, and advanced ISP processing.</p>
+              <p>
+                Fully utilizes QCS8550&apos;s AI capabilities with optimized drivers for Hexagon
+                NPU, Adreno GPU compute, and advanced ISP processing.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><CpuChipIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <CpuChipIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Multi-Model Inference</Heading>
-              <p>Support for concurrent execution of multiple AI models with dynamic resource allocation and thermal management.</p>
+              <p>
+                Support for concurrent execution of multiple AI models with dynamic resource
+                allocation and thermal management.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><BoltIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <BoltIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Hardware Acceleration</Heading>
-              <p>Native integration with Qualcomm AI Engine Direct SDK for maximum performance and efficiency at flagship scale.</p>
+              <p>
+                Native integration with Qualcomm AI Engine Direct SDK for maximum performance and
+                efficiency at flagship scale.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><LockClosedIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <LockClosedIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Enterprise Security</Heading>
-              <p>Hardware-backed security with Qualcomm Secure Processing Unit, secure boot chain, and encrypted storage.</p>
+              <p>
+                Hardware-backed security with Qualcomm Secure Processing Unit, secure boot chain,
+                and encrypted storage.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><WifiIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <WifiIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Advanced Fleet Operations</Heading>
-              <p>Sophisticated device management with A/B update partitions, rollback protection, and remote diagnostics.</p>
+              <p>
+                Sophisticated device management with A/B update partitions, rollback protection, and
+                remote diagnostics.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><GlobeAltIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Future-Ready Connectivity</Heading>
-              <p>5G and Wi-Fi 7 support enables ultra-low latency edge-to-cloud coordination for premium applications.</p>
+              <p>
+                5G and Wi-Fi 7 support enables ultra-low latency edge-to-cloud coordination for
+                premium applications.
+              </p>
             </div>
           </div>
         </div>
@@ -294,7 +374,10 @@ export default function IQ9Solution() {
         <div className={styles.container}>
           <div className={styles.ctaContent}>
             <Heading as="h2">Ready for Flagship Edge AI Performance?</Heading>
-            <p>Transform your Qualcomm IQ-9 into the ultimate edge AI platform for the most demanding applications requiring flagship performance and enterprise reliability.</p>
+            <p>
+              Transform your Qualcomm IQ-9 into the ultimate edge AI platform for the most demanding
+              applications requiring flagship performance and enterprise reliability.
+            </p>
             <div className={styles.ctaButtons}>
               <Link to="/evk" className={styles.ctaPrimary}>
                 Start Premium Demo
@@ -310,7 +393,9 @@ export default function IQ9Solution() {
       {/* Related Resources */}
       <section className={styles.resources}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Documentation & Resources</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Documentation & Resources
+          </Heading>
           <div className={styles.resourceGrid}>
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
               <Heading as="h3">Advanced Yocto Configuration</Heading>

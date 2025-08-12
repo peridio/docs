@@ -6,22 +6,22 @@ Cloud delegated updates enable your backend services to integrate with Peridio t
 
 In some architectures, devices connect to your backend services rather than directly to Peridio. Cloud delegated updates allow your backend to:
 
-  - Check for available updates on behalf of devices.
-  - Manage device update state in Peridio.
-  - Leverage Admin API authentication and authorization controls.
-  - Facilitate cloud-to-cloud integrations.
+- Check for available updates on behalf of devices.
+- Manage device update state in Peridio.
+- Leverage Admin API authentication and authorization controls.
+- Facilitate cloud-to-cloud integrations.
 
 ## Prerequisites
 
-  - Admin API access credentials.
-  - Proper authorization with the required permissions:
-    - `device.check_for_update`
-    - `binary.download`
-  - Device PRNs for the devices you want to manage.
-  - Current update state for the devices you want to manage.
-    - Release PRN.
-    - Bundle PRN.
-    - Release version.
+- Admin API access credentials.
+- Proper authorization with the required permissions:
+  - `device.check_for_update`
+  - `binary.download`
+- Device PRNs for the devices you want to manage.
+- Current update state for the devices you want to manage.
+  - Release PRN.
+  - Bundle PRN.
+  - Release version.
 
 ## Check for updates
 

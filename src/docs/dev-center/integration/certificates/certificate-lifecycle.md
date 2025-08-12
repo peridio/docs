@@ -9,12 +9,14 @@ Managing certificates throughout their operational lifetime.
 The initial creation of certificates and keys.
 
 #### Planning
+
 - Define certificate hierarchy
 - Determine validity periods
 - Choose key algorithms
 - Plan naming conventions
 
 #### Key Generation
+
 ```bash
 # Generate private key
 openssl genrsa -out private.key 4096
@@ -24,6 +26,7 @@ openssl ecparam -name prime256v1 -genkey -out ec-private.key
 ```
 
 #### CSR Creation
+
 ```bash
 # Create certificate signing request
 openssl req -new -key private.key -out device.csr \
@@ -35,6 +38,7 @@ openssl req -new -key private.key -out device.csr \
 Issuing certificates from certificate authorities.
 
 #### CA Signing
+
 ```bash
 # Sign certificate with CA
 openssl x509 -req -in device.csr \
@@ -46,6 +50,7 @@ openssl x509 -req -in device.csr \
 ```
 
 #### Validation
+
 - Verify certificate chain
 - Check certificate attributes
 - Validate extensions
@@ -56,12 +61,14 @@ openssl x509 -req -in device.csr \
 Installing certificates on target devices.
 
 #### Deployment Methods
+
 - **Pre-provisioning** - Install during manufacturing
 - **Just-in-Time** - Generate during first boot
 - **Field Update** - Deploy via OTA update
 - **Manual Installation** - Direct file transfer
 
 #### Storage Locations
+
 ```bash
 # Common certificate locations
 /etc/ssl/certs/          # System certificates
@@ -70,6 +77,7 @@ Installing certificates on target devices.
 ```
 
 #### Permissions
+
 ```bash
 # Secure certificate files
 chmod 644 device.crt     # Certificate readable
@@ -82,6 +90,7 @@ chown root:root *.crt *.key
 Tracking certificate status and health.
 
 #### Expiration Monitoring
+
 ```bash
 # Check certificate expiration
 openssl x509 -in device.crt -noout -enddate
@@ -91,13 +100,16 @@ openssl x509 -in device.crt -noout -checkend 2592000
 ```
 
 #### Health Checks
+
 - Certificate expiration warnings
 - Revocation list updates
 - Chain validation status
 - Usage statistics
 
 #### Alerting
+
 Set up alerts for:
+
 - Certificates expiring in 30/60/90 days
 - Revocation list updates
 - Failed authentication attempts
@@ -108,11 +120,13 @@ Set up alerts for:
 Replacing certificates before expiration.
 
 #### Rotation Strategy
+
 - **Scheduled** - Regular rotation intervals
 - **Triggered** - Based on events or policies
 - **Emergency** - Immediate replacement
 
 #### Rotation Process
+
 1. Generate new certificate
 2. Deploy to device
 3. Verify new certificate works
@@ -120,6 +134,7 @@ Replacing certificates before expiration.
 5. Remove old certificate
 
 #### Zero-Downtime Rotation
+
 ```bash
 # Deploy new certificate alongside old
 cp new-device.crt /etc/peridio/certs/device-new.crt
@@ -139,12 +154,14 @@ rm /etc/peridio/certs/device.crt
 Handling compromised or invalid certificates.
 
 #### Revocation Triggers
+
 - Private key compromise
 - Device decommissioning
 - Security policy violation
 - Certificate misuse
 
 #### Revocation Methods
+
 - **Certificate Revocation List (CRL)**
   - Periodic list updates
   - Cached locally on devices
@@ -156,6 +173,7 @@ Handling compromised or invalid certificates.
   - Individual certificate queries
 
 #### Revocation Process
+
 ```bash
 # Add certificate to revocation list
 openssl ca -revoke device.crt -config ca.conf
@@ -170,13 +188,16 @@ peridio deployments create --crl crl.pem
 ## Lifecycle Automation
 
 ### Platform Features
+
 Peridio provides automated lifecycle management:
+
 - Automatic expiration monitoring
 - Scheduled rotation workflows
 - Integrated revocation management
 - Audit logging and compliance
 
 ### API Integration
+
 ```bash
 # Check certificate status
 peridio device-certificates get $CERT_ID
@@ -191,18 +212,21 @@ peridio device-certificates revoke $CERT_ID
 ## Best Practices
 
 ### Planning
+
 - Design for rotation from the start
 - Use shorter validity periods for higher security
 - Implement monitoring before deployment
 - Document procedures and policies
 
 ### Operations
+
 - Automate routine tasks
 - Test rotation procedures regularly
 - Maintain revocation capability
 - Keep audit logs
 
 ### Security
+
 - Protect private keys at all stages
 - Use secure communication for deployment
 - Implement defense in depth
@@ -211,15 +235,19 @@ peridio device-certificates revoke $CERT_ID
 ## Common Challenges
 
 ### Challenge: Mass Rotation
+
 **Solution**: Implement staged rollout with canary deployments
 
 ### Challenge: Offline Devices
+
 **Solution**: Use longer validity periods with CRL caching
 
 ### Challenge: Emergency Revocation
+
 **Solution**: Maintain hot-standby replacement certificates
 
 ### Challenge: Chain Updates
+
 **Solution**: Deploy new chains before old ones expire
 
 ## Related Documentation

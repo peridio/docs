@@ -69,6 +69,7 @@ When creating a webhook, Peridio automatically performs URL verification:
 4. **Failure handling** - If verification fails, the webhook creation will fail
 
 **Example verification payload:**
+
 ```json
 {
   "version": 1,
@@ -83,6 +84,7 @@ When creating a webhook, Peridio automatically performs URL verification:
 ```
 
 Your endpoint should respond with:
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -160,6 +162,7 @@ peridio webhooks roll-secret --prn prn:1:your-org:webhook:webhook-id
 ```
 
 **Important considerations:**
+
 - Rolling secrets may cause a brief transition period where both old and new secrets are valid
 - Update your verification code to handle dual signatures during transitions
 - Test your verification logic after rolling secrets
@@ -175,6 +178,7 @@ peridio webhooks test-fire --prn prn:1:your-org:webhook:webhook-id
 ```
 
 This sends a `webhook.test_fire` event to your endpoint, allowing you to:
+
 - Verify your endpoint is reachable
 - Test your signature verification logic
 - Confirm your event processing works correctly
@@ -190,6 +194,7 @@ Before creating a webhook, ensure your endpoint:
 5. **Processes quickly** to avoid timeouts
 
 **Example endpoint test:**
+
 ```bash
 # Test your endpoint manually
 curl -X POST https://your-domain.com/webhooks \
@@ -263,7 +268,7 @@ peridio webhooks delete --prn prn:1:your-org:webhook:webhook-id
 Once your webhook is configured:
 
 1. **[Implement security](./security.md)** - Add signature verification to your endpoint
-2. **[Understand events](./events-and-payloads.md)** - Learn about event types and payload structures  
+2. **[Understand events](./events-and-payloads.md)** - Learn about event types and payload structures
 3. **[Monitor and debug](./troubleshooting.md)** - Set up monitoring and handle common issues
 
 ## Common Configuration Issues

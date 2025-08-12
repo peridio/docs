@@ -6,8 +6,8 @@
 
 This guide depends on the following requirements:
 
-* [Peridio Cloud Configuration](/integration/linux/overview#peridio-cloud-requirements)
-* [Peridio CLI Development Machine](/integration/linux/overview#development-machine-requirements)
+- [Peridio Cloud Configuration](/integration/linux/overview#peridio-cloud-requirements)
+- [Peridio CLI Development Machine](/integration/linux/overview#development-machine-requirements)
 
 ### Configuration
 
@@ -54,11 +54,11 @@ Connect a serial console cable to the UART pins on the Khadas header
 
 <img src="/img/integration/linux/reference-designs/khadas-vim3-console.png" />
 
-| Serial tools pin | GPIO board header pin | Name |
-|-|-|-|
-| GND | 17 | |
-| TXD | 18 | Linux_Rx |
-| RXD | 19 | Linux_Tx |
-| VCC | 20 | |
+| Serial tools pin | GPIO board header pin | Name     |
+| ---------------- | --------------------- | -------- |
+| GND              | 17                    |          |
+| TXD              | 18                    | Linux_Rx |
+| RXD              | 19                    | Linux_Tx |
+| VCC              | 20                    |          |
 
 Insert the microSD card and power on the board.

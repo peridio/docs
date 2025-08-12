@@ -45,6 +45,7 @@ http://[server_tunnel_ip_address]:[server_tunnel_port]
 ```
 
 Example:
+
 ```
 http://3.82.23.99:47532
 ```
@@ -114,6 +115,7 @@ curl -O http://server_ip:server_port/logs/system.log
 Set up browser to use tunnel as proxy:
 
 1. Create SSH tunnel with SOCKS proxy:
+
 ```bash
 ssh -D 1080 user@server_ip -p server_port
 ```
@@ -197,7 +199,7 @@ for _ in range(10):
         '--prn', tunnel_prn,
         '--output', 'json'
     ], capture_output=True, text=True)
-    
+
     status = json.loads(result.stdout)
     if status['state'] == 'open':
         base_url = f"http://{status['server_tunnel_ip_address']}:{status['server_tunnel_port']}"
@@ -214,16 +216,16 @@ assert response.status_code == 200
 WebSocket connections work through HTTP tunnels:
 
 ```javascript
-const ws = new WebSocket(`ws://server_ip:server_port/ws`);
+const ws = new WebSocket(`ws://server_ip:server_port/ws`)
 
 ws.onopen = () => {
-    console.log('Connected to device WebSocket');
-    ws.send('Hello Device');
-};
+  console.log('Connected to device WebSocket')
+  ws.send('Hello Device')
+}
 
 ws.onmessage = (event) => {
-    console.log('Received:', event.data);
-};
+  console.log('Received:', event.data)
+}
 ```
 
 ## Security Best Practices
@@ -284,10 +286,10 @@ Configure CORS headers on device web service:
 ```javascript
 // Express.js example
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  next()
+})
 ```
 
 ## Performance Optimization
@@ -295,6 +297,7 @@ app.use((req, res, next) => {
 ### Enable Compression
 
 Nginx configuration:
+
 ```nginx
 gzip on;
 gzip_types text/plain application/json application/javascript text/css;

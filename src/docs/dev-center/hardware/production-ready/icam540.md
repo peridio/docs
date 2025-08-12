@@ -18,6 +18,7 @@ The iCam540 is a production-ready AI camera system designed for advanced compute
 ## Technical Specifications
 
 ### Vision Capabilities
+
 - High-resolution image sensor
 - Advanced ISP (Image Signal Processor)
 - Hardware-accelerated video encoding/decoding
@@ -25,12 +26,14 @@ The iCam540 is a production-ready AI camera system designed for advanced compute
 - Low-light optimization
 
 ### AI Processing
+
 - Dedicated NPU for edge AI inference
 - Support for popular ML frameworks
 - Pre-trained model library available
 - Custom model deployment capability
 
 ### Connectivity
+
 - Gigabit Ethernet with PoE+ support
 - Wi-Fi 6 and Bluetooth 5.2
 - USB 3.0 interfaces
@@ -38,12 +41,14 @@ The iCam540 is a production-ready AI camera system designed for advanced compute
 - GPIO for external triggers and controls
 
 ### Video Output
+
 - H.264/H.265 encoding
 - Multiple simultaneous streams
 - RTSP/ONVIF support
 - Cloud streaming capabilities
 
 ### Environmental
+
 - Operating Temperature: -20°C to 60°C
 - IP66 weatherproof rating (with enclosure)
 - Vibration and shock resistant
@@ -52,6 +57,7 @@ The iCam540 is a production-ready AI camera system designed for advanced compute
 ## Purchasing Information
 
 Available from authorized distributors:
+
 - **Advantech**: Global industrial solutions
 - **Arrow Electronics**: Technology solutions provider
 - **Mouser Electronics**: Component and system distributor
@@ -60,24 +66,28 @@ Available from authorized distributors:
 ## Use Cases
 
 ### Industrial Vision
+
 - Quality inspection and defect detection
 - Production line monitoring
 - Automated optical inspection (AOI)
 - Barcode and OCR reading
 
 ### Smart Retail
+
 - Customer analytics and heat mapping
 - Inventory management
 - Queue management
 - Loss prevention
 
 ### Smart Cities
+
 - Traffic monitoring and analytics
 - License plate recognition
 - Parking management
 - Public safety applications
 
 ### Healthcare
+
 - Patient monitoring
 - Fall detection
 - Access control
@@ -112,6 +122,7 @@ sudo peridio-agent status
 ## AI Model Deployment
 
 The iCam540 supports various pre-trained models:
+
 - Object detection (YOLO, SSD)
 - Face detection and recognition
 - Person detection and tracking
@@ -121,6 +132,7 @@ The iCam540 supports various pre-trained models:
 ### Model Management via Peridio
 
 Deploy and update AI models using Peridio's OTA capabilities:
+
 1. Package models as binary artifacts
 2. Create releases with model updates
 3. Deploy to device cohorts
@@ -130,12 +142,14 @@ Deploy and update AI models using Peridio's OTA capabilities:
 ## Development Resources
 
 ### SDK and Tools
+
 - Camera SDK for application development
 - Model conversion tools
 - Performance profiling utilities
 - Sample applications and demos
 
 ### Documentation
+
 - [Hardware Integration Guide]
 - [API Reference]
 - [AI Model Development Guide]

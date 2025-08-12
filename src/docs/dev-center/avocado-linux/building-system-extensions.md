@@ -14,18 +14,21 @@ This page is currently being developed. Check back soon for comprehensive docume
 This guide will cover:
 
 ### Understanding System Extensions
+
 - What are systemd system extensions
 - Benefits over traditional package management
 - Immutable root filesystem architecture
 - Extension layering and composition
 
 ### Creating Extensions
+
 - Extension directory structure
 - Metadata requirements (`extension-release`)
 - Version compatibility
 - Dependencies and conflicts
 
 ### Building with Avocado SDK
+
 ```bash
 # Example commands (coming soon)
 avocado-repo sysext install <package>
@@ -34,6 +37,7 @@ avocado-sysext validate
 ```
 
 ### Extension Types
+
 - **Application Extensions**: User-space applications
 - **Service Extensions**: System services and daemons
 - **Driver Extensions**: Kernel modules and firmware
@@ -41,6 +45,7 @@ avocado-sysext validate
 - **Configuration Extensions**: System configuration overlays
 
 ### Advanced Topics
+
 - Multi-architecture extensions
 - Signed extensions for secure boot
 - Delta updates for extensions
@@ -48,6 +53,7 @@ avocado-sysext validate
 - Runtime extension management
 
 ### Best Practices
+
 - Minimizing extension size
 - Security considerations
 - Version management strategies
@@ -55,6 +61,7 @@ avocado-sysext validate
 - Documentation requirements
 
 ### Integration with Peridio
+
 - OTA updates for extensions
 - Extension deployment strategies
 - A/B testing with extensions

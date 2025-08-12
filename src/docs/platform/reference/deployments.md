@@ -40,19 +40,19 @@ Deployments allow you to configure failure rates and thresholds such that device
 
 ### Automatically quarantine deployments
 
-|Field|Description|
-|-|-|
-|Failure rate|How many devices can have asked 2 or more times each for the same update from the same deployment within failure rate seconds before the deployment is automatically quarantined.|
-|Failure rate seconds|The duration to use with failure rate.|
-|Failure threshold|How many devices with firmware metadata whose architecture, platform, product, and uuid match that of the deployment's firmware that can be simultaneously quarantined before the deployment is automatically quarantined.|
+| Field                | Description                                                                                                                                                                                                                |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Failure rate         | How many devices can have asked 2 or more times each for the same update from the same deployment within failure rate seconds before the deployment is automatically quarantined.                                          |
+| Failure rate seconds | The duration to use with failure rate.                                                                                                                                                                                     |
+| Failure threshold    | How many devices with firmware metadata whose architecture, platform, product, and uuid match that of the deployment's firmware that can be simultaneously quarantined before the deployment is automatically quarantined. |
 
 ### Automatically quarantine devices
 
-|Field|Description|
-|-|-|
-|Device failure rate|How many times a device can have asked for the same update from the same deployment within device failure rate seconds before the device is automatically quarantined.|
-|Device failure rate seconds|The duration to use with device failure rate.|
-|Device Failure threshold|How many times total a device can have asked for the same update from the same deployment before the device is automatically quarantined.|
+| Field                       | Description                                                                                                                                                            |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Device failure rate         | How many times a device can have asked for the same update from the same deployment within device failure rate seconds before the device is automatically quarantined. |
+| Device failure rate seconds | The duration to use with device failure rate.                                                                                                                          |
+| Device Failure threshold    | How many times total a device can have asked for the same update from the same deployment before the device is automatically quarantined.                              |
 
 ### Clear failure rates and thresholds
 

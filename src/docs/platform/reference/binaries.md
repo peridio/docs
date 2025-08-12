@@ -97,7 +97,7 @@ Destroying a binary is an irreversible and destructive action.
 - The binary's record is updated such that `destroyed: true, bytes_uploaded: 0`.
 - The binary's content is irrecoverably deleted.
 - Devices' ability to update may be interupted, see [impact on releases](#impact-on-releases).
-:::
+  :::
 
 ### Impact on releases
 

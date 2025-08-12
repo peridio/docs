@@ -65,6 +65,7 @@ Since tunnel creation is asynchronous, you may need to poll for status. Here's a
 3. Stop after 30 seconds total elapsed time
 
 Example polling strategy:
+
 - First check: 2 seconds after creation
 - Second check: 4 seconds after first check
 - Third check: 9 seconds after second check
@@ -73,6 +74,7 @@ Example polling strategy:
 ## Common Connection Types
 
 ### SSH Access
+
 ```bash
 peridio tunnels create \
   --device-prn $PERIDIO_DEVICE_PRN \
@@ -80,6 +82,7 @@ peridio tunnels create \
 ```
 
 ### HTTP/Web Interface
+
 ```bash
 peridio tunnels create \
   --device-prn $PERIDIO_DEVICE_PRN \
@@ -89,6 +92,7 @@ peridio tunnels create \
 Then access via browser: `http://[server_tunnel_ip_address]:[server_tunnel_port]`
 
 ### Custom Application
+
 ```bash
 peridio tunnels create \
   --device-prn $PERIDIO_DEVICE_PRN \
@@ -104,6 +108,7 @@ peridio tunnels create \
 5. **Closed**: Tunnel has been terminated
 
 Tunnels automatically close after:
+
 - The configured expiration time (default: 1 hour)
 - Manual termination via API
 - Device disconnection
@@ -111,16 +116,19 @@ Tunnels automatically close after:
 ## Troubleshooting
 
 ### Tunnel Stays in "Created" State
+
 - Verify the device is online and connected to Peridio
 - Check that peridiod has tunnel support enabled
 - Ensure the device can make outbound connections
 
 ### Connection Refused
+
 - Verify the service is running on the specified port on the device
 - Check device firewall rules
 - Ensure the tunnel is in "open" state
 
 ### Tunnel Expires Too Quickly
+
 - Request longer duration when creating tunnel
 - Keep activity on the connection to prevent idle timeout
 

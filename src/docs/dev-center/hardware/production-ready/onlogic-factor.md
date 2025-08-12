@@ -18,14 +18,18 @@ The OnLogic Factor 201 and Factor 202 are rugged, fanless industrial computers d
 ## Model Comparison
 
 ### Factor 201
+
 Compact edge computer optimized for space-constrained deployments:
+
 - Intel Atom or Celeron processors
 - Ideal for basic edge computing and IoT gateway applications
 - Lower power consumption (12-24W typical)
 - Compact form factor
 
 ### Factor 202
+
 Higher performance system for demanding applications:
+
 - Intel Core i3/i5/i7 processor options
 - Suitable for AI inference and complex edge analytics
 - Enhanced graphics capabilities
@@ -36,6 +40,7 @@ Higher performance system for demanding applications:
 ### Common Features (Both Models)
 
 #### Durability
+
 - Fanless, ventless design
 - Operating Temperature: -40°C to 70°C (with wide-temp option)
 - Shock: 50G (IEC 60068-2-27)
@@ -43,6 +48,7 @@ Higher performance system for demanding applications:
 - IP50 rated enclosure
 
 #### Connectivity
+
 - Dual Gigabit Ethernet ports
 - Wi-Fi 6 and Bluetooth 5.2 (optional)
 - 4G/5G cellular modem support (optional)
@@ -50,12 +56,14 @@ Higher performance system for demanding applications:
 - Serial ports (RS232/RS485)
 
 #### Storage & Memory
+
 - M.2 NVMe SSD support
 - 2.5" SATA drive bay
 - DDR4 SO-DIMM (up to 64GB)
 - eMMC option available
 
 #### I/O Options
+
 - Digital I/O (GPIO)
 - CAN bus support
 - Mini PCIe expansion slots
@@ -78,6 +86,7 @@ Higher performance system for demanding applications:
 ## Purchasing Information
 
 ### Direct from OnLogic
+
 - Configure-to-order options
 - Volume pricing available
 - Global shipping
@@ -85,6 +94,7 @@ Higher performance system for demanding applications:
 - Custom branding available
 
 ### Configuration Options
+
 - Processor selection
 - Memory and storage
 - Wireless connectivity
@@ -96,6 +106,7 @@ Visit [onlogic.com](https://www.onlogic.com) or contact OnLogic sales for quotes
 ## Use Cases
 
 ### Industrial Automation
+
 - PLC replacement and augmentation
 - SCADA systems
 - Machine control and monitoring
@@ -103,6 +114,7 @@ Visit [onlogic.com](https://www.onlogic.com) or contact OnLogic sales for quotes
 - Predictive maintenance systems
 
 ### Transportation
+
 - Fleet management systems
 - Vehicle diagnostics
 - Digital signage controllers
@@ -110,6 +122,7 @@ Visit [onlogic.com](https://www.onlogic.com) or contact OnLogic sales for quotes
 - Traffic monitoring
 
 ### Energy & Utilities
+
 - Substation automation
 - Smart grid controllers
 - Solar/wind farm monitoring
@@ -117,6 +130,7 @@ Visit [onlogic.com](https://www.onlogic.com) or contact OnLogic sales for quotes
 - Water treatment systems
 
 ### Edge AI
+
 - Computer vision applications
 - Predictive analytics
 - Anomaly detection
@@ -158,16 +172,19 @@ sudo peridio-agent status
 ## Optimizations for OnLogic Hardware
 
 ### Power Management
+
 - Configure for always-on operation
 - Set up wake-on-LAN if needed
 - Optimize for thermal constraints
 
 ### Storage Configuration
+
 - Use industrial-grade SSDs
 - Configure wear leveling
 - Set up redundant storage if critical
 
 ### Network Resilience
+
 - Configure failover between Ethernet and cellular
 - Set up connection monitoring
 - Implement local buffering for offline scenarios
@@ -175,12 +192,14 @@ sudo peridio-agent status
 ## Development Tools
 
 ### Supported Operating Systems
+
 - Ubuntu 20.04/22.04 LTS
 - Debian 11/12
 - Yocto Project custom builds
 - Windows 10/11 IoT Enterprise
 
 ### Development Resources
+
 - OnLogic BSP packages
 - Hardware documentation
 - Sample applications
@@ -189,12 +208,14 @@ sudo peridio-agent status
 ## Support & Resources
 
 ### OnLogic Support
+
 - Hardware warranty and RMA
 - Technical documentation
 - BIOS customization
 - Hardware customization services
 
 ### Peridio Support
+
 - Integration assistance
 - OTA update configuration
 - Device management setup

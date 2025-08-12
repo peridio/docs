@@ -62,7 +62,6 @@ Lastly, there are statistics showing the percentage of devices that are on the g
 
 Hover table column headers to view more detailed descriptions. Hover percentage values to see actual device count numbers.
 
-
 ## Additional Resources
 
 [Read our introductory blog post for Fleet View.](https://blog.peridio.com/introducing-fleet-view)

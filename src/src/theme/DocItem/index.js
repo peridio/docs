@@ -1,7 +1,7 @@
-import React from 'react';
-import DocItem from '@theme-original/DocItem';
-import Heading from '@theme/Heading';
-import PropTypes from 'prop-types';
+import React from 'react'
+import DocItem from '@theme-original/DocItem'
+import Heading from '@theme/Heading'
+import PropTypes from 'prop-types'
 
 function SpecSheetLayout(props) {
   // Custom layout for spec sheets
@@ -10,17 +10,17 @@ function SpecSheetLayout(props) {
       <Heading as="h1">SPEC SHEET</Heading>
       <DocItem {...props} />
     </div>
-  );
+  )
 }
 
 export default function DocItemWrapper(props) {
-  const { route } = props.content.metadata;
+  const { route } = props.content.metadata
 
   if (route && route.source.includes('solutions')) {
-    return <SpecSheetLayout {...props} />;
+    return <SpecSheetLayout {...props} />
   }
 
-  return <DocItem {...props} />;
+  return <DocItem {...props} />
 }
 
 DocItemWrapper.propTypes = {
@@ -31,4 +31,4 @@ DocItemWrapper.propTypes = {
       }),
     }),
   }),
-};
+}

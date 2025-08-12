@@ -28,7 +28,7 @@ touch database.txt
 mkdir certificates
 ```
 
-Note that when creating certificates with the `openssl ca` command that it will write the same created certificate file twice, once to the `certificates` directory where the name will be the serial number in hex with *.pem* appended, and once to the calling directory with the name specified by the `-out` option of the command.
+Note that when creating certificates with the `openssl ca` command that it will write the same created certificate file twice, once to the `certificates` directory where the name will be the serial number in hex with _.pem_ appended, and once to the calling directory with the name specified by the `-out` option of the command.
 
 :::warning sensitive private keys
 Private keys are sensitive components of a public key infrastructure. If they are leaked the entire downstream chain of trust is compromised.

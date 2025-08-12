@@ -16,18 +16,17 @@ If you **ever** wish to rely on dynamic ordering, it is strongly recommended to 
 
 Releases support static and dynamic ordering:
 
-  - **static** - Releases have a next release field that specifies an explicit path to be walked through a [release channel](release-channels) during [bundle resolution](bundle-distribution#bundle-resolution) via [release PRN resolution](bundle-distribution#release-resolution-method).
-  - **dynamic** - Releases have version and version requirement fields that specify an implicit path to be walked through a [release channel](release-channels) during [bundle resolution](bundle-distribution#bundle-resolution) via [release version resolution](bundle-distribution#release-resolution-method).
+- **static** - Releases have a next release field that specifies an explicit path to be walked through a [release channel](release-channels) during [bundle resolution](bundle-distribution#bundle-resolution) via [release PRN resolution](bundle-distribution#release-resolution-method).
+- **dynamic** - Releases have version and version requirement fields that specify an implicit path to be walked through a [release channel](release-channels) during [bundle resolution](bundle-distribution#bundle-resolution) via [release version resolution](bundle-distribution#release-resolution-method).
 
 For a detailed specification of how the [release channel](release-channels) is walked, see [bundle resolution](bundle-distribution#bundle-resolution).
-
 
 ## Required and disabled
 
 Releases may be required or disabled to impact how they are treated during [bundle resolution](bundle-distribution#bundle-resolution):
 
-  - **required** - A required release cannot be skipped.
-  - **disabled** - A disabled release cannot have its bundle selected during [bundle resolution](bundle-distribution#bundle-resolution), but can be skipped so long as it is not required.
+- **required** - A required release cannot be skipped.
+- **disabled** - A disabled release cannot have its bundle selected during [bundle resolution](bundle-distribution#bundle-resolution), but can be skipped so long as it is not required.
 
 ## Availability
 
@@ -35,11 +34,11 @@ The latest release in a release channel can optionally constrain its availabilit
 
 With respect to availability evaluations:
 
-  - A release that is scheduled for the future is considered scheduled.
-    - A releases ceases to be scheduled once its schedule date has passed.
-  - A release that whose phase mode is not numeric or whose phase value is not 100% is considered phased.
-    - A release ceases to be phased once its phase mode is numeric and its phase value is 100%.
-  - A scheduled or phased release is considered to have its availability constrained.
+- A release that is scheduled for the future is considered scheduled.
+  - A releases ceases to be scheduled once its schedule date has passed.
+- A release that whose phase mode is not numeric or whose phase value is not 100% is considered phased.
+  - A release ceases to be phased once its phase mode is numeric and its phase value is 100%.
+- A scheduled or phased release is considered to have its availability constrained.
 
 :::tip availability + release channels
 For details about how release availability can impact your ability to create new latest releases, see the [only-sinks-constrain-availability](release-channels#only-sinks-constrain-availability) release channel rule.
@@ -55,8 +54,8 @@ The latest release in a graph can be made available gradually by configuring its
 
 There are two supported phase modes that are mutually exclusive but can be updated between:
 
-  1. tags
-  2. numeric
+1. tags
+2. numeric
 
 #### Tags
 

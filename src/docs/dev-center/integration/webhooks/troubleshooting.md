@@ -17,11 +17,14 @@ When webhooks aren't working as expected, start with these steps:
 ### Webhook Creation Fails
 
 #### Issue: URL Verification Timeout
+
 **Symptoms:**
+
 - Webhook creation fails with timeout error
 - "URL verification failed" message
 
 **Causes:**
+
 - Endpoint not responding within timeout period
 - Endpoint returning non-200 status code
 - Network connectivity issues
@@ -37,6 +40,7 @@ curl -X POST https://your-endpoint.com/webhooks \
 ```
 
 **Checklist:**
+
 - [ ] Endpoint returns 200 HTTP status
 - [ ] Response time is under 10 seconds
 - [ ] Endpoint is accessible from the internet
@@ -44,11 +48,14 @@ curl -X POST https://your-endpoint.com/webhooks \
 - [ ] SSL certificate is valid and not expired
 
 #### Issue: Invalid URL Format
+
 **Symptoms:**
+
 - "Invalid URL" error during creation
 - URL validation fails
 
 **Solutions:**
+
 - Ensure URL starts with `https://` (HTTP not supported)
 - URL must be under 1028 characters
 - Use valid URL format with proper encoding
@@ -67,29 +74,35 @@ peridio webhooks create --url https://api.company.com/webhooks with spaces
 ### Webhook Not Receiving Events
 
 #### Issue: Events Not Being Delivered
+
 **Symptoms:**
+
 - Webhook configured but no events received
 - Expected events not triggering webhooks
 
 **Diagnostic Steps:**
 
 1. **Check webhook status:**
+
 ```bash
 peridio webhooks get --prn your-webhook-prn
 ```
 
 2. **Verify enabled events:**
+
 ```bash
 # List webhook configuration
 peridio webhooks get --prn your-webhook-prn | grep enabled_events
 ```
 
 3. **Test with manual event:**
+
 ```bash
 peridio webhooks test-fire --prn your-webhook-prn
 ```
 
 **Common Causes:**
+
 - Webhook is disabled (`state: disabled`)
 - Event type not in `enabled_events` list
 - Endpoint returning non-200 status codes
@@ -108,13 +121,16 @@ peridio webhooks update \
 ```
 
 #### Issue: High-Frequency Events Missing
+
 **Symptoms:**
+
 - Some device events received, others missing
 - Inconsistent event delivery
 
 **Likely Cause:** Rate limiting or endpoint timeouts
 
 **Solutions:**
+
 - Optimize endpoint performance
 - Return 200 immediately, process asynchronously
 - Implement proper error handling
@@ -123,98 +139,105 @@ peridio webhooks update \
 // Good - immediate response
 app.post('/webhooks', (req, res) => {
   // Return 200 immediately
-  res.status(200).send('OK');
-  
+  res.status(200).send('OK')
+
   // Process asynchronously
   setImmediate(() => {
-    processWebhookEvent(req.body);
-  });
-});
+    processWebhookEvent(req.body)
+  })
+})
 
 // Bad - synchronous processing
 app.post('/webhooks', (req, res) => {
-  processWebhookEvent(req.body); // This might be slow
-  res.status(200).send('OK');
-});
+  processWebhookEvent(req.body) // This might be slow
+  res.status(200).send('OK')
+})
 ```
 
 ### Signature Verification Issues
 
 #### Issue: Signature Verification Always Fails
+
 **Symptoms:**
+
 - All webhook requests fail signature verification
 - "Invalid signature" errors in logs
 
 **Common Causes:**
 
 1. **Incorrect secret format:**
+
 ```javascript
 // Wrong - using secret as string
-const secret = 'B284A51B143841695B2D7BF3B8554731';
+const secret = 'B284A51B143841695B2D7BF3B8554731'
 
 // Right - converting hex string to bytes
-const secret = Buffer.from('B284A51B143841695B2D7BF3B8554731', 'hex');
+const secret = Buffer.from('B284A51B143841695B2D7BF3B8554731', 'hex')
 ```
 
 2. **Body modification:**
+
 ```javascript
 // Wrong - body modified by middleware
-app.use(express.json()); // This changes the raw body
+app.use(express.json()) // This changes the raw body
 app.post('/webhooks', (req, res) => {
-  const body = JSON.stringify(req.body); // Body is already parsed
+  const body = JSON.stringify(req.body) // Body is already parsed
   // Signature verification will fail
-});
+})
 
 // Right - preserve raw body
-app.use('/webhooks', express.raw({type: 'application/json'}));
+app.use('/webhooks', express.raw({ type: 'application/json' }))
 app.post('/webhooks', (req, res) => {
-  const body = req.body.toString(); // Use raw body
-  const parsedBody = JSON.parse(body);
+  const body = req.body.toString() // Use raw body
+  const parsedBody = JSON.parse(body)
   // Signature verification will succeed
-});
+})
 ```
 
 3. **Incorrect header names:**
+
 ```javascript
 // Wrong - incorrect header names
-const signature = req.headers['peridio_signature']; // Underscore
-const publishedAt = req.headers['Peridio-Published-At']; // Wrong case
+const signature = req.headers['peridio_signature'] // Underscore
+const publishedAt = req.headers['Peridio-Published-At'] // Wrong case
 
 // Right - correct header names
-const signature = req.headers['peridio-signature']; // Hyphen, lowercase
-const publishedAt = req.headers['peridio-published-at']; // Hyphen, lowercase
+const signature = req.headers['peridio-signature'] // Hyphen, lowercase
+const publishedAt = req.headers['peridio-published-at'] // Hyphen, lowercase
 ```
 
 **Debugging Steps:**
 
 ```javascript
 function debugSignatureVerification(req, webhookSecret) {
-  const signature = req.headers['peridio-signature'];
-  const publishedAt = req.headers['peridio-published-at'];
-  const body = req.body.toString();
-  
-  console.log('Debug signature verification:');
-  console.log('- Signature header:', signature);
-  console.log('- Published-at header:', publishedAt);
-  console.log('- Body length:', body.length);
-  console.log('- Body (first 100 chars):', body.substring(0, 100));
-  console.log('- Webhook secret:', webhookSecret);
-  
-  const toSign = publishedAt + body;
-  console.log('- To-sign payload:', toSign);
-  
+  const signature = req.headers['peridio-signature']
+  const publishedAt = req.headers['peridio-published-at']
+  const body = req.body.toString()
+
+  console.log('Debug signature verification:')
+  console.log('- Signature header:', signature)
+  console.log('- Published-at header:', publishedAt)
+  console.log('- Body length:', body.length)
+  console.log('- Body (first 100 chars):', body.substring(0, 100))
+  console.log('- Webhook secret:', webhookSecret)
+
+  const toSign = publishedAt + body
+  console.log('- To-sign payload:', toSign)
+
   const expectedSignature = crypto
     .createHmac('sha256', Buffer.from(webhookSecret, 'hex'))
     .update(toSign, 'utf8')
     .digest('hex')
-    .toUpperCase();
-    
-  console.log('- Expected signature:', expectedSignature);
+    .toUpperCase()
+
+  console.log('- Expected signature:', expectedSignature)
 }
 ```
 
 #### Issue: Signatures Work Intermittently
+
 **Symptoms:**
+
 - Some webhook requests verify successfully, others fail
 - Inconsistent verification results
 
@@ -225,27 +248,27 @@ function debugSignatureVerification(req, webhookSecret) {
 ```javascript
 function verifySignature(receivedSignature, expectedSignature) {
   // Handle dual signatures (comma-separated)
-  const signatures = receivedSignature.split(',');
-  
-  return signatures.some(sig => 
-    crypto.timingSafeEqual(
-      Buffer.from(expectedSignature, 'hex'),
-      Buffer.from(sig.trim(), 'hex')
-    )
-  );
+  const signatures = receivedSignature.split(',')
+
+  return signatures.some((sig) =>
+    crypto.timingSafeEqual(Buffer.from(expectedSignature, 'hex'), Buffer.from(sig.trim(), 'hex'))
+  )
 }
 ```
 
 ### Replay Attack Protection Issues
 
 #### Issue: Recent Requests Rejected as "Too Old"
+
 **Symptoms:**
+
 - Valid webhook requests rejected with "too old" errors
 - Timestamp validation failing for recent events
 
 **Common Causes:**
 
 1. **Server time synchronization:**
+
 ```bash
 # Check server time
 date
@@ -258,34 +281,38 @@ sudo chrony sources
 ```
 
 2. **Incorrect timezone handling:**
+
 ```javascript
 // Wrong - not handling UTC properly
-const publishedTime = new Date(publishedAt);
+const publishedTime = new Date(publishedAt)
 
 // Right - explicitly handle UTC
-const publishedTime = new Date(publishedAt);
-const currentTime = new Date();
-console.log('Published:', publishedTime.toISOString());
-console.log('Current:', currentTime.toISOString());
+const publishedTime = new Date(publishedAt)
+const currentTime = new Date()
+console.log('Published:', publishedTime.toISOString())
+console.log('Current:', currentTime.toISOString())
 ```
 
 3. **Too strict time tolerance:**
+
 ```javascript
 // Too strict - 30 seconds
 if (timeDiff > 30 * 1000) {
-  throw new Error('Request too old');
+  throw new Error('Request too old')
 }
 
 // Better - 5 minutes (recommended)
 if (timeDiff > 5 * 60 * 1000) {
-  throw new Error('Request too old');
+  throw new Error('Request too old')
 }
 ```
 
 ### Performance and Reliability Issues
 
 #### Issue: Webhook Timeouts
+
 **Symptoms:**
+
 - Webhook delivery failures
 - Retries being triggered
 - Performance degradation
@@ -294,27 +321,29 @@ if (timeDiff > 5 * 60 * 1000) {
 
 ```javascript
 // Use async processing
-const Queue = require('bull');
-const webhookQueue = new Queue('webhook processing');
+const Queue = require('bull')
+const webhookQueue = new Queue('webhook processing')
 
 app.post('/webhooks', async (req, res) => {
   try {
     // Verify signature quickly
-    verifyWebhookSignature(req, webhookSecret);
-    
+    verifyWebhookSignature(req, webhookSecret)
+
     // Return 200 immediately
-    res.status(200).send('OK');
-    
+    res.status(200).send('OK')
+
     // Queue for async processing
-    await webhookQueue.add('process', req.body);
+    await webhookQueue.add('process', req.body)
   } catch (error) {
-    res.status(401).send('Unauthorized');
+    res.status(401).send('Unauthorized')
   }
-});
+})
 ```
 
 #### Issue: Memory Leaks with High Volume
+
 **Symptoms:**
+
 - Increasing memory usage over time
 - Application becomes slow or crashes
 - High webhook volume environments
@@ -323,39 +352,42 @@ app.post('/webhooks', async (req, res) => {
 
 ```javascript
 // Implement proper cleanup
-const processedEvents = new Set();
-const MAX_CACHE_SIZE = 10000;
+const processedEvents = new Set()
+const MAX_CACHE_SIZE = 10000
 
 function processWebhook(eventData) {
   // Deduplicate using event PRN
-  const eventPrn = eventData.prn;
-  
+  const eventPrn = eventData.prn
+
   if (processedEvents.has(eventPrn)) {
-    return; // Already processed
+    return // Already processed
   }
-  
+
   // Clean cache if it gets too large
   if (processedEvents.size >= MAX_CACHE_SIZE) {
-    processedEvents.clear();
+    processedEvents.clear()
   }
-  
-  processedEvents.add(eventPrn);
-  
+
+  processedEvents.add(eventPrn)
+
   // Process the event
-  handleEvent(eventData);
+  handleEvent(eventData)
 }
 ```
 
 ### Development and Testing Issues
 
 #### Issue: Test Events Not Received
+
 **Symptoms:**
+
 - `peridio webhooks test-fire` succeeds but no request received
 - Testing environment issues
 
 **Debugging Steps:**
 
 1. **Check endpoint accessibility:**
+
 ```bash
 # Test from external network
 curl -X POST https://your-endpoint.com/webhooks \
@@ -365,6 +397,7 @@ curl -X POST https://your-endpoint.com/webhooks \
 ```
 
 2. **Use webhook testing tools:**
+
 ```bash
 # Use ngrok for local development
 ngrok http 3000
@@ -374,12 +407,15 @@ peridio webhooks create --url https://abc123.ngrok.io/webhooks
 ```
 
 3. **Check firewall and network settings:**
+
 - Ensure port 443 is open for inbound traffic
 - Verify DNS resolution works correctly
 - Check if behind corporate firewall
 
 #### Issue: Local Development Setup
+
 **Symptoms:**
+
 - Can't test webhooks locally
 - Peridio can't reach local development server
 
@@ -417,9 +453,9 @@ app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    webhook_endpoint: '/webhooks'
-  });
-});
+    webhook_endpoint: '/webhooks',
+  })
+})
 ```
 
 ### Error Rate Monitoring
@@ -428,34 +464,34 @@ app.get('/health', (req, res) => {
 const webhookStats = {
   received: 0,
   processed: 0,
-  failed: 0
-};
+  failed: 0,
+}
 
 app.post('/webhooks', (req, res) => {
-  webhookStats.received++;
-  
+  webhookStats.received++
+
   try {
-    verifyWebhookSignature(req, webhookSecret);
-    processWebhookEvent(req.body);
-    
-    webhookStats.processed++;
-    res.status(200).send('OK');
+    verifyWebhookSignature(req, webhookSecret)
+    processWebhookEvent(req.body)
+
+    webhookStats.processed++
+    res.status(200).send('OK')
   } catch (error) {
-    webhookStats.failed++;
-    console.error('Webhook processing failed:', error);
-    res.status(401).send('Unauthorized');
+    webhookStats.failed++
+    console.error('Webhook processing failed:', error)
+    res.status(401).send('Unauthorized')
   }
-});
+})
 
 // Expose metrics endpoint
 app.get('/metrics', (req, res) => {
-  const errorRate = (webhookStats.failed / webhookStats.received) * 100;
-  
+  const errorRate = (webhookStats.failed / webhookStats.received) * 100
+
   res.json({
     ...webhookStats,
-    error_rate_percent: errorRate.toFixed(2)
-  });
-});
+    error_rate_percent: errorRate.toFixed(2),
+  })
+})
 ```
 
 ## Debugging Tools and Techniques
@@ -463,10 +499,13 @@ app.get('/metrics', (req, res) => {
 ### Request Logging
 
 ```javascript
-const morgan = require('morgan');
+const morgan = require('morgan')
 
 // Custom morgan format for webhook debugging
-app.use('/webhooks', morgan(':method :url :status :res[content-length] - :response-time ms - :req[peridio-signature]'));
+app.use(
+  '/webhooks',
+  morgan(':method :url :status :res[content-length] - :response-time ms - :req[peridio-signature]')
+)
 ```
 
 ### Signature Validation Testing
@@ -474,21 +513,21 @@ app.use('/webhooks', morgan(':method :url :status :res[content-length] - :respon
 ```javascript
 // Test signature generation with known values
 function testSignatureGeneration() {
-  const testSecret = 'B284A51B143841695B2D7BF3B8554731';
-  const testPublishedAt = '2000-01-01T00:00:00Z';
-  const testBody = '{"version":1,"test":"data"}';
-  const expectedSignature = 'EXPECTED_SIGNATURE_HERE';
-  
-  const toSign = testPublishedAt + testBody;
+  const testSecret = 'B284A51B143841695B2D7BF3B8554731'
+  const testPublishedAt = '2000-01-01T00:00:00Z'
+  const testBody = '{"version":1,"test":"data"}'
+  const expectedSignature = 'EXPECTED_SIGNATURE_HERE'
+
+  const toSign = testPublishedAt + testBody
   const signature = crypto
     .createHmac('sha256', Buffer.from(testSecret, 'hex'))
     .update(toSign, 'utf8')
     .digest('hex')
-    .toUpperCase();
-    
-  console.log('Generated signature:', signature);
-  console.log('Expected signature:', expectedSignature);
-  console.log('Match:', signature === expectedSignature);
+    .toUpperCase()
+
+  console.log('Generated signature:', signature)
+  console.log('Expected signature:', expectedSignature)
+  console.log('Match:', signature === expectedSignature)
 }
 ```
 

@@ -7,7 +7,9 @@ Essential security guidelines for certificate management in Peridio.
 ### Storage Requirements
 
 #### Hardware Security Modules (HSM)
+
 Highest security for production environments:
+
 ```bash
 # PKCS#11 HSM integration
 openssl req -new -keyform engine -engine pkcs11 \
@@ -16,13 +18,16 @@ openssl req -new -keyform engine -engine pkcs11 \
 ```
 
 Benefits:
+
 - Keys never exist in plaintext
 - Tamper-resistant hardware
 - Cryptographic operations in secure boundary
 - Audit logging of all operations
 
 #### Trusted Platform Module (TPM)
+
 Built-in security for embedded devices:
+
 ```bash
 # TPM 2.0 key generation
 tpm2_createprimary -C e -g sha256 -G rsa -c primary.ctx
@@ -31,7 +36,9 @@ tpm2_create -C primary.ctx -g sha256 -G rsa \
 ```
 
 #### Secure File Storage
+
 When hardware security isn't available:
+
 ```bash
 # Encrypt private key
 openssl rsa -aes256 -in device.key -out device.key.enc
@@ -47,6 +54,7 @@ mv device.key /etc/peridio/private/
 ### Key Generation Best Practices
 
 #### Entropy Requirements
+
 ```bash
 # Check available entropy
 cat /proc/sys/kernel/random/entropy_avail
@@ -59,18 +67,20 @@ openssl genrsa -rand random.dat -out device.key 4096
 ```
 
 #### Algorithm Selection
+
 Recommended algorithms by use case:
 
-| Use Case | Algorithm | Key Size | Notes |
-|----------|-----------|----------|-------|
-| General Purpose | RSA | 4096 bits | Wide compatibility |
-| Embedded Devices | ECDSA | P-256 | Smaller keys/signatures |
-| High Security | EdDSA | Ed25519 | Modern, fast |
-| Legacy Systems | RSA | 2048 bits | Minimum acceptable |
+| Use Case         | Algorithm | Key Size  | Notes                   |
+| ---------------- | --------- | --------- | ----------------------- |
+| General Purpose  | RSA       | 4096 bits | Wide compatibility      |
+| Embedded Devices | ECDSA     | P-256     | Smaller keys/signatures |
+| High Security    | EdDSA     | Ed25519   | Modern, fast            |
+| Legacy Systems   | RSA       | 2048 bits | Minimum acceptable      |
 
 ### Access Control
 
 #### Linux Permissions
+
 ```bash
 # Certificate files (public)
 chmod 644 /etc/peridio/certs/*.crt
@@ -85,6 +95,7 @@ chown peridiod:peridiod /etc/peridio/private/
 ```
 
 #### Process Isolation
+
 ```systemd
 # systemd service hardening
 [Service]
@@ -102,6 +113,7 @@ ReadWritePaths=/etc/peridio/
 ### Chain Verification
 
 #### Complete Chain Validation
+
 ```bash
 # Verify full certificate chain
 openssl verify -CAfile root-ca.crt \
@@ -116,6 +128,7 @@ openssl verify -crl_check_all \
 ```
 
 #### Pinning Strategies
+
 ```c
 // Certificate pinning in application
 const char* expected_ca_fingerprint = "SHA256:abcd1234...";
@@ -124,14 +137,14 @@ int verify_certificate(X509* cert) {
     // Get certificate fingerprint
     unsigned char fingerprint[EVP_MAX_MD_SIZE];
     unsigned int fingerprint_size;
-    
-    if (!X509_digest(cert, EVP_sha256(), 
+
+    if (!X509_digest(cert, EVP_sha256(),
                      fingerprint, &fingerprint_size)) {
         return -1;
     }
-    
+
     // Compare with expected
-    return memcmp(fingerprint, expected_ca_fingerprint, 
+    return memcmp(fingerprint, expected_ca_fingerprint,
                   fingerprint_size);
 }
 ```
@@ -139,6 +152,7 @@ int verify_certificate(X509* cert) {
 ### Revocation Checking
 
 #### CRL Implementation
+
 ```bash
 # Download and cache CRL
 curl -o /etc/peridio/crl.pem \
@@ -151,6 +165,7 @@ EOF
 ```
 
 #### OCSP Configuration
+
 ```nginx
 # NGINX OCSP stapling
 ssl_stapling on;
@@ -164,28 +179,30 @@ resolver 8.8.8.8 8.8.4.4 valid=300s;
 ### Automated Rotation
 
 #### Rotation Schedule
+
 ```yaml
 # rotation-policy.yml
 certificates:
   root_ca:
     validity: 20 years
     rotation_warning: 2 years
-    
+
   intermediate_ca:
     validity: 5 years
     rotation_warning: 6 months
-    
+
   device_certificates:
     validity: 1 year
     rotation_warning: 30 days
     auto_rotate: true
-    
+
   signing_keys:
     validity: 2 years
     rotation_warning: 60 days
 ```
 
 #### Zero-Downtime Rotation
+
 ```bash
 #!/bin/bash
 # Certificate rotation script
@@ -206,7 +223,7 @@ if peridio-test-auth --cert $NEW_CERT --key $NEW_KEY; then
     mv $NEW_KEY $OLD_KEY.backup
     mv $NEW_CERT $OLD_CERT
     mv $NEW_KEY $OLD_KEY
-    
+
     # Reload service
     systemctl reload peridiod
 else
@@ -221,6 +238,7 @@ fi
 ### Certificate Monitoring
 
 #### Expiration Tracking
+
 ```bash
 #!/bin/bash
 # Certificate expiration monitor
@@ -241,6 +259,7 @@ done
 ```
 
 #### Health Metrics
+
 ```python
 # Prometheus metrics exporter
 from prometheus_client import Gauge
@@ -248,7 +267,7 @@ import OpenSSL
 import glob
 import time
 
-cert_expiry = Gauge('certificate_expiry_seconds', 
+cert_expiry = Gauge('certificate_expiry_seconds',
                    'Certificate expiration time',
                    ['filename', 'cn'])
 
@@ -258,16 +277,16 @@ def check_certificates():
             cert = OpenSSL.crypto.load_certificate(
                 OpenSSL.crypto.FILETYPE_PEM, f.read()
             )
-            
+
         # Get expiration time
         expiry = cert.get_notAfter().decode('ascii')
         expiry_time = time.mktime(
             time.strptime(expiry, '%Y%m%d%H%M%SZ')
         )
-        
+
         # Get common name
         cn = cert.get_subject().CN
-        
+
         # Set metric
         cert_expiry.labels(
             filename=cert_file,
@@ -278,6 +297,7 @@ def check_certificates():
 ### Audit Logging
 
 #### Comprehensive Logging
+
 ```json
 {
   "timestamp": "2024-01-15T10:30:00Z",
@@ -295,6 +315,7 @@ def check_certificates():
 ```
 
 #### Log Retention
+
 ```bash
 # Configure log rotation
 cat > /etc/logrotate.d/peridio-certs <<EOF
@@ -318,14 +339,16 @@ EOF
 ### Incident Response
 
 #### Key Compromise
+
 1. **Immediate Actions**
+
    ```bash
    # Revoke compromised certificate
    peridio ca-certificates revoke $CERT_ID --reason key-compromise
-   
+
    # Generate new certificate
    peridio device-certificates create --device-id $DEVICE_ID
-   
+
    # Deploy via emergency channel
    peridio deployments create --emergency --cert-update
    ```
@@ -345,6 +368,7 @@ EOF
 ### Backup and Recovery
 
 #### Key Backup
+
 ```bash
 # Encrypted backup of CA keys
 tar czf - /etc/peridio/ca-keys/ | \
@@ -357,6 +381,7 @@ split -b 1M ca-backup.tar.gz.enc ca-backup-part-
 ```
 
 #### Recovery Procedures
+
 ```bash
 # Reconstruct backup
 cat ca-backup-part-* > ca-backup.tar.gz.enc
@@ -371,12 +396,14 @@ openssl enc -d -aes-256-cbc -in ca-backup.tar.gz.enc | \
 ### Industry Standards
 
 #### NIST Guidelines
+
 - Use NIST-approved algorithms
 - Minimum 2048-bit RSA or P-256 ECDSA
 - Regular security assessments
 - Documented key management practices
 
 #### Common Criteria
+
 - Formal security evaluation
 - Protection profiles compliance
 - Vulnerability assessment
@@ -385,6 +412,7 @@ openssl enc -d -aes-256-cbc -in ca-backup.tar.gz.enc | \
 ### Documentation Requirements
 
 #### Required Documentation
+
 - Certificate Policy (CP)
 - Certification Practice Statement (CPS)
 - Key Management Plan
@@ -392,6 +420,7 @@ openssl enc -d -aes-256-cbc -in ca-backup.tar.gz.enc | \
 - Audit Procedures
 
 #### Record Keeping
+
 - Certificate issuance logs: 7 years
 - Revocation records: Permanent
 - Audit logs: 3 years

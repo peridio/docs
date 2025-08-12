@@ -13,7 +13,7 @@
   background: white;
 }
 
-html[data-theme='dark'] .support-matrix {
+html[data-theme="dark"] .support-matrix {
   background: #1e1e1e;
 }
 
@@ -22,7 +22,7 @@ html[data-theme='dark'] .support-matrix {
   color: white;
 }
 
-html[data-theme='dark'] .support-matrix thead {
+html[data-theme="dark"] .support-matrix thead {
   background: linear-gradient(135deg, #4c5aaf 0%, #5a3d7f 100%);
 }
 
@@ -45,7 +45,7 @@ html[data-theme='dark'] .support-matrix thead {
   border-bottom: 1px solid #e2e8f0;
 }
 
-html[data-theme='dark'] .support-matrix tbody tr {
+html[data-theme="dark"] .support-matrix tbody tr {
   border-bottom: 1px solid #374151;
 }
 
@@ -53,7 +53,7 @@ html[data-theme='dark'] .support-matrix tbody tr {
   background: #f7fafc;
 }
 
-html[data-theme='dark'] .support-matrix tbody tr:hover {
+html[data-theme="dark"] .support-matrix tbody tr:hover {
   background: #2d2d2d;
 }
 
@@ -73,7 +73,7 @@ html[data-theme='dark'] .support-matrix tbody tr:hover {
   font-weight: 600;
 }
 
-html[data-theme='dark'] .category-header {
+html[data-theme="dark"] .category-header {
   background: #2a2a2a;
 }
 
@@ -86,7 +86,7 @@ html[data-theme='dark'] .category-header {
   letter-spacing: 0.05em;
 }
 
-html[data-theme='dark'] .category-header td {
+html[data-theme="dark"] .category-header td {
   color: #94a3b8;
 }
 
@@ -124,7 +124,7 @@ html[data-theme='dark'] .category-header td {
   border: 1px solid #e2e8f0;
 }
 
-html[data-theme='dark'] .support-legend {
+html[data-theme="dark"] .support-legend {
   background: #1e1e1e;
   border-color: #374151;
 }
@@ -136,7 +136,7 @@ html[data-theme='dark'] .support-legend {
   color: #334155;
 }
 
-html[data-theme='dark'] .support-legend h3 {
+html[data-theme="dark"] .support-legend h3 {
   color: #cbd5e1;
 }
 
@@ -157,7 +157,7 @@ html[data-theme='dark'] .support-legend h3 {
   color: #64748b;
 }
 
-html[data-theme='dark'] .support-legend li {
+html[data-theme="dark"] .support-legend li {
   color: #94a3b8;
 }
 
@@ -172,17 +172,17 @@ html[data-theme='dark'] .support-legend li {
   .support-matrix {
     font-size: 0.8rem;
   }
-  
+
   .support-matrix th,
   .support-matrix td {
     padding: 0.5rem;
   }
-  
+
   .support-matrix th:first-child,
   .support-matrix td:first-child {
     min-width: 150px;
   }
-  
+
   .support-legend ul {
     flex-direction: column;
     gap: 0.75rem;
@@ -202,6 +202,6 @@ html[data-theme='dark'] .support-legend li {
   color: #1e293b;
 }
 
-html[data-theme='dark'] .support-matrix strong {
+html[data-theme="dark"] .support-matrix strong {
   color: #e2e8f0;
 }

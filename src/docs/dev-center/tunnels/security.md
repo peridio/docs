@@ -24,14 +24,14 @@ Implement authentication for HTTP services:
 ```javascript
 // Express.js middleware example
 const authenticate = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!verifyToken(token)) {
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
-    next();
-};
+  const token = req.headers['authorization']
+  if (!verifyToken(token)) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+  next()
+}
 
-app.use('/api', authenticate);
+app.use('/api', authenticate)
 ```
 
 ### Role-Based Access Control
@@ -41,9 +41,8 @@ Implement RBAC for tunnel creation:
 ```javascript
 // Check user permissions before creating tunnel
 const canCreateTunnel = (user, device) => {
-    return user.role === 'admin' || 
-           user.devices.includes(device.id);
-};
+  return user.role === 'admin' || user.devices.includes(device.id)
+}
 ```
 
 ## Network Security
@@ -183,9 +182,9 @@ def log_tunnel_access(tunnel_prn):
         '--prn', tunnel_prn,
         '--output', 'json'
     ], capture_output=True, text=True)
-    
+
     tunnel_info = json.loads(result.stdout)
-    
+
     log_entry = {
         'timestamp': datetime.now().isoformat(),
         'tunnel_prn': tunnel_prn,
@@ -194,7 +193,7 @@ def log_tunnel_access(tunnel_prn):
         'ip_address': tunnel_info['server_tunnel_ip_address'],
         'port': tunnel_info['server_tunnel_port']
     }
-    
+
     with open('/var/log/tunnel-audit.json', 'a') as f:
         f.write(json.dumps(log_entry) + '\n')
 ```

@@ -33,6 +33,7 @@ Replace `<target>` with one of the supported target platforms below.
 Set the `AVOCADO_SDK_TARGET` environment variable to one of the following available Avocado SDK targets when starting an SDK container:
 
 **Arm**:
+
 - `imx91-frdm`: NXP FRDM i.MX 91 Development Board
 - `imx93-evk`: NXP i.MX 93 Evaluation Kit
 - `imx93-frdm`: NXP FRDM i.MX 93 Development Board
@@ -41,6 +42,7 @@ Set the `AVOCADO_SDK_TARGET` environment variable to one of the following availa
 - `reterminal`: Seeed reTerminal
 
 **x86**:
+
 - `qemux86-64`: QEMU x86-64 Virtual Machine
 
 ## Extension Image Build Pipeline

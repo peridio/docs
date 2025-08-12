@@ -17,10 +17,12 @@ These are complete, certified systems that you can purchase today from leading d
 ## Available Systems
 
 ### Industrial Computing
+
 - **OnLogic Factor 201/202** - Rugged industrial computers for harsh environments
 - **Seeed reTerminal** - Industrial HMI with integrated display and touch interface
 
 ### Vision & AI Systems
+
 - **iCam540** - Advanced camera system with edge AI capabilities
 
 ## Purchasing Information
@@ -43,6 +45,7 @@ These systems are available through authorized distributors:
 ## Support
 
 Each production-ready system includes:
+
 - Detailed integration documentation
 - Reference configurations
 - Sample applications

@@ -13,7 +13,9 @@ Peridio's firmware management system provides a comprehensive framework for orga
 The firmware management system is organized into three primary levels:
 
 ### 1. Artifacts
+
 **Artifacts** define the type of binary content you're managing. Think of artifacts as categories or classifications for your binaries. Examples include:
+
 - Firmware images
 - Machine learning models
 - Configuration files
@@ -23,7 +25,9 @@ The firmware management system is organized into three primary levels:
 Each artifact serves as an immutable reference point that remains consistent regardless of versions or specific binaries created within it.
 
 ### 2. Artifact Versions
+
 **Artifact Versions** represent specific iterations of an artifact. They follow semantic versioning or your preferred versioning scheme. For example:
+
 - `1.0.0` - Initial release
 - `1.1.0` - Feature update
 - `1.1.1` - Bug fix
@@ -32,7 +36,9 @@ Each artifact serves as an immutable reference point that remains consistent reg
 Versions allow you to track the evolution of your artifacts over time while maintaining a clear upgrade path.
 
 ### 3. Binaries
+
 **Binaries** are the actual content files distributed to devices. Each binary:
+
 - Is associated with a specific artifact version
 - Can target specific hardware architectures (e.g., `arm-linux-gnueabihf`)
 - Contains the actual firmware image, model, or file data
@@ -55,11 +61,13 @@ Uploadable → Hashable → Hashing → Signable → Signed
 ## Code Signing and Security
 
 All binaries must be cryptographically signed before distribution. This ensures:
+
 - **Authenticity**: Devices can verify the binary comes from a trusted source
 - **Integrity**: Any tampering with the binary will be detected
 - **Non-repudiation**: Provides an audit trail of who signed each binary
 
 The signing process uses:
+
 - RSA or Ed25519 signing keys
 - SHA-256 hashing for integrity verification
 - X.509 certificates for key management
@@ -75,6 +83,7 @@ Once binaries are signed, they're distributed through:
 ## Target Architecture Support
 
 Binaries support target-specific builds through target triplets:
+
 - `x86_64-linux-gnu` - 64-bit Linux on Intel/AMD
 - `aarch64-linux-gnu` - 64-bit ARM Linux
 - `arm-linux-gnueabihf` - 32-bit ARM with hardware float
@@ -83,6 +92,7 @@ Binaries support target-specific builds through target triplets:
 ## Storage and CDN
 
 Peridio handles binary storage with:
+
 - Automatic replication across multiple regions
 - CDN distribution for fast, reliable downloads
 - Support for external storage backends (S3, Azure Blob)
@@ -91,22 +101,26 @@ Peridio handles binary storage with:
 ## Best Practices
 
 ### Version Management
+
 - Use semantic versioning for clarity
 - Tag pre-release versions appropriately
 - Maintain version history documentation
 
 ### Binary Organization
+
 - Group related binaries in the same artifact
 - Use consistent naming conventions
 - Document target compatibility
 
 ### Security
+
 - Rotate signing keys periodically
 - Use hardware security modules (HSMs) for production keys
 - Implement role-based access control
 - Audit all signing operations
 
 ### Testing
+
 - Test binaries in staging before production release
 - Use release channels for phased rollouts
 - Implement automated testing pipelines
@@ -114,19 +128,25 @@ Peridio handles binary storage with:
 ## Common Use Cases
 
 ### Multi-Component Updates
+
 Deploy firmware, configuration, and ML models together:
+
 - Create separate artifacts for each component type
 - Bundle compatible versions together
 - Deploy atomically to ensure consistency
 
 ### A/B Testing
+
 Test new features with subset of fleet:
+
 - Create experimental artifact versions
 - Use cohorts to target test devices
 - Monitor metrics before full rollout
 
 ### Emergency Rollback
+
 Quickly revert problematic updates:
+
 - Maintain previous signed binaries
 - Create rollback releases pre-emptively
 - Use priority channels for critical fixes
@@ -134,6 +154,7 @@ Quickly revert problematic updates:
 ## Integration Points
 
 The firmware management system integrates with:
+
 - **CI/CD Pipelines**: Automated building and signing
 - **Device Management**: Targeting and deployment
 - **Monitoring**: Update success metrics

@@ -35,65 +35,63 @@ Webhook requests include these security headers:
 #### Node.js
 
 ```javascript
-const crypto = require('crypto');
+const crypto = require('crypto')
 
 function verifyWebhookSignature(req, webhookSecret) {
-  const signature = req.headers['peridio-signature'];
-  const publishedAt = req.headers['peridio-published-at'];
-  const body = JSON.stringify(req.body);
-  
+  const signature = req.headers['peridio-signature']
+  const publishedAt = req.headers['peridio-published-at']
+  const body = JSON.stringify(req.body)
+
   if (!signature || !publishedAt) {
-    throw new Error('Missing required headers');
+    throw new Error('Missing required headers')
   }
-  
+
   // Check for replay attacks (5-minute tolerance)
-  const publishedTime = new Date(publishedAt);
-  const currentTime = new Date();
-  const timeDiff = Math.abs(currentTime - publishedTime);
-  
-  if (timeDiff > 5 * 60 * 1000) { // 5 minutes in milliseconds
-    throw new Error('Request too old');
+  const publishedTime = new Date(publishedAt)
+  const currentTime = new Date()
+  const timeDiff = Math.abs(currentTime - publishedTime)
+
+  if (timeDiff > 5 * 60 * 1000) {
+    // 5 minutes in milliseconds
+    throw new Error('Request too old')
   }
-  
+
   // Prepare the payload to be signed
-  const toSign = publishedAt + body;
-  
+  const toSign = publishedAt + body
+
   // Calculate expected signature
   const expectedSignature = crypto
     .createHmac('sha256', Buffer.from(webhookSecret, 'hex'))
     .update(toSign, 'utf8')
     .digest('hex')
-    .toUpperCase();
-  
+    .toUpperCase()
+
   // Handle dual signatures during secret rotation
-  const signatures = signature.split(',');
-  const isValid = signatures.some(sig => 
-    crypto.timingSafeEqual(
-      Buffer.from(expectedSignature, 'hex'),
-      Buffer.from(sig.trim(), 'hex')
-    )
-  );
-  
+  const signatures = signature.split(',')
+  const isValid = signatures.some((sig) =>
+    crypto.timingSafeEqual(Buffer.from(expectedSignature, 'hex'), Buffer.from(sig.trim(), 'hex'))
+  )
+
   if (!isValid) {
-    throw new Error('Invalid signature');
+    throw new Error('Invalid signature')
   }
-  
-  return true;
+
+  return true
 }
 
 // Usage in Express.js
 app.post('/webhooks', (req, res) => {
   try {
-    verifyWebhookSignature(req, process.env.WEBHOOK_SECRET);
-    
+    verifyWebhookSignature(req, process.env.WEBHOOK_SECRET)
+
     // Process the webhook
-    processWebhookEvent(req.body);
-    res.status(200).send('OK');
+    processWebhookEvent(req.body)
+    res.status(200).send('OK')
   } catch (error) {
-    console.error('Webhook verification failed:', error.message);
-    res.status(401).send('Unauthorized');
+    console.error('Webhook verification failed:', error.message)
+    res.status(401).send('Unauthorized')
   }
-});
+})
 ```
 
 #### Python
@@ -107,21 +105,21 @@ from datetime import datetime, timezone
 def verify_webhook_signature(headers, body, webhook_secret):
     signature = headers.get('peridio-signature')
     published_at = headers.get('peridio-published-at')
-    
+
     if not signature or not published_at:
         raise ValueError('Missing required headers')
-    
+
     # Check for replay attacks (5-minute tolerance)
     published_time = datetime.fromisoformat(published_at.replace('Z', '+00:00'))
     current_time = datetime.now(timezone.utc)
     time_diff = abs((current_time - published_time).total_seconds())
-    
+
     if time_diff > 300:  # 5 minutes
         raise ValueError('Request too old')
-    
+
     # Prepare the payload to be signed
     to_sign = published_at + body
-    
+
     # Calculate expected signature
     secret_bytes = bytes.fromhex(webhook_secret)
     expected_signature = hmac.new(
@@ -129,19 +127,19 @@ def verify_webhook_signature(headers, body, webhook_secret):
         to_sign.encode('utf-8'),
         hashlib.sha256
     ).hexdigest().upper()
-    
+
     # Handle dual signatures during secret rotation
     signatures = [sig.strip() for sig in signature.split(',')]
-    
+
     # Use constant-time comparison
     is_valid = any(
         hmac.compare_digest(expected_signature, sig)
         for sig in signatures
     )
-    
+
     if not is_valid:
         raise ValueError('Invalid signature')
-    
+
     return True
 
 # Usage in Flask
@@ -154,11 +152,11 @@ def handle_webhook():
     try:
         body = request.get_data(as_text=True)
         verify_webhook_signature(request.headers, body, os.environ['WEBHOOK_SECRET'])
-        
+
         # Process the webhook
         event_data = request.json
         process_webhook_event(event_data)
-        
+
         return jsonify({'status': 'success'}), 200
     except ValueError as e:
         print(f'Webhook verification failed: {e}')
@@ -184,45 +182,45 @@ import (
 func verifyWebhookSignature(r *http.Request, body []byte, webhookSecret string) error {
     signature := r.Header.Get("peridio-signature")
     publishedAt := r.Header.Get("peridio-published-at")
-    
+
     if signature == "" || publishedAt == "" {
         return fmt.Errorf("missing required headers")
     }
-    
+
     // Check for replay attacks (5-minute tolerance)
     publishedTime, err := time.Parse(time.RFC3339, publishedAt)
     if err != nil {
         return fmt.Errorf("invalid published-at format")
     }
-    
+
     if time.Since(publishedTime) > 5*time.Minute {
         return fmt.Errorf("request too old")
     }
-    
+
     // Prepare the payload to be signed
     toSign := publishedAt + string(body)
-    
+
     // Decode webhook secret from hex
     secretBytes, err := hex.DecodeString(webhookSecret)
     if err != nil {
         return fmt.Errorf("invalid webhook secret format")
     }
-    
+
     // Calculate expected signature
     h := hmac.New(sha256.New, secretBytes)
     h.Write([]byte(toSign))
     expectedSignature := strings.ToUpper(hex.EncodeToString(h.Sum(nil)))
-    
+
     // Handle dual signatures during secret rotation
     signatures := strings.Split(signature, ",")
-    
+
     for _, sig := range signatures {
         sig = strings.TrimSpace(sig)
         if subtle.ConstantTimeCompare([]byte(expectedSignature), []byte(sig)) == 1 {
             return nil
         }
     }
-    
+
     return fmt.Errorf("invalid signature")
 }
 
@@ -232,16 +230,16 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "Failed to read request body", http.StatusBadRequest)
         return
     }
-    
+
     if err := verifyWebhookSignature(r, body, os.Getenv("WEBHOOK_SECRET")); err != nil {
         log.Printf("Webhook verification failed: %v", err)
         http.Error(w, "Unauthorized", http.StatusUnauthorized)
         return
     }
-    
+
     // Process the webhook
     processWebhookEvent(body)
-    
+
     w.WriteHeader(http.StatusOK)
     w.Write([]byte("OK"))
 }
@@ -252,11 +250,35 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 Use this example to validate your signature verification implementation:
 
 **Test Data:**
+
 - Webhook secret: `B284A51B143841695B2D7BF3B8554731`
 - Published at: `2000-01-01T00:00:00Z`
-- Body: 
+- Body:
+
 ```json
-{"version":1,"prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:event:a727838c-0195-4ccf-8258-cebf4608db8e","type":"device","inserted_at":"2023-09-14T20:23:30Z","data":{"type":"release_changed","data":{"device":{"identifier":"SN1337","prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:device:a2edbb76-5f44-4202-860d-74a8c17d65aa"},"from_release":{"prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:499b64fb-1420-4f58-8c73-e5497e1f531e","version":"1.0.0"},"to_release":{"prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:f456986f-1a2f-4d73-8f70-96ff05a6bce7","version":"2.0.0"}}}}
+{
+  "version": 1,
+  "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:event:a727838c-0195-4ccf-8258-cebf4608db8e",
+  "type": "device",
+  "inserted_at": "2023-09-14T20:23:30Z",
+  "data": {
+    "type": "release_changed",
+    "data": {
+      "device": {
+        "identifier": "SN1337",
+        "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:device:a2edbb76-5f44-4202-860d-74a8c17d65aa"
+      },
+      "from_release": {
+        "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:499b64fb-1420-4f58-8c73-e5497e1f531e",
+        "version": "1.0.0"
+      },
+      "to_release": {
+        "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:f456986f-1a2f-4d73-8f70-96ff05a6bce7",
+        "version": "2.0.0"
+      }
+    }
+  }
+}
 ```
 
 **Expected signature:** `FC825FCAA2E4C2688F075144105B75C2943D8B88AC4B5FAB134F2676A63FB6EF`
@@ -304,13 +326,13 @@ Always check the `peridio-published-at` header to prevent replay attacks:
 
 ```javascript
 function checkTimestamp(publishedAt) {
-  const publishedTime = new Date(publishedAt);
-  const currentTime = new Date();
-  const timeDiff = Math.abs(currentTime - publishedTime);
-  
+  const publishedTime = new Date(publishedAt)
+  const currentTime = new Date()
+  const timeDiff = Math.abs(currentTime - publishedTime)
+
   // Reject requests older than 5 minutes
   if (timeDiff > 5 * 60 * 1000) {
-    throw new Error('Request too old');
+    throw new Error('Request too old')
   }
 }
 ```
@@ -334,10 +356,10 @@ Use constant-time comparison to prevent timing attacks:
 const isValid = crypto.timingSafeEqual(
   Buffer.from(expectedSignature, 'hex'),
   Buffer.from(receivedSignature, 'hex')
-);
+)
 
 // Bad - vulnerable to timing attacks
-const isValid = expectedSignature === receivedSignature;
+const isValid = expectedSignature === receivedSignature
 ```
 
 ## HTTPS Requirements
@@ -387,28 +409,28 @@ Log security-relevant events:
 ```javascript
 app.post('/webhooks', (req, res) => {
   try {
-    verifyWebhookSignature(req, webhookSecret);
-    
+    verifyWebhookSignature(req, webhookSecret)
+
     // Log successful verification
     logger.info('Webhook received', {
       event_type: req.body.data?.type,
       published_at: req.headers['peridio-published-at'],
-      source_ip: req.ip
-    });
-    
-    processWebhookEvent(req.body);
-    res.status(200).send('OK');
+      source_ip: req.ip,
+    })
+
+    processWebhookEvent(req.body)
+    res.status(200).send('OK')
   } catch (error) {
     // Log security failures
     logger.warn('Webhook verification failed', {
       error: error.message,
       source_ip: req.ip,
-      user_agent: req.headers['user-agent']
-    });
-    
-    res.status(401).send('Unauthorized');
+      user_agent: req.headers['user-agent'],
+    })
+
+    res.status(401).send('Unauthorized')
   }
-});
+})
 ```
 
 ## Compliance Considerations

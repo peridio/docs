@@ -5,6 +5,7 @@ The Peridio daemon (peridiod) is the on-device agent that handles OTA updates, r
 ## Overview
 
 Peridiod runs as a system service on Linux devices, providing:
+
 - Secure communication with Peridio Cloud
 - Atomic A/B update management
 - Remote access tunnel establishment
@@ -22,6 +23,7 @@ peridio-evk devices-start --tag latest
 ## Installation
 
 ### Package Installation
+
 ```bash
 # Debian/Ubuntu
 wget -qO- https://packages.peridio.com/install.sh | bash
@@ -33,6 +35,7 @@ yum install peridiod
 ```
 
 ### Container Deployment
+
 ```bash
 docker run -d --name peridio-agent \
   --privileged \
@@ -70,6 +73,7 @@ url = "https://api.peridio.com"
 ## Remote Access
 
 Peridiod enables remote device access through:
+
 - **Web Console** - Browser-based terminal access
 - **SSH Tunnels** - Secure shell connections via WireGuard
 - **Custom Services** - Application-specific remote access

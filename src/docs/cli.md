@@ -30,11 +30,11 @@ The Peridio CLI supports profile based configuration files as a means of supplyi
 
 By default, the directory searched for these files is:
 
-| OS | Default Config Directory |
-| - | - |
-| Linux | `$HOME/.config/peridio` |
-| Windows | `{FOLDERID_RoamingAppData}/peridio/config`|
-| macOS | `$HOME/Library/Application\ Support/peridio` |
+| OS      | Default Config Directory                     |
+| ------- | -------------------------------------------- |
+| Linux   | `$HOME/.config/peridio`                      |
+| Windows | `{FOLDERID_RoamingAppData}/peridio/config`   |
+| macOS   | `$HOME/Library/Application\ Support/peridio` |
 
 To override this directory, see [--config-directory](#config-directory).
 

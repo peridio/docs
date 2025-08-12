@@ -4,7 +4,7 @@ Usage: peridio tunnels create [OPTIONS] --device-prn <DEVICE_PRN> --device-tunne
 Options:
       --cidr-block-allowlist <CIDR_BLOCK_ALLOWLIST>
           An optional list of CIDR blocks that can use the resource.
-          
+
           Values can be provided by passing each value in a flag or by delimiting all values with ","
 
       --device-prn <DEVICE_PRN>

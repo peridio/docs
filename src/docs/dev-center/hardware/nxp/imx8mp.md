@@ -3,35 +3,39 @@ title: NXP i.MX 8MP EVK
 description: How to develop for NXP i.MX 8M Plus Evaluation Kit.
 ---
 
-
 The NXP i.MX 8M Plus EVK is a powerful evaluation kit designed for industrial vision and edge AI applications, featuring a quad-core Cortex-A53 processor, dedicated NPU for AI acceleration, and comprehensive multimedia capabilities.
 
 ## Technical Specifications
 
 **Compute:**
+
 - Quad-core Arm Cortex-A53 @ 2.0 GHz
 - Cortex-M7 real-time core @ 800 MHz
 - Neural Processing Unit (NPU) with 2.3 TOPS performance
 - HiFi 4 DSP for audio processing
 
 **Memory & Storage:**
+
 - 6GB LPDDR4 RAM
 - 32GB eMMC flash storage
 - microSD card slot for expansion
 
 **Vision & Display:**
+
 - Dual MIPI CSI camera interfaces (up to 12MP/375MP/s)
 - HDMI 2.0a output (up to 4K60)
 - MIPI DSI display interface
 - LVDS display support
 
 **Connectivity:**
+
 - Dual Gigabit Ethernet (one with TSN support)
 - Wi-Fi 802.11ac and Bluetooth 5.0
 - 2x USB 3.0, 1x USB-C
 - PCIe Gen 3 interface
 
 **Industrial Features:**
+
 - Operating temperature: -40°C to +85°C
 - Multiple CAN-FD interfaces
 - Industrial I/O expansion headers

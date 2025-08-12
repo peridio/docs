@@ -8,7 +8,7 @@ For information about how release channels participate in resolving target bundl
 
 ## Graph details
 
-A release channel forms a [anti-arborescence](https://en.wikipedia.org/wiki/Arborescence_(graph_theory)) graph. In other words, releases may point to exactly one next release, a release may be pointed to by zero to many releases, and all releases eventually converge to a single release that points to no node.
+A release channel forms a [anti-arborescence](<https://en.wikipedia.org/wiki/Arborescence_(graph_theory)>) graph. In other words, releases may point to exactly one next release, a release may be pointed to by zero to many releases, and all releases eventually converge to a single release that points to no node.
 
 When reasoning about releases as nodes in such a graph, there are three categories of nodes:
 

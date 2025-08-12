@@ -5,13 +5,16 @@ Binary signatures provide cryptographic proof of authenticity and integrity for 
 ## Why Sign Binaries?
 
 ### Security Benefits
+
 - **Authentication**: Proves the binary comes from a trusted source
 - **Integrity**: Detects any tampering or corruption
 - **Non-repudiation**: Creates audit trail of who signed what
 - **Trust Chain**: Establishes secure update path
 
 ### Compliance Requirements
+
 Many industries require code signing:
+
 - Automotive (ISO 26262)
 - Medical devices (FDA)
 - IoT security standards
@@ -20,14 +23,17 @@ Many industries require code signing:
 ## Signing Keys
 
 ### Key Types
+
 Peridio supports multiple key algorithms:
 
 #### RSA Keys
+
 - 2048-bit (minimum)
 - 4096-bit (recommended)
 - Wide compatibility
 
 #### Ed25519 Keys
+
 - Modern elliptic curve
 - Smaller signatures
 - Faster verification
@@ -36,6 +42,7 @@ Peridio supports multiple key algorithms:
 ### Creating Signing Keys
 
 #### Generate RSA Key
+
 ```bash
 # Generate private key
 openssl genrsa -out private_key.pem 4096
@@ -45,6 +52,7 @@ openssl rsa -in private_key.pem -pubout -out public_key.pem
 ```
 
 #### Generate Ed25519 Key
+
 ```bash
 # Generate private key
 openssl genpkey -algorithm ED25519 -out private_key.pem
@@ -54,6 +62,7 @@ openssl pkey -in private_key.pem -pubout -out public_key.pem
 ```
 
 #### Register with Peridio
+
 ```bash
 peridio signing-keys create \
   --name "production-2024" \
@@ -65,17 +74,19 @@ peridio signing-keys create \
 ### Manual Signing
 
 #### Using OpenSSL
+
 ```bash
 # RSA signature
 openssl dgst -sha256 -sign private_key.pem \
   -out firmware.sig firmware.bin
 
-# Ed25519 signature  
+# Ed25519 signature
 openssl pkeyutl -sign -inkey private_key.pem \
   -in firmware.bin -out firmware.sig
 ```
 
 #### Attach to Binary
+
 ```bash
 SIGNATURE=$(base64 firmware.sig)
 
@@ -88,6 +99,7 @@ peridio binary-signatures create \
 ### Automated Signing
 
 #### CI/CD Pipeline
+
 ```yaml
 # GitHub Actions
 - name: Sign Binary
@@ -95,7 +107,7 @@ peridio binary-signatures create \
     # Sign the binary
     openssl dgst -sha256 -sign ${{ secrets.SIGNING_KEY }} \
       -out firmware.sig firmware.bin
-    
+
     # Attach signature
     peridio binary-signatures create \
       --binary-prn ${{ env.BINARY_PRN }} \
@@ -104,6 +116,7 @@ peridio binary-signatures create \
 ```
 
 #### Signing Service
+
 ```python
 import subprocess
 import base64
@@ -114,17 +127,18 @@ def sign_binary(binary_path, key_path):
         'openssl', 'dgst', '-sha256', '-sign', key_path,
         '-out', 'temp.sig', binary_path
     ])
-    
+
     # Read and encode signature
     with open('temp.sig', 'rb') as f:
         signature = base64.b64encode(f.read()).decode()
-    
+
     return signature
 ```
 
 ## Hardware Security Modules (HSM)
 
 ### Benefits
+
 - Keys never leave HSM
 - FIPS 140-2 compliance
 - Audit logging
@@ -133,6 +147,7 @@ def sign_binary(binary_path, key_path):
 ### HSM Integration
 
 #### AWS CloudHSM
+
 ```bash
 # Configure PKCS#11
 export PKCS11_MODULE=/opt/cloudhsm/lib/libcloudhsm_pkcs11.so
@@ -144,6 +159,7 @@ pkcs11-tool --sign --mechanism SHA256-RSA-PKCS \
 ```
 
 #### Azure Key Vault
+
 ```python
 from azure.keyvault.keys.crypto import CryptographyClient
 from azure.identity import DefaultAzureCredential
@@ -154,7 +170,7 @@ client = CryptographyClient(key_url, credential)
 # Sign binary
 with open('firmware.bin', 'rb') as f:
     digest = hashlib.sha256(f.read()).digest()
-    
+
 result = client.sign(SignatureAlgorithm.rs256, digest)
 signature = base64.b64encode(result.signature)
 ```
@@ -162,6 +178,7 @@ signature = base64.b64encode(result.signature)
 ## Signature Verification
 
 ### On-Device Verification
+
 Devices automatically verify signatures during updates:
 
 ```c
@@ -176,13 +193,14 @@ bool verify_signature(
     // Calculate hash
     uint8_t hash[32];
     sha256(binary_data, binary_size, hash);
-    
+
     // Verify signature
     return rsa_verify(hash, signature, sig_size, public_key);
 }
 ```
 
 ### Manual Verification
+
 ```bash
 # Verify RSA signature
 openssl dgst -sha256 -verify public_key.pem \
@@ -196,6 +214,7 @@ openssl pkeyutl -verify -pubin -inkey public_key.pem \
 ## Key Management
 
 ### Key Rotation
+
 Regular key rotation improves security:
 
 1. **Generate new key pair**
@@ -207,11 +226,13 @@ Regular key rotation improves security:
 ### Key Storage Best Practices
 
 #### Development Keys
+
 - Store in secure key management system
 - Use separate keys from production
 - Rotate frequently
 
 #### Production Keys
+
 - Use HSM or secure enclave
 - Implement access controls
 - Audit all usage
@@ -262,13 +283,16 @@ peridio binary-signatures create \
 ## Compliance and Auditing
 
 ### Audit Log Requirements
+
 Track all signing operations:
+
 - Who signed what
 - When it was signed
 - Which key was used
 - From which system
 
 ### Compliance Checklist
+
 - [ ] Key generation follows standards
 - [ ] Keys stored securely
 - [ ] Access controls implemented
@@ -281,16 +305,19 @@ Track all signing operations:
 ### Signature Verification Failures
 
 #### Invalid Signature
+
 - Verify correct key pair used
 - Check binary hasn't been modified
 - Ensure signature properly encoded
 
 #### Key Mismatch
+
 - Confirm public key registered correctly
 - Verify using matching private key
 - Check key algorithm compatibility
 
 #### Expired Keys
+
 - Review key validity period
 - Update device trust store
 - Rotate to new keys
@@ -298,11 +325,13 @@ Track all signing operations:
 ### Common Issues
 
 #### Binary Won't Transition to Signed
+
 - Verify signature attached successfully
 - Check signing key is active
 - Review error logs
 
 #### Devices Reject Updates
+
 - Ensure devices have correct public keys
 - Verify signature algorithm supported
 - Check certificate chain validity
@@ -310,6 +339,7 @@ Track all signing operations:
 ## Best Practices
 
 ### Security
+
 1. Never commit private keys to version control
 2. Use strong key generation parameters
 3. Implement key access controls
@@ -317,6 +347,7 @@ Track all signing operations:
 5. Plan for key compromise
 
 ### Operations
+
 1. Automate signing in CI/CD
 2. Test signature verification
 3. Monitor signing operations
@@ -324,6 +355,7 @@ Track all signing operations:
 5. Train team on security
 
 ### Development
+
 1. Use separate keys for dev/staging/prod
 2. Implement signing early in pipeline
 3. Validate signatures in tests

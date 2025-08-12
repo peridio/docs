@@ -14,6 +14,7 @@ Custom binary backends let you store your binaries in your own cloud storage whi
 ## Supported Backends
 
 Currently, Peridio supports:
+
 - **Amazon S3** - Direct storage in your S3 buckets
 - **Amazon CloudFront** - CDN distribution with signed URLs for enhanced security and performance
 
@@ -22,6 +23,7 @@ Currently, Peridio supports:
 ### Prerequisites
 
 Before you begin, make sure you have:
+
 - An AWS account with administrative access
 - A Peridio organization set up
 - Basic familiarity with AWS IAM and S3
@@ -50,22 +52,14 @@ Your IAM role needs specific permissions to work with your S3 bucket. Attach thi
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject",
-                "s3:DeleteObject",
-                "s3:ListBucket"
-            ],
-            "Resource": [
-                "arn:aws:s3:::YOUR_BUCKET_NAME",
-                "arn:aws:s3:::YOUR_BUCKET_NAME/*"
-            ]
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::YOUR_BUCKET_NAME", "arn:aws:s3:::YOUR_BUCKET_NAME/*"]
+    }
+  ]
 }
 ```
 
@@ -76,6 +70,7 @@ Your IAM role needs specific permissions to work with your S3 bucket. Attach thi
 Contact Peridio support with the following information:
 
 **Required Information:**
+
 - **Bucket name** - The name of your S3 bucket
 - **AWS region** - The region where your bucket is located
 - **Role ARN** - The Amazon Resource Name of the IAM role you created
@@ -87,21 +82,21 @@ Once Peridio creates the necessary infrastructure, you'll receive a trust policy
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::PERIDIO_AWS_ACCOUNT:role/binary_backend_ORG_ID_ROLE_NAME"
-            },
-            "Action": "sts:AssumeRole",
-            "Condition": {
-                "StringEquals": {
-                    "sts:ExternalId": "YOUR_ORG_ID"
-                }
-            }
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::PERIDIO_AWS_ACCOUNT:role/binary_backend_ORG_ID_ROLE_NAME"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "sts:ExternalId": "YOUR_ORG_ID"
         }
-    ]
+      }
+    }
+  ]
 }
 ```
 
@@ -114,6 +109,7 @@ CloudFront provides additional benefits like global distribution and signed URLs
 ### When to Use CloudFront
 
 Consider CloudFront if you need:
+
 - **Global distribution** - Faster downloads for devices worldwide
 - **Enhanced security** - Time-limited download links
 - **Bandwidth optimization** - Reduce costs with edge caching
@@ -138,11 +134,13 @@ For secure, time-limited downloads, you'll need to configure signed URLs:
 Send Peridio the following information:
 
 **Required:**
+
 - **Host** - Your CloudFront domain (e.g., `d1234567890.cloudfront.net`)
 - **Private key** - The private key for signing URLs
 - **Key pair ID** - The ID of your CloudFront key group
 
 **Optional:**
+
 - **TTL seconds** - How long download links remain valid (default is reasonable for most use cases)
 
 ## Important Considerations

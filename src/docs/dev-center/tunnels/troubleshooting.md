@@ -7,10 +7,12 @@ This guide helps diagnose and resolve common issues with Peridio tunnels.
 ### Tunnel Stuck in "Created" State
 
 **Symptoms:**
+
 - Tunnel remains in "created" state after several minutes
 - Never transitions to "open" state
 
 **Possible Causes:**
+
 1. Device is offline
 2. Peridiod agent not running
 3. Network connectivity issues
@@ -19,17 +21,20 @@ This guide helps diagnose and resolve common issues with Peridio tunnels.
 **Solutions:**
 
 Check device status:
+
 ```bash
 peridio devices get --prn $DEVICE_PRN
 ```
 
 Verify peridiod is running on device:
+
 ```bash
 systemctl status peridiod
 journalctl -u peridiod -n 50
 ```
 
 Test outbound connectivity from device:
+
 ```bash
 # On device
 curl -v https://api.peridio.com
@@ -39,10 +44,12 @@ nc -zv tunnel.peridio.com 443
 ### Connection Refused
 
 **Symptoms:**
+
 - `ssh: connect to host x.x.x.x port xxxxx: Connection refused`
 - Browser shows "Unable to connect"
 
 **Possible Causes:**
+
 1. Service not running on device
 2. Wrong port specified
 3. Firewall blocking connection
@@ -50,6 +57,7 @@ nc -zv tunnel.peridio.com 443
 **Solutions:**
 
 Verify service is running:
+
 ```bash
 # For SSH
 systemctl status sshd
@@ -61,6 +69,7 @@ curl http://localhost:80
 ```
 
 Check firewall rules:
+
 ```bash
 iptables -L -n
 ufw status
@@ -69,12 +78,14 @@ ufw status
 ### Authentication Failures
 
 **Symptoms:**
+
 - `Permission denied (publickey,password)`
 - HTTP 401 Unauthorized errors
 
 **Solutions:**
 
 For SSH authentication:
+
 ```bash
 # Check SSH configuration
 grep -E "PasswordAuthentication|PubkeyAuthentication" /etc/ssh/sshd_config
@@ -91,12 +102,14 @@ chmod 600 ~/.ssh/authorized_keys
 ### Tunnel Expires Too Quickly
 
 **Symptoms:**
+
 - Tunnel closes before work is complete
 - Frequent reconnection needed
 
 **Solutions:**
 
 Request longer duration:
+
 ```bash
 peridio tunnels create \
   --device-prn $DEVICE_PRN \
@@ -105,6 +118,7 @@ peridio tunnels create \
 ```
 
 Keep connection alive:
+
 ```bash
 # SSH keep-alive
 ssh -o ServerAliveInterval=60 \
@@ -115,6 +129,7 @@ ssh -o ServerAliveInterval=60 \
 ### Slow Connection Performance
 
 **Symptoms:**
+
 - High latency
 - Slow file transfers
 - Timeouts
@@ -122,6 +137,7 @@ ssh -o ServerAliveInterval=60 \
 **Solutions:**
 
 Check network metrics:
+
 ```bash
 # Ping test
 ping -c 10 server_ip
@@ -134,6 +150,7 @@ ping -M do -s 1472 server_ip
 ```
 
 Optimize SSH for slow connections:
+
 ```bash
 ssh -C -o Compression=yes \
     -o CompressionLevel=9 \
@@ -199,6 +216,7 @@ Error: Device with PRN prn:1:device:xxx not found
 ```
 
 **Solution:**
+
 - Verify device PRN is correct
 - Check device exists: `peridio devices list`
 - Ensure you have permissions for the device
@@ -210,6 +228,7 @@ Error: Failed to create tunnel: Maximum tunnels exceeded
 ```
 
 **Solution:**
+
 - Close existing tunnels: `peridio tunnels delete --prn $TUNNEL_PRN`
 - Check tunnel quota limits
 - Wait for expired tunnels to close automatically
@@ -221,6 +240,7 @@ ssh: connect to host x.x.x.x port xxxxx: Network is unreachable
 ```
 
 **Solution:**
+
 - Check local network connectivity
 - Verify DNS resolution
 - Try using IP address directly
@@ -242,6 +262,7 @@ Host tunnel-*
 ### Compression Settings
 
 For slow connections:
+
 ```bash
 # SSH compression
 ssh -C user@server_ip -p server_port
@@ -253,6 +274,7 @@ scp -C -P server_port file.txt user@server_ip:/tmp/
 ### Buffer Tuning
 
 Optimize TCP buffers:
+
 ```bash
 # On device
 echo 'net.core.rmem_max = 134217728' >> /etc/sysctl.conf
@@ -302,8 +324,8 @@ iftop -P -n -f "host server_ip"
 STUCK_TUNNELS=$(peridio tunnels list \
   --state created \
   --output json | \
-  jq -r '.tunnels[] | 
-    select(.created_at < (now - 3600)) | 
+  jq -r '.tunnels[] |
+    select(.created_at < (now - 3600)) |
     .prn')
 
 for tunnel in $STUCK_TUNNELS; do
@@ -317,17 +339,20 @@ done
 If device becomes unresponsive:
 
 1. Restart peridiod service:
+
 ```bash
 systemctl restart peridiod
 ```
 
 2. Clear peridiod cache:
+
 ```bash
 rm -rf /var/cache/peridiod/*
 systemctl restart peridiod
 ```
 
 3. Re-register device if necessary:
+
 ```bash
 peridiod --register --key device.key
 ```

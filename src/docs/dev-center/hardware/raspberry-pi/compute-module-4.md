@@ -10,13 +10,16 @@ The Raspberry Pi 4 is the most popular single-board computer on the planet. Rele
 ## Technical Specifications
 
 **Compute:**
+
 - Quad-core 64-bit Arm Cortex-A72 CPU at 1.8 GHz
 
 **Memory & Storage:**
+
 - 1GB, 2GB, 4GB, or 8GB LPDDR4-3200 variants
 - microSD card slot
 
 **Wireless Connectivity:**
+
 - Built-in Broadcom BCM43455 wireless module with Wi-Fi and Bluetooth
 
 ## Getting Started

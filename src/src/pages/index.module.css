@@ -35,8 +35,6 @@
   margin-right: 2rem;
 }
 
-
-
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -115,26 +113,26 @@
   .promoBar {
     padding: 0.375rem 0;
   }
-  
+
   .promoContent {
     gap: 0.5rem;
     padding: 0 1rem;
   }
-  
+
   .promoMarquee {
     flex: 0.8;
   }
-  
+
   .promoMessage {
     font-size: 0.75rem;
     animation: marquee 15s linear infinite;
   }
-  
+
   .promoLink {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
   }
-  
+
   .promoDismiss {
     font-size: 1.125rem;
     min-width: 24px;
@@ -147,7 +145,9 @@
   padding-left: 2.5rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 100%), url("/img/hero.png") lightgray center / cover no-repeat;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%),
+    url("/img/hero.png") lightgray center / cover no-repeat;
   text-align: left;
   color: white;
 }
@@ -267,7 +267,9 @@
 }
 
 .stack:hover {
-  box-shadow: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+  box-shadow:
+    0 1px 3px rgba(60, 64, 67, 0.3),
+    0 4px 8px 3px rgba(60, 64, 67, 0.15);
 }
 
 .stack .header {
@@ -308,7 +310,7 @@
   flex-wrap: wrap;
   gap: 2rem;
   padding: 2rem;
-  font-family: 'Space Grotesk';
+  font-family: "Space Grotesk";
 }
 
 @media screen and (max-width: 996px) {
@@ -339,10 +341,9 @@
   }
 }
 
-
 .homepage_code_block {
   border-radius: 20px;
-  background: #FFF;
+  background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   margin-top: -100px;
   z-index: 9999;
@@ -353,7 +354,7 @@
   color: #414552;
   font-weight: bold;
   font-size: 21px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
 }
 
 /* Tabs */
@@ -367,12 +368,12 @@
   border-radius: var(--ifm-code-border-radius);
 }
 
-.tab_item_selected[aria-selected='true'] {
+.tab_item_selected[aria-selected="true"] {
   border-bottom-left-radius: var(--ifm-global-radius);
   border-bottom-right-radius: var(--ifm-global-radius);
   border-bottom-color: transparent;
   color: white;
-  background-color: #6059FB;
+  background-color: #6059fb;
   font-weight: bold;
 }
 
@@ -381,14 +382,14 @@
   border-bottom-right-radius: var(--ifm-global-radius);
   border-bottom-color: transparent;
   color: white;
-  background-color: #6059FB;
+  background-color: #6059fb;
   font-weight: bold;
 }
 
 .tab_item_selected {
   margin-bottom: 1rem;
   font-weight: normal;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
 }
 
 /* code block */
@@ -466,7 +467,7 @@
 .externalLink {
   display: inline-flex;
   align-items: center;
-  color: #5B5BF6 !important;
+  color: #5b5bf6 !important;
   font-size: 0.9rem;
   font-weight: 400;
   text-decoration: none;
@@ -484,7 +485,8 @@
   border-bottom: none;
 }
 
-.externalLink:hover, .externalLink:focus {
+.externalLink:hover,
+.externalLink:focus {
   color: #3737d6 !important;
   text-decoration: underline;
   outline: none;
@@ -525,8 +527,6 @@
   width: 100%;
 }
 
-
-
 .carousel {
   display: flex;
   overflow-x: auto;
@@ -565,7 +565,7 @@
 }
 
 .stackHeader {
-  background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
   color: var(--ifm-color-emphasis-800);
   padding: 1.5rem;
   border-top-left-radius: 10px;
@@ -593,7 +593,7 @@
   display: block;
   width: 100%;
   text-align: left;
-  color: #5B5BF6 !important;
+  color: #5b5bf6 !important;
   background: none;
   border: none;
   border-radius: 0;
@@ -609,7 +609,8 @@
   border-bottom: none;
 }
 
-.ctaButtonMinimal:hover, .ctaButtonMinimal:focus {
+.ctaButtonMinimal:hover,
+.ctaButtonMinimal:focus {
   color: #3737d6 !important;
   text-decoration: underline;
   outline: none;
@@ -648,7 +649,7 @@
   color: inherit;
   transition: all 0.2s ease;
   position: relative;
-  background: #F5F5F7;
+  background: #f5f5f7;
   text-align: center;
 }
 
@@ -662,7 +663,7 @@
   font-size: 1.15rem;
   margin-bottom: 0.5rem;
   color: #333333;
-  font-family: 'Avenir', sans-serif;
+  font-family: "Avenir", sans-serif;
   font-weight: bold;
   text-align: center;
   width: 100%;
@@ -692,7 +693,7 @@
     max-width: 100%;
     margin: 0;
   }
-  
+
   .resourceCard {
     min-width: 100%;
     max-width: none;

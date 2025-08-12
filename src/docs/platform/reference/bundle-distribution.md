@@ -4,7 +4,6 @@ The process Peridio undergoes to check for an update for a device is referred to
 
 Users may check for an update on behalf of a device via the Admin API [get-device-udpate](/admin-api#devices/operation/devices-get-update) route. Devices may check for an update via the Device API [get-update](/device-api#devices/operation/get-update) route.
 
-
 ## Bundle resolution
 
 A target bundle is resolved via either bundle overrides or release resolution. The following subsections give a high-level overview of the two resolution methods. For an exhaustive specification of the entire process, refer to the [resolution algorithm](#resolution-algorithm).
@@ -55,15 +54,15 @@ When supplying multiple headers at once, or multiple body params at once, the va
 
 Bundle received via a [release](releases):
 
-  - Release PRN must be supplied.
-  - Bundle PRN must be supplied.
-  - Release version must be supplied.
+- Release PRN must be supplied.
+- Bundle PRN must be supplied.
+- Release version must be supplied.
 
 Bundle received via a [bundle override](bundle-overrides):
 
-  - Release PRN must not be supplied.
-  - Bundle PRN must be supplied.
-  - Release version must not be supplied.
+- Release PRN must not be supplied.
+- Bundle PRN must be supplied.
+- Release version must not be supplied.
 
 :::caution releases + bundle overrides
 If a device installed a bundle from a release and subsequently installed a bundle from a bundle override: it is critical that the aforementioned update state rules are respected, in this instance: a `peridio-bundle-prn` must be exclusively supplied.
@@ -73,23 +72,23 @@ If a device installed a bundle from a release and subsequently installed a bundl
 
 When supplying multiple update state values, bundle resolution processes them in the order noted below. If a supplied value is malformed, or fails to identify a release or bundle in the device's current cohort, the next highest precedence supplied header will be attempted.
 
-  1. Release PRN.
-  2. Bundle PRN.
-  3. Release version.
+1. Release PRN.
+2. Bundle PRN.
+3. Release version.
 
 **Example**
 
 Supplied:
 
-  - A malformed release PRN.
-  - A well-formed bundle PRN that fails to identify a release in the device's current cohort.
-  - A well-formed release version that identifies a release in the device's current cohort.
+- A malformed release PRN.
+- A well-formed bundle PRN that fails to identify a release in the device's current cohort.
+- A well-formed release version that identifies a release in the device's current cohort.
 
 Therefore:
 
-  1. First, the release PRN is considered, but is discarded immediately due to being malformed.
-  2. Second, the bundle PRN is considered, it is well formed, but is discarded still because it fails to identify a bundle served by a release in the device's current cohort.
-  3. Finally, the release version is considered, it is well formed, and successfully identifies a release in the device's current cohort.
+1. First, the release PRN is considered, but is discarded immediately due to being malformed.
+2. Second, the bundle PRN is considered, it is well formed, but is discarded still because it fails to identify a bundle served by a release in the device's current cohort.
+3. Finally, the release version is considered, it is well formed, and successfully identifies a release in the device's current cohort.
 
 ## Resolution algorithm
 
