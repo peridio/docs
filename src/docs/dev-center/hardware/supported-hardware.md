@@ -168,12 +168,15 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 ## Hardware Categories
 
 ### Production Ready Systems
+
 Complete, certified systems available from leading distributors that are ready for immediate deployment at scale. These systems come with full Peridio integration and are available from distributors like OnLogic, Advantech, Mouser, and others.
 
 ### Development Boards
+
 Popular development platforms for prototyping and evaluation, including Raspberry Pi, NVIDIA Jetson, and NXP development kits.
 
 ### Virtual Environments
+
 QEMU and other virtualization platforms for testing and development without physical hardware.
 
 ## Getting Started with Hardware
@@ -187,6 +190,7 @@ QEMU and other virtualization platforms for testing and development without phys
 ## Hardware Requirements
 
 Minimum requirements for Peridio integration:
+
 - Linux-based operating system (or Android)
 - Network connectivity (Ethernet, WiFi, or Cellular)
 - Sufficient storage for update staging

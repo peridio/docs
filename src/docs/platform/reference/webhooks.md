@@ -37,12 +37,12 @@ When you roll a webhook's secret, depending on whether you provide a TTL or not 
 :::
 
 1. Obtain value of `peridio-signature` header.
-    - Keep in mind their may be two values here if you rolling secrets with a transition window. If your expected computed signature matches either signature, the request is valid.
+   - Keep in mind their may be two values here if you rolling secrets with a transition window. If your expected computed signature matches either signature, the request is valid.
 2. Obtain value of `peridio-published-at` header.
 3. Obtain request body.
 4. Prepare the to-be-signed payload by concatentating:
-    - The published at value.
-    - The request body.
+   - The published at value.
+   - The request body.
 5. Compute the HMAC-SHA256 over the to-be-signed payload using the webhook's secret.
 
 **Verification example**
@@ -52,9 +52,31 @@ You can use the following example values to validate your signature verification
 - Webhook secret: `B284A51B143841695B2D7BF3B8554731`.
 - Published at: `2000-01-01T00:00:00Z`.
 - Body:
-    ```json
-    {"version":1,"prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:event:a727838c-0195-4ccf-8258-cebf4608db8e","type":"device","inserted_at":"2023-09-14T20:23:30Z","data":{"type":"release_changed","data":{"device":{"identifier":"SN1337","prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:device:a2edbb76-5f44-4202-860d-74a8c17d65aa"},"from_release":{"prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:499b64fb-1420-4f58-8c73-e5497e1f531e","version":"1.0.0"},"to_release":{"prn":"prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:f456986f-1a2f-4d73-8f70-96ff05a6bce7","version":"2.0.0"}}}}
-    ```
+  ```json
+  {
+    "version": 1,
+    "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:event:a727838c-0195-4ccf-8258-cebf4608db8e",
+    "type": "device",
+    "inserted_at": "2023-09-14T20:23:30Z",
+    "data": {
+      "type": "release_changed",
+      "data": {
+        "device": {
+          "identifier": "SN1337",
+          "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:device:a2edbb76-5f44-4202-860d-74a8c17d65aa"
+        },
+        "from_release": {
+          "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:499b64fb-1420-4f58-8c73-e5497e1f531e",
+          "version": "1.0.0"
+        },
+        "to_release": {
+          "prn": "prn:1:4e33149b-637d-4679-b64f-4905e7a0cf8c:release:f456986f-1a2f-4d73-8f70-96ff05a6bce7",
+          "version": "2.0.0"
+        }
+      }
+    }
+  }
+  ```
 
 Give the above, the to-be-signed payload would be:
 
@@ -97,7 +119,7 @@ The client endpoint in this context is a webhook's `url` field.
 - Must be prefixed with `https://`.
 - Must immediately return a `200` upon receipt and signature verification. For example, you must return a `200` response before updating a record in your system.
 - Must be operational at the time of enabling a webhook, or at the time of the update if updating the `url` of an enabled webhook.
-- HTTP method:  `POST`.
+- HTTP method: `POST`.
 - Max `url` length: `1028`.
 
 ## Retries
@@ -127,5 +149,5 @@ Peridio supports Peridio-side event filtering. This means that only the events t
   - [test-fire](/admin-api#webhook-events/operation/webhook-test-fire)
 
 :::info request failed
-The webhook [request-failed](/admin-api#webhook-events/operation/webhook-request-failed) event is *not* supported - Peridio does not publish webhook request-failed events as it facilitates cascading recursive failures.
+The webhook [request-failed](/admin-api#webhook-events/operation/webhook-request-failed) event is _not_ supported - Peridio does not publish webhook request-failed events as it facilitates cascading recursive failures.
 :::

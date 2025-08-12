@@ -13,7 +13,7 @@ The Peridio Core Platform is a CI/CD platform for embedded devices. It supports 
 
 ## Guide overview
 
-This guide will walk you through the process of readying a firmware for release, and simulating final the update through leveraging our CLI. In the interest of simplicity, *we are going to make a few assumptions*, but feel free to detour at any point and explore the broader product and platform.
+This guide will walk you through the process of readying a firmware for release, and simulating final the update through leveraging our CLI. In the interest of simplicity, _we are going to make a few assumptions_, but feel free to detour at any point and explore the broader product and platform.
 
 In this guide, we'll walk through the following steps:
 
@@ -76,7 +76,7 @@ So, lets get that set up.
 
 ## CLI setup
 
-The Peridio CLI is simply a wrapper around our  RESTful API. [Full documentation for the CLI is available here.](https://docs.peridio.com/cli)
+The Peridio CLI is simply a wrapper around our RESTful API. [Full documentation for the CLI is available here.](https://docs.peridio.com/cli)
 
 To get started, we'll need to
 
@@ -118,7 +118,6 @@ Use with: peridio -p peridio-demo [command]
 :::tip Profiles
 The Peridio CLI config supports multiple profiles. We strongly encourage you to pass your `--profile` to all CLI commands, as it lets you avoid passing your API key to every command.
 :::
-
 
 If you _want_ to see where this information is stored, you can see it in these two files. _Note: This assumes a macOS operating system. For other platforms, see here: [CLI Configuration Files](https://docs.peridio.com/cli#configuration-files)._
 
@@ -181,12 +180,9 @@ We will leverage the Peridio CLI again to generate our signing keys, upload them
 
 This CLI command will create a signing key pair, using the Ed25519 algorithm, storing them in the current directory, then uploading them to the Peridio platform under the name `demo key`, then updating our local CLI `peridio-demo` profile config to use these signing keys for future binary creation commands.
 
-
-
 :::tip File storage locations
 The `--out` directory is where your keys will be stored, and this path will be written into our config. Consider this location before executing the command. It can always be updated within the `config.json` file.
 :::
-
 
 ```bash
 peridio --profile peridio-demo signing-keys create \
@@ -212,7 +208,6 @@ Response:
 ```
 
 We can check our local CLI configuration, and see that the `signing_key_pairs` section has been updated with a `peridio-demo` profile entry pointing to the location of our private signing key file.
-
 
 ```bash
 cat $HOME/Library/Application\ Support/peridio/config.json
@@ -245,13 +240,13 @@ _For a more manual process of creating signing keys, see our [guide on creating 
 
 ## Check in
 
-- [x]  Account creation
-- [x]  Initialize a product & device
-- [x]  Configuring the development environment
-- [x]  Creating and registering our signing keys
-- [ ]  Creating a binary
-- [ ]  Making our binary available to our device
-- [ ]  Performing a simulated update
+- [x] Account creation
+- [x] Initialize a product & device
+- [x] Configuring the development environment
+- [x] Creating and registering our signing keys
+- [ ] Creating a binary
+- [ ] Making our binary available to our device
+- [ ] Performing a simulated update
 
 We're now on the home stretch — all that's remaining is to get our assets into peridio, and then perform a simulated device update.
 

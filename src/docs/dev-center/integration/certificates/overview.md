@@ -5,6 +5,7 @@ Device authentication and security in Peridio relies on X.509 certificates for d
 ## Core Concepts
 
 Peridio uses a comprehensive certificate management system that provides:
+
 - **Device Authentication** - Cryptographic proof of device identity
 - **Secure Communication** - TLS/SSL encrypted connections
 - **Firmware Validation** - Code signing and verification
@@ -13,6 +14,7 @@ Peridio uses a comprehensive certificate management system that provides:
 ## Certificate Components
 
 The Peridio certificate infrastructure consists of:
+
 - **Certificate Authorities (CAs)** - Root and intermediate trust anchors
 - **Device Certificates** - Individual device identity credentials
 - **Signing Keys** - Code signing certificates for firmware
@@ -29,13 +31,17 @@ The Peridio certificate infrastructure consists of:
 ## Management Options
 
 ### Self-Managed
+
 Full control over your PKI infrastructure:
+
 - Generate and manage your own CAs
 - Issue device certificates manually
 - Handle rotation and revocation
 
 ### Platform-Managed
+
 Let Peridio handle the complexity:
+
 - Automated certificate generation
 - Built-in rotation policies
 - Integrated revocation management
@@ -51,6 +57,7 @@ Let Peridio handle the complexity:
 ## Next Steps
 
 Explore the specific certificate management topics:
+
 - [Certificate Types](./certificate-types) - Understanding different certificate roles
 - [Certificate Lifecycle](./certificate-lifecycle) - Managing certificates over time
 - [Creation Methods](./creation-methods) - How to generate certificates

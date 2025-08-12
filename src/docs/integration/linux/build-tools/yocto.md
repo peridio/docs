@@ -78,14 +78,12 @@ header:
       file: conf/kas/peridio-include.yml
 
 repos:
-
   meta-peridio:
     url: https://github.com/peridio/meta-peridio.git
     branch: kirkstone
     commit: 3c7cb6a536f440218765a51d9b588f853569caeb
     layers:
       .:
-
 ```
 
 ## Building FWUP archives

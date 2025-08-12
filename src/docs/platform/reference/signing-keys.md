@@ -114,7 +114,6 @@ You will see the same sequence of bytes at the beginning of the output.
 
 #### Convert a raw public key into a PEM public key
 
-
 ```
 echo -n "\x30\x2a\x30\x05\x06\x03\x2b\x65\x70\x03\x21\x00$(cat public.raw | base64 -d)" \
   | openssl pkey -inform der -outform pem -pubin -pubout > public.pem

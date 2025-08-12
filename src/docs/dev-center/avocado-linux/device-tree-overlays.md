@@ -14,18 +14,21 @@ This page is currently being developed. Check back soon for comprehensive docume
 This guide will cover:
 
 ### Understanding Device Trees
+
 - Device tree basics and syntax
 - Hardware description fundamentals
 - Relationship to kernel drivers
 - Boot-time vs runtime configuration
 
 ### Device Tree Overlays (DTO)
+
 - What are overlays and why use them
 - Overlay syntax and structure
 - Fragment-based modifications
 - Symbol resolution and phandles
 
 ### Creating Overlays
+
 ```dts
 // Example overlay (coming soon)
 /dts-v1/;
@@ -33,7 +36,7 @@ This guide will cover:
 
 / {
     compatible = "brcm,bcm2835";
-    
+
     fragment@0 {
         target = <&spi0>;
         __overlay__ {
@@ -45,6 +48,7 @@ This guide will cover:
 ```
 
 ### Common Use Cases
+
 - **GPIO Configuration**: Pin multiplexing and functions
 - **I2C/SPI Devices**: Adding sensor support
 - **Display Configuration**: HDMI, MIPI DSI, LVDS
@@ -53,12 +57,14 @@ This guide will cover:
 - **Custom Hardware**: HAT and expansion boards
 
 ### Platform-Specific Guides
+
 - **Raspberry Pi**: Using dtoverlay and config.txt
 - **NXP i.MX**: U-Boot and overlay loading
 - **NVIDIA Jetson**: Device tree customization
 - **BeagleBone**: Cape manager and slots
 
 ### Building and Compiling
+
 ```bash
 # Example commands (coming soon)
 dtc -@ -I dts -O dtb -o my-overlay.dtbo my-overlay.dts
@@ -66,6 +72,7 @@ avocado-build dtbo my-overlay
 ```
 
 ### Runtime Management
+
 - Loading overlays at boot
 - Dynamic overlay application
 - Overlay parameters and configuration
@@ -73,6 +80,7 @@ avocado-build dtbo my-overlay
 - Overlay conflicts and resolution
 
 ### Integration with Avocado OS
+
 - Overlay storage and management
 - System extension packaging
 - OTA updates for overlays
@@ -80,6 +88,7 @@ avocado-build dtbo my-overlay
 - Fleet-wide overlay deployment
 
 ### Advanced Topics
+
 - Overlay dependencies
 - Conditional overlays
 - Multi-board support
@@ -87,6 +96,7 @@ avocado-build dtbo my-overlay
 - Security considerations
 
 ### Debugging Tools
+
 ```bash
 # Coming soon: Debugging examples
 dtc -I fs -O dts /proc/device-tree
@@ -97,6 +107,7 @@ vcdbg log msg
 ## Hardware Examples
 
 ### Enabling I2C Device
+
 ```dts
 // Coming soon: Complete I2C sensor example
 /dts-v1/;
@@ -108,7 +119,7 @@ vcdbg log msg
         __overlay__ {
             #address-cells = <1>;
             #size-cells = <0>;
-            
+
             sensor@48 {
                 compatible = "ti,tmp102";
                 reg = <0x48>;
@@ -119,6 +130,7 @@ vcdbg log msg
 ```
 
 ### Custom GPIO Configuration
+
 ```dts
 // Coming soon: GPIO configuration example
 ```

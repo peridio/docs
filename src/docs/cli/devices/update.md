@@ -10,7 +10,7 @@ Options:
 
       --quarantined <QUARANTINED>
           Whether or not the device is quarantined or not
-          
+
           [possible values: true, false]
 
       --cohort-prn <COHORT_PRN>
@@ -21,7 +21,7 @@ Options:
 
       --tags [<TAGS>...]
           A list of tags to attach to the device.
-          
+
           Values can be provided by passing each value in a flag or by delimiting all values with ","
 
       --target <TARGET>

@@ -30,18 +30,21 @@ const config = {
     ],
   ],
   presets: [
-    ['classic', {
-      docs: {
-        breadcrumbs: false,
-        path: 'docs',
-        routeBasePath: '/',
-        sidebarPath: require.resolve('./sidebars.js'),
-        id: 'docs1',
+    [
+      'classic',
+      {
+        docs: {
+          breadcrumbs: false,
+          path: 'docs',
+          routeBasePath: '/',
+          sidebarPath: require.resolve('./sidebars.js'),
+          id: 'docs1',
+        },
+        theme: {
+          customCss: [require.resolve('./src/css/custom.css')],
+        },
       },
-      theme: {
-        customCss: [require.resolve('./src/css/custom.css')],
-      },
-    }],
+    ],
     [
       'redocusaurus',
       {

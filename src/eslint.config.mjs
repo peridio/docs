@@ -1,12 +1,10 @@
-import reactPlugin from 'eslint-plugin-react';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import docusaurusPlugin from '@docusaurus/eslint-plugin';
+import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import docusaurusPlugin from '@docusaurus/eslint-plugin'
 
 export default [
   {
-    ignores: [
-      'build',
-    ],
+    ignores: ['build'],
   },
   {
     files: ['**/*.{js,jsx}'],
@@ -25,7 +23,7 @@ export default [
     plugins: {
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
-      "@docusaurus": docusaurusPlugin,
+      '@docusaurus': docusaurusPlugin,
     },
     settings: {
       react: {
@@ -39,4 +37,4 @@ export default [
       // Add or override rules here
     },
   },
-];
+]

@@ -6,9 +6,9 @@ The Peridio EVK (Evaluation Kit) offers a streamlined approach to configuring an
 
 To get started with the Peridio EVK you will need access to a workstation with the following requirements:
 
-* Python 3.6+
-* [Peridio CLI](/cli)
-* docker
+- Python 3.6+
+- [Peridio CLI](/cli)
+- docker
 
 ## Getting started
 
@@ -20,11 +20,11 @@ pip install peridio-evk
 
 Once the Peridio EVK is installed, you will need the following to initialize an environment
 
-* A Peridio Cloud organization
+- A Peridio Cloud organization
 
 This should be an organization that you have administrative rights to create new products and operate within. If you are just getting started with Peridio, you can deploy the EVK into your desired corporate org. If you are new to Peridio, but operating from within an existing corporate organization and you wish to leverage the Peridio EVK to help familiarize yourself with Peridio, it is advised that you create a new organization.
 
-* An API Key
+- An API Key
 
 You can generate a new API key in Peridio from the [API Authentication](https://console.peridio.com/settings/api-authentication) page. The generated token will only be displayed to you once, be sure to copy it down for the next steps.
 
@@ -38,9 +38,9 @@ peridio-evk initialize --organization-name <ORGANIZATION_NAME> --organization-pr
 
 Replace the following tokens in the command with your values
 
-* `<ORGANIZATION_NAME>`: This is the string value of the name of the organization Peridio EVK will deploy the demo product into. If this value contains spaces or special characters, you should wrap it in double quotes.
-* `<ORGANIZARION_PRN>`: The PRN (Peridio Resource Name) of the organization. You can find the organization PRN from the [Organization List](https://console.peridio.com/organizations). Click the copy link next to the PRN column.
-* `<API_KEY>`: The API key that you generated in the [API Authentication](https://console.peridio.com/settings/api-authentication) page
+- `<ORGANIZATION_NAME>`: This is the string value of the name of the organization Peridio EVK will deploy the demo product into. If this value contains spaces or special characters, you should wrap it in double quotes.
+- `<ORGANIZARION_PRN>`: The PRN (Peridio Resource Name) of the organization. You can find the organization PRN from the [Organization List](https://console.peridio.com/organizations). Click the copy link next to the PRN column.
+- `<API_KEY>`: The API key that you generated in the [API Authentication](https://console.peridio.com/settings/api-authentication) page
 
 You should see output like the following:
 
@@ -103,81 +103,81 @@ The Peridio EVK deploys a demo product called `edge-inference` into your organiz
 
 Product:
 
-* edge-inference
+- edge-inference
 
 Cohorts:
 
-* release
-* release-debug
-* daily-release
-* daily-debug
+- release
+- release-debug
+- daily-release
+- daily-debug
 
 Signing-Keys:
 
-* release-signing-key
-* release-debug-signing-key
-* daily-release-signing-key
-* daily-debug-signing-key
+- release-signing-key
+- release-debug-signing-key
+- daily-release-signing-key
+- daily-debug-signing-key
 
 CA Certificates:
 
-* Intermediate CA: edge-inference:release
-* Intermediate CA: edge-inference:release-debug
-* Intermediate CA: edge-inference:daily-release
-* Intermediate CA: edge-inference:daily-debug
+- Intermediate CA: edge-inference:release
+- Intermediate CA: edge-inference:release-debug
+- Intermediate CA: edge-inference:daily-release
+- Intermediate CA: edge-inference:daily-debug
 
 Artifacts, Versions, Binaries:
 
-* edge-inference-os
-  * v1.12.1
-    * target: x86_64
-    * target: arm64-v8
-* edge-inference-service
-  * v1.5.3
-    * target: x86_64
-    * target: arm64-v8
-  * v2.0.0
-    * target: x86_64
-    * target: arm64-v8
-* edge-inference-peripheral
-  * v1.9.10
-    * target: arm-cortex-m33
-* edge-inference-model
-  * v1.4.0
-    * target: x86_64
-    * target: arm64-v8
-  * v2.1.0
-    * target: x86_64
-    * target: arm64-v8
+- edge-inference-os
+  - v1.12.1
+    - target: x86_64
+    - target: arm64-v8
+- edge-inference-service
+  - v1.5.3
+    - target: x86_64
+    - target: arm64-v8
+  - v2.0.0
+    - target: x86_64
+    - target: arm64-v8
+- edge-inference-peripheral
+  - v1.9.10
+    - target: arm-cortex-m33
+- edge-inference-model
+  - v1.4.0
+    - target: x86_64
+    - target: arm64-v8
+  - v2.1.0
+    - target: x86_64
+    - target: arm64-v8
 
 Devices:
 
-* EI-ML-0001
-  * tags: canary
-* EI-ML-0002
-  * tags: canary
-* EI-ML-0003
-  * tags: JITP
-* EI-ML-0004
-  * tags: JITP
-* EI-ML-0005
-  * tags: JITP
-* EI-ML-0006
-  * tags: JITP
+- EI-ML-0001
+  - tags: canary
+- EI-ML-0002
+  - tags: canary
+- EI-ML-0003
+  - tags: JITP
+- EI-ML-0004
+  - tags: JITP
+- EI-ML-0005
+  - tags: JITP
+- EI-ML-0006
+  - tags: JITP
 
 Releases:
 
-* release-r1001
-  * edge-inference-os v1.12.1
-  * edge-inference-service v1.5.3
-  * edge-inference-peripheral v1.9.10
-  * edge-inference-model v1.4.0
+- release-r1001
+  - edge-inference-os v1.12.1
+  - edge-inference-service v1.5.3
+  - edge-inference-peripheral v1.9.10
+  - edge-inference-model v1.4.0
 
-* release-r1002
-  * edge-inference-os v1.12.1
-  * edge-inference-service v2.0.0
-  * edge-inference-peripheral v1.9.10
-  * edge-inference-model v2.1.0
+- release-r1002
+  - edge-inference-os v1.12.1
+  - edge-inference-service v2.0.0
+  - edge-inference-peripheral v1.9.10
+  - edge-inference-model v2.1.0
 
 The Peridio EVK simulates an environment where you have six devices, where four of the devices are Just-In-Time-Provisioned. These devices are in the release cohort and start on release-r1001. There is a release that has been staged for the release cohort titled release-r1002. This release will update the edge-inference-service and edge-inference-model to the latest version. The release is initially staged in a disabled state, and it is configured to deploy to only devices tagged with `canary`. Once you enable the release, and start virtual devices, the `canary` devices will begin to take an update.
 

@@ -2,14 +2,14 @@
 
 Peridiod can be run from within a container for testing, development, and production use cases. For example, [Peridio EVK](/evk) leverages containerized peridiod for managing virtual devices. Running peridiod in a container orchestrator requires several considerations.
 
-* Access to the UBoot Environment for state storage.
-* Access to `/dev` devices to perform block level operations when modifying partitions etc with tools like fwup or swupdate.
-* `NET_ADMIN` capabilities for managing network interfaces for use with remote access tunnels.
-* Access to the chosen identity provider.
-  * `file`: bind mount a host directory that contains the certificate / key pair.
-  * `env`: Pass the base 64 encoded PEM into environment variables directly from the run command.
-  * `uboot-env`: Access ot the host u-boot environment, or you can construct a u-boot environment file and bind mount it in a directory from the host.
-  * `pkcs11`: Access to shared libraries and or device files required by the pkcs11 engine / provider.
+- Access to the UBoot Environment for state storage.
+- Access to `/dev` devices to perform block level operations when modifying partitions etc with tools like fwup or swupdate.
+- `NET_ADMIN` capabilities for managing network interfaces for use with remote access tunnels.
+- Access to the chosen identity provider.
+  - `file`: bind mount a host directory that contains the certificate / key pair.
+  - `env`: Pass the base 64 encoded PEM into environment variables directly from the run command.
+  - `uboot-env`: Access ot the host u-boot environment, or you can construct a u-boot environment file and bind mount it in a directory from the host.
+  - `pkcs11`: Access to shared libraries and or device files required by the pkcs11 engine / provider.
 
 ## Running a container
 
@@ -36,14 +36,10 @@ Here is what the `peridio.json` file looks like:
   "cache_dir": "/etc/peridiod/cache",
   "release_poll_enabled": true,
   "remote_shell": true,
-  "targets": [
-    "arm64-v8"
-  ],
+  "targets": ["arm64-v8"],
   "remote_access_tunnels": {
     "enabled": true,
-    "service_ports": [
-      22
-    ]
+    "service_ports": [22]
   },
   "node": {
     "key_pair_source": "file",
@@ -52,9 +48,7 @@ Here is what the `peridio.json` file looks like:
       "certificate_path": "/etc/peridiod/device-certificate.pem"
     }
   },
-  "trusted_signing_keys": [
-    "I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="
-  ]
+  "trusted_signing_keys": ["I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="]
 }
 ```
 

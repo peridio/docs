@@ -9,24 +9,28 @@ Custom binary backends enable you to store and distribute firmware binaries usin
 ## Key Benefits
 
 ### Performance Optimization
+
 - **Global distribution** - Serve binaries from edge locations closest to your devices
 - **Reduced latency** - Minimize download times with strategically placed content
 - **Bandwidth optimization** - Leverage CDN caching to reduce origin server load
 - **Parallel downloads** - Support for multipart downloads and resume capabilities
 
 ### Cost Control
+
 - **Existing contracts** - Utilize your current cloud storage agreements
 - **Traffic optimization** - Reduce costs through intelligent caching strategies
 - **Regional pricing** - Take advantage of regional pricing differences
 - **Predictable billing** - Better control over storage and bandwidth costs
 
 ### Compliance & Security
+
 - **Data sovereignty** - Keep binaries in specific geographic regions
 - **Regulatory compliance** - Meet industry-specific storage requirements
 - **Enhanced security** - Time-limited signed URLs for secure downloads
 - **Access control** - Granular permissions and audit trails
 
 ### Operational Benefits
+
 - **Infrastructure control** - Full visibility into your storage and distribution
 - **Monitoring integration** - Use your existing monitoring and alerting systems
 - **Backup strategies** - Implement your own backup and disaster recovery
@@ -37,12 +41,14 @@ Custom binary backends enable you to store and distribute firmware binaries usin
 Peridio currently supports the following cloud platforms for custom binary backends:
 
 ### Amazon Web Services (AWS)
+
 - **Amazon S3** - Primary storage backend with regional flexibility
 - **Amazon CloudFront** - Global CDN with signed URL capabilities
 - **Cross-region replication** - Built-in redundancy options
 - **Integrated monitoring** - CloudWatch metrics and logging
 
 ### Coming Soon
+
 - **Google Cloud Platform** - Cloud Storage and Cloud CDN integration
 - **Microsoft Azure** - Blob Storage and Azure CDN support
 - **Multi-cloud strategies** - Cross-platform distribution scenarios
@@ -74,21 +80,25 @@ Global Edge Locations
 ## Use Cases
 
 ### Enterprise Deployments
+
 - Large-scale IoT deployments requiring guaranteed SLAs
 - Enterprises with existing cloud infrastructure investments
 - Organizations with strict data governance requirements
 
 ### Geographic Distribution
+
 - Global device fleets requiring optimized regional performance
 - Compliance with local data residency requirements
 - Multi-region redundancy strategies
 
 ### High-Volume Scenarios
+
 - Frequent firmware updates across large device populations
 - Bandwidth-intensive applications (video, ML models, etc.)
 - Cost-sensitive deployments requiring optimal pricing
 
 ### Development & Testing
+
 - Staging environments with isolated storage
 - A/B testing scenarios with different distribution strategies
 - Development workflows requiring rapid iteration
@@ -96,17 +106,20 @@ Global Edge Locations
 ## Security Model
 
 ### Authentication & Authorization
+
 - **IAM integration** - Leverage cloud provider identity management
 - **Least privilege access** - Minimal required permissions
 - **External ID validation** - Additional security layer using organization IDs
 
 ### Secure Distribution
+
 - **Signed URLs** - Time-limited, authenticated download links
 - **Encryption in transit** - TLS/SSL for all communications
 - **Encryption at rest** - Cloud provider encryption capabilities
 - **Access logging** - Comprehensive audit trails
 
 ### Best Practices
+
 - Regular key rotation for signing operations
 - Monitoring and alerting for unusual access patterns
 - Network security groups and firewall configurations

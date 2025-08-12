@@ -38,7 +38,7 @@ Perform all remaining exercises from inside the SDK container.
 
 ## Building a system extension
 
-Let's build a system extension that adds peridiod to the runtime. 
+Let's build a system extension that adds peridiod to the runtime.
 
 1. Install package contents for the peridiod package to the sysext sysroot:
 

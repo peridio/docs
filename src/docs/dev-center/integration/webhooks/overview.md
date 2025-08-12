@@ -21,17 +21,20 @@ Webhooks are HTTP callbacks that Peridio sends to your specified endpoint URL wh
 ## Key Features
 
 ### Security First
+
 - **HTTPS required** - All webhook requests are sent over encrypted connections
 - **HMAC-SHA256 signatures** - Every request is cryptographically signed to verify authenticity
 - **Replay protection** - Timestamps prevent old requests from being replayed
 - **Secret rolling** - Webhook secrets can be rotated with configurable transition periods
 
 ### Reliability
+
 - **Automatic retries** - Failed deliveries are automatically retried for up to 3 days with exponential backoff
 - **Event filtering** - Choose exactly which events you want to receive to reduce noise
 - **Deduplication support** - Each event includes a unique PRN for reliable deduplication
 
 ### Developer Experience
+
 - **JSON payloads** - All webhook data is sent as structured JSON
 - **Test functionality** - Test your endpoint with sample events before going live
 - **Comprehensive documentation** - Detailed payload schemas and examples for all event types
@@ -39,16 +42,19 @@ Webhooks are HTTP callbacks that Peridio sends to your specified endpoint URL wh
 ## Common Use Cases
 
 ### Device Management
+
 - **Connection monitoring** - Track when devices come online or go offline
 - **Firmware update tracking** - Monitor the progress of OTA updates across your fleet
 - **Authentication alerts** - Get notified of failed device authentication attempts
 
 ### Integration Workflows
+
 - **CRM synchronization** - Automatically update customer records when device status changes
 - **Monitoring integration** - Send device events to your monitoring and alerting systems
 - **Data pipeline triggers** - Initiate data processing workflows when devices report new data
 
 ### Business Intelligence
+
 - **Analytics ingestion** - Stream device events into your data warehouse or analytics platform
 - **Real-time dashboards** - Power live dashboards with instant event updates
 - **Compliance reporting** - Automatically generate compliance reports from device activities
@@ -67,7 +73,7 @@ Ready to start using webhooks? Here's what to do next:
 Peridio webhooks support several categories of events:
 
 - **Device Events** - Connection status, authentication, and firmware update events
-- **API Key Events** - API key creation and management events  
+- **API Key Events** - API key creation and management events
 - **Webhook Events** - Test events for webhook validation
 
 See the [Events and Payloads](./events-and-payloads.md) page for complete details on all available events.

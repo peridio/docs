@@ -21,12 +21,13 @@ This launches containerized devices that simulate the QEMU environment.
 ## Reference Implementation
 
 For detailed QEMU setup instructions, see:
+
 - [QEMU ARM64 Reference Design](/integration/linux/reference-designs/qemu-arm64/overview)
 
 ## Use Cases
 
 - **Development** - Code without physical hardware
-- **CI/CD** - Automated testing pipelines  
+- **CI/CD** - Automated testing pipelines
 - **Demos** - Presentations and evaluations
 - **Training** - Learning Peridio concepts
 

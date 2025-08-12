@@ -27,7 +27,6 @@ Firmware require the use of [fwup](https://github.com/fwup-home/fwup) archives a
 
 When a device downloads a firmware it may extract from it like a ZIP, or apply a fwup task, or do whatever it sees fit to install or process the firmware. The code responsible for this functionality is the [agent](/integration/introduction#agent).
 
-
 ## Time to live (TTL)
 
 All firmware will be deleted automatically after a set amount of seconds by configuring their `ttl` field. Firmware associated with a deployment will never be automatically deleted. Dissassociating a firmware with a configured TTL from all deployments will cause the TTL to begin counting down again from its maximum value.
@@ -35,15 +34,15 @@ All firmware will be deleted automatically after a set amount of seconds by conf
 ### Example
 
 1. Firmware (A) is created with `ttl: 60` and is associated with zero deployments.
-    - Firmware (A)'s TTL begins counting down and it will be automatically deleted once it runs out.
+   - Firmware (A)'s TTL begins counting down and it will be automatically deleted once it runs out.
 2. Firmware (A) is associated with deployment (B).
-    - Firmware (A)'s TTL is ignored and it will not be automatically deleted.
+   - Firmware (A)'s TTL is ignored and it will not be automatically deleted.
 3. Firmware (A) is associated with deployment (C).
-    - Firmware (A) is now associated with two deployments, its TTL continues to be ignored and it still will not be automatically deleted.
+   - Firmware (A) is now associated with two deployments, its TTL continues to be ignored and it still will not be automatically deleted.
 4. Deployment (B) is deleted.
-    - Firmware (A) is still associated with at least one deployment, its TTL continues to be ignored and it still will not be automatically deleted.
+   - Firmware (A) is still associated with at least one deployment, its TTL continues to be ignored and it still will not be automatically deleted.
 5. Deployment (C) is deleted.
-    - Firmware (A) is associated with zero deployments, its TTL begins counting down from its maximum value of `60` and it will be automatically deleted once it runs out.
+   - Firmware (A) is associated with zero deployments, its TTL begins counting down from its maximum value of `60` and it will be automatically deleted once it runs out.
 
 ## Delta updates
 

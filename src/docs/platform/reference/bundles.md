@@ -14,9 +14,9 @@ Bundles enable distributing the exact same set of binaries and custom metadata a
 
 For example:
 
-  1. Testing a bundle on a development device via a bundle override.
-  2. Testing the same bundle against staging and nightly cohorts.
-  3. Distributing the same bundle to production cohorts.
+1. Testing a bundle on a development device via a bundle override.
+2. Testing the same bundle against staging and nightly cohorts.
+3. Distributing the same bundle to production cohorts.
 
 This reduces the opportunity for human error that can occur when requiring an asset be rebuilt / redefined when crossing these distribution boundaries.
 
@@ -28,37 +28,37 @@ Each binary in a bundle can optionally have an arbitrary, user-defined JSON obje
 
 ### Example 1: supplied only on artifact
 
-  - Artifact **(A1)** has custom metadata defined on it.
-  - Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
-  - Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
-  - Creating a bundle with **(B1)**, but supplying no custom metadata.
+- Artifact **(A1)** has custom metadata defined on it.
+- Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
+- Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
+- Creating a bundle with **(B1)**, but supplying no custom metadata.
 
 In the bundle:
 
-  - **(B1)** will have the custom metadata from **(A1)**.
+- **(B1)** will have the custom metadata from **(A1)**.
 
 ### Example 2: supplied on artifact and binary
 
-  - Artifact **(A1)** has custom metadata defined on it.
-  - Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
-  - Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
-  - Binary **(B2)** for **(AV1)** has custom metadata defined on it.
-  - Creating a bundle with **(B1)** and **(B2)**, but supplying no custom metadata.
+- Artifact **(A1)** has custom metadata defined on it.
+- Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
+- Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
+- Binary **(B2)** for **(AV1)** has custom metadata defined on it.
+- Creating a bundle with **(B1)** and **(B2)**, but supplying no custom metadata.
 
 In the bundle:
 
-  - **(B1)** will have the custom metadata from **(A1)**.
-  - **(B2)** will have the custom metadata from **(B2)**.
+- **(B1)** will have the custom metadata from **(A1)**.
+- **(B2)** will have the custom metadata from **(B2)**.
 
 ### Example 3: supplied on artifact, binary, and bundle
 
-  - Artifact **(A1)** has custom metadata defined on it.
-  - Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
-  - Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
-  - Binary **(B2)** for **(AV1)** has custom metadata defined on it.
-  - Creating a bundle with **(B1)** and **(B2)**, and supplying custom metadata for **(B2)**.
+- Artifact **(A1)** has custom metadata defined on it.
+- Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
+- Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
+- Binary **(B2)** for **(AV1)** has custom metadata defined on it.
+- Creating a bundle with **(B1)** and **(B2)**, and supplying custom metadata for **(B2)**.
 
 In the bundle:
 
-  - **(B1)** will have the custom metadata from **(A1)**.
-  - **(B2)** will have the custom metadata supplied for **(B2)** at the time of bundle creation.
+- **(B1)** will have the custom metadata from **(A1)**.
+- **(B2)** will have the custom metadata supplied for **(B2)** at the time of bundle creation.

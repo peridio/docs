@@ -16,7 +16,7 @@ Options:
 
       --tags [<TAGS>...]
           A list of tags that must be present on a device for it to be eligible for this deployment.
-          
+
           Values can be provided by passing each value in a flag or by delimiting all values with ","
 
       --version <VERSION>

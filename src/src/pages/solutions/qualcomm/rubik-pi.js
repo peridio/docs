@@ -4,15 +4,15 @@ import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import styles from './rubik-pi.module.css'
-import { 
-  HiCommandLine as CommandLineIcon, 
-  HiOutlineRocketLaunch as RocketLaunchIcon, 
-  HiOutlineLockClosed as LockClosedIcon, 
-  HiOutlineWifi as WifiIcon, 
-  HiOutlineGlobeAlt as GlobeAltIcon, 
+import {
+  HiCommandLine as CommandLineIcon,
+  HiOutlineRocketLaunch as RocketLaunchIcon,
+  HiOutlineLockClosed as LockClosedIcon,
+  HiOutlineWifi as WifiIcon,
+  HiOutlineGlobeAlt as GlobeAltIcon,
   HiOutlineShieldCheck as ShieldCheckIcon,
   HiOutlineXMark as XMarkIcon,
-  HiOutlineCheck as CheckIcon
+  HiOutlineCheck as CheckIcon,
 } from 'react-icons/hi2'
 
 export default function RubikPiSolution() {
@@ -20,35 +20,45 @@ export default function RubikPiSolution() {
     <Layout>
       <Head>
         <title>Qualcomm Rubik Pi Edge AI Development | Production-Ready Robotics | Peridio</title>
-        <meta 
-          name="description" 
-          content="Deploy Qualcomm Rubik Pi (RB3 Gen 2) in production 3x faster with Peridio Fleet + Avocado OS. 15.5 TOPS AI performance, secure OTA updates, enterprise robotics support." 
+        <meta
+          name="description"
+          content="Deploy Qualcomm Rubik Pi (RB3 Gen 2) in production 3x faster with Peridio Fleet + Avocado OS. 15.5 TOPS AI performance, secure OTA updates, enterprise robotics support."
         />
-        <meta name="keywords" content="qualcomm rubik pi, rb3 gen 2, edge ai, robotics, qcs6490, device management, ota updates, yocto, embedded linux" />
-        <meta property="og:title" content="Qualcomm Rubik Pi Edge AI Development | Production-Ready Robotics | Peridio" />
-        <meta property="og:description" content="Deploy Qualcomm Rubik Pi in production 3x faster with Peridio Fleet + Avocado OS. 15.5 TOPS AI performance, secure OTA updates, enterprise support." />
+        <meta
+          name="keywords"
+          content="qualcomm rubik pi, rb3 gen 2, edge ai, robotics, qcs6490, device management, ota updates, yocto, embedded linux"
+        />
+        <meta
+          property="og:title"
+          content="Qualcomm Rubik Pi Edge AI Development | Production-Ready Robotics | Peridio"
+        />
+        <meta
+          property="og:description"
+          content="Deploy Qualcomm Rubik Pi in production 3x faster with Peridio Fleet + Avocado OS. 15.5 TOPS AI performance, secure OTA updates, enterprise support."
+        />
         <meta property="og:image" content="/img/rubik-pi.jpeg" />
         <meta property="og:type" content="product" />
         <link rel="canonical" href="https://docs.peridio.com/solutions/qualcomm/rubik-pi" />
-        
+
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "Peridio + Avocado OS for Qualcomm Rubik Pi",
-            "description": "Production-ready edge AI and robotics platform with device management and OTA updates for Qualcomm RB3 Gen 2",
-            "manufacturer": {
-              "@type": "Organization",
-              "name": "Peridio"
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: 'Peridio + Avocado OS for Qualcomm Rubik Pi',
+            description:
+              'Production-ready edge AI and robotics platform with device management and OTA updates for Qualcomm RB3 Gen 2',
+            manufacturer: {
+              '@type': 'Organization',
+              name: 'Peridio',
             },
-            "category": "Edge AI Development Platform",
-            "offers": {
-              "@type": "Offer",
-              "availability": "https://schema.org/InStock"
+            category: 'Edge AI Development Platform',
+            offers: {
+              '@type': 'Offer',
+              availability: 'https://schema.org/InStock',
             },
-            "applicationCategory": "Robotics, Edge AI, IoT",
-            "operatingSystem": "Yocto Linux, Avocado OS"
+            applicationCategory: 'Robotics, Edge AI, IoT',
+            operatingSystem: 'Yocto Linux, Avocado OS',
           })}
         </script>
       </Head>
@@ -59,10 +69,12 @@ export default function RubikPiSolution() {
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <Heading as="h1" className={styles.heroTitle}>
-                Accelerate <span className={styles.highlight}>Edge AI & Robotics</span> with Qualcomm Rubik Pi
+                Accelerate <span className={styles.highlight}>Edge AI & Robotics</span> with
+                Qualcomm Rubik Pi
               </Heading>
               <p className={styles.heroSubtitle}>
-                Production-ready Qualcomm RB3 Gen 2 deployment in 3-6 months with Peridio Fleet + Avocado OS
+                Production-ready Qualcomm RB3 Gen 2 deployment in 3-6 months with Peridio Fleet +
+                Avocado OS
               </p>
               <div className={styles.heroStats}>
                 <div className={styles.stat}>
@@ -88,9 +100,9 @@ export default function RubikPiSolution() {
               </div>
             </div>
             <div className={styles.heroImage}>
-              <img 
-                src="/img/Qualcomm-Rubikpi.png" 
-                alt="Qualcomm Rubik Pi RB3 Gen 2 development kit" 
+              <img
+                src="/img/Qualcomm-Rubikpi.png"
+                alt="Qualcomm Rubik Pi RB3 Gen 2 development kit"
                 className={styles.productImage}
               />
             </div>
@@ -101,7 +113,9 @@ export default function RubikPiSolution() {
       {/* Hardware Specs */}
       <section className={styles.specs}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Rubik Pi Hardware Highlights</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Rubik Pi Hardware Highlights
+          </Heading>
           <div className={styles.specsTable}>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>AI Performance</div>
@@ -140,22 +154,45 @@ export default function RubikPiSolution() {
       {/* Use Cases */}
       <section className={styles.useCases}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Production Use Cases</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Production Use Cases
+          </Heading>
           <div className={styles.useCaseGrid}>
             <div className={styles.useCase}>
-              <img src="/img/factory-quality-inspection.png" alt="Autonomous Mobile Robots" className={styles.useCaseImage} />
+              <img
+                src="/img/factory-quality-inspection.png"
+                alt="Autonomous Mobile Robots"
+                className={styles.useCaseImage}
+              />
               <Heading as="h3">Autonomous Mobile Robots</Heading>
-              <p>Real-time SLAM, obstacle avoidance, and path planning with multi-camera fusion. OTA enables algorithm updates and new capabilities.</p>
+              <p>
+                Real-time SLAM, obstacle avoidance, and path planning with multi-camera fusion. OTA
+                enables algorithm updates and new capabilities.
+              </p>
             </div>
             <div className={styles.useCase}>
-              <img src="/img/environmental-inspection.png" alt="Smart Security Cameras" className={styles.useCaseImage} />
+              <img
+                src="/img/environmental-inspection.png"
+                alt="Smart Security Cameras"
+                className={styles.useCaseImage}
+              />
               <Heading as="h3">Smart Security Cameras</Heading>
-              <p>AI-powered video analytics with edge processing for privacy-sensitive environments. Fleet management simplifies large-scale deployments.</p>
+              <p>
+                AI-powered video analytics with edge processing for privacy-sensitive environments.
+                Fleet management simplifies large-scale deployments.
+              </p>
             </div>
             <div className={styles.useCase}>
-              <img src="/img/see-and-spray.png" alt="Industrial IoT Gateways" className={styles.useCaseImage} />
+              <img
+                src="/img/see-and-spray.png"
+                alt="Industrial IoT Gateways"
+                className={styles.useCaseImage}
+              />
               <Heading as="h3">Industrial IoT Gateways</Heading>
-              <p>Edge inference for predictive maintenance and quality control. 5G connectivity enables real-time coordination with cloud systems.</p>
+              <p>
+                Edge inference for predictive maintenance and quality control. 5G connectivity
+                enables real-time coordination with cloud systems.
+              </p>
             </div>
           </div>
         </div>
@@ -168,7 +205,7 @@ export default function RubikPiSolution() {
             <Heading as="h2">From Challenge to Solution</Heading>
             <p>Transform your Rubik Pi development workflow with enterprise-grade infrastructure</p>
           </div>
-          
+
           <div className={styles.comparisonContainer}>
             <div className={styles.challengeCard}>
               <div className={styles.cardHeader}>
@@ -179,13 +216,17 @@ export default function RubikPiSolution() {
               </div>
               <div className={styles.cardContent}>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Complex Qualcomm AI Engine integration</span>
+                  <span className={styles.challengeText}>
+                    Complex Qualcomm AI Engine integration
+                  </span>
                 </div>
                 <div className={styles.challengeItem}>
                   <span className={styles.challengeText}>12-18 month Yocto development cycles</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Custom fleet management infrastructure</span>
+                  <span className={styles.challengeText}>
+                    Custom fleet management infrastructure
+                  </span>
                 </div>
                 <div className={styles.challengeItem}>
                   <span className={styles.challengeText}>Security compliance overhead</span>
@@ -228,37 +269,69 @@ export default function RubikPiSolution() {
       {/* Key Features */}
       <section className={styles.features}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Why Choose Peridio for Rubik Pi Development</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Why Choose Peridio for Rubik Pi Development
+          </Heading>
           <div className={styles.featureGrid}>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><CommandLineIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <CommandLineIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">AI-Optimized Stack</Heading>
-              <p>Native support for Qualcomm AI Engine and Hexagon SDK. Streamlined deployment of TensorFlow Lite, ONNX, and PyTorch models.</p>
+              <p>
+                Native support for Qualcomm AI Engine and Hexagon SDK. Streamlined deployment of
+                TensorFlow Lite, ONNX, and PyTorch models.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><RocketLaunchIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <RocketLaunchIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Rapid Deployment</Heading>
-              <p>Optimized BSPs for Qualcomm silicon enable fast boot and deterministic builds. Pre-integrated drivers reduce development time.</p>
+              <p>
+                Optimized BSPs for Qualcomm silicon enable fast boot and deterministic builds.
+                Pre-integrated drivers reduce development time.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><LockClosedIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <LockClosedIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Hardware Security</Heading>
-              <p>Hardware-backed security with TrustZone, secure boot, and verified boot. LUKS encryption and dm-verity ensure data integrity.</p>
+              <p>
+                Hardware-backed security with TrustZone, secure boot, and verified boot. LUKS
+                encryption and dm-verity ensure data integrity.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><WifiIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <WifiIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Fleet Operations</Heading>
-              <p>Comprehensive device management through Peridio Fleet with remote diagnostics, phased updates, and fleet-wide security patching.</p>
+              <p>
+                Comprehensive device management through Peridio Fleet with remote diagnostics,
+                phased updates, and fleet-wide security patching.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><GlobeAltIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Cross-Platform</Heading>
-              <p>Unified development experience across ARM SoCs (NVIDIA Jetson, NXP i.MX, Qualcomm QCS) with portable application layers.</p>
+              <p>
+                Unified development experience across ARM SoCs (NVIDIA Jetson, NXP i.MX, Qualcomm
+                QCS) with portable application layers.
+              </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}><ShieldCheckIcon style={{ width: '100%', height: '100%' }} /></div>
+              <div className={styles.featureIcon}>
+                <ShieldCheckIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Long-term Support</Heading>
-              <p>10+ years of maintenance ensures device longevity and reduces lifecycle management overhead for enterprise deployments.</p>
+              <p>
+                10+ years of maintenance ensures device longevity and reduces lifecycle management
+                overhead for enterprise deployments.
+              </p>
             </div>
           </div>
         </div>
@@ -269,7 +342,10 @@ export default function RubikPiSolution() {
         <div className={styles.container}>
           <div className={styles.ctaContent}>
             <Heading as="h2">Ready to Accelerate Your Edge AI Development?</Heading>
-            <p>Transform your Qualcomm Rubik Pi from development kit to secure, deployable edge AI platform ready for production.</p>
+            <p>
+              Transform your Qualcomm Rubik Pi from development kit to secure, deployable edge AI
+              platform ready for production.
+            </p>
             <div className={styles.ctaButtons}>
               <Link to="/evk" className={styles.ctaPrimary}>
                 Get Started
@@ -285,7 +361,9 @@ export default function RubikPiSolution() {
       {/* Related Resources */}
       <section className={styles.resources}>
         <div className={styles.container}>
-          <Heading as="h2" className={styles.sectionTitle}>Documentation & Resources</Heading>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Documentation & Resources
+          </Heading>
           <div className={styles.resourceGrid}>
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
               <Heading as="h3">Yocto Integration Guide</Heading>

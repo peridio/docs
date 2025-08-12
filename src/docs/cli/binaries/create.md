@@ -35,7 +35,7 @@ Options:
 
       --binary-part-size <BINARY_PART_SIZE>
           The size to use when creating binary parts. All binary parts will be equal to this size, except the last one which will be less than or equal to this size
-          
+
           [default: 5242880]
 
       --concurrency <CONCURRENCY>
@@ -55,27 +55,27 @@ Options:
 
       --bundle-override-prn <BUNDLE_OVERRIDE_PRN>
           The PRN of the bundle override to associate with this binary.
-          
+
           A bundle will be created for the newly-created binary.
-          
+
           The given bundle override will be updated to this bundle.
 
       --device-prn <DEVICE_PRN>
           The PRN of the device to stage this binary for.
-          
+
           A bundle will be created for the newly-created binary.
-          
+
           A bundle override will be created with this bundle.
-          
+
           The given device will be added to the bundle override.
 
       --cohort-prn <COHORT_PRN>
           The PRN of a cohort, in which to create a release for.
-          
+
           A bundle will be created for the newly-created binary.
-          
+
           A release will be created for the given cohort with this bundle.
-          
+
           The created release is not required, has scheduled availability of "now", and 100% availability.
 
   -h, --help

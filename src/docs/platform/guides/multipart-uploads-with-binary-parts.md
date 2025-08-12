@@ -45,7 +45,7 @@ peridio binary-parts create \
 
 - `--binary-content-path` points at the complete bianry, not any given chunk.
 - `--hash` value can be calculated as documented in the [create a hash to later be signed](/platform/reference/signing-keys#create-a-hash) section of the signing keys reference.
-    - Exercise extreme caution regarding newlines and invisible characters, it is a common source of mistakes.
+  - Exercise extreme caution regarding newlines and invisible characters, it is a common source of mistakes.
 - `--size` is the byte size of the part.
 
 If successful, this command will return a presigned URL you can use to upload the binary part's content.
@@ -66,7 +66,6 @@ curl $PERIDIO_PRESIGNED_URL \
 Every specified header in that example is required.
 
 ## Listing parts
-
 
 ```console
 peridio binary-parts list \

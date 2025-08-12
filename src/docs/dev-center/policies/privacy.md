@@ -15,6 +15,7 @@ Avocado Linux is committed to protecting your privacy. This Privacy Statement ex
 **We do not collect any personal data from users of our documentation site or software.**
 
 Specifically:
+
 - We do not create or require user accounts
 - We do not collect personal information
 - We do not store IP addresses

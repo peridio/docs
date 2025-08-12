@@ -42,6 +42,7 @@ Host my-device-tunnel
 ```
 
 Then connect with:
+
 ```bash
 ssh my-device-tunnel
 ```
@@ -55,6 +56,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub user@device
 ```
 
 Then connect through the tunnel without password:
+
 ```bash
 ssh -i ~/.ssh/id_rsa user@server_ip -p server_port
 ```
@@ -88,11 +90,13 @@ Configure applications to use `localhost:1080` as SOCKS proxy.
 ### Copy Files with SCP
 
 Upload files to device:
+
 ```bash
 scp -P server_port file.txt user@server_ip:/path/to/destination
 ```
 
 Download files from device:
+
 ```bash
 scp -P server_port user@server_ip:/path/to/file.txt ./
 ```
@@ -126,19 +130,19 @@ TUNNEL_PRN=$(echo $TUNNEL_RESPONSE | jq -r '.prn')
 elapsed=0
 while [ $elapsed -lt $MAX_WAIT ]; do
   sleep $WAIT_INTERVAL
-  
+
   STATUS=$(peridio tunnels get --prn $TUNNEL_PRN --output json)
   STATE=$(echo $STATUS | jq -r '.state')
-  
+
   if [ "$STATE" = "open" ]; then
     IP=$(echo $STATUS | jq -r '.server_tunnel_ip_address')
     PORT=$(echo $STATUS | jq -r '.server_tunnel_port')
-    
+
     echo "Connecting to $IP:$PORT"
     ssh root@$IP -p $PORT
     exit 0
   fi
-  
+
   elapsed=$((elapsed + WAIT_INTERVAL))
   WAIT_INTERVAL=$((WAIT_INTERVAL * 2))
 done

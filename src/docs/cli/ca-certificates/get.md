@@ -2,7 +2,7 @@
 Usage: peridio ca-certificates get --prn <PRN>
 
 Options:
-      --prn <PRN>  
+      --prn <PRN>
   -h, --help       Print help
 
 ```

@@ -6,8 +6,8 @@
 
 This guide depends on the following requirements:
 
-* [Peridio Cloud Configuration](/integration/linux/overview#peridio-cloud-requirements)
-* [Peridio CLI Development Machine](/integration/linux/overview#development-machine-requirements)
+- [Peridio Cloud Configuration](/integration/linux/overview#peridio-cloud-requirements)
+- [Peridio CLI Development Machine](/integration/linux/overview#development-machine-requirements)
 
 ### Configuration
 

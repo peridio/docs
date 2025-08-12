@@ -20,27 +20,32 @@ The Seeed reTerminal is a production-ready Human-Machine Interface (HMI) device 
 ## Technical Specifications
 
 ### Compute
+
 - Quad-Core 64-bit Arm Cortex-A72 CPU at 1.5 GHz
 - Raspberry Pi CM4 compatible
 
 ### Memory & Storage
+
 - 4GB LPDDR4-3200
 - 32GB eMMC onboard storage
 - MicroSD card slot for expansion
 
 ### Display
+
 - 5-inch IPS capacitive multi-touch LCD
 - 720x1280 resolution
 - 293 PPI pixel density
 - 10-point multi-touch support
 
 ### Connectivity
+
 - Built-in Broadcom BCM43455 wireless module
 - Dual-band 802.11ac Wi-Fi
 - Bluetooth 5.0
 - Gigabit Ethernet port
 
 ### I/O Interfaces
+
 - 40-pin Raspberry Pi compatible GPIO
 - USB 2.0 ports
 - RS232/RS485 interfaces
@@ -48,6 +53,7 @@ The Seeed reTerminal is a production-ready Human-Machine Interface (HMI) device 
 - M.2 connector for expansion modules
 
 ### Environmental
+
 - Operating Temperature: 0°C to 50°C
 - Storage Temperature: -20°C to 70°C
 - Humidity: 10% to 90% non-condensing
@@ -55,6 +61,7 @@ The Seeed reTerminal is a production-ready Human-Machine Interface (HMI) device 
 ## Purchasing Information
 
 The reTerminal is available from:
+
 - **Seeed Studio**: Direct from manufacturer
 - **Mouser Electronics**: Global distributor
 - **Digi-Key**: Quick shipping worldwide
@@ -72,6 +79,7 @@ The reTerminal is available from:
 ### Development with Avocado Linux SDK
 
 #### Prerequisites
+
 - Linux development machine (Ubuntu 22.04+, Fedora 39+)
 - Podman installed
 - 20GB+ available disk space
@@ -79,17 +87,20 @@ The reTerminal is available from:
 #### Installing the SDK
 
 1. Pull the SDK container:
+
 ```bash
 podman pull avocadolinux/sdk:apollo-edge
 ```
 
 2. Create your workspace:
+
 ```bash
 mkdir avocado-reterminal
 cd avocado-reterminal
 ```
 
 3. Start the SDK environment:
+
 ```bash
 podman run -it --rm -e AVOCADO_SDK_TARGET=reterminal \
   -v $(pwd):/opt:z --entrypoint entrypoint.sh \
@@ -99,18 +110,21 @@ podman run -it --rm -e AVOCADO_SDK_TARGET=reterminal \
 ## Use Cases
 
 ### Industrial HMI
+
 - Machine control panels
 - Production line monitoring
 - Quality control stations
 - Equipment status displays
 
 ### Building Automation
+
 - HVAC control interfaces
 - Lighting control systems
 - Security panel displays
 - Energy management dashboards
 
 ### Edge Computing
+
 - Local data processing
 - AI inference at the edge
 - Gateway applications

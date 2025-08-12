@@ -8,22 +8,23 @@ Releases allow greater control and flexibility to managing devices in the field.
 
 To use releases, binaries must be configured to use an installer. An Installer is a module that can handle the last mile of deploying your binary onto your device. The following installer modules are currently supported:
 
-* `fwup`: Binary in the [fwup](https://github.com/fwup-home/fwup) format.
-* `file`: Writes individual files to a writeable location on the system.
-* `deb`: [Debian package manager](https://www.debian.org/doc/manuals/debian-faq/pkg-basics.en.html) install format.
-* `rpm`: [RPM Package manager](https://rpm.org/) install format.
-* `opkg`: [OPkg Package manager](https://openwrt.org/docs/guide-user/additional-software/opkg) installer format.
-* `swupdate`: [SWUpdate](https://sbabic.github.io/swupdate/swupdate.html) package format.
+- `fwup`: Binary in the [fwup](https://github.com/fwup-home/fwup) format.
+- `file`: Writes individual files to a writeable location on the system.
+- `deb`: [Debian package manager](https://www.debian.org/doc/manuals/debian-faq/pkg-basics.en.html) install format.
+- `rpm`: [RPM Package manager](https://rpm.org/) install format.
+- `opkg`: [OPkg Package manager](https://openwrt.org/docs/guide-user/additional-software/opkg) installer format.
+- `swupdate`: [SWUpdate](https://sbabic.github.io/swupdate/swupdate.html) package format.
 
 Binaries that you compose into bundles can each specify their own installer format with different options. The installer and installer optioins are specified in the `custom_metadata`. When adding binaries to bundles, you have the option to override the custom_metadata or inherit it from the most specific to least specific location from bundle, binary, artifact version, or artifact.
 
 Common top level keys in the custom metadata to configure peridod are:
 
-* `installer` (string): The module to use for installing the binary
-* `installer_opts` (object): Additional options to configure the installer module. These options are different for each installer module. See below.
-* `reboot_required` (true | false): Specifies if a reboot is required. If > 0 binaries specify a reboot is required, the reboot will be scheduled following the bundle installation.
+- `installer` (string): The module to use for installing the binary
+- `installer_opts` (object): Additional options to configure the installer module. These options are different for each installer module. See below.
+- `reboot_required` (true | false): Specifies if a reboot is required. If > 0 binaries specify a reboot is required, the reboot will be scheduled following the bundle installation.
 
 Example:
+
 ```json
 {
   "peridiod": {
@@ -46,18 +47,19 @@ The fwup installer will stream the download directly to the fwup process instead
 
 Installer Opts:
 
-* `env` (object): A key value object of environment variables and values to decorate the environment the fwup process is being applied within.
-* `extra_args` (list of strings): A list of extra command line args to pass to `fwup`.
-* `task` (string): The fwup task to execute. Defaults to `upgrade`.
-* `devpath` (string): The path to the device fwup will apply to.
+- `env` (object): A key value object of environment variables and values to decorate the environment the fwup process is being applied within.
+- `extra_args` (list of strings): A list of extra command line args to pass to `fwup`.
+- `task` (string): The fwup task to execute. Defaults to `upgrade`.
+- `devpath` (string): The path to the device fwup will apply to.
 
 Example:
+
 ```json
 {
   "peridiod": {
     "installer": "fwup",
     "installer_opts": {
-      "env": {"KEY": "VALUE"},
+      "env": { "KEY": "VALUE" },
       "extra_args": [],
       "task": "upgrade",
       "devpath": "/dev/mmcblk0"
@@ -73,8 +75,8 @@ The file installer will download the file to a name containing the binary PRN an
 
 Installer Opts:
 
-* `name` (string): The name of the file
-* `path` (string): The path to where the file with `name` will be written
+- `name` (string): The name of the file
+- `path` (string): The path to where the file with `name` will be written
 
 Example:
 
@@ -99,7 +101,7 @@ Requires the `apt` executable to be installed on the running system.
 
 Installer Opts:
 
-* `extra_args` (list of strings): A list of extra command line args to pass to `apt`.
+- `extra_args` (list of strings): A list of extra command line args to pass to `apt`.
 
 Example:
 
@@ -123,7 +125,7 @@ Requires the `dnf` executable to be installed on the running system.
 
 Installer Opts:
 
-* `extra_args` (list of strings): A list of extra command line args to pass to `dnf`.
+- `extra_args` (list of strings): A list of extra command line args to pass to `dnf`.
 
 Example:
 
@@ -147,7 +149,7 @@ Requires the `opkg` executable to be installed on the running system.
 
 Installer Opts:
 
-* `extra_args` (list of strings): A list of extra command line args to pass to `opkg`.
+- `extra_args` (list of strings): A list of extra command line args to pass to `opkg`.
 
 Example:
 
@@ -171,7 +173,7 @@ Requires the `swupdate` executable to be installed on the running system.
 
 Installer Opts:
 
-* `extra_args` (list of strings): A list of extra command line args to pass to `swupdate`.
+- `extra_args` (list of strings): A list of extra command line args to pass to `swupdate`.
 
 Example:
 

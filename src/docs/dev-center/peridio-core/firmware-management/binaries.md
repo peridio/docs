@@ -5,6 +5,7 @@ Binaries are the actual files distributed to your devices. They represent the co
 ## Binary Components
 
 Each binary consists of:
+
 - **Record**: Metadata stored in Peridio (hash, size, target, state)
 - **Content**: The actual file data stored in object storage
 
@@ -27,32 +28,38 @@ graph LR
 ### State Definitions
 
 #### Uploadable
+
 - Initial state after creation
 - Ready to receive content via binary parts
 - Can be reset to this state if upload fails
 
 #### Hashable
+
 - Upload complete, awaiting verification
 - Triggers finalization of multipart uploads
 - User indicates upload is finished
 
 #### Hashing
+
 - Peridio automatically verifies integrity
 - Computes SHA-256 hash of content
 - Validates against provided hash
 - **Auto-transitions** to Signable when complete
 
 #### Signable
+
 - Content verified and ready for signing
 - Awaiting cryptographic signature
 - **Auto-transitions** to Signed when signature attached
 
 #### Signed
+
 - Fully validated and signed
 - Ready for distribution in releases
 - Can be included in bundles
 
 #### Destroyed
+
 - Content permanently deleted
 - Record remains for audit trail
 - Cannot be distributed or downloaded
@@ -60,12 +67,14 @@ graph LR
 ## Creating Binaries
 
 ### Via Web Console
+
 1. Navigate to artifact version
 2. Click **Create Binary**
 3. Upload file or use multipart upload
 4. System automatically handles state transitions
 
 ### Via CLI
+
 ```bash
 # Create binary
 peridio binaries create \
@@ -81,6 +90,7 @@ peridio binaries upload \
 ```
 
 ### Via API
+
 ```bash
 # Create binary record
 curl -X POST https://api.peridio.com/v1/binaries \
@@ -98,6 +108,7 @@ curl -X POST https://api.peridio.com/v1/binaries \
 Binaries use target triplets to specify compatibility:
 
 ### Common Targets
+
 ```
 x86_64-linux-gnu         # 64-bit Intel/AMD Linux
 i686-linux-gnu          # 32-bit Intel Linux
@@ -109,7 +120,9 @@ aarch64-apple-darwin    # macOS Apple Silicon
 ```
 
 ### Custom Targets
+
 Define custom targets for specialized hardware:
+
 ```
 custom-soc-v1
 proprietary-rtos-2.0
@@ -117,7 +130,9 @@ vendor-specific-platform
 ```
 
 ### Universal Binaries
+
 Use `universal` for platform-agnostic content:
+
 - Configuration files
 - Machine learning models
 - Media assets
@@ -126,7 +141,9 @@ Use `universal` for platform-agnostic content:
 ## Uploading Content
 
 ### Direct Upload
+
 For files under 100MB:
+
 ```bash
 peridio binaries upload \
   --binary-prn $BINARY_PRN \
@@ -134,9 +151,11 @@ peridio binaries upload \
 ```
 
 ### Multipart Upload
+
 For large files (>100MB):
 
 1. Create binary parts:
+
 ```bash
 # Split file into parts
 split -b 10M firmware.bin part_
@@ -151,6 +170,7 @@ done
 ```
 
 2. Complete upload:
+
 ```bash
 peridio binaries update \
   --prn $BINARY_PRN \
@@ -158,7 +178,9 @@ peridio binaries update \
 ```
 
 ### External Storage
+
 Configure custom storage backends:
+
 - AWS S3
 - Azure Blob Storage
 - Google Cloud Storage
@@ -169,6 +191,7 @@ Configure custom storage backends:
 Peridio verifies binary integrity using SHA-256:
 
 ### Calculate Hash
+
 ```bash
 # Linux/macOS
 sha256sum firmware.bin
@@ -178,6 +201,7 @@ openssl dgst -sha256 firmware.bin
 ```
 
 ### Provide Hash on Creation
+
 ```bash
 HASH=$(sha256sum firmware.bin | cut -d' ' -f1)
 SIZE=$(stat -f%z firmware.bin)  # macOS
@@ -193,12 +217,14 @@ peridio binaries create \
 All binaries must be signed before distribution:
 
 ### Signing Process
+
 1. Binary reaches `signable` state
 2. Create signature using signing key
 3. Attach signature to binary
 4. Binary auto-transitions to `signed`
 
 ### Signature Creation
+
 ```bash
 # Generate signature
 openssl dgst -sha256 -sign private_key.pem \
@@ -229,19 +255,24 @@ Enhance binaries with metadata:
 ## Content Distribution
 
 ### CDN Delivery
+
 Binaries are distributed via CDN for:
+
 - Fast global downloads
 - Reduced latency
 - High availability
 - Bandwidth optimization
 
 ### Download URLs
+
 Devices receive pre-signed URLs:
+
 ```
 https://cdn.peridio.com/binaries/abc123...?token=xyz
 ```
 
 URLs are:
+
 - Time-limited for security
 - CDN-accelerated
 - Region-optimized
@@ -250,6 +281,7 @@ URLs are:
 ## Binary Management
 
 ### Listing Binaries
+
 ```bash
 # List all binaries for a version
 peridio binaries list \
@@ -262,11 +294,13 @@ peridio binaries list \
 ```
 
 ### Binary Information
+
 ```bash
 peridio binaries get --prn $BINARY_PRN
 ```
 
 Output:
+
 ```json
 {
   "prn": "prn:1:binary:...",
@@ -279,7 +313,9 @@ Output:
 ```
 
 ### Resetting Failed Uploads
+
 Reset to uploadable state:
+
 ```bash
 peridio binaries update \
   --prn $BINARY_PRN \
@@ -287,6 +323,7 @@ peridio binaries update \
 ```
 
 This will:
+
 - Delete existing binary parts
 - Reset upload state
 - Allow retry of upload
@@ -294,6 +331,7 @@ This will:
 ## Binary Destruction
 
 ### Destroying Binaries
+
 ⚠️ **Warning**: This is irreversible!
 
 ```bash
@@ -301,12 +339,14 @@ peridio binaries destroy --prn $BINARY_PRN
 ```
 
 Effects:
+
 - Content permanently deleted
 - Record marked as destroyed
 - Cannot be included in new releases
 - Existing devices may fail to update
 
 ### When to Destroy
+
 - Security vulnerabilities
 - Legal/compliance requirements
 - Accidental uploads
@@ -315,24 +355,28 @@ Effects:
 ## Best Practices
 
 ### Upload Strategy
+
 1. Calculate hash before upload
 2. Use multipart for files >100MB
 3. Implement retry logic
 4. Verify upload completion
 
 ### Target Management
+
 1. Use standard target triplets
 2. Document custom targets
 3. Test target compatibility
 4. Plan for multi-arch support
 
 ### Security
+
 1. Sign all binaries
 2. Rotate signing keys periodically
 3. Audit binary access
 4. Monitor download patterns
 
 ### Storage Optimization
+
 1. Compress binaries before upload
 2. Use delta updates when possible
 3. Clean up failed uploads
@@ -341,6 +385,7 @@ Effects:
 ## Common Patterns
 
 ### Multi-Architecture Builds
+
 ```bash
 # Build for multiple targets
 TARGETS="x86_64-linux-gnu aarch64-linux-gnu arm-linux-gnueabihf"
@@ -348,13 +393,13 @@ TARGETS="x86_64-linux-gnu aarch64-linux-gnu arm-linux-gnueabihf"
 for TARGET in $TARGETS; do
   # Build
   make TARGET=$TARGET
-  
+
   # Create binary
   peridio binaries create \
     --artifact-version-prn $VERSION_PRN \
     --target $TARGET \
     --hash $(sha256sum output-$TARGET.bin | cut -d' ' -f1)
-    
+
   # Upload
   peridio binaries upload \
     --binary-prn $BINARY_PRN \
@@ -363,20 +408,21 @@ done
 ```
 
 ### CI/CD Integration
+
 ```yaml
 # GitHub Actions
 - name: Upload Binary
   run: |
     HASH=$(sha256sum ${{ env.OUTPUT_FILE }} | cut -d' ' -f1)
     SIZE=$(stat -c%s ${{ env.OUTPUT_FILE }})
-    
+
     BINARY_PRN=$(peridio binaries create \
       --artifact-version-prn ${{ env.VERSION_PRN }} \
       --target ${{ matrix.target }} \
       --hash "sha256:$HASH" \
       --size $SIZE \
       --output prn)
-    
+
     peridio binaries upload \
       --binary-prn $BINARY_PRN \
       --file ${{ env.OUTPUT_FILE }}
@@ -385,18 +431,21 @@ done
 ## Troubleshooting
 
 ### Upload Failures
+
 - Check network connectivity
 - Verify file permissions
 - Confirm hash matches
 - Ensure sufficient storage quota
 
 ### State Transition Issues
+
 - Verify previous state completed
 - Check for signature attachment
 - Review error logs
 - Contact support if stuck
 
 ### Download Problems
+
 - Verify binary is signed
 - Check URL expiration
 - Confirm CDN accessibility

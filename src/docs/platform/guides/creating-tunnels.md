@@ -19,7 +19,6 @@ peridio tunnels create \
   --device-tunnel-port 22
 ```
 
-
 ### API
 
 Use the Peridio Admin API [create-a-tunnel](/admin-api#tunnels/operation/create-a-tunnel) endpoint.

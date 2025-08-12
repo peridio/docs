@@ -14,36 +14,42 @@ This page is currently being developed. Check back soon for comprehensive docume
 This guide will cover:
 
 ### HIL Testing Infrastructure
+
 - Setting up automated test benches
 - Integrating real hardware with CI/CD pipelines
 - Remote device access and control
 - Power cycling and boot management
 
 ### Test Automation
+
 - Automated firmware flashing
 - Test suite execution on real hardware
 - Performance benchmarking
 - Regression testing strategies
 
 ### Development Workflows
+
 - Remote debugging on target hardware
 - Live kernel development
 - Driver development and testing
 - Real-time system validation
 
 ### Continuous Integration
+
 - Jenkins integration for HIL testing
 - GitLab CI/CD with hardware runners
 - GitHub Actions for embedded testing
 - Test result aggregation and reporting
 
 ### Hardware Farm Management
+
 - Device pool management
 - Resource scheduling and allocation
 - Multi-device test scenarios
 - Hardware health monitoring
 
 ### Tools and Frameworks
+
 - LAVA (Linaro Automation and Validation Architecture)
 - Robot Framework for embedded testing
 - Custom test harness development

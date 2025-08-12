@@ -29,7 +29,7 @@ html {
   font-family: "Avenir";
 }
 
-html[data-theme='dark'] {
+html[data-theme="dark"] {
   --ifm-color-content-secondary: #525860;
   --ifm-breadcrumb-item-background-active: white;
   --ifm-color-content-inverse: white;
@@ -39,7 +39,7 @@ html[data-theme='dark'] {
   --ifm-breadcrumb-color-active: black;
 }
 
-html[data-theme='dark'] .breadcrumbs .breadcrumbs__item a {
+html[data-theme="dark"] .breadcrumbs .breadcrumbs__item a {
   background-color: white;
 }
 
@@ -50,11 +50,11 @@ html[data-theme='dark'] .breadcrumbs .breadcrumbs__item a {
   padding: 0 var(--ifm-pre-padding);
 }
 
-html[data-theme='dark'] .docusaurus-highlight-code-line {
+html[data-theme="dark"] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-html[data-theme='dark'] .navbar {
+html[data-theme="dark"] .navbar {
   border-bottom: 1px solid var(--ifm-toc-border-color);
 }
 
@@ -169,12 +169,12 @@ footer {
 }
 
 /* Dark mode adjustments */
-html[data-theme='dark'] .menu__link:hover,
-html[data-theme='dark'] .menu__list-item-collapsible:hover > .menu__link,
-html[data-theme='dark'] .menu__list-item-collapsible:hover > .menu__link--sublist {
+html[data-theme="dark"] .menu__link:hover,
+html[data-theme="dark"] .menu__list-item-collapsible:hover > .menu__link,
+html[data-theme="dark"] .menu__list-item-collapsible:hover > .menu__link--sublist {
   background-color: rgba(52, 36, 238, 0.2);
 }
 
-html[data-theme='dark'] .menu__link--active:hover {
+html[data-theme="dark"] .menu__link--active:hover {
   background-color: rgba(52, 36, 238, 0.25);
 }

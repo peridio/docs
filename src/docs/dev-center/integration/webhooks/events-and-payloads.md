@@ -41,6 +41,7 @@ Triggered when a device establishes a connection to Peridio.
 **Event Type:** `device.connected`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -60,6 +61,7 @@ Triggered when a device establishes a connection to Peridio.
 ```
 
 **Use Cases:**
+
 - Device connectivity monitoring
 - Triggering device initialization workflows
 - Updating device status in external systems
@@ -71,6 +73,7 @@ Triggered when a device fails to authenticate with Peridio.
 **Event Type:** `device.authentication-failed`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -91,11 +94,13 @@ Triggered when a device fails to authenticate with Peridio.
 ```
 
 **Common Reasons:**
+
 - `invalid_certificate` - Device certificate is invalid or expired
 - `unknown_device` - Device is not registered in the system
 - `revoked_certificate` - Device certificate has been revoked
 
 **Use Cases:**
+
 - Security monitoring and alerting
 - Automatic device troubleshooting
 - Compliance and audit logging
@@ -107,6 +112,7 @@ Triggered when a device checks for available firmware releases.
 **Event Type:** `device.checked-for-release`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -130,6 +136,7 @@ Triggered when a device checks for available firmware releases.
 ```
 
 **Use Cases:**
+
 - Monitoring device update checking patterns
 - Analytics on device behavior
 - Debugging update delivery issues
@@ -143,6 +150,7 @@ Triggered when a device successfully claims (downloads) a firmware release.
 **Event Type:** `device.claimed-release`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -166,6 +174,7 @@ Triggered when a device successfully claims (downloads) a firmware release.
 ```
 
 **Use Cases:**
+
 - Tracking firmware download progress
 - Update deployment monitoring
 - Bandwidth usage analytics
@@ -177,6 +186,7 @@ Triggered when a device's active firmware release changes (typically after a suc
 **Event Type:** `device.release-changed`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -204,6 +214,7 @@ Triggered when a device's active firmware release changes (typically after a suc
 ```
 
 **Use Cases:**
+
 - Confirming successful firmware updates
 - Update campaign tracking
 - Device fleet version monitoring
@@ -216,6 +227,7 @@ Triggered when device metadata or configuration is updated.
 **Event Type:** `device.updated`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -236,6 +248,7 @@ Triggered when device metadata or configuration is updated.
 ```
 
 **Use Cases:**
+
 - Synchronizing device data with external systems
 - Audit logging for device changes
 - Triggering configuration updates
@@ -251,6 +264,7 @@ Triggered when a new API key is created in your account.
 **Event Type:** `api_key.created`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -270,6 +284,7 @@ Triggered when a new API key is created in your account.
 ```
 
 **Use Cases:**
+
 - Security monitoring and alerting
 - Access audit logging
 - Automated key management workflows
@@ -285,6 +300,7 @@ Triggered during webhook URL verification or manual testing.
 **Event Type:** `webhook.test_fire`
 
 **Example Payload:**
+
 ```json
 {
   "version": 1,
@@ -299,11 +315,13 @@ Triggered during webhook URL verification or manual testing.
 ```
 
 **When Triggered:**
+
 - During webhook creation (URL verification)
 - When updating a webhook's URL
 - When manually testing with `peridio webhooks test-fire`
 
 **Use Cases:**
+
 - Webhook endpoint validation
 - Testing signature verification logic
 - Debugging webhook configuration
@@ -349,20 +367,20 @@ app.post('/webhooks', (req, res) => {
   try {
     // Verify signature first
     if (!verifySignature(req)) {
-      return res.status(401).send('Invalid signature');
+      return res.status(401).send('Invalid signature')
     }
-    
+
     // Process the event
-    processWebhookEvent(req.body);
-    
+    processWebhookEvent(req.body)
+
     // Always return 200 for successful processing
-    res.status(200).send('OK');
+    res.status(200).send('OK')
   } catch (error) {
-    console.error('Webhook processing error:', error);
+    console.error('Webhook processing error:', error)
     // Return 200 to prevent retries for processing errors
-    res.status(200).send('Processing error logged');
+    res.status(200).send('Processing error logged')
   }
-});
+})
 ```
 
 ## Payload Validation

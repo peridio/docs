@@ -14,12 +14,14 @@ This page is currently being developed. Check back soon for comprehensive docume
 This guide will cover:
 
 ### Container Runtimes
+
 - **Podman**: Rootless container management
 - **Docker**: Traditional container runtime
 - **containerd**: Lightweight runtime for embedded
 - **crun**: OCI-compliant runtime optimized for embedded
 
 ### Getting Started with Containers
+
 ```bash
 # Example commands (coming soon)
 avocado-repo sysext install podman
@@ -28,6 +30,7 @@ podman run --rm hello-world
 ```
 
 ### Container Image Management
+
 - Building images for embedded targets
 - Multi-architecture image support
 - Image optimization for constrained devices
@@ -35,12 +38,14 @@ podman run --rm hello-world
 - Air-gapped deployments
 
 ### Container Orchestration
+
 - **Podman pods**: Multi-container applications
 - **systemd integration**: Containers as services
 - **K3s**: Lightweight Kubernetes for edge
 - **Docker Compose**: Application stacks
 
 ### Embedded-Specific Considerations
+
 - Resource constraints and limits
 - Storage management on eMMC/SD cards
 - Network configuration for embedded
@@ -48,6 +53,7 @@ podman run --rm hello-world
 - Real-time considerations
 
 ### Security
+
 - Rootless containers
 - SELinux/AppArmor integration
 - Container signing and verification
@@ -55,6 +61,7 @@ podman run --rm hello-world
 - Secret management
 
 ### OTA Updates with Containers
+
 - Container image updates via Peridio
 - Application versioning strategies
 - Rollback mechanisms
@@ -62,12 +69,14 @@ podman run --rm hello-world
 - Canary releases
 
 ### Use Cases
+
 - **Edge AI**: Running ML models in containers
 - **Industrial IoT**: Isolated application environments
 - **Multi-tenancy**: Running customer workloads
 - **Development**: Consistent dev/prod environments
 
 ### Performance Optimization
+
 - Container startup optimization
 - Memory and CPU tuning
 - Storage driver selection
@@ -77,6 +86,7 @@ podman run --rm hello-world
 ## Example Workflows
 
 ### Running an Application Container
+
 ```bash
 # Coming soon: Complete example
 podman pull myapp:latest
@@ -88,6 +98,7 @@ podman run -d --name myapp \
 ```
 
 ### Container as a systemd Service
+
 ```ini
 # Coming soon: systemd unit file example
 [Unit]

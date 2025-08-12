@@ -16,10 +16,13 @@ Avocado OS is 100% open source. It's built to stand alone — and scales even fu
 ## What Makes Avocado OS Different?
 
 ### 🧩 Composable by Design
+
 Instead of traditional monolithic builds, Avocado uses a **layered architecture**. Developers assemble systems using a small, immutable base and extend it with modular **system extensions**, **configuration overlays**, and **portable services**. This makes it simple to develop, test, and deploy without managing partitions or modifying core images.
 
 ### 🔐 Security Roadmap
+
 Avocado has plans for:
+
 - Secure Boot
 - dm-verity for root filesystem integrity
 - Full-disk encryption with LUKS
@@ -28,9 +31,11 @@ Avocado has plans for:
 These tools ensure that only verified software runs on your devices—from bootloader to user space.
 
 ### 🛠 Built with Yocto, Built to Scale
+
 Avocado is fully based on the **Yocto Project**, making it highly customizable for your hardware while maintaining consistency across platforms. Whether you're targeting a single-board computer or a production SoC, Avocado provides a clean path from development to deployment.
 
 ### 🌱 Developer Experience Matters
+
 With prebuilt layers, sensible defaults, and a vibrant extension ecosystem, Avocado takes the friction out of embedded Linux development. Developers can focus on building features—not wrestling with build systems.
 
 ---
@@ -42,4 +47,5 @@ Avocado OS is an open-source project driven by its community. Join us to shape t
 - 💻 [GitHub](https://github.com/avocado-linux/meta-avocado)
 - 💬 [Community Discord](https://discord.com/invite/rH77fKpKAj)
 - 🥑 [Avocado Whitepaper](https://39718632.fs1.hubspotusercontent-na1.net/hubfs/39718632/Avocado%20OS%20Whitepaper.pdf)
+
 ---

@@ -9,24 +9,31 @@ This section provides comprehensive guides for integrating various Peridio featu
 ## Core Integration Topics
 
 ### Peridio Agent
+
 The Peridio daemon (peridiod) is the core agent that runs on your devices to enable OTA updates and remote management capabilities.
 
 ### Webhooks
+
 Real-time event notifications for device status changes, update completions, and system events.
+
 - Configuration - Set up webhook endpoints
 - Events and Payloads - Event types and data formats
 - Security - Secure webhook implementations
 - Troubleshooting - Common issues and solutions
 
 ### External CDN
+
 Configure external content delivery networks for efficient binary distribution at scale.
+
 - AWS S3 Setup - Configure S3 buckets for binary storage
 - AWS CloudFront Setup - Deploy CloudFront distributions
 - Geographic Distribution - Optimize global delivery
 - Cost Optimization - Reduce CDN costs
 
 ### Certificates
+
 Comprehensive certificate management for secure device authentication and communication.
+
 - Certificate Types - Understanding different certificate types
 - Certificate Lifecycle - Managing certificate lifecycles
 - Creation Methods - Generate and deploy certificates
@@ -43,6 +50,7 @@ Comprehensive certificate management for secure device authentication and commun
 ## Need Help?
 
 For additional support with integration:
+
 - Review our troubleshooting guides
 - Contact technical support
 - Join our community forums

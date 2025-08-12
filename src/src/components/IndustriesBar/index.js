@@ -1,6 +1,6 @@
-import React from 'react';
-import Heading from '@theme/Heading';
-import styles from './styles.module.css';
+import React from 'react'
+import Heading from '@theme/Heading'
+import styles from './styles.module.css'
 
 const industries = [
   { name: 'Robotics', icon: 'precision_manufacturing' },
@@ -9,12 +9,14 @@ const industries = [
   { name: 'Medical', icon: 'medical_services' },
   { name: 'Industrial', icon: 'factory' },
   { name: 'Agriculture', icon: 'agriculture' },
-];
+]
 
 function IndustriesBar() {
   return (
     <div className={styles['industries-bar']}>
-      <Heading as="h2" className={styles['industries-main-title']}>Built for your industry</Heading>
+      <Heading as="h2" className={styles['industries-main-title']}>
+        Built for your industry
+      </Heading>
       <div className={styles['industries-title']}>Solutions for every sector</div>
       <div className={styles['industries-container']}>
         {industries.map((industry) => (
@@ -27,7 +29,7 @@ function IndustriesBar() {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default IndustriesBar;
+export default IndustriesBar
