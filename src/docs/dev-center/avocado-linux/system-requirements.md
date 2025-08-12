@@ -1,9 +1,13 @@
 ---
-title: Getting Started
-description: Quick start guide for the Avocado Linux SDK.
+title: System Requirements
+description: Hardware and software requirements for running Avocado OS and the SDK.
 ---
 
-Get up and running with the Avocado Linux SDK in minutes.
+:::info Under Construction
+This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::
+
+Ensure your system meets these requirements before installing Avocado OS or the SDK.
 
 ## Prerequisites
 
