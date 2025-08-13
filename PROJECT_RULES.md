@@ -277,3 +277,7 @@ For questions about these guidelines, please open an issue or contact the mainta
 - **MUST** create follow-up ticket for proper implementation
 - **SHOULD** limit scope to critical fixes only
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
