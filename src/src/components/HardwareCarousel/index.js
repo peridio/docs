@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import styles from './styles.module.css'
 
@@ -14,6 +13,7 @@ const slides = [
     vendor: 'Raspberry Pi',
     target: 'Raspberry Pi 4 / 5',
     image: '/img/raspberry-pi.jpg',
+    link: '/solutions/raspberry-pi/raspberry-pi',
   },
   {
     vendor: 'NXP',
@@ -99,13 +99,6 @@ export default function HardwareCarousel() {
                 {slide.vendor}
               </Heading>
               <p className={styles.target}>{slide.target}</p>
-              {/* Links hidden for now
-                            <div className={styles.links}>
-                                <Link to={slide.link} className={styles.link}>Solution Overview</Link>
-                                <Link to="#" className={styles.link}>Data Sheet</Link>
-                                <Link to="#" className={styles.link}>Try It</Link>
-                            </div>
-                            */}
             </div>
           </div>
         ))}

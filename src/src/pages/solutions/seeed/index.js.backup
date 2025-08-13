@@ -1,0 +1,438 @@
+import React from 'react'
+import Layout from '@theme/Layout'
+import Head from '@docusaurus/Head'
+import Link from '@docusaurus/Link'
+import Heading from '@theme/Heading'
+import styles from './index.module.css'
+import {
+  HiOutlineCpuChip as CpuChipIcon,
+  HiOutlineBeaker as BeakerIcon,
+  HiOutlineShieldCheck as ShieldCheckIcon,
+  HiOutlineGlobeAlt as GlobeAltIcon,
+  HiOutlineBuildingOffice2 as BuildingOfficeIcon,
+  HiOutlineWrenchScrewdriver as WrenchScrewdriverIcon,
+  HiOutlineXMark as XMarkIcon,
+  HiOutlineCheck as CheckIcon,
+} from 'react-icons/hi2'
+
+export default function SeeedSolution() {
+  return (
+    <Layout>
+      <Head>
+        <title>Seeed Studio Development Boards | IoT & Edge AI | Peridio</title>
+        <meta
+          name="description"
+          content="Deploy Seeed Studio boards including reComputer, ODYSSEY, and Wio Terminal with enterprise fleet management. Production-ready IoT and edge AI solutions."
+        />
+        <meta
+          name="keywords"
+          content="seeed studio, recomputer, odyssey, wio terminal, iot boards, edge ai, nvidia jetson, fleet management"
+        />
+        <meta
+          property="og:title"
+          content="Seeed Studio Development Boards | IoT & Edge AI | Peridio"
+        />
+        <meta
+          property="og:description"
+          content="Deploy Seeed Studio boards with enterprise fleet management and secure OTA updates."
+        />
+        <meta property="og:image" content="/img/seeed-boards.jpg" />
+        <meta property="og:type" content="product" />
+        <link rel="canonical" href="https://docs.peridio.com/solutions/seeed" />
+
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: 'Peridio + Avocado OS for Seeed Studio Boards',
+            description:
+              'Production-ready IoT and edge AI boards with enterprise fleet management',
+            manufacturer: {
+              '@type': 'Organization',
+              name: 'Peridio',
+            },
+            category: 'IoT Development Boards',
+            offers: {
+              '@type': 'Offer',
+              availability: 'https://schema.org/InStock',
+            },
+            applicationCategory: 'IoT, Edge AI, Computer Vision, Industrial Automation',
+            operatingSystem: 'Yocto Linux, Avocado OS',
+          })}
+        </script>
+      </Head>
+
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className={styles.heroContainer}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroText}>
+              <Heading as="h1" className={styles.heroTitle}>
+                Scale IoT & Edge AI with{' '}
+                <span className={styles.highlight}>Seeed Studio</span>
+              </Heading>
+              <p className={styles.heroSubtitle}>
+                From prototype to production with reComputer, ODYSSEY, and Wio Terminal boards
+                featuring NVIDIA Jetson and x86 processors
+              </p>
+              <div className={styles.heroStats}>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>275</span>
+                  <span className={styles.statLabel}>TOPS with Orin</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>100K+</span>
+                  <span className={styles.statLabel}>Developers</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>5+</span>
+                  <span className={styles.statLabel}>Years Support</span>
+                </div>
+              </div>
+              <div className={styles.heroCta}>
+                <Link to="/evk" className={styles.ctaPrimary}>
+                  Request Demo
+                </Link>
+                <Link to="/platform/reference/overview" className={styles.ctaSecondary}>
+                  Platform Overview
+                </Link>
+              </div>
+            </div>
+            <div className={styles.heroImage}>
+              <img
+                src="/img/seeed-boards.jpg"
+                alt="Seeed Studio development boards"
+                className={styles.productImage}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className={styles.products}>
+        <div className={styles.container}>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Featured Seeed Studio Products
+          </Heading>
+          <div className={styles.productGrid}>
+            <div className={styles.productCard}>
+              <img
+                src="/img/seeed-recomputer.jpg"
+                alt="reComputer Series"
+                className={styles.productImage}
+              />
+              <Heading as="h3">reComputer Series</Heading>
+              <p className={styles.productSpecs}>NVIDIA Jetson • Edge AI • Compact</p>
+              <p>
+                Industrial-grade Jetson carriers from Nano to Orin NX for AI inference, computer
+                vision, and robotics applications.
+              </p>
+              <ul className={styles.productFeatures}>
+                <li>Pre-installed JetPack SDK</li>
+                <li>Aluminum enclosure with passive cooling</li>
+                <li>Rich I/O: M.2, CSI, GPIO, Ethernet</li>
+              </ul>
+            </div>
+            <div className={styles.productCard}>
+              <img
+                src="/img/seeed-odyssey.jpg"
+                alt="ODYSSEY Boards"
+                className={styles.productImage}
+              />
+              <Heading as="h3">ODYSSEY x86 Boards</Heading>
+              <p className={styles.productSpecs}>Intel/AMD • Windows/Linux • Versatile</p>
+              <p>
+                x86 single board computers with Intel Celeron and AMD Ryzen processors for
+                industrial IoT and edge computing.
+              </p>
+              <ul className={styles.productFeatures}>
+                <li>Built-in Arduino coprocessor</li>
+                <li>Dual Gigabit Ethernet</li>
+                <li>M.2 NVMe and SATA support</li>
+              </ul>
+            </div>
+            <div className={styles.productCard}>
+              <img
+                src="/img/seeed-wio.jpg"
+                alt="Wio Terminal"
+                className={styles.productImage}
+              />
+              <Heading as="h3">Wio Terminal</Heading>
+              <p className={styles.productSpecs}>SAMD51 • Display • Wireless</p>
+              <p>
+                All-in-one IoT development platform with 2.4&quot; LCD, WiFi, Bluetooth, and Grove
+                ecosystem compatibility.
+              </p>
+              <ul className={styles.productFeatures}>
+                <li>Integrated display and buttons</li>
+                <li>WiFi and BLE connectivity</li>
+                <li>40-pin Raspberry Pi compatible header</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Use Cases */}
+      <section className={styles.useCases}>
+        <div className={styles.container}>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Production Use Cases
+          </Heading>
+          <div className={styles.useCaseGrid}>
+            <div className={styles.useCase}>
+              <img
+                src="/img/smart-retail.png"
+                alt="Smart Retail"
+                className={styles.useCaseImage}
+              />
+              <Heading as="h3">Smart Retail & POS</Heading>
+              <p>
+                Customer analytics, inventory tracking, and intelligent checkout systems with
+                real-time AI processing at the edge.
+              </p>
+            </div>
+            <div className={styles.useCase}>
+              <img
+                src="/img/industrial-iot.png"
+                alt="Industrial IoT"
+                className={styles.useCaseImage}
+              />
+              <Heading as="h3">Industrial IoT</Heading>
+              <p>
+                Predictive maintenance, asset tracking, and environmental monitoring with LoRaWAN
+                and cellular connectivity options.
+              </p>
+            </div>
+            <div className={styles.useCase}>
+              <img
+                src="/img/robotics.png"
+                alt="Robotics"
+                className={styles.useCaseImage}
+              />
+              <Heading as="h3">Robotics & Automation</Heading>
+              <p>
+                Autonomous navigation, object detection, and manipulation with ROS2 support and
+                CUDA acceleration on Jetson platforms.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Problem/Solution Section */}
+      <section className={styles.problemSolution}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <Heading as="h2">From Prototype to Production</Heading>
+            <p>Bridge the gap between development boards and scalable deployments</p>
+          </div>
+
+          <div className={styles.comparisonContainer}>
+            <div className={styles.challengeCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.challengeIcon}>
+                  <XMarkIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                </div>
+                <Heading as="h3">The Challenge</Heading>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>
+                    Manual SD card flashing for each device
+                  </span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>No production OS support</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Difficult remote management</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Limited security features</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>No fleet visibility</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.solutionCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.solutionIcon}>
+                  <CheckIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                </div>
+                <Heading as="h3">The Solution</Heading>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Zero-touch provisioning</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Production-ready Avocado OS</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Enterprise fleet management</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Secure boot and encryption</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Real-time monitoring & analytics</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features */}
+      <section className={styles.features}>
+        <div className={styles.container}>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Why Choose Peridio for Seeed Deployment
+          </Heading>
+          <div className={styles.featureGrid}>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <CpuChipIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Optimized BSPs</Heading>
+              <p>
+                Board support packages for reComputer, ODYSSEY, and Wio platforms with validated
+                drivers and hardware acceleration.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <BeakerIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Development to Production</Heading>
+              <p>
+                Seamless transition from prototyping to mass production with consistent tooling and
+                infrastructure.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <ShieldCheckIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Security First</Heading>
+              <p>
+                Hardware security modules, secure boot, encrypted storage, and compliance with IoT
+                security standards.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Global Deployment</Heading>
+              <p>
+                Deploy and manage Seeed boards worldwide with regional update servers and bandwidth
+                optimization.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <BuildingOfficeIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">AI/ML Pipeline</Heading>
+              <p>
+                Integrated MLOps for model deployment, A/B testing, and performance monitoring on
+                Jetson platforms.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <WrenchScrewdriverIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Developer Friendly</Heading>
+              <p>
+                Compatible with Arduino, CircuitPython, and standard Linux development workflows.
+                Extensive SDK and API support.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Ecosystem Section */}
+      <section className={styles.ecosystem}>
+        <div className={styles.container}>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Seeed Ecosystem Support
+          </Heading>
+          <div className={styles.ecosystemGrid}>
+            <div className={styles.ecosystemItem}>
+              <Heading as="h3">Grove Modules</Heading>
+              <p>Full support for 300+ Grove sensors and actuators with pre-built drivers</p>
+            </div>
+            <div className={styles.ecosystemItem}>
+              <Heading as="h3">SenseCAP Platform</Heading>
+              <p>Integration with SenseCAP IoT sensors for environmental monitoring</p>
+            </div>
+            <div className={styles.ecosystemItem}>
+              <Heading as="h3">Edge Impulse</Heading>
+              <p>Deploy TinyML models with optimized inference on Seeed hardware</p>
+            </div>
+            <div className={styles.ecosystemItem}>
+              <Heading as="h3">ROS2 Support</Heading>
+              <p>Pre-configured ROS2 packages for robotics and automation projects</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className={styles.cta}>
+        <div className={styles.container}>
+          <div className={styles.ctaContent}>
+            <Heading as="h2">Ready to Scale Your Seeed Deployment?</Heading>
+            <p>
+              Transform your Seeed Studio boards into production-ready devices with secure OTA
+              updates, remote management, and enterprise support.
+            </p>
+            <div className={styles.ctaButtons}>
+              <Link to="/evk" className={styles.ctaPrimary}>
+                Request Evaluation
+              </Link>
+              <Link to="https://avocadolinux.org" className={styles.ctaSecondary} target="_blank">
+                Visit Avocado Linux
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Resources */}
+      <section className={styles.resources}>
+        <div className={styles.container}>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Documentation & Resources
+          </Heading>
+          <div className={styles.resourceGrid}>
+            <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
+              <Heading as="h3">Seeed BSP Integration</Heading>
+              <p>Yocto layers and device trees for Seeed boards</p>
+            </Link>
+            <Link to="/platform/reference/overview" className={styles.resourceCard}>
+              <Heading as="h3">Jetson Optimization</Heading>
+              <p>CUDA, TensorRT, and DeepStream configuration guides</p>
+            </Link>
+            <Link to="/platform/reference/overview" className={styles.resourceCard}>
+              <Heading as="h3">IoT Connectivity</Heading>
+              <p>LoRaWAN, cellular, and WiFi provisioning guides</p>
+            </Link>
+            <Link to="/admin-api" className={styles.resourceCard}>
+              <Heading as="h3">Fleet Automation</Heading>
+              <p>APIs for device provisioning and management</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  )
+}
