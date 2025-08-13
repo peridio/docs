@@ -50,9 +50,9 @@ const MegaMenuNavbar = () => {
         {
           title: 'Production Ready',
           items: [
-            { label: 'Advantech ICAM 540', to: '/solutions/icam540' },
-            { label: 'Onlogic FR201', to: '/solutions/onlogic/fr201' },
-            { label: 'Seed Reterminal', to: '/solutions/seed/reterminal' },
+            { label: 'Advantech ICAM 540', to: '/solutions/advantech/icam-540' },
+            { label: 'OnLogic FR201', to: '/solutions/onlogic' },
+            { label: 'Seeed reTerminal', to: '/solutions/seeed' },
           ],
         },
       ],
@@ -79,13 +79,13 @@ const MegaMenuNavbar = () => {
     <nav className="navbar navbar--fixed-top">
       <div className="navbar__inner">
         <div className="navbar__items">
-          <Link to="/" className="navbar__brand">
+          <a href="https://peridio.com" className="navbar__brand" target="_blank" rel="noopener noreferrer">
             <img src={`/${navbar.logo.src}`} alt={navbar.logo.alt} className="navbar__logo" />
-          </Link>
+          </a>
           <div className="mega-menu-container">
-            <Link to="/dev-center" className="navbar__item navbar__link">
-              Get Started
-            </Link>
+            <a href="https://docs.peridio.com" className="navbar__item navbar__link">
+              Developer Home
+            </a>
             {Object.entries(megaMenuItems).map(([key, menu]) => (
               <div
                 key={key}

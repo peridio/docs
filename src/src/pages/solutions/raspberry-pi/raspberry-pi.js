@@ -4,6 +4,16 @@ import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import styles from './raspberry-pi.module.css'
+import {
+  HiOutlineShieldCheck as ShieldCheckIcon,
+  HiOutlineWifi as WifiIcon,
+  HiOutlineLockClosed as LockClosedIcon,
+  HiOutlineBolt as BoltIcon,
+  HiOutlineGlobeAlt as GlobeAltIcon,
+  HiOutlineChartBar as ChartBarIcon,
+  HiOutlineXMark as XMarkIcon,
+  HiOutlineCheck as CheckIcon,
+} from 'react-icons/hi2'
 
 export default function RaspberryPiSolution() {
   return (
@@ -80,12 +90,12 @@ export default function RaspberryPiSolution() {
                 </div>
               </div>
               <div className={styles.heroCta}>
-                <Link to="/evk" className={styles.ctaPrimary}>
-                  Start Free Demo →
+                <Link to="/dev-center/hardware/raspberry-pi/compute-module-4" className={styles.ctaPrimary}>
+                  Get Started →
                 </Link>
-                <Link to="/platform/reference/overview" className={styles.ctaSecondary}>
-                  View Documentation
-                </Link>
+                <a href="https://peridio.com" className={styles.ctaSecondary} target="_blank" rel="noopener noreferrer">
+                  Datasheet
+                </a>
               </div>
             </div>
             <div className={styles.heroImage}>
@@ -102,25 +112,69 @@ export default function RaspberryPiSolution() {
       {/* Problem/Solution Section */}
       <section className={styles.problemSolution}>
         <div className={styles.container}>
-          <div className={styles.problem}>
-            <Heading as="h2">The Raspberry Pi Production Gap</Heading>
-            <ul className={styles.problemList}>
-              <li>Prototypes work great, production deployment fails</li>
-              <li>SD card corruption in industrial environments</li>
-              <li>No secure OTA update mechanism</li>
-              <li>Manual fleet management doesn&apos;t scale</li>
-              <li>Security vulnerabilities in default OS</li>
-            </ul>
+          <div className={styles.sectionHeader}>
+            <Heading as="h2">From Challenge to Solution</Heading>
+            <p>
+              Transform your Raspberry Pi development workflow with enterprise-grade infrastructure
+            </p>
           </div>
-          <div className={styles.solution}>
-            <Heading as="h2">Peridio + Avocado OS Solution</Heading>
-            <ul className={styles.solutionList}>
-              <li>Production-hardened Linux OS</li>
-              <li>Read-only root with atomic updates</li>
-              <li>Enterprise OTA orchestration</li>
-              <li>Centralized fleet management</li>
-              <li>Built-in security compliance</li>
-            </ul>
+
+          <div className={styles.comparisonContainer}>
+            <div className={styles.challengeCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.challengeIcon}>
+                  <XMarkIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                </div>
+                <Heading as="h3">The Challenge</Heading>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>
+                    Prototypes work great, production deployment fails
+                  </span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>
+                    SD card corruption in industrial environments
+                  </span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>No secure OTA update mechanism</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Manual fleet management doesn&apos;t scale</span>
+                </div>
+                <div className={styles.challengeItem}>
+                  <span className={styles.challengeText}>Security vulnerabilities in default OS</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.solutionCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.solutionIcon}>
+                  <CheckIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+                </div>
+                <Heading as="h3">The Solution</Heading>
+              </div>
+              <div className={styles.cardContent}>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Production-hardened Linux OS</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Read-only root with atomic updates</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Enterprise OTA orchestration</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Centralized fleet management</span>
+                </div>
+                <div className={styles.solutionItem}>
+                  <span className={styles.solutionText}>Built-in security compliance</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -133,7 +187,9 @@ export default function RaspberryPiSolution() {
           </Heading>
           <div className={styles.featureGrid}>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>🛡️</div>
+              <div className={styles.featureIcon}>
+                <ShieldCheckIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Production Hardening</Heading>
               <p>
                 Read-only root filesystem, secure boot, and A/B partitioning eliminate SD card
@@ -141,7 +197,9 @@ export default function RaspberryPiSolution() {
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>📡</div>
+              <div className={styles.featureIcon}>
+                <WifiIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Fleet-Scale OTA</Heading>
               <p>
                 Deploy updates to thousands of devices with phased rollouts, rollback capabilities,
@@ -149,7 +207,9 @@ export default function RaspberryPiSolution() {
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>🔒</div>
+              <div className={styles.featureIcon}>
+                <LockClosedIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Zero-Trust Security</Heading>
               <p>
                 Code signing, device certificates, and encrypted communication secure your entire
@@ -157,7 +217,9 @@ export default function RaspberryPiSolution() {
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>⚡</div>
+              <div className={styles.featureIcon}>
+                <BoltIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Rapid Development</Heading>
               <p>
                 Pre-built Yocto layers and containerized applications accelerate your time-to-market
@@ -165,7 +227,9 @@ export default function RaspberryPiSolution() {
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>🌐</div>
+              <div className={styles.featureIcon}>
+                <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Cross-Platform Ready</Heading>
               <p>
                 Develop on Pi, deploy across ARM architectures. Reuse software stacks on industrial
@@ -173,7 +237,9 @@ export default function RaspberryPiSolution() {
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>📊</div>
+              <div className={styles.featureIcon}>
+                <ChartBarIcon style={{ width: '100%', height: '100%' }} />
+              </div>
               <Heading as="h3">Fleet Intelligence</Heading>
               <p>
                 Real-time telemetry, remote diagnostics, and predictive maintenance keep your
@@ -282,8 +348,8 @@ export default function RaspberryPiSolution() {
               enterprise-grade reliability.
             </p>
             <div className={styles.ctaButtons}>
-              <Link to="/evk" className={styles.ctaPrimary}>
-                Start Free Demo
+              <Link to="/dev-center/hardware/raspberry-pi/compute-module-4" className={styles.ctaPrimary}>
+                Get Started
               </Link>
               <Link to="https://avocadolinux.org" className={styles.ctaSecondary} target="_blank">
                 Visit Avocado Linux

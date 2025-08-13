@@ -92,15 +92,14 @@ export default function IMX8MPSolution() {
               </div>
               <div className={styles.heroCta}>
                 <Link
-                  to="https://docs.avocadolinux.org/supported-hardware/imx-8m-plus"
+                  to="/dev-center/hardware/nxp/imx8mp"
                   className={styles.ctaPrimary}
-                  target="_blank"
                 >
                   Get Started
                 </Link>
-                <Link to="/platform/reference/overview" className={styles.ctaSecondary}>
+                <a href="https://peridio.com" className={styles.ctaSecondary} target="_blank" rel="noopener noreferrer">
                   Datasheet
-                </Link>
+                </a>
               </div>
             </div>
             <div className={styles.heroImage}>
@@ -394,8 +393,8 @@ export default function IMX8MPSolution() {
               ready for harsh environments.
             </p>
             <div className={styles.ctaButtons}>
-              <Link to="/evk" className={styles.ctaPrimary}>
-                Request Evaluation
+              <Link to="/dev-center/hardware/nxp/imx8mp" className={styles.ctaPrimary}>
+                Get Started
               </Link>
               <Link
                 to="https://docs.avocadolinux.org/supported-hardware/imx-8m-plus"

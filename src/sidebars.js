@@ -286,7 +286,7 @@ export default {
   'dev-center': [
     {
       type: 'category',
-      label: '🚧 Getting Started',
+      label: 'Getting Started',
       link: {
         type: 'doc',
         id: 'dev-center/index',
@@ -297,17 +297,17 @@ export default {
         {
           type: 'doc',
           id: 'dev-center/getting-started/provision-device',
-          label: '🚧 Provision Device',
+          label: 'Provision Device',
         },
         {
           type: 'doc',
           id: 'dev-center/getting-started/program-device',
-          label: '🚧 Program Device',
+          label: 'Program Device',
         },
         {
           type: 'doc',
           id: 'dev-center/getting-started/first-ota-update',
-          label: '🚧 First OTA Update',
+          label: 'First OTA Update',
         },
       ],
     },
@@ -388,7 +388,7 @@ export default {
     },
     {
       type: 'category',
-      label: '🚧 Supported Hardware',
+      label: 'Supported Hardware',
       link: {
         type: 'doc',
         id: 'dev-center/hardware/supported-hardware',
@@ -407,43 +407,43 @@ export default {
             {
               type: 'doc',
               id: 'dev-center/hardware/production-ready/seeed-reterminal',
-              label: '🚧 Seeed reTerminal',
+              label: 'Seeed reTerminal',
             },
             {
               type: 'doc',
               id: 'dev-center/hardware/production-ready/icam540',
-              label: '🚧 iCam540',
+              label: 'iCam540',
             },
             {
               type: 'doc',
               id: 'dev-center/hardware/production-ready/onlogic-factor',
-              label: '🚧 OnLogic Factor 201/202',
+              label: 'OnLogic Factor 201/202',
             },
           ],
         },
         {
           type: 'doc',
           id: 'dev-center/hardware/nvidia/jetson-orin-nano-evk',
-          label: '🚧 NVIDIA Jetson Orin Nano EVK',
+          label: 'NVIDIA Jetson Orin Nano EVK',
         },
         {
           type: 'doc',
           id: 'dev-center/hardware/nxp/frdm-imx-93',
-          label: '🚧 NXP i.MX 93 FRDM SBC',
+          label: 'NXP i.MX 93 FRDM SBC',
         },
-        { type: 'doc', id: 'dev-center/hardware/nxp/imx8mp', label: '🚧 NXP i.MX 8MP EVK' },
+        { type: 'doc', id: 'dev-center/hardware/nxp/imx8mp', label: 'NXP i.MX 8MP EVK' },
         {
           type: 'doc',
           id: 'dev-center/hardware/raspberry-pi/compute-module-4',
-          label: '🚧 Raspberry Pi Compute Module 4',
+          label: 'Raspberry Pi Compute Module 4',
         },
-        { type: 'doc', id: 'dev-center/hardware/qemu', label: '🚧 QEMU (Virtual Machine)' },
+        { type: 'doc', id: 'dev-center/hardware/qemu', label: 'QEMU (Virtual Machine)' },
         { type: 'doc', id: 'dev-center/hardware/coming-soon', label: '🚀 Coming Soon' },
       ],
     },
     {
       type: 'category',
-      label: '🚧 Integration / Guides',
+      label: 'Integration / Guides',
       link: {
         type: 'doc',
         id: 'dev-center/integration/index',
@@ -515,7 +515,7 @@ export default {
     },
     {
       type: 'category',
-      label: '🚧 Policies',
+      label: 'Policies',
       link: {
         type: 'doc',
         id: 'dev-center/policies/index',
