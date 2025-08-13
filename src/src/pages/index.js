@@ -348,7 +348,7 @@ export default function Home() {
             {/* Build Tools */}
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
               <div className={styles.featureIcon}>
-                <WrenchScrewdriverIcon />
+                <WrenchScrewdriverIcon style={{ width: '3.5rem', height: '3.5rem' }} />
               </div>
               <Heading as="h3">Build Tools</Heading>
               <p>
@@ -360,7 +360,7 @@ export default function Home() {
             {/* Security */}
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
               <div className={styles.featureIcon}>
-                <ShieldCheckIcon />
+                <ShieldCheckIcon style={{ width: '3.5rem', height: '3.5rem' }} />
               </div>
               <Heading as="h3">Security</Heading>
               <p>
@@ -372,7 +372,7 @@ export default function Home() {
             {/* Integrations */}
             <Link to="/admin-api" className={styles.resourceCard}>
               <div className={styles.featureIcon}>
-                <LinkIcon />
+                <LinkIcon style={{ width: '3.5rem', height: '3.5rem' }} />
               </div>
               <Heading as="h3">Integrations</Heading>
               <p>
