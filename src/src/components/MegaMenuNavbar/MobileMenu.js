@@ -11,48 +11,24 @@ const MobileMenu = ({ isOpen, onClose }) => {
 
   const menuSections = [
     {
-      title: 'Quickstart',
+      title: 'Featured Hardware',
       items: [
-        { label: 'EVK Demo', to: '/evk' },
-        { label: 'Platform Getting Started', to: '/platform/getting-started' },
+        { label: 'NXP IMX8MP', to: '/solutions/nxp/imx8mp' },
+        { label: 'NXP FRDM 93', to: '/solutions/nxp/frdm-93' },
+        { label: 'Raspberry Pi', to: '/solutions/raspberry-pi/raspberry-pi' },
+        { label: 'NVIDIA Jetson', to: '/solutions/nvidia/jetson-orin-nano' },
+        { label: 'Advantech ICAM 540', to: '/solutions/icam540' },
+        { label: 'Onlogic FR201', to: '/solutions/onlogic/fr201' },
+        { label: 'Seed Reterminal', to: '/solutions/seed/reterminal' },
       ],
     },
     {
-      title: 'Platform',
+      title: 'Tools',
       items: [
-        { label: 'Overview', to: '/platform/reference/overview' },
-        { label: 'Creating Releases', to: '/platform/guides/creating-releases' },
-        { label: 'Cloud-Delegated Updates', to: '/platform/guides/cloud-delegated-updates' },
-        { label: 'Fleet View', to: '/platform/reference/fleet-view' },
         { label: 'CLI', to: '/cli' },
-        { label: 'Admin API', to: '/admin-api' },
         { label: 'Device API', to: '/device-api' },
-      ],
-    },
-    {
-      title: 'Integration',
-      items: [
-        { label: 'Linux Overview', to: '/integration/linux/overview' },
-        { label: 'Android Overview', to: '/integration/android/overview' },
-        { label: 'Buildroot', to: '/integration/linux/build-tools/buildroot' },
-        { label: 'Yocto', to: '/integration/linux/build-tools/yocto' },
-      ],
-    },
-    {
-      title: 'Build & Ship',
-      items: [
-        { label: 'Creating Artifacts', to: '/platform/guides/creating-artifacts' },
-        { label: 'Creating Binaries', to: '/platform/guides/creating-binaries' },
-        { label: 'Creating Bundles', to: '/platform/guides/creating-bundles' },
-        { label: 'CA Certificates', to: '/platform/guides/creating-ca-certificates' },
-      ],
-    },
-    {
-      title: 'Operate',
-      items: [
-        { label: 'Creating Devices', to: '/platform/guides/creating-devices' },
-        { label: 'Creating Deployments', to: '/platform/guides/creating-deployments' },
-        { label: 'Creating Tunnels', to: '/platform/guides/creating-tunnels' },
+        { label: 'Admin API', to: '/admin-api' },
+        { label: 'Peridio Agent', to: '/dev-center/agents/peridio-agent' },
       ],
     },
   ]
@@ -68,6 +44,15 @@ const MobileMenu = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className="mobile-menu-content">
+          <div className="mobile-menu-section">
+            <Link
+              to="/dev-center"
+              className="mobile-menu-section-title"
+              onClick={onClose}
+            >
+              Get Started
+            </Link>
+          </div>
           {menuSections.map((section, index) => (
             <div key={index} className="mobile-menu-section">
               <button className="mobile-menu-section-title" onClick={() => toggleSection(index)}>
@@ -106,7 +91,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
               rel="noopener noreferrer"
               onClick={onClose}
             >
-              Log in to Web Console
+              Web Console
             </Link>
           </div>
         </div>
