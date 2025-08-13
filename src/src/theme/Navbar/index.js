@@ -6,7 +6,12 @@ import SimpleNavbar from '../../components/SimpleNavbar'
 export default function Navbar(props) {
   const location = useLocation()
 
-  // Use MegaMenuNavbar for dev-center and solutions pages
+  // In development mode, always use MegaMenuNavbar for unified navigation
+  if (process.env.NODE_ENV === 'development') {
+    return <MegaMenuNavbar {...props} />
+  }
+
+  // Production: Use MegaMenuNavbar for dev-center and solutions pages
   const isDevCenter = location.pathname.startsWith('/dev-center')
   const isSolutions = location.pathname.startsWith('/solutions')
 
@@ -14,6 +19,6 @@ export default function Navbar(props) {
     return <MegaMenuNavbar {...props} />
   }
 
-  // Use SimpleNavbar for all other pages
+  // Production: Use SimpleNavbar for all other pages
   return <SimpleNavbar {...props} />
 }

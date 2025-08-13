@@ -3,62 +3,62 @@ import Layout from '@theme/Layout'
 import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
-import styles from './jetson-orin-nano.module.css'
+import styles from './frdm-93.module.css'
 import {
-  HiOutlineRocketLaunch as RocketLaunchIcon,
-  HiOutlineLockClosed as LockClosedIcon,
-  HiOutlineWifi as WifiIcon,
-  HiOutlineWrenchScrewdriver as WrenchScrewdriverIcon,
-  HiOutlineGlobeAlt as GlobeAltIcon,
+  HiOutlineCpuChip as CpuChipIcon,
+  HiOutlineBolt as BoltIcon,
   HiOutlineShieldCheck as ShieldCheckIcon,
+  HiOutlineWrenchScrewdriver as WrenchScrewdriverIcon,
+  HiOutlineBeaker as BeakerIcon,
+  HiOutlineChartBar as ChartBarIcon,
   HiOutlineXMark as XMarkIcon,
   HiOutlineCheck as CheckIcon,
 } from 'react-icons/hi2'
 
-export default function JetsonOrinNanoSolution() {
+export default function FRDM93Solution() {
   return (
     <Layout>
       <Head>
-        <title>NVIDIA Jetson Orin Nano Production Linux | Day 1 Ready | Peridio</title>
+        <title>NXP FRDM-MCXN947 MCU Development | Real-Time IoT | Peridio</title>
         <meta
           name="description"
-          content="Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for industrial AI."
+          content="Production-ready NXP FRDM-MCXN947 development with dual Cortex-M33 cores, ML acceleration, and secure IoT connectivity. Enterprise OTA and fleet management."
         />
         <meta
           name="keywords"
-          content="nvidia jetson orin nano, device management, ota updates, yocto, embedded linux, industrial ai, robotics, fleet management"
+          content="nxp frdm-mcxn947, mcx n94, cortex-m33, mcu development, real-time, iot, embedded, fleet management"
         />
         <meta
           property="og:title"
-          content="NVIDIA Jetson Orin Nano Production Linux | Day 1 Ready | Peridio"
+          content="NXP FRDM-MCXN947 MCU Development | Real-Time IoT | Peridio"
         />
         <meta
           property="og:description"
-          content="Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux and secure fleet management."
+          content="Production-ready NXP FRDM-MCXN947 development with dual Cortex-M33 cores and enterprise fleet management."
         />
-        <meta property="og:image" content="/img/nvidia-jetson-orin.jpg" />
+        <meta property="og:image" content="/img/nxp-frdm-93.jpg" />
         <meta property="og:type" content="product" />
-        <link rel="canonical" href="https://docs.peridio.com/solutions/nvidia/jetson-orin-nano" />
+        <link rel="canonical" href="https://docs.peridio.com/solutions/nxp/frdm-93" />
 
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Product',
-            name: 'Peridio + Avocado OS for NVIDIA Jetson Orin Nano',
+            name: 'Peridio + Avocado OS for NXP FRDM-MCXN947',
             description:
-              'Day 1 production-ready Linux and device management for NVIDIA Jetson Orin Nano with enterprise-grade embedded OS',
+              'Production-ready MCU development platform with dual-core Cortex-M33 and enterprise fleet management',
             manufacturer: {
               '@type': 'Organization',
               name: 'Peridio',
             },
-            category: 'Device Management Software',
+            category: 'MCU Development Platform',
             offers: {
               '@type': 'Offer',
               availability: 'https://schema.org/InStock',
             },
-            applicationCategory: 'Industrial AI, Robotics, Edge Computing',
-            operatingSystem: 'Yocto Linux, Avocado OS',
+            applicationCategory: 'Real-Time IoT, Industrial Control, ML Edge',
+            operatingSystem: 'FreeRTOS, Zephyr, Bare Metal',
           })}
         </script>
       </Head>
@@ -69,29 +69,30 @@ export default function JetsonOrinNanoSolution() {
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <Heading as="h1" className={styles.heroTitle}>
-                Skip 18 Months of <span className={styles.highlight}>Jetson Development</span>
+                Industrial MCU Development with{' '}
+                <span className={styles.highlight}>NXP FRDM-MCXN947</span>
               </Heading>
               <p className={styles.heroSubtitle}>
-                Deploy enterprise-grade NVIDIA Jetson Orin Nano fleets from day 1 with deterministic
-                Linux, secure OTA, and managed operations
+                Dual-core Cortex-M33 platform with ML acceleration, secure boot, and industrial
+                connectivity for real-time IoT applications
               </p>
               <div className={styles.heroStats}>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>Day 1</span>
-                  <span className={styles.statLabel}>Production Ready</span>
+                  <span className={styles.statNumber}>150MHz</span>
+                  <span className={styles.statLabel}>Dual Cortex-M33</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>10+</span>
-                  <span className={styles.statLabel}>Year Support</span>
+                  <span className={styles.statNumber}>2MB</span>
+                  <span className={styles.statLabel}>Flash Memory</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>67</span>
-                  <span className={styles.statLabel}>TOPS AI Performance</span>
+                  <span className={styles.statNumber}>-40°C</span>
+                  <span className={styles.statLabel}>Industrial Temp</span>
                 </div>
               </div>
               <div className={styles.heroCta}>
                 <Link
-                  to="/dev-center/hardware/nvidia/jetson-orin-nano-evk"
+                  to="/dev-center/hardware/nxp/frdm-imx-93"
                   className={styles.ctaPrimary}
                 >
                   Get Started
@@ -103,8 +104,8 @@ export default function JetsonOrinNanoSolution() {
             </div>
             <div className={styles.heroImage}>
               <img
-                src="/img/jetson-nano.png"
-                alt="NVIDIA Jetson Orin Nano development kit"
+                src="/img/nxp-frdm-93.jpg"
+                alt="NXP FRDM-MCXN947 development board"
                 className={styles.productImage}
               />
             </div>
@@ -116,38 +117,38 @@ export default function JetsonOrinNanoSolution() {
       <section className={styles.specs}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Hardware Specifications
+            FRDM-MCXN947 Technical Specifications
           </Heading>
           <div className={styles.specsTable}>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>AI Performance</div>
-              <div className={styles.specValue}>67 TOPS (8GB) / 34 TOPS (4GB)</div>
-              <div className={styles.specNote}>Up to 142× performance of Jetson Nano</div>
-            </div>
-            <div className={styles.specsRow}>
-              <div className={styles.specLabel}>GPU</div>
-              <div className={styles.specValue}>1024/512-core NVIDIA Ampere GPU</div>
-              <div className={styles.specNote}>CUDA-X and TensorRT for real-time inference</div>
-            </div>
-            <div className={styles.specsRow}>
-              <div className={styles.specLabel}>CPU</div>
-              <div className={styles.specValue}>6-core Arm Cortex-A78AE @ 1.7 GHz</div>
-              <div className={styles.specNote}>Armv8.2 64-bit with safety features</div>
+              <div className={styles.specLabel}>Processor</div>
+              <div className={styles.specValue}>Dual Cortex-M33 @ 150MHz</div>
+              <div className={styles.specNote}>TrustZone security and DSP extensions</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Memory</div>
-              <div className={styles.specValue}>8GB/4GB LPDDR5</div>
-              <div className={styles.specNote}>102/51 GB/s bandwidth for multi-sensor vision</div>
+              <div className={styles.specValue}>2MB Flash / 512KB SRAM</div>
+              <div className={styles.specNote}>Execute-in-place from external flash</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Power</div>
-              <div className={styles.specValue}>7–25W</div>
-              <div className={styles.specNote}>Scalable to battery-powered devices</div>
+              <div className={styles.specLabel}>ML Accelerator</div>
+              <div className={styles.specValue}>NPU with eIQ ML support</div>
+              <div className={styles.specNote}>TensorFlow Lite Micro optimized</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Operating Temperature</div>
-              <div className={styles.specValue}>-40°C to +70°C</div>
-              <div className={styles.specNote}>Rugged industrial environments</div>
+              <div className={styles.specLabel}>Connectivity</div>
+              <div className={styles.specValue}>CAN FD, USB, UART, SPI, I2C</div>
+              <div className={styles.specNote}>Industrial protocols and automotive CAN</div>
+            </div>
+            <div className={styles.specsRow}>
+              <div className={styles.specLabel}>Security</div>
+              <div className={styles.specValue}>Secure Boot, Crypto, TRNG</div>
+              <div className={styles.specNote}>Hardware root of trust</div>
+            </div>
+            <div className={styles.specsRow}>
+              <div className={styles.specLabel}>Operating Temp</div>
+              <div className={styles.specValue}>-40°C to +105°C</div>
+              <div className={styles.specNote}>Automotive and industrial grade</div>
             </div>
           </div>
         </div>
@@ -157,43 +158,43 @@ export default function JetsonOrinNanoSolution() {
       <section className={styles.useCases}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Production Use Cases
+            Industrial Use Cases
           </Heading>
           <div className={styles.useCaseGrid}>
             <div className={styles.useCase}>
               <img
-                src="/img/pedestrian-monitoring.png"
-                alt="Industrial Smart Cameras"
+                src="/img/factory-quality-inspection.png"
+                alt="Industrial Sensor Hub"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Industrial Smart Cameras</Heading>
+              <Heading as="h3">Industrial Sensor Hub</Heading>
               <p>
-                Multi-camera CSI input for AI tasks like object detection and quality inspection.
-                OTA supports model updates in production.
+                Multi-sensor data fusion with ML inference at the edge. Dual-core architecture
+                separates real-time control from communication tasks.
               </p>
             </div>
             <div className={styles.useCase}>
               <img
-                src="/img/traffic-flow-optimization.png"
-                alt="Autonomous Mobile Robots"
+                src="/img/environmental-inspection.png"
+                alt="Motor Control Systems"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Autonomous Mobile Robots</Heading>
+              <Heading as="h3">Motor Control Systems</Heading>
               <p>
-                Real-time sensor fusion and navigation processing. Avocado OS supports ROS2 and
-                containers with scalable fleet rollouts.
+                FOC motor control with CAN FD for automotive and industrial applications. Hardware
+                PWM and encoder interfaces for precision control.
               </p>
             </div>
             <div className={styles.useCase}>
               <img
                 src="/img/workplace-safety.png"
-                alt="Edge AI Gateways"
+                alt="Secure IoT Gateway"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Edge AI Gateways</Heading>
+              <Heading as="h3">Secure IoT Gateway</Heading>
               <p>
-                Run generative AI or LLMs locally with NVMe and optional 10-GbE. Managed Linux keeps
-                them secure in harsh environments.
+                TrustZone-enabled secure gateway with hardware crypto. Bridge industrial sensors to
+                cloud with authenticated OTA updates.
               </p>
             </div>
           </div>
@@ -205,7 +206,7 @@ export default function JetsonOrinNanoSolution() {
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <Heading as="h2">From Challenge to Solution</Heading>
-            <p>Transform your Jetson development workflow with enterprise-grade infrastructure</p>
+            <p>Transform your MCU development workflow with enterprise-grade infrastructure</p>
           </div>
 
           <div className={styles.comparisonContainer}>
@@ -219,22 +220,20 @@ export default function JetsonOrinNanoSolution() {
               <div className={styles.cardContent}>
                 <div className={styles.challengeItem}>
                   <span className={styles.challengeText}>
-                    Developer kits aren&apos;t production-ready
+                    Complex dual-core synchronization
                   </span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Custom Yocto builds take 6-18 months</span>
+                  <span className={styles.challengeText}>Manual firmware update processes</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>
-                    OTA infrastructure requires dedicated teams
-                  </span>
+                  <span className={styles.challengeText}>Limited debugging in production</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Security compliance adds complexity</span>
+                  <span className={styles.challengeText}>Security implementation overhead</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Fleet management built from scratch</span>
+                  <span className={styles.challengeText}>No fleet management for MCUs</span>
                 </div>
               </div>
             </div>
@@ -248,19 +247,19 @@ export default function JetsonOrinNanoSolution() {
               </div>
               <div className={styles.cardContent}>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Production-ready OS in minutes</span>
+                  <span className={styles.solutionText}>Pre-configured multicore RTOS</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Pre-integrated Jetson BSPs</span>
+                  <span className={styles.solutionText}>Secure OTA with rollback</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Enterprise OTA orchestration</span>
+                  <span className={styles.solutionText}>Remote diagnostics and logging</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Built-in security compliance</span>
+                  <span className={styles.solutionText}>Built-in secure boot chain</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Managed fleet operations</span>
+                  <span className={styles.solutionText}>Enterprise MCU fleet management</span>
                 </div>
               </div>
             </div>
@@ -272,67 +271,67 @@ export default function JetsonOrinNanoSolution() {
       <section className={styles.features}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Why Choose Peridio for Jetson Development
+            Why Choose Peridio for FRDM-MCXN947 Development
           </Heading>
           <div className={styles.featureGrid}>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
-                <RocketLaunchIcon style={{ width: '100%', height: '100%' }} />
+                <CpuChipIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Rapid Deployment</Heading>
+              <Heading as="h3">Dual-Core Optimization</Heading>
               <p>
-                Boot deterministic Linux on Jetson in minutes. Hardware-in-the-loop tools reduce
-                iteration from weeks to hours.
+                Pre-configured FreeRTOS/Zephyr with inter-core communication. Separate real-time
+                control from application logic seamlessly.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
-                <LockClosedIcon style={{ width: '100%', height: '100%' }} />
+                <BoltIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Production Security</Heading>
+              <Heading as="h3">Real-Time Performance</Heading>
               <p>
-                Secure boot, dm-verity, and LUKS encryption across all architectures. Reproducible
-                images simplify certification.
-              </p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <WifiIcon style={{ width: '100%', height: '100%' }} />
-              </div>
-              <Heading as="h3">Fleet Management</Heading>
-              <p>
-                Register and manage devices in Peridio Fleet. Phased releases, cohort targeting,
-                SBOM, and CVE patching.
-              </p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <WrenchScrewdriverIcon style={{ width: '100%', height: '100%' }} />
-              </div>
-              <Heading as="h3">Composable Architecture</Heading>
-              <p>
-                Build systems using modular layers and standard secure components. Avoid the
-                fragility of DIY Yocto.
-              </p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
-              </div>
-              <Heading as="h3">Cross-Platform</Heading>
-              <p>
-                Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio,
-                NXP i.MX8MP).
+                Deterministic execution with hardware PWM, timers, and DMA. Low-latency interrupt
+                handling for motor control and sensors.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <ShieldCheckIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Long-term Support</Heading>
+              <Heading as="h3">Hardware Security</Heading>
               <p>
-                10+ years of kernel/security maintenance. Combined with Jetson&apos;s industrial
-                lifecycle ensures device longevity.
+                TrustZone isolation, secure boot, and hardware crypto. Device certificates and
+                secure key storage in PUF.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <WrenchScrewdriverIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">MCU Fleet OTA</Heading>
+              <p>
+                Delta updates minimize bandwidth for constrained devices. A/B partitioning with
+                automatic rollback on failure.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <BeakerIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">ML at the Edge</Heading>
+              <p>
+                NPU-accelerated inference with TensorFlow Lite Micro. Pre-trained models for
+                anomaly detection and predictive maintenance.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <ChartBarIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Production Analytics</Heading>
+              <p>
+                Real-time telemetry and remote diagnostics. Monitor CPU usage, memory, and custom
+                metrics across your fleet.
               </p>
             </div>
           </div>
@@ -343,19 +342,20 @@ export default function JetsonOrinNanoSolution() {
       <section className={styles.cta}>
         <div className={styles.container}>
           <div className={styles.ctaContent}>
-            <Heading as="h2">Ready to Accelerate Your Jetson Development?</Heading>
+            <Heading as="h2">Ready to Accelerate Your MCU Development?</Heading>
             <p>
-              Transform your NVIDIA Jetson Orin Nano from developer kit to secure, deployable
-              industrial AI platform.
+              Transform your NXP FRDM-MCXN947 from development board to production-ready industrial
+              platform with secure OTA and fleet management.
             </p>
             <div className={styles.ctaButtons}>
-              <Link
-                to="/dev-center/hardware/nvidia/jetson-orin-nano-evk"
-                className={styles.ctaPrimary}
-              >
+              <Link to="/dev-center/hardware/nxp/frdm-imx-93" className={styles.ctaPrimary}>
                 Get Started
               </Link>
-              <Link to="https://avocadolinux.org" className={styles.ctaSecondary} target="_blank">
+              <Link
+                to="https://docs.avocadolinux.org/supported-hardware/frdm-mcxn947"
+                className={styles.ctaSecondary}
+                target="_blank"
+              >
                 Visit Avocado Linux
               </Link>
             </div>
@@ -371,20 +371,20 @@ export default function JetsonOrinNanoSolution() {
           </Heading>
           <div className={styles.resourceGrid}>
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
-              <Heading as="h3">Yocto Integration Guide</Heading>
-              <p>Step-by-step Yocto build configuration for Jetson Orin Nano</p>
+              <Heading as="h3">MCU Development Guide</Heading>
+              <p>FreeRTOS and Zephyr configuration for dual-core Cortex-M33 platforms</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">Device Security</Heading>
-              <p>Device certificates, secure boot, and fleet security management</p>
+              <Heading as="h3">Secure Boot Chain</Heading>
+              <p>Hardware root of trust with TrustZone and secure firmware updates</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">Platform Overview</Heading>
-              <p>Complete Peridio platform architecture and capabilities</p>
+              <Heading as="h3">Fleet Management</Heading>
+              <p>MCU fleet operations with OTA updates and remote diagnostics</p>
             </Link>
             <Link to="/admin-api" className={styles.resourceCard}>
-              <Heading as="h3">API Documentation</Heading>
-              <p>REST API and GraphQL integration for fleet management</p>
+              <Heading as="h3">API Integration</Heading>
+              <p>REST API for automated testing and continuous deployment</p>
             </Link>
           </div>
         </div>

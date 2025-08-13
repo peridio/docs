@@ -3,61 +3,61 @@ import Layout from '@theme/Layout'
 import Head from '@docusaurus/Head'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
-import styles from './jetson-orin-nano.module.css'
+import styles from './index.module.css'
 import {
-  HiOutlineRocketLaunch as RocketLaunchIcon,
-  HiOutlineLockClosed as LockClosedIcon,
-  HiOutlineWifi as WifiIcon,
-  HiOutlineWrenchScrewdriver as WrenchScrewdriverIcon,
-  HiOutlineGlobeAlt as GlobeAltIcon,
+  HiOutlineDeviceTablet as DeviceTabletIcon,
+  HiOutlineCpuChip as CpuChipIcon,
   HiOutlineShieldCheck as ShieldCheckIcon,
+  HiOutlineGlobeAlt as GlobeAltIcon,
+  HiOutlineWrenchScrewdriver as WrenchScrewdriverIcon,
+  HiOutlineCommandLine as CommandLineIcon,
   HiOutlineXMark as XMarkIcon,
   HiOutlineCheck as CheckIcon,
 } from 'react-icons/hi2'
 
-export default function JetsonOrinNanoSolution() {
+export default function ReTerminalSolution() {
   return (
     <Layout>
       <Head>
-        <title>NVIDIA Jetson Orin Nano Production Linux | Day 1 Ready | Peridio</title>
+        <title>Seeed reTerminal Industrial HMI | Raspberry Pi CM4 | Peridio</title>
         <meta
           name="description"
-          content="Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for industrial AI."
+          content="Deploy Seeed reTerminal industrial HMI with Raspberry Pi CM4, 5-inch touchscreen, and enterprise fleet management. Production-ready edge computing."
         />
         <meta
           name="keywords"
-          content="nvidia jetson orin nano, device management, ota updates, yocto, embedded linux, industrial ai, robotics, fleet management"
+          content="seeed reterminal, raspberry pi cm4, industrial hmi, touchscreen, edge computing, fleet management"
         />
         <meta
           property="og:title"
-          content="NVIDIA Jetson Orin Nano Production Linux | Day 1 Ready | Peridio"
+          content="Seeed reTerminal Industrial HMI | Raspberry Pi CM4 | Peridio"
         />
         <meta
           property="og:description"
-          content="Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux and secure fleet management."
+          content="Deploy Seeed reTerminal industrial HMI with enterprise fleet management and secure OTA updates."
         />
-        <meta property="og:image" content="/img/nvidia-jetson-orin.jpg" />
+        <meta property="og:image" content="/img/seeed-reterminal.jpg" />
         <meta property="og:type" content="product" />
-        <link rel="canonical" href="https://docs.peridio.com/solutions/nvidia/jetson-orin-nano" />
+        <link rel="canonical" href="https://docs.peridio.com/solutions/seeed" />
 
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Product',
-            name: 'Peridio + Avocado OS for NVIDIA Jetson Orin Nano',
+            name: 'Peridio + Avocado OS for Seeed reTerminal',
             description:
-              'Day 1 production-ready Linux and device management for NVIDIA Jetson Orin Nano with enterprise-grade embedded OS',
+              'Production-ready industrial HMI with Raspberry Pi CM4 and enterprise fleet management',
             manufacturer: {
               '@type': 'Organization',
               name: 'Peridio',
             },
-            category: 'Device Management Software',
+            category: 'Industrial HMI',
             offers: {
               '@type': 'Offer',
               availability: 'https://schema.org/InStock',
             },
-            applicationCategory: 'Industrial AI, Robotics, Edge Computing',
+            applicationCategory: 'HMI, Edge Computing, Industrial Control, IoT Gateway',
             operatingSystem: 'Yocto Linux, Avocado OS',
           })}
         </script>
@@ -69,31 +69,29 @@ export default function JetsonOrinNanoSolution() {
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <Heading as="h1" className={styles.heroTitle}>
-                Skip 18 Months of <span className={styles.highlight}>Jetson Development</span>
+                Industrial HMI with{' '}
+                <span className={styles.highlight}>Seeed reTerminal</span>
               </Heading>
               <p className={styles.heroSubtitle}>
-                Deploy enterprise-grade NVIDIA Jetson Orin Nano fleets from day 1 with deterministic
-                Linux, secure OTA, and managed operations
+                5-inch multi-touch display powered by Raspberry Pi CM4 with wireless connectivity
+                and modular expansion for industrial control
               </p>
               <div className={styles.heroStats}>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>Day 1</span>
-                  <span className={styles.statLabel}>Production Ready</span>
+                  <span className={styles.statNumber}>5&quot;</span>
+                  <span className={styles.statLabel}>IPS Touchscreen</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>10+</span>
-                  <span className={styles.statLabel}>Year Support</span>
+                  <span className={styles.statNumber}>1.5GHz</span>
+                  <span className={styles.statLabel}>Quad-Core ARM</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>67</span>
-                  <span className={styles.statLabel}>TOPS AI Performance</span>
+                  <span className={styles.statNumber}>IP64</span>
+                  <span className={styles.statLabel}>Front Panel</span>
                 </div>
               </div>
               <div className={styles.heroCta}>
-                <Link
-                  to="/dev-center/hardware/nvidia/jetson-orin-nano-evk"
-                  className={styles.ctaPrimary}
-                >
+                <Link to="/dev-center/hardware/production-ready/seeed-reterminal" className={styles.ctaPrimary}>
                   Get Started
                 </Link>
                 <Link to="/" className={styles.ctaSecondary}>
@@ -103,8 +101,8 @@ export default function JetsonOrinNanoSolution() {
             </div>
             <div className={styles.heroImage}>
               <img
-                src="/img/jetson-nano.png"
-                alt="NVIDIA Jetson Orin Nano development kit"
+                src="/img/seeed-reterminal.jpg"
+                alt="Seeed reTerminal industrial HMI"
                 className={styles.productImage}
               />
             </div>
@@ -116,38 +114,38 @@ export default function JetsonOrinNanoSolution() {
       <section className={styles.specs}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Hardware Specifications
+            reTerminal Technical Specifications
           </Heading>
           <div className={styles.specsTable}>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>AI Performance</div>
-              <div className={styles.specValue}>67 TOPS (8GB) / 34 TOPS (4GB)</div>
-              <div className={styles.specNote}>Up to 142× performance of Jetson Nano</div>
+              <div className={styles.specLabel}>Processor</div>
+              <div className={styles.specValue}>Raspberry Pi CM4</div>
+              <div className={styles.specNote}>Quad-core Cortex-A72 @ 1.5GHz</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>GPU</div>
-              <div className={styles.specValue}>1024/512-core NVIDIA Ampere GPU</div>
-              <div className={styles.specNote}>CUDA-X and TensorRT for real-time inference</div>
-            </div>
-            <div className={styles.specsRow}>
-              <div className={styles.specLabel}>CPU</div>
-              <div className={styles.specValue}>6-core Arm Cortex-A78AE @ 1.7 GHz</div>
-              <div className={styles.specNote}>Armv8.2 64-bit with safety features</div>
+              <div className={styles.specLabel}>Display</div>
+              <div className={styles.specValue}>5-inch IPS LCD</div>
+              <div className={styles.specNote}>1280x720, 10-point multi-touch</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Memory</div>
-              <div className={styles.specValue}>8GB/4GB LPDDR5</div>
-              <div className={styles.specNote}>102/51 GB/s bandwidth for multi-sensor vision</div>
+              <div className={styles.specValue}>2/4/8GB LPDDR4</div>
+              <div className={styles.specNote}>Up to 32GB eMMC storage</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Power</div>
-              <div className={styles.specValue}>7–25W</div>
-              <div className={styles.specNote}>Scalable to battery-powered devices</div>
+              <div className={styles.specLabel}>Connectivity</div>
+              <div className={styles.specValue}>WiFi 5 + BT 5.0</div>
+              <div className={styles.specNote}>Gigabit Ethernet, dual USB</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Operating Temperature</div>
-              <div className={styles.specValue}>-40°C to +70°C</div>
-              <div className={styles.specNote}>Rugged industrial environments</div>
+              <div className={styles.specLabel}>Expansion</div>
+              <div className={styles.specValue}>40-pin GPIO</div>
+              <div className={styles.specNote}>Compatible with reTerminal E10-1 modules</div>
+            </div>
+            <div className={styles.specsRow}>
+              <div className={styles.specLabel}>Operating Temp</div>
+              <div className={styles.specValue}>0°C to +50°C</div>
+              <div className={styles.specNote}>Industrial-grade components</div>
             </div>
           </div>
         </div>
@@ -162,38 +160,38 @@ export default function JetsonOrinNanoSolution() {
           <div className={styles.useCaseGrid}>
             <div className={styles.useCase}>
               <img
-                src="/img/pedestrian-monitoring.png"
-                alt="Industrial Smart Cameras"
+                src="/img/industrial-hmi.png"
+                alt="Industrial HMI"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Industrial Smart Cameras</Heading>
+              <Heading as="h3">Machine Control Interface</Heading>
               <p>
-                Multi-camera CSI input for AI tasks like object detection and quality inspection.
-                OTA supports model updates in production.
+                Real-time machine monitoring and control with responsive touch interface. Integrate
+                with PLCs via Modbus, OPC UA, and MQTT protocols.
               </p>
             </div>
             <div className={styles.useCase}>
               <img
-                src="/img/traffic-flow-optimization.png"
-                alt="Autonomous Mobile Robots"
+                src="/img/building-automation.png"
+                alt="Building Automation"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Autonomous Mobile Robots</Heading>
+              <Heading as="h3">Building Automation</Heading>
               <p>
-                Real-time sensor fusion and navigation processing. Avocado OS supports ROS2 and
-                containers with scalable fleet rollouts.
+                Smart building control panels for HVAC, lighting, and security systems. Node-RED
+                integration for visual programming.
               </p>
             </div>
             <div className={styles.useCase}>
               <img
-                src="/img/workplace-safety.png"
-                alt="Edge AI Gateways"
+                src="/img/iot-gateway.png"
+                alt="IoT Gateway"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Edge AI Gateways</Heading>
+              <Heading as="h3">Edge IoT Gateway</Heading>
               <p>
-                Run generative AI or LLMs locally with NVMe and optional 10-GbE. Managed Linux keeps
-                them secure in harsh environments.
+                Collect, process, and visualize sensor data at the edge. LoRaWAN and Zigbee support
+                via expansion modules.
               </p>
             </div>
           </div>
@@ -205,7 +203,7 @@ export default function JetsonOrinNanoSolution() {
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <Heading as="h2">From Challenge to Solution</Heading>
-            <p>Transform your Jetson development workflow with enterprise-grade infrastructure</p>
+            <p>Transform your reTerminal deployment with production-ready infrastructure</p>
           </div>
 
           <div className={styles.comparisonContainer}>
@@ -219,22 +217,20 @@ export default function JetsonOrinNanoSolution() {
               <div className={styles.cardContent}>
                 <div className={styles.challengeItem}>
                   <span className={styles.challengeText}>
-                    Developer kits aren&apos;t production-ready
+                    Manual SD card imaging for each device
                   </span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Custom Yocto builds take 6-18 months</span>
+                  <span className={styles.challengeText}>No remote HMI management</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>
-                    OTA infrastructure requires dedicated teams
-                  </span>
+                  <span className={styles.challengeText}>Difficult UI updates in field</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Security compliance adds complexity</span>
+                  <span className={styles.challengeText}>Limited security features</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Fleet management built from scratch</span>
+                  <span className={styles.challengeText}>No fleet monitoring</span>
                 </div>
               </div>
             </div>
@@ -248,19 +244,19 @@ export default function JetsonOrinNanoSolution() {
               </div>
               <div className={styles.cardContent}>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Production-ready OS in minutes</span>
+                  <span className={styles.solutionText}>Zero-touch provisioning</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Pre-integrated Jetson BSPs</span>
+                  <span className={styles.solutionText}>Remote HMI configuration</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Enterprise OTA orchestration</span>
+                  <span className={styles.solutionText}>OTA UI and app updates</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Built-in security compliance</span>
+                  <span className={styles.solutionText}>Secure boot and encryption</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Managed fleet operations</span>
+                  <span className={styles.solutionText}>Real-time fleet analytics</span>
                 </div>
               </div>
             </div>
@@ -272,67 +268,67 @@ export default function JetsonOrinNanoSolution() {
       <section className={styles.features}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Why Choose Peridio for Jetson Development
+            Why Choose Peridio for reTerminal Deployment
           </Heading>
           <div className={styles.featureGrid}>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
-                <RocketLaunchIcon style={{ width: '100%', height: '100%' }} />
+                <DeviceTabletIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Rapid Deployment</Heading>
+              <Heading as="h3">HMI-Optimized OS</Heading>
               <p>
-                Boot deterministic Linux on Jetson in minutes. Hardware-in-the-loop tools reduce
-                iteration from weeks to hours.
+                Pre-configured Avocado OS with Qt, Flutter, and web-based UI frameworks. Hardware
+                accelerated graphics with Wayland compositor.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
-                <LockClosedIcon style={{ width: '100%', height: '100%' }} />
+                <CpuChipIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Production Security</Heading>
+              <Heading as="h3">CM4 Optimization</Heading>
               <p>
-                Secure boot, dm-verity, and LUKS encryption across all architectures. Reproducible
-                images simplify certification.
-              </p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <WifiIcon style={{ width: '100%', height: '100%' }} />
-              </div>
-              <Heading as="h3">Fleet Management</Heading>
-              <p>
-                Register and manage devices in Peridio Fleet. Phased releases, cohort targeting,
-                SBOM, and CVE patching.
-              </p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <WrenchScrewdriverIcon style={{ width: '100%', height: '100%' }} />
-              </div>
-              <Heading as="h3">Composable Architecture</Heading>
-              <p>
-                Build systems using modular layers and standard secure components. Avoid the
-                fragility of DIY Yocto.
-              </p>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>
-                <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
-              </div>
-              <Heading as="h3">Cross-Platform</Heading>
-              <p>
-                Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio,
-                NXP i.MX8MP).
+                Optimized for Raspberry Pi CM4 with GPU acceleration, hardware video decoding, and
+                efficient power management.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <ShieldCheckIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Long-term Support</Heading>
+              <Heading as="h3">Industrial Security</Heading>
               <p>
-                10+ years of kernel/security maintenance. Combined with Jetson&apos;s industrial
-                lifecycle ensures device longevity.
+                Secure boot chain, encrypted storage, and certificate-based authentication. Kiosk
+                mode for locked-down deployments.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Fleet Management</Heading>
+              <p>
+                Manage hundreds of reTerminals across multiple sites. Group-based configuration and
+                scheduled maintenance windows.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <CommandLineIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Protocol Support</Heading>
+              <p>
+                Built-in Modbus RTU/TCP, OPC UA, MQTT, and CoAP. Node-RED for visual flow-based
+                programming.
+              </p>
+            </div>
+            <div className={styles.feature}>
+              <div className={styles.featureIcon}>
+                <WrenchScrewdriverIcon style={{ width: '100%', height: '100%' }} />
+              </div>
+              <Heading as="h3">Developer Tools</Heading>
+              <p>
+                Remote debugging, log aggregation, and performance monitoring. SDK for custom
+                application development.
               </p>
             </div>
           </div>
@@ -343,16 +339,13 @@ export default function JetsonOrinNanoSolution() {
       <section className={styles.cta}>
         <div className={styles.container}>
           <div className={styles.ctaContent}>
-            <Heading as="h2">Ready to Accelerate Your Jetson Development?</Heading>
+            <Heading as="h2">Ready to Deploy reTerminal at Scale?</Heading>
             <p>
-              Transform your NVIDIA Jetson Orin Nano from developer kit to secure, deployable
-              industrial AI platform.
+              Transform your Seeed reTerminal HMIs into a managed fleet with secure OTA updates,
+              remote configuration, and enterprise support.
             </p>
             <div className={styles.ctaButtons}>
-              <Link
-                to="/dev-center/hardware/nvidia/jetson-orin-nano-evk"
-                className={styles.ctaPrimary}
-              >
+              <Link to="/dev-center/hardware/production-ready/seeed-reterminal" className={styles.ctaPrimary}>
                 Get Started
               </Link>
               <Link to="https://avocadolinux.org" className={styles.ctaSecondary} target="_blank">
@@ -371,20 +364,20 @@ export default function JetsonOrinNanoSolution() {
           </Heading>
           <div className={styles.resourceGrid}>
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
-              <Heading as="h3">Yocto Integration Guide</Heading>
-              <p>Step-by-step Yocto build configuration for Jetson Orin Nano</p>
+              <Heading as="h3">HMI Development Guide</Heading>
+              <p>Qt and Flutter integration for reTerminal touchscreen applications</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">Device Security</Heading>
-              <p>Device certificates, secure boot, and fleet security management</p>
+              <Heading as="h3">Industrial Protocols</Heading>
+              <p>Modbus, OPC UA, and MQTT configuration for industrial systems</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">Platform Overview</Heading>
-              <p>Complete Peridio platform architecture and capabilities</p>
+              <Heading as="h3">Fleet Configuration</Heading>
+              <p>Managing HMI settings and UI updates across deployments</p>
             </Link>
             <Link to="/admin-api" className={styles.resourceCard}>
-              <Heading as="h3">API Documentation</Heading>
-              <p>REST API and GraphQL integration for fleet management</p>
+              <Heading as="h3">Remote Management API</Heading>
+              <p>REST APIs for HMI control and monitoring</p>
             </Link>
           </div>
         </div>

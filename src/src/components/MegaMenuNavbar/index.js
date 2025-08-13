@@ -7,7 +7,6 @@ import Heading from '@theme/Heading'
 import './styles.css'
 
 const MegaMenuNavbar = () => {
-  const { siteConfig } = useDocusaurusContext()
   const { navbar } = useThemeConfig()
   const [activeMenu, setActiveMenu] = useState(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -35,6 +34,40 @@ const MegaMenuNavbar = () => {
   }, [])
 
   const megaMenuItems = {
+    documentation: {
+      label: 'Documentation',
+      linkTo: '/dev-center',
+      sections: [
+        {
+          title: 'Getting Started',
+          items: [
+            { label: 'Introduction', to: '/dev-center' },
+            { label: 'Provision Device', to: '/dev-center/getting-started/provision-device' },
+            { label: 'Program Device', to: '/dev-center/getting-started/program-device' },
+            { label: 'First OTA Update', to: '/dev-center/getting-started/first-ota-update' },
+          ],
+        },
+        {
+          title: 'Core Platforms',
+          items: [
+            { label: 'Avocado OS', to: '/dev-center/avocado-linux/introduction' },
+            { label: 'Peridio Core', to: '/dev-center/peridio-core/introduction' },
+            { label: 'Supported Hardware', to: '/dev-center/hardware/supported-hardware' },
+            { label: 'Integration Guides', to: '/dev-center/integration' },
+          ],
+        },
+        {
+          title: 'Resources',
+          items: [
+            { label: 'Tools', to: '/dev-center/tools' },
+            { label: 'Tunnels (Remote Access)', to: '/dev-center/tunnels/overview' },
+            { label: 'Webhooks', to: '/dev-center/integration/webhooks/overview' },
+            { label: 'Certificates', to: '/dev-center/integration/certificates/overview' },
+          ],
+        },
+      ],
+      twoColumn: true,
+    },
     hardware: {
       label: 'Featured Hardware',
       sections: [
@@ -50,9 +83,9 @@ const MegaMenuNavbar = () => {
         {
           title: 'Production Ready',
           items: [
-            { label: 'Advantech ICAM 540', to: '/solutions/icam540' },
-            { label: 'Onlogic FR201', to: '/solutions/onlogic/fr201' },
-            { label: 'Seed Reterminal', to: '/solutions/seed/reterminal' },
+            { label: 'Advantech ICAM 540', to: '/solutions/advantech/icam-540' },
+            { label: 'OnLogic FR201', to: '/solutions/onlogic' },
+            { label: 'Seeed reTerminal', to: '/solutions/seeed' },
           ],
         },
       ],
@@ -75,6 +108,8 @@ const MegaMenuNavbar = () => {
     ],
   }
 
+  const isDevelopment = process.env.NODE_ENV === 'development'
+
   return (
     <nav className="navbar navbar--fixed-top">
       <div className="navbar__inner">
@@ -83,8 +118,21 @@ const MegaMenuNavbar = () => {
             <img src={`/${navbar.logo.src}`} alt={navbar.logo.alt} className="navbar__logo" />
           </Link>
           <div className="mega-menu-container">
-            <Link to="/dev-center" className="navbar__item navbar__link">
-              Get Started
+            {isDevelopment && (
+              <span className="dev-mode-indicator" style={{
+                padding: '4px 8px',
+                marginRight: '10px',
+                background: '#ff6b6b',
+                color: 'white',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}>
+                DEV MODE
+              </span>
+            )}
+            <Link to="/" className="navbar__item navbar__link">
+              Developer Center
             </Link>
             {Object.entries(megaMenuItems).map(([key, menu]) => (
               <div
@@ -93,12 +141,21 @@ const MegaMenuNavbar = () => {
                 onMouseEnter={() => handleMouseEnter(key)}
                 onMouseLeave={handleMouseLeave}
               >
-                <span className="mega-menu-trigger">
-                  {menu.label}
-                  <svg width="12" height="8" viewBox="0 0 12 8" className="mega-menu-arrow">
-                    <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                  </svg>
-                </span>
+                {menu.linkTo ? (
+                  <Link to={menu.linkTo} className="mega-menu-trigger">
+                    {menu.label}
+                    <svg width="12" height="8" viewBox="0 0 12 8" className="mega-menu-arrow">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    </svg>
+                  </Link>
+                ) : (
+                    <span className="mega-menu-trigger">
+                      {menu.label}
+                      <svg width="12" height="8" viewBox="0 0 12 8" className="mega-menu-arrow">
+                        <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                      </svg>
+                    </span>
+                )}
 
                 {activeMenu === key && (
                   <div className="mega-menu-dropdown">

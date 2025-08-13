@@ -17,9 +17,9 @@ const MobileMenu = ({ isOpen, onClose }) => {
         { label: 'NXP FRDM 93', to: '/solutions/nxp/frdm-93' },
         { label: 'Raspberry Pi', to: '/solutions/raspberry-pi/raspberry-pi' },
         { label: 'NVIDIA Jetson', to: '/solutions/nvidia/jetson-orin-nano' },
-        { label: 'Advantech ICAM 540', to: '/solutions/icam540' },
-        { label: 'Onlogic FR201', to: '/solutions/onlogic/fr201' },
-        { label: 'Seed Reterminal', to: '/solutions/seed/reterminal' },
+        { label: 'Advantech ICAM 540', to: '/solutions/advantech/icam-540' },
+        { label: 'OnLogic FR201', to: '/solutions/onlogic' },
+        { label: 'Seeed reTerminal', to: '/solutions/seeed' },
       ],
     },
     {
@@ -46,11 +46,11 @@ const MobileMenu = ({ isOpen, onClose }) => {
         <div className="mobile-menu-content">
           <div className="mobile-menu-section">
             <Link
-              to="/dev-center"
+              to="/"
               className="mobile-menu-section-title"
               onClick={onClose}
             >
-              Get Started
+              Developer Center
             </Link>
           </div>
           {menuSections.map((section, index) => (
