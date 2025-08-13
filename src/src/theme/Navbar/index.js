@@ -6,10 +6,11 @@ import SimpleNavbar from '../../components/SimpleNavbar'
 export default function Navbar(props) {
   const location = useLocation()
 
-  // Use MegaMenuNavbar only for dev-center pages
+  // Use MegaMenuNavbar for dev-center and solutions pages
   const isDevCenter = location.pathname.startsWith('/dev-center')
+  const isSolutions = location.pathname.startsWith('/solutions')
 
-  if (isDevCenter) {
+  if (isDevCenter || isSolutions) {
     return <MegaMenuNavbar {...props} />
   }
 

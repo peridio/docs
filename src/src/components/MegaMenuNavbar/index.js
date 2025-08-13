@@ -35,215 +35,44 @@ const MegaMenuNavbar = () => {
   }, [])
 
   const megaMenuItems = {
-    quickstart: {
-      label: 'Quickstart',
-      sections: [
-        {
-          title: 'Get Started',
-          items: [
-            { label: 'EVK Demo', to: '/evk' },
-            { label: 'Platform Getting Started', to: '/platform/getting-started' },
-          ],
-        },
-      ],
-    },
-    'dev-center': {
-      label: 'Dev Center',
-      sections: [
-        {
-          title: 'Developer Resources',
-          items: [
-            { label: 'Overview', to: '/dev-center' },
-            { label: 'Getting Started', to: '/dev-center/getting-started/raspberry-pi' },
-            { label: 'Avocado Linux', to: '/dev-center/avocado-linux/introduction' },
-            { label: 'Hardware Support', to: '/dev-center/hardware/raspberry-pi/overview' },
-            { label: 'Peridio Core', to: '/dev-center/peridio-core/introduction' },
-          ],
-        },
-      ],
-    },
-    solutions: {
-      label: 'Hardware',
+    hardware: {
+      label: 'Featured Hardware',
       sections: [
         {
           title: 'EVKs',
           items: [
-            { label: 'NXP i.MX 8M Plus', to: '/solutions/nxp/imx8mp' },
-            { label: 'NVIDIA Jetson Orin Nano', to: '/solutions/nvidia/jetson-orin-nano' },
-            { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
-            { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
+            { label: 'NXP IMX8MP', to: '/solutions/nxp/imx8mp' },
+            { label: 'NXP FRDM 93', to: '/solutions/nxp/frdm-93' },
             { label: 'Raspberry Pi', to: '/solutions/raspberry-pi/raspberry-pi' },
-            { label: 'ST Micro STM32MP257F-DK', to: '/solutions/stmicro/stm32mp157d-dk' },
+            { label: 'NVIDIA Jetson', to: '/solutions/nvidia/jetson-orin-nano' },
           ],
         },
         {
           title: 'Production Ready',
-          items: [{ label: 'icam540', to: '/solutions/icam540' }],
-        },
-      ],
-    },
-    platform: {
-      label: 'Platform',
-      sections: [
-        {
-          title: 'Guides',
           items: [
-            { label: 'Creating Releases', to: '/platform/guides/creating-releases' },
-            { label: 'Cloud-Delegated Updates', to: '/platform/guides/cloud-delegated-updates' },
-            {
-              label: 'Remote Access & Tunnels',
-              to: '/platform/guides/introduction-to-remote-access',
-            },
-            {
-              label: 'Binary Management',
-              to: '/platform/guides/introduction-to-binary-management',
-            },
-            {
-              label: 'Bundle Management',
-              to: '/platform/guides/introduction-to-bundle-management',
-            },
-          ],
-        },
-        {
-          title: 'Reference',
-          items: [
-            { label: 'Overview', to: '/platform/reference/overview' },
-            { label: 'Devices', to: '/platform/reference/devices' },
-            { label: 'Artifacts', to: '/platform/reference/artifacts' },
-            { label: 'Bundles', to: '/platform/reference/bundles' },
-            { label: 'Cohorts', to: '/platform/reference/cohorts' },
-            { label: 'Fleet View', to: '/platform/reference/fleet-view' },
-          ],
-        },
-        {
-          title: 'Tools',
-          items: [
-            { label: 'CLI', to: '/cli' },
-            { label: 'Admin API', to: '/admin-api' },
-            { label: 'Device API', to: '/device-api' },
+            { label: 'Advantech ICAM 540', to: '/solutions/icam540' },
+            { label: 'Onlogic FR201', to: '/solutions/onlogic/fr201' },
+            { label: 'Seed Reterminal', to: '/solutions/seed/reterminal' },
           ],
         },
       ],
+      twoColumn: true,
     },
-    integration: {
-      label: 'Integration',
-      sections: [
-        {
-          title: 'Linux',
-          items: [
-            { label: 'Overview', to: '/integration/linux/overview' },
-            { label: 'Buildroot', to: '/integration/linux/build-tools/buildroot' },
-            { label: 'Yocto', to: '/integration/linux/build-tools/yocto' },
-            { label: 'peridiod Config', to: '/integration/linux/peridiod/configuration' },
-            { label: 'peridiod Updates', to: '/integration/linux/peridiod/updates' },
-          ],
-        },
-        {
-          title: 'Reference Designs',
-          items: [
-            {
-              label: 'i.MX6ULL EVK',
-              to: '/integration/linux/reference-designs/imx6ullevk/overview',
-            },
-            {
-              label: 'Khadas VIM3',
-              to: '/integration/linux/reference-designs/khadas-vim3/overview',
-            },
-            {
-              label: 'Raspberry Pi 4',
-              to: '/integration/linux/reference-designs/raspberrypi4/overview',
-            },
-            {
-              label: 'Raspberry Pi 5',
-              to: '/integration/linux/reference-designs/raspberrypi5/overview',
-            },
-            { label: 'QEMU ARM64', to: '/integration/linux/reference-designs/qemu-arm64/overview' },
-          ],
-        },
-        {
-          title: 'Android',
-          items: [
-            { label: 'Overview', to: '/integration/android/overview' },
-            {
-              label: 'Direct API Integration',
-              to: '/integration/android/reference-designs/direct-api-integration',
-            },
-          ],
-        },
-      ],
-    },
-    build: {
-      label: 'Build & Ship',
-      sections: [
-        {
-          title: 'Artifacts & Binaries',
-          items: [
-            { label: 'Creating Artifacts', to: '/platform/guides/creating-artifacts' },
-            {
-              label: 'Creating Artifact Versions',
-              to: '/platform/guides/creating-artifact-versions',
-            },
-            { label: 'Creating Binaries', to: '/platform/guides/creating-binaries' },
-            { label: 'Creating Binary Parts', to: '/platform/guides/creating-binary-parts' },
-            {
-              label: 'Multipart Uploads',
-              to: '/platform/guides/multipart-uploads-with-binary-parts',
-            },
-          ],
-        },
-        {
-          title: 'Signing & Security',
-          items: [
-            { label: 'CA Certificates', to: '/platform/guides/creating-ca-certificates' },
-            {
-              label: 'X.509 via OpenSSL',
-              to: '/platform/guides/creating-x509-certificates-with-openssl',
-            },
-            {
-              label: 'X.509 via Peridio',
-              to: '/platform/guides/creating-x509-certificates-with-peridio',
-            },
-            { label: 'Signing Keys', to: '/platform/guides/creating-signing-keys' },
-          ],
-        },
-        {
-          title: 'Advanced',
-          items: [
-            { label: 'Custom Binary Backends', to: '/platform/guides/custom-binary-backends' },
-            { label: 'Creating Bundles', to: '/platform/guides/creating-bundles' },
-          ],
-        },
-      ],
-    },
-    operate: {
-      label: 'Operate',
-      sections: [
-        {
-          title: 'Device Management',
-          items: [
-            { label: 'Creating Devices', to: '/platform/guides/creating-devices' },
-            { label: 'Creating Deployments', to: '/platform/guides/creating-deployments' },
-            { label: 'Fleet View', to: '/platform/reference/fleet-view' },
-            { label: 'Device Certificates', to: '/platform/reference/device-certificates' },
-          ],
-        },
-        {
-          title: 'Release Management',
-          items: [
-            { label: 'Release Channels', to: '/platform/reference/release-channels' },
-            { label: 'Cohorts', to: '/platform/reference/cohorts' },
-            { label: 'Bundle Overrides', to: '/platform/reference/bundle-overrides' },
-          ],
-        },
-        {
-          title: 'Remote Access',
-          items: [
-            { label: 'Creating Tunnels', to: '/platform/guides/creating-tunnels' },
-            { label: 'Tunnels Reference', to: '/platform/reference/tunnels' },
-          ],
-        },
-      ],
-    },
+  }
+
+  const toolsMenu = {
+    label: 'Tools',
+    sections: [
+      {
+        title: '',
+        items: [
+          { label: 'CLI', to: '/cli' },
+          { label: 'Device API', to: '/device-api' },
+          { label: 'Admin API', to: '/admin-api' },
+          { label: 'Peridio Agent', to: '/dev-center/agents/peridio-agent' },
+        ],
+      },
+    ],
   }
 
   return (
@@ -254,6 +83,9 @@ const MegaMenuNavbar = () => {
             <img src={`/${navbar.logo.src}`} alt={navbar.logo.alt} className="navbar__logo" />
           </Link>
           <div className="mega-menu-container">
+            <Link to="/dev-center" className="navbar__item navbar__link">
+              Get Started
+            </Link>
             {Object.entries(megaMenuItems).map(([key, menu]) => (
               <div
                 key={key}
@@ -270,7 +102,7 @@ const MegaMenuNavbar = () => {
 
                 {activeMenu === key && (
                   <div className="mega-menu-dropdown">
-                    <div className="mega-menu-content">
+                    <div className={`mega-menu-content ${menu.twoColumn ? 'two-column' : ''}`}>
                       {menu.sections.map((section, sectionIndex) => (
                         <div key={sectionIndex} className="mega-menu-section">
                           <Heading as="h4" className="mega-menu-section-title">
@@ -305,6 +137,44 @@ const MegaMenuNavbar = () => {
         </div>
 
         <div className="navbar__items navbar__items--right">
+          <div
+            className="mega-menu-item"
+            onMouseEnter={() => handleMouseEnter('tools')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <span className="mega-menu-trigger">
+              {toolsMenu.label}
+              <svg width="12" height="8" viewBox="0 0 12 8" className="mega-menu-arrow">
+                <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              </svg>
+            </span>
+
+            {activeMenu === 'tools' && (
+              <div className="mega-menu-dropdown">
+                <div className="mega-menu-content">
+                  {toolsMenu.sections.map((section, sectionIndex) => (
+                    <div key={sectionIndex} className="mega-menu-section">
+                      {section.title && (
+                        <Heading as="h4" className="mega-menu-section-title">
+                          {section.title}
+                        </Heading>
+                      )}
+                      <ul className="mega-menu-links">
+                        {section.items.map((item, itemIndex) => (
+                          <li key={itemIndex}>
+                            <Link to={item.to} className="mega-menu-link">
+                              {item.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           <Link
             to="https://console.peridio.com"
             className="navbar__item navbar__link"
