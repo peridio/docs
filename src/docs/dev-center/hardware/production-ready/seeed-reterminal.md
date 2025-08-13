@@ -134,7 +134,7 @@ podman run -it --rm -e AVOCADO_SDK_TARGET=reterminal \
 
 - [Seeed Studio Wiki](https://wiki.seeedstudio.com/reTerminal/)
 - [Hardware Datasheet](https://files.seeedstudio.com/wiki/ReTerminal/reTerminal.pdf)
-- [Peridio Integration Guide](/dev-center/avocado-linux/getting-started)
+- [Peridio Integration Guide](/dev-center/avocado-linux/system-requirements)
 - [Community Forum](https://forum.seeedstudio.com/)
 
 ## Next Steps

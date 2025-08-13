@@ -3,6 +3,10 @@ title: Welcome to Avocado OS Documentation
 description: A modern, composable embedded Linux distribution built for rapid development and production-ready deployment.
 ---
 
+:::info Under Construction
+This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::
+
 **Avocado OS** is a next-generation embedded Linux distribution that bridges the gap between rapid development and production-grade stability. Built and maintained by [Peridio](https://www.peridio.com/), Avocado OS rethinks how Linux systems are built, deployed, and maintained in modern products.
 
 Whether you're prototyping on a dev board or deploying to thousands of devices in the field, Avocado helps you move fast **without compromising on reliability, security, or maintainability.**
