@@ -19,14 +19,14 @@ export default function ICAM540Solution() {
   return (
     <Layout>
       <Head>
-        <title>Advantech ICAM-540 Industrial AI Camera | Production Ready | Peridio</title>
+        <title>Advantech ICAM-540 Industrial AI Camera | Edge Vision Computing | Peridio</title>
         <meta
           name="description"
-          content="Deploy Advantech ICAM-540 industrial AI cameras with NVIDIA Jetson Xavier NX, IP67 protection, and enterprise fleet management. Production-ready computer vision."
+          content="Deploy Advantech ICAM-540 industrial AI cameras with NVIDIA Jetson Orin NX, 100 TOPS AI performance, and enterprise fleet management. Production-ready edge vision."
         />
         <meta
           name="keywords"
-          content="advantech icam-540, industrial ai camera, nvidia jetson xavier nx, computer vision, ip67, poe+, fleet management"
+          content="advantech icam-540, industrial ai camera, nvidia jetson orin nx, sony imx334, edge ai, computer vision, camnavi sdk, deepstream, fleet management"
         />
         <meta
           property="og:title"
@@ -36,7 +36,7 @@ export default function ICAM540Solution() {
           property="og:description"
           content="Deploy Advantech ICAM-540 industrial AI cameras with enterprise fleet management and secure OTA updates."
         />
-        <meta property="og:image" content="/img/advantech-icam-540.jpg" />
+        <meta property="og:image" content="/img/icam540.png" />
         <meta property="og:type" content="product" />
         <link rel="canonical" href="https://docs.peridio.com/solutions/advantech/icam-540" />
 
@@ -47,7 +47,7 @@ export default function ICAM540Solution() {
             '@type': 'Product',
             name: 'Peridio + Avocado OS for Advantech ICAM-540',
             description:
-              'Production-ready industrial AI camera with NVIDIA Jetson Xavier NX and enterprise fleet management',
+              'Production-ready industrial AI camera with NVIDIA Jetson Orin NX (100 TOPS) and enterprise fleet management',
             manufacturer: {
               '@type': 'Organization',
               name: 'Peridio',
@@ -57,7 +57,7 @@ export default function ICAM540Solution() {
               '@type': 'Offer',
               availability: 'https://schema.org/InStock',
             },
-            applicationCategory: 'Computer Vision, Quality Inspection, Smart Factory',
+            applicationCategory: 'Automated Optical Inspection, Industrial Safety, Smart Factory Analytics, Edge Vision Computing',
             operatingSystem: 'Yocto Linux, Avocado OS',
           })}
         </script>
@@ -69,25 +69,29 @@ export default function ICAM540Solution() {
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <Heading as="h1" className={styles.heroTitle}>
-                Industrial AI Vision with{' '}
-                <span className={styles.highlight}>Advantech ICAM-540</span>
+                All-in-One AI Vision from{' '}
+                <span className={styles.highlight}>Development to Production</span>
               </Heading>
               <p className={styles.heroSubtitle}>
-                IP67-rated smart camera with NVIDIA Jetson Xavier NX, 5MP global shutter, and PoE+
-                for harsh industrial environments
+                Transform your Advantech ICAM-540 from AI development platform to production-grade
+                industrial vision system with enterprise Linux and fleet management
               </p>
               <div className={styles.heroStats}>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>21</span>
-                  <span className={styles.statLabel}>TOPS AI Performance</span>
+                  <span className={styles.statNumber}>100 TOPS</span>
+                  <span className={styles.statLabel}>AI Performance</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>IP67</span>
-                  <span className={styles.statLabel}>Ruggedized Design</span>
+                  <span className={styles.statNumber}>8MP @ 45fps</span>
+                  <span className={styles.statLabel}>Sony IMX334 Sensor</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>PoE+</span>
-                  <span className={styles.statLabel}>Single Cable Solution</span>
+                  <span className={styles.statNumber}>C-Mount</span>
+                  <span className={styles.statLabel}>Flexible Lens Options</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>6x Faster</span>
+                  <span className={styles.statLabel}>Time to Production</span>
                 </div>
               </div>
               <div className={styles.heroCta}>
@@ -101,7 +105,7 @@ export default function ICAM540Solution() {
             </div>
             <div className={styles.heroImage}>
               <img
-                src="/img/advantech-icam-540.jpg"
+                src="/img/icam540.png"
                 alt="Advantech ICAM-540 industrial AI camera"
                 className={styles.productImage}
               />
@@ -119,33 +123,33 @@ export default function ICAM540Solution() {
           <div className={styles.specsTable}>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>AI Processor</div>
-              <div className={styles.specValue}>NVIDIA Jetson Xavier NX</div>
-              <div className={styles.specNote}>21 TOPS with 384 CUDA cores</div>
+              <div className={styles.specValue}>NVIDIA Jetson Orin NX</div>
+              <div className={styles.specNote}>100 TOPS for multi-model concurrent inference</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Camera Sensor</div>
-              <div className={styles.specValue}>5MP Global Shutter CMOS</div>
-              <div className={styles.specNote}>2448 x 2048 @ 75fps, low distortion</div>
+              <div className={styles.specValue}>Sony IMX334 8MP CMOS</div>
+              <div className={styles.specNote}>Industrial-grade sensor with exceptional low-light performance</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Lens Options</div>
+              <div className={styles.specLabel}>Frame Rate</div>
+              <div className={styles.specValue}>45 fps at full resolution</div>
+              <div className={styles.specNote}>Real-time processing for high-speed inspection</div>
+            </div>
+            <div className={styles.specsRow}>
+              <div className={styles.specLabel}>Lens Mount</div>
               <div className={styles.specValue}>C-Mount Compatible</div>
-              <div className={styles.specNote}>6mm/8mm/12mm/16mm/25mm available</div>
+              <div className={styles.specNote}>Wide selection of industrial optics available</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Environmental</div>
-              <div className={styles.specValue}>IP67, IK10 Rated</div>
-              <div className={styles.specNote}>Dust-proof, waterproof, vandal-resistant</div>
-            </div>
-            <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Power & Network</div>
-              <div className={styles.specValue}>PoE+ (IEEE 802.3at)</div>
-              <div className={styles.specNote}>Single cable for power and data</div>
+              <div className={styles.specLabel}>SDK Support</div>
+              <div className={styles.specValue}>CAMNavi + DeepStream</div>
+              <div className={styles.specNote}>Python-based development with NVIDIA optimization</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Operating Temp</div>
-              <div className={styles.specValue}>-30°C to +60°C</div>
-              <div className={styles.specNote}>Wide temperature for harsh environments</div>
+              <div className={styles.specValue}>-20°C to +60°C</div>
+              <div className={styles.specNote}>Reliable operation in industrial environments</div>
             </div>
           </div>
         </div>
@@ -155,7 +159,7 @@ export default function ICAM540Solution() {
       <section className={styles.useCases}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Production Use Cases
+            Production Vision Applications
           </Heading>
           <div className={styles.useCaseGrid}>
             <div className={styles.useCase}>
@@ -164,10 +168,10 @@ export default function ICAM540Solution() {
                 alt="Quality Inspection"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Quality Inspection</Heading>
+              <Heading as="h3">Automated Optical Inspection (AOI)</Heading>
               <p>
-                Real-time defect detection on production lines with sub-millisecond inference.
-                Global shutter eliminates motion blur for high-speed inspection.
+                Deploy 100 TOPS of AI performance for real-time defect detection on high-speed
+                production lines. Process multiple inspection models simultaneously with sub-10ms latency.
               </p>
             </div>
             <div className={styles.useCase}>
@@ -176,10 +180,10 @@ export default function ICAM540Solution() {
                 alt="Safety Monitoring"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Safety Monitoring</Heading>
+              <Heading as="h3">Industrial Safety & Compliance</Heading>
               <p>
-                PPE compliance and hazard detection in industrial facilities. IP67 rating allows
-                deployment in harsh factory environments.
+                Monitor PPE compliance, detect safety violations, and track worker movement patterns.
+                Edge processing ensures privacy compliance without cloud data transmission.
               </p>
             </div>
             <div className={styles.useCase}>
@@ -188,10 +192,10 @@ export default function ICAM540Solution() {
                 alt="Logistics Automation"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Logistics Automation</Heading>
+              <Heading as="h3">Smart Factory Analytics</Heading>
               <p>
-                Barcode reading, OCR, and package tracking in warehouses. PoE+ simplifies
-                multi-camera deployments across facilities.
+                Real-time production monitoring with on-device inference for quality metrics,
+                throughput optimization, and predictive maintenance triggers.
               </p>
             </div>
           </div>
@@ -202,8 +206,8 @@ export default function ICAM540Solution() {
       <section className={styles.problemSolution}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <Heading as="h2">From Challenge to Solution</Heading>
-            <p>Transform your industrial vision deployment with production-ready infrastructure</p>
+            <Heading as="h2">From Development Complexity to Production Simplicity</Heading>
+            <p></p>
           </div>
 
           <div className={styles.comparisonContainer}>
@@ -212,25 +216,25 @@ export default function ICAM540Solution() {
                 <div className={styles.challengeIcon}>
                   <XMarkIcon style={{ width: '1.5rem', height: '1.5rem' }} />
                 </div>
-                <Heading as="h3">The Challenge</Heading>
+                <Heading as="h3">The Traditional Vision System Challenge</Heading>
               </div>
               <div className={styles.cardContent}>
                 <div className={styles.challengeItem}>
                   <span className={styles.challengeText}>
-                    Complex multi-camera synchronization
+                    18-month custom integration for production vision deployment
                   </span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Manual model deployment to edge</span>
+                  <span className={styles.challengeText}>Manual on-camera updates that don&apos;t scale across facilities</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>No centralized camera management</span>
+                  <span className={styles.challengeText}>Complex AI model lifecycle without version control</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Difficult firmware updates</span>
+                  <span className={styles.challengeText}>No unified management across camera fleets</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Limited production diagnostics</span>
+                  <span className={styles.challengeText}>Limited remote diagnostics when vision systems fail</span>
                 </div>
               </div>
             </div>
@@ -240,23 +244,23 @@ export default function ICAM540Solution() {
                 <div className={styles.solutionIcon}>
                   <CheckIcon style={{ width: '1.5rem', height: '1.5rem' }} />
                 </div>
-                <Heading as="h3">The Solution</Heading>
+                <Heading as="h3">The Avocado OS Solution</Heading>
               </div>
               <div className={styles.cardContent}>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Synchronized multi-camera systems</span>
+                  <span className={styles.solutionText}>Production-ready in weeks with pre-configured vision BSPs</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>OTA model and firmware updates</span>
+                  <span className={styles.solutionText}>Atomic OTA updates for models, firmware, and applications</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Centralized fleet management</span>
+                  <span className={styles.solutionText}>Built-in DeepStream SDK with TensorRT optimization</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Secure, atomic updates</span>
+                  <span className={styles.solutionText}>Cross-camera orchestration with centralized management</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Remote monitoring and diagnostics</span>
+                  <span className={styles.solutionText}>Enterprise remote diagnostics with secure tunnel access</span>
                 </div>
               </div>
             </div>
@@ -268,27 +272,27 @@ export default function ICAM540Solution() {
       <section className={styles.features}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Why Choose Peridio for ICAM-540 Deployment
+            Why Choose Peridio for ICAM-540 Production Deployment
           </Heading>
           <div className={styles.featureGrid}>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <CameraIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Production Vision OS</Heading>
+              <Heading as="h3">Production-Ready from Day One</Heading>
               <p>
-                Pre-configured Avocado OS with GStreamer, OpenCV, and DeepStream SDK. Optimized for
-                industrial computer vision workloads.
+                Pre-hardened Linux OS with CAMNavi SDK, DeepStream, and TensorRT pre-integrated.
+                No prototype-to-production gap.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <CpuChipIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">AI Model Management</Heading>
+              <Heading as="h3">Atomic AI Model Updates</Heading>
               <p>
-                Deploy TensorRT-optimized models via OTA. A/B testing for model updates with
-                automatic rollback on accuracy degradation.
+                Zero-downtime model deployment with automatic rollback on performance degradation.
+                Version control and A/B testing for continuous improvement.
               </p>
             </div>
             <div className={styles.feature}>
@@ -297,38 +301,38 @@ export default function ICAM540Solution() {
               </div>
               <Heading as="h3">Enterprise Security</Heading>
               <p>
-                Secure boot, encrypted storage, and certificate-based authentication. GDPR-compliant
-                edge processing without cloud dependencies.
+                Hardware-accelerated encryption, secure boot, and certificate-based authentication.
+                Zero-trust architecture built for industrial vision systems.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <GlobeAltIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Fleet Orchestration</Heading>
+              <Heading as="h3">Vision Fleet Management</Heading>
               <p>
-                Manage hundreds of cameras across multiple sites. Cohort-based updates, scheduling,
-                and maintenance windows.
+                Deploy and manage hundreds of ICAM-540 cameras across industrial sites.
+                Site-specific configurations with centralized policy enforcement.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <BuildingOfficeIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Industrial Hardened</Heading>
+              <Heading as="h3">Cross-Platform Portability</Heading>
               <p>
-                IP67-rated hardware with watchdog timers and auto-recovery. Designed for 24/7
-                operation in harsh environments.
+                Develop on ICAM-540, deploy across NVIDIA Jetson platforms. Unified toolchain
+                prevents vendor lock-in and reduces engineering overhead.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <WrenchScrewdriverIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Long-term Support</Heading>
+              <Heading as="h3">Optimized Vision Performance</Heading>
               <p>
-                10-year hardware availability with enterprise Linux maintenance. Security patches
-                and compliance updates guaranteed.
+                Hardware acceleration for GStreamer pipelines and TensorRT inference. Automatic
+                resource allocation for multi-model concurrent processing.
               </p>
             </div>
           </div>
@@ -339,9 +343,9 @@ export default function ICAM540Solution() {
       <section className={styles.cta}>
         <div className={styles.container}>
           <div className={styles.ctaContent}>
-            <Heading as="h2">Ready to Deploy Industrial AI Vision?</Heading>
+            <Heading as="h2">Ready to Deploy Production-Ready AI Vision?</Heading>
             <p>
-              Transform your Advantech ICAM-540 cameras into a managed fleet with secure OTA
+              Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic
               updates, remote diagnostics, and enterprise support.
             </p>
             <div className={styles.ctaButtons}>
@@ -364,20 +368,20 @@ export default function ICAM540Solution() {
           </Heading>
           <div className={styles.resourceGrid}>
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
-              <Heading as="h3">Vision System Integration</Heading>
-              <p>GStreamer pipelines and DeepStream configuration for industrial cameras</p>
+              <Heading as="h3">Industrial Vision Guide</Heading>
+              <p>CAMNavi SDK integration and DeepStream pipeline optimization for AOI applications</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">AI Model Deployment</Heading>
-              <p>TensorRT optimization and OTA model updates for edge inference</p>
+              <Heading as="h3">AI Model Lifecycle</Heading>
+              <p>TensorRT optimization, versioning, and atomic deployment for production inference</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">Camera Fleet Management</Heading>
-              <p>Multi-site camera orchestration with centralized monitoring</p>
+              <Heading as="h3">Vision Fleet Operations</Heading>
+              <p>Multi-camera synchronization and centralized management across facilities</p>
             </Link>
             <Link to="/admin-api" className={styles.resourceCard}>
-              <Heading as="h3">Vision API Integration</Heading>
-              <p>REST API for camera control and inference result streaming</p>
+              <Heading as="h3">Edge-to-Cloud Integration</Heading>
+              <p>Secure data pipelines and inference result streaming with on-premise support</p>
             </Link>
           </div>
         </div>
