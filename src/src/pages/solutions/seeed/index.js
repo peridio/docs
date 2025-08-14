@@ -5,7 +5,7 @@ const solutionData = {
   title: "Seeed reTerminal Industrial HMI | Raspberry Pi CM4",
   description: "Deploy Seeed reTerminal industrial HMI with Raspberry Pi CM4, 5-inch touchscreen, and enterprise fleet management. Production-ready edge computing.",
   keywords: "seeed reterminal, raspberry pi cm4, industrial hmi, touchscreen, edge computing, fleet management",
-  ogImage: "/img/seeed-reterminal.jpg",
+  ogImage: "/img/reterminal.jpg",
   canonicalUrl: "https://docs.peridio.com/solutions/seeed",
   
   hero: {
