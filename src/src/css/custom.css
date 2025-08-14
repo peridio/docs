@@ -54,6 +54,21 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Colored code line highlights for added/removed (custom magic comments) */
+.code-block-line--added {
+  background-color: rgba(63, 185, 80, 0.28);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-line--removed {
+  background-color: rgba(248, 81, 73, 0.22);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
 html[data-theme="dark"] .navbar {
   border-bottom: 1px solid var(--ifm-toc-border-color);
 }

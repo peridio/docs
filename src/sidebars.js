@@ -301,14 +301,14 @@ export default {
         },
         {
           type: 'doc',
-          id: 'dev-center/getting-started/program-device',
-          label: 'Program Device',
+          id: 'dev-center/getting-started/hardware-in-the-loop',
+          label: 'Hardware in the Loop',
         },
-        {
-          type: 'doc',
-          id: 'dev-center/getting-started/first-ota-update',
-          label: 'First OTA Update',
-        },
+        // {
+        //   type: 'doc',
+        //   id: 'dev-center/getting-started/first-ota-update',
+        //   label: 'First OTA Update',
+        // },
       ],
     },
     {
