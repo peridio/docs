@@ -2,12 +2,15 @@
 
 ## Industrial HMI with Seeed reTerminal
 
-5-inch multi-touch display powered by Raspberry Pi CM4 with wireless connectivity and modular expansion for industrial control
+Production-Ready Industrial HMI Platform. Deploy fleets of Raspberry Pi CM4-powered touch interfaces with deterministic Linux, secure OTA updates, and enterprise fleet management from Day 1.
 
 ### Key Stats
 - **5"** - IPS Touchscreen
 - **1.5GHz** - Quad-Core ARM
 - **IP64** - Front Panel
+- **&lt;30s** - Cold boot to UI
+- **1000+** - Fleet scalability
+- **7yr** - Avocado OS LTS
 
 **Call to Action Buttons:**
 - Get Started
@@ -31,13 +34,13 @@
 ## Production Use Cases
 
 ### Machine Control Interface
-Real-time machine monitoring and control with responsive touch interface. Integrate with PLCs via Modbus, OPC UA, and MQTT protocols.
+Real-time PLC Integration with responsive multi-touch interface. Optimized UI rendering for smooth operator interactions. Native Modbus RTU/TCP, OPC UA, and MQTT support through Avocado OS.
 
 ### Building Automation
-Smart building control panels for HVAC, lighting, and security systems. Node-RED integration for visual programming.
+Multi-site HVAC/BMS deployment with centralized management. Deploy identical HMI configurations across facilities with group-based fleet management. Node-RED visual programming with pre-built automation blocks.
 
 ### Edge IoT Gateway
-Collect, process, and visualize sensor data at the edge. LoRaWAN and Zigbee support via expansion modules.
+Process 10,000+ sensor messages/sec at the edge with local data aggregation and filtering. LoRaWAN and Zigbee expansion modules for wireless sensor networks. Real-time visualization with sub-second latency.
 
 ---
 
@@ -45,46 +48,46 @@ Collect, process, and visualize sensor data at the edge. LoRaWAN and Zigbee supp
 Transform your reTerminal deployment with production-ready infrastructure
 
 ### The Challenge
-- Manual SD card imaging for each device
-- No remote HMI management
-- Difficult UI updates in field
-- Limited security features
-- No fleet monitoring
+- Weeks to configure each HMI manually with custom SD card images
+- No rollback when UI updates fail in production
+- Consumer-grade OS unsuitable for 24/7 industrial operation
+- Custom BSP development for each deployment scenario
+- No centralized visibility across distributed HMI fleets
 
 ### The Solution
-- Zero-touch provisioning
-- Remote HMI configuration
-- OTA UI and app updates
-- Secure boot and encryption
-- Real-time fleet analytics
+- Deploy 100s of HMIs in hours with zero-touch provisioning
+- Atomic updates with instant rollback on failure
+- Industrial Linux with real-time kernel and 10-year support
+- Pre-integrated BSP with GPU acceleration out-of-the-box
+- Single dashboard for monitoring and managing entire fleet
 
 ---
 
 ## Why Choose Peridio for reTerminal Deployment
 
-### HMI-Optimized OS
-Pre-configured Avocado OS with Qt, Flutter, and web-based UI frameworks. Hardware accelerated graphics with Wayland compositor.
+### Avocado OS - Production Linux for reTerminal
+Deterministic Yocto Linux optimized for reTerminal and Raspberry Pi CM4. Pre-integrated Qt 6, Flutter, and LVGL UI frameworks. Wayland compositor optimized for IPS multi-touch display performance.
 
-### CM4 Optimization
-Optimized for Raspberry Pi CM4 with GPU acceleration, hardware video decoding, and efficient power management.
+### Day 1 Production Ready
+Skip months of BSP development with pre-integrated Raspberry Pi CM4 support. Optimized drivers for the IPS multi-touch display and wireless connectivity. Real-time kernel patches for deterministic performance in industrial environments.
 
-### Industrial Security
-Secure boot chain, encrypted storage, and certificate-based authentication. Kiosk mode for locked-down deployments.
+### Enterprise Security & Compliance
+Secure boot chain from bootloader to application. Encrypted storage with TPM 2.0 support. SBOM generation for supply chain compliance. Kiosk mode with lockdown policies for operator terminals.
 
-### Fleet Management
-Manage hundreds of reTerminals across multiple sites. Group-based configuration and scheduled maintenance windows.
+### Fleet-Scale Operations
+Manage 1000+ reTerminals from a single dashboard. Phased rollouts with automatic rollback on failure. Group-based configuration for site-specific settings. Real-time health monitoring and alerting.
 
-### Protocol Support
-Built-in Modbus RTU/TCP, OPC UA, MQTT, and CoAP. Node-RED for visual flow-based programming.
+### Industrial Protocol Suite
+Native Modbus RTU/TCP with &lt;10ms response times. OPC UA server/client with security profiles. MQTT 5.0 with QoS and retained messages. Pre-built Node-RED flows for common automation patterns.
 
-### Developer Tools
-Remote debugging, log aggregation, and performance monitoring. SDK for custom application development.
+### Developer Acceleration
+Hardware-in-the-loop development reduces iteration from weeks to hours. Remote debugging with full stack traces. Performance profiling for UI and system optimization. Cross-compilation SDK for CI/CD pipelines.
 
 ---
 
 ## Ready to Deploy reTerminal at Scale?
 
-Transform your Seeed reTerminal HMIs into a managed fleet with secure OTA updates, remote configuration, and enterprise support.
+Transform your Seeed reTerminal HMIs into a production fleet. Get deterministic Linux, secure OTA orchestration, and enterprise fleet management - all production-ready from Day 1.
 
 **Call to Action Buttons:**
 - Get Started
