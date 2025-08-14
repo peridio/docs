@@ -2,20 +2,20 @@ import React from 'react'
 import SolutionLayout from '@site/src/components/solutions/SolutionLayout'
 
 const solutionData = {
-  title: "NXP FRDM-MCXN947 MCU Development | Real-Time IoT | Peridio",
-  description: "Production-ready NXP FRDM-MCXN947 development with dual Cortex-M33 cores, ML acceleration, and secure IoT connectivity. Enterprise OTA and fleet management.",
-  keywords: "nxp frdm-mcxn947, mcx n94, cortex-m33, mcu development, real-time, iot, embedded, fleet management",
-  ogImage: "/img/nxp-frdm-93.jpg",
+  title: "NXP FRDM i.MX 93 Edge AI Development | Industrial Linux | Peridio",
+  description: "Production-ready NXP FRDM i.MX 93 development with dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and secure edge connectivity. Enterprise OTA and fleet management.",
+  keywords: "nxp frdm imx93, i.mx 93, cortex-a55, edge ai, ethos u65, industrial linux, embedded, fleet management",
+  ogImage: "/img/NXP-FRDM-93.png",
   canonicalUrl: "https://docs.peridio.com/solutions/nxp/frdm-93",
   
   hero: {
-    title: "Industrial MCU Development with NXP FRDM-MCXN947",
-    highlight: "NXP FRDM-MCXN947",
-    subtitle: "Dual-core Cortex-M33 platform with ML acceleration, secure boot, and industrial connectivity for real-time IoT applications",
+    title: "Edge AI Development with NXP FRDM i.MX 93",
+    highlight: "NXP FRDM i.MX 93",
+    subtitle: "Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock secure enclave, and industrial connectivity for edge AI applications",
     stats: [
-      { value: "150MHz", label: "Dual Cortex-M33" },
-      { value: "2MB", label: "Flash Memory" },
-      { value: "-40°C", label: "Industrial Temp" }
+      { value: "1.7GHz", label: "Dual Cortex-A55" },
+      { value: "0.5 TOPS", label: "Ethos U-65 NPU" },
+      { value: "2GB", label: "LPDDR4X Memory" }
     ],
     primaryCTA: {
       text: "Get Started",
@@ -25,146 +25,146 @@ const solutionData = {
       text: "Datasheet",
       link: "/"
     },
-    image: "/img/nxp-frdm-93.jpg",
-    imageAlt: "NXP FRDM-MCXN947 development board"
+    image: "/img/NXP-FRDM-93.png",
+    imageAlt: "NXP FRDM i.MX 93 development board"
   },
   
   specs: [
     {
-      label: "Processor",
-      value: "Dual Cortex-M33 @ 150MHz",
-      note: "TrustZone security and DSP extensions"
+      label: "Applications CPU",
+      value: "Dual Cortex-A55 @ 1.7GHz",
+      note: "64-bit ARM v8.2-A architecture"
+    },
+    {
+      label: "Real-time CPU",
+      value: "Cortex-M33 @ 250MHz",
+      note: "Dedicated real-time processing"
+    },
+    {
+      label: "AI Accelerator",
+      value: "Ethos U-65 NPU",
+      note: "0.5 TOPS for edge AI inference"
     },
     {
       label: "Memory",
-      value: "2MB Flash / 512KB SRAM",
-      note: "Execute-in-place from external flash"
-    },
-    {
-      label: "ML Accelerator",
-      value: "NPU with eIQ ML support",
-      note: "TensorFlow Lite Micro optimized"
+      value: "2GB LPDDR4X",
+      note: "16GB eMMC storage included"
     },
     {
       label: "Connectivity",
-      value: "CAN FD, USB, UART, SPI, I2C",
-      note: "Industrial protocols and automotive CAN"
-    },
-    {
-      label: "Security",
-      value: "Secure Boot, Crypto, TRNG",
-      note: "Hardware root of trust"
+      value: "Gigabit Ethernet, CAN FD, USB 3.0",
+      note: "Industrial and automotive interfaces"
     },
     {
       label: "Operating Temp",
-      value: "-40°C to +105°C",
-      note: "Automotive and industrial grade"
+      value: "-40°C to +85°C",
+      note: "Industrial temperature range"
     }
   ],
 
   useCases: [
     {
-      title: "Industrial Sensor Hub",
-      description: "Multi-sensor data fusion with ML inference at the edge. Dual-core architecture separates real-time control from communication tasks.",
+      title: "Edge AI Vision Systems",
+      description: "Real-time object detection and classification with Ethos U-65 NPU. Process camera streams locally with low latency for industrial inspection.",
       image: "/img/factory-quality-inspection.png",
-      imageAlt: "Industrial Sensor Hub"
+      imageAlt: "Edge AI Vision Systems"
     },
     {
-      title: "Motor Control Systems",
-      description: "FOC motor control with CAN FD for automotive and industrial applications. Hardware PWM and encoder interfaces for precision control.",
+      title: "Industrial HMI Controllers",
+      description: "Rich graphical interfaces on Cortex-A55 with real-time control on Cortex-M33. Heterogeneous processing for responsive industrial control panels.",
       image: "/img/environmental-inspection.png",
-      imageAlt: "Motor Control Systems"
+      imageAlt: "Industrial HMI Controllers"
     },
     {
-      title: "Secure IoT Gateway",
-      description: "TrustZone-enabled secure gateway with hardware crypto. Bridge industrial sensors to cloud with authenticated OTA updates.",
+      title: "Smart IoT Gateways",
+      description: "Bridge OT and IT networks with secure EdgeLock enclave. Local AI processing reduces cloud dependency and improves response times.",
       image: "/img/workplace-safety.png",
-      imageAlt: "Secure IoT Gateway"
+      imageAlt: "Smart IoT Gateways"
     }
   ],
 
   challenges: [
-    "Complex dual-core synchronization",
-    "Manual firmware update processes",
-    "Limited debugging in production",
-    "Security implementation overhead",
-    "No fleet management for MCUs"
+    "Complex heterogeneous architecture setup",
+    "Linux and RTOS integration challenges",
+    "NPU optimization requires expertise",
+    "Security configuration complexity",
+    "Long development cycles for edge AI"
   ],
 
   solutions: [
-    "Pre-configured multicore RTOS",
-    "Secure OTA with rollback",
-    "Remote diagnostics and logging",
-    "Built-in secure boot chain",
-    "Enterprise MCU fleet management"
+    "Pre-integrated Linux + RTOS system",
+    "Optimized NPU drivers and frameworks",
+    "Secure OTA for both cores",
+    "EdgeLock security pre-configured",
+    "Production-ready in weeks not months"
   ],
 
   features: [
     {
       icon: "CpuChip",
-      title: "Dual-Core Optimization",
-      description: "Pre-configured FreeRTOS/Zephyr with inter-core communication. Separate real-time control from application logic seamlessly."
+      title: "Heterogeneous Processing",
+      description: "Seamless Linux on Cortex-A55 with RTOS on Cortex-M33. Pre-configured inter-core communication for optimal workload distribution."
     },
     {
       icon: "Bolt",
-      title: "Real-Time Performance",
-      description: "Deterministic execution with hardware PWM, timers, and DMA. Low-latency interrupt handling for motor control and sensors."
+      title: "Edge AI Acceleration",
+      description: "Ethos U-65 NPU with optimized TensorFlow Lite and ONNX runtime. Hardware acceleration for computer vision and anomaly detection."
     },
     {
       icon: "ShieldCheck",
-      title: "Hardware Security",
-      description: "TrustZone isolation, secure boot, and hardware crypto. Device certificates and secure key storage in PUF."
+      title: "EdgeLock Security",
+      description: "Hardware root of trust with secure enclave. Secure boot, encrypted storage, and runtime attestation built-in."
     },
     {
       icon: "WrenchScrewdriver",
-      title: "MCU Fleet OTA",
-      description: "Delta updates minimize bandwidth for constrained devices. A/B partitioning with automatic rollback on failure."
+      title: "Dual-OS Fleet Management",
+      description: "Unified OTA updates for Linux and RTOS partitions. Coordinate updates across heterogeneous cores with rollback protection."
     },
     {
       icon: "Beaker",
-      title: "ML at the Edge",
-      description: "NPU-accelerated inference with TensorFlow Lite Micro. Pre-trained models for anomaly detection and predictive maintenance."
+      title: "Industrial Linux Stack",
+      description: "Yocto-based Linux with real-time patches. Pre-integrated industrial protocols and containerization support."
     },
     {
       icon: "ChartBar",
-      title: "Production Analytics",
-      description: "Real-time telemetry and remote diagnostics. Monitor CPU usage, memory, and custom metrics across your fleet."
+      title: "Multi-Core Analytics",
+      description: "Monitor both application and real-time cores. Track AI inference performance and system health metrics."
     }
   ],
 
   cta: {
-    title: "Ready to Accelerate Your MCU Development?",
-    subtitle: "Transform your NXP FRDM-MCXN947 from development board to production-ready industrial platform with secure OTA and fleet management.",
+    title: "Ready to Accelerate Your Edge AI Development?",
+    subtitle: "Transform your NXP FRDM i.MX 93 from development board to production-ready edge AI platform with heterogeneous processing and fleet management.",
     primaryCTA: {
       text: "Get Started",
       link: "/dev-center/hardware/nxp/frdm-imx-93"
     },
     secondaryCTA: {
       text: "Visit Avocado Linux",
-      link: "https://docs.avocadolinux.org/supported-hardware/frdm-mcxn947",
+      link: "https://docs.avocadolinux.org/supported-hardware/frdm-imx93",
       target: "_blank"
     }
   },
 
   resources: [
     {
-      title: "MCU Development Guide",
-      description: "FreeRTOS and Zephyr configuration for dual-core Cortex-M33 platforms",
+      title: "Heterogeneous Architecture Guide",
+      description: "Linux and RTOS integration for i.MX 93 dual-domain processing",
       link: "/integration/linux/build-tools/yocto"
     },
     {
-      title: "Secure Boot Chain",
-      description: "Hardware root of trust with TrustZone and secure firmware updates",
+      title: "Edge AI Deployment",
+      description: "NPU optimization and model deployment with Ethos U-65",
       link: "/platform/reference/overview"
     },
     {
       title: "Fleet Management",
-      description: "MCU fleet operations with OTA updates and remote diagnostics",
+      description: "Managing heterogeneous edge AI devices at scale",
       link: "/platform/reference/overview"
     },
     {
       title: "API Integration",
-      description: "REST API for automated testing and continuous deployment",
+      description: "REST API for edge AI fleet orchestration",
       link: "/admin-api"
     }
   ]
