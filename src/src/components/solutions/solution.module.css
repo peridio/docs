@@ -1,0 +1,556 @@
+/* Shared Solution Page Styles with Mobile Optimization */
+
+/* Base Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%),
+    url("/img/hero.png") lightgray -13px -1669.396px / 101.458% 1124.387% no-repeat;
+  color: white;
+  padding: 6rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+
+.heroContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.heroContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.heroTitle {
+  font-size: 2.1rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 0.125rem;
+  font-family: "Avenir", sans-serif;
+  color: white;
+}
+
+.highlight {
+  color: white;
+}
+
+.heroSubtitle {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+  font-family: "Avenir", sans-serif;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #bbb;
+  margin-top: 4px;
+}
+
+.heroCta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  background: #5f51ff;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  font-family: "Avenir", sans-serif;
+  display: inline-block;
+}
+
+.ctaPrimary:hover {
+  background: #4a3dff;
+  color: white;
+  text-decoration: none;
+}
+
+.ctaSecondary {
+  background: transparent;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-family: "Avenir", sans-serif;
+  display: inline-block;
+}
+
+.ctaSecondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  text-decoration: none;
+}
+
+.heroImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.productImage {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Specifications Section */
+.specs {
+  padding: 5rem 1.5rem;
+  background: #f8f9fa;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 3rem;
+  font-family: "Avenir", sans-serif;
+}
+
+.specsTable {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.specsRow {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  padding: 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+  align-items: center;
+}
+
+.specsRow:last-child {
+  border-bottom: none;
+}
+
+.specLabel {
+  font-weight: 600;
+  color: #333;
+}
+
+.specValue {
+  color: #555;
+  padding: 0 1rem;
+}
+
+.specNote {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Use Cases Section */
+.useCases {
+  padding: 5rem 1.5rem;
+  background: white;
+}
+
+.useCaseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.useCase {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.useCaseImage {
+  width: 100%;
+  max-width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.useCase h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.useCase p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Problem/Solution Section */
+.problemSolution {
+  padding: 5rem 1.5rem;
+  background: #f8f9fa;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sectionHeader h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.sectionHeader p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.comparisonContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.challengeCard,
+.solutionCard {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.challengeIcon,
+.solutionIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.challengeIcon {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.solutionIcon {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.cardHeader h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.challengeItem,
+.solutionItem {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.challengeItem:last-child,
+.solutionItem:last-child {
+  border-bottom: none;
+}
+
+.challengeText,
+.solutionText {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Features Section */
+.features {
+  padding: 5rem 1.5rem;
+  background: white;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.feature {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.featureIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.5rem;
+  color: #5f51ff;
+}
+
+.feature h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.feature p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta {
+  padding: 5rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.ctaContent {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ctaContent h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.ctaContent p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Resources Section */
+.resources {
+  padding: 5rem 1.5rem;
+  background: #f8f9fa;
+}
+
+.resourceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.resourceCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid #e9ecef;
+  display: block;
+}
+
+.resourceCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.resourceCard h3 {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.resourceCard p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 1024px) {
+  .heroContent {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .heroImage {
+    order: -1;
+  }
+  
+  .featureGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 1rem;
+  }
+  
+  .heroTitle {
+    font-size: 1.75rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+  
+  .heroStats {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+  }
+  
+  .statNumber {
+    font-size: 1.5rem;
+  }
+  
+  .statLabel {
+    font-size: 0.75rem;
+  }
+  
+  .specsRow {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .specLabel {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  
+  .specValue {
+    padding: 0;
+    margin-bottom: 0.25rem;
+  }
+  
+  .comparisonContainer {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .useCaseGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .resourceGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .ctaContent h2 {
+    font-size: 1.5rem;
+  }
+  
+  .ctaContent p {
+    font-size: 1rem;
+  }
+  
+  .ctaButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 3rem 1rem;
+  }
+  
+  .heroTitle {
+    font-size: 1.5rem;
+  }
+  
+  .heroStats {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .specs,
+  .useCases,
+  .problemSolution,
+  .features,
+  .cta,
+  .resources {
+    padding: 3rem 1rem;
+  }
+  
+  .challengeCard,
+  .solutionCard {
+    padding: 1.5rem;
+  }
+  
+  .cardHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+}
