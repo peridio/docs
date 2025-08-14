@@ -19,24 +19,24 @@ export default function FRDM93Solution() {
   return (
     <Layout>
       <Head>
-        <title>NXP FRDM-MCXN947 MCU Development | Real-Time IoT | Peridio</title>
+        <title>NXP FRDM i.MX 93 Edge AI Development | Industrial Linux | Peridio</title>
         <meta
           name="description"
-          content="Production-ready NXP FRDM-MCXN947 development with dual Cortex-M33 cores, ML acceleration, and secure IoT connectivity. Enterprise OTA and fleet management."
+          content="Production-ready NXP FRDM i.MX 93 development with dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and secure edge connectivity. Enterprise OTA and fleet management."
         />
         <meta
           name="keywords"
-          content="nxp frdm-mcxn947, mcx n94, cortex-m33, mcu development, real-time, iot, embedded, fleet management"
+          content="nxp frdm imx93, i.mx 93, cortex-a55, edge ai, ethos u65, industrial linux, embedded, fleet management"
         />
         <meta
           property="og:title"
-          content="NXP FRDM-MCXN947 MCU Development | Real-Time IoT | Peridio"
+          content="NXP FRDM i.MX 93 Edge AI Development | Industrial Linux | Peridio"
         />
         <meta
           property="og:description"
-          content="Production-ready NXP FRDM-MCXN947 development with dual Cortex-M33 cores and enterprise fleet management."
+          content="Production-ready NXP FRDM i.MX 93 development with heterogeneous processing and enterprise fleet management."
         />
-        <meta property="og:image" content="/img/nxp-frdm-93.jpg" />
+        <meta property="og:image" content="/img/NXP-FRDM-93.png" />
         <meta property="og:type" content="product" />
         <link rel="canonical" href="https://docs.peridio.com/solutions/nxp/frdm-93" />
 
@@ -45,20 +45,20 @@ export default function FRDM93Solution() {
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Product',
-            name: 'Peridio + Avocado OS for NXP FRDM-MCXN947',
+            name: 'Peridio + Avocado Linux for NXP FRDM i.MX 93',
             description:
-              'Production-ready MCU development platform with dual-core Cortex-M33 and enterprise fleet management',
+              'Production-ready edge AI development platform with heterogeneous processing and enterprise fleet management',
             manufacturer: {
               '@type': 'Organization',
               name: 'Peridio',
             },
-            category: 'MCU Development Platform',
+            category: 'Edge AI Development Platform',
             offers: {
               '@type': 'Offer',
               availability: 'https://schema.org/InStock',
             },
-            applicationCategory: 'Real-Time IoT, Industrial Control, ML Edge',
-            operatingSystem: 'FreeRTOS, Zephyr, Bare Metal',
+            applicationCategory: 'Edge AI, Industrial HMI, Smart Vision, IoT Gateway',
+            operatingSystem: 'Yocto Linux, FreeRTOS, Zephyr',
           })}
         </script>
       </Head>
@@ -69,25 +69,25 @@ export default function FRDM93Solution() {
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <Heading as="h1" className={styles.heroTitle}>
-                Industrial MCU Development with{' '}
-                <span className={styles.highlight}>NXP FRDM-MCXN947</span>
+                Edge AI Development with{' '}
+                <span className={styles.highlight}>NXP FRDM i.MX 93</span>
               </Heading>
               <p className={styles.heroSubtitle}>
-                Dual-core Cortex-M33 platform with ML acceleration, secure boot, and industrial
-                connectivity for real-time IoT applications
+                Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock
+                secure enclave, and industrial connectivity for edge AI applications
               </p>
               <div className={styles.heroStats}>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>150MHz</span>
-                  <span className={styles.statLabel}>Dual Cortex-M33</span>
+                  <span className={styles.statNumber}>1.7GHz</span>
+                  <span className={styles.statLabel}>Dual Cortex-A55</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>2MB</span>
-                  <span className={styles.statLabel}>Flash Memory</span>
+                  <span className={styles.statNumber}>0.5 TOPS</span>
+                  <span className={styles.statLabel}>Ethos U-65 NPU</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>-40°C</span>
-                  <span className={styles.statLabel}>Industrial Temp</span>
+                  <span className={styles.statNumber}>2GB</span>
+                  <span className={styles.statLabel}>LPDDR4X Memory</span>
                 </div>
               </div>
               <div className={styles.heroCta}>
@@ -104,8 +104,8 @@ export default function FRDM93Solution() {
             </div>
             <div className={styles.heroImage}>
               <img
-                src="/img/nxp-frdm-93.jpg"
-                alt="NXP FRDM-MCXN947 development board"
+                src="/img/NXP-FRDM-93.png"
+                alt="NXP FRDM i.MX 93 development board"
                 className={styles.productImage}
               />
             </div>
@@ -117,38 +117,38 @@ export default function FRDM93Solution() {
       <section className={styles.specs}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            FRDM-MCXN947 Technical Specifications
+            FRDM i.MX 93 Technical Specifications
           </Heading>
           <div className={styles.specsTable}>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Processor</div>
-              <div className={styles.specValue}>Dual Cortex-M33 @ 150MHz</div>
-              <div className={styles.specNote}>TrustZone security and DSP extensions</div>
+              <div className={styles.specValue}>Dual Cortex-A55 @ 1.7GHz + Cortex-M33 @ 250MHz</div>
+              <div className={styles.specNote}>64-bit Linux cores + real-time core</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Memory</div>
-              <div className={styles.specValue}>2MB Flash / 512KB SRAM</div>
-              <div className={styles.specNote}>Execute-in-place from external flash</div>
+              <div className={styles.specValue}>2GB LPDDR4X / 32GB eMMC</div>
+              <div className={styles.specNote}>High-speed memory with expansion slot</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>ML Accelerator</div>
-              <div className={styles.specValue}>NPU with eIQ ML support</div>
-              <div className={styles.specNote}>TensorFlow Lite Micro optimized</div>
+              <div className={styles.specValue}>Arm Ethos U-65 microNPU</div>
+              <div className={styles.specNote}>0.5 TOPS for edge AI inference</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Connectivity</div>
-              <div className={styles.specValue}>CAN FD, USB, UART, SPI, I2C</div>
-              <div className={styles.specNote}>Industrial protocols and automotive CAN</div>
+              <div className={styles.specValue}>2x GbE, Wi-Fi 6, BT 5.4, CAN</div>
+              <div className={styles.specNote}>Tri-radio wireless + industrial networking</div>
             </div>
             <div className={styles.specsRow}>
               <div className={styles.specLabel}>Security</div>
-              <div className={styles.specValue}>Secure Boot, Crypto, TRNG</div>
-              <div className={styles.specNote}>Hardware root of trust</div>
+              <div className={styles.specValue}>EdgeLock Secure Enclave</div>
+              <div className={styles.specNote}>Hardware root of trust with secure boot</div>
             </div>
             <div className={styles.specsRow}>
-              <div className={styles.specLabel}>Operating Temp</div>
-              <div className={styles.specValue}>-40°C to +105°C</div>
-              <div className={styles.specNote}>Automotive and industrial grade</div>
+              <div className={styles.specLabel}>Display/Camera</div>
+              <div className={styles.specValue}>MIPI DSI, LVDS, MIPI CSI-2</div>
+              <div className={styles.specNote}>4-lane display and 2-lane camera interfaces</div>
             </div>
           </div>
         </div>
@@ -164,37 +164,37 @@ export default function FRDM93Solution() {
             <div className={styles.useCase}>
               <img
                 src="/img/factory-quality-inspection.png"
-                alt="Industrial Sensor Hub"
+                alt="Smart HMI Systems"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Industrial Sensor Hub</Heading>
+              <Heading as="h3">Smart HMI Systems</Heading>
               <p>
-                Multi-sensor data fusion with ML inference at the edge. Dual-core architecture
-                separates real-time control from communication tasks.
+                AI-powered human-machine interfaces with advanced display capabilities. MIPI DSI
+                and LVDS support for industrial touch panels with real-time responsiveness.
               </p>
             </div>
             <div className={styles.useCase}>
               <img
                 src="/img/environmental-inspection.png"
-                alt="Motor Control Systems"
+                alt="Edge AI Vision"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Motor Control Systems</Heading>
+              <Heading as="h3">Edge AI Vision</Heading>
               <p>
-                FOC motor control with CAN FD for automotive and industrial applications. Hardware
-                PWM and encoder interfaces for precision control.
+                Camera-based inspection and monitoring with on-device ML inference. Process 2-lane
+                MIPI CSI-2 video streams with Ethos U-65 NPU acceleration.
               </p>
             </div>
             <div className={styles.useCase}>
               <img
                 src="/img/workplace-safety.png"
-                alt="Secure IoT Gateway"
+                alt="Industrial IoT Gateway"
                 className={styles.useCaseImage}
               />
-              <Heading as="h3">Secure IoT Gateway</Heading>
+              <Heading as="h3">Industrial IoT Gateway</Heading>
               <p>
-                TrustZone-enabled secure gateway with hardware crypto. Bridge industrial sensors to
-                cloud with authenticated OTA updates.
+                Heterogeneous processing with Linux applications and real-time control. Dual Gigabit
+                Ethernet and Wi-Fi 6 for high-bandwidth connectivity.
               </p>
             </div>
           </div>
@@ -220,20 +220,20 @@ export default function FRDM93Solution() {
               <div className={styles.cardContent}>
                 <div className={styles.challengeItem}>
                   <span className={styles.challengeText}>
-                    Complex dual-core synchronization
+                    Complex heterogeneous architecture
                   </span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Manual firmware update processes</span>
+                  <span className={styles.challengeText}>Manual Linux image deployment</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Limited debugging in production</span>
+                  <span className={styles.challengeText}>Limited edge AI optimization</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>Security implementation overhead</span>
+                  <span className={styles.challengeText}>Security compliance overhead</span>
                 </div>
                 <div className={styles.challengeItem}>
-                  <span className={styles.challengeText}>No fleet management for MCUs</span>
+                  <span className={styles.challengeText}>No unified fleet management</span>
                 </div>
               </div>
             </div>
@@ -247,19 +247,19 @@ export default function FRDM93Solution() {
               </div>
               <div className={styles.cardContent}>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Pre-configured multicore RTOS</span>
+                  <span className={styles.solutionText}>Optimized Yocto Linux BSP</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Secure OTA with rollback</span>
+                  <span className={styles.solutionText}>Atomic OTA updates with rollback</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Remote diagnostics and logging</span>
+                  <span className={styles.solutionText}>Edge AI model deployment</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Built-in secure boot chain</span>
+                  <span className={styles.solutionText}>EdgeLock secure boot integration</span>
                 </div>
                 <div className={styles.solutionItem}>
-                  <span className={styles.solutionText}>Enterprise MCU fleet management</span>
+                  <span className={styles.solutionText}>Enterprise edge fleet management</span>
                 </div>
               </div>
             </div>
@@ -271,67 +271,67 @@ export default function FRDM93Solution() {
       <section className={styles.features}>
         <div className={styles.container}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Why Choose Peridio for FRDM-MCXN947 Development
+            Why Choose Peridio for FRDM i.MX 93 Development
           </Heading>
           <div className={styles.featureGrid}>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <CpuChipIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Dual-Core Optimization</Heading>
+              <Heading as="h3">Heterogeneous Computing</Heading>
               <p>
-                Pre-configured FreeRTOS/Zephyr with inter-core communication. Separate real-time
-                control from application logic seamlessly.
+                Optimized Linux on Cortex-A55 cores with RTOS on Cortex-M33. Seamless
+                inter-processor communication for mixed-criticality systems.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <BoltIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Real-Time Performance</Heading>
+              <Heading as="h3">Edge AI Acceleration</Heading>
               <p>
-                Deterministic execution with hardware PWM, timers, and DMA. Low-latency interrupt
-                handling for motor control and sensors.
+                Ethos U-65 NPU integration with TensorFlow Lite and ONNX Runtime. Deploy and update
+                ML models over-the-air without downtime.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <ShieldCheckIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Hardware Security</Heading>
+              <Heading as="h3">Enterprise Security</Heading>
               <p>
-                TrustZone isolation, secure boot, and hardware crypto. Device certificates and
-                secure key storage in PUF.
+                EdgeLock Secure Enclave with hardware root of trust. Secure boot, encrypted storage,
+                and device attestation.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <WrenchScrewdriverIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">MCU Fleet OTA</Heading>
+              <Heading as="h3">Industrial Connectivity</Heading>
               <p>
-                Delta updates minimize bandwidth for constrained devices. A/B partitioning with
-                automatic rollback on failure.
+                Dual Gigabit Ethernet with TSN support for deterministic networking. Wi-Fi 6 and
+                Bluetooth 5.4 for wireless flexibility.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <BeakerIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">ML at the Edge</Heading>
+              <Heading as="h3">Containerization Support</Heading>
               <p>
-                NPU-accelerated inference with TensorFlow Lite Micro. Pre-trained models for
-                anomaly detection and predictive maintenance.
+                Docker support for edge applications. Deploy microservices with resource isolation
+                and portability.
               </p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
                 <ChartBarIcon style={{ width: '100%', height: '100%' }} />
               </div>
-              <Heading as="h3">Production Analytics</Heading>
+              <Heading as="h3">Fleet Intelligence</Heading>
               <p>
-                Real-time telemetry and remote diagnostics. Monitor CPU usage, memory, and custom
-                metrics across your fleet.
+                Real-time monitoring of heterogeneous systems. Track Linux metrics, M33 performance,
+                and AI inference statistics.
               </p>
             </div>
           </div>
@@ -342,9 +342,9 @@ export default function FRDM93Solution() {
       <section className={styles.cta}>
         <div className={styles.container}>
           <div className={styles.ctaContent}>
-            <Heading as="h2">Ready to Accelerate Your MCU Development?</Heading>
+            <Heading as="h2">Ready to Accelerate Your Edge AI Development?</Heading>
             <p>
-              Transform your NXP FRDM-MCXN947 from development board to production-ready industrial
+              Transform your NXP FRDM i.MX 93 from development board to production-ready edge AI
               platform with secure OTA and fleet management.
             </p>
             <div className={styles.ctaButtons}>
@@ -352,7 +352,7 @@ export default function FRDM93Solution() {
                 Get Started
               </Link>
               <Link
-                to="https://docs.avocadolinux.org/supported-hardware/frdm-mcxn947"
+                to="https://docs.avocadolinux.org/supported-hardware/frdm-imx93"
                 className={styles.ctaSecondary}
                 target="_blank"
               >
@@ -371,20 +371,20 @@ export default function FRDM93Solution() {
           </Heading>
           <div className={styles.resourceGrid}>
             <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
-              <Heading as="h3">MCU Development Guide</Heading>
-              <p>FreeRTOS and Zephyr configuration for dual-core Cortex-M33 platforms</p>
+              <Heading as="h3">i.MX 93 BSP Guide</Heading>
+              <p>Yocto Linux configuration for heterogeneous Cortex-A55/M33 platforms</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">Secure Boot Chain</Heading>
-              <p>Hardware root of trust with TrustZone and secure firmware updates</p>
+              <Heading as="h3">EdgeLock Security</Heading>
+              <p>Secure enclave integration with hardware root of trust and attestation</p>
             </Link>
             <Link to="/platform/reference/overview" className={styles.resourceCard}>
-              <Heading as="h3">Fleet Management</Heading>
-              <p>MCU fleet operations with OTA updates and remote diagnostics</p>
+              <Heading as="h3">Edge AI Deployment</Heading>
+              <p>Ethos U-65 NPU optimization and ML model management</p>
             </Link>
             <Link to="/admin-api" className={styles.resourceCard}>
-              <Heading as="h3">API Integration</Heading>
-              <p>REST API for automated testing and continuous deployment</p>
+              <Heading as="h3">Fleet API</Heading>
+              <p>REST API for automated edge deployments and monitoring</p>
             </Link>
           </div>
         </div>
