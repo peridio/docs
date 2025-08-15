@@ -101,6 +101,12 @@
   gap: 3rem;
 }
 
+.mega-menu-content.three-column {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  min-width: 700px;
+}
+
 .mega-menu-section {
   min-width: 180px;
 }

@@ -29,6 +29,11 @@ const solutionData = {
     imageAlt: "NXP FRDM i.MX 93 development board"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The NXP FRDM i.MX 93 development platform, enhanced with Avocado Linux and Peridio Fleet, delivers a production-ready heterogeneous computing solution for edge AI applications. This integrated platform combines dual Cortex-A55 application processors, a Cortex-M33 real-time core, and an Ethos U-65 NPU to enable sophisticated edge processing with 0.5 TOPS of AI performance. The pre-integrated Linux and RTOS environment eliminates months of complex multi-core development, while EdgeLock security and atomic OTA updates ensure enterprise-grade deployment from prototype to production. Teams can leverage industrial connectivity options including CAN FD and Gigabit Ethernet to build secure, scalable edge AI systems that operate reliably in -40°C to +85°C environments with 10+ years of platform support."
+  },
+  
   specs: [
     {
       label: "Applications CPU",

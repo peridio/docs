@@ -29,6 +29,11 @@ const solutionData = {
     imageAlt: "NXP i.MX 8M Plus development board"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The NXP i.MX 8M Plus, powered by Avocado Linux and Peridio Fleet, delivers the ideal platform for industrial vision and edge AI applications requiring real-time processing and neural network acceleration. With 2.3 TOPS of NPU performance, dual MIPI CSI camera interfaces, and a dedicated Cortex-M7 real-time core, this solution enables sophisticated computer vision workloads at the edge without cloud dependency. The pre-integrated multi-core Linux and RTOS environment streamlines development of complex vision systems, while TSN-enabled Gigabit Ethernet ensures deterministic networking for synchronized multi-camera deployments. Built for -40°C to +85°C operation with enterprise OTA and fleet management, the platform transforms months of custom integration into a production-ready vision system that scales from prototype to thousands of units."
+  },
+  
   specs: [
     {
       label: "NPU",

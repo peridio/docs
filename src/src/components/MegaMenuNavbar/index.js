@@ -33,6 +33,8 @@ const MegaMenuNavbar = () => {
     }
   }, [])
 
+  const isDevelopment = process.env.NODE_ENV === 'development'
+  
   const megaMenuItems = {
     documentation: {
       label: 'Documentation',
@@ -88,8 +90,19 @@ const MegaMenuNavbar = () => {
             { label: 'Seeed reTerminal', to: '/solutions/seeed' },
           ],
         },
+        ...(isDevelopment ? [
+          {
+            title: 'Pre-review',
+            items: [
+              { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
+              { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
+              { label: 'STMicro STM32MP257F', to: '/solutions/stmicro/stm32mp157d-dk' },
+            ],
+          },
+        ] : []),
       ],
-      twoColumn: true,
+      twoColumn: isDevelopment ? false : true,
+      threeColumn: isDevelopment ? true : false,
     },
   }
 
@@ -107,8 +120,6 @@ const MegaMenuNavbar = () => {
       },
     ],
   }
-
-  const isDevelopment = process.env.NODE_ENV === 'development'
 
   return (
     <nav className="navbar navbar--fixed-top">
@@ -159,7 +170,7 @@ const MegaMenuNavbar = () => {
 
                 {activeMenu === key && (
                   <div className="mega-menu-dropdown">
-                    <div className={`mega-menu-content ${menu.twoColumn ? 'two-column' : ''}`}>
+                    <div className={`mega-menu-content ${menu.threeColumn ? 'three-column' : menu.twoColumn ? 'two-column' : ''}`}>
                       {menu.sections.map((section, sectionIndex) => (
                         <div key={sectionIndex} className="mega-menu-section">
                           <Heading as="h4" className="mega-menu-section-title">

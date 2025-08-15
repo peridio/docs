@@ -29,6 +29,11 @@ const solutionData = {
     imageAlt: "Qualcomm IQ-9 QCS8550 development platform"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The Qualcomm IQ-9 (QCS8550), enhanced with Avocado Linux and Peridio Fleet, delivers flagship-grade edge AI performance with 45 TOPS of compute power in a production-ready platform. Built on a premium 4nm process, this solution brings smartphone-class AI capabilities to industrial and automotive applications, featuring an 8-core Kryo CPU, Adreno 740 GPU, and advanced Hexagon NPU for concurrent multi-model inference. The pre-integrated Linux environment with Wi-Fi 7, 5G, and comprehensive driver support eliminates months of complex SoC bring-up, while enterprise OTA and fleet management enable secure deployment at scale. Perfect for autonomous vehicles, advanced manufacturing, and smart city infrastructure, the IQ-9 platform transforms cutting-edge silicon into deployable edge AI systems with thermal management, hardware security, and 10+ years of support."
+  },
+  
   specs: [
     {
       label: "AI Performance",
