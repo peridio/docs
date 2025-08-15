@@ -78,7 +78,7 @@ const solutionData = {
     {
       title: "Smart City Infrastructure",
       description: "Multi-modal AI for traffic optimization, security monitoring, and environmental sensing with 5G coordination.",
-      image: "/img/use-cases/quality-inspection.png",
+      image: "/img/use-cases/quality-Inspection.png",
       imageAlt: "Smart City Infrastructure"
     }
   ],

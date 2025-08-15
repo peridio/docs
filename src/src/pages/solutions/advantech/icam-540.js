@@ -30,6 +30,11 @@ const solutionData = {
     imageAlt: "Advantech ICAM-540 industrial AI camera"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The Advantech iCAM-540, powered by Avocado Linux and Peridio Core on NVIDIA Jetson, delivers a production-grade smart camera platform ready to ship value in days, not months. Turnkey integration with the underlying Jetson hardware and Triton Inference Server allows application engineers to begin iterating on computer vision models from day one. This scale-ready Linux environment ensures secure, reliable deployment across fleets, with rollback protection and centralized control built in. Together, Advantech and Peridio provide a complete, programmable foundation for industrial-grade vision systems that can move seamlessly from lab to large-scale field operations."
+  },
+  
   specs: [
     {
       label: "AI Processor",
@@ -67,7 +72,7 @@ const solutionData = {
     {
       title: "Automated Optical Inspection (AOI)",
       description: "Deploy 100 TOPS of AI performance for real-time defect detection on high-speed production lines. Process multiple inspection models simultaneously with sub-10ms latency.",
-      image: "/img/use-cases/quality-inspection.png",
+      image: "/img/use-cases/quality-Inspection.png",
       imageAlt: "Quality Inspection"
     },
     {
@@ -135,15 +140,14 @@ const solutionData = {
 
   cta: {
     title: "Ready to Deploy Production-Ready AI Vision?",
-    subtitle: "Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.",
-    primaryCTA: {
+    description: "Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.",
+    primaryButton: {
       text: "Get Started",
       link: "/dev-center/hardware/production-ready/icam540"
     },
-    secondaryCTA: {
-      text: "Visit Avocado Linux",
-      link: "https://avocadolinux.org",
-      target: "_blank"
+    secondaryButton: {
+      text: "Request a Demo",
+      link: "https://peridio.com/book-a-meeting"
     }
   },
 
