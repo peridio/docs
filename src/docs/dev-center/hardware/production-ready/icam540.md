@@ -165,6 +165,6 @@ Deploy and update AI models using Peridio's OTA capabilities:
 ## Next Steps
 
 - Review [Peridio platform capabilities](/platform/getting-started)
-- Set up [device management](/dev-center/peridio-core/device-management)
+- Set up [device management](/dev-center/peridio-core/device-management/overview)
 - Configure [OTA updates](/dev-center/getting-started/first-ota-update)
 - Explore [edge AI deployment strategies]

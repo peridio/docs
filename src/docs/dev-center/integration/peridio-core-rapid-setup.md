@@ -1,4 +1,8 @@
-# Getting started
+---
+title: Peridio Core Rapid Setup
+---
+
+# Peridio Core Rapid Setup
 
 This guide provides a technical introduction to the Peridio Core Platform, designed for developers evaluating the system or starting an integration.
 

@@ -103,6 +103,6 @@ Multi-tier storage architecture:
 ## Next Steps
 
 - [Getting Started](/platform/getting-started): Begin using Peridio
-- [Device Management](device-management): Managing your fleet
+- [Device Management](device-management/overview): Managing your fleet
 - [Firmware Management](firmware-management/overview): Understanding updates
 - [API Documentation](/admin-api): Integration reference
