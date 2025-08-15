@@ -29,6 +29,11 @@ const solutionData = {
     imageAlt: "Qualcomm Rubik Pi RB3 Gen 2 development kit"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The Qualcomm Rubik Pi (RB3 Gen 2), powered by Avocado Linux and Peridio Fleet, accelerates edge AI and robotics development from years to months. Built on the QCS6490 platform with 15.5 TOPS of AI performance, this solution combines Hexagon NPU acceleration with octa-core processing to enable sophisticated autonomous systems. The pre-integrated Linux environment eliminates 12-18 months of custom Yocto development, while built-in support for multi-camera vision, 5G connectivity, and ROS2 makes it ideal for autonomous mobile robots, smart cameras, and industrial IoT gateways. With enterprise OTA updates, fleet management, and security compliance built in from day one, teams can focus on their robotics applications instead of infrastructure, achieving production deployment 3x faster than traditional approaches."
+  },
+  
   specs: [
     {
       label: "AI Performance",

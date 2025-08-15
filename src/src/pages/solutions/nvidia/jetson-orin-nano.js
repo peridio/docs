@@ -29,6 +29,11 @@ const solutionData = {
     imageAlt: "NVIDIA Jetson Orin Nano development kit"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The NVIDIA Jetson Orin Nano, powered by Avocado Linux and Peridio Fleet, transforms AI edge development from a multi-year engineering project into a production deployment measured in days. This integrated platform delivers 67 TOPS of AI performance with enterprise-grade Linux, atomic OTA updates, and fleet management built in from day one. By eliminating the traditional 18-month journey from developer kit to production system, teams can focus on their AI applications instead of infrastructure. The result is a secure, scalable edge AI platform that's ready for industrial deployment out of the box, with 10+ years of support and cross-platform portability across the entire NVIDIA Jetson family."
+  },
+  
   specs: [
     {
       label: "AI Performance",

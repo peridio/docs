@@ -62,6 +62,11 @@ const solutionData = {
     }
   ],
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "Raspberry Pi, enhanced with Avocado Linux and Peridio Fleet, bridges the gap between prototype and production deployment for edge computing and IoT applications. This integrated solution transforms the world's most popular single-board computer into an enterprise-ready platform with production-hardened Linux, atomic OTA updates, and centralized fleet management. By replacing the default Raspberry Pi OS with a Yocto-based, read-only root filesystem, teams eliminate common production issues like SD card corruption while gaining secure boot, remote diagnostics, and compliance features. Whether deploying industrial sensors, smart city infrastructure, or digital signage networks, the platform enables organizations to leverage Raspberry Pi's $35 starting price and vast ecosystem while meeting enterprise requirements for security, reliability, and scale."
+  },
+  
   useCases: [
     {
       title: "Industrial IoT Sensors",

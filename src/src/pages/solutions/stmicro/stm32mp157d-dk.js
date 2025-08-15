@@ -63,6 +63,11 @@ const solutionData = {
     }
   ],
 
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The STMicroelectronics STM32MP257F-DK, powered by Avocado Linux and Peridio Fleet, transforms industrial embedded development from an 18-month journey into a 4-month production deployment. This heterogeneous platform combines dual Cortex-A35 cores, a Cortex-M33 real-time processor, and a 1.35 TOPS NPU to deliver sophisticated edge AI capabilities with deterministic real-time control. The pre-integrated Yocto-based Linux distribution eliminates months of complex dual-core system integration, while enterprise OTA updates and fleet management ensure secure, scalable deployment across industrial environments. Perfect for smart manufacturing, IoT gateways, and HMI controllers, the solution enables teams to leverage STM32's industrial heritage and -40°C to +85°C operation while reducing development teams by 3x and accelerating time to market by 10x."
+  },
+
   useCases: [
     {
       title: "Smart Manufacturing",
