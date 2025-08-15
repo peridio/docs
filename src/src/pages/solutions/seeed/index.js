@@ -28,7 +28,7 @@ const solutionData = {
       text: "Datasheet",
       link: "/"
     },
-    image: "/img/reterminal-2.png",
+    image: "/img/hardware/seeed/seeed_reterminal.png",
     imageAlt: "Seeed reTerminal industrial HMI"
   },
   
@@ -69,17 +69,17 @@ const solutionData = {
     {
       title: "Machine Control Interface",
       description: "Real-time PLC Integration with responsive multi-touch interface. Optimized UI rendering for smooth operator interactions. Native Modbus RTU/TCP, OPC UA, and MQTT support through Avocado OS.",
-      image: "/img/industrial-hmi.png"
+      image: "/img/use-cases/machine-control-interface.png"
     },
     {
       title: "Building Automation",
       description: "Multi-site HVAC/BMS deployment with centralized management. Deploy identical HMI configurations across facilities with group-based fleet management. Node-RED visual programming with pre-built automation blocks.",
-      image: "/img/building-automation.png"
+      image: "/img/use-cases/building-automation.png"
     },
     {
       title: "Edge IoT Gateway",
       description: "Process 10,000+ sensor messages/sec at the edge with local data aggregation and filtering. LoRaWAN and Zigbee expansion modules for wireless sensor networks. Real-time visualization with sub-second latency.",
-      image: "/img/iot-gateway.png"
+      image: "/img/use-cases/edge-iot-gateway.png"
     }
   ],
   

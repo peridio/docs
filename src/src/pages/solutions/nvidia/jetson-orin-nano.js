@@ -66,19 +66,19 @@ const solutionData = {
     {
       title: "Industrial Smart Cameras",
       description: "Multi-camera CSI input for AI tasks like object detection and quality inspection. OTA supports model updates in production.",
-      image: "/img/pedestrian-monitoring.png",
+      image: "/img/use-cases/industrial-smart-cameras.png",
       imageAlt: "Industrial Smart Cameras"
     },
     {
       title: "Autonomous Mobile Robots",
       description: "Real-time sensor fusion and navigation processing. Avocado OS supports ROS2 and containers with scalable fleet rollouts.",
-      image: "/img/traffic-flow-optimization.png",
+      image: "/img/use-cases/autonomous-mobile-robots.png",
       imageAlt: "Autonomous Mobile Robots"
     },
     {
       title: "Edge AI Gateways",
       description: "Run generative AI or LLMs locally with NVMe and optional 10-GbE. Managed Linux keeps them secure in harsh environments.",
-      image: "/img/workplace-safety.png",
+      image: "/img/use-cases/edge-iot-gateway.png",
       imageAlt: "Edge AI Gateways"
     }
   ],

@@ -25,7 +25,7 @@ const solutionData = {
       text: "Datasheet",
       link: "/"
     },
-    image: "/img/NXP-FRDM-93.png",
+    image: "/img/hardware/nxp/NXP-FRDM-MCXN947.png",
     imageAlt: "NXP FRDM i.MX 93 development board"
   },
   
@@ -66,19 +66,19 @@ const solutionData = {
     {
       title: "Edge AI Vision Systems",
       description: "Real-time object detection and classification with Ethos U-65 NPU. Process camera streams locally with low latency for industrial inspection.",
-      image: "/img/factory-quality-inspection.png",
+      image: "/img/use-cases/industrial-sensor-hub.png",
       imageAlt: "Edge AI Vision Systems"
     },
     {
       title: "Industrial HMI Controllers",
       description: "Rich graphical interfaces on Cortex-A55 with real-time control on Cortex-M33. Heterogeneous processing for responsive industrial control panels.",
-      image: "/img/environmental-inspection.png",
+      image: "/img/use-cases/motor-control-systems.png",
       imageAlt: "Industrial HMI Controllers"
     },
     {
       title: "Smart IoT Gateways",
       description: "Bridge OT and IT networks with secure EdgeLock enclave. Local AI processing reduces cloud dependency and improves response times.",
-      image: "/img/workplace-safety.png",
+      image: "/img/use-cases/edge-iot-gateway.png",
       imageAlt: "Smart IoT Gateways"
     }
   ],

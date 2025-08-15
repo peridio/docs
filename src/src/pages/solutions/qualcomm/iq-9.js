@@ -66,19 +66,19 @@ const solutionData = {
     {
       title: "Autonomous Vehicles",
       description: "Real-time sensor fusion, object detection, and path planning with multiple AI models running simultaneously for ADAS and autonomous driving.",
-      image: "/img/traffic-flow-optimization.png",
+      image: "/img/use-cases/autonomous-mobile-robots.png",
       imageAlt: "Autonomous Vehicles"
     },
     {
       title: "Advanced Manufacturing",
       description: "High-speed quality inspection with multi-camera systems and complex AI models for defect detection and classification.",
-      image: "/img/workplace-safety.png",
+      image: "/img/use-cases/workplace-safety.png",
       imageAlt: "Advanced Manufacturing"
     },
     {
       title: "Smart City Infrastructure",
       description: "Multi-modal AI for traffic optimization, security monitoring, and environmental sensing with 5G coordination.",
-      image: "/img/factory-quality-inspection.png",
+      image: "/img/use-cases/quality-inspection.png",
       imageAlt: "Smart City Infrastructure"
     }
   ],

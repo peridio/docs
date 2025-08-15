@@ -67,19 +67,19 @@ const solutionData = {
     {
       title: "Smart Manufacturing",
       description: "Real-time quality control with AI-powered visual inspection. OTA updates enable continuous model improvement in production.",
-      image: "/img/factory-quality-inspection.png",
+      image: "/img/use-cases/quality-inspection.png",
       imageAlt: "Smart Manufacturing"
     },
     {
       title: "Industrial IoT Gateways",
       description: "Edge processing for sensor fusion and local decision making. Secure connectivity with cellular and ethernet interfaces.",
-      image: "/img/environmental-inspection.png",
+      image: "/img/use-cases/edge-iot-gateway.png",
       imageAlt: "Industrial IoT Gateways"
     },
     {
       title: "HMI Controllers",
       description: "Advanced human-machine interfaces with touchscreen support. Real-time responsiveness with dual-core architecture.",
-      image: "/img/see-and-spray.png",
+      image: "/img/use-cases/machine-control-interface.png",
       imageAlt: "HMI Controllers"
     }
   ],

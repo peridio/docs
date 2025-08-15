@@ -66,19 +66,19 @@ const solutionData = {
     {
       title: "Smart Industrial Camera",
       description: "Dual-camera stereo vision with real-time inference for defect detection and classification. NPU accelerates ResNet/YOLO models at the edge.",
-      image: "/img/factory-quality-inspection.png",
+      image: "/img/use-cases/industrial-smart-cameras.png",
       imageAlt: "Smart Industrial Camera"
     },
     {
       title: "Autonomous Inspection System",
       description: "Low-latency TSN-based Gigabit connection enables synchronized multi-sensor deployments with persistent vision monitoring.",
-      image: "/img/environmental-inspection.png",
+      image: "/img/use-cases/workplace-safety.png",
       imageAlt: "Autonomous Inspection System"
     },
     {
       title: "Voice-Controlled Industrial Gateway",
       description: "Audio streaming and voice recognition via HiFi 4 DSP with wake-word detection handled on-chip for operator assistance.",
-      image: "/img/workplace-safety.png",
+      image: "/img/use-cases/voice-controlled-industrial-gateway.png",
       imageAlt: "Voice-Controlled Gateway"
     }
   ],
