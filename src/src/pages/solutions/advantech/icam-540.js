@@ -26,7 +26,7 @@ const solutionData = {
       text: "Datasheet",
       link: "/"
     },
-    image: "/img/icam540.png",
+    image: "/img/hardware/advantech/advantech-icam540.png",
     imageAlt: "Advantech ICAM-540 industrial AI camera"
   },
   
@@ -67,19 +67,19 @@ const solutionData = {
     {
       title: "Automated Optical Inspection (AOI)",
       description: "Deploy 100 TOPS of AI performance for real-time defect detection on high-speed production lines. Process multiple inspection models simultaneously with sub-10ms latency.",
-      image: "/img/factory-quality-inspection.png",
+      image: "/img/use-cases/quality-inspection.png",
       imageAlt: "Quality Inspection"
     },
     {
       title: "Industrial Safety & Compliance",
       description: "Monitor PPE compliance, detect safety violations, and track worker movement patterns. Edge processing ensures privacy compliance without cloud data transmission.",
-      image: "/img/workplace-safety.png",
+      image: "/img/use-cases/workplace-safety.png",
       imageAlt: "Safety Monitoring"
     },
     {
       title: "Smart Factory Analytics",
       description: "Real-time production monitoring with on-device inference for quality metrics, throughput optimization, and predictive maintenance triggers.",
-      image: "/img/pedestrian-monitoring.png",
+      image: "/img/use-cases/logistics-automation.png",
       imageAlt: "Logistics Automation"
     }
   ],

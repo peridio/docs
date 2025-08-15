@@ -25,7 +25,7 @@ const solutionData = {
       text: "Datasheet",
       link: "/"
     },
-    image: "/img/raspberry-pi.jpg",
+    image: "/img/hardware/raspberry-pi/raspberrypi.png",
     imageAlt: "Raspberry Pi development board"
   },
   
@@ -66,17 +66,17 @@ const solutionData = {
     {
       title: "Industrial IoT Sensors",
       description: "Environmental monitoring, predictive maintenance, and quality control with secure data collection and edge processing.",
-      image: "/img/factory-quality-inspection.png"
+      image: "/img/use-cases/industrial-sensor-hub.png"
     },
     {
       title: "Smart City Infrastructure",
       description: "Traffic monitoring, air quality sensors, and smart lighting with centralized management and real-time updates.",
-      image: "/img/traffic-flow-optimization.png"
+      image: "/img/use-cases/traffic-flow-optimization.png"
     },
     {
       title: "Digital Signage & Kiosks",
       description: "Retail displays, information kiosks, and interactive installations with content management and remote monitoring.",
-      image: "/img/environmental-inspection.png"
+      image: "/img/use-cases/digital-signage-kiosks.png"
     }
   ],
   

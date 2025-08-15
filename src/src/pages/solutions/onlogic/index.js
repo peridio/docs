@@ -25,7 +25,7 @@ const solutionData = {
       text: "Request a Demo",
       link: "https://peridio.com/book-a-meeting"
     },
-    image: "/img/FR201.png",
+    image: "/img/hardware/onlogic/OnLogic-FR201.png",
     imageAlt: "OnLogic FR201 fanless industrial PC"
   },
   
@@ -66,17 +66,17 @@ const solutionData = {
     {
       title: "Factory Data Aggregation",
       description: "Consolidate data from PLCs, sensors, and SCADA systems. Process and filter industrial protocols before cloud transmission with built-in security.",
-      image: "/img/factory-quality-inspection.png"
+      image: "/img/use-cases/edge-iot-gateway.png"
     },
     {
       title: "Remote Site Management",
       description: "Manage distributed industrial equipment with secure remote access tunnels. Monitor system health and perform maintenance without site visits.",
-      image: "/img/environmental-inspection.png"
+      image: "/img/use-cases/ml-inference-server.png"
     },
     {
       title: "Protocol Bridge Gateway",
       description: "Convert between industrial protocols (Modbus, OPC-UA, CAN) and modern APIs. Enable legacy equipment integration with cloud platforms.",
-      image: "/img/traffic-flow-optimization.png"
+      image: "/img/use-cases/industrial-sensor-hub.png"
     }
   ],
   

@@ -66,19 +66,19 @@ const solutionData = {
     {
       title: "Autonomous Mobile Robots",
       description: "Real-time SLAM, obstacle avoidance, and path planning with multi-camera fusion. OTA enables algorithm updates and new capabilities.",
-      image: "/img/factory-quality-inspection.png",
+      image: "/img/use-cases/autonomous-mobile-robots.png",
       imageAlt: "Autonomous Mobile Robots"
     },
     {
       title: "Smart Security Cameras",
       description: "AI-powered video analytics with edge processing for privacy-sensitive environments. Fleet management simplifies large-scale deployments.",
-      image: "/img/environmental-inspection.png",
+      image: "/img/use-cases/industrial-smart-cameras.png",
       imageAlt: "Smart Security Cameras"
     },
     {
       title: "Industrial IoT Gateways",
       description: "Edge inference for predictive maintenance and quality control. 5G connectivity enables real-time coordination with cloud systems.",
-      image: "/img/see-and-spray.png",
+      image: "/img/use-cases/edge-iot-gateway.png",
       imageAlt: "Industrial IoT Gateways"
     }
   ],
