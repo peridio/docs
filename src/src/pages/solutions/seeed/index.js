@@ -32,6 +32,11 @@ const solutionData = {
     imageAlt: "Seeed reTerminal industrial HMI"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "The Seeed Studio reTerminal, powered by Avocado Linux and Peridio Core on the Raspberry Pi Compute Module 4, delivers an industrial-grade HMI platform ready for deployment in days or weeks, not months. Built-in WebKit support and other utilities enable application engineers to start building interfaces and user experiences on day one. This turnkey, programmable device provides a production-ready foundation for industrial, IoT, and embedded applications. Together, Seeed and Peridio offer a cost-effective, Linux-first solution that scales seamlessly from prototype to full-scale field deployment."
+  },
+  
   specs: [
     {
       label: "Processor",

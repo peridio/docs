@@ -29,6 +29,11 @@ const solutionData = {
     imageAlt: "OnLogic FR201 fanless industrial PC"
   },
   
+  valueProposition: {
+    title: "Solution Overview",
+    content: "OnLogic's FR201, powered by Avocado Linux and Peridio Core, becomes a production-ready gateway platform with enterprise-grade OTA updates and centralized fleet management. This partnership addresses hardware obsolescence, helps right-size deployments for optimal ROI, and supports a wide range of industrial use cases from manufacturing to transportation. Together, OnLogic and Peridio enable secure, scalable edge infrastructure that can move from prototype to large-scale deployment in weeks instead of months. The result is a proven hardware-software foundation designed to operate for years with 99.9% uptime and automatic rollback protection."
+  },
+
   specs: [
     {
       label: "Processor",

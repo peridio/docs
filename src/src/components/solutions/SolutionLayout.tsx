@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '@theme/Layout'
 import Head from '@docusaurus/Head'
 import SolutionHero from './SolutionHero'
+import ValueProposition from './ValueProposition'
 import TechSpecs from './TechSpecs'
 import UseCases from './UseCases'
 import ProblemSolution from './ProblemSolution'
@@ -68,6 +69,10 @@ interface SolutionLayoutProps {
     description: string
     link: string
   }>
+  valueProposition?: {
+    title?: string
+    content?: string
+  }
   children?: React.ReactNode
 }
 
@@ -79,6 +84,7 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
     ogImage,
     canonicalUrl,
     hero,
+    valueProposition,
     specs,
     useCases,
     challenges,
@@ -103,6 +109,8 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
       </Head>
 
       <SolutionHero {...hero} />
+      
+      {valueProposition && <ValueProposition {...valueProposition} />}
       
       {specs && <TechSpecs specs={specs} />}
       

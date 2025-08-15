@@ -554,3 +554,42 @@
     text-align: center;
   }
 }
+
+/* Solution Overview Section */
+.solutionOverview {
+  padding: 3rem 2rem;
+  background: white;
+  text-align: center;
+}
+
+.overviewTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.overviewContent {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: #666;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Solution Overview Mobile Styles */
+@media (max-width: 768px) {
+  .solutionOverview {
+    padding: 2rem 1rem;
+  }
+  
+  .overviewTitle {
+    font-size: 1.75rem;
+  }
+  
+  .overviewContent {
+    font-size: 1rem;
+  }
+}

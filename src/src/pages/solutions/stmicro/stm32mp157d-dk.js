@@ -67,7 +67,7 @@ const solutionData = {
     {
       title: "Smart Manufacturing",
       description: "Real-time quality control with AI-powered visual inspection. OTA updates enable continuous model improvement in production.",
-      image: "/img/use-cases/quality-inspection.png",
+      image: "/img/use-cases/quality-Inspection.png",
       imageAlt: "Smart Manufacturing"
     },
     {
