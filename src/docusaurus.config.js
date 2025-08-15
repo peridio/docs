@@ -9,7 +9,8 @@ const config = {
   url: 'https://docs.peridio.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenAnchors: 'throw',
+  onBrokenMarkdownLinks: 'throw',
   favicon: 'img/logo.svg',
   organizationName: 'peridio', // Usually your GitHub org/user name.
   projectName: 'peridio-docs', // Usually your repo name.
