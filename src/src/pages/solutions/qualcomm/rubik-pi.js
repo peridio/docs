@@ -22,8 +22,8 @@ const solutionData = {
       link: "/evk"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/platform/reference/overview"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/Qualcomm-Rubikpi.png",
     imageAlt: "Qualcomm Rubik Pi RB3 Gen 2 development kit"

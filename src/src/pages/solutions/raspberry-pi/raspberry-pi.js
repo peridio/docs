@@ -22,8 +22,8 @@ const solutionData = {
       link: "/dev-center/hardware/raspberry-pi/compute-module-4"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/hardware/raspberry-pi/raspberrypi.png",
     imageAlt: "Raspberry Pi development board"

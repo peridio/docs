@@ -20,11 +20,11 @@ const solutionData = {
     ],
     primaryCTA: {
       text: "Get Started",
-      link: "/dev-center/hardware/production-ready/icam540"
+      link: "/dev-center/hardware/nvidia/jetson-orin-nano-evk"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/hardware/advantech/advantech-icam540.png",
     imageAlt: "Advantech ICAM-540 industrial AI camera"
@@ -143,7 +143,7 @@ const solutionData = {
     description: "Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.",
     primaryButton: {
       text: "Get Started",
-      link: "/dev-center/hardware/production-ready/icam540"
+      link: "/dev-center/hardware/nvidia/jetson-orin-nano-evk"
     },
     secondaryButton: {
       text: "Request a Demo",

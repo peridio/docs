@@ -23,8 +23,8 @@ const solutionData = {
       target: "_blank"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/platform/reference/overview"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/stmicro_STM32MP257F-DK.png",
     imageAlt: "STMicroelectronics STM32MP257F-DK development kit"

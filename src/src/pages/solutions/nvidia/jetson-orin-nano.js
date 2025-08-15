@@ -22,8 +22,8 @@ const solutionData = {
       link: "/dev-center/hardware/nvidia/jetson-orin-nano-evk"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/jetson-nano.png",
     imageAlt: "NVIDIA Jetson Orin Nano development kit"

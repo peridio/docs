@@ -22,8 +22,8 @@ const solutionData = {
       link: "/evk"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/platform/reference/overview"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/Qualcomm-IQ9.png",
     imageAlt: "Qualcomm IQ-9 QCS8550 development platform"
