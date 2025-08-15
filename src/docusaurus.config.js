@@ -88,7 +88,29 @@ const config = {
       prism: {
         theme: themes.dracula,
         darkTheme: themes.dracula,
-        additionalLanguages: ['bash'],
+        additionalLanguages: ['bash', 'toml'],
+        // Enable custom magic comments for colored line highlighting
+        // See: https://docusaurus.io/docs/markdown-features/code-blocks#highlighting-with-metadata-string
+        magicComments: [
+          // Keep neutral highlight support (default)
+          {
+            className: 'docusaurus-highlight-code-line',
+            line: 'highlight-next-line',
+            block: { start: 'highlight-start', end: 'highlight-end' },
+          },
+          // Added lines (green)
+          {
+            className: 'code-block-line--added',
+            line: 'highlight-added',
+            block: { start: 'highlight-added-start', end: 'highlight-added-end' },
+          },
+          // Removed lines (red)
+          {
+            className: 'code-block-line--removed',
+            line: 'highlight-removed',
+            block: { start: 'highlight-removed-start', end: 'highlight-removed-end' },
+          },
+        ],
       },
       algolia: {
         appId: 'EBXD92WI74',
