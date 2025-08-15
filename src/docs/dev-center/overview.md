@@ -1,60 +1,40 @@
-# Developer Center
+# Welcome to the Peridio Development Center
 
-Welcome to the Peridio Developer Center - a streamlined approach to organizing our documentation based on user workflows and learning paths.
+The fastest way to go from new hardware on your desk to production devices in the field.
 
-## Content Organization
+[Insert Video]
 
-### Getting Started
+We've built this Development Center to give embedded Linux developers a single, unified home for everything you need to build, test, deploy, and manage connected devices — powered by Avocado OS and Peridio Core.
 
-A complete first-time user experience focused on:
+Whether you're starting with an evaluation kit or scaling commodity-grade hardware into thousands of field devices, our goal is simple: remove the uncertainty, delays, and frustration that traditionally slow down embedded product teams.
 
-- Starting with the Raspberry Pi
-- Device provisioning
-- Programming devices
-- Issuing first OTA updates
+## Why We Built It
 
-### Avocado Linux Documentation
+Embedded Linux development is powerful — but it's also messy. Vendor BSPs vary in quality, Yocto has a steep learning curve, and integrating over-the-air updates, observability, and security is time-consuming.
 
-- Introduction/Overview (includes video)
-- Getting Started guide
-- Development Environment setup
-- SDK Architecture overview
+By combining Avocado OS (production-ready Embedded Linux build system) with Peridio Core (secure device management + OTA), you get a clear, supported path from prototype to production.
 
-### Supported Hardware
+## What You'll Find Here
 
-Hardware-specific documentation organized by manufacturer:
+The Dev Center is designed to be your step-by-step guide:
 
-- **NVIDIA Jetson** - Orin, Xavier series
-- **Raspberry Pi** - Compute Module, Pi 4/5
-- **NXP** - i.MX 8MP, FRDM 91/93
-- **Qemu** - Virtual Machine setup
+**Provision a Device** – Get your target hardware or virtualized environment up and running in minutes.
 
-### Peridio Core Documentation
+**Hardware-in-the-Loop Development** – Validate your system in real-world conditions before shipping.
 
-Platform features and architecture:
+**On-Desk Device Updates** - Local validation and test of OTA workflows
 
-- Introduction/Overview (includes video)
-- Device Management
-- Secure Remote Access & VPN
-- Firmware: Artifacts, Bundles and Releases
-- System Architecture
-- Firmware Repository
-- Organization / Account Management
-- Peridio Core Onboarding Flow
+**First OTA Update** – Learn how to deploy changes to devices in the field — safely and securely.
 
-### Integration / Guides
+Every guide is production-focused — the same processes you use on day one will carry through to deployment and maintenance.
 
-Implementation guides and integrations:
+## What You'll Be Able to Do
 
-- Peridiod Agent
-- Webhooks
-- Leveraging external CDN (AWS)
-- Certificates
+By the time you've completed the Getting Started path, you'll have:
 
-## Navigation
+- A working device running Avocado OS.
+- An application deployed using our development workflow.
+- A tested OTA update pipeline to manage future releases.
+- Confidence that your approach is production-ready from the start.
 
-Use the left sidebar to explore the experimental content tree. This organization aims to provide clearer learning paths and reduce cognitive overhead when finding relevant information.
-
-## Feedback
-
-This is an experimental area - the content organization and structure may change as we iterate and gather feedback.
+→ Next: Choose your starting point with Avocado OS or Peridio Core.

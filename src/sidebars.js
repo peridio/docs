@@ -341,7 +341,31 @@ export default {
       collapsible: true,
       collapsed: true,
       items: [
-        'dev-center/peridio-core/device-management',
+        {
+          type: 'doc',
+          id: 'dev-center/peridio-core/core-concepts',
+          label: 'Core Concepts',
+        },
+        {
+          type: 'category',
+          label: 'Device Management',
+          link: {
+            type: 'doc',
+            id: 'dev-center/peridio-core/device-management/overview',
+          },
+          items: [
+            'dev-center/peridio-core/device-management/agent',
+            'dev-center/peridio-core/device-management/ca-certificates',
+            'dev-center/peridio-core/device-management/cohorts',
+            'dev-center/peridio-core/device-management/device-certificates',
+            'dev-center/peridio-core/device-management/devices',
+            'dev-center/peridio-core/device-management/just-in-time-provisioning',
+            'dev-center/peridio-core/device-management/products',
+            'dev-center/peridio-core/device-management/verification-certificates',
+            'dev-center/peridio-core/device-management/verification-codes',
+            'dev-center/peridio-core/device-management/x509',
+          ],
+        },
         {
           type: 'category',
           label: 'Tunnels (Remote Access)',
@@ -383,7 +407,6 @@ export default {
           id: 'dev-center/peridio-core/organization-management',
           label: 'Organization Management',
         },
-        { type: 'doc', id: 'dev-center/peridio-core/onboarding-flow', label: 'Onboarding Flow' },
       ],
     },
     {
@@ -448,6 +471,7 @@ export default {
       collapsible: true,
       collapsed: true,
       items: [
+        'dev-center/integration/peridio-core-rapid-setup',
         'dev-center/integration/peridiod-agent',
         'dev-center/integration/evk',
         'dev-center/integration/cloud-delegated-updates',
