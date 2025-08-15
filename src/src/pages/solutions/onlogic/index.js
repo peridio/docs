@@ -19,10 +19,10 @@ const solutionData = {
     ],
     primaryCTA: {
       text: "Get Started",
-      link: "/dev-center/hardware/production-ready/onlogic-factor"
+      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
     },
     secondaryCTA: {
-      text: "Request a Demo",
+      text: "Request Demo",
       link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/hardware/onlogic/OnLogic-FR201.png",
@@ -139,7 +139,7 @@ const solutionData = {
     description: "Transform your OnLogic FR201 systems into a managed gateway fleet with atomic updates, remote diagnostics, and enterprise support.",
     primaryButton: {
       text: "Get Started",
-      link: "/dev-center/hardware/production-ready/onlogic-factor"
+      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
     },
     secondaryButton: {
       text: "Request a Demo",

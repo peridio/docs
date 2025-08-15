@@ -22,11 +22,11 @@ const solutionData = {
     ],
     primaryCTA: {
       text: "Get Started",
-      link: "/dev-center/hardware/production-ready/seeed-reterminal"
+      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/hardware/seeed/seeed_reterminal.png",
     imageAlt: "Seeed reTerminal industrial HMI"
@@ -142,7 +142,7 @@ const solutionData = {
     description: "Transform your Seeed reTerminal HMIs into a production fleet. Get deterministic Linux, secure OTA orchestration, and enterprise fleet management - all production-ready from Day 1.",
     primaryButton: {
       text: "Get Started",
-      link: "/dev-center/hardware/production-ready/seeed-reterminal"
+      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
     },
     secondaryButton: {
       text: "Visit Avocado Linux",

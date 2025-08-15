@@ -22,8 +22,8 @@ const solutionData = {
       link: "/dev-center/hardware/nxp/imx8mp"
     },
     secondaryCTA: {
-      text: "Datasheet",
-      link: "/"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     },
     image: "/img/nxp_iMX8M_Plus.png",
     imageAlt: "NXP i.MX 8M Plus development board"

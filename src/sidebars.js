@@ -405,19 +405,16 @@ export default {
           },
           items: [
             {
-              type: 'doc',
-              id: 'dev-center/hardware/production-ready/seeed-reterminal',
-              label: 'Seeed reTerminal',
+              type: 'html',
+              value: '<a href="/solutions/seeed" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">Seeed reTerminal</a>',
             },
             {
-              type: 'doc',
-              id: 'dev-center/hardware/production-ready/icam540',
-              label: 'iCam540',
+              type: 'html',
+              value: '<a href="/solutions/advantech/icam-540" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">Advantech ICAM-540</a>',
             },
             {
-              type: 'doc',
-              id: 'dev-center/hardware/production-ready/onlogic-factor',
-              label: 'OnLogic Factor 201/202',
+              type: 'html',
+              value: '<a href="/solutions/onlogic" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">OnLogic FR201</a>',
             },
           ],
         },
