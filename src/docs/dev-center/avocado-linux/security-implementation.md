@@ -3,8 +3,8 @@ title: Security Implementation
 description: Implement Avocado OS's comprehensive defense-in-depth security architecture from hardware root of trust to application-level protection
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado OS implements a comprehensive defense-in-depth security architecture that establishes an unbroken chain of trust from hardware through kernel and all loaded extension layers. The system provides a board-agnostic command-line interface that abstracts away complex, vendor-specific mechanisms to establish a hardware root of trust, while dm-verity provides continuous integrity verification for read-only filesystems by checking each block against a pre-computed hash tree.

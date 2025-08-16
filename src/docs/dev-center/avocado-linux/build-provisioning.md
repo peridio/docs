@@ -3,8 +3,8 @@ title: Build & Provisioning
 description: Advanced build system configuration and device provisioning workflows
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado's binary distribution model uses package repositories during the build phase to create custom extensions, resulting in deterministic, immutable, and cryptographically verifiable system images. Unlike traditional approaches that rely on runtime package management, this build-time composition ensures system consistency and eliminates the unpredictability of runtime package conflicts.

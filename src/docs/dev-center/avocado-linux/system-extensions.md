@@ -3,8 +3,8 @@ title: System Extensions
 description: Build, deploy, and manage modular system extensions in Avocado OS
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado OS utilizes systemd's extension mechanism to provide two distinct types of extensions that enable modular system composition. System Extensions (sysext) dynamically extend the `/usr/` and `/opt/` hierarchies with executable code and resources using overlayfs, activating automatically during boot. Configuration Extensions (confext) operate on the `/etc/` hierarchy to manage and deploy system configuration independently from system software.

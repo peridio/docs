@@ -3,8 +3,8 @@ title: Update Mechanisms
 description: Secure over-the-air update deployment and fault-tolerant update mechanisms
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado OS implements fault-tolerant update mechanisms designed for reliability under adverse conditions. The system uses btrfs for atomic updates and integrity verification, ensuring that updates either complete successfully or roll back cleanly without leaving the system in an inconsistent state. This approach provides operational continuity even in challenging deployment environments.

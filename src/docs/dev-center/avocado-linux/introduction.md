@@ -5,6 +5,10 @@ description: The Fast Track to Production-Ready Embedded Linux
 
 # Avocado OS Overview
 
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
+:::
+
 ## Rethinking Embedded Linux Development
 
 Avocado OS is a productized, production-ready Embedded Linux build system — designed to give you the flexibility of Yocto without the steep learning curve or months of bring-up.

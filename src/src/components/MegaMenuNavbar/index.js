@@ -45,8 +45,8 @@ const MegaMenuNavbar = () => {
           items: [
             { label: 'Introduction', to: '/dev-center' },
             { label: 'Provision Device', to: '/dev-center/getting-started/provision-device' },
-            { label: 'Program Device', to: '/dev-center/getting-started/program-device' },
-            { label: 'First OTA Update', to: '/dev-center/getting-started/first-ota-update' },
+            { label: 'Hardware in the Loop', to: '/dev-center/getting-started/hardware-in-the-loop' },
+            { label: 'Desktop Deploy', to: '/dev-center/getting-started/desktop-deploy' },
           ],
         },
         {

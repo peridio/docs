@@ -3,8 +3,8 @@ title: Porting Guide
 description: Port Avocado OS to new hardware platforms and customize for specific deployment requirements
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado's architecture supports multiple target devices with a single codebase through sophisticated hardware abstraction. The same declarative configuration can be adapted for different hardware platforms, with Avocado managing the underlying differences in toolchains and kernel configurations. This unified approach provides simplified CI/CD integration for multiple hardware targets and supports products with diverse hardware variants using a single codebase.
