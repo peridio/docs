@@ -3,8 +3,8 @@ title: System Requirements
 description: Hardware and software requirements for running Avocado OS and the SDK.
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado OS is built on the Yocto Project foundation, chosen for its industry-standard approach and comprehensive hardware support. The system leverages Yocto to create pre-built binary packages and images, allowing users to compose complete systems without dealing with Yocto's inherent complexity. Unlike traditional approaches that rely on runtime package management, Avocado's binary distribution model uses package repositories during the build phase to create custom extensions.

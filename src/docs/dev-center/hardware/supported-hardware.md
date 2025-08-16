@@ -7,6 +7,10 @@ import './support-matrix.css';
 
 # Supported Hardware
 
+:::caution Under Development
+This documentation is currently under active development. Hardware support and feature availability may change as we continue to expand platform capabilities.
+:::
+
 Peridio supports a wide range of hardware platforms for IoT device management and OTA updates. Our platform integrates seamlessly with various processors, development boards, and production-ready systems.
 
 ## Hardware Support Matrix

@@ -3,8 +3,8 @@ title: Architecture Overview
 description: Understand the core architecture and design principles of Avocado OS
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado OS is a comprehensive product framework built on proven open-source technologies, designed to bridge the gap between development agility and production readiness in embedded Linux systems. Built on the Yocto Project foundation with systemd service management, btrfs for atomic updates, and overlayfs for layered system architecture, it provides a robust platform that combines data integrity with system flexibility through its sophisticated extension mechanism.

@@ -3,8 +3,8 @@ title: Development Environment
 description: Set up and configure your Avocado OS development environment for building, testing, and deploying embedded Linux systems
 ---
 
-:::info Under Construction
-This documentation is currently under development. Content and features may change as we continue to improve and expand the Avocado OS platform.
+:::caution Under Development
+This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.
 :::
 
 Avocado OS provides an interactive development experience that feels more like modern web development than traditional embedded Linux workflows. Developers work in containerized environments with seamless connection to target devices, enabling live code reloading and interactive debugging capabilities. This approach eliminates the traditional barriers between development and target deployment, allowing for rapid iteration and experimentation.
