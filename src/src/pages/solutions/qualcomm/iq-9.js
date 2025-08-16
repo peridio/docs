@@ -155,7 +155,7 @@ const solutionData = {
     {
       title: "Advanced Yocto Configuration",
       description: "Flagship SoC optimization and multi-model inference setup for QCS8550",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Device Security",

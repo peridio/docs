@@ -151,12 +151,12 @@ const solutionData = {
     {
       title: "Raspberry Pi 5 Guide",
       description: "Complete setup and configuration guide for Raspberry Pi 5 with Avocado OS",
-      link: "/integration/linux/reference-designs/raspberrypi5/overview"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/reference-designs/raspberrypi5/overview"
     },
     {
       title: "Raspberry Pi 4 Guide",
       description: "Production deployment guide for Raspberry Pi 4 with enterprise features",
-      link: "/integration/linux/reference-designs/raspberrypi4/overview"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/reference-designs/raspberrypi4/overview"
     },
     {
       title: "Fleet Management",
@@ -166,7 +166,7 @@ const solutionData = {
     {
       title: "Custom OS Build",
       description: "Build custom Yocto images for your specific Raspberry Pi application",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     }
   ]
 }

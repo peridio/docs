@@ -129,22 +129,9 @@ const MegaMenuNavbar = () => {
             <img src={`/${navbar.logo.src}`} alt={navbar.logo.alt} className="navbar__logo" />
           </Link>
           <div className="mega-menu-container">
-            {isDevelopment && (
-              <span className="dev-mode-indicator" style={{
-                padding: '4px 8px',
-                marginRight: '10px',
-                background: '#ff6b6b',
-                color: 'white',
-                borderRadius: '4px',
-                fontSize: '12px',
-                fontWeight: 'bold'
-              }}>
-                DEV MODE
-              </span>
-            )}
-            <Link to="/" className="navbar__item navbar__link">
-              Developer Center
-            </Link>
+            <a href="https://peridio.com" className="navbar__item navbar__link" target="_blank" rel="noopener noreferrer">
+              Home
+            </a>
             {Object.entries(megaMenuItems).map(([key, menu]) => (
               <div
                 key={key}
@@ -201,6 +188,19 @@ const MegaMenuNavbar = () => {
                 )}
               </div>
             ))}
+            {isDevelopment && (
+              <span className="dev-mode-indicator" style={{
+                padding: '4px 8px',
+                marginLeft: '10px',
+                background: '#ff6b6b',
+                color: 'white',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}>
+                DEV MODE
+              </span>
+            )}
           </div>
         </div>
 

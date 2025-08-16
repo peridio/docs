@@ -155,7 +155,7 @@ const solutionData = {
     {
       title: "Heterogeneous Architecture Guide",
       description: "Linux and RTOS integration for i.MX 93 dual-domain processing",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Edge AI Deployment",

@@ -154,7 +154,7 @@ const solutionData = {
     {
       title: "HMI Development Guide",
       description: "Qt and Flutter integration for reTerminal touchscreen applications",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Industrial Protocols",

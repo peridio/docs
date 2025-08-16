@@ -155,7 +155,7 @@ const solutionData = {
     {
       title: "Yocto Integration Guide",
       description: "Step-by-step Yocto build configuration for Jetson Orin Nano",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Device Security",

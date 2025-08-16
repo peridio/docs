@@ -155,7 +155,7 @@ const solutionData = {
     {
       title: "Industrial Yocto Configuration",
       description: "Multi-core optimization and NPU integration for i.MX 8M Plus industrial applications",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Device Security",
