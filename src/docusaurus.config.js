@@ -75,7 +75,7 @@ const config = {
       navbar: {
         logo: {
           alt: 'Peridio logo color black',
-          src: 'img/logo-color-black.svg',
+          src: 'img/peridio-docs-logo.svg',
         },
         items: [
           {
