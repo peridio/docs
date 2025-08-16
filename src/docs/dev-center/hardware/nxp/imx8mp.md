@@ -3,43 +3,25 @@ title: NXP i.MX 8MP EVK
 description: How to develop for NXP i.MX 8M Plus Evaluation Kit.
 ---
 
-The NXP i.MX 8M Plus EVK is a powerful evaluation kit designed for industrial vision and edge AI applications, featuring a quad-core Cortex-A53 processor, dedicated NPU for AI acceleration, and comprehensive multimedia capabilities.
+![i.MX 8MP EVK](/img/hardware/nxp/imx8mp-evk.jpg)
+
+The i.MX 8M Plus Evaluation Kit is a powerful and flexible platform for edge AI development. With a quad-core Cortex-A53 processor and an integrated neural processing unit (NPU), it enables real-time ML inference without overloading the CPU—ideal for vision, voice, and industrial applications.
+
+Combined with Avocado OS, teams can deploy complex workloads quickly using a consistent, production-ready Linux environment.
 
 ## Technical Specifications
 
-**Compute:**
-
-- Quad-core Arm Cortex-A53 @ 2.0 GHz
-- Cortex-M7 real-time core @ 800 MHz
-- Neural Processing Unit (NPU) with 2.3 TOPS performance
-- HiFi 4 DSP for audio processing
-
-**Memory & Storage:**
-
-- 6GB LPDDR4 RAM
-- 32GB eMMC flash storage
-- microSD card slot for expansion
-
-**Vision & Display:**
-
-- Dual MIPI CSI camera interfaces (up to 12MP/375MP/s)
-- HDMI 2.0a output (up to 4K60)
-- MIPI DSI display interface
-- LVDS display support
-
-**Connectivity:**
-
-- Dual Gigabit Ethernet (one with TSN support)
-- Wi-Fi 802.11ac and Bluetooth 5.0
-- 2x USB 3.0, 1x USB-C
-- PCIe Gen 3 interface
-
-**Industrial Features:**
-
-- Operating temperature: -40°C to +85°C
-- Multiple CAN-FD interfaces
-- Industrial I/O expansion headers
-- Secure boot and cryptographic acceleration
+| Component        | Details                                                   |
+|------------------|-----------------------------------------------------------|
+| CPU              | Quad-core Arm Cortex-A53 (1.8 GHz)                        |
+| MCU              | Single Arm Cortex-M7 (800 MHz)                            |
+| NPU              | i.MX 8M Plus SoC integrated NPU                           |
+| AI Performance   | Up to 2.3 TOPS (INT8)                                     |
+| Memory           | 6GB 32-bit LPDDR4                                         |
+| Memory Bandwidth | 12.8 GB/s                                                 |
+| Storage          | 32GB eMMC                                                 |
+| Connectivity     | Single M.2 Key E wireless module with Wi-Fi and Bluetooth |
+| Power Modes      | 1.7W / 2W / 4W / 6W                                       |
 
 ## Getting Started
 
@@ -47,64 +29,39 @@ Get up and running with the Avocado Linux SDK for i.MX 8M Plus in minutes.
 
 ### Prerequisites
 
-- Linux development machine (Ubuntu 22.04+, Fedora 39+)
-- Podman installed
-- 30GB+ available disk space (for full BSP)
+- A Mac (macOS 10.12+) or Linux (Ubuntu 22.04+, Fedora 39+) development machine
+- Docker installed
+- 10GB+ available disk space
 
-### Installing and running the SDK
 
-1. Pull the SDK container:
+### Provisioning your device
 
-```bash
-podman pull avocadolinux/sdk:apollo-edge
-```
-
-2. Create your workspace:
+1. Initialize your project
 
 ```bash
-mkdir avocado-imx8mp
+avocado init --target imx8mp-evk avocado-imx8mp
 cd avocado-imx8mp
 ```
 
-3. Start the SDK environment:
+2. Install all components (SDK, extensions, and runtime dependencies):
 
 ```bash
-podman run -it --rm -e AVOCADO_SDK_TARGET=imx8mp-evk -v $(pwd):/opt:z --entrypoint entrypoint.sh avocadolinux/sdk:apollo-edge /bin/bash
+avocado install -f
 ```
 
-### Building a System Image
-
-1. Download the necessary images for the bootchain and core rootfs:
+3. Build all components
 
 ```bash
-avocado-repo images
+avocado build
 ```
 
-2. Install packages for your application (example with peridiod):
+4. Provision a runtime
 
 ```bash
-avocado-repo sysext install peridiod -y
+avocado provision -r dev
 ```
 
-3. Build system extension:
-
-```bash
-avocado-build sysext peridiod
-```
-
-4. Build var partition containing extension contents:
-
-```bash
-avocado-build var
-```
-
-5. Build complete system image:
-
-```bash
-avocado-build image
-```
-
-6. Verify that a complete system image file was output:
+5. Verify that a complete system image file was output:
 
 ```bash
 ls -l /opt/_avocado/output/avocado-image-imx8mp*.wic
