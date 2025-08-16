@@ -5,7 +5,7 @@ export default {
   platform: [
     {
       type: 'doc',
-      label: 'Getting started',
+      label: 'Getting Started',
       id: 'platform/getting-started',
     },
     {
@@ -17,7 +17,7 @@ export default {
         'platform/reference/overview',
         {
           type: 'category',
-          label: 'Account management',
+          label: 'Account Management',
           items: [
             'platform/reference/organizations',
             'platform/reference/peridio-resource-names',
@@ -26,7 +26,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Binary management',
+          label: 'Binary Management',
           items: [
             {
               type: 'doc',
@@ -58,7 +58,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Device management',
+          label: 'Device Management',
           items: [
             {
               type: 'doc',
@@ -82,12 +82,12 @@ export default {
         },
         {
           type: 'category',
-          label: 'Integration management',
+          label: 'Integration Management',
           items: ['platform/reference/webhooks'],
         },
         {
           type: 'category',
-          label: 'Bundle mangement',
+          label: 'Bundle Management',
           items: [
             {
               type: 'doc',
@@ -101,24 +101,24 @@ export default {
             },
             {
               type: 'doc',
-              label: 'Release channels',
+              label: 'Release Channels',
               id: 'platform/reference/release-channels',
             },
             {
               type: 'doc',
-              label: 'Bundle overrides',
+              label: 'Bundle Overrides',
               id: 'platform/reference/bundle-overrides',
             },
             {
               type: 'doc',
-              label: 'Bundle distribution',
+              label: 'Bundle Distribution',
               id: 'platform/reference/bundle-distribution',
             },
           ],
         },
         {
           type: 'category',
-          label: 'Remote access',
+          label: 'Remote Access',
           items: ['platform/reference/tunnels'],
         },
         {
@@ -158,12 +158,12 @@ export default {
       items: [
         {
           type: 'category',
-          label: 'Cloud integration',
+          label: 'Cloud Integration',
           items: ['platform/guides/cloud-delegated-updates'],
         },
         {
           type: 'category',
-          label: 'Binary management',
+          label: 'Binary Management',
           items: [
             'platform/guides/introduction-to-binary-management',
             'platform/guides/multipart-uploads-with-binary-parts',
@@ -178,7 +178,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Device management',
+          label: 'Device Management',
           items: [
             'platform/guides/creating-ca-certificates',
             'platform/guides/creating-devices',
@@ -189,7 +189,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Bundle management',
+          label: 'Bundle Management',
           items: [
             'platform/guides/introduction-to-bundle-management',
             'platform/guides/creating-bundles',
@@ -198,7 +198,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Remote access',
+          label: 'Remote Access',
           items: [
             'platform/guides/introduction-to-remote-access',
             'platform/guides/creating-tunnels',
@@ -389,6 +389,29 @@ export default {
       items: [
         {
           type: 'category',
+          label: 'EVKs',
+          items: [
+            {
+              type: 'doc',
+              id: 'dev-center/hardware/nvidia/jetson-orin-nano-evk',
+              label: 'NVIDIA Jetson Orin Nano EVK',
+            },
+            { type: 'doc', id: 'dev-center/hardware/nxp/imx8mp', label: 'NXP i.MX 8MP EVK' },
+            {
+              type: 'doc',
+              id: 'dev-center/hardware/nxp/frdm-imx-93',
+              label: 'NXP i.MX 93 FRDM SBC',
+            },
+            { type: 'doc', id: 'dev-center/hardware/qemu', label: 'QEMU (Virtual Machine)' },
+            {
+              type: 'doc',
+              id: 'dev-center/hardware/raspberry-pi/compute-module-4',
+              label: 'Raspberry Pi Compute Module 4',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Production Ready',
           link: {
             type: 'doc',
@@ -397,41 +420,23 @@ export default {
           items: [
             {
               type: 'html',
-              value: '<a href="/solutions/seeed" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">Seeed reTerminal</a>',
-            },
-            {
-              type: 'html',
               value: '<a href="/solutions/advantech/icam-540" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">Advantech ICAM-540</a>',
             },
             {
               type: 'html',
               value: '<a href="/solutions/onlogic" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">OnLogic FR201</a>',
             },
+            {
+              type: 'html',
+              value: '<a href="/solutions/seeed" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">Seeed reTerminal</a>',
+            },
           ],
         },
-        {
-          type: 'doc',
-          id: 'dev-center/hardware/nvidia/jetson-orin-nano-evk',
-          label: 'NVIDIA Jetson Orin Nano EVK',
-        },
-        {
-          type: 'doc',
-          id: 'dev-center/hardware/nxp/frdm-imx-93',
-          label: 'NXP i.MX 93 FRDM SBC',
-        },
-        { type: 'doc', id: 'dev-center/hardware/nxp/imx8mp', label: 'NXP i.MX 8MP EVK' },
-        {
-          type: 'doc',
-          id: 'dev-center/hardware/raspberry-pi/compute-module-4',
-          label: 'Raspberry Pi Compute Module 4',
-        },
-        { type: 'doc', id: 'dev-center/hardware/qemu', label: 'QEMU (Virtual Machine)' },
-        { type: 'doc', id: 'dev-center/hardware/coming-soon', label: '🚀 Coming Soon' },
       ],
     },
     {
       type: 'category',
-      label: 'Integration / Guides',
+      label: 'Integration & Guides',
       link: {
         type: 'doc',
         id: 'dev-center/integration/index',
