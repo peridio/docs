@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Heading from '@theme/Heading'
+import Link from '@docusaurus/Link'
 import styles from './styles.module.css'
 
 const slides = [
@@ -7,19 +8,22 @@ const slides = [
     vendor: 'NVIDIA',
     target: 'Jetson Xavier / Orin',
     image: '/img/nvidia-jetson-orin.jpg', // TODO: replace with real Jetson image
-    link: '/solutions/nvidia/jetson-orin-nano',
+    overviewLink: '/solutions/nvidia/jetson-orin-nano',
+    getStartedLink: '/dev-center/hardware/nvidia/jetson-orin-nano-evk',
   },
   {
     vendor: 'Raspberry Pi',
     target: 'Raspberry Pi 4 / 5',
     image: '/img/raspberry-pi.jpg',
-    link: '/solutions/raspberry-pi/raspberry-pi',
+    overviewLink: '/solutions/raspberry-pi/raspberry-pi',
+    getStartedLink: '/dev-center/hardware/raspberry-pi/compute-module-4',
   },
   {
     vendor: 'NXP',
     target: 'i.MX8MP EVK',
     image: '/img/nxp-imx8p.jpg', // TODO: replace with real i.MX8 image
-    link: '/solutions/nxp/imx8mp',
+    overviewLink: '/solutions/nxp/imx8mp',
+    getStartedLink: '/dev-center/hardware/nxp/imx8mp',
   },
 ]
 
@@ -99,6 +103,14 @@ export default function HardwareCarousel() {
                 {slide.vendor}
               </Heading>
               <p className={styles.target}>{slide.target}</p>
+              <div className={styles.links}>
+                <Link to={slide.overviewLink} className={styles.link}>
+                  Overview →
+                </Link>
+                <Link to={slide.getStartedLink} className={styles.linkClear}>
+                  Get Started →
+                </Link>
+              </div>
             </div>
           </div>
         ))}

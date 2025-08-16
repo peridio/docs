@@ -145,33 +145,7 @@ export default function Home() {
             </p>
             {/* Avocado OS Links Section */}
             <div className={styles.linkGrid}>
-              <Link
-                to="https://avocadolinux.org"
-                className={styles.externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
-                >
-                  <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Website
-              </Link>
-              <Link
-                to="https://docs.avocadolinux.org"
-                className={styles.externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to="/dev-center/avocado-linux/introduction" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -185,7 +159,7 @@ export default function Home() {
                     fill="currentColor"
                   />
                 </svg>
-                Developer Docs
+                Get Started
               </Link>
               <Link
                 to="https://github.com/avocado-linux"
@@ -206,7 +180,7 @@ export default function Home() {
                     fill="currentColor"
                   />
                 </svg>
-                Get involved
+                Get Involved
               </Link>
               <Link
                 to="https://discord.com/invite/rH77fKpKAj"
@@ -228,6 +202,27 @@ export default function Home() {
                   />
                 </svg>
                 Join Discord
+              </Link>
+              <Link
+                to="https://avocadolinux.org"
+                className={styles.externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Website
               </Link>
             </div>
           </div>
@@ -295,15 +290,74 @@ export default function Home() {
             </svg>
           </div>
           <div className={styles.body}>
-            <ul>
-              <li>Artifact & binary management</li>
-              <li>Device provisioning & cohorts</li>
-              <li>Fleet view & OTA deployments</li>
-            </ul>
-            {/* Platform Overview Button Group */}
-            <div className={styles.ctaButtonGroup}>
-              <Link to="/platform/reference/overview" className={styles.ctaButtonMinimal}>
-                Platform Overview →
+            <p className={styles.description}>
+              Enterprise-grade device management platform for secure OTA updates, fleet monitoring, and device provisioning. Scale from prototype to production with confidence.
+            </p>
+            {/* Peridio Core Links Section */}
+            <div className={styles.linkGrid}>
+              <Link to="/dev-center/peridio-core/introduction" className={styles.externalLink}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Overview
+              </Link>
+              <Link to="/dev-center/peridio-core/device-management/overview" className={styles.externalLink}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Device Management
+              </Link>
+              <Link to="/dev-center/tunnels/overview" className={styles.externalLink}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Tunnels / Remote Access
+              </Link>
+              <Link to="/dev-center/peridio-core/firmware-management/overview" className={styles.externalLink}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Firmware Management
               </Link>
             </div>
           </div>
@@ -313,24 +367,83 @@ export default function Home() {
         <div className={styles.stack}>
           <div className={styles.stackHeader}>
             <Heading as="h2" style={{ margin: 0, fontSize: '1.7rem', color: '#606770' }}>
-              Get Started
+              🚀 Get Started
             </Heading>
           </div>
           <div className={styles.body}>
-            <ul>
-              <li>Flash Avocado OS</li>
-              <li>Register with Peridio</li>
-              <li>Deploy your first OTA update</li>
-            </ul>
-            {/* Start Demo Button Group */}
-            <div className={styles.ctaButtonGroup}>
+            <p className={styles.description}>
+              Begin your journey with Peridio. From initial setup to your first OTA deployment, we&apos;ll guide you through every step to get your devices connected and updating securely.
+            </p>
+            {/* Get Started Links Section */}
+            <div className={styles.linkGrid}>
+              <Link to="/dev-center" className={styles.externalLink}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Introduction
+              </Link>
+              <Link to="/dev-center/getting-started/provision-device" className={styles.externalLink}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Provision Device
+              </Link>
+              <Link to="/dev-center/getting-started/hardware-in-the-loop" className={styles.externalLink}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M9 3V1h6v2H9zM7.5 6.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM3 21h18v-2H3v2zm0-3h18v-2H3v2zm0-3h18v-2H3v2zm0-3h18v-2H3v2zm0-3h18V7H3v2z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Hardware in the Loop
+              </Link>
               <Link
                 to="https://www.peridio.com/sign-up"
-                className={styles.ctaButtonMinimal}
+                className={styles.externalLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Get Started →
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Create Account
               </Link>
             </div>
           </div>
