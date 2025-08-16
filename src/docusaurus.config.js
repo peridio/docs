@@ -78,7 +78,113 @@ const config = {
           src: 'img/logo-color-black.svg',
         },
         items: [
-          // Items are now handled by the custom MegaMenuNavbar component
+          {
+            to: '/',
+            label: 'Developer Center',
+            position: 'left',
+          },
+          {
+            type: 'dropdown',
+            label: 'Documentation',
+            position: 'left',
+            items: [
+              {
+                label: 'Getting Started',
+                to: '/platform/getting-started/introduction',
+              },
+              {
+                label: 'Avocado OS',
+                to: '/integration/linux/introduction',
+              },
+              {
+                label: 'Peridio Core',
+                to: '/platform/reference/overview',
+              },
+              {
+                label: 'Supported Hardware',
+                to: '/solutions',
+              },
+              {
+                label: 'Integration Guides',
+                to: '/integration',
+              },
+              {
+                label: 'Tunnels (Remote Access)',
+                to: '/platform/reference/tunnels',
+              },
+              {
+                label: 'Webhooks',
+                to: '/platform/reference/webhooks',
+              },
+              {
+                label: 'Certificates',
+                to: '/platform/reference/device-certificates',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            label: 'Featured Hardware',
+            position: 'left',
+            items: [
+              {
+                label: 'NXP IMX8MP',
+                to: '/solutions/nxp/imx8mp',
+              },
+              {
+                label: 'NXP FRDM 93',
+                to: '/solutions/nxp/frdm-93',
+              },
+              {
+                label: 'Raspberry Pi',
+                to: '/solutions/raspberry-pi/raspberry-pi',
+              },
+              {
+                label: 'NVIDIA Jetson',
+                to: '/solutions/nvidia/jetson-orin-nano',
+              },
+              {
+                label: 'Advantech ICAM 540',
+                to: '/solutions/advantech/icam-540',
+              },
+              {
+                label: 'OnLogic FR201',
+                to: '/solutions/onlogic',
+              },
+              {
+                label: 'Seeed reTerminal',
+                to: '/solutions/seeed',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            label: 'Tools',
+            position: 'left',
+            items: [
+              {
+                label: 'CLI',
+                to: '/cli',
+              },
+              {
+                label: 'Device API',
+                to: '/device-api',
+              },
+              {
+                label: 'Admin API',
+                to: '/admin-api',
+              },
+              {
+                label: 'Peridio Agent',
+                to: '/integration/linux/agents/peridio-agent',
+              },
+            ],
+          },
+          {
+            href: 'https://www.peridio.com/sign-up',
+            label: 'Sign Up',
+            position: 'right',
+          },
         ],
       },
       footer: {

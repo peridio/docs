@@ -280,4 +280,4 @@ peridio --profile evk users me | jq
 
 :::
 
-After you are finished, you'll have configured a workstation with a functional Peridio CLI that can be used to create new products and begin working with real devices. Check out the [peridio reference designs](/integration/linux/overview#reference-designs) for a good starting point to deploying peridiod onto real devices.
+After you are finished, you'll have configured a workstation with a functional Peridio CLI that can be used to create new products and begin working with real devices. Check out the [peridio reference designs](/dev-center/integration/guides/peridio-core-custom-integration/linux/overview#reference-designs) for a good starting point to deploying peridiod onto real devices.

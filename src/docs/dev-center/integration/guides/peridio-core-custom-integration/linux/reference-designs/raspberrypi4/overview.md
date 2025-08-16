@@ -1,13 +1,11 @@
 # Overview
 
-<img src="/img/integration/linux/reference-designs/imx6ullevk.jpg" />
-
 ## Getting started
 
 This guide depends on the following requirements:
 
-- [Peridio Cloud Configuration](/integration/linux/overview#peridio-cloud-requirements)
-- [Peridio CLI Development Machine](/integration/linux/overview#development-machine-requirements)
+- [Peridio Cloud Configuration](/dev-center/integration/guides/peridio-core-custom-integration/linux/overview#peridio-cloud-requirements)
+- [Peridio CLI Development Machine](/dev-center/integration/guides/peridio-core-custom-integration/linux/overview#development-machine-requirements)
 
 ### Configuration
 
@@ -22,10 +20,10 @@ export PERIDIO_PRIVATE_KEY_FILE=/path/to/end-entity-private-key.pem
 
 #### Create working directory
 
-Create a working directory for building the `imx6ull14x14evk` machine.
+Create a working directory for building the `raspberrypi4-64` machine.
 
 ```bash
-mkdir build-avocado-imx6ull14x14evk && cd build-avocado-imx6ull14x14evk
+mkdir build-avocado-raspberrypi4-64 && cd build-avocado-raspberrypi4-64
 ```
 
 Checkout the `meta-avocado` project to your build directory
@@ -39,7 +37,7 @@ git clone git@github.com:peridio/meta-avocado
 You can build the project using kas. The product will have the device identity included as part of the runtime environment. Building this system may take a long time to complete depending on your build machine resources.
 
 ```bash
-kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/imx6ull14x14evk.yml
+kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/raspberrypi4-64.yml
 ```
 
 ## Testing
@@ -47,11 +45,11 @@ kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/imx6ull14x
 Insert a microSD card and execute the following command to write the image:
 
 ```shell
-fwup build/tmp/deploy/images/imx6ull14x14evk/avocado-image-base-imx6ull14x14evk.fw
+fwup build/tmp/deploy/images/raspberrypi4-64/avocado-image-base-raspberrypi4-64.fw
 ```
 
-Connect a usb cable to the micro usb port on the top edge of the board
+Connect a serial console cable to the UART pins on the Raspberry Pi header
 
-<img src="/img/integration/linux/reference-designs/imx6ullevk-console.jpg" />
+<img src="/img/integration/linux/reference-designs/raspberry-pi-serial-cable-connection.png" />
 
-Insert the microSD card into the microsd card cage on the SOM and power on the board using the power switch.
+Insert the microSD card and power on the board.

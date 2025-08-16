@@ -1,13 +1,11 @@
 # Overview
 
-<img src="/img/integration/linux/reference-designs/khadas-vim3.jpg" />
-
 ## Getting started
 
 This guide depends on the following requirements:
 
-- [Peridio Cloud Configuration](/integration/linux/overview#peridio-cloud-requirements)
-- [Peridio CLI Development Machine](/integration/linux/overview#development-machine-requirements)
+- [Peridio Cloud Configuration](/dev-center/integration/guides/peridio-core-custom-integration/linux/overview#peridio-cloud-requirements)
+- [Peridio CLI Development Machine](/dev-center/integration/guides/peridio-core-custom-integration/linux/overview#development-machine-requirements)
 
 ### Configuration
 
@@ -22,10 +20,10 @@ export PERIDIO_PRIVATE_KEY_FILE=/path/to/end-entity-private-key.pem
 
 #### Create working directory
 
-Create a working directory for building the `khadas-vim3` machine.
+Create a working directory for building the `raspberrypi5` machine.
 
 ```bash
-mkdir build-avocado-khadas-vim3 && cd build-avocado-khadas-vim3
+mkdir build-avocado-raspberrypi5 && cd build-avocado-raspberrypi5
 ```
 
 Checkout the `meta-avocado` project to your build directory
@@ -39,7 +37,7 @@ git clone git@github.com:peridio/meta-avocado
 You can build the project using kas. The product will have the device identity included as part of the runtime environment. Building this system may take a long time to complete depending on your build machine resources.
 
 ```bash
-kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/khadas-vim3.yml
+kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/raspberrypi5.yml
 ```
 
 ## Testing
@@ -47,18 +45,11 @@ kas build --update meta-avocado/meta-avocado-example/conf/kas/machine/khadas-vim
 Insert a microSD card and execute the following command to write the image:
 
 ```shell
-fwup build/tmp/deploy/images/khadas-vim3/avocado-image-base-khadas-vim3.fw
+fwup build/tmp/deploy/images/raspberrypi5/avocado-image-base-raspberrypi5.fw
 ```
 
-Connect a serial console cable to the UART pins on the Khadas header
+Connect a serial console cable to the UART pins on the Raspberry Pi header
 
-<img src="/img/integration/linux/reference-designs/khadas-vim3-console.png" />
-
-| Serial tools pin | GPIO board header pin | Name     |
-| ---------------- | --------------------- | -------- |
-| GND              | 17                    |          |
-| TXD              | 18                    | Linux_Rx |
-| RXD              | 19                    | Linux_Tx |
-| VCC              | 20                    |          |
+<img src="/img/integration/linux/reference-designs/raspberry-pi-serial-cable-connection.png" />
 
 Insert the microSD card and power on the board.

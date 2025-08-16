@@ -80,7 +80,7 @@ Peridiod enables remote device access through:
 
 ## Reference Documentation
 
-- [Peridiod Getting Started](/integration/linux/peridiod/getting-started)
-- [Configuration Reference](/integration/linux/peridiod/configuration)
-- [Update Process](/integration/linux/peridiod/updates)
-- [Container Deployment](/integration/linux/peridiod/containers)
+- [Peridiod Getting Started](/dev-center/integration/guides/peridio-core-custom-integration/linux/peridiod/getting-started)
+- [Configuration Reference](/dev-center/integration/guides/peridio-core-custom-integration/linux/peridiod/configuration)
+- [Update Process](/dev-center/integration/guides/peridio-core-custom-integration/linux/peridiod/updates)
+- [Container Deployment](/dev-center/integration/guides/peridio-core-custom-integration/linux/peridiod/containers)

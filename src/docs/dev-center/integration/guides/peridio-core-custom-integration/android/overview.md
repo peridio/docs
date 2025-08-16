@@ -1,10 +1,10 @@
 # Overview
 
-Peridio can be integrated with any variant of the Android OS by programming against the Peridio [Device API](/device-api) via [direct API integration](/integration/android/reference-designs/direct-api-integration).
+Peridio can be integrated with any variant of the Android OS by programming against the Peridio [Device API](/device-api) via [direct API integration](/dev-center/integration/guides/peridio-core-custom-integration/android/reference-designs/direct-api-integration).
 
 ## Reference agent
 
-The code that runs on a device that integrates with Peridio is referred to as a Peridio Agent. For a platform-agnostic overview of its optional and required capabilities, please reference the [Peridio Agent](/integration/introduction#agent) documentation.
+The code that runs on a device that integrates with Peridio is referred to as a Peridio Agent. For a platform-agnostic overview of its optional and required capabilities, please reference the [Peridio Agent](/dev-center/integration/guides/peridio-core-custom-integration/introduction#agent) documentation.
 
 `peridiod`, the standard Peridio agent reference implementation, does not currently support Android-specific interfaces, e.g., interacting with Android APIs and libraries to:
 
@@ -24,5 +24,5 @@ The implication of the above is that while the surface area of the Peridio Devic
 
 While Android-specific hardware reference designs are still in private beta, the following options are available:
 
-- [Direct API integration](/integration/android/reference-designs/direct-api-integration).
-- Peridio maintains opinionated reference implementations for a variety of development kits and evaluation boards with respect to Embedded Linux platforms. These will still serve as a helpful context when reasoning about system design with Peridio. For more information, refer to the [Linux reference designs](/integration/linux/overview#reference-designs).
+- [Direct API integration](/dev-center/integration/guides/peridio-core-custom-integration/android/reference-designs/direct-api-integration).
+- Peridio maintains opinionated reference implementations for a variety of development kits and evaluation boards with respect to Embedded Linux platforms. These will still serve as a helpful context when reasoning about system design with Peridio. For more information, refer to the [Linux reference designs](/dev-center/integration/guides/peridio-core-custom-integration/linux/overview#reference-designs).
