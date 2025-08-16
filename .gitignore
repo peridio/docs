@@ -28,3 +28,4 @@ package-lock.json
 screenshots/
 spec-sheets/
 vibe/
+.cursor/rules/docrules.mdc
