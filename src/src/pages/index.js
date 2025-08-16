@@ -459,7 +459,7 @@ export default function Home() {
           {/* Resource Cards Container */}
           <div className={styles.resourceCardsContainer}>
             {/* Build Tools */}
-            <Link to="/integration/linux/build-tools/yocto" className={styles.resourceCard}>
+            <Link to="/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto" className={styles.resourceCard}>
               <div className={styles.featureIcon}>
                 <WrenchScrewdriverIcon style={{ width: '3.5rem', height: '3.5rem' }} />
               </div>

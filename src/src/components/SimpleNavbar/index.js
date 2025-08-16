@@ -11,7 +11,7 @@ const SimpleNavbar = () => {
 
   const navItems = [
     { label: 'Platform', to: '/platform/reference/overview' },
-    { label: 'Integration', to: '/integration/introduction' },
+    { label: 'Integration', to: '/dev-center/integration/guides/peridio-core-custom-integration/introduction' },
     { label: 'Admin API', to: '/admin-api' },
     { label: 'Device API', to: '/device-api' },
     { label: 'CLI', to: '/cli' },

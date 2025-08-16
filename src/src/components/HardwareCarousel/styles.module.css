@@ -128,28 +128,53 @@
 }
 
 .link {
-  color: #ffffff;
+  background: #5f51ff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.875rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
+  transition: background-color 0.2s;
+  display: inline-block;
+  min-width: 110px;
+  text-align: center;
 }
 
 .link:hover {
-  color: #ffffff;
-  background: rgba(0, 0, 0, 0.9);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: #4a3dff;
+  color: white;
   text-decoration: none;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .link:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.linkClear {
+  background: transparent;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  display: inline-block;
+  min-width: 110px;
+  text-align: center;
+}
+
+.linkClear:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  text-decoration: none;
+}
+
+.linkClear:focus {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
 }

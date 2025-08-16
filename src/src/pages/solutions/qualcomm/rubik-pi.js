@@ -155,7 +155,7 @@ const solutionData = {
     {
       title: "Yocto Integration Guide",
       description: "Step-by-step Yocto build configuration for Qualcomm QCS6490",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Device Security",

@@ -155,7 +155,7 @@ const solutionData = {
     {
       title: "Industrial Vision Guide",
       description: "CAMNavi SDK integration and DeepStream pipeline optimization for AOI applications",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "AI Model Lifecycle",

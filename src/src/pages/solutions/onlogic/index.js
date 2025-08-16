@@ -151,7 +151,7 @@ const solutionData = {
     {
       title: "Industrial Gateway Guide",
       description: "Protocol bridging and data aggregation for manufacturing environments",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Atomic Update Architecture",

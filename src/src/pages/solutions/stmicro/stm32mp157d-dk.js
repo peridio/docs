@@ -157,7 +157,7 @@ const solutionData = {
     {
       title: "Yocto Integration Guide",
       description: "Step-by-step Yocto build configuration for STM32MP257F-DK",
-      link: "/integration/linux/build-tools/yocto"
+      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
     },
     {
       title: "Device Security",
