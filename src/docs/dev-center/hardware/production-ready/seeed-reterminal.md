@@ -7,104 +7,58 @@ description: Industrial HMI device with integrated touchscreen for IoT applicati
 
 ![reTerminal](/img/reterminal.jpg)
 
-The Seeed reTerminal is a production-ready Human-Machine Interface (HMI) device that integrates a Raspberry Pi Compute Module 4 with a touchscreen display in a rugged tablet form factor. Designed for industrial automation, IoT control panels, and edge AI applications, it's available today from major distributors.
+Seeed Studio's reTerminal is an industrial HMI with the same Raspberry Pi 4 compute module at its heart, but wrapped in a touchscreen interface, expanded I/O, and a form factor designed for real-world deployment.
 
-## Why Choose reTerminal?
-
-- **All-in-One Solution**: Integrated display, compute, and I/O in a single device
-- **Industrial Grade**: Rugged design suitable for production environments
-- **Rich Connectivity**: Built-in wireless, Ethernet, and expansion options
-- **Peridio Ready**: Full support for OTA updates and device management
-- **Volume Available**: In stock at major distributors worldwide
+Since the reTerminal is just a Raspberry Pi 4 with extra peripherals, you can use Avocado OS to develop your application on a Raspberry Pi 4, then quickly retarget your finished Linux image for production hardware.
 
 ## Technical Specifications
 
-### Compute
+| Component        | Details                                                    |
+|------------------|------------------------------------------------------------|
+| CPU              | Quad-core 64-bit Arm Cortex-A72 (1.5 GHz)                  |
+| GPU              | Broadcom VideoCore VI (graphics only, not suitable for AI) |
+| Memory           | 4GB LPDDR4-3200                                            |
+| Memory Bandwidth | 8.5 GB/s                                                   |
+| Storage          | 32GB eMMC                                                  |
+| Connectivity     | Broadcom BCM43455 wireless module with Wi-Fi and Bluetooth |
+| Display          | 5-inch IPS capacitive multi-touch 720x1280 LCD screen      |
+| Power Modes      | 2.6W / 4.9W                                                |
 
-- Quad-Core 64-bit Arm Cortex-A72 CPU at 1.5 GHz
-- Raspberry Pi CM4 compatible
+## Getting Started
 
-### Memory & Storage
+Get up and running with the Avocado Linux SDK in minutes.
 
-- 4GB LPDDR4-3200
-- 32GB eMMC onboard storage
-- MicroSD card slot for expansion
+### Prerequisites
 
-### Display
+- A Mac (macOS 10.12+) or Linux (Ubuntu 22.04+, Fedora 39+) development machine
+- Docker installed
+- 3GB+ available disk space
 
-- 5-inch IPS capacitive multi-touch LCD
-- 720x1280 resolution
-- 293 PPI pixel density
-- 10-point multi-touch support
+### Provisioning your device
 
-### Connectivity
-
-- Built-in Broadcom BCM43455 wireless module
-- Dual-band 802.11ac Wi-Fi
-- Bluetooth 5.0
-- Gigabit Ethernet port
-
-### I/O Interfaces
-
-- 40-pin Raspberry Pi compatible GPIO
-- USB 2.0 ports
-- RS232/RS485 interfaces
-- CAN bus support (with expansion module)
-- M.2 connector for expansion modules
-
-### Environmental
-
-- Operating Temperature: 0°C to 50°C
-- Storage Temperature: -20°C to 70°C
-- Humidity: 10% to 90% non-condensing
-
-## Purchasing Information
-
-The reTerminal is available from:
-
-- **Seeed Studio**: Direct from manufacturer
-- **Mouser Electronics**: Global distributor
-- **Digi-Key**: Quick shipping worldwide
-- **Element14**: Local stock in many regions
-
-## Getting Started with Peridio
-
-### Quick Start
-
-1. **Purchase Hardware**: Order from authorized distributors
-2. **Install Avocado Linux**: Flash the Peridio-enabled OS
-3. **Register Device**: Connect to Peridio Cloud
-4. **Deploy Updates**: Manage via Peridio Console
-
-### Development with Avocado Linux SDK
-
-#### Prerequisites
-
-- Linux development machine (Ubuntu 22.04+, Fedora 39+)
-- Podman installed
-- 20GB+ available disk space
-
-#### Installing the SDK
-
-1. Pull the SDK container:
+1. Initialize your project
 
 ```bash
-podman pull avocadolinux/sdk:apollo-edge
-```
-
-2. Create your workspace:
-
-```bash
-mkdir avocado-reterminal
+avocado init --target reterminal avocado-reterminal
 cd avocado-reterminal
 ```
 
-3. Start the SDK environment:
+2. Install all components (SDK, extensions, and runtime dependencies):
 
 ```bash
-podman run -it --rm -e AVOCADO_SDK_TARGET=reterminal \
-  -v $(pwd):/opt:z --entrypoint entrypoint.sh \
-  avocadolinux/sdk:apollo-edge /bin/bash
+avocado install -f
+```
+
+3. Build all components
+
+```bash
+avocado build
+```
+
+4. Provision a runtime
+
+```bash
+avocado provision -r dev
 ```
 
 ## Use Cases
