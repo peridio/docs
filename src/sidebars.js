@@ -240,6 +240,11 @@ export default {
           id: 'dev-center/getting-started/hardware-in-the-loop',
           label: 'Hardware in the Loop',
         },
+        {
+          type: 'doc',
+          id: 'dev-center/getting-started/desktop-deploy',
+          label: 'Desktop Deploy',
+        },
         // {
         //   type: 'doc',
         //   id: 'dev-center/getting-started/first-ota-update',
@@ -434,9 +439,18 @@ export default {
       collapsible: true,
       collapsed: true,
       items: [
-        'dev-center/integration/peridio-core-rapid-setup',
+        {
+          type: 'category',
+          label: 'Peridio Core Rapid Setup',
+          link: {
+            type: 'doc',
+            id: 'dev-center/integration/peridio-core-rapid-setup',
+          },
+          items: [
+            'dev-center/integration/evk',
+          ],
+        },
         'dev-center/integration/peridiod-agent',
-        'dev-center/integration/evk',
         'dev-center/integration/cloud-delegated-updates',
         {
           type: 'category',
