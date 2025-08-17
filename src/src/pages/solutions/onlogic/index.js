@@ -18,10 +18,6 @@ const solutionData = {
       { value: "6x Faster", label: "Time to Production" }
     ],
     primaryCTA: {
-      text: "Get Started",
-      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
-    },
-    secondaryCTA: {
       text: "Request Demo",
       link: "https://peridio.com/book-a-meeting"
     },
@@ -138,37 +134,10 @@ const solutionData = {
     title: "Ready to Deploy Production-Ready Gateways?",
     description: "Transform your OnLogic FR201 systems into a managed gateway fleet with atomic updates, remote diagnostics, and enterprise support.",
     primaryButton: {
-      text: "Get Started",
-      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
-    },
-    secondaryButton: {
       text: "Request a Demo",
       link: "https://peridio.com/book-a-meeting"
     }
-  },
-  
-  resources: [
-    {
-      title: "Industrial Gateway Guide",
-      description: "Protocol bridging and data aggregation for manufacturing environments",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "Atomic Update Architecture",
-      description: "Zero-downtime update mechanisms with automatic rollback protection",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Fleet Operations Manual",
-      description: "Multi-site gateway management with centralized monitoring",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Remote Access Security",
-      description: "Secure tunneling and certificate management for industrial networks",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function OnLogicSolution() {

@@ -145,30 +145,7 @@ const solutionData = {
       text: "Visit Avocado Linux",
       link: "https://avocadolinux.org"
     }
-  },
-  
-  resources: [
-    {
-      title: "Raspberry Pi 5 Guide",
-      description: "Complete setup and configuration guide for Raspberry Pi 5 with Avocado OS",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/reference-designs/raspberrypi5/overview"
-    },
-    {
-      title: "Raspberry Pi 4 Guide",
-      description: "Production deployment guide for Raspberry Pi 4 with enterprise features",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/reference-designs/raspberrypi4/overview"
-    },
-    {
-      title: "Fleet Management",
-      description: "Learn how to manage thousands of Raspberry Pi devices at scale",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Custom OS Build",
-      description: "Build custom Yocto images for your specific Raspberry Pi application",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    }
-  ]
+  }
 }
 
 export default function RaspberryPiSolution() {

@@ -21,10 +21,6 @@ const solutionData = {
       { value: "7yr", label: "Avocado OS LTS" }
     ],
     primaryCTA: {
-      text: "Get Started",
-      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
-    },
-    secondaryCTA: {
       text: "Request Demo",
       link: "https://peridio.com/book-a-meeting"
     },
@@ -141,37 +137,10 @@ const solutionData = {
     title: "Ready to Deploy reTerminal at Scale?",
     description: "Transform your Seeed reTerminal HMIs into a production fleet. Get deterministic Linux, secure OTA orchestration, and enterprise fleet management - all production-ready from Day 1.",
     primaryButton: {
-      text: "Get Started",
-      link: "/dev-center/hardware/raspberry-pi/compute-module-4"
-    },
-    secondaryButton: {
-      text: "Visit Avocado Linux",
-      link: "https://avocadolinux.org"
+      text: "Request a Demo",
+      link: "https://peridio.com/book-a-meeting"
     }
-  },
-  
-  resources: [
-    {
-      title: "HMI Development Guide",
-      description: "Qt and Flutter integration for reTerminal touchscreen applications",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "Industrial Protocols",
-      description: "Modbus, OPC UA, and MQTT configuration for industrial systems",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Fleet Configuration",
-      description: "Managing HMI settings and UI updates across deployments",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Remote Management API",
-      description: "REST APIs for HMI control and monitoring",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function SeeedSolution() {

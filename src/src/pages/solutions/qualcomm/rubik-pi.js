@@ -149,30 +149,7 @@ const solutionData = {
       link: "https://avocadolinux.org",
       target: "_blank"
     }
-  },
-
-  resources: [
-    {
-      title: "Yocto Integration Guide",
-      description: "Step-by-step Yocto build configuration for Qualcomm QCS6490",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "Device Security",
-      description: "Hardware-backed security, device certificates, and fleet security management",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Platform Overview",
-      description: "Complete Peridio platform architecture and fleet management capabilities",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "API Documentation",
-      description: "REST API and GraphQL integration for custom robotics applications",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function RubikPiSolutionNew() {

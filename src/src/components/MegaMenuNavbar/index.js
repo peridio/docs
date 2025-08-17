@@ -74,7 +74,7 @@ const MegaMenuNavbar = () => {
       label: 'Featured Hardware',
       sections: [
         {
-          title: 'EVKs',
+          title: 'Silicon',
           items: [
             { label: 'NXP IMX8MP', to: '/solutions/nxp/imx8mp' },
             { label: 'NXP FRDM 93', to: '/solutions/nxp/frdm-93' },
