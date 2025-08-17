@@ -140,12 +140,13 @@ export default function Home() {
           </div>
           <div className={styles.body}>
             <p className={styles.description}>
-              A secure, updatable Linux distribution built for embedded devices. Get to production
-              faster with pre-configured security, OTA updates, and container support.
+              Simplified Embedded Linux. With day-one BSPs for leading hardware targets, a fully 
+              open-source foundation, and built-in extensibility, Avocado OS lets your team focus 
+              on building applications — not wrestling with the OS.
             </p>
             {/* Avocado OS Links Section */}
             <div className={styles.linkGrid}>
-              <Link to="/dev-center/avocado-linux/introduction" className={styles.externalLink}>
+              <Link to="/dev-center" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -182,8 +183,8 @@ export default function Home() {
                 </svg>
                 Get Involved
               </Link>
-              <Link
-                to="https://discord.com/invite/rH77fKpKAj"
+              <a
+                href="https://www.peridio.com/join-our-discord"
                 className={styles.externalLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -202,7 +203,7 @@ export default function Home() {
                   />
                 </svg>
                 Join Discord
-              </Link>
+              </a>
               <Link
                 to="https://avocadolinux.org"
                 className={styles.externalLink}
