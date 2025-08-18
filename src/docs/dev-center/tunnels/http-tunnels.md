@@ -327,4 +327,4 @@ vnstat -i tun0
 
 - [Security Best Practices](security.md) - Secure your HTTP tunnels
 - [Troubleshooting](troubleshooting.md) - Common issues and solutions
-- [API Reference](/admin-api#Tunnels) - Full API documentation
+- [API Reference](/admin-api#tunnels) - Full API documentation

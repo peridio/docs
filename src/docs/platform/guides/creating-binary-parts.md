@@ -23,7 +23,7 @@ peridio binary-parts create \
 
 ### API
 
-Use the Peridio Admin API [create-a-binary-part](/admin-api#binaries/operation/create-a-binary-part) endpoint.
+Use the Peridio Admin API [create-a-binary-part](/admin-api#binary-parts/operation/create-a-binary-part) endpoint.
 
 ### Web Console
 

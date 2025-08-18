@@ -3568,6 +3568,11 @@ components:
       type: apiKey
       name: Authorization
       in: "header"
+      description: Legacy API Keys. The header value must be `Bearer API_KEY_VALUE`.
+    api_key_v2:
+      type: apiKey
+      name: Authorization
+      in: "header"
       description: API Keys. The header value must be `Bearer API_KEY_VALUE`.
   parameters:
     limit:

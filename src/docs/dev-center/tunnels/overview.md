@@ -39,4 +39,4 @@ This architecture works even when devices are behind NAT, firewalls, or cellular
 - [SSH Tunnels](ssh-tunnels.md) - Set up SSH access to your devices
 - [HTTP Tunnels](http-tunnels.md) - Access web interfaces on your devices
 - [Security Best Practices](security.md) - Secure your tunnel configurations
-- [API Reference](/admin-api#Tunnels) - Detailed API documentation
+- [API Reference](/admin-api#tunnels) - Detailed API documentation

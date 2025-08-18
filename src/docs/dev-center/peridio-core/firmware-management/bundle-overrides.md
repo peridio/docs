@@ -424,7 +424,7 @@ Set up monitoring for override operations:
 // Webhook handler for override events
 app.post('/webhooks/bundle-override', (req, res) => {
   const event = req.body;
-  
+
   switch(event.type) {
     case 'bundle_override.created':
       notifyOps(`Override created: ${event.data.name}`);
@@ -436,7 +436,7 @@ app.post('/webhooks/bundle-override', (req, res) => {
       trackDevice(event.data.device_prn, event.data.bundle_prn);
       break;
   }
-  
+
   res.sendStatus(200);
 });
 ```
@@ -445,10 +445,9 @@ app.post('/webhooks/bundle-override', (req, res) => {
 
 Bundle overrides work as part of Peridio's broader bundle distribution system. For detailed information about how overrides interact with release resolution and device update checks, see the [bundle distribution](bundle-distribution) reference.
 
-## API Reference
+## Additional Resources
 
-For detailed API documentation, see:
-- [Bundle Overrides API Reference](/admin-api#bundle-overrides)
+For additional resources, see:
 - [Bundle Distribution Reference](bundle-distribution)
 - [Bundles Reference](bundles)
 - [Devices Reference](/dev-center/peridio-core/device-management/devices)

@@ -24,7 +24,6 @@ yarn-error.log*
 # Project specific
 CLAUDE.md
 content-master
-package-lock.json
 screenshots/
 spec-sheets/
 vibe/

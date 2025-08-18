@@ -9,7 +9,7 @@ In this guide, you will use the Avocado CLI to initialize a project and orchestr
 To get started with device provisioning, we will first need the [Avocado CLI](https://github.com/avocado-linux/avocado-cli). Grab the latest release for your development architecture from the [Github releases page](https://github.com/avocado-linux/avocado-cli/releases).
 
 :::info
-This guide is intended to be run on a Linux-based host system (for example, Ubuntu, Debian, Fedora). Running these commands on macOS or Windows is not _currently_ supported.
+This guide is intended to be run on a Mac (macOS 10.12+) or Linux (Ubuntu 22.04+, Fedora 39+) development machine. Running these commands on Windows is not _currently_ supported.
 :::
 
 #### Command

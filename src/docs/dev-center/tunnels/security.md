@@ -347,5 +347,5 @@ nikto -h http://server_ip:server_port
 ## Next Steps
 
 - [Troubleshooting](troubleshooting.md) - Common security issues
-- [API Reference](/admin-api#Tunnels) - API security features
+- [API Reference](/admin-api#tunnels) - API security features
 - [Getting Started](getting-started.md) - Basic tunnel setup

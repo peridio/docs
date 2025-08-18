@@ -21,7 +21,7 @@ peridio binary-signatures create \
 
 ### API
 
-Use the Peridio Admin API [create-a-binary-signature](/admin-api#binaries/operation/create-a-binary-signature) endpoint.
+Use the Peridio Admin API [create-a-binary-signature](/admin-api#binary-signatures/operation/create-a-binary-signature) endpoint.
 
 ### Web Console
 

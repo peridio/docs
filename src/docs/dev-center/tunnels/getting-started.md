@@ -136,4 +136,4 @@ Tunnels automatically close after:
 
 - [SSH Tunnels](ssh-tunnels.md) - Advanced SSH configuration
 - [Security Best Practices](security.md) - Secure your tunnels
-- [API Reference](/admin-api#Tunnels) - Full API documentation
+- [API Reference](/admin-api#tunnels) - Full API documentation
