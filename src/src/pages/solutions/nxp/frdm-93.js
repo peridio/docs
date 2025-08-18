@@ -149,30 +149,7 @@ const solutionData = {
       link: "https://docs.avocadolinux.org/supported-hardware/frdm-imx93",
       target: "_blank"
     }
-  },
-
-  resources: [
-    {
-      title: "Heterogeneous Architecture Guide",
-      description: "Linux and RTOS integration for i.MX 93 dual-domain processing",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "Edge AI Deployment",
-      description: "NPU optimization and model deployment with Ethos U-65",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Fleet Management",
-      description: "Managing heterogeneous edge AI devices at scale",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "API Integration",
-      description: "REST API for edge AI fleet orchestration",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function FRDM93SolutionNew() {

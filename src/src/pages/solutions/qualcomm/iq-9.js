@@ -149,30 +149,7 @@ const solutionData = {
       link: "https://avocadolinux.org",
       target: "_blank"
     }
-  },
-
-  resources: [
-    {
-      title: "Advanced Yocto Configuration",
-      description: "Flagship SoC optimization and multi-model inference setup for QCS8550",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "Device Security",
-      description: "Enterprise security with device certificates and fleet management",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Premium Platform Features",
-      description: "Advanced fleet management and enterprise-grade device operations",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Advanced API Integration",
-      description: "REST API and GraphQL for sophisticated automotive and industrial applications",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function IQ9SolutionNew() {

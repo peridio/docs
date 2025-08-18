@@ -19,10 +19,6 @@ const solutionData = {
       { value: "6x Faster", label: "Time to Production" }
     ],
     primaryCTA: {
-      text: "Get Started",
-      link: "/dev-center/hardware/nvidia/jetson-orin-nano-evk"
-    },
-    secondaryCTA: {
       text: "Request Demo",
       link: "https://peridio.com/book-a-meeting"
     },
@@ -32,7 +28,7 @@ const solutionData = {
   
   valueProposition: {
     title: "Solution Overview",
-    content: "The Advantech iCAM-540, powered by Avocado Linux and Peridio Core on NVIDIA Jetson, delivers a production-grade smart camera platform ready to ship value in days, not months. Turnkey integration with the underlying Jetson hardware and Triton Inference Server allows application engineers to begin iterating on computer vision models from day one. This scale-ready Linux environment ensures secure, reliable deployment across fleets, with rollback protection and centralized control built in. Together, Advantech and Peridio provide a complete, programmable foundation for industrial-grade vision systems that can move seamlessly from lab to large-scale field operations."
+    content: "The Advantech iCAM-540, featuring the NVIDIA Jetson Orin NX and powered by Avocado OS, delivers a production-grade smart camera platform ready to ship value in days, not months. Turnkey integration with the underlying Jetson hardware and Triton Inference Server allows application engineers to begin iterating on computer vision models from day one. This scale-ready Linux environment ensures secure, reliable deployment across fleets, with rollback protection and centralized control built in. Together, Advantech and Peridio provide a complete, programmable foundation for industrial-grade vision systems that can move seamlessly from lab to large-scale field operations."
   },
   
   specs: [
@@ -129,7 +125,7 @@ const solutionData = {
     {
       icon: "BuildingOffice",
       title: "Cross-Platform Portability",
-      description: "Develop on ICAM-540, deploy across NVIDIA Jetson platforms. Unified toolchain prevents vendor lock-in and reduces engineering overhead."
+      description: "Develop on ICAM-540 with Orin NX, deploy across NVIDIA Jetson platforms. Unified toolchain prevents vendor lock-in and reduces engineering overhead."
     },
     {
       icon: "WrenchScrewdriver",
@@ -142,37 +138,10 @@ const solutionData = {
     title: "Ready to Deploy Production-Ready AI Vision?",
     description: "Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.",
     primaryButton: {
-      text: "Get Started",
-      link: "/dev-center/hardware/nvidia/jetson-orin-nano-evk"
-    },
-    secondaryButton: {
       text: "Request a Demo",
       link: "https://peridio.com/book-a-meeting"
     }
-  },
-
-  resources: [
-    {
-      title: "Industrial Vision Guide",
-      description: "CAMNavi SDK integration and DeepStream pipeline optimization for AOI applications",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "AI Model Lifecycle",
-      description: "TensorRT optimization, versioning, and atomic deployment for production inference",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Vision Fleet Operations",
-      description: "Multi-camera synchronization and centralized management across facilities",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Edge-to-Cloud Integration",
-      description: "Secure data pipelines and inference result streaming with on-premise support",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function ICAM540SolutionNew() {

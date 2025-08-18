@@ -389,7 +389,7 @@ export default {
       items: [
         {
           type: 'category',
-          label: 'EVKs',
+          label: 'Silicon',
           items: [
             {
               type: 'doc',

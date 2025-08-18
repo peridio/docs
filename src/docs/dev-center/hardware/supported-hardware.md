@@ -60,7 +60,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-full" title="Fully Supported">●</span></td>
     </tr>
     <tr className="category-header">
-      <td colSpan="8"><strong>EVKs</strong></td>
+      <td colSpan="8"><strong>Silicon</strong></td>
     </tr>
     <tr>
       <td><strong><a href="/dev-center/hardware/nvidia/jetson-orin-nano-evk" target="_blank" rel="noopener noreferrer">NVIDIA Jetson Orin Nano EVK</a></strong></td>
@@ -71,6 +71,16 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-partial" title="In Development">●</span></td>
       <td><span className="status-partial" title="In Development">●</span></td>
       <td><span className="status-full" title="Fully Supported">●</span></td>
+    </tr>
+    <tr>
+      <td><strong>NVIDIA Jetson Orin NX Silicon</strong></td>
+      <td><span className="status-partial" title="In Development">●</span></td>
+      <td><span className="status-partial" title="In Development">●</span></td>
+      <td><span className="status-partial" title="In Development">●</span></td>
+      <td><span className="status-partial" title="In Development">●</span></td>
+      <td><span className="status-partial" title="In Development">●</span></td>
+      <td><span className="status-partial" title="In Development">●</span></td>
+      <td><span className="status-partial" title="In Development">●</span></td>
     </tr>
     <tr>
       <td><strong><a href="/dev-center/hardware/nxp/imx8mp" target="_blank" rel="noopener noreferrer">NXP i.MX 8MP EVK</a></strong></td>

@@ -149,30 +149,7 @@ const solutionData = {
       link: "https://docs.avocadolinux.org/supported-hardware/imx-8m-plus",
       target: "_blank"
     }
-  },
-
-  resources: [
-    {
-      title: "Industrial Yocto Configuration",
-      description: "Multi-core optimization and NPU integration for i.MX 8M Plus industrial applications",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "Device Security",
-      description: "Industrial security with device certificates and fleet management",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Fleet Management",
-      description: "Industrial device operations with remote diagnostics and secure OTA updates",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Industrial Integration APIs",
-      description: "REST API and GraphQL for industrial automation and camera system integration",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function IMX8MPSolutionNew() {

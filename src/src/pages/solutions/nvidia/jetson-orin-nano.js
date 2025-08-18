@@ -149,30 +149,7 @@ const solutionData = {
       link: "https://avocadolinux.org",
       target: "_blank"
     }
-  },
-
-  resources: [
-    {
-      title: "Yocto Integration Guide",
-      description: "Step-by-step Yocto build configuration for Jetson Orin Nano",
-      link: "/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-    },
-    {
-      title: "Device Security",
-      description: "Device certificates, secure boot, and fleet security management",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "Platform Overview",
-      description: "Complete Peridio platform architecture and capabilities",
-      link: "/platform/reference/overview"
-    },
-    {
-      title: "API Documentation",
-      description: "REST API and GraphQL integration for fleet management",
-      link: "/admin-api"
-    }
-  ]
+  }
 }
 
 export default function JetsonOrinNanoSolutionNew() {
