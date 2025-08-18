@@ -4,7 +4,7 @@ title: CA Certificates
 
 # CA Certificates
 
-In the context of Peridio, a CA certificate is an X.509 [intermediate CA](/dev-center/peridio-core/device-management/x509#intermediate) that signs other [end-entity certificates](/dev-center/peridio-core/device-management/x509#end-entity). They are optionally used to control the registration of [device certificates](/dev-center/peridio-core/device-management/device-certificates) during [just-in-time provisioning](/dev-center/peridio-core/device-management/just-in-time-provisioning).
+In the context of Peridio, a CA certificate is an X.509 [intermediate CA](/dev-center/peridio-core/device-management/x509#intermediate-certificate-authority) that signs other [end-entity certificates](/dev-center/peridio-core/device-management/x509#end-entity-certificate). They are optionally used to control the registration of [device certificates](/dev-center/peridio-core/device-management/device-certificates) during [just-in-time provisioning](/dev-center/peridio-core/device-management/just-in-time-provisioning).
 
 ## Purpose
 

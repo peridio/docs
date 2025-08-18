@@ -24,4 +24,4 @@ peridio products-v2 create \
 
 ### API
 
-Use the Peridio Admin API [create-a-product-v2](/admin-api#products/operation/create-a-product-v2) endpoint.
+Use the Peridio Admin API [create-a-product-v2](/admin-api#products/operation/create-a-product) endpoint.

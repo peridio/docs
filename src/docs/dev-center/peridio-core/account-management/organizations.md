@@ -16,48 +16,15 @@ An organization serves as:
 
 ## User Access
 
-Users within an organization with a role of `admin` are able to invite other users to that organization. As part of this process the inviter will choose a role level for the invited which will dictate their access level to the organization in general.
+Peridio supports granular permission-based access control for users within organizations. User management and access control configuration is handled through Peridio support. Contact [Peridio support](mailto:support@peridio.com) for details on:
 
-### Organization Roles
-
-Organizations support multiple role levels to provide granular access control:
-
-| Role | Description | Permissions |
-|------|-------------|------------|
-| **Admin** | Full organization access | Create, read, update, delete all resources; manage users and billing |
-| **Manager** | Operational management | Create, read, update, delete most resources; cannot manage billing |
-| **Developer** | Development access | Create, read, update resources; limited delete permissions |
-| **Viewer** | Read-only access | Read all resources; no modification permissions |
+- Adding users to your organization
+- Configuring user permissions and access levels
+- Managing user roles and responsibilities
 
 ## Creating Organizations
 
-Organizations can be created through multiple methods:
-
-### Web Console
-
-Navigate to the [Peridio Web Console](https://console.peridio.com) and follow the organization creation wizard.
-
-### CLI
-
-```bash
-peridio organizations create \
-  --name "My Organization" \
-  --display-name "My Company IoT Division"
-```
-
-### API
-
-Use the Peridio Admin API to programmatically create organizations:
-
-```bash
-curl -X POST https://api.peridio.com/v2/organizations \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "my-organization",
-    "display_name": "My Company IoT Division"
-  }'
-```
+New organizations must be created through Peridio support. Please contact [Peridio support](mailto:support@peridio.com) to request a new organization for your account.
 
 ## Organization Settings
 
@@ -96,13 +63,7 @@ Organizations have configurable limits on resources:
 
 ### Transferring Ownership
 
-Organization ownership can be transferred to another admin user:
-
-```bash
-peridio organizations transfer-ownership \
-  --organization $ORG_ID \
-  --new-owner $USER_EMAIL
-```
+Organization ownership transfers must be handled through Peridio support. Contact support to initiate an ownership transfer.
 
 ### Deleting Organizations
 
@@ -131,7 +92,7 @@ For enterprises managing multiple organizations:
 
 ### Separate by Environment
 - Development Organization
-- Staging Organization  
+- Staging Organization
 - Production Organization
 
 ### Separate by Business Unit
@@ -144,6 +105,6 @@ For enterprises managing multiple organizations:
 - Europe Organization
 - Asia Pacific Organization
 
-## API Reference
+## Support
 
-For detailed API documentation, see the [Organizations API Reference](/admin-api#organizations).
+For assistance with organization management, contact [Peridio support](mailto:support@peridio.com).

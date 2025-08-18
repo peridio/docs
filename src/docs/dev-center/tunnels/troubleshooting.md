@@ -394,4 +394,4 @@ echo "Debug bundle created: $DEBUG_DIR.tar.gz"
 
 - [Security Best Practices](security.md) - Prevent security issues
 - [Getting Started](getting-started.md) - Basic setup guide
-- [API Reference](/admin-api#Tunnels) - Complete API documentation
+- [API Reference](/admin-api#tunnels) - Complete API documentation

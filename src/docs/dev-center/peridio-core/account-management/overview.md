@@ -14,7 +14,7 @@ The top-level container for all Peridio resources, providing isolation and manag
 ### [Users](users)
 Individual accounts that interact with the Peridio platform, with configurable roles and permissions.
 
-### [Peridio Resource Names (PRNs)](peridio-resource-names)
+### [Peridio Resource Names (PRNs)](/dev-center/peridio-core/peridio-resource-names)
 Unique identifiers that unambiguously specify resources across the entire Peridio platform.
 
 ## Key Features

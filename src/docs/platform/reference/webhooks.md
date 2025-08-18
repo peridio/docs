@@ -139,7 +139,7 @@ Peridio supports Peridio-side event filtering. This means that only the events t
 - api_key
   - [created](/admin-api#api-key-events/operation/api-key-created)
 - device
-  - [authentication-failed](/admin-api#device-events/operation/device-authentication-failed)
+  <!-- - [authentication-failed](/admin-api#device-events/operation/device-authentication-failed) -->
   - [checked-for-release](/admin-api#device-events/operation/device-checked-for-release)
   - [claimed-release](/admin-api#device-events/operation/device-claimed-release)
   - [connected](/admin-api#device-events/operation/device-connected)

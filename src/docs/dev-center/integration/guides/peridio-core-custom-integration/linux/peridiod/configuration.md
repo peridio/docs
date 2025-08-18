@@ -1,6 +1,6 @@
 # Configuring
 
-Peridiod is configured via a json formatted file on the filesystem. The location of the file defaults to `$XDG_CONFIG_HOME/peridio/peridio-config.json`. if `$XDG_CONFIG_HOME` is not set the default path is `$HOME/.config/peridio/peridio-config.json`. This file location can be overwritten by setting `PERIDIO_CONFIG_FILE=/path/to/peridio.json`.
+Peridiod is configured via a json formatted file on the filesystem. The location of the file defaults to `$XDG_CONFIG_HOME/peridio/peridio-config.json`. If `$XDG_CONFIG_HOME` is not set the default path is `$HOME/.config/peridio/peridio-config.json`. This file location can be overwritten by setting `PERIDIO_CONFIG_FILE=/path/to/peridio.json`.
 
 The peridiod configuration has the following top level keys:
 
@@ -90,7 +90,7 @@ The device api options will default to enable connecting peridiod to the Peridio
 
 ## `fwup` options
 
-The following keys inform how the use of distributions will be applied in the system. They will also act as a global default when using fwup installer. You can override these settings on a per binary basis by passing them in `installer_opts` for the [fwup installer](updates#installers)
+The following keys inform how the use of distributions will be applied in the system. They will also act as a global default when using fwup installer. You can override these settings on a per binary basis by passing them in `installer_opts` for the [fwup installer](updates#fwup)
 
 - `devpath`: The block storage device path to use for applying firmware updates.
 - `public_keys`: A list of authorized public keys used when verifying update archives.

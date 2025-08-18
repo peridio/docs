@@ -72,7 +72,7 @@ There can only ever be at most a single latest release at any given time. In gra
 
 ### Only-Sinks-Constrain-Availability Rule
 
-The latest release of a graph is special in that it is the only release within a graph that is allowed to constrain its [availability](/dev-center/peridio-core/firmware-management/releases#availability) through scheduling or phasing.
+The latest release of a graph is special in that it is the only release within a graph that is allowed to constrain its [availability](/dev-center/peridio-core/firmware-management/releases#availability-controls) through scheduling or phasing.
 
 **Implications:**
 - Historical releases cannot be phased or scheduled

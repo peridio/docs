@@ -58,4 +58,4 @@ Deployments allow you to configure failure rates and thresholds such that device
 
 - Unquarantining a deployment will cause device update attempts prior to that to be ignored in failure rates and thresholds.
 - Unquarantining a device will cause its update attempts prior to that to be ignored in failure rates and thresholds.
-- [`device.release_changed`](/admin-api#device-events/operation/device-release-changed) and [`device.firmware_changed`](/admin-api#device-events/operation/device-firmware-changed) events cause update attempts prior to them to be ignored in failure rates and thresholds.
+- `device.release_changed` and `device.firmware_changed` events cause update attempts prior to them to be ignored in failure rates and thresholds.

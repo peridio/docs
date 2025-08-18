@@ -12,7 +12,7 @@ This guide serves as a comprehensive introduction to bundle management that will
 Bundle management comprises the following resources:
 
 - [Bundles](/platform/reference/bundles) - define ordered sets of [binaries](/platform/reference/binaries) that can be distributed to [devices](/platform/reference/devices) via [releases](/platform/reference/releases).
-- [Releases](/platform/reference/releases) - publish bundles to devices and form the [release graph](/platform/reference/releases#graph-traversal).
+- [Releases](/platform/reference/releases) - publish bundles to devices and form the [release graph](/platform/reference/releases).
 
 ## Getting started
 
