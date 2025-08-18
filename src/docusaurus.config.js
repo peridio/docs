@@ -233,17 +233,6 @@ const config = {
           // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
         },
       },
-      scripts: [
-        {
-          src: 'https://tag.unifyintent.com/v1/LDrzeMh2P67Pebcy3gyjWc/script.js',
-          async: true,
-          'data-api-key': 'wk_PdA49XZi_8rJCmEbbb3YJnXGDECJJvKA5wt6fdP14',
-          id: 'unifytag',
-        },
-        {
-          innerHTML: `!function(){var e=["identify","page","startAutoPage","stopAutoPage","startAutoIdentify","stopAutoIdentify"];function t(o){return Object.assign([],e.reduce(function(r,n){return r[n]=function(){return o.push([n,[].slice.call(arguments)]),o},r},{}))}window.unify||(window.unify=t(window.unify)),window.unifyBrowser||(window.unifyBrowser=t(window.unifyBrowser))}();`,
-        },
-      ],
     }),
   headTags: [
     {
@@ -274,6 +263,11 @@ const config = {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
       },
+    },
+    {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `!function(){var e=["identify","page","startAutoPage","stopAutoPage","startAutoIdentify","stopAutoIdentify"];function t(o){return Object.assign([],e.reduce(function(r,n){return r[n]=function(){return o.push([n,[].slice.call(arguments)]),o},r},{}))}window.unify||(window.unify=t(window.unify)),window.unifyBrowser||(window.unifyBrowser=t(window.unifyBrowser));var n=document.createElement("script");n.async=!0,n.setAttribute("src","https://tag.unifyintent.com/v1/LDrzeMh2P67Pebcy3gyjWc/script.js"),n.setAttribute("data-api-key","wk_PdA49XZi_8rJCmEbbb3YJnXGDECJJvKA5wt6fdP14"),n.setAttribute("id","unifytag"),(document.body||document.head).appendChild(n)}();`,
     },
   ],
 }
