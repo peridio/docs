@@ -54,14 +54,16 @@ interface SolutionLayoutProps {
   }>
   cta?: {
     title: string
-    description: string
-    primaryButton?: {
+    subtitle?: string
+    primaryCTA?: {
       text: string
       link: string
+      target?: string
     }
-    secondaryButton?: {
+    secondaryCTA?: {
       text: string
       link: string
+      target?: string
     }
   }
   resources?: Array<{

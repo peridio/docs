@@ -11,9 +11,9 @@
 .hero {
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%),
-    url("/img/hero.png") lightgray -13px -1669.396px / 101.458% 1124.387% no-repeat;
+    url("/img/hero.png") lightgray center center / cover no-repeat;
   color: white;
-  padding: 6rem 2.5rem;
+  padding: 5rem 1.5rem;
   position: relative;
   overflow: hidden;
   text-align: left;
@@ -22,6 +22,7 @@
 .heroContainer {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 2rem;
   position: relative;
   z-index: 1;
 }
@@ -61,6 +62,10 @@
   margin-bottom: 2rem;
 }
 
+.heroStats:has(.stat:nth-child(4):last-child) {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .stat {
   display: flex;
   flex-direction: column;
@@ -69,7 +74,7 @@
 }
 
 .statNumber {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: white;
   line-height: 1;
@@ -89,8 +94,8 @@
 }
 
 .ctaPrimary {
-  background: #5f51ff;
-  color: white;
+  background: white;
+  color: #333;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   text-decoration: none;
@@ -102,8 +107,8 @@
 }
 
 .ctaPrimary:hover {
-  background: #4a3dff;
-  color: white;
+  background: #f8f9fa;
+  color: #333;
   text-decoration: none;
 }
 
@@ -203,15 +208,13 @@
 
 .useCase {
   text-align: center;
-  padding: 1.5rem;
 }
 
 .useCaseImage {
   width: 100%;
-  max-width: 300px;
   height: 200px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
 }
 
@@ -453,8 +456,12 @@
     gap: 1rem;
   }
   
+  .heroStats:has(.stat:nth-child(4):last-child) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
   .statNumber {
-    font-size: 1.5rem;
+    font-size: 1.05rem;
   }
   
   .statLabel {
@@ -483,10 +490,20 @@
   
   .useCaseGrid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .useCase {
+    padding: 0;
+    text-align: left;
   }
   
   .featureGrid {
     grid-template-columns: 1fr;
+  }
+  
+  .feature {
+    text-align: center;
   }
   
   .resourceGrid {
@@ -496,14 +513,25 @@
   .sectionTitle {
     font-size: 1.5rem;
     margin-bottom: 2rem;
+    text-align: left;
+  }
+  
+  .features .sectionTitle {
+    text-align: center;
+  }
+  
+  .ctaContent {
+    text-align: left;
   }
   
   .ctaContent h2 {
     font-size: 1.5rem;
+    text-align: left;
   }
   
   .ctaContent p {
     font-size: 1rem;
+    text-align: left;
   }
   
   .ctaButtons {
@@ -515,6 +543,18 @@
   .ctaSecondary {
     width: 100%;
     text-align: center;
+  }
+  
+  .sectionHeader {
+    text-align: left;
+  }
+  
+  .sectionHeader h2 {
+    text-align: left;
+  }
+  
+  .sectionHeader p {
+    text-align: left;
   }
 }
 
@@ -551,7 +591,7 @@
   
   .cardHeader {
     flex-direction: column;
-    text-align: center;
+    text-align: left;
   }
 }
 
@@ -583,13 +623,16 @@
 @media (max-width: 768px) {
   .solutionOverview {
     padding: 2rem 1rem;
+    text-align: left;
   }
   
   .overviewTitle {
     font-size: 1.75rem;
+    text-align: left;
   }
   
   .overviewContent {
     font-size: 1rem;
+    text-align: left;
   }
 }

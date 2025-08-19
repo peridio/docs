@@ -19,7 +19,7 @@ const solutionData = {
     ],
     primaryCTA: {
       text: "Get Started",
-      link: "https://docs.avocadolinux.org/supported-hardware/stm32mp257f-dk",
+      link: "/evk",
       target: "_blank"
     },
     secondaryCTA: {
@@ -143,7 +143,7 @@ const solutionData = {
     subtitle: "Transform your STMicroelectronics STM32MP257F-DK from development kit to secure, deployable industrial platform.",
     primaryCTA: {
       text: "Get Started",
-      link: "https://docs.avocadolinux.org/supported-hardware/stm32mp257f-dk",
+      link: "/evk",
       target: "_blank"
     },
     secondaryCTA: {

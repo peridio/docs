@@ -135,10 +135,11 @@ const solutionData = {
   
   cta: {
     title: "Ready to Deploy reTerminal at Scale?",
-    description: "Transform your Seeed reTerminal HMIs into a production fleet. Get deterministic Linux, secure OTA orchestration, and enterprise fleet management - all production-ready from Day 1.",
-    primaryButton: {
+    subtitle: "Transform your Seeed reTerminal HMIs into a production fleet. Get deterministic Linux, secure OTA orchestration, and enterprise fleet management - all production-ready from Day 1.",
+    primaryCTA: {
       text: "Request a Demo",
-      link: "https://peridio.com/book-a-meeting"
+      link: "https://peridio.com/book-a-meeting",
+      target: "_blank"
     }
   }
 }

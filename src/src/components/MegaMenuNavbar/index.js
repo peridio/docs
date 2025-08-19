@@ -129,9 +129,9 @@ const MegaMenuNavbar = () => {
             <img src={`/${navbar.logo.src}`} alt={navbar.logo.alt} className="navbar__logo" />
           </Link>
           <div className="mega-menu-container">
-            <a href="https://peridio.com" className="navbar__item navbar__link" target="_blank" rel="noopener noreferrer">
+            <Link to="https://peridio.com" className="navbar__item navbar__link" target="_blank" rel="noopener noreferrer">
               Home
-            </a>
+            </Link>
             {Object.entries(megaMenuItems).map(([key, menu]) => (
               <div
                 key={key}
