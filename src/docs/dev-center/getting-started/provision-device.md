@@ -43,14 +43,16 @@ Options:
 
 Initialize a new Avocado project by generating an `avocado.toml` with sensible defaults (target `qemux86-64`, a `dev` runtime, and baseline SDK/extension dependencies).
 
+By default, the target is set to `qemux86-64`, as it allows you go exercise all Avocado CLI workflows without a physical device. You can specify a specific hardware target via the `--target` flag.
+
 #### Command
 ```bash
-avocado init foo && cd foo
+avocado init qemu && cd qemu
 ```
 
 #### Output
 ```text
-✓ Created config at /home/user/targets/foo/avocado.toml.
+✓ Created config at /home/user/targets/qemu/avocado.toml.
 ```
 
 :::info
@@ -63,6 +65,9 @@ Run all subsequent commands in this guide from the root of your Avocado project 
 The generated config defines the `dev` runtime and dependencies, the SDK container image, and the `avocado-dev` extension (declared as both sysext and confext) used throughout this guide.
 
 ```toml title="avocado.toml"
+default_target = "qemux86-64"
+supported_targets = ["qemux86-64"]
+
 [runtime.dev]
 target = "qemux86-64"
 
@@ -88,26 +93,24 @@ avocado-hitl = "*"
 nativesdk-avocado-hitl = "*"
 ```
 
-By default, the target is set to `qemux86-64`, as it allows you go exercise all Avocado CLI workflows without a physical device.
-
 ### Install dependencies
 
-The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). Use `-r` to scope to a single runtime and its extensions. Otherwise, by default it builds *all* runtimes. Prompts may appear during package installation unless you pass `--force`.
+The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). Use `-r` to scope to a single runtime and its extensions. Otherwise, by default it builds *all* runtimes. Prompts may appear during package installation unless you pass `--force` (`-f`).
 
 #### Command
 ```bash title="On Host"
-avocado install
+avocado install --force
 ```
 
 #### Output
 ```text
+[INFO] Using target: qemux86-64 (from config file (default_target))
 [INFO] Starting comprehensive install process...
 [INFO] Step 1/3: Installing SDK dependencies
+[INFO] Using target: qemux86-64 (from config file (default_target))
 [INFO] Installing SDK dependencies.
-[INFO] Using repo URL: 'https://repo.avocadolinux.org'
-[INFO] Using repo release: 'latest/apollo/edge'
 [INFO] Initializing Avocado SDK.
-Avocado SDK                                                                                   2.1 kB/s | 1.9 kB     00:00
+Avocado SDK                                                          1.9 kB/s | 1.9 kB     00:00
 Dependencies resolved.
 ==============================================================================================================================
  Package                               Architecture                  Version                 Repository                  Size
@@ -118,7 +121,7 @@ Installing:
 ... snip ...
 
 Installed:
-  avocado-img-bootfiles-1.0-r0.avocado_qemux86_64               avocado-img-initramfs-1.0-r0.avocado_qemux86_64
+  avocado-img-bootfiles-1.0-r0.avocado_qemux86_64   avocado-img-initramfs-1.0-r0.avocado_qemux86_64
   avocado-img-rootfs-1.0-r0.avocado_qemux86_64
 
 Complete!
@@ -138,8 +141,9 @@ avocado build
 
 #### Output
 ```text
+[INFO] Using target: qemux86-64 (from config file (default_target))
 [INFO] Starting comprehensive build process...
-[INFO] Step 1/3: Analyzing dependencies and compiling SDK code
+[INFO] Step 1/4: Analyzing dependencies and compiling SDK code
 [INFO] No SDK compilation needed.
 [INFO] Step 2/4: Building extensions
 [INFO] Building sysext extension 'avocado-dev'.
@@ -150,14 +154,11 @@ avocado build
 [SUCCESS] Successfully ran SDK lifecycle hook 'avocado-build' for target 'qemux86-64'.
 [SUCCESS] Successfully built runtime 'dev'
 [SUCCESS] All components built successfully!
-
 ```
 
 ### Provision a runtime
 
 The `avocado provision` command prepares the specified runtime by transforming the output of the build, and depending on the target, either: writing final artifacts to disk, or even provisioning a physical device via USB, network, etc.
-
-
 
 #### Command
 ```bash title="On Host"
@@ -170,7 +171,7 @@ avocado provision -r dev
 
 ... snip ...
 
-[SUCCESS] Provision script 'stone-provision.sh' completed successfully.
+[SUCCESS] Provision script 'stone-provision-img.sh' completed successfully.
 [SUCCESS] Provision completed.
 [SUCCESS] Successfully ran SDK lifecycle hook 'avocado-provision' for target 'qemux86-64'.
 [SUCCESS] Successfully provisioned runtime 'dev'
@@ -180,11 +181,11 @@ In this guide, we are targeting QEMU, so our provisioning process will write the
 
 ### Run virtual target
 
-Run the built image under QEMU using the SDK container. `sdk run -ie` launches an interactive session with the Avocado SDK environment sourced and invokes the VM launcher for the `dev` runtime.
+Run the built image under QEMU using the SDK container. `sdk run -iE` launches an interactive session with the Avocado SDK environment sourced and invokes the VM launcher for the `dev` runtime.
 
 #### Command
 ```bash title="On Host"
-avocado sdk run -ie vm dev
+avocado sdk run -iE vm dev
 ```
 
 #### Output

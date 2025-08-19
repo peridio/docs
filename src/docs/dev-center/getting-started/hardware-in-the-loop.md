@@ -15,6 +15,9 @@ Run all commands in this guide from the root of your Avocado project on your hos
 Edit your Avocado config to include a new extension. In this example, it will be called `my-app`.
 
 ```toml title="avocado.toml"
+default_target = "qemux86-64"
+supported_targets = ["qemux86-64"]
+
 [runtime.dev]
 target = "qemux86-64"
 
@@ -49,6 +52,7 @@ version = "1.0.0"
 # highlight-added-end
 ```
 
+
 ### Building the extension
 
 After adding an entry for our new extension, we need to build it. This is accomplished via `avocado build`. This will ensure all necessary components are re-built.
@@ -59,6 +63,7 @@ avocado build
 ```
 
 ```bash
+[INFO] Using target: qemux86-64 (from config file (default_target))
 [INFO] Starting comprehensive build process...
 [INFO] Step 1/4: Analyzing dependencies and compiling SDK code
 [INFO] No SDK compilation needed.
@@ -89,7 +94,7 @@ Run the VM using the SDK passing args for host networking, so the guest (the dev
 
 #### Command
 ```bash title="On Host"
-avocado sdk run -ie --container-arg "--net=host" vm dev
+avocado sdk run -iE --container-arg "--net=host" vm dev
 ```
 
 #### Output
