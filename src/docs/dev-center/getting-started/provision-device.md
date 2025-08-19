@@ -28,8 +28,10 @@ Commands:
   ext        Extension related commands
   init       Initialize a new avocado project
   runtime    Runtime management commands
-  clean      Clean the avocado project by removing the _avocado directory
+  hitl       Hardware-in-the-loop testing commands
+  clean      Clean the avocado project by removing docker volumes and state files
   install    Install all components (SDK, extensions, and runtime dependencies)
+  upgrade    Upgrade the CLI to the latest (or specified) version
   build      Build all components (SDK compile, extensions, and runtime images)
   provision  Provision a runtime (shortcut for 'runtime provision')
 
