@@ -9,7 +9,9 @@ import './styles.css'
 const MegaMenuNavbar = () => {
   const { navbar } = useThemeConfig()
   const [activeMenu, setActiveMenu] = useState(null)
+  const [toggledMenu, setToggledMenu] = useState(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isMegaMenuHidden, setIsMegaMenuHidden] = useState(false)
   const timeoutRef = useRef(null)
 
   const handleMouseEnter = (menuKey) => {
@@ -25,8 +27,70 @@ const MegaMenuNavbar = () => {
     }, 150)
   }
 
+  const handleMenuClick = (menuKey) => {
+    if (toggledMenu === menuKey) {
+      // Add fade-out animation before hiding
+      const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`);
+      if (dropdown) {
+        dropdown.classList.add('fade-out');
+        setTimeout(() => {
+          setToggledMenu(null);
+        }, 200); // Match the CSS transition duration
+      } else {
+        setToggledMenu(null);
+      }
+    } else {
+      setToggledMenu(menuKey)
+    }
+  }
+
+  const handleLinkClick = () => {
+    if (toggledMenu) {
+      // Add fade-out animation before hiding
+      const dropdown = document.querySelector(`[data-menu="${toggledMenu}"] .mega-menu-dropdown`);
+      if (dropdown) {
+        dropdown.classList.add('fade-out');
+        setTimeout(() => {
+          setToggledMenu(null);
+        }, 200); // Match the CSS transition duration
+      } else {
+        setToggledMenu(null);
+      }
+    }
+  }
+
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.mega-menu-item') && toggledMenu) {
+        // Add fade-out animation before hiding
+        const dropdown = document.querySelector(`[data-menu="${toggledMenu}"] .mega-menu-dropdown`);
+        if (dropdown) {
+          dropdown.classList.add('fade-out');
+          setTimeout(() => {
+            setToggledMenu(null);
+          }, 200); // Match the CSS transition duration
+        } else {
+          setToggledMenu(null);
+        }
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
     return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [toggledMenu])
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMegaMenuHidden(window.innerWidth <= 996)
+    }
+    
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    
+    return () => {
+      window.removeEventListener('resize', checkScreenSize)
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
@@ -125,22 +189,26 @@ const MegaMenuNavbar = () => {
     <nav className="navbar navbar--fixed-top">
       <div className="navbar__inner">
         <div className="navbar__items">
-          <Link to="/" className="navbar__brand">
-            <img src={`/${navbar.logo.src}`} alt={navbar.logo.alt} className="navbar__logo" />
+          <Link to="/" className="navbar__brand" onClick={handleLinkClick}>
+            <img 
+              src={isMegaMenuHidden ? "/img/peridio-docs-logo-mobile.svg" : `/${navbar.logo.src}`} 
+              alt={navbar.logo.alt} 
+              className="navbar__logo" 
+            />
           </Link>
           <div className="mega-menu-container">
-            <Link to="https://peridio.com" className="navbar__item navbar__link" target="_blank" rel="noopener noreferrer">
+            <Link to="https://peridio.com" className="navbar__item navbar__link" target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>
               Home
             </Link>
             {Object.entries(megaMenuItems).map(([key, menu]) => (
               <div
                 key={key}
-                className="mega-menu-item"
-                onMouseEnter={() => handleMouseEnter(key)}
-                onMouseLeave={handleMouseLeave}
+                className={`mega-menu-item ${toggledMenu === key ? 'active' : ''}`}
+                onClick={() => handleMenuClick(key)}
+                data-menu={key}
               >
                 {menu.linkTo ? (
-                  <Link to={menu.linkTo} className="mega-menu-trigger">
+                  <Link to={menu.linkTo} className="mega-menu-trigger" onClick={handleLinkClick}>
                     {menu.label}
                     <svg width="12" height="8" viewBox="0 0 12 8" className="mega-menu-arrow">
                       <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
@@ -155,7 +223,7 @@ const MegaMenuNavbar = () => {
                     </span>
                 )}
 
-                {activeMenu === key && (
+                {toggledMenu === key && (
                   <div className="mega-menu-dropdown">
                     <div className={`mega-menu-content ${menu.threeColumn ? 'three-column' : menu.twoColumn ? 'two-column' : ''}`}>
                       {menu.sections.map((section, sectionIndex) => (
@@ -174,7 +242,7 @@ const MegaMenuNavbar = () => {
                                     {item.label}
                                   </span>
                                 ) : (
-                                  <Link to={item.to} className="mega-menu-link">
+                                  <Link to={item.to} className="mega-menu-link" onClick={handleLinkClick}>
                                     {item.label}
                                   </Link>
                                 )}
@@ -206,9 +274,9 @@ const MegaMenuNavbar = () => {
 
         <div className="navbar__items navbar__items--right">
           <div
-            className="mega-menu-item"
-            onMouseEnter={() => handleMouseEnter('tools')}
-            onMouseLeave={handleMouseLeave}
+            className={`mega-menu-item ${toggledMenu === 'tools' ? 'active' : ''}`}
+            onClick={() => handleMenuClick('tools')}
+            data-menu="tools"
           >
             <span className="mega-menu-trigger">
               {toolsMenu.label}
@@ -217,7 +285,7 @@ const MegaMenuNavbar = () => {
               </svg>
             </span>
 
-            {activeMenu === 'tools' && (
+            {toggledMenu === 'tools' && (
               <div className="mega-menu-dropdown">
                 <div className="mega-menu-content">
                   {toolsMenu.sections.map((section, sectionIndex) => (
@@ -230,7 +298,7 @@ const MegaMenuNavbar = () => {
                       <ul className="mega-menu-links">
                         {section.items.map((item, itemIndex) => (
                           <li key={itemIndex}>
-                            <Link to={item.to} className="mega-menu-link">
+                            <Link to={item.to} className="mega-menu-link" onClick={handleLinkClick}>
                               {item.label}
                             </Link>
                           </li>
@@ -248,6 +316,7 @@ const MegaMenuNavbar = () => {
             className="navbar__item navbar__link"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleLinkClick}
           >
             Web Console
           </Link>
@@ -256,6 +325,8 @@ const MegaMenuNavbar = () => {
             className="navbar__toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             <svg
               width="24"
@@ -263,14 +334,17 @@ const MegaMenuNavbar = () => {
               viewBox="0 0 24 24"
               className="navbar__toggle-icon"
               aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <path
-                d="M3 6h18M3 12h18M3 18h18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              {mobileMenuOpen ? (
+                <path d="M18 6L6 18M6 6l12 12" />
+              ) : (
+                <path d="M3 6h18M3 12h18M3 18h18" />
+              )}
             </svg>
           </button>
         </div>
