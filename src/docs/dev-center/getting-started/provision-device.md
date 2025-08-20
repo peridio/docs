@@ -57,13 +57,6 @@ avocado init qemu && cd qemu
 ✓ Created config at /home/user/targets/qemu/avocado.toml.
 ```
 
-:::info
-Run all subsequent commands in this guide from the root of your Avocado project on your host machine — the directory that contains your Avocado config. Code blocks labeled "On Device (VM)" are executed inside the running QEMU VM.
-:::
-
-
-### View the generated Avocado config
-
 The generated config defines the `dev` runtime and dependencies, the SDK container image, and the `avocado-dev` extension (declared as both sysext and confext) used throughout this guide.
 
 ```toml title="avocado.toml"
@@ -94,6 +87,11 @@ avocado-hitl = "*"
 [ext.avocado-dev.sdk.dependencies]
 nativesdk-avocado-hitl = "*"
 ```
+
+:::info
+Run all subsequent commands in this guide from the root of your Avocado project on your host machine — the directory that contains your Avocado config. Code blocks labeled "On Device (VM)" are executed inside the running QEMU VM.
+:::
+
 
 ### Install dependencies
 
@@ -131,6 +129,108 @@ Complete!
 [SUCCESS] Successfully installed dependencies for 1 runtime(s)
 [SUCCESS] All components installed successfully!
 ```
+
+### Set up user credentials
+
+We must define a password for our `root` user account.
+
+Passwords can be generated via the `openssl passwd -6` command to generate a SHA512 password.
+
+#### Command
+```bash
+openssl passwd -6 "my-secret-password"
+```
+
+#### Output
+```text
+$6$Q98YeorOiEwd2wEo$LEtlJIsT1yJVdBkEGyP9rbeambXPLXN4Ci59G40HEq1/mjy99UkBWAkNQpGHoGdeCi0XGlv.w0ZjbBqzjJ/vp1
+```
+
+With our password hash, we can insert a new config directive configuring our account password.
+
+```toml title="avocado.toml"
+default_target = "qemux86-64"
+supported_targets = ["qemux86-64"]
+
+[runtime.dev]
+target = "qemux86-64"
+
+[runtime.dev.dependencies]
+avocado-img-bootfiles = "*"
+avocado-img-rootfs = "*"
+avocado-img-initramfs = "*"
+avocado-dev = { ext = "avocado-dev" }
+
+[sdk]
+image = "avocadolinux/sdk:apollo-edge"
+
+[sdk.dependencies]
+nativesdk-qemu-system-x86-64 = "*"
+
+[ext.avocado-dev]
+types = ["sysext", "confext"]
+
+# highlight-added-start
+[ext.avocado-dev.users.root]
+password = "$6$Q98YeorOiEwd2wEo$LEtlJIsT1yJVdBkEGyP9rbeambXPLXN4Ci59G40HEq1/mjy99UkBWAkNQpGHoGdeCi0XGlv.w0ZjbBqzjJ/vp1"
+# highlight-added-end
+
+[ext.avocado-dev.dependencies]
+avocado-hitl = "*"
+
+[ext.avocado-dev.sdk.dependencies]
+nativesdk-avocado-hitl = "*"
+```
+
+Additional user accounts can be added by inserting more `users` entries:
+
+```toml title="avocado.toml"
+default_target = "qemux86-64"
+supported_targets = ["qemux86-64"]
+
+[runtime.dev]
+target = "qemux86-64"
+
+[runtime.dev.dependencies]
+avocado-img-bootfiles = "*"
+avocado-img-rootfs = "*"
+avocado-img-initramfs = "*"
+avocado-dev = { ext = "avocado-dev" }
+
+[sdk]
+image = "avocadolinux/sdk:apollo-edge"
+
+[sdk.dependencies]
+nativesdk-qemu-system-x86-64 = "*"
+
+[ext.avocado-dev]
+types = ["sysext", "confext"]
+
+# highlight-added-start
+[ext.avocado-dev.users.root]
+password = "$6$Q98YeorOiEwd2wEo$LEtlJIsT1yJVdBkEGyP9rbeambXPLXN4Ci59G40HEq1/mjy99UkBWAkNQpGHoGdeCi0XGlv.w0ZjbBqzjJ/vp1"
+
+[ext.avocado-dev.users.linus]
+password = "$6$lpwMHiXhb/3aZJxL$iwmuDI5SwZutHRVpUy2/JdPdHxZ8qf4.9r74O43rGTE6891A.VtJ1TGeGDuqAf/ug098KU1izlmxPbWfG9pGf."
+# highlight-added-end
+
+[ext.avocado-dev.dependencies]
+avocado-hitl = "*"
+
+[ext.avocado-dev.sdk.dependencies]
+nativesdk-avocado-hitl = "*"
+```
+
+:::tip
+To set **no** password, set this value to an empty string.
+
+```
+[ext.avocado-dev.users.root]
+password = ""
+```
+:::
+
+Any time user or password values are changed, you will need to re-run build and provision commands (`avocado build` + `avocado provision -r dev`).
 
 ### Build all components
 
@@ -201,7 +301,7 @@ Avocado OS 0.1.0 avocado-qemux86-64 ttyS0
 avocado-qemux86-64 login:
 ```
 
-You may log in using the username `root`, and will not be prompted for a password.
+You may log in using the `root` account and the appropriate password as configured in your Avocado config. If you configured an empty password, just press Enter when prompted for one.
 
 
 ### Verify extensions
