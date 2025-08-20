@@ -18,10 +18,6 @@ const solutionData = {
       { value: "Wi-Fi 7", label: "Next-Gen Connectivity" }
     ],
     primaryCTA: {
-      text: "Get Started",
-      link: "/evk"
-    },
-    secondaryCTA: {
       text: "Request Demo",
       link: "https://peridio.com/book-a-meeting"
     },
@@ -141,13 +137,8 @@ const solutionData = {
     title: "Ready for Flagship Edge AI Performance?",
     subtitle: "Transform your Qualcomm IQ-9 into the ultimate edge AI platform for the most demanding applications requiring flagship performance and enterprise reliability.",
     primaryCTA: {
-      text: "Start Premium Demo",
-      link: "/evk"
-    },
-    secondaryCTA: {
-      text: "Visit Avocado Linux",
-      link: "https://avocadolinux.org",
-      target: "_blank"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     }
   }
 }
