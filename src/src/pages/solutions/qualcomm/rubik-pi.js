@@ -18,10 +18,6 @@ const solutionData = {
       { value: "5G", label: "Ready Connectivity" }
     ],
     primaryCTA: {
-      text: "Get Started",
-      link: "/evk"
-    },
-    secondaryCTA: {
       text: "Request Demo",
       link: "https://peridio.com/book-a-meeting"
     },
@@ -141,13 +137,8 @@ const solutionData = {
     title: "Ready to Accelerate Your Edge AI Development?",
     subtitle: "Transform your Qualcomm Rubik Pi from development kit to secure, deployable edge AI platform ready for production.",
     primaryCTA: {
-      text: "Get Started",
-      link: "/evk"
-    },
-    secondaryCTA: {
-      text: "Visit Avocado Linux",
-      link: "https://avocadolinux.org",
-      target: "_blank"
+      text: "Request Demo",
+      link: "https://peridio.com/book-a-meeting"
     }
   }
 }
