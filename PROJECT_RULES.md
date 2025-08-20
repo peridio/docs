@@ -277,5 +277,38 @@ For questions about these guidelines, please open an issue or contact the mainta
 - **MUST** create follow-up ticket for proper implementation
 - **SHOULD** limit scope to critical fixes only
 
+## 14. Package Management and Development Environment
+
+### 14.1 Project Structure
+
+- **MUST** maintain only one `package-lock.json` file in the `src/` directory
+- **MUST NOT** have `package-lock.json` files in the root directory
+- **MUST** keep all npm dependencies and configuration in the `src/` directory
+
+### 14.2 NPM Commands
+
+- **MUST** run all npm commands from the `src/` directory:
+  - `npm install` - Install dependencies
+  - `npm run build` - Build the project
+  - `npm run start` - Start development server
+  - `npm run lint` - Run linting
+  - Any other `npm run ...` commands
+- **MUST NOT** run npm commands from the root directory
+- **MUST** ensure working directory is `src/` before executing npm commands
+
+### 14.3 Dependency Management
+
+- **MUST** add new dependencies using `npm install` from `src/` directory
+- **MUST** update dependencies using `npm update` from `src/` directory
+- **MUST** commit the `package-lock.json` file in `src/` directory to version control
+- **SHOULD** use exact versions for critical dependencies
+
+### 14.4 Development Workflow
+
+- **MUST** `cd src/` before starting development work
+- **MUST** verify current directory is `src/` before running npm commands
+- **SHOULD** use `pwd` or similar to confirm working directory
+- **MUST** ensure all team members understand this directory structure requirement
+
 
 

@@ -132,10 +132,11 @@ const solutionData = {
   
   cta: {
     title: "Ready to Deploy Production-Ready Gateways?",
-    description: "Transform your OnLogic FR201 systems into a managed gateway fleet with atomic updates, remote diagnostics, and enterprise support.",
-    primaryButton: {
+    subtitle: "Transform your OnLogic FR201 systems into a managed gateway fleet with atomic updates, remote diagnostics, and enterprise support.",
+    primaryCTA: {
       text: "Request a Demo",
-      link: "https://peridio.com/book-a-meeting"
+      link: "https://peridio.com/book-a-meeting",
+      target: "_blank"
     }
   }
 }

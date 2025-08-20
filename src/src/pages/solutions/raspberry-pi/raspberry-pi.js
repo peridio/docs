@@ -18,7 +18,7 @@ const solutionData = {
       { value: "$35", label: "Starting Cost" }
     ],
     primaryCTA: {
-      text: "Get Started →",
+      text: "Get Started",
       link: "/dev-center/hardware/raspberry-pi/compute-module-4"
     },
     secondaryCTA: {
@@ -136,14 +136,15 @@ const solutionData = {
   
   cta: {
     title: "Ready to Scale Your Raspberry Pi Project?",
-    description: "Transform your Raspberry Pi prototype into a secure, manageable production fleet with enterprise-grade reliability.",
-    primaryButton: {
+    subtitle: "Transform your Raspberry Pi prototype into a secure, manageable production fleet with enterprise-grade reliability.",
+    primaryCTA: {
       text: "Get Started",
       link: "/dev-center/hardware/raspberry-pi/compute-module-4"
     },
-    secondaryButton: {
+    secondaryCTA: {
       text: "Visit Avocado Linux",
-      link: "https://avocadolinux.org"
+      link: "https://avocadolinux.org",
+      target: "_blank"
     }
   }
 }

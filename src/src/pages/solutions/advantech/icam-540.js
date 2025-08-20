@@ -136,10 +136,11 @@ const solutionData = {
 
   cta: {
     title: "Ready to Deploy Production-Ready AI Vision?",
-    description: "Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.",
-    primaryButton: {
+    subtitle: "Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.",
+    primaryCTA: {
       text: "Request a Demo",
-      link: "https://peridio.com/book-a-meeting"
+      link: "https://peridio.com/book-a-meeting",
+      target: "_blank"
     }
   }
 }

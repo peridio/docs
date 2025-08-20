@@ -5,42 +5,48 @@ import styles from './solution.module.css'
 
 interface CTASectionProps {
   title: string
-  description: string
-  primaryButton?: {
+  subtitle?: string
+  primaryCTA?: {
     text: string
     link: string
+    target?: string
   }
-  secondaryButton?: {
+  secondaryCTA?: {
     text: string
     link: string
+    target?: string
   }
 }
 
 export default function CTASection({
   title,
-  description,
-  primaryButton,
-  secondaryButton
+  subtitle,
+  primaryCTA,
+  secondaryCTA
 }: CTASectionProps) {
   return (
     <section className={styles.cta}>
       <div className={styles.container}>
         <div className={styles.ctaContent}>
           <Heading as="h2">{title}</Heading>
-          <p>{description}</p>
+          {subtitle && <p>{subtitle}</p>}
           <div className={styles.ctaButtons}>
-            {primaryButton && (
-              <Link to={primaryButton.link} className={styles.ctaPrimary}>
-                {primaryButton.text}
+            {primaryCTA && (
+              <Link 
+                to={primaryCTA.link} 
+                className={styles.ctaPrimary}
+                {...(primaryCTA.target ? { target: primaryCTA.target } : {})}
+              >
+                {primaryCTA.text}
               </Link>
             )}
-            {secondaryButton && (
+            {secondaryCTA && (
               <Link 
-                to={secondaryButton.link} 
+                to={secondaryCTA.link} 
                 className={styles.ctaSecondary}
-                {...(secondaryButton.link.startsWith('http') ? { target: '_blank' } : {})}
+                {...(secondaryCTA.target ? { target: secondaryCTA.target } : {})}
               >
-                {secondaryButton.text}
+                {secondaryCTA.text}
               </Link>
             )}
           </div>
