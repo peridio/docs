@@ -9,9 +9,9 @@ const solutionData = {
   canonicalUrl: "https://docs.peridio.com/solutions/nvidia/jetson-orin-nano",
   
   hero: {
-    title: "Skip 18 Months of Jetson Development",
-    highlight: "Jetson Development",
-    subtitle: "Deploy enterprise-grade NVIDIA Jetson Orin Nano fleets from day 1 with deterministic Linux, secure OTA, and managed operations",
+    title: "Fast-Track Your Jetson Production Deployment",
+    highlight: "Jetson Production Deployment",
+    subtitle: "Production-grade software for the industry's leading AI edge hardware. Deploy NVIDIA Jetson Orin Nano fleets from day 1 with deterministic Linux, secure OTA, and fleet management",
     stats: [
       { value: "Day 1", label: "Production Ready" },
       { value: "10+", label: "Year Support" },
@@ -31,7 +31,7 @@ const solutionData = {
   
   valueProposition: {
     title: "Solution Overview",
-    content: "The NVIDIA Jetson Orin Nano, powered by Avocado Linux and Peridio Fleet, transforms AI edge development from a multi-year engineering project into a production deployment measured in days. This integrated platform delivers 67 TOPS of AI performance with enterprise-grade Linux, atomic OTA updates, and fleet management built in from day one. By eliminating the traditional 18-month journey from developer kit to production system, teams can focus on their AI applications instead of infrastructure. The result is a secure, scalable edge AI platform that's ready for industrial deployment out of the box, with 10+ years of support and cross-platform portability across the entire NVIDIA Jetson family."
+    content: "The NVIDIA Jetson Orin Nano represents the pinnacle of AI edge computing hardware, delivering 67 TOPS of performance in an efficient, compact form factor. When paired with Avocado Linux and Peridio Fleet, this industry-leading platform gains the production-grade software infrastructure it deserves. Teams can accelerate their time to market with enterprise Linux, atomic OTA updates, and fleet management built in from day one. This powerful combination enables you to fully leverage Jetson's exceptional AI capabilities while our integrated platform handles the complex infrastructure requirements. The result is a secure, scalable edge AI solution that matches Jetson's hardware excellence with enterprise-grade software, backed by 10+ years of support and cross-platform portability across the entire NVIDIA Jetson family."
   },
   
   specs: [
@@ -90,7 +90,7 @@ const solutionData = {
 
   challenges: [
     "Developer kits aren't production-ready",
-    "Custom Yocto builds take 6-18 months",
+    "Custom Yocto builds require significant time investment",
     "OTA infrastructure requires dedicated teams",
     "Security compliance adds complexity",
     "Fleet management built from scratch"
@@ -138,8 +138,8 @@ const solutionData = {
   ],
 
   cta: {
-    title: "Ready to Accelerate Your Jetson Development?",
-    subtitle: "Transform your NVIDIA Jetson Orin Nano from developer kit to secure, deployable industrial AI platform.",
+    title: "Ready to Accelerate Your Jetson Deployment?",
+    subtitle: "Empower your NVIDIA Jetson Orin Nano with production-grade software infrastructure for secure, scalable industrial AI.",
     primaryCTA: {
       text: "Get Started",
       link: "/dev-center/hardware/nvidia/jetson-orin-nano-evk"

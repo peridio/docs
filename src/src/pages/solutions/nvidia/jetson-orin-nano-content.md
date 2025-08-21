@@ -1,8 +1,8 @@
 # NVIDIA Jetson Orin Nano Production Linux | Day 1 Ready | Peridio
 
-## Skip 18 Months of Jetson Development
+## Fast-Track Your Jetson Production Deployment
 
-Deploy enterprise-grade NVIDIA Jetson Orin Nano fleets from day 1 with deterministic Linux, secure OTA, and managed operations
+Production-grade software for the industry's leading AI edge hardware. Deploy NVIDIA Jetson Orin Nano fleets from day 1 with deterministic Linux, secure OTA, and fleet management
 
 ### Key Stats
 - **Day 1** - Production Ready
@@ -46,7 +46,7 @@ Transform your Jetson development workflow with enterprise-grade infrastructure
 
 ### The Challenge
 - Developer kits aren't production-ready
-- Custom Yocto builds take 6-18 months
+- Custom Yocto builds require significant time investment
 - OTA infrastructure requires dedicated teams
 - Security compliance adds complexity
 - Fleet management built from scratch
@@ -82,9 +82,9 @@ Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio
 
 ---
 
-## Ready to Accelerate Your Jetson Development?
+## Ready to Accelerate Your Jetson Deployment?
 
-Transform your NVIDIA Jetson Orin Nano from developer kit to secure, deployable industrial AI platform.
+Empower your NVIDIA Jetson Orin Nano with production-grade software infrastructure for secure, scalable industrial AI.
 
 **Call to Action Buttons:**
 - Get Started

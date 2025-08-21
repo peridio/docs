@@ -9,9 +9,9 @@ const solutionData = {
   canonicalUrl: "https://docs.peridio.com/solutions/nvidia/jetson-orin-nx",
   
   hero: {
-    title: "Skip 18 Months of Orin NX Development",
-    highlight: "Orin NX Development",
-    subtitle: "Deploy enterprise-grade NVIDIA Jetson Orin NX fleets from day 1 with deterministic Linux, secure OTA, and managed operations",
+    title: "Fast-Track Your Orin NX Production Deployment",
+    highlight: "Orin NX Production Deployment",
+    subtitle: "Production-grade software for high-performance AI edge computing. Deploy NVIDIA Jetson Orin NX fleets from day 1 with deterministic Linux, secure OTA, and fleet management",
     stats: [
       { value: "Day 1", label: "Production Ready" },
       { value: "10+", label: "Year Support" },
@@ -31,7 +31,7 @@ const solutionData = {
   
   valueProposition: {
     title: "Solution Overview",
-    content: "The NVIDIA Jetson Orin NX, powered by Avocado Linux and Peridio Fleet, transforms high-performance edge AI development from a multi-year engineering project into a production deployment measured in days. This integrated platform delivers up to 100 TOPS of AI performance (157 TOPS in Super Mode) with enterprise-grade Linux, atomic OTA updates, and fleet management built in from day one. Ideal for robotics, drones, industrial AI, and multi-sensor vision systems, the Orin NX balances compute power, efficiency, and small form factor. By eliminating the traditional 18-month journey from developer kit to production system, teams can focus on their AI applications instead of infrastructure. The result is a secure, scalable edge AI platform that's ready for industrial deployment out of the box, with 10+ years of support and pin-compatibility with the entire Orin family."
+    content: "The NVIDIA Jetson Orin NX stands as the premier high-performance edge AI platform, delivering up to 100 TOPS (157 TOPS in Super Mode) while maintaining exceptional efficiency. When combined with Avocado Linux and Peridio Fleet, this industry-leading hardware gains the production-grade software foundation needed for mission-critical deployments. Perfect for robotics, drones, industrial AI, and multi-sensor vision systems, the Orin NX's exceptional compute capabilities are fully unleashed with our enterprise Linux, atomic OTA updates, and fleet management infrastructure. This powerful integration accelerates your path to production, allowing teams to leverage Orin NX's superior AI performance while we handle the complex infrastructure requirements. The result is a secure, scalable edge AI solution that matches NVIDIA's hardware excellence with enterprise-grade software, backed by 10+ years of support and seamless pin-compatibility across the entire Orin family."
   },
   
   specs: [
@@ -90,7 +90,7 @@ const solutionData = {
 
   challenges: [
     "Developer kits aren't production-ready",
-    "Custom Yocto builds take 6-18 months",
+    "Custom Yocto builds require significant time investment",
     "OTA infrastructure requires dedicated teams",
     "Security compliance adds complexity",
     "Fleet management built from scratch"
@@ -138,8 +138,8 @@ const solutionData = {
   ],
 
   cta: {
-    title: "Ready to Accelerate Your Orin NX Development?",
-    subtitle: "Transform your NVIDIA Jetson Orin NX from developer kit to secure, deployable high-performance AI platform.",
+    title: "Ready to Accelerate Your Orin NX Deployment?",
+    subtitle: "Empower your NVIDIA Jetson Orin NX with production-grade software infrastructure for secure, scalable high-performance AI.",
     primaryCTA: {
       text: "Get Started",
       link: "/dev-center/hardware/nvidia/jetson-orin-nano-evk"
