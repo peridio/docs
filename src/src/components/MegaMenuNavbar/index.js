@@ -15,32 +15,55 @@ const MegaMenuNavbar = () => {
   const timeoutRef = useRef(null)
 
   const handleMouseEnter = (menuKey) => {
+    if (isMegaMenuHidden) return // Only work on desktop
+    
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
     setActiveMenu(menuKey)
+    setToggledMenu(menuKey)
   }
 
   const handleMouseLeave = () => {
+    if (isMegaMenuHidden) return // Only work on desktop
+    
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null)
+      setToggledMenu(null)
     }, 150)
   }
 
   const handleMenuClick = (menuKey) => {
-    if (toggledMenu === menuKey) {
-      // Add fade-out animation before hiding
-      const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`);
-      if (dropdown) {
-        dropdown.classList.add('fade-out');
-        setTimeout(() => {
+    if (isMegaMenuHidden) {
+      // Mobile behavior - toggle menu
+      if (toggledMenu === menuKey) {
+        const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`);
+        if (dropdown) {
+          dropdown.classList.add('fade-out');
+          setTimeout(() => {
+            setToggledMenu(null);
+          }, 200);
+        } else {
           setToggledMenu(null);
-        }, 200); // Match the CSS transition duration
+        }
       } else {
-        setToggledMenu(null);
+        setToggledMenu(menuKey)
       }
     } else {
-      setToggledMenu(menuKey)
+      // Desktop behavior - toggle menu on click
+      if (toggledMenu === menuKey) {
+        const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`);
+        if (dropdown) {
+          dropdown.classList.add('fade-out');
+          setTimeout(() => {
+            setToggledMenu(null);
+          }, 200);
+        } else {
+          setToggledMenu(null);
+        }
+      } else {
+        setToggledMenu(menuKey)
+      }
     }
   }
 
@@ -83,7 +106,8 @@ const MegaMenuNavbar = () => {
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMegaMenuHidden(window.innerWidth <= 996)
+      // Use 768px as mobile breakpoint - keeps desktop menu on tablet and desktop
+      setIsMegaMenuHidden(window.innerWidth <= 768)
     }
     
     checkScreenSize()
@@ -205,6 +229,8 @@ const MegaMenuNavbar = () => {
                 key={key}
                 className={`mega-menu-item ${toggledMenu === key ? 'active' : ''}`}
                 onClick={() => handleMenuClick(key)}
+                onMouseEnter={() => handleMouseEnter(key)}
+                onMouseLeave={handleMouseLeave}
                 data-menu={key}
               >
                 {menu.linkTo ? (
@@ -276,6 +302,8 @@ const MegaMenuNavbar = () => {
           <div
             className={`mega-menu-item ${toggledMenu === 'tools' ? 'active' : ''}`}
             onClick={() => handleMenuClick('tools')}
+            onMouseEnter={() => handleMouseEnter('tools')}
+            onMouseLeave={handleMouseLeave}
             data-menu="tools"
           >
             <span className="mega-menu-trigger">
