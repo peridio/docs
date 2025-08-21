@@ -198,7 +198,7 @@ html[data-theme="dark"] .mega-menu-link:hover {
 }
 
 /* Mobile responsiveness */
-@media (max-width: 996px) {
+@media (max-width: 768px) {
   .mega-menu-container {
     display: none;
   }
@@ -240,10 +240,33 @@ html[data-theme="dark"] .mega-menu-link:hover {
   .mega-menu-item:not(.active) .mega-menu-dropdown {
     display: none;
   }
+  
+  /* Prevent chevron spinning on hover for mobile, but allow active state rotation */
+  .mega-menu-item:hover .mega-menu-arrow {
+    transform: none;
+  }
+  
+  /* Ensure active state rotation works on mobile */
+  .mega-menu-item.active .mega-menu-arrow {
+    transform: rotate(180deg);
+  }
+  
+  /* Override desktop logo sizing on mobile to keep original size */
+  .navbar__logo {
+    height: 38.4px !important;
+  }
+  
+  .navbar__brand {
+    height: 30.72px !important;
+  }
+  
+  .navbar__brand img {
+    height: 30.72px !important;
+  }
 }
 
 /* Desktop-only hover effects for mega menu links */
-@media (min-width: 997px) and (hover: hover) {
+@media (min-width: 769px) and (hover: hover) {
   .mega-menu-link:hover {
     background-color: #f8f9fa;
     border-radius: 4px;
@@ -275,6 +298,11 @@ html[data-theme="dark"] .mega-menu-link:hover {
   .mega-menu-trigger:hover {
     color: var(--ifm-navbar-link-color);
   }
+  
+  /* Ensure active state rotation works on touch devices */
+  .mega-menu-item.active .mega-menu-arrow {
+    transform: rotate(180deg);
+  }
 }
 
 /* Adjust dropdown width for different menu items */
@@ -300,17 +328,17 @@ html[data-theme="dark"] .mega-menu-link:hover {
 
 /* Ensure proper spacing and alignment */
 .navbar__logo {
-  height: 38.4px;
+  height: 30.72px;
   margin-right: 1rem;
 }
 
 .navbar__brand {
-  height: 30.72px;
+  height: 24.576px;
   margin-right: 0;
 }
 
 .navbar__brand img {
-  height: 30.72px;
+  height: 24.576px;
   width: auto;
 }
 
@@ -342,7 +370,7 @@ html[data-theme="dark"] .mega-menu-link:hover {
 }
 
 /* Mobile dropdown improvements */
-@media (max-width: 996px) {
+@media (max-width: 768px) {
   .mega-menu-dropdown {
     animation: slideInDown 0.3s ease-out;
     position: fixed;
@@ -778,6 +806,11 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     color: var(--ifm-navbar-link-color);
     background-color: transparent;
   }
+  
+  /* Ensure active state arrow rotation works on touch devices */
+  .mega-menu-item.active .mega-menu-arrow {
+    transform: rotate(180deg);
+  }
 }
 
 /* Reduce motion for users who prefer it */
@@ -866,7 +899,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
 }
 
 /* Enhanced mobile mega menu item styling */
-@media (max-width: 996px) {
+@media (max-width: 768px) {
   .mega-menu-item {
     /* Ensure proper touch targets on mobile */
     min-height: 44px;
@@ -977,6 +1010,11 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     animation: slideInDown 0.3s ease-out;
   }
   
+  /* Ensure active state arrow rotation works on mobile */
+  .mega-menu-item.active .mega-menu-arrow {
+    transform: rotate(180deg);
+  }
+  
   @keyframes slideInDown {
     from {
       opacity: 0;
@@ -990,7 +1028,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
 }
 
 /* Dark theme mobile mega menu improvements */
-@media (max-width: 996px) {
+@media (max-width: 768px) {
   html[data-theme="dark"] .mega-menu-dropdown {
     background: var(--ifm-background-surface-color);
     border-color: var(--ifm-color-emphasis-300);
