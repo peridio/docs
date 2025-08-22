@@ -34,11 +34,13 @@ Commands:
   upgrade    Upgrade the CLI to the latest (or specified) version
   build      Build all components (SDK compile, extensions, and runtime images)
   provision  Provision a runtime (shortcut for 'runtime provision')
+  deploy     Deploy a runtime to a device (shortcut for 'runtime deploy')
 
 Options:
       --target <TARGET>  Global target architecture
   -h, --help             Print help
   -V, --version          Print version
+
 ```
 
 ### Initialize your project
