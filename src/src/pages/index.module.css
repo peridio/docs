@@ -173,6 +173,85 @@
   width: 100%;
 }
 
+.heroContent {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+}
+
+.heroLeft {
+  flex: 1;
+  max-width: 600px;
+}
+
+.heroRight {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.videoFrame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.videoFrameHidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.videoLoader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.loadingText {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media screen and (max-width: 966px) {
+  .heroContent {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .heroLeft {
+    max-width: 100%;
+  }
+}
+
 @media screen and (max-width: 966px) {
   .heroBanner {
     padding: 4rem 1rem;
@@ -740,4 +819,10 @@
     height: auto;
     min-height: 250px;
   }
+}
+
+.videoPlaceholder {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import Layout from '@theme/Layout'
@@ -48,29 +48,61 @@ PromoBar.propTypes = {
 }
 
 function HomepageHeader({ promoBarVisible }) {
+  const [videoLoading, setVideoLoading] = useState(true)
+
+  const handleVideoLoad = () => {
+    setVideoLoading(false)
+  }
+
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner, {
       [styles.heroBannerWithPromo]: promoBarVisible,
       [styles.heroBannerWithoutPromo]: !promoBarVisible
     })}>
       <div className="container">
-        <Heading as="h1" className={clsx('hero__title', styles.hero_title)}>
-          Developer Center
-        </Heading>
-        <p className={clsx('hero__subtitle', styles.hero_subtitle)}>
-          Launch faster with field-proven infrastructure and Avocado OS.
-        </p>
-        <div className={styles.heroSearch}>
-          <div className={styles.searchPlaceholder}>
-            <input
-              type="text"
-              placeholder="Search documentation..."
-              className={styles.searchInput}
-              onFocus={(e) => {
-                e.preventDefault()
-                window.location.href = '/search'
-              }}
-            />
+        <div className={styles.heroContent}>
+          <div className={styles.heroLeft}>
+            <Heading as="h1" className={clsx('hero__title', styles.hero_title)}>
+              Developer Center
+            </Heading>
+            <p className={clsx('hero__subtitle', styles.hero_subtitle)}>
+              Launch faster with field-proven infrastructure and Avocado OS.
+            </p>
+            <div className={styles.heroSearch}>
+              <div className={styles.searchPlaceholder}>
+                <input
+                  type="text"
+                  placeholder="Search documentation..."
+                  className={styles.searchInput}
+                  onFocus={(e) => {
+                    e.preventDefault()
+                    window.location.href = '/search'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className={styles.heroRight}>
+            <div className={styles.videoPlaceholder}>
+              {videoLoading && (
+                <div className={styles.videoLoader}>
+                  <div className={styles.spinner}></div>
+                  <div className={styles.loadingText}>Loading video...</div>
+                </div>
+              )}
+              <iframe 
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/uBvPU8NNRTE?si=-Lj-KJJghanBNr3M" 
+                title="YouTube video player" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen
+                className={clsx(styles.videoFrame, { [styles.videoFrameHidden]: videoLoading })}
+                onLoad={handleVideoLoad}
+              ></iframe>
+            </div>
           </div>
         </div>
       </div>
