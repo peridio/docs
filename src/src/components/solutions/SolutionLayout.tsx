@@ -74,6 +74,7 @@ interface SolutionLayoutProps {
   valueProposition?: {
     title?: string
     content?: string
+    videoUrl?: string
   }
   children?: React.ReactNode
 }
