@@ -11,7 +11,7 @@ const solutionData = {
   hero: {
     title: "Industrial HMI with Seeed reTerminal",
     highlight: "Seeed reTerminal",
-    subtitle: "Production-Ready Industrial HMI Platform. Deploy fleets of Raspberry Pi CM4-powered touch interfaces with deterministic Linux, secure OTA updates, and enterprise fleet management from Day 1.",
+    subtitle: "Production-Ready Yocto Linux for reTerminal in Days, Not Months. Build industrial HMI applications with the security and scalability of Yocto, plus the rapid development cycles your team needs.",
     stats: [
       { value: "5\"", label: "IPS Touchscreen" },
       { value: "1.5GHz", label: "Quad-Core ARM" },
@@ -30,7 +30,8 @@ const solutionData = {
   
   valueProposition: {
     title: "Solution Overview",
-    content: "The Seeed Studio reTerminal, powered by Avocado Linux and Peridio Core on the Raspberry Pi Compute Module 4, delivers an industrial-grade HMI platform ready for deployment in days or weeks, not months. Built-in WebKit support and other utilities enable application engineers to start building interfaces and user experiences on day one. This turnkey, programmable device provides a production-ready foundation for industrial, IoT, and embedded applications. Together, Seeed and Peridio offer a cost-effective, Linux-first solution that scales seamlessly from prototype to full-scale field deployment."
+    content: "Avocado OS gives teams the ability to build production-grade applications on the Seeed reTerminal with the security and scalability guarantees provided by Yocto Linux, but with the immediate feedback loops that developers need. Start building UIs and application code in under 10 minutes with our turnkey development environment - no months of BSP configuration or toolchain setup required. This complete platform combines the Raspberry Pi CM4's computing power with production-hardened Linux, atomic OTA updates, and enterprise fleet management. Deploy your first device in days, not months, while maintaining the deterministic behavior and long-term support essential for industrial applications. Whether you're building machine interfaces, building automation systems, or edge AI applications, Avocado OS and Peridio transform the reTerminal from a development board into a production-ready platform that scales from prototype to thousands of devices.",
+    videoUrl: "https://www.youtube.com/embed/2jujJtewuPw?start=450"
   },
   
   specs: [
