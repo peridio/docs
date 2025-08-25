@@ -208,7 +208,7 @@ export default function Home() {
             </p>
             {/* Avocado OS Links Section */}
             <div className={styles.linkGrid}>
-              <Link to="/dev-center" className={styles.externalLink}>
+              <Link to="/" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -358,7 +358,7 @@ export default function Home() {
             </p>
             {/* Peridio Core Links Section */}
             <div className={styles.linkGrid}>
-              <Link to="/dev-center/peridio-core/introduction" className={styles.externalLink}>
+              <Link to="/peridio-core/introduction" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -373,10 +373,7 @@ export default function Home() {
                 </svg>
                 Overview
               </Link>
-              <Link
-                to="/dev-center/peridio-core/device-management/overview"
-                className={styles.externalLink}
-              >
+              <Link to="/peridio-core/device-management/overview" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -391,7 +388,7 @@ export default function Home() {
                 </svg>
                 Device Management
               </Link>
-              <Link to="/dev-center/tunnels/overview" className={styles.externalLink}>
+              <Link to="/tunnels/overview" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -406,10 +403,7 @@ export default function Home() {
                 </svg>
                 Tunnels / Remote Access
               </Link>
-              <Link
-                to="/dev-center/peridio-core/firmware-management/overview"
-                className={styles.externalLink}
-              >
+              <Link to="/peridio-core/firmware-management/overview" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -443,7 +437,7 @@ export default function Home() {
             </p>
             {/* Get Started Links Section */}
             <div className={styles.linkGrid}>
-              <Link to="/dev-center" className={styles.externalLink}>
+              <Link to="/" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -458,10 +452,7 @@ export default function Home() {
                 </svg>
                 Introduction
               </Link>
-              <Link
-                to="/dev-center/getting-started/provision-device"
-                className={styles.externalLink}
-              >
+              <Link to="/getting-started/provision-device" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -476,10 +467,7 @@ export default function Home() {
                 </svg>
                 Provision Device
               </Link>
-              <Link
-                to="/dev-center/getting-started/hardware-in-the-loop"
-                className={styles.externalLink}
-              >
+              <Link to="/getting-started/hardware-in-the-loop" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"
@@ -529,7 +517,7 @@ export default function Home() {
           <div className={styles.resourceCardsContainer}>
             {/* Build Tools */}
             <Link
-              to="/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
+              to="/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
               className={styles.resourceCard}
             >
               <div className={styles.featureIcon}>

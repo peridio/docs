@@ -22,7 +22,7 @@ const solutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/raspberry-pi/compute-module-4',
+      link: '/hardware/raspberry-pi/compute-module-4',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -153,10 +153,9 @@ const solutionData = {
       'Transform your Raspberry Pi prototype into a secure, manageable production fleet with enterprise-grade reliability.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/raspberry-pi/compute-module-4',
+      link: '/hardware/raspberry-pi/compute-module-4',
     },
     secondaryCTA: {
-      text: 'Visit Avocado Linux',
       link: 'https://avocadolinux.org',
       target: '_blank',
     },

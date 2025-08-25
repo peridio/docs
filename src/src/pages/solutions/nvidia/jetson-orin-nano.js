@@ -22,7 +22,7 @@ const solutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/nvidia/jetson-orin-nano-evk',
+      link: '/hardware/nvidia/jetson-orin-nano-evk',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -156,7 +156,7 @@ const solutionData = {
       'Empower your NVIDIA Jetson Orin Nano with production-grade software infrastructure for secure, scalable industrial AI.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/nvidia/jetson-orin-nano-evk',
+      link: '/hardware/nvidia/jetson-orin-nano-evk',
     },
     secondaryCTA: {
       text: 'Visit Avocado Linux',

@@ -130,7 +130,7 @@ const solutionData = {
       icon: 'Wifi',
       title: 'Fleet Operations',
       description:
-        'Comprehensive device management through Peridio Fleet with remote diagnostics, phased updates, and fleet-wide security patching.',
+        'Comprehensive device management through Peridio Core with remote diagnostics, phased updates, and fleet-wide security patching.',
     },
     {
       icon: 'GlobeAlt',

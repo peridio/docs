@@ -161,7 +161,6 @@ const solutionData = {
       target: '_blank',
     },
     secondaryCTA: {
-      text: 'Visit Avocado Linux',
       link: 'https://avocadolinux.org',
       target: '_blank',
     },

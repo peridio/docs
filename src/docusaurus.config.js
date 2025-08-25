@@ -92,20 +92,20 @@ const config = {
                 value: '<div class="dropdown__menu--section-title">GETTING STARTED</div>',
               },
               {
-                label: 'Introduction',
-                to: '/dev-center',
+                label: 'Overview',
+                to: '/getting-started/overview',
               },
               {
                 label: 'Provision Device',
-                to: '/dev-center/getting-started/provision-device',
+                to: '/getting-started/provision-device',
               },
               {
                 label: 'Hardware in the Loop',
-                to: '/dev-center/getting-started/hardware-in-the-loop',
+                to: '/getting-started/hardware-in-the-loop',
               },
               {
                 label: 'Desktop Deploy',
-                to: '/dev-center/getting-started/desktop-deploy',
+                to: '/getting-started/desktop-deploy',
               },
               {
                 type: 'html',
@@ -117,19 +117,19 @@ const config = {
               },
               {
                 label: 'Avocado OS',
-                to: '/dev-center/avocado-linux/introduction',
+                to: '/avocado-linux/introduction',
               },
               {
                 label: 'Peridio Core',
-                to: '/dev-center/peridio-core/introduction',
+                to: '/peridio-core/introduction',
               },
               {
                 label: 'Supported Hardware',
-                to: '/dev-center/hardware/supported-hardware',
+                to: '/hardware/supported-hardware',
               },
               {
                 label: 'Integration Guides',
-                to: '/dev-center/integration',
+                to: '/integration',
               },
               {
                 type: 'html',
@@ -141,19 +141,19 @@ const config = {
               },
               {
                 label: 'Tools',
-                to: '/dev-center/tools',
+                to: '/tools',
               },
               {
                 label: 'Tunnels (Remote Access)',
-                to: '/dev-center/tunnels/overview',
+                to: '/tunnels/overview',
               },
               {
                 label: 'Webhooks',
-                to: '/dev-center/integration/webhooks/overview',
+                to: '/integration/webhooks/overview',
               },
               {
                 label: 'Certificates',
-                to: '/dev-center/integration/certificates/overview',
+                to: '/integration/certificates/overview',
               },
             ],
           },
@@ -223,7 +223,7 @@ const config = {
               },
               {
                 label: 'Peridio Agent',
-                to: '/platform/reference/agent',
+                to: '/peridio-core/device-management/agent',
               },
             ],
           },

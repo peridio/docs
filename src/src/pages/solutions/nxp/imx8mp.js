@@ -22,7 +22,7 @@ const solutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/nxp/imx8mp',
+      link: '/hardware/nxp/imx8mp',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -156,10 +156,9 @@ const solutionData = {
       'Transform your NXP i.MX 8M Plus into a secure, deployable industrial vision platform ready for harsh environments.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/nxp/imx8mp',
+      link: '/hardware/nxp/imx8mp',
     },
     secondaryCTA: {
-      text: 'Visit Avocado Linux',
       link: 'https://docs.avocadolinux.org/supported-hardware/imx-8m-plus',
       target: '_blank',
     },

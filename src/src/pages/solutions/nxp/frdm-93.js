@@ -22,7 +22,7 @@ const solutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/nxp/frdm-imx-93',
+      link: '/hardware/nxp/frdm-imx-93',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -156,10 +156,9 @@ const solutionData = {
       'Transform your NXP FRDM i.MX 93 from development board to production-ready edge AI platform with heterogeneous processing and fleet management.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/dev-center/hardware/nxp/frdm-imx-93',
+      link: '/hardware/nxp/frdm-imx-93',
     },
     secondaryCTA: {
-      text: 'Visit Avocado Linux',
       link: 'https://docs.avocadolinux.org/supported-hardware/frdm-imx93',
       target: '_blank',
     },
