@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import Layout from '@theme/Layout'
+import Head from '@docusaurus/Head'
 import styles from './index.module.css'
 import Heading from '@theme/Heading'
 import Link from '@docusaurus/Link'
@@ -119,7 +120,20 @@ export default function Home() {
   const [promoBarVisible, setPromoBarVisible] = React.useState(true)
 
   return (
-    <Layout>
+    <Layout
+      title="Developer center"
+      description="Launch faster with field-proven infrastructure and Avocado OS."
+    >
+      <Head>
+        <meta property="og:title" content="Developer center | Peridio" />
+        <meta property="og:description" content="Launch faster with field-proven infrastructure and Avocado OS." />
+        <meta property="og:image" content="/img/developer-center.png" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Developer center | Peridio" />
+        <meta name="twitter:description" content="Launch faster with field-proven infrastructure and Avocado OS." />
+        <meta name="twitter:image" content="/img/developer-center.png" />
+      </Head>
       <PromoBar isVisible={promoBarVisible} onDismiss={() => setPromoBarVisible(false)} />
       <HomepageHeader promoBarVisible={promoBarVisible} />
       <main className={clsx('container', styles.container)}>
