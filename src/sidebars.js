@@ -266,6 +266,7 @@ export default {
         'dev-center/avocado-linux/architecture-overview',
         'dev-center/avocado-linux/development-environment',
         'dev-center/avocado-linux/system-extensions',
+        'dev-center/avocado-linux/user-management',
         'dev-center/avocado-linux/build-provisioning',
         'dev-center/avocado-linux/security-implementation',
         'dev-center/avocado-linux/update-mechanisms',
