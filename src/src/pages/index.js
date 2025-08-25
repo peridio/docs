@@ -11,6 +11,7 @@ import {
   HiOutlineWrenchScrewdriver as WrenchScrewdriverIcon,
   HiOutlineShieldCheck as ShieldCheckIcon,
   HiOutlineLink as LinkIcon,
+  HiRocketLaunch as RocketLaunchIcon,
 } from 'react-icons/hi2'
 
 function PromoBar({ isVisible, onDismiss }) {
@@ -93,7 +94,7 @@ function HomepageHeader({ promoBarVisible }) {
               <iframe 
                 width="560" 
                 height="315" 
-                src="https://www.youtube.com/embed/uBvPU8NNRTE?si=-Lj-KJJghanBNr3M" 
+                src="https://www.youtube.com/embed/uBvPU8NNRTE?playlist=uBvPU8NNRTE&loop=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&autoplay=0&controls=1&showinfo=0&fs=1&disablekb=1&color=white" 
                 title="YouTube video player" 
                 frameBorder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -270,13 +271,13 @@ export default function Home() {
         </div>
 
         {/* Peridio Core (Platform) */}
-        <div className={styles.stack}>
+        <div className={clsx(styles.stack, styles.peridioCoreSection)}>
           <div className={styles.stackHeader}>
             <svg
               viewBox="0 0 589 82"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className={styles.peridioCoreLogo}
+              className={styles.lockup}
             >
               <path
                 fillRule="evenodd"
@@ -404,7 +405,7 @@ export default function Home() {
         <div className={styles.stack}>
           <div className={styles.stackHeader}>
             <Heading as="h2" className={styles.getStartedHeading}>
-              🚀 Get Started
+              <RocketLaunchIcon className={styles.inlineIcon} /> Get Started
             </Heading>
           </div>
           <div className={styles.body}>
