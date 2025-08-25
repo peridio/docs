@@ -197,6 +197,13 @@
   aspect-ratio: 16/9;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  /* Hide YouTube branding elements */
+  filter: contrast(1.1) brightness(1.05);
+}
+
+/* Hide YouTube branding elements that might still appear */
+.videoFrame iframe {
+  filter: contrast(1.1) brightness(1.05);
 }
 
 .videoFrameHidden {
@@ -659,6 +666,11 @@
 
 .lockup {
   width: 160px;
+}
+
+/* Peridio Core Logo - 20% bigger than standard lockup */
+.peridioCoreSection .lockup {
+  width: 192px;
 }
 
 .stack.black .body {
