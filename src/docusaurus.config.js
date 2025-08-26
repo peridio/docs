@@ -221,7 +221,7 @@ const config = {
       },
       algolia: {
         appId: 'EBXD92WI74',
-        apiKey: 'cc85a8afb9c77cc48205e2e73eeb0d7a',
+        apiKey: '94b06f9c5bf6a24e020120fa38784bca',
         indexName: 'peridio',
       },
       zoom: {

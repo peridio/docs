@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+import SearchBar from '@theme/SearchBar'
 import { useThemeConfig } from '@docusaurus/theme-common'
 import MobileMenu from './MobileMenu'
 import Heading from '@theme/Heading'
@@ -16,7 +17,7 @@ const MegaMenuNavbar = () => {
 
   const handleMouseEnter = (menuKey) => {
     if (isMegaMenuHidden) return // Only work on desktop
-    
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
@@ -26,7 +27,7 @@ const MegaMenuNavbar = () => {
 
   const handleMouseLeave = () => {
     if (isMegaMenuHidden) return // Only work on desktop
-    
+
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null)
       setToggledMenu(null)
@@ -37,14 +38,14 @@ const MegaMenuNavbar = () => {
     if (isMegaMenuHidden) {
       // Mobile behavior - toggle menu
       if (toggledMenu === menuKey) {
-        const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`);
+        const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`)
         if (dropdown) {
-          dropdown.classList.add('fade-out');
+          dropdown.classList.add('fade-out')
           setTimeout(() => {
-            setToggledMenu(null);
-          }, 200);
+            setToggledMenu(null)
+          }, 200)
         } else {
-          setToggledMenu(null);
+          setToggledMenu(null)
         }
       } else {
         setToggledMenu(menuKey)
@@ -52,14 +53,14 @@ const MegaMenuNavbar = () => {
     } else {
       // Desktop behavior - toggle menu on click
       if (toggledMenu === menuKey) {
-        const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`);
+        const dropdown = document.querySelector(`[data-menu="${menuKey}"] .mega-menu-dropdown`)
         if (dropdown) {
-          dropdown.classList.add('fade-out');
+          dropdown.classList.add('fade-out')
           setTimeout(() => {
-            setToggledMenu(null);
-          }, 200);
+            setToggledMenu(null)
+          }, 200)
         } else {
-          setToggledMenu(null);
+          setToggledMenu(null)
         }
       } else {
         setToggledMenu(menuKey)
@@ -70,14 +71,14 @@ const MegaMenuNavbar = () => {
   const handleLinkClick = () => {
     if (toggledMenu) {
       // Add fade-out animation before hiding
-      const dropdown = document.querySelector(`[data-menu="${toggledMenu}"] .mega-menu-dropdown`);
+      const dropdown = document.querySelector(`[data-menu="${toggledMenu}"] .mega-menu-dropdown`)
       if (dropdown) {
-        dropdown.classList.add('fade-out');
+        dropdown.classList.add('fade-out')
         setTimeout(() => {
-          setToggledMenu(null);
-        }, 200); // Match the CSS transition duration
+          setToggledMenu(null)
+        }, 200) // Match the CSS transition duration
       } else {
-        setToggledMenu(null);
+        setToggledMenu(null)
       }
     }
   }
@@ -86,14 +87,14 @@ const MegaMenuNavbar = () => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.mega-menu-item') && toggledMenu) {
         // Add fade-out animation before hiding
-        const dropdown = document.querySelector(`[data-menu="${toggledMenu}"] .mega-menu-dropdown`);
+        const dropdown = document.querySelector(`[data-menu="${toggledMenu}"] .mega-menu-dropdown`)
         if (dropdown) {
-          dropdown.classList.add('fade-out');
+          dropdown.classList.add('fade-out')
           setTimeout(() => {
-            setToggledMenu(null);
-          }, 200); // Match the CSS transition duration
+            setToggledMenu(null)
+          }, 200) // Match the CSS transition duration
         } else {
-          setToggledMenu(null);
+          setToggledMenu(null)
         }
       }
     }
@@ -109,10 +110,10 @@ const MegaMenuNavbar = () => {
       // Use 768px as mobile breakpoint - keeps desktop menu on tablet and desktop
       setIsMegaMenuHidden(window.innerWidth <= 768)
     }
-    
+
     checkScreenSize()
     window.addEventListener('resize', checkScreenSize)
-    
+
     return () => {
       window.removeEventListener('resize', checkScreenSize)
       if (timeoutRef.current) {
@@ -122,7 +123,7 @@ const MegaMenuNavbar = () => {
   }, [])
 
   const isDevelopment = process.env.NODE_ENV === 'development'
-  
+
   const megaMenuItems = {
     documentation: {
       label: 'Documentation',
@@ -133,7 +134,10 @@ const MegaMenuNavbar = () => {
           items: [
             { label: 'Introduction', to: '/dev-center' },
             { label: 'Provision Device', to: '/dev-center/getting-started/provision-device' },
-            { label: 'Hardware in the Loop', to: '/dev-center/getting-started/hardware-in-the-loop' },
+            {
+              label: 'Hardware in the Loop',
+              to: '/dev-center/getting-started/hardware-in-the-loop',
+            },
             { label: 'Desktop Deploy', to: '/dev-center/getting-started/desktop-deploy' },
           ],
         },
@@ -178,16 +182,18 @@ const MegaMenuNavbar = () => {
             { label: 'Seeed reTerminal', to: '/solutions/seeed' },
           ],
         },
-        ...(isDevelopment ? [
-          {
-            title: 'Pre-review',
-            items: [
-              { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
-              { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
-              { label: 'STMicro STM32MP257F', to: '/solutions/stmicro/stm32mp157d-dk' },
-            ],
-          },
-        ] : []),
+        ...(isDevelopment
+          ? [
+              {
+                title: 'Pre-review',
+                items: [
+                  { label: 'Qualcomm IQ-9', to: '/solutions/qualcomm/iq-9' },
+                  { label: 'Qualcomm Rubik Pi', to: '/solutions/qualcomm/rubik-pi' },
+                  { label: 'STMicro STM32MP257F', to: '/solutions/stmicro/stm32mp157d-dk' },
+                ],
+              },
+            ]
+          : []),
       ],
       twoColumn: isDevelopment ? false : true,
       threeColumn: isDevelopment ? true : false,
@@ -214,14 +220,20 @@ const MegaMenuNavbar = () => {
       <div className="navbar__inner">
         <div className="navbar__items">
           <Link to="/" className="navbar__brand" onClick={handleLinkClick}>
-            <img 
-              src={isMegaMenuHidden ? "/img/peridio-docs-logo-mobile.svg" : `/${navbar.logo.src}`} 
-              alt={navbar.logo.alt} 
-              className="navbar__logo" 
+            <img
+              src={isMegaMenuHidden ? '/img/peridio-docs-logo-mobile.svg' : `/${navbar.logo.src}`}
+              alt={navbar.logo.alt}
+              className="navbar__logo"
             />
           </Link>
           <div className="mega-menu-container">
-            <Link to="https://peridio.com" className="navbar__item navbar__link" target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>
+            <Link
+              to="https://peridio.com"
+              className="navbar__item navbar__link"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleLinkClick}
+            >
               Home
             </Link>
             {Object.entries(megaMenuItems).map(([key, menu]) => (
@@ -241,17 +253,21 @@ const MegaMenuNavbar = () => {
                     </svg>
                   </Link>
                 ) : (
-                    <span className="mega-menu-trigger">
-                      {menu.label}
-                      <svg width="12" height="8" viewBox="0 0 12 8" className="mega-menu-arrow">
-                        <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                      </svg>
-                    </span>
+                  <span className="mega-menu-trigger">
+                    {menu.label}
+                    <svg width="12" height="8" viewBox="0 0 12 8" className="mega-menu-arrow">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    </svg>
+                  </span>
                 )}
 
                 {toggledMenu === key && (
                   <div className="mega-menu-dropdown">
-                    <div className={`mega-menu-content ${menu.threeColumn ? 'three-column' : menu.twoColumn ? 'two-column' : ''}`}>
+                    <div
+                      className={`mega-menu-content ${
+                        menu.threeColumn ? 'three-column' : menu.twoColumn ? 'two-column' : ''
+                      }`}
+                    >
                       {menu.sections.map((section, sectionIndex) => (
                         <div key={sectionIndex} className="mega-menu-section">
                           <Heading as="h4" className="mega-menu-section-title">
@@ -268,7 +284,11 @@ const MegaMenuNavbar = () => {
                                     {item.label}
                                   </span>
                                 ) : (
-                                  <Link to={item.to} className="mega-menu-link" onClick={handleLinkClick}>
+                                  <Link
+                                    to={item.to}
+                                    className="mega-menu-link"
+                                    onClick={handleLinkClick}
+                                  >
                                     {item.label}
                                   </Link>
                                 )}
@@ -282,19 +302,6 @@ const MegaMenuNavbar = () => {
                 )}
               </div>
             ))}
-            {isDevelopment && (
-              <span className="dev-mode-indicator" style={{
-                padding: '4px 8px',
-                marginLeft: '10px',
-                background: '#ff6b6b',
-                color: 'white',
-                borderRadius: '4px',
-                fontSize: '12px',
-                fontWeight: 'bold'
-              }}>
-                DEV MODE
-              </span>
-            )}
           </div>
         </div>
 
@@ -348,6 +355,8 @@ const MegaMenuNavbar = () => {
           >
             Web Console
           </Link>
+
+          <SearchBar />
 
           <button
             className="navbar__toggle"

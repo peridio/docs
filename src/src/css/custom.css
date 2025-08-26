@@ -158,6 +158,18 @@ footer {
   z-index: 9999;
 }
 
+/* Adjust Algolia DocSearch modal to avoid overlapping the promo/banner */
+.DocSearch-Modal {
+  margin-top: 150px !important;
+}
+
+/* Ensure DocSearch modal overlays above mega menu dropdowns */
+.DocSearch-Container,
+.DocSearch-Modal,
+.DocSearch-Dropdown {
+  z-index: 10000;
+}
+
 /* Mobile fallback - handled by mega menu component */
 @media (max-width: 996px) {
   /* Mobile styles are handled in the MegaMenuNavbar component */
