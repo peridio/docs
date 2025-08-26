@@ -88,6 +88,7 @@ Releases form channels that define how devices progress through updates. These c
 ### Resolution Priority
 
 Bundle distribution follows a strict priority order:
+
 1. Bundle Overrides (highest priority)
 2. Release Channels
 3. No Update
@@ -128,7 +129,7 @@ peridio releases create \
   --cohort-prn $COHORT_A \
   --bundle-prn $VERSION_A
 
-# Group B  
+# Group B
 peridio releases create \
   --cohort-prn $COHORT_B \
   --bundle-prn $VERSION_B
@@ -162,17 +163,20 @@ peridio releases create \
 ### Common Issues
 
 **Devices Not Updating**
+
 - Verify cohort membership
 - Check release availability
 - Review version requirements
 - Validate bundle resolution
 
 **Phasing Problems**
+
 - Ensure phase configuration is correct
 - Verify device counts
 - Check scheduling constraints
 
 **Resolution Conflicts**
+
 - Review override status
 - Check release channel structure
 - Validate state reporting

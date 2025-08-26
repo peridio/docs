@@ -207,7 +207,7 @@ html[data-theme="dark"] .mega-menu-link:hover {
   .mega-menu-container {
     display: none;
   }
-  
+
   /* Show the hamburger menu on mobile */
   .navbar__toggle {
     display: block !important;
@@ -217,54 +217,54 @@ html[data-theme="dark"] .mega-menu-link:hover {
   .navbar__items--right .navbar__link {
     display: none;
   }
-  
+
   /* Ensure proper spacing on mobile */
   .navbar__items--right {
     display: flex;
     align-items: center;
   }
-  
+
   /* Optimize spacing between tools and hamburger menu on mobile */
   .navbar__items--right .mega-menu-item {
     margin-right: 0.5rem;
   }
-  
+
   .navbar__toggle {
     margin-left: 0.5rem;
   }
-  
+
   /* Mobile mega menu toggle behavior */
   .mega-menu-item {
     position: relative;
   }
-  
+
   .mega-menu-item.active .mega-menu-dropdown {
     display: block;
   }
-  
+
   .mega-menu-item:not(.active) .mega-menu-dropdown {
     display: none;
   }
-  
+
   /* Prevent chevron spinning on hover for mobile, but allow active state rotation */
   .mega-menu-item:hover .mega-menu-arrow {
     transform: none;
   }
-  
+
   /* Ensure active state rotation works on mobile */
   .mega-menu-item.active .mega-menu-arrow {
     transform: rotate(180deg);
   }
-  
+
   /* Override desktop logo sizing on mobile to keep original size */
   .navbar__logo {
     height: 38.4px !important;
   }
-  
+
   .navbar__brand {
     height: 30.72px !important;
   }
-  
+
   .navbar__brand img {
     height: 30.72px !important;
   }
@@ -278,11 +278,11 @@ html[data-theme="dark"] .mega-menu-link:hover {
     padding: 0.375rem 0.5rem;
     margin: 0 -0.5rem;
   }
-  
+
   html[data-theme="dark"] .mega-menu-link:hover {
     background-color: #2d3748;
   }
-  
+
   .mega-menu-item:hover .mega-menu-arrow {
     transform: rotate(180deg);
   }
@@ -293,17 +293,17 @@ html[data-theme="dark"] .mega-menu-link:hover {
   .mega-menu-item:hover .mega-menu-arrow {
     transform: none;
   }
-  
+
   .mega-menu-link:hover {
     background-color: transparent;
     padding: 0.375rem 0;
     margin: 0;
   }
-  
+
   .mega-menu-trigger:hover {
     color: var(--ifm-navbar-link-color);
   }
-  
+
   /* Ensure active state rotation works on touch devices */
   .mega-menu-item.active .mega-menu-arrow {
     transform: rotate(180deg);
@@ -390,7 +390,7 @@ html[data-theme="dark"] .mega-menu-link:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 999;
   }
-  
+
   @keyframes slideInDown {
     from {
       opacity: 0;
@@ -401,7 +401,7 @@ html[data-theme="dark"] .mega-menu-link:hover {
       transform: translateY(0);
     }
   }
-  
+
   /* Mobile fade out */
   .mega-menu-dropdown.fade-out {
     opacity: 0;
@@ -675,27 +675,27 @@ html[data-theme="dark"] .mobile-menu-items {
     max-width: none;
     box-shadow: none;
   }
-  
+
   .mobile-menu-overlay {
     justify-content: center;
   }
-  
+
   .mobile-menu-section-title {
     padding: 1.25rem 2rem;
     font-size: 1.1rem;
     min-height: 60px;
   }
-  
+
   .mobile-menu-link {
     padding: 1rem 2rem 1rem 3rem;
     font-size: 1rem;
     min-height: 56px;
   }
-  
+
   .mobile-menu-header {
     padding: 1.5rem 2rem;
   }
-  
+
   .mobile-menu-content {
     padding: 0;
   }
@@ -707,29 +707,29 @@ html[data-theme="dark"] .mobile-menu-items {
     padding: 1rem 1.5rem;
     font-size: 1rem;
   }
-  
+
   .mobile-menu-link {
     padding: 0.875rem 1.5rem 0.875rem 2.5rem;
     font-size: 0.95rem;
   }
-  
+
   .mobile-menu-header {
     padding: 1.25rem 1.5rem;
   }
-  
+
   .mobile-menu-logo {
     height: 25.6px;
   }
-  
+
   .mobile-menu-title {
     font-size: 1rem;
   }
-  
+
   /* Further optimize spacing on very small screens */
   .navbar__items--right .mega-menu-item {
     margin-right: 0.25rem;
   }
-  
+
   .navbar__toggle {
     margin-left: 0.25rem;
   }
@@ -777,32 +777,32 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     min-height: 64px;
     padding: 1.5rem 2rem;
   }
-  
+
   .mobile-menu-link {
     min-height: 64px;
     padding: 1.25rem 2rem 1.25rem 3rem;
   }
-  
+
   .mobile-menu-close {
     min-width: 48px;
     min-height: 48px;
   }
-  
+
   /* Ensure mega menu items are touch-friendly */
   .mega-menu-item {
     min-height: 48px;
   }
-  
+
   .mega-menu-trigger {
     min-height: 48px;
     padding: 0.875rem 0;
   }
-  
+
   .mega-menu-link {
     min-height: 48px;
     padding: 0.75rem 0;
   }
-  
+
   /* Remove all hover effects on touch devices */
   .mega-menu-item:hover .mega-menu-arrow,
   .mega-menu-trigger:hover,
@@ -811,7 +811,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     color: var(--ifm-navbar-link-color);
     background-color: transparent;
   }
-  
+
   /* Ensure active state arrow rotation works on touch devices */
   .mega-menu-item.active .mega-menu-arrow {
     transform: rotate(180deg);
@@ -831,7 +831,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
 
 /* Additional mobile improvements */
 .mobile-menu-section-title:before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -850,7 +850,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
 }
 
 .mobile-menu-link:before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -892,11 +892,11 @@ html[data-theme="dark"] .mobile-menu-link:hover {
   .mobile-menu-section-title {
     min-height: 64px;
   }
-  
+
   .mobile-menu-link {
     min-height: 64px;
   }
-  
+
   .mobile-menu-close {
     min-width: 48px;
     min-height: 48px;
@@ -913,7 +913,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     /* Remove hover effects on mobile */
     cursor: pointer;
   }
-  
+
   .mega-menu-trigger {
     /* Optimize touch targets for mobile */
     min-height: 44px;
@@ -923,12 +923,12 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     /* Remove hover color change on mobile */
     transition: none;
   }
-  
+
   /* Remove hover effects on mobile */
   .mega-menu-trigger:hover {
     color: var(--ifm-navbar-link-color);
   }
-  
+
   /* Improve mobile dropdown positioning */
   .mega-menu-dropdown {
     position: fixed;
@@ -943,7 +943,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 999;
   }
-  
+
   /* Mobile-friendly mega menu content */
   .mega-menu-content {
     display: flex;
@@ -953,37 +953,37 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     max-height: 70vh;
     overflow-y: auto;
   }
-  
+
   .mega-menu-content.two-column,
   .mega-menu-content.three-column {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   /* Mobile mega menu sections */
   .mega-menu-section {
     min-width: auto;
     border-bottom: 1px solid var(--ifm-color-emphasis-200);
     padding-bottom: 1rem;
   }
-  
+
   .mega-menu-section:last-child {
     border-bottom: none;
     padding-bottom: 0;
   }
-  
+
   .mega-menu-section-title {
     font-size: 0.875rem;
     margin-bottom: 0.75rem;
     color: var(--ifm-color-emphasis-900);
     font-weight: 700;
   }
-  
+
   /* Mobile mega menu links */
   .mega-menu-links li {
     margin-bottom: 0.75rem;
   }
-  
+
   .mega-menu-link {
     font-size: 0.9rem;
     padding: 0.5rem 0;
@@ -994,13 +994,13 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     transition: all 0.2s ease;
     /* Remove hover effects on mobile */
   }
-  
+
   .mega-menu-link:hover {
     background-color: transparent;
     padding: 0.5rem 0;
     margin: 0;
   }
-  
+
   /* Mobile mega menu arrow improvements */
   .mega-menu-arrow {
     width: 16px;
@@ -1009,17 +1009,17 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     /* Remove hover rotation on mobile */
     transition: transform 0.3s ease;
   }
-  
+
   /* Mobile mega menu backdrop */
   .mega-menu-item.active .mega-menu-dropdown {
     animation: slideInDown 0.3s ease-out;
   }
-  
+
   /* Ensure active state arrow rotation works on mobile */
   .mega-menu-item.active .mega-menu-arrow {
     transform: rotate(180deg);
   }
-  
+
   @keyframes slideInDown {
     from {
       opacity: 0;
@@ -1038,15 +1038,15 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     background: var(--ifm-background-surface-color);
     border-color: var(--ifm-color-emphasis-300);
   }
-  
+
   html[data-theme="dark"] .mega-menu-section {
     border-bottom-color: var(--ifm-color-emphasis-300);
   }
-  
+
   html[data-theme="dark"] .mega-menu-link:hover {
     background-color: transparent;
   }
-  
+
   html[data-theme="dark"] .mega-menu-trigger:hover {
     color: var(--ifm-navbar-link-color);
   }
@@ -1093,17 +1093,17 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     padding: 1.5rem 2rem;
     min-height: 72px;
   }
-  
+
   .mobile-menu-link {
     padding: 1.25rem 2rem 1.25rem 3rem;
     min-height: 64px;
     font-size: 1rem;
   }
-  
+
   .mobile-menu-category {
     padding-left: 1.5rem;
   }
-  
+
   .mobile-menu-category-title {
     font-size: 0.8rem;
     margin-bottom: 1rem;
@@ -1116,22 +1116,22 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     padding: 1.25rem 1.5rem;
     min-height: 68px;
   }
-  
+
   .mobile-menu-link {
     padding: 1rem 1.5rem 1rem 2.5rem;
     min-height: 60px;
     font-size: 0.95rem;
   }
-  
+
   .mobile-menu-category {
     padding-left: 1rem;
   }
-  
+
   .mobile-menu-category-title {
     font-size: 0.75rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .mobile-menu-section-icon {
     font-size: 1.1rem;
     width: 1.25rem;
@@ -1206,7 +1206,7 @@ html[data-theme="dark"] .mobile-menu-link:hover {
     /* Remove transform scale to prevent size changes */
     transition: background-color 0.1s ease;
   }
-  
+
   .mobile-menu-link:active {
     background: var(--ifm-color-emphasis-200);
     /* Remove transform scale to prevent size changes */

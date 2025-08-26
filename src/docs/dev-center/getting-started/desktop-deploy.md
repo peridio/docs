@@ -30,11 +30,13 @@ The SD card writing process **must** be performed on a Linux host machine. Docke
 To get started with device provisioning, we will first need the [Avocado CLI](https://github.com/avocado-linux/avocado-cli). Grab the latest release for your development architecture from the [Github releases page](https://github.com/avocado-linux/avocado-cli/releases).
 
 #### Command
+
 ```bash
 avocado
 ```
 
 #### Output
+
 ```text
 Avocado CLI - A command line interface for Avocado
 
@@ -65,6 +67,7 @@ Options:
 Instead of initializing a new project, we'll use a pre-configured example that supports multiple targets. Clone the Avocado extension repository which contains a comprehensive example configuration.
 
 #### Command
+
 ```bash
 git clone https://github.com/avocado-linux/avocado-ext.git
 ```
@@ -74,6 +77,7 @@ git clone https://github.com/avocado-linux/avocado-ext.git
 The repository contains a full example configuration in the `runtimes/dev` directory that supports multiple hardware targets. Navigate to this directory:
 
 #### Command
+
 ```bash
 cd avocado-ext/runtimes/dev
 ```
@@ -85,6 +89,7 @@ This directory contains a comprehensive `avocado.toml` configuration file that s
 Since the configuration supports multiple targets, we need to specify which target architecture we're building for by setting an environment variable:
 
 #### Command
+
 ```bash
 export AVOCADO_TARGET="raspberrypi4"
 ```
@@ -104,11 +109,13 @@ The example repository comes with a pre-configured `avocado.toml` that includes 
 The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). The `--force` flag (`-f`) skips interactive prompts during package installation.
 
 #### Command
+
 ```bash
 avocado install -f
 ```
 
 #### Output
+
 ```text
 [INFO] Using target: raspberrypi4 (from environment variable)
 [INFO] Starting comprehensive install process...
@@ -141,11 +148,13 @@ Complete!
 The `avocado build` command compiles any required SDK code for extensions, builds extension images, and produces the runtime image(s) as defined in your avocado config. This process creates the complete Avocado OS image optimized for the Raspberry Pi 4.
 
 #### Command
+
 ```bash
 avocado build
 ```
 
 #### Output
+
 ```text
 [INFO] Using target: raspberrypi4 (from environment variable)
 [INFO] Starting comprehensive build process...
@@ -167,11 +176,13 @@ avocado build
 The `avocado provision` command prepares the specified runtime by transforming the build output and creating the final artifacts for deployment. For Raspberry Pi 4, this creates an SD card image that can be flashed to your microSD card.
 
 #### Command
+
 ```bash
 avocado provision -r dev
 ```
 
 #### Output
+
 ```text
 [INFO] Provisioning runtime 'dev'
 
@@ -200,6 +211,7 @@ Make sure your SD card is **NOT** inserted before running the provisioning comma
 :::
 
 #### Command
+
 ```bash
 avocado provision --provision-profile sd -r dev
 ```
@@ -213,6 +225,7 @@ The provisioning process will guide you through the SD card writing:
 3. **Confirmation**: You'll need to confirm the write operation by typing `y`
 
 #### Output
+
 ```text
 [INFO] Provisioning runtime 'dev'
 [INFO] Running SDK lifecycle hook 'avocado-provision' for 'dev'.
@@ -293,6 +306,7 @@ Your Raspberry Pi 4 and development workstation must be connected to the same lo
 First, determine how to connect to your device. The device uses the hostname `avocado-raspberrypi4` by default, but depending on your network setup, you may need to use the IP address instead.
 
 **Option 1: Using mDNS hostname (if supported by your network)**
+
 ```bash
 ssh root@avocado-raspberrypi4
 ```
@@ -365,16 +379,19 @@ tcpdump = "*"
 After making the dependency change, rebuild the components with the new package included:
 
 ##### Install Dependencies
+
 ```bash
 avocado install -f
 ```
 
 ##### Build Components
+
 ```bash
 avocado build
 ```
 
 ##### Provision Runtime
+
 ```bash
 avocado provision -r dev
 ```

@@ -12,14 +12,16 @@ Avocado OS is a comprehensive product framework built on proven open-source tech
 The system implements a layered architecture consisting of a read-only Core OS Layer and modular Extension Layers that enable application isolation, simplified deployment, and custom application integration. Avocado's architecture supports multiple target devices with a single codebase through hardware abstraction, managing underlying differences in toolchains and kernel configurations while providing comprehensive support for heterogeneous computing environments on modern SoCs with specialized processing units.
 
 **Foundation Technologies:**
+
 - Yocto Project integration for industry-standard build capabilities
 - systemd service management with extension mechanism support
 - btrfs and overlayfs combination for atomic updates and layered architecture
 - System Extensions (sysext) and Configuration Extensions (confext)
 
 **Multi-Platform Architecture:**
+
 - Single codebase deployment across multiple hardware platforms
-- Hardware abstraction through device tree and overlay systems  
+- Hardware abstraction through device tree and overlay systems
 - Heterogeneous computing support for DSPs, GPUs, and AI accelerators
 - QEMU integration for virtualized development environments
 

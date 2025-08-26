@@ -12,12 +12,14 @@ Avocado OS provides an interactive development experience that feels more like m
 The development workflow includes live NFS-mounted extensions where changes to code or configurations are immediately reflected on the target device without redeployment. Interactive debugging through GDB server integration provides breakpoint and variable inspection capabilities directly on target hardware. Additionally, soft reboot capabilities allow developers to restart only necessary components instead of the entire system, significantly accelerating the development cycle.
 
 **Key Development Features:**
+
 - Containerized development environments with target device integration
 - Live NFS-mounted extensions for immediate code reflection
 - Interactive debugging with GDB server integration
 - Soft reboot capabilities for component-level restarts
 
 **Multi-Target Development Support:**
+
 - Single codebase deployment across multiple hardware platforms
 - Unified development approach for different architectures
 - QEMU integration for virtualized development environments

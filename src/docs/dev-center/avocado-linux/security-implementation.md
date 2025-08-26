@@ -12,12 +12,14 @@ Avocado OS implements a comprehensive defense-in-depth security architecture tha
 Security features are integrated into the build system from the start, enabling security-by-default development builds that use the same security controls as production builds. The system includes intelligent power management with ordered shutdown sequences on power failure, fault-tolerant temperature management with thermal monitoring and adaptive performance throttling, and store-and-forward architecture using a transaction-based model for system management operations to ensure consistency even with intermittent connectivity.
 
 **Defense-in-Depth Security:**
+
 - Cryptographic chain of trust from hardware to application runtime
 - Board-agnostic secure boot implementation across platforms
 - dm-verity continuous integrity verification for filesystem protection
 - LUKS encryption with hardware-backed key storage support
 
 **Security Continuity:**
+
 - Security-by-default development builds with same controls as production
 - Incremental hardening for progressive security feature activation
 - Extension-level security isolation with defined boundaries

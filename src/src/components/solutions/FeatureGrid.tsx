@@ -34,10 +34,7 @@ interface FeatureGridProps {
   title?: string
 }
 
-export default function FeatureGrid({ 
-  features, 
-  title = "Why Choose Peridio" 
-}: FeatureGridProps) {
+export default function FeatureGrid({ features, title = 'Why Choose Peridio' }: FeatureGridProps) {
   return (
     <section className={styles.features}>
       <div className={styles.container}>

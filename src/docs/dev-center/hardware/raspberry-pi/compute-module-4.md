@@ -12,7 +12,7 @@ When paired with Avocado OS, developers can accelerate time to production with a
 ## Technical Specifications
 
 | Component        | Details                                                    |
-|------------------|------------------------------------------------------------|
+| ---------------- | ---------------------------------------------------------- |
 | CPU              | Quad-core 64-bit Arm Cortex-A72 (1.8 GHz)                  |
 | GPU              | Broadcom VideoCore VI (graphics only, not suitable for AI) |
 | Memory           | 1GB, 2GB, 4GB, or 8GB LPDDR4-3200 variants                 |

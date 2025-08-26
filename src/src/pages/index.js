@@ -23,9 +23,7 @@ function PromoBar({ isVisible, onDismiss }) {
   return (
     <div className={styles.promoBar}>
       <div className={styles.promoContent}>
-        <span className={styles.promoBadge}>
-          UNDER DEVELOPMENT
-        </span>
+        <span className={styles.promoBadge}>UNDER DEVELOPMENT</span>
         <div className={styles.promoMarquee}>
           <span className={styles.promoMessage}>
             This documentation site is currently under active migration. Some content may be
@@ -57,10 +55,12 @@ function HomepageHeader({ promoBarVisible }) {
   }
 
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner, {
-      [styles.heroBannerWithPromo]: promoBarVisible,
-      [styles.heroBannerWithoutPromo]: !promoBarVisible
-    })}>
+    <header
+      className={clsx('hero hero--primary', styles.heroBanner, {
+        [styles.heroBannerWithPromo]: promoBarVisible,
+        [styles.heroBannerWithoutPromo]: !promoBarVisible,
+      })}
+    >
       <div className="container">
         <div className={styles.heroContent}>
           <div className={styles.heroLeft}>
@@ -92,14 +92,14 @@ function HomepageHeader({ promoBarVisible }) {
                   <div className={styles.loadingText}>Loading video...</div>
                 </div>
               )}
-              <iframe 
-                width="560" 
-                height="315" 
-                src="https://www.youtube.com/embed/uBvPU8NNRTE?playlist=uBvPU8NNRTE&loop=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&autoplay=0&controls=1&showinfo=0&fs=1&disablekb=1&color=white" 
-                title="YouTube video player" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                referrerPolicy="strict-origin-when-cross-origin" 
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/uBvPU8NNRTE?playlist=uBvPU8NNRTE&loop=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&autoplay=0&controls=1&showinfo=0&fs=1&disablekb=1&color=white"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
                 className={clsx(styles.videoFrame, { [styles.videoFrameHidden]: videoLoading })}
                 onLoad={handleVideoLoad}
@@ -126,12 +126,18 @@ export default function Home() {
     >
       <Head>
         <meta property="og:title" content="Developer center | Peridio" />
-        <meta property="og:description" content="Launch faster with field-proven infrastructure and Avocado OS." />
+        <meta
+          property="og:description"
+          content="Launch faster with field-proven infrastructure and Avocado OS."
+        />
         <meta property="og:image" content="/img/developer-center.png" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Developer center | Peridio" />
-        <meta name="twitter:description" content="Launch faster with field-proven infrastructure and Avocado OS." />
+        <meta
+          name="twitter:description"
+          content="Launch faster with field-proven infrastructure and Avocado OS."
+        />
         <meta name="twitter:image" content="/img/developer-center.png" />
       </Head>
       <PromoBar isVisible={promoBarVisible} onDismiss={() => setPromoBarVisible(false)} />
@@ -196,9 +202,9 @@ export default function Home() {
           </div>
           <div className={styles.body}>
             <p className={styles.description}>
-              Simplified Embedded Linux. With day-one BSPs for leading hardware targets, a fully 
-              open-source foundation, and built-in extensibility, Avocado OS lets your team focus 
-              on building applications — not wrestling with the OS.
+              Simplified Embedded Linux. With day-one BSPs for leading hardware targets, a fully
+              open-source foundation, and built-in extensibility, Avocado OS lets your team focus on
+              building applications — not wrestling with the OS.
             </p>
             {/* Avocado OS Links Section */}
             <div className={styles.linkGrid}>
@@ -347,7 +353,8 @@ export default function Home() {
           </div>
           <div className={styles.body}>
             <p className={styles.description}>
-              Enterprise-grade device management platform for secure OTA updates, fleet monitoring, and device provisioning. Scale from prototype to production with confidence.
+              Enterprise-grade device management platform for secure OTA updates, fleet monitoring,
+              and device provisioning. Scale from prototype to production with confidence.
             </p>
             {/* Peridio Core Links Section */}
             <div className={styles.linkGrid}>
@@ -366,7 +373,10 @@ export default function Home() {
                 </svg>
                 Overview
               </Link>
-              <Link to="/dev-center/peridio-core/device-management/overview" className={styles.externalLink}>
+              <Link
+                to="/dev-center/peridio-core/device-management/overview"
+                className={styles.externalLink}
+              >
                 <svg
                   width="16"
                   height="16"
@@ -396,7 +406,10 @@ export default function Home() {
                 </svg>
                 Tunnels / Remote Access
               </Link>
-              <Link to="/dev-center/peridio-core/firmware-management/overview" className={styles.externalLink}>
+              <Link
+                to="/dev-center/peridio-core/firmware-management/overview"
+                className={styles.externalLink}
+              >
                 <svg
                   width="16"
                   height="16"
@@ -424,7 +437,9 @@ export default function Home() {
           </div>
           <div className={styles.body}>
             <p className={styles.description}>
-              Begin your journey with Peridio. From initial setup to your first OTA deployment, we&apos;ll guide you through every step to get your devices connected and updating securely.
+              Begin your journey with Peridio. From initial setup to your first OTA deployment,
+              we&apos;ll guide you through every step to get your devices connected and updating
+              securely.
             </p>
             {/* Get Started Links Section */}
             <div className={styles.linkGrid}>
@@ -443,7 +458,10 @@ export default function Home() {
                 </svg>
                 Introduction
               </Link>
-              <Link to="/dev-center/getting-started/provision-device" className={styles.externalLink}>
+              <Link
+                to="/dev-center/getting-started/provision-device"
+                className={styles.externalLink}
+              >
                 <svg
                   width="16"
                   height="16"
@@ -458,7 +476,10 @@ export default function Home() {
                 </svg>
                 Provision Device
               </Link>
-              <Link to="/dev-center/getting-started/hardware-in-the-loop" className={styles.externalLink}>
+              <Link
+                to="/dev-center/getting-started/hardware-in-the-loop"
+                className={styles.externalLink}
+              >
                 <svg
                   width="16"
                   height="16"
@@ -507,7 +528,10 @@ export default function Home() {
           {/* Resource Cards Container */}
           <div className={styles.resourceCardsContainer}>
             {/* Build Tools */}
-            <Link to="/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto" className={styles.resourceCard}>
+            <Link
+              to="/dev-center/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
+              className={styles.resourceCard}
+            >
               <div className={styles.featureIcon}>
                 <WrenchScrewdriverIcon className={styles.featureIconSvg} />
               </div>

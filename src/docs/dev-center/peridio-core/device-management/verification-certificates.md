@@ -9,6 +9,7 @@ A verification certificate is an X.509 certificate that is consumed during the p
 ## Purpose
 
 Verification certificates serve as proof of private key ownership. Without this verification step, anyone possessing a public CA certificate could potentially:
+
 - Associate it with their organization
 - Configure JITP settings
 - Claim devices signed by that CA
@@ -18,19 +19,25 @@ The verification process ensures only the legitimate owner of the CA's private k
 ## Verification Process
 
 ### Step 1: Generate Verification Code
+
 Request a verification code from Peridio for your organization.
 
 ### Step 2: Create Verification Certificate
+
 Generate a certificate with:
+
 - **Common Name (CN)**: The verification code from Step 1
 - **Signed by**: The CA certificate you want to register
 - **Validity**: Can be short-lived (minutes to hours)
 
 ### Step 3: Upload Both Certificates
+
 Submit both the CA certificate and verification certificate together.
 
 ### Step 4: Validation
+
 Peridio validates:
+
 - Verification certificate is signed by the CA certificate
 - Common name matches the verification code
 - Verification code is valid and unused
@@ -38,16 +45,19 @@ Peridio validates:
 ## Technical Requirements
 
 ### Certificate Format
+
 - Standard X.509 v3 certificate
 - PEM or DER encoding accepted
 - Must be signed by the target CA certificate
 
 ### Common Name
+
 - Must exactly match the verification code
 - Case-sensitive
 - No additional fields required
 
 ### Validity Period
+
 - Can be very short (even minutes)
 - Only needs to be valid during upload
 - Not used after verification complete
@@ -55,20 +65,25 @@ Peridio validates:
 ## Security Benefits
 
 ### Proof of Ownership
+
 Demonstrates control of the CA's private key, not just possession of the public certificate.
 
 ### One-Time Use
+
 Verification codes are single-use, preventing replay attacks.
 
 ### Time-Limited
+
 Codes expire if not used promptly, reducing window for compromise.
 
 ### Audit Trail
+
 Creates verifiable record of CA certificate registration.
 
 ## Implementation Example
 
 ### Generate Verification Certificate
+
 ```bash
 # Assuming you have:
 # - ca-key.pem (CA private key)
@@ -94,12 +109,14 @@ openssl x509 -req \
 ## Common Issues
 
 ### Verification Failures
+
 - **Wrong CN**: Ensure exact match with verification code
 - **Not signed by CA**: Verify signature chain
 - **Expired code**: Request new verification code
 - **Already used**: Each code is single-use only
 
 ### Certificate Problems
+
 - **Invalid signature**: Check CA key corresponds to certificate
 - **Malformed certificate**: Validate X.509 structure
 - **Encoding issues**: Use standard PEM or DER format
@@ -115,12 +132,14 @@ openssl x509 -req \
 ## Workflow Integration
 
 ### Manufacturing Setup
+
 1. Generate CA certificate for production line
 2. Create verification certificate
 3. Register CA with JITP configuration
 4. Begin device provisioning
 
 ### Development Environment
+
 1. Create development CA
 2. Generate verification certificate
 3. Register for development product

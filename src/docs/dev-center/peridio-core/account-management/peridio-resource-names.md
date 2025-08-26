@@ -9,6 +9,7 @@ Peridio Resource Names (PRNs) uniquely identify Peridio resources. PRNs are used
 ## Overview
 
 PRNs provide a standardized way to reference any resource within the Peridio platform. They are:
+
 - **Globally Unique**: No two resources share the same PRN
 - **Immutable**: PRNs never change once assigned
 - **Hierarchical**: Reflect the resource ownership structure
@@ -25,24 +26,28 @@ prn:prn-version:organization-id:resource-type:resource-id
 
 ### Components
 
-| Component | Description | Example |
-|-----------|-------------|---------|
-| **prn** | Fixed prefix identifying this as a PRN | `prn` |
-| **prn-version** | Version of the PRN format (currently 1) | `1` |
-| **organization-id** | UUID of the owning organization | `eec5cabf-c4a8-46ab-ae5a-70ca847d558d` |
-| **resource-type** | Type of resource (singular form) | `artifact`, `device`, `product` |
-| **resource-id** | UUID of the specific resource | `ddfd22a7-d928-4dce-8de2-cd98bd0dd72a` |
+| Component           | Description                             | Example                                |
+| ------------------- | --------------------------------------- | -------------------------------------- |
+| **prn**             | Fixed prefix identifying this as a PRN  | `prn`                                  |
+| **prn-version**     | Version of the PRN format (currently 1) | `1`                                    |
+| **organization-id** | UUID of the owning organization         | `eec5cabf-c4a8-46ab-ae5a-70ca847d558d` |
+| **resource-type**   | Type of resource (singular form)        | `artifact`, `device`, `product`        |
+| **resource-id**     | UUID of the specific resource           | `ddfd22a7-d928-4dce-8de2-cd98bd0dd72a` |
 
 ### Special Cases
 
 #### Organization PRN
+
 Organizations have a special format to avoid redundancy:
+
 ```text
 prn:1:eec5cabf-c4a8-46ab-ae5a-70ca847d558d
 ```
 
 #### Artifact PRN
+
 Standard resource format:
+
 ```text
 prn:1:eec5cabf-c4a8-46ab-ae5a-70ca847d558d:artifact:ddfd22a7-d928-4dce-8de2-cd98bd0dd72a
 ```
@@ -51,26 +56,26 @@ prn:1:eec5cabf-c4a8-46ab-ae5a-70ca847d558d:artifact:ddfd22a7-d928-4dce-8de2-cd98
 
 The following resource types are supported in PRNs:
 
-| Resource Type | PRN Identifier | Example |
-|---------------|----------------|---------|
-| API Keys | `api_key` | `prn:1:org-uuid:api_key:key-uuid` |
-| Artifacts | `artifact` | `prn:1:org-uuid:artifact:artifact-uuid` |
-| Artifact Versions | `artifact_version` | `prn:1:org-uuid:artifact_version:version-uuid` |
-| Binaries | `binary` | `prn:1:org-uuid:binary:binary-uuid` |
-| Binary Parts | `binary_part` | `prn:1:org-uuid:binary_part:part-uuid` |
-| Binary Signatures | `binary_signature` | `prn:1:org-uuid:binary_signature:signature-uuid` |
-| Bundles | `bundle` | `prn:1:org-uuid:bundle:bundle-uuid` |
-| CA Certificates | `ca_certificate` | `prn:1:org-uuid:ca_certificate:cert-uuid` |
-| Cohorts | `cohort` | `prn:1:org-uuid:cohort:cohort-uuid` |
-| Device Certificates | `device_certificate` | `prn:1:org-uuid:device_certificate:cert-uuid` |
-| Devices | `device` | `prn:1:org-uuid:device:device-uuid` |
-| Organizations | (special case) | `prn:1:org-uuid` |
-| Products | `product` | `prn:1:org-uuid:product:product-uuid` |
-| Releases | `release` | `prn:1:org-uuid:release:release-uuid` |
-| Signing Keys | `signing_key` | `prn:1:org-uuid:signing_key:key-uuid` |
-| Tunnels | `tunnel` | `prn:1:org-uuid:tunnel:tunnel-uuid` |
-| Users | `user` | `prn:1:user:user-uuid` |
-| Webhooks | `webhook` | `prn:1:org-uuid:webhook:webhook-uuid` |
+| Resource Type       | PRN Identifier       | Example                                          |
+| ------------------- | -------------------- | ------------------------------------------------ |
+| API Keys            | `api_key`            | `prn:1:org-uuid:api_key:key-uuid`                |
+| Artifacts           | `artifact`           | `prn:1:org-uuid:artifact:artifact-uuid`          |
+| Artifact Versions   | `artifact_version`   | `prn:1:org-uuid:artifact_version:version-uuid`   |
+| Binaries            | `binary`             | `prn:1:org-uuid:binary:binary-uuid`              |
+| Binary Parts        | `binary_part`        | `prn:1:org-uuid:binary_part:part-uuid`           |
+| Binary Signatures   | `binary_signature`   | `prn:1:org-uuid:binary_signature:signature-uuid` |
+| Bundles             | `bundle`             | `prn:1:org-uuid:bundle:bundle-uuid`              |
+| CA Certificates     | `ca_certificate`     | `prn:1:org-uuid:ca_certificate:cert-uuid`        |
+| Cohorts             | `cohort`             | `prn:1:org-uuid:cohort:cohort-uuid`              |
+| Device Certificates | `device_certificate` | `prn:1:org-uuid:device_certificate:cert-uuid`    |
+| Devices             | `device`             | `prn:1:org-uuid:device:device-uuid`              |
+| Organizations       | (special case)       | `prn:1:org-uuid`                                 |
+| Products            | `product`            | `prn:1:org-uuid:product:product-uuid`            |
+| Releases            | `release`            | `prn:1:org-uuid:release:release-uuid`            |
+| Signing Keys        | `signing_key`        | `prn:1:org-uuid:signing_key:key-uuid`            |
+| Tunnels             | `tunnel`             | `prn:1:org-uuid:tunnel:tunnel-uuid`              |
+| Users               | `user`               | `prn:1:user:user-uuid`                           |
+| Webhooks            | `webhook`            | `prn:1:org-uuid:webhook:webhook-uuid`            |
 
 ## Using PRNs
 
@@ -112,18 +117,21 @@ All support requests will need PRNs to identify resources. PRNs are the only uni
 ## Troubleshooting
 
 ### Invalid PRN Format
+
 - Verify all components are present
 - Check UUIDs are valid format
 - Ensure resource type is singular and lowercase
 - Confirm organization exists
 
 ### PRN Not Found
+
 - Verify resource exists
 - Check organization membership
 - Confirm permissions to access resource
 - Validate PRN construction
 
 ### Permission Denied
+
 - Review user's role and permissions
 - Check resource-level access controls
 - Verify organization membership

@@ -36,6 +36,7 @@ If you **ever** wish to rely on dynamic ordering, it is strongly recommended to 
 ```
 
 Common version requirements:
+
 - `">= 1.0.0"` - Minimum version
 - `"~> 2.1"` - Compatible with 2.1.x
 - `">= 1.0.0 and < 2.0.0"` - Range constraint
@@ -57,6 +58,7 @@ Releases have a next release field that specifies an explicit path to be walked 
 ```
 
 **Use Cases:**
+
 - Mandatory update sequences
 - Complex dependency chains
 - Controlled migration paths
@@ -73,6 +75,7 @@ Releases use version and version requirement fields to specify an implicit path 
 ```
 
 **Use Cases:**
+
 - Flexible update paths
 - Skip intermediate versions
 - Automatic compatibility resolution
@@ -91,6 +94,7 @@ A required release cannot be skipped during the update process. Devices must ins
 ```
 
 **Common Use Cases:**
+
 - Security patches
 - Breaking changes requiring migration
 - License compliance updates
@@ -107,6 +111,7 @@ A disabled release cannot have its bundle selected during bundle resolution, but
 ```
 
 **Common Use Cases:**
+
 - Problematic releases
 - Temporary rollback scenarios
 - Testing specific update paths
@@ -127,6 +132,7 @@ Schedule releases for immediate or future deployment:
 ```
 
 **Scheduling States:**
+
 - **Scheduled**: Release date is in the future
 - **Available**: Schedule date has passed
 - **Immediate**: No schedule date specified
@@ -168,6 +174,7 @@ Limit the number or percentage of devices:
 ```
 
 **Phasing Rules:**
+
 - Decimal values `[0.0, 1.0]` are treated as percentages
 - Integer values `>= 2` are treated as device counts
 - Phase value of `1.0` or `100%` means fully deployed
@@ -295,6 +302,7 @@ peridio releases update \
 ### Health Monitoring
 
 Track key metrics during deployment:
+
 - Device check-in rates
 - Update success/failure ratios
 - Error logs and crash reports
@@ -316,6 +324,7 @@ Configure failure thresholds:
 ### Manual Rollback
 
 Options for reverting deployments:
+
 1. Disable the problematic release
 2. Create new release with previous bundle
 3. Use bundle override for affected devices
@@ -356,24 +365,28 @@ Options for reverting deployments:
 ### Common Issues
 
 #### Devices Not Receiving Updates
+
 - Verify device cohort membership
 - Check release availability constraints
 - Review version requirements
 - Confirm bundle resolution path
 
 #### Phasing Not Working
+
 - Ensure phase mode is correctly set
 - Verify phase value is valid
 - Check device count in cohort
 - Review device tags for tag-based phasing
 
 #### Version Conflicts
+
 - Validate version requirement syntax
 - Check for circular dependencies
 - Review release channel ordering
 - Verify bundle compatibility
 
 #### Rollback Issues
+
 - Confirm previous release is not disabled
 - Check version requirements allow rollback
 - Verify devices can reach previous version
@@ -423,6 +436,7 @@ Integrate with CI/CD pipelines:
 ## API Reference
 
 For detailed API documentation, see:
+
 - [Releases API Reference](/admin-api#releases)
 - [Bundle Distribution Reference](/platform/reference/bundle-distribution)
 - [Release Channels Reference](/platform/reference/release-channels)

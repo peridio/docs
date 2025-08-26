@@ -12,12 +12,14 @@ Avocado's binary distribution model uses package repositories during the build p
 The build system is integrated directly into the Yocto Project foundation, providing industry-standard build capabilities while abstracting away the complexity typically associated with Yocto development. Avocado manages the underlying differences in toolchains and kernel configurations, enabling the same declarative configuration to adapt across different hardware platforms with simplified CI/CD integration for multiple hardware targets.
 
 **Build System Features:**
+
 - Deterministic, immutable system image generation
 - Cryptographically verifiable build outputs
 - Yocto Project integration with complexity abstraction
 - Multi-platform toolchain and configuration management
 
 **Provisioning Capabilities:**
+
 - Build-time extension composition and integration
 - Hardware-agnostic build configuration
 - Automated CI/CD pipeline integration

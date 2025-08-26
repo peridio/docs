@@ -15,10 +15,10 @@ interface ProblemSolutionProps {
 export default function ProblemSolution({
   challenges,
   solutions,
-  challengeTitle = "The Challenge",
-  solutionTitle = "The Solution",
-  sectionTitle = "From Challenge to Solution",
-  sectionSubtitle = "Transform your deployment with production-ready infrastructure"
+  challengeTitle = 'The Challenge',
+  solutionTitle = 'The Solution',
+  sectionTitle = 'From Challenge to Solution',
+  sectionSubtitle = 'Transform your deployment with production-ready infrastructure',
 }: ProblemSolutionProps) {
   if (!challenges && !solutions) return null
 

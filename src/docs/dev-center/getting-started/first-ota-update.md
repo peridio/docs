@@ -58,6 +58,7 @@ version = "1.1.0"
 The build produces extension image(s) for your target in Avocado's state. You'll upload these file(s) as binaries in the following steps. The exact filenames/paths depend on your target and extension type(s).
 
 #### Command
+
 ```bash title="On Host"
 avocado build
 ```
@@ -67,6 +68,7 @@ avocado build
 If you don't already have an artifact for your app, create one. Otherwise, reuse its PRN.
 
 #### Command
+
 ```bash title="On Host"
 peridio artifacts create \
   --name my-app
@@ -81,6 +83,7 @@ Record the returned `ARTIFACT_PRN` for the next step. You can also find it via `
 Create a new version to represent this update, e.g., `1.1.0`.
 
 #### Command
+
 ```bash title="On Host"
 peridio artifact-versions create \
   --artifact-prn ARTIFACT_PRN \
@@ -96,6 +99,7 @@ Record the returned `ARTIFACT_VERSION_PRN` for the next step. See the [CLI artif
 Upload the build output file(s) for your target as binaries associated with the artifact version. Repeat per target if needed.
 
 #### Command
+
 ```bash title="On Host"
 peridio binaries create \
   --artifact-version-prn ARTIFACT_VERSION_PRN \
@@ -112,6 +116,7 @@ Replace `PATH_TO_BUILT_MY_APP_IMAGE` with the path to the `my-app` extension ima
 Create a bundle that resolves to the latest binaries of one or more artifact versions.
 
 #### Command
+
 ```bash title="On Host"
 peridio bundles create \
   --name "my-app 1.1.0" \
@@ -129,6 +134,7 @@ You can include multiple artifact versions by repeating `-a` or passing a comma-
 Bundle overrides are great for manual tests and troubleshooting against specific devices or small sets.
 
 ##### Command
+
 ```bash title="On Host"
 peridio bundle-overrides create \
   --name my-app-1.1.0-override \
@@ -143,6 +149,7 @@ See the [CLI bundle-overrides command](/cli/bundle-overrides/create).
 Create a release in a cohort to roll out broadly, optionally phased or scheduled.
 
 ##### Command
+
 ```bash title="On Host"
 peridio releases create \
   --name my-app-1.1.0 \
@@ -160,5 +167,6 @@ For phased rollouts, add `--phase-value` and/or `--phase-tags`. See the [CLI rel
 Device-side application of these updates is handled by the `peridiod` daemon. The specifics of activation and restart flows will be covered as that integration is developed. For now, you have published a new extension version, bundled it, and scheduled delivery via Peridio Core.
 
 See also:
+
 - Bundle Management Guide: `/platform/guides/introduction-to-bundle-management`
 - CLI reference: `/cli/artifacts/create`, `/cli/artifact-versions/create`, `/cli/binaries/create`, `/cli/bundles/create`, `/cli/bundle-overrides/create`, `/cli/releases/create`

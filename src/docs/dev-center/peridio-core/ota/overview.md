@@ -16,15 +16,19 @@ Peridio provides comprehensive OTA update capabilities that enable you to secure
 ## Update Methods
 
 ### [Avocado OS Side Loading](avocado-side-loading)
+
 Deploy updates directly to devices running Avocado OS without going through standard release channels.
 
 ### [Cohort-Based Releases](cohort-based-releases)
+
 Roll out updates progressively to specific device groups for controlled deployment and testing.
 
 ### [Quick Deploy / Bundle Overrides](quick-deploy-bundle-overrides)
+
 Rapidly deploy critical updates or override standard release schedules for emergency fixes.
 
 ### [Deployments (Deprecated)](deployments-deprecated)
+
 Legacy deployment system for backward compatibility with existing implementations.
 
 ## Best Practices
