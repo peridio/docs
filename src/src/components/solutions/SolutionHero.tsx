@@ -31,7 +31,7 @@ export default function SolutionHero({
   primaryCTA,
   secondaryCTA,
   image,
-  imageAlt
+  imageAlt,
 }: SolutionHeroProps) {
   const renderTitle = () => {
     if (highlight) {
@@ -56,7 +56,7 @@ export default function SolutionHero({
               {renderTitle()}
             </Heading>
             <p className={styles.heroSubtitle}>{subtitle}</p>
-            
+
             {stats && stats.length > 0 && (
               <div className={styles.heroStats}>
                 {stats.map((stat, index) => (
@@ -67,7 +67,7 @@ export default function SolutionHero({
                 ))}
               </div>
             )}
-            
+
             <div className={styles.heroCta}>
               {primaryCTA && (
                 <Link to={primaryCTA.link} className={styles.ctaPrimary}>
@@ -81,14 +81,10 @@ export default function SolutionHero({
               )}
             </div>
           </div>
-          
+
           {image && (
             <div className={styles.heroImage}>
-              <img
-                src={image}
-                alt={imageAlt || title}
-                className={styles.productImage}
-              />
+              <img src={image} alt={imageAlt || title} className={styles.productImage} />
             </div>
           )}
         </div>

@@ -11,7 +11,7 @@ interface TechSpecsProps {
   title?: string
 }
 
-export default function TechSpecs({ specs, title = "Technical Specifications" }: TechSpecsProps) {
+export default function TechSpecs({ specs, title = 'Technical Specifications' }: TechSpecsProps) {
   return (
     <section className={styles.specs}>
       <div className={styles.container}>

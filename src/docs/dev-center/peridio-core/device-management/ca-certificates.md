@@ -23,6 +23,7 @@ To learn more about how to create and use CA certificates, see the [creating CA 
 ### JITP Configuration
 
 When configuring a CA certificate for JITP, you can specify:
+
 - Default product assignment
 - Default cohort placement
 - Initial tags
@@ -37,6 +38,7 @@ You cannot create a CA certificate in Peridio with an expired X.509 certificate.
 ### Post-Expiration Behavior
 
 If a CA certificate expires after being configured in Peridio:
+
 - **New devices** cannot JITP using that expired CA certificate
 - **Existing devices** that were previously provisioned remain unaffected and can still connect
 - **Certificate renewal** should be planned well before expiration

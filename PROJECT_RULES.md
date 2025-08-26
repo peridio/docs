@@ -309,6 +309,3 @@ For questions about these guidelines, please open an issue or contact the mainta
 - **MUST** verify current directory is `src/` before running npm commands
 - **SHOULD** use `pwd` or similar to confirm working directory
 - **MUST** ensure all team members understand this directory structure requirement
-
-
-

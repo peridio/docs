@@ -8,13 +8,13 @@ interface ValuePropositionProps {
   videoUrl?: string
 }
 
-export default function ValueProposition({ 
-  title = "Solution Overview",
+export default function ValueProposition({
+  title = 'Solution Overview',
   content,
-  videoUrl
+  videoUrl,
 }: ValuePropositionProps) {
   const [videoLoading, setVideoLoading] = useState(true)
-  
+
   const handleVideoLoad = () => {
     setVideoLoading(false)
   }
@@ -27,7 +27,7 @@ export default function ValueProposition({
             {title}
           </Heading>
         )}
-        
+
         {videoUrl && (
           <div className={styles.videoContainer}>
             {videoLoading && (
@@ -36,22 +36,20 @@ export default function ValueProposition({
                 <div className={styles.loadingText}>Loading video...</div>
               </div>
             )}
-            <iframe 
+            <iframe
               src={videoUrl}
-              title="Product Demo Video" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
+              title="Product Demo Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
               className={videoLoading ? styles.videoFrameHidden : styles.videoFrame}
               onLoad={handleVideoLoad}
             />
           </div>
         )}
-        
-        {content && (
-          <p className={styles.overviewContent}>{content}</p>
-        )}
+
+        {content && <p className={styles.overviewContent}>{content}</p>}
       </div>
     </section>
   )

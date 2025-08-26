@@ -12,7 +12,7 @@ Combined with Avocado OS, teams can deploy complex workloads quickly using a con
 ## Technical Specifications
 
 | Component        | Details                                                   |
-|------------------|-----------------------------------------------------------|
+| ---------------- | --------------------------------------------------------- |
 | CPU              | Quad-core Arm Cortex-A53 (1.8 GHz)                        |
 | MCU              | Single Arm Cortex-M7 (800 MHz)                            |
 | NPU              | i.MX 8M Plus SoC integrated NPU                           |
@@ -32,7 +32,6 @@ Get up and running with the Avocado Linux SDK for i.MX 8M Plus in minutes.
 - A Mac (macOS 10.12+) or Linux (Ubuntu 22.04+, Fedora 39+) development machine
 - Docker installed
 - 10GB+ available disk space
-
 
 ### Provisioning your device
 

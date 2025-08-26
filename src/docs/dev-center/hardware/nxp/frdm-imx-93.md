@@ -9,15 +9,15 @@ The FRDM i.MX 93 is a low-cost development board for rapid prototyping. It inclu
 
 ## Technical Specifications
 
-| Component        | Details                                                   |
-|------------------|-----------------------------------------------------------|
-| CPU              | Dual-core Arm Cortex-A55 (1.7 GHz)                        |
-| MCU              | Single Arm Cortex-M33 (250 MHz)                           |
-| NPU              | Arm Ethos U-65 microNPU                                   |
-| AI Performance   | Up to 0.5 TOPS (INT8)                                     |
-| Memory           | 2GB 16-bit LPDDR4X                                        |
-| Storage          | 32GB eMMC + microSD card slot + M.2 Key M PCIe NVMe SSD  |
-| Connectivity     | Built-in NXP IW612 wireless module with Wi-Fi and Bluetooth |
+| Component      | Details                                                     |
+| -------------- | ----------------------------------------------------------- |
+| CPU            | Dual-core Arm Cortex-A55 (1.7 GHz)                          |
+| MCU            | Single Arm Cortex-M33 (250 MHz)                             |
+| NPU            | Arm Ethos U-65 microNPU                                     |
+| AI Performance | Up to 0.5 TOPS (INT8)                                       |
+| Memory         | 2GB 16-bit LPDDR4X                                          |
+| Storage        | 32GB eMMC + microSD card slot + M.2 Key M PCIe NVMe SSD     |
+| Connectivity   | Built-in NXP IW612 wireless module with Wi-Fi and Bluetooth |
 
 ## Getting Started
 
@@ -28,7 +28,6 @@ Get up and running with the Avocado Linux SDK in minutes.
 - A Mac (macOS 10.12+) or Linux (Ubuntu 22.04+, Fedora 39+) development machine
 - Docker installed
 - 10GB+ available disk space
-
 
 ### Provisioning your device
 

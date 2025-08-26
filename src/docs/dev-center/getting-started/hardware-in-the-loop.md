@@ -52,12 +52,12 @@ version = "1.0.0"
 # highlight-added-end
 ```
 
-
 ### Building the extension
 
 After adding an entry for our new extension, we need to build it. This is accomplished via `avocado build`. This will ensure all necessary components are re-built.
 
 #### Command
+
 ```bash title="On Host"
 avocado build
 ```
@@ -84,6 +84,7 @@ This creates the extension's image(s) in Avocado's state.
 Start the HITL server to serve your extension over NFS so the device can mount it live.
 
 #### Command
+
 ```bash title="On Host"
 avocado hitl server -e my-app
 ```
@@ -93,11 +94,13 @@ avocado hitl server -e my-app
 Run the VM using the SDK passing args for host networking, so the guest (the device) can reach the HITL server on the host.
 
 #### Command
+
 ```bash title="On Host"
 avocado sdk run -iE --container-arg "--net=host" vm dev
 ```
 
 #### Output
+
 ```text
 Runtime: dev
 
@@ -115,10 +118,10 @@ You may log in using the username `root`, and will not be prompted for a passwor
 Inside your QEMU VM, mount the HITL NFS served by your host, so changes to your extension on the host appear immediately in the VM.
 
 #### Command
+
 ```bash title="On Device (VM)"
 avocadoctl hitl mount -e my-app -s 10.0.2.2
 ```
-
 
 ### Add a file to the extension export
 
@@ -127,6 +130,7 @@ We can leverage `avocado sdk run` to place assets into our extension's directory
 This command places a `hello.txt` file into the `/usr` directory of the `my-app` extension.
 
 #### Command
+
 ```bash title="On Host"
 avocado sdk run cd /opt/_avocado \&\& \
   mkdir -p ./qemux86-64/extensions/my-app/usr \&\& \
@@ -142,21 +146,25 @@ The inner command runs inside the SDK container but is passed through your host 
 As we have the HITL NFS server running, and the extenion mounted, the placed artifacts should immediately appear inside the VM at the corresponding path.
 
 #### Command
+
 ```bash title="On Device (VM)"
 ls -la /usr
 ```
 
 #### Output
+
 ```text
 -rw-r--r-- 1 root root 17 Aug 12 23:05 hello.txt
 ```
 
 #### Command
+
 ```bash title="On Device (VM)"
 cat /usr/hello.txt
 ```
 
 #### Output
+
 ```text
 hello from host
 ```

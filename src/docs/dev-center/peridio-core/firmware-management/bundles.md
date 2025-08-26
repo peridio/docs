@@ -22,9 +22,11 @@ Bundles serve as the fundamental distribution unit in Peridio's firmware managem
 Bundles may be distributed to devices via:
 
 ### [Releases](releases)
+
 Distribute bundles to cohorts with versioning, ordering, and phased rollout capabilities.
 
 ### [Bundle Overrides](/platform/reference/bundle-overrides)
+
 Force specific devices to receive a bundle, overriding normal release channels.
 
 :::tip Bundle Re-distribution
@@ -63,17 +65,20 @@ More specific definitions override broader ones in the inheritance chain.
 #### Example 1: Basic Inheritance from Artifact
 
 **Setup:**
+
 - Artifact **(A1)** has custom metadata: `{"platform": "arm64", "region": "global"}`
 - Artifact Version **(AV1)** for **(A1)** has no custom metadata
 - Binary **(B1)** for **(AV1)** has no custom metadata
 - Creating a bundle with **(B1)**, supplying no additional metadata
 
 **Result in Bundle:**
+
 - **(B1)** inherits metadata from **(A1)**: `{"platform": "arm64", "region": "global"}`
 
 #### Example 2: Binary Override
 
 **Setup:**
+
 - Artifact **(A1)** has custom metadata: `{"platform": "arm64"}`
 - Artifact Version **(AV1)** for **(A1)** has no custom metadata
 - Binary **(B1)** for **(AV1)** has no custom metadata
@@ -81,12 +86,14 @@ More specific definitions override broader ones in the inheritance chain.
 - Creating a bundle with **(B1)** and **(B2)**, supplying no additional metadata
 
 **Result in Bundle:**
+
 - **(B1)** inherits from **(A1)**: `{"platform": "arm64"}`
 - **(B2)** uses its own metadata: `{"platform": "arm64", "variant": "debug"}`
 
 #### Example 3: Bundle Creation Override
 
 **Setup:**
+
 - Artifact **(A1)** has custom metadata: `{"version": "1.0"}`
 - Artifact Version **(AV1)** for **(A1)** has no custom metadata
 - Binary **(B1)** for **(AV1)** has no custom metadata
@@ -94,6 +101,7 @@ More specific definitions override broader ones in the inheritance chain.
 - Creating a bundle with **(B1)** and **(B2)**, supplying metadata for **(B2)**: `{"version": "1.1", "type": "firmware", "priority": "high"}`
 
 **Result in Bundle:**
+
 - **(B1)** inherits from **(A1)**: `{"version": "1.0"}`
 - **(B2)** uses bundle creation metadata: `{"version": "1.1", "type": "firmware", "priority": "high"}`
 
@@ -178,11 +186,13 @@ Effective use of custom metadata can enhance your deployment process:
 ### Bundle Naming
 
 Use descriptive, consistent naming conventions:
+
 - Include version information
 - Indicate target environment (dev, staging, prod)
 - Add date or build number for tracking
 
 Examples:
+
 - `firmware-v2.1.0-prod-20240115`
 - `app-bundle-staging-build-4523`
 - `critical-security-patch-v1.0.1`
@@ -214,17 +224,20 @@ Examples:
 ### Common Issues
 
 #### Bundle Creation Fails
+
 - Verify all binary UUIDs are valid
 - Check permissions for referenced binaries
 - Ensure metadata is valid JSON
 - Confirm organization quotas aren't exceeded
 
 #### Metadata Not Appearing
+
 - Check inheritance chain for overrides
 - Verify JSON syntax in metadata
 - Confirm metadata size limits aren't exceeded
 
 #### Distribution Problems
+
 - Verify bundle is associated with a release or override
 - Check device eligibility for the distribution method
 - Review cohort membership for releases
@@ -233,6 +246,7 @@ Examples:
 ## API Reference
 
 For detailed API documentation, see:
+
 - [Bundles API Reference](/admin-api#bundles)
 - [Bundle Distribution Reference](/platform/reference/bundle-distribution)
 - [Release Channels Reference](/platform/reference/release-channels)

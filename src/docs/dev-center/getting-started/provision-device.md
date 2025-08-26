@@ -13,11 +13,13 @@ This guide is intended to be run on a Mac (macOS 10.12+) or Linux (Ubuntu 22.04+
 :::
 
 #### Command
+
 ```bash
 avocado
 ```
 
 #### Output
+
 ```text
 Avocado CLI - A command line interface for Avocado
 
@@ -50,11 +52,13 @@ Initialize a new Avocado project by generating an `avocado.toml` with sensible d
 By default, the target is set to `qemux86-64`, as it allows you go exercise all Avocado CLI workflows without a physical device. You can specify a specific hardware target via the `--target` flag.
 
 #### Command
+
 ```bash
 avocado init qemu && cd qemu
 ```
 
 #### Output
+
 ```text
 ✓ Created config at /home/user/targets/qemu/avocado.toml.
 ```
@@ -94,17 +98,18 @@ nativesdk-avocado-hitl = "*"
 Run all subsequent commands in this guide from the root of your Avocado project on your host machine — the directory that contains your Avocado config. Code blocks labeled "On Device (VM)" are executed inside the running QEMU VM.
 :::
 
-
 ### Install dependencies
 
-The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). Use `-r` to scope to a single runtime and its extensions. Otherwise, by default it builds *all* runtimes. Prompts may appear during package installation unless you pass `--force` (`-f`).
+The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). Use `-r` to scope to a single runtime and its extensions. Otherwise, by default it builds _all_ runtimes. Prompts may appear during package installation unless you pass `--force` (`-f`).
 
 #### Command
+
 ```bash title="On Host"
 avocado install --force
 ```
 
 #### Output
+
 ```text
 [INFO] Using target: qemux86-64 (from config file (default_target))
 [INFO] Starting comprehensive install process...
@@ -139,11 +144,13 @@ We must define a password for our `root` user account.
 Passwords can be generated via the `openssl passwd -6` command to generate a SHA512 password.
 
 #### Command
+
 ```bash
 openssl passwd -6 "my-secret-password"
 ```
 
 #### Output
+
 ```text
 $6$Q98YeorOiEwd2wEo$LEtlJIsT1yJVdBkEGyP9rbeambXPLXN4Ci59G40HEq1/mjy99UkBWAkNQpGHoGdeCi0XGlv.w0ZjbBqzjJ/vp1
 ```
@@ -230,6 +237,7 @@ To set **no** password, set this value to an empty string.
 [ext.avocado-dev.users.root]
 password = ""
 ```
+
 :::
 
 Any time user or password values are changed, you will need to re-run build and provision commands (`avocado build` + `avocado provision -r dev`).
@@ -239,11 +247,13 @@ Any time user or password values are changed, you will need to re-run build and 
 The `avocado build` command compiles any required SDK code for extensions, builds extension images, and produces the runtime image(s) as defined in your avocado config. By default, all runtimes are built, (use `-r` to build a specific runtime).
 
 #### Command
+
 ```bash title="On Host"
 avocado build
 ```
 
 #### Output
+
 ```text
 [INFO] Using target: qemux86-64 (from config file (default_target))
 [INFO] Starting comprehensive build process...
@@ -265,11 +275,13 @@ avocado build
 The `avocado provision` command prepares the specified runtime by transforming the output of the build, and depending on the target, either: writing final artifacts to disk, or even provisioning a physical device via USB, network, etc.
 
 #### Command
+
 ```bash title="On Host"
 avocado provision -r dev
 ```
 
 #### Output
+
 ```text
 [INFO] Provisioning runtime 'dev'
 
@@ -288,11 +300,13 @@ In this guide, we are targeting QEMU, so our provisioning process will write the
 Run the built image under QEMU using the SDK container. `sdk run -iE` launches an interactive session with the Avocado SDK environment sourced and invokes the VM launcher for the `dev` runtime.
 
 #### Command
+
 ```bash title="On Host"
 avocado sdk run -iE vm dev
 ```
 
 #### Output
+
 ```text
 Runtime: dev
 
@@ -305,7 +319,6 @@ avocado-qemux86-64 login:
 
 You may log in using the `root` account and the appropriate password as configured in your Avocado config. If you configured an empty password, just press Enter when prompted for one.
 
-
 ### Verify extensions
 
 Once logged into the running virtual machine, you have a fully-running Avocado operating system.
@@ -313,11 +326,13 @@ Once logged into the running virtual machine, you have a fully-running Avocado o
 A validation command you may run is `avocadoctl ext status` to list the status of all extensions.
 
 #### Command
+
 ```bash title="On Device (VM)"
 avocadoctl ext status
 ```
 
 #### Output
+
 ```text
 Extension Status
 ================

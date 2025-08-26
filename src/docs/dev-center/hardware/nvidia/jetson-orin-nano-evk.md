@@ -12,7 +12,7 @@ Whether you're building computer vision, robotics, or edge AI applications, this
 ## Technical Specifications
 
 | Component        | Details                                                    |
-|------------------|------------------------------------------------------------|
+| ---------------- | ---------------------------------------------------------- |
 | CPU              | 6-core Arm Cortex-A78AE v8.2 (1.7 GHz)                     |
 | GPU              | NVIDIA Ampere GPU with 1024 CUDA cores and 32 tensor cores |
 | AI Performance   | Up to 67 TOPS (INT8)                                       |
@@ -31,7 +31,6 @@ Get up and running with the Avocado Linux SDK in minutes.
 - A Mac (macOS 10.12+) or Linux (Ubuntu 22.04+, Fedora 39+) development machine
 - Docker installed
 - 10GB+ available disk space
-
 
 ### Provisioning your device
 

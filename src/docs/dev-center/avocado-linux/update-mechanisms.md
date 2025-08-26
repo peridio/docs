@@ -1,5 +1,5 @@
 ---
-title: Update Mechanisms  
+title: Update Mechanisms
 description: Secure over-the-air update deployment and fault-tolerant update mechanisms
 ---
 
@@ -12,12 +12,14 @@ Avocado OS implements fault-tolerant update mechanisms designed for reliability 
 The update architecture includes intelligent power management with ordered shutdown sequences initiated on power failure to protect data integrity. Store-and-forward architecture uses a transaction-based model for system management operations, ensuring consistency even with intermittent connectivity. These mechanisms work together to provide robust update deployment capabilities across diverse operational conditions.
 
 **Update System Features:**
+
 - Atomic updates using btrfs filesystem capabilities
 - Fault-tolerant update deployment with automatic rollback
 - Transaction-based update model for consistency
 - Power failure protection during update processes
 
 **Reliability Mechanisms:**
+
 - Intelligent power management and ordered shutdown sequences
 - Store-and-forward architecture for intermittent connectivity
 - Integrity verification throughout update process

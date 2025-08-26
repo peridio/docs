@@ -11,7 +11,7 @@ interface UseCasesProps {
   title?: string
 }
 
-export default function UseCases({ useCases, title = "Production Use Cases" }: UseCasesProps) {
+export default function UseCases({ useCases, title = 'Production Use Cases' }: UseCasesProps) {
   return (
     <section className={styles.useCases}>
       <div className={styles.container}>
@@ -22,11 +22,7 @@ export default function UseCases({ useCases, title = "Production Use Cases" }: U
           {useCases.map((useCase, index) => (
             <div key={index} className={styles.useCase}>
               {useCase.image && (
-                <img
-                  src={useCase.image}
-                  alt={useCase.title}
-                  className={styles.useCaseImage}
-                />
+                <img src={useCase.image} alt={useCase.title} className={styles.useCaseImage} />
               )}
               <Heading as="h3">{useCase.title}</Heading>
               <p>{useCase.description}</p>

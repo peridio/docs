@@ -241,7 +241,7 @@ if ./run_tests.sh; then
     --binary-prns $TESTED_BINARY \
     --name "Tested Release $(date +%Y%m%d)" \
     --output json | jq -r '.prn')
-  
+
   echo "Bundle created: $BUNDLE_PRN"
 else
   echo "Tests failed, bundle not created"
@@ -267,7 +267,7 @@ Integrate with CI/CD pipelines:
         "build_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       }' \
       --output json | jq -r '.prn')
-    
+
     echo "BUNDLE_PRN=$BUNDLE_PRN" >> $GITHUB_ENV
 ```
 
@@ -292,7 +292,7 @@ for variant in variants:
         "features": variant["features"],
         "version": "2.0.0"
     })
-    
+
     result = subprocess.run([
         "peridio", "bundles", "create",
         "--organization-prn", org_prn,
@@ -300,7 +300,7 @@ for variant in variants:
         "--name", f"Release 2.0.0 - {variant['region'].upper()}",
         "--metadata", metadata
     ], capture_output=True, text=True)
-    
+
     print(f"Created bundle for {variant['region']}: {result.stdout}")
 ```
 
@@ -311,12 +311,14 @@ for variant in variants:
 **Symptom**: Error when creating bundle
 
 **Common Causes**:
+
 - Invalid binary PRNs
 - Malformed metadata JSON
 - Insufficient permissions
 - Quota exceeded
 
 **Solution**:
+
 ```bash
 # Verify binary exists
 peridio binaries get --binary-prn $BINARY_PRN
@@ -333,11 +335,13 @@ peridio organizations get-permissions
 **Symptom**: Custom metadata missing or incorrect
 
 **Common Causes**:
+
 - Inheritance overriding metadata
 - JSON formatting issues
 - Size limits exceeded
 
 **Solution**:
+
 ```bash
 # Check metadata at each level
 peridio artifacts get-metadata --artifact-prn $ARTIFACT_PRN
@@ -350,11 +354,13 @@ peridio bundles get-metadata --bundle-prn $BUNDLE_PRN
 **Symptom**: Bundle contains unexpected binaries
 
 **Common Causes**:
+
 - Incorrect PRN specification
 - Copy-paste errors
 - Wrong binary versions
 
 **Solution**:
+
 ```bash
 # List bundle contents
 peridio bundles list-binaries --bundle-prn $BUNDLE_PRN

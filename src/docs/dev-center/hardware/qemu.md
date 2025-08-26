@@ -35,7 +35,6 @@ For detailed QEMU setup instructions, see:
 - Some drivers may not be available
 - WireGuard tunnels require Linux host
 
-
 ## Getting Started
 
 Get up and running with the Avocado Linux SDK in minutes.

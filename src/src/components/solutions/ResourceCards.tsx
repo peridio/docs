@@ -12,9 +12,9 @@ interface ResourceCardsProps {
   title?: string
 }
 
-export default function ResourceCards({ 
-  resources, 
-  title = "Documentation & Resources" 
+export default function ResourceCards({
+  resources,
+  title = 'Documentation & Resources',
 }: ResourceCardsProps) {
   return (
     <section className={styles.resources}>
@@ -24,11 +24,7 @@ export default function ResourceCards({
         </Heading>
         <div className={styles.resourceGrid}>
           {resources.map((resource, index) => (
-            <Link 
-              key={index} 
-              to={resource.link} 
-              className={styles.resourceCard}
-            >
+            <Link key={index} to={resource.link} className={styles.resourceCard}>
               <Heading as="h3">{resource.title}</Heading>
               <p>{resource.description}</p>
             </Link>

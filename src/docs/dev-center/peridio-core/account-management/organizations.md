@@ -9,6 +9,7 @@ At the highest level, Peridio resources are created and managed within an organi
 ## Overview
 
 An organization serves as:
+
 - The top-level container for all Peridio resources
 - A security boundary providing complete isolation from other organizations
 - The billing entity for platform usage
@@ -29,18 +30,21 @@ New organizations must be created through Peridio support. Please contact [Perid
 ## Organization Settings
 
 ### General Settings
+
 - **Name**: Unique identifier for the organization (cannot be changed)
 - **Display Name**: Human-readable name shown in the UI
 - **Description**: Optional description of the organization's purpose
 - **Contact Email**: Primary contact for organization-level communications
 
 ### Security Settings
+
 - **Two-factor Authentication**: Enforce 2FA for all organization users
 - **IP Allowlisting**: Restrict access to specific IP ranges
 - **Session Timeout**: Configure maximum session duration
 - **API Key Rotation**: Set policies for API key lifecycle
 
 ### Billing Settings
+
 - **Billing Email**: Email for invoice delivery
 - **Payment Method**: Credit card or invoicing options
 - **Usage Alerts**: Configure thresholds for usage notifications
@@ -50,14 +54,14 @@ New organizations must be created through Peridio support. Please contact [Perid
 Organizations have configurable limits on resources:
 
 | Resource | Default Limit | Maximum Limit |
-|----------|--------------|---------------|
-| Products | 100 | Unlimited* |
-| Devices | 10,000 | Unlimited* |
-| Users | 50 | 500 |
-| API Keys | 100 | 1,000 |
-| Webhooks | 25 | 100 |
+| -------- | ------------- | ------------- |
+| Products | 100           | Unlimited\*   |
+| Devices  | 10,000        | Unlimited\*   |
+| Users    | 50            | 500           |
+| API Keys | 100           | 1,000         |
+| Webhooks | 25            | 100           |
 
-*Contact sales for custom limits
+\*Contact sales for custom limits
 
 ## Organization Management
 
@@ -72,6 +76,7 @@ Deleting an organization is irreversible and will permanently delete all associa
 :::
 
 Organizations can only be deleted when:
+
 - All devices have been deleted or transferred
 - All active deployments have been stopped
 - All users except the owner have been removed
@@ -91,16 +96,19 @@ Organizations can only be deleted when:
 For enterprises managing multiple organizations:
 
 ### Separate by Environment
+
 - Development Organization
 - Staging Organization
 - Production Organization
 
 ### Separate by Business Unit
+
 - Consumer Products Organization
 - Industrial Products Organization
 - Partner Integration Organization
 
 ### Separate by Geography
+
 - North America Organization
 - Europe Organization
 - Asia Pacific Organization

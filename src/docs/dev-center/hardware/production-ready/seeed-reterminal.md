@@ -14,7 +14,7 @@ Since the reTerminal is just a Raspberry Pi 4 with extra peripherals, you can us
 ## Technical Specifications
 
 | Component        | Details                                                    |
-|------------------|------------------------------------------------------------|
+| ---------------- | ---------------------------------------------------------- |
 | CPU              | Quad-core 64-bit Arm Cortex-A72 (1.5 GHz)                  |
 | GPU              | Broadcom VideoCore VI (graphics only, not suitable for AI) |
 | Memory           | 4GB LPDDR4-3200                                            |

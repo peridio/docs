@@ -30,12 +30,14 @@ While an agent may provide all of the aforementioned features, it does not have 
 If you choose to develop your own agent, ensure it implements:
 
 ### Core Requirements
+
 - **Authentication**: Use X.509 certificates for device authentication
 - **API Integration**: Communicate with the Peridio Device API
 - **Update Management**: Download, verify, and install firmware updates
 - **Status Reporting**: Send device health and update progress
 
 ### Recommended Features
+
 - **Rollback Support**: Ability to revert failed updates
 - **Delta Updates**: Minimize bandwidth with incremental updates
 - **Remote Access**: Enable SSH or other remote management
@@ -44,5 +46,6 @@ If you choose to develop your own agent, ensure it implements:
 ## Integration
 
 For detailed integration instructions, see:
+
 - [Peridio Agent Integration](/dev-center/integration/peridiod-agent)
 - [Device API Reference](/device-api)

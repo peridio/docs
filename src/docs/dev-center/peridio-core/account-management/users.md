@@ -40,6 +40,7 @@ This returns information about the currently authenticated user.
 API keys provide programmatic access to the Peridio platform. API keys are managed via the [Peridio Console](https://console.peridio.com/).
 
 ### API Key Best Practices
+
 1. **Rotation**: Regularly rotate API keys
 2. **Storage**: Never commit API keys to version control
 3. **Monitoring**: Track API key usage
@@ -55,4 +56,3 @@ API keys provide programmatic access to the Peridio platform. API keys are manag
 ## Support
 
 For user account issues, access problems, or permission changes, contact [Peridio support](mailto:support@peridio.com).
-

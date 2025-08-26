@@ -318,7 +318,7 @@ jobs:
     steps:
       - name: Extract version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-      
+
       - name: Create Peridio Release
         run: |
           peridio releases create \
@@ -328,7 +328,7 @@ jobs:
             --version ${{ env.VERSION }} \
             --version-requirement ">= ${{ env.PREV_VERSION }}" \
             --phase-value 0.1
-      
+
       - name: Monitor Deployment
         run: |
           ./scripts/monitor-deployment.sh ${{ env.VERSION }}
@@ -380,6 +380,7 @@ peridio releases update \
 **Cause**: Current latest release has constrained availability
 
 **Solution**:
+
 ```bash
 # Complete current latest release
 peridio releases update \
@@ -399,12 +400,14 @@ peridio releases create \
 **Symptom**: Devices don't update despite new release
 
 **Common Causes**:
+
 - Version requirements not met
 - Release is disabled
 - Phasing excludes devices
 - Scheduling not yet active
 
 **Solution**:
+
 ```bash
 # Check device eligibility
 peridio devices check-update \
@@ -425,6 +428,7 @@ peridio releases validate-requirements \
 **Symptom**: Wrong number of devices receiving update
 
 **Solution**:
+
 ```bash
 # Check current phase
 peridio releases get-phase-info \

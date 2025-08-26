@@ -12,12 +12,14 @@ Avocado OS is built on the Yocto Project foundation, chosen for its industry-sta
 The development environment operates through containerized workflows that provide seamless connection to target devices. This approach eliminates the complexity typically associated with embedded Linux development while maintaining the power and flexibility of the underlying Yocto build system. The SDK provides all necessary tools for building system extensions, creating bootable images, and deploying to both virtual and physical hardware targets.
 
 **Key Requirements:**
+
 - Yocto Project-compatible development environment
 - Container runtime support for SDK deployment
 - Hardware abstraction through device tree support
 - Multi-platform toolchain compatibility
 
 **Supported Deployment Targets:**
+
 - QEMU virtualized environments for development and testing
 - Multiple hardware architectures through unified toolchain
 - Custom hardware integration through device tree overlays

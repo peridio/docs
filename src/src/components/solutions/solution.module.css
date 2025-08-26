@@ -428,11 +428,11 @@
     grid-template-columns: 1fr;
     gap: 3rem;
   }
-  
+
   .heroImage {
     order: -1;
   }
-  
+
   .featureGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
@@ -442,117 +442,117 @@
   .hero {
     padding: 4rem 1rem;
   }
-  
+
   .heroTitle {
     font-size: 1.75rem;
   }
-  
+
   .heroSubtitle {
     font-size: 1rem;
   }
-  
+
   .heroStats {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 1rem;
   }
-  
+
   .heroStats:has(.stat:nth-child(4):last-child) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .statNumber {
     font-size: 1.05rem;
   }
-  
+
   .statLabel {
     font-size: 0.75rem;
   }
-  
+
   .specsRow {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  
+
   .specLabel {
     font-weight: 700;
     margin-bottom: 0.25rem;
   }
-  
+
   .specValue {
     padding: 0;
     margin-bottom: 0.25rem;
   }
-  
+
   .comparisonContainer {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .useCaseGrid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .useCase {
     padding: 0;
     text-align: left;
   }
-  
+
   .featureGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .feature {
     text-align: center;
   }
-  
+
   .resourceGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .sectionTitle {
     font-size: 1.5rem;
     margin-bottom: 2rem;
     text-align: left;
   }
-  
+
   .features .sectionTitle {
     text-align: center;
   }
-  
+
   .ctaContent {
     text-align: left;
   }
-  
+
   .ctaContent h2 {
     font-size: 1.5rem;
     text-align: left;
   }
-  
+
   .ctaContent p {
     font-size: 1rem;
     text-align: left;
   }
-  
+
   .ctaButtons {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .ctaPrimary,
   .ctaSecondary {
     width: 100%;
     text-align: center;
   }
-  
+
   .sectionHeader {
     text-align: left;
   }
-  
+
   .sectionHeader h2 {
     text-align: left;
   }
-  
+
   .sectionHeader p {
     text-align: left;
   }
@@ -562,19 +562,19 @@
   .hero {
     padding: 3rem 1rem;
   }
-  
+
   .heroTitle {
     font-size: 1.5rem;
   }
-  
+
   .heroStats {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .container {
     padding: 0 1rem;
   }
-  
+
   .specs,
   .useCases,
   .problemSolution,
@@ -583,12 +583,12 @@
   .resources {
     padding: 3rem 1rem;
   }
-  
+
   .challengeCard,
   .solutionCard {
     padding: 1.5rem;
   }
-  
+
   .cardHeader {
     flex-direction: column;
     text-align: left;
@@ -673,7 +673,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loadingText {
@@ -687,17 +689,17 @@
     padding: 2rem 1rem;
     text-align: left;
   }
-  
+
   .overviewTitle {
     font-size: 1.75rem;
     text-align: left;
   }
-  
+
   .overviewContent {
     font-size: 1rem;
     text-align: left;
   }
-  
+
   .videoContainer {
     margin: 1.5rem auto;
     border-radius: 8px;

@@ -18,12 +18,7 @@ interface CTASectionProps {
   }
 }
 
-export default function CTASection({
-  title,
-  subtitle,
-  primaryCTA,
-  secondaryCTA
-}: CTASectionProps) {
+export default function CTASection({ title, subtitle, primaryCTA, secondaryCTA }: CTASectionProps) {
   return (
     <section className={styles.cta}>
       <div className={styles.container}>
@@ -32,8 +27,8 @@ export default function CTASection({
           {subtitle && <p>{subtitle}</p>}
           <div className={styles.ctaButtons}>
             {primaryCTA && (
-              <Link 
-                to={primaryCTA.link} 
+              <Link
+                to={primaryCTA.link}
                 className={styles.ctaPrimary}
                 {...(primaryCTA.target ? { target: primaryCTA.target } : {})}
               >
@@ -41,8 +36,8 @@ export default function CTASection({
               </Link>
             )}
             {secondaryCTA && (
-              <Link 
-                to={secondaryCTA.link} 
+              <Link
+                to={secondaryCTA.link}
                 className={styles.ctaSecondary}
                 {...(secondaryCTA.target ? { target: secondaryCTA.target } : {})}
               >

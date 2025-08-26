@@ -5,6 +5,7 @@ Cohorts are logical groupings of devices within a [product](/dev-center/peridio-
 ## Purpose
 
 Cohorts provide a powerful way to segment your device fleet for:
+
 - Staged deployments and rollouts
 - A/B testing and experimentation
 - Geographic or customer-specific configurations
@@ -16,12 +17,15 @@ Cohorts provide a powerful way to segment your device fleet for:
 You may structure your cohorts as you wish, but the following are common approaches:
 
 ### Environments
+
 Organize devices into development, staging, and production cohorts to mirror your software development lifecycle.
 
 ### Release Channels
+
 Organize devices into nightly, canary, and stable cohorts to control update cadence and risk.
 
 ### Operational Segments
+
 Organize devices into geographic, tenant-related, and other domain-specific cohorts based on business needs.
 
 :::tip You can always change
@@ -34,9 +38,10 @@ We recommend considering if you would want to target different devices with diff
 
 ## Metrics
 
-One of the key benefits of using cohorts is the ability to view and analyze metrics segmented by logical groups of devices. By comparing data across cohorts, you can gain valuable insights into how different subsets of your fleet are behaving and performing. 
+One of the key benefits of using cohorts is the ability to view and analyze metrics segmented by logical groups of devices. By comparing data across cohorts, you can gain valuable insights into how different subsets of your fleet are behaving and performing.
 
 ### Cohort-Based Analytics
+
 - Device health and connectivity rates
 - Update success/failure ratios
 - Performance metrics comparison
@@ -54,15 +59,17 @@ Only devices within a cohort are able to perform bundle resolution via release r
 ## Common Patterns
 
 ### Progressive Rollout
+
 ```
 1. Canary Cohort (1% of fleet)
    ↓ Monitor for 24 hours
-2. Beta Cohort (10% of fleet)  
+2. Beta Cohort (10% of fleet)
    ↓ Monitor for 3 days
 3. Production Cohort (remaining fleet)
 ```
 
 ### Geographic Distribution
+
 ```
 - cohort-us-east
 - cohort-us-west
@@ -71,6 +78,7 @@ Only devices within a cohort are able to perform bundle resolution via release r
 ```
 
 ### Customer Segmentation
+
 ```
 - cohort-enterprise-tier1
 - cohort-enterprise-tier2
@@ -81,13 +89,17 @@ Only devices within a cohort are able to perform bundle resolution via release r
 ## Managing Cohorts
 
 ### Creation
+
 Cohorts are created within a product and require:
+
 - Unique name within the product
 - Optional description
 - Optional release channel association
 
 ### Device Assignment
+
 Devices can be assigned to cohorts:
+
 - During JITP configuration
 - Via bulk operations
 - Through individual device updates

@@ -35,6 +35,7 @@ Bundle resolution follows a strict priority order:
 - **No Release Association**: Override continues until expired, deleted, or superseded
 
 This state continues until:
+
 - Bundle override is updated
 - Bundle override expires
 - Bundle override is deleted
@@ -112,6 +113,7 @@ def check_device_update(device_id, current_state):
 ```
 
 **Characteristics:**
+
 - Backend manages update checks
 - Centralized update control
 - Reduced device complexity
@@ -134,13 +136,14 @@ int check_for_update(struct update_check* current) {
     set_header("x-peridio-release-prn", current->release_prn);
     set_header("x-peridio-bundle-prn", current->bundle_prn);
     set_header("x-peridio-release-version", current->release_version);
-    
+
     // Make request
     return http_get("https://api.peridio.com/device/update");
 }
 ```
 
 **Characteristics:**
+
 - Direct device-to-cloud communication
 - Real-time update checks
 - Distributed update management
@@ -157,6 +160,7 @@ When supplying multiple headers or body params, the values must be informed by t
 #### Update State Rules
 
 **Bundle received via Release:**
+
 - ✅ Release PRN must be supplied
 - ✅ Bundle PRN must be supplied
 - ✅ Release version must be supplied
@@ -170,6 +174,7 @@ When supplying multiple headers or body params, the values must be informed by t
 ```
 
 **Bundle received via Bundle Override:**
+
 - ❌ Release PRN must NOT be supplied
 - ✅ Bundle PRN must be supplied
 - ❌ Release version must NOT be supplied
@@ -196,11 +201,13 @@ Bundle resolution processes supplied values in priority order. If a value is mal
 **Example Fallback Scenario:**
 
 Supplied values:
+
 - Malformed release PRN: `"prn:invalid"`
 - Valid bundle PRN that doesn't match cohort: `"prn:1:org:bundles:other"`
 - Valid release version: `"2.0.0"`
 
 Resolution process:
+
 1. Release PRN discarded (malformed)
 2. Bundle PRN discarded (not in cohort)
 3. Release version used successfully ✅
@@ -208,6 +215,7 @@ Resolution process:
 ## Resolution Algorithm
 
 The complete bundle resolution algorithm handles complex scenarios including:
+
 - Multiple update paths
 - Required releases
 - Disabled releases
@@ -268,24 +276,24 @@ graph TD
 ```javascript
 // JavaScript SDK example
 async function checkForUpdate(device) {
-  const currentState = await device.getCurrentState();
-  
+  const currentState = await device.getCurrentState()
+
   const updateCheck = {
     device_prn: device.prn,
     release_prn: currentState.release_prn,
     bundle_prn: currentState.bundle_prn,
-    release_version: currentState.version
-  };
-  
-  const result = await peridio.checkUpdate(updateCheck);
-  
-  if (result.update_available) {
-    console.log(`Update available: ${result.bundle.name}`);
-    return result.bundle;
+    release_version: currentState.version,
   }
-  
-  console.log("Device is up to date");
-  return null;
+
+  const result = await peridio.checkUpdate(updateCheck)
+
+  if (result.update_available) {
+    console.log(`Update available: ${result.bundle.name}`)
+    return result.bundle
+  }
+
+  console.log('Device is up to date')
+  return null
 }
 ```
 
@@ -297,7 +305,7 @@ class DeviceUpdateManager:
     def __init__(self, device):
         self.device = device
         self.state = self.load_state()
-    
+
     def update_from_release(self, release, bundle):
         """Update device from a release"""
         self.state = {
@@ -307,7 +315,7 @@ class DeviceUpdateManager:
         }
         self.save_state()
         self.apply_bundle(bundle)
-    
+
     def update_from_override(self, bundle):
         """Update device from bundle override"""
         self.state = {
@@ -316,7 +324,7 @@ class DeviceUpdateManager:
         }
         self.save_state()
         self.apply_bundle(bundle)
-    
+
     def check_for_update(self):
         """Check for available updates"""
         return peridio.check_update(
@@ -341,7 +349,7 @@ func (r *UpdateResolver) ResolveUpdate(device *Device) (*Bundle, error) {
             return bundle, nil
         }
     }
-    
+
     // Fall back to version resolution
     if device.Version != "" {
         bundle, err := r.resolveByVersion(device.Version)
@@ -349,12 +357,12 @@ func (r *UpdateResolver) ResolveUpdate(device *Device) (*Bundle, error) {
             return bundle, nil
         }
     }
-    
+
     // Finally try bundle PRN
     if device.BundlePRN != "" {
         return r.resolveByBundle(device.BundlePRN)
     }
-    
+
     return nil, ErrNoUpdateAvailable
 }
 ```
@@ -398,6 +406,7 @@ func (r *UpdateResolver) ResolveUpdate(device *Device) (*Bundle, error) {
 **Symptoms:** Device checks for update but receives wrong bundle or no update
 
 **Diagnosis Steps:**
+
 1. Verify bundle override status
 2. Check cohort membership
 3. Validate release channel structure
@@ -405,6 +414,7 @@ func (r *UpdateResolver) ResolveUpdate(device *Device) (*Bundle, error) {
 5. Check release requirements and phases
 
 **Resolution:**
+
 ```bash
 # Debug update resolution
 peridio devices debug-update \
@@ -417,26 +427,28 @@ peridio devices debug-update \
 **Symptoms:** Device state doesn't match Peridio's expectations
 
 **Common Causes:**
+
 - Mixed release/override state
 - Stale cached state
 - Incomplete state updates
 
 **Resolution:**
+
 ```python
 # Force state refresh
 def refresh_device_state(device):
     # Clear local state
     device.clear_state()
-    
+
     # Get current bundle info
     current_bundle = device.get_installed_bundle()
-    
+
     # Determine source (release or override)
     source = peridio.get_bundle_source(
-        device.prn, 
+        device.prn,
         current_bundle.prn
     )
-    
+
     # Rebuild state correctly
     if source.type == "release":
         device.set_state(
@@ -453,11 +465,13 @@ def refresh_device_state(device):
 **Symptoms:** Device repeatedly receives same update
 
 **Common Causes:**
+
 - Not reporting successful installation
 - State not updated after installation
 - Version mismatch
 
 **Resolution:**
+
 - Ensure state updates after successful installation
 - Verify bundle PRN matches installed bundle
 - Check version reporting accuracy
@@ -494,25 +508,25 @@ class CustomResolver {
   async resolve(device) {
     // Check for emergency overrides first
     if (await this.hasEmergencyOverride(device)) {
-      return this.getEmergencyBundle(device);
+      return this.getEmergencyBundle(device)
     }
-    
+
     // Check maintenance window
     if (!this.inMaintenanceWindow(device)) {
-      return null; // No updates outside window
+      return null // No updates outside window
     }
-    
+
     // Standard resolution
-    return this.standardResolve(device);
+    return this.standardResolve(device)
   }
-  
+
   async standardResolve(device) {
     // Implement standard Peridio resolution
-    const state = device.getState();
+    const state = device.getState()
     return peridio.checkUpdate({
       device_prn: device.prn,
-      ...state
-    });
+      ...state,
+    })
   }
 }
 ```
@@ -528,13 +542,13 @@ class MultiStageResolver:
         critical = self.check_critical_updates(device)
         if critical:
             return critical
-        
+
         # Stage 2: Check feature updates
         if device.feature_channel_enabled:
             feature = self.check_feature_updates(device)
             if feature:
                 return feature
-        
+
         # Stage 3: Standard updates
         return self.check_standard_updates(device)
 ```
@@ -550,7 +564,7 @@ type ResolutionMetrics struct {
     ReleaseHits      int64
     NoUpdateResults  int64
     AvgResolutionTime time.Duration
-    
+
     // Track fallback usage
     PRNResolutions     int64
     VersionResolutions int64
@@ -559,7 +573,7 @@ type ResolutionMetrics struct {
 
 func (m *ResolutionMetrics) RecordResolution(result ResolutionResult) {
     m.TotalChecks++
-    
+
     switch result.Type {
     case Override:
         m.OverrideHits++
@@ -569,7 +583,7 @@ func (m *ResolutionMetrics) RecordResolution(result ResolutionResult) {
     case NoUpdate:
         m.NoUpdateResults++
     }
-    
+
     m.updateAvgTime(result.Duration)
 }
 ```
@@ -577,6 +591,7 @@ func (m *ResolutionMetrics) RecordResolution(result ResolutionResult) {
 ## API Reference
 
 For detailed API documentation, see:
+
 - [Device Update API](/device-api#devices/operation/get-update)
 - [Admin Device Update API](/admin-api#devices/operation/devices-get-update)
 - [Bundle Overrides Reference](bundle-overrides)

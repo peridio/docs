@@ -29,6 +29,7 @@ Bundle overrides operate at the highest level of Peridio's distribution hierarch
 3. **Default/No Update** (if no applicable distribution method)
 
 When a device checks for updates:
+
 - If an applicable bundle override exists → Serve the override's bundle
 - If no override exists → Check release channels
 - If no applicable releases → No update available
@@ -329,22 +330,26 @@ peridio bundle-overrides cleanup \
 ### Common Issues
 
 #### Device Not Receiving Override Bundle
+
 - **Check Schedule**: Verify current time is within override schedule
 - **Check Stacking**: Another override may have higher priority
 - **Check Device**: Confirm device PRN matches override target
 - **Check Bundle**: Verify bundle exists and is accessible
 
 #### Override Not Taking Effect
+
 - **Cache Issues**: Device may have cached previous update check
 - **Reporting**: Device may not be correctly reporting current bundle
 - **Timing**: Override may not have started yet
 
 #### Multiple Overrides Confusion
+
 - **Check Start Times**: Most recent start time takes precedence
 - **List Active**: View all active overrides for device
 - **Review Schedule**: Diagram overlapping schedules
 
 #### Performance Impact
+
 - **Large Overrides**: Many devices checking simultaneously
 - **Mitigation**: Use phased start times to distribute load
 
@@ -423,22 +428,22 @@ Set up monitoring for override operations:
 ```javascript
 // Webhook handler for override events
 app.post('/webhooks/bundle-override', (req, res) => {
-  const event = req.body;
+  const event = req.body
 
-  switch(event.type) {
+  switch (event.type) {
     case 'bundle_override.created':
-      notifyOps(`Override created: ${event.data.name}`);
-      break;
+      notifyOps(`Override created: ${event.data.name}`)
+      break
     case 'bundle_override.expired':
-      logMetric('override.expired', event.data);
-      break;
+      logMetric('override.expired', event.data)
+      break
     case 'bundle_override.device_updated':
-      trackDevice(event.data.device_prn, event.data.bundle_prn);
-      break;
+      trackDevice(event.data.device_prn, event.data.bundle_prn)
+      break
   }
 
-  res.sendStatus(200);
-});
+  res.sendStatus(200)
+})
 ```
 
 ## Distribution Integration
@@ -448,6 +453,7 @@ Bundle overrides work as part of Peridio's broader bundle distribution system. F
 ## Additional Resources
 
 For additional resources, see:
+
 - [Bundle Distribution Reference](bundle-distribution)
 - [Bundles Reference](bundles)
 - [Devices Reference](/dev-center/peridio-core/device-management/devices)

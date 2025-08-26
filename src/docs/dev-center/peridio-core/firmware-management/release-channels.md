@@ -30,25 +30,31 @@ A release channel forms an [anti-arborescence](<https://en.wikipedia.org/wiki/Ar
 When reasoning about releases as nodes in a release channel graph, there are three categories:
 
 ### Source Nodes
+
 Nodes that no other nodes point to. These represent entry points into the update channel.
 
 **Characteristics:**
+
 - Starting points for update paths
 - Often represent initial versions or migration entry points
 - Multiple source nodes can exist in a channel
 
 ### Intermediate Nodes
+
 Nodes that are pointed to, and that point to other nodes. These form the bulk of most update paths.
 
 **Characteristics:**
+
 - Bridge between source and sink nodes
 - Can be required or optional in the update path
 - Enable complex update orchestration
 
 ### Sink Nodes
+
 Nodes that are pointed to, but point to no other nodes. This is the current "latest" release.
 
 **Characteristics:**
+
 - Represents the most current release
 - Only one sink node can exist at a time
 - Special availability controls apply
@@ -66,6 +72,7 @@ Release channels enforce several important rules that govern their behavior:
 There can only ever be at most a single latest release at any given time. In graph terms, an anti-arborescence graph is either empty, or has at most a single sink node.
 
 **Implications:**
+
 - Prevents ambiguity about the target version
 - Ensures predictable update behavior
 - Simplifies rollout management
@@ -75,6 +82,7 @@ There can only ever be at most a single latest release at any given time. In gra
 The latest release of a graph is special in that it is the only release within a graph that is allowed to constrain its [availability](/dev-center/peridio-core/firmware-management/releases#availability-controls) through scheduling or phasing.
 
 **Implications:**
+
 - Historical releases cannot be phased or scheduled
 - Simplifies availability management
 - Focuses control on current rollouts
@@ -88,6 +96,7 @@ This rule has the side effect of requiring the current latest release, should it
 You cannot create a new latest release while the current latest release has constrained availability.
 
 **Required Actions:**
+
 1. Complete phasing (set to 100%)
 2. Remove scheduling constraints
 3. Then create new latest release
@@ -107,6 +116,7 @@ R3---/
 ```
 
 **Analysis:**
+
 - **Source nodes**: `R4`, `R1`, and `R3` (entry points)
 - **Intermediate nodes**: `R5` and `R2` (path bridges)
 - **Sink nodes**: `R6` (latest release)
@@ -123,6 +133,7 @@ R1--->R2--->R3--->R4--->R5--->R6
 ```
 
 **Analysis:**
+
 - **Source nodes**: `R1` (single entry point)
 - **Intermediate nodes**: `R2`, `R3`, `R4`, `R5` (sequential updates)
 - **Sink nodes**: `R6` (latest release)
@@ -258,18 +269,22 @@ R1 ---------> R2 ---------> R3
 ### Common Issues
 
 #### Cannot Create New Release
+
 - **Cause**: Current latest release has constrained availability
 - **Solution**: Set phase to 100% and remove scheduling
 
 #### Devices Not Following Expected Path
+
 - **Cause**: Version requirements not met or releases disabled
 - **Solution**: Verify version requirements and release states
 
 #### Update Loops
+
 - **Cause**: Circular references in release channel
 - **Solution**: Review and fix next_release pointers
 
 #### Devices Stuck at Release
+
 - **Cause**: Next release is disabled or required but unavailable
 - **Solution**: Check release states and availability
 
@@ -306,6 +321,7 @@ Bundle overrides take precedence over release channels, providing an escape hatc
 ## API Reference
 
 For detailed API documentation, see:
+
 - [Releases API Reference](/admin-api#releases)
 - [Bundle Distribution Reference](bundle-distribution)
 - [Cohorts Reference](/dev-center/peridio-core/device-management/cohorts)

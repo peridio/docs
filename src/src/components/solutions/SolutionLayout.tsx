@@ -95,7 +95,7 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
     features,
     cta,
     resources,
-    children
+    children,
   } = props
 
   return (
@@ -112,23 +112,23 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
       </Head>
 
       <SolutionHero {...hero} />
-      
+
       {valueProposition && <ValueProposition {...valueProposition} />}
-      
+
       {specs && <TechSpecs specs={specs} />}
-      
+
       {useCases && <UseCases useCases={useCases} />}
-      
+
       {children}
-      
+
       {(challenges || solutions) && (
         <ProblemSolution challenges={challenges} solutions={solutions} />
       )}
-      
+
       {features && <FeatureGrid features={features} />}
-      
+
       {cta && <CTASection {...cta} />}
-      
+
       {resources && <ResourceCards resources={resources} />}
     </Layout>
   )

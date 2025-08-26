@@ -12,6 +12,7 @@ Avocado OS supports comprehensive user and group management in extensions using 
 The user management system automatically handles the creation and configuration of users and groups during the extension build process. It seamlessly integrates with the underlying Linux user management infrastructure while providing a declarative configuration approach that ensures consistency across deployments. Users and groups defined in extensions are properly isolated and managed as part of the layered system architecture.
 
 **User Management Features:**
+
 - Declarative user and group configuration in TOML format
 - Support for both simple inline and complex table syntax
 - Full password aging and shadow file configuration
@@ -19,6 +20,7 @@ The user management system automatically handles the creation and configuration 
 - Automatic UID/GID assignment with override capabilities
 
 **Security and Compliance:**
+
 - Build-time password validation and security warnings
 - Proper file permissions automatically applied
 - Support for password policies and account expiration
@@ -76,6 +78,7 @@ system = true           # Mark as system user
 All user attributes are optional with reasonable defaults:
 
 ### Core Attributes
+
 - `password`: Password hash, `""` for no password, `"*"` for no login (default: `"*"`)
 - `uid`: User ID (default: auto-increment from 1000)
 - `gid`: Primary group ID (default: same as UID)
@@ -86,6 +89,7 @@ All user attributes are optional with reasonable defaults:
 - `system`: Mark as system user (default: false)
 
 ### Password Aging (Shadow File)
+
 - `last_change`: Days since epoch when password was last changed (default: 19000)
 - `min_days`: Minimum days between password changes (default: 0)
 - `max_days`: Maximum days before password expires (default: 99999)
@@ -99,6 +103,7 @@ All user attributes are optional with reasonable defaults:
 All group attributes are optional with reasonable defaults:
 
 ### Core Attributes
+
 - `gid`: Group ID (default: auto-increment from 1000)
 - `members`: List of usernames to add to group (default: empty)
 - `system`: Mark as system group (default: false)
