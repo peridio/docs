@@ -818,6 +818,10 @@
   color: #606770;
 }
 
+.inlineIcon {
+  vertical-align: middle;
+}
+
 @media screen and (max-width: 768px) {
   .buildToolsStack {
     flex: 0 0 100%;

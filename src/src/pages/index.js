@@ -419,7 +419,7 @@ export default function Home() {
         <div className={styles.stack}>
           <div className={styles.stackHeader}>
             <Heading as="h2" className={styles.getStartedHeading}>
-              <RocketLaunchIcon className={styles.inlineIcon} /> Get Started
+              <img src="/img/get-started.svg" alt="Get Started" className={styles.inlineIcon} />
             </Heading>
           </div>
           <div className={styles.body}>
