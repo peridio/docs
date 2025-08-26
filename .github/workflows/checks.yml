@@ -20,5 +20,7 @@ jobs:
         run: npm --prefix src exec --no -- redocly lint --config src/redocly.yaml
       - name: ESLint
         run: npm --prefix src run lint
+      - name: Prettier Check
+        run: npm --prefix src exec --no -- prettier --check .
       - name: Docusaurus Build
         run: npm --prefix src run build
