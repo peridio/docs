@@ -175,6 +175,162 @@ footer {
   /* Mobile styles are handled in the MegaMenuNavbar component */
 }
 
+/* Announcement Bar Styles - Override Docusaurus defaults */
+[class*="announcementBar"] {
+  color: inherit !important;
+  border-bottom: none !important;
+  height: auto !important;
+  padding: 0 !important;
+}
+
+/* Hide the announcement bar placeholder that takes up space */
+[class*="announcementBarPlaceholder"] {
+  display: none !important;
+}
+
+/* Hide the close button placeholder */
+.announcement-bar__close-placeholder {
+  display: none;
+}
+
+/* Position the close button inside our wrapper */
+[class*="announcementBar"] {
+  position: relative;
+}
+
+[class*="announcementBarClose"] {
+  position: absolute !important;
+  top: 50% !important;
+  right: 1rem !important;
+  transform: translateY(-50%) !important;
+  background: none !important;
+  border: none !important;
+  color: white !important;
+  font-size: 1.5rem !important;
+  font-weight: 300 !important;
+  cursor: pointer !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  z-index: 10 !important;
+}
+
+[class*="announcementBarClose"]:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Mobile styles for close button */
+@media screen and (max-width: 768px) {
+  [class*="announcementBarClose"] {
+    right: 0.5rem !important;
+    font-size: 1.125rem !important;
+    min-width: 24px !important;
+    height: 24px !important;
+  }
+}
+
+.announcement-bar__wrapper {
+  background: linear-gradient(135deg, #5b5bf6 0%, #667eea 50%, #0d1492 100%);
+  color: white;
+  padding: 0.75rem 0;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.announcement-bar__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4rem 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
+}
+
+.announcement-bar__badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.announcement-bar__marquee {
+  flex: 1 1 0%;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0;
+  width: 0;
+}
+
+.announcement-bar__message {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .announcement-bar__wrapper {
+    padding: 0.375rem 0;
+  }
+
+  .announcement-bar__content {
+    max-width: none;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0 2.5rem 0 1rem;
+    min-width: 0;
+  }
+
+  .announcement-bar__badge {
+    flex-shrink: 0;
+    order: 1;
+  }
+
+  .announcement-bar__marquee {
+    flex: 1 1 0%;
+    min-width: 0;
+    width: 0;
+    order: 2;
+    overflow: hidden;
+  }
+
+  .announcement-bar__message {
+    font-size: 0.75rem;
+    animation: marquee 15s linear infinite;
+    white-space: nowrap;
+  }
+}
+
 /* Sidebar Styles */
 /* Remove border radius from all menu items for straight edges */
 .menu__link {
