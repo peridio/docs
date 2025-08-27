@@ -75,51 +75,85 @@ const config = {
       },
       navbar: {
         logo: {
-          alt: 'Peridio logo color black',
+          alt: 'Peridio Logo',
           src: 'img/peridio-docs-logo.svg',
+          style: {
+            height: '25px',
+          },
         },
         items: [
-          {
-            to: '/',
-            label: 'Developer Center',
-            position: 'left',
-          },
           {
             type: 'dropdown',
             label: 'Documentation',
             position: 'left',
             items: [
               {
-                label: 'Getting Started',
-                to: '/platform/getting-started/introduction',
+                type: 'html',
+                value: '<div class="dropdown__menu--section-title">GETTING STARTED</div>',
+              },
+              {
+                label: 'Introduction',
+                to: '/dev-center',
+              },
+              {
+                label: 'Provision Device',
+                to: '/dev-center/getting-started/provision-device',
+              },
+              {
+                label: 'Hardware in the Loop',
+                to: '/dev-center/getting-started/hardware-in-the-loop',
+              },
+              {
+                label: 'Desktop Deploy',
+                to: '/dev-center/getting-started/desktop-deploy',
+              },
+              {
+                type: 'html',
+                value: '&nbsp;',
+              },
+              {
+                type: 'html',
+                value: '<div class="dropdown__menu--section-title">CORE PLATFORMS</div>',
               },
               {
                 label: 'Avocado OS',
-                to: '/integration/linux/introduction',
+                to: '/dev-center/avocado-linux/introduction',
               },
               {
                 label: 'Peridio Core',
-                to: '/platform/reference/overview',
+                to: '/dev-center/peridio-core/introduction',
               },
               {
                 label: 'Supported Hardware',
-                to: '/solutions',
+                to: '/dev-center/hardware/supported-hardware',
               },
               {
                 label: 'Integration Guides',
-                to: '/integration',
+                to: '/dev-center/integration',
+              },
+              {
+                type: 'html',
+                value: '&nbsp;',
+              },
+              {
+                type: 'html',
+                value: '<div class="dropdown__menu--section-title">RESOURCES</div>',
+              },
+              {
+                label: 'Tools',
+                to: '/dev-center/tools',
               },
               {
                 label: 'Tunnels (Remote Access)',
-                to: '/platform/reference/tunnels',
+                to: '/dev-center/tunnels/overview',
               },
               {
                 label: 'Webhooks',
-                to: '/platform/reference/webhooks',
+                to: '/dev-center/integration/webhooks/overview',
               },
               {
                 label: 'Certificates',
-                to: '/platform/reference/device-certificates',
+                to: '/dev-center/integration/certificates/overview',
               },
             ],
           },
@@ -128,6 +162,10 @@ const config = {
             label: 'Featured Hardware',
             position: 'left',
             items: [
+              {
+                type: 'html',
+                value: '<div class="dropdown__menu--section-title">SILICON</div>',
+              },
               {
                 label: 'NXP IMX8MP',
                 to: '/solutions/nxp/imx8mp',
@@ -143,6 +181,14 @@ const config = {
               {
                 label: 'NVIDIA Jetson',
                 to: '/solutions/nvidia/jetson-orin-nano',
+              },
+              {
+                type: 'html',
+                value: '&nbsp;',
+              },
+              {
+                type: 'html',
+                value: '<div class="dropdown__menu--section-title">PRODUCTION READY</div>',
               },
               {
                 label: 'Advantech ICAM 540',
@@ -161,7 +207,7 @@ const config = {
           {
             type: 'dropdown',
             label: 'Tools',
-            position: 'left',
+            position: 'right',
             items: [
               {
                 label: 'CLI',
@@ -177,13 +223,13 @@ const config = {
               },
               {
                 label: 'Peridio Agent',
-                to: '/integration/linux/agents/peridio-agent',
+                to: '/platform/reference/agent',
               },
             ],
           },
           {
-            href: 'https://www.peridio.com/sign-up',
-            label: 'Sign Up',
+            href: 'https://console.peridio.com',
+            label: 'Web Console',
             position: 'right',
           },
         ],

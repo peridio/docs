@@ -243,3 +243,14 @@ html[data-theme="dark"] .menu__list-item-collapsible:hover > .menu__link--sublis
 html[data-theme="dark"] .menu__link--active:hover {
   background-color: rgba(52, 36, 238, 0.25);
 }
+
+.dropdown__menu {
+  padding: 1.5rem !important;
+}
+
+.dropdown__menu--section-title {
+  font-weight: bold;
+  font-size: 0.9rem;
+  min-width: 200px;
+  color: #1c1e21;
+}
