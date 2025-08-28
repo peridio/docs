@@ -132,6 +132,10 @@ const config = {
             position: 'right',
             items: [
               {
+                label: 'Avocado CLI',
+                to: '/avocado-cli',
+              },
+              {
                 label: 'CLI',
                 to: '/cli',
               },

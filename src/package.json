@@ -5,7 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "gen-cli": "node scripts/gen-cli.js",
+    "gen-peridio-cli": "node scripts/gen-cli.js",
+    "gen-avocado-cli": "node scripts/gen-avocado-cli.js",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
