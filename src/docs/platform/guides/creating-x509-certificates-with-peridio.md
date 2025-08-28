@@ -8,7 +8,7 @@ For more control over key and certificate details, see [creating X.509 certifica
 
 ## Prerequisites
 
-- [Peridio CLI](/cli).
+- [Peridio CLI](/peridio-cli).
   - Last tested with version 0.24.0.
 
 ## Create certificates
@@ -24,7 +24,7 @@ For information regarding how Peridio interacts with certificates reference [CA 
 :::
 
 :::tip sign by name
-The `--signer-key PATH` and `--signer-cert PATH` option pair can be replaced by a single `--signer NAME` option. For context, see [Peridio CLI config](/cli#configjson).
+The `--signer-key PATH` and `--signer-cert PATH` option pair can be replaced by a single `--signer NAME` option. For context, see [Peridio CLI config](/peridio-cli#configjson).
 :::
 
 ### Root

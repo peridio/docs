@@ -80,7 +80,7 @@ So, lets get that set up.
 
 ## CLI setup
 
-The Peridio CLI is simply a wrapper around our RESTful API. [Full documentation for the CLI is available here.](https://docs.peridio.com/cli)
+The Peridio CLI is simply a wrapper around our RESTful API. [Full documentation for the CLI is available here.](https://docs.peridio.com/peridio-cli)
 
 To get started, we'll need to
 
@@ -92,7 +92,7 @@ Ok, lets get into it.
 
 ### Downloading the CLI
 
-Go ahead and download the `peridio` cli from our releases page on Github [here](https://docs.peridio.com/cli).
+Go ahead and download the `peridio` cli from our releases page on Github [here](https://docs.peridio.com/peridio-cli).
 
 ### Generating an API key for the CLI
 
@@ -106,7 +106,7 @@ We'll need this key when configuring our first Peridio CLI profile next.
 
 ### Configuring the CLI
 
-The Peridio CLI has a convenience command for configuring new profiles: `peridio config profiles create` ([docs here](https://docs.peridio.com/cli/config/profiles/create)).
+The Peridio CLI has a convenience command for configuring new profiles: `peridio config profiles create` ([docs here](https://docs.peridio.com/peridio-cli/config/profiles/create)).
 
 You pass a name for the profile, which can be whatever is convenient for you. By default, the `create` command will prompt you interactively for your API key. Alternatively you can pass it in as an argument via the `--api-key` option.
 
@@ -123,7 +123,7 @@ Use with: peridio -p peridio-demo [command]
 The Peridio CLI config supports multiple profiles. We strongly encourage you to pass your `--profile` to all CLI commands, as it lets you avoid passing your API key to every command.
 :::
 
-If you _want_ to see where this information is stored, you can see it in these two files. _Note: This assumes a macOS operating system. For other platforms, see here: [CLI Configuration Files](https://docs.peridio.com/cli#configuration-files)._
+If you _want_ to see where this information is stored, you can see it in these two files. _Note: This assumes a macOS operating system. For other platforms, see here: [CLI Configuration Files](https://docs.peridio.com/peridio-cli#configuration-files)._
 
 ```bash
 cat $HOME/Library/Application\ Support/peridio/config.json

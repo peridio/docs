@@ -393,7 +393,7 @@ export default function Home() {
             </p>
             {/* Get Started Links Section */}
             <div className={styles.linkGrid}>
-              <Link to="/" className={styles.externalLink}>
+              <Link to="/getting-started/overview" className={styles.externalLink}>
                 <svg
                   width="16"
                   height="16"

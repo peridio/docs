@@ -132,8 +132,12 @@ const config = {
             position: 'right',
             items: [
               {
-                label: 'CLI',
-                to: '/cli',
+                label: 'Avocado CLI',
+                to: '/avocado-cli',
+              },
+              {
+                label: 'Peridio CLI',
+                to: '/peridio-cli',
               },
               {
                 label: 'Device API',

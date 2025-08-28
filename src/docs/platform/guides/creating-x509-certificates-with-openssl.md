@@ -46,7 +46,7 @@ For context, reference [X.509](/platform/reference/x509#root).
 
 #### Create a private key
 
-For context, reference [cli-x509-create](/cli/x509/create).
+For context, reference [cli-x509-create](/peridio-cli/x509/create).
 
 ```console
 openssl ecparam \
