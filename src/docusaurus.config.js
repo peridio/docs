@@ -97,6 +97,7 @@ const config = {
           src: 'img/peridio-docs-logo.svg',
           style: {
             height: '25px',
+            marginTop: '3px',
           },
         },
         items: [
