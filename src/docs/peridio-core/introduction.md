@@ -51,7 +51,7 @@ This is where theory meets practice. Device Management covers the entire lifecyc
 
 We cover everything from the basics of device identity through X.509 certificates to advanced topics like verification codes and CA certificate management. Whether you're provisioning ten devices or ten thousand, these guides will show you the most efficient path.
 
-### Tunnels (Remote Access)
+### Remote Access Tunnels
 
 When devices are deployed in the field, getting hands-on access becomes critical for debugging and support. Our Tunnels documentation shows you how to establish secure, on-demand connections to remote devices without exposing them to the internet. You'll learn to set up SSH sessions for command-line access, HTTP tunnels for web interfaces, and implement proper security controls to protect your fleet. This section is essential for anyone who needs to diagnose issues, collect logs, or provide remote support.
 

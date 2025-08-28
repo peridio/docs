@@ -1,8 +1,8 @@
 ---
-title: Peridio Resource Names (PRNs)
+title: Peridio Resource Names
 ---
 
-# Peridio Resource Names (PRNs)
+# Peridio Resource Names
 
 Peridio Resource Names (PRNs) uniquely identify Peridio resources. PRNs are used throughout the Peridio platform to reference specific resources in API calls and responses.
 

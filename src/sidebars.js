@@ -303,7 +303,7 @@ export default {
         {
           type: 'doc',
           id: 'peridio-core/peridio-resource-names',
-          label: 'Peridio Resource Names (PRNs)',
+          label: 'Peridio Resource Names',
         },
         {
           type: 'category',
@@ -327,7 +327,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Tunnels (Remote Access)',
+          label: 'Remote Access Tunnels',
           link: {
             type: 'doc',
             id: 'tunnels/overview',

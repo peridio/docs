@@ -114,7 +114,7 @@ No inbound ports need to be exposed on the device.
 - **Protocols**: HTTPS and WSS
 - **Ports**: 443
 
-#### Tunnels (Remote Access)
+#### Remote Access Tunnels
 
 - **IP**: `3.142.155.49`
 - **Protocol**: UDP
