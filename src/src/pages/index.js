@@ -15,39 +15,7 @@ import {
   HiRocketLaunch as RocketLaunchIcon,
 } from 'react-icons/hi2'
 
-function PromoBar({ isVisible, onDismiss }) {
-  if (!isVisible) {
-    return null
-  }
-
-  return (
-    <div className={styles.promoBar}>
-      <div className={styles.promoContent}>
-        <span className={styles.promoBadge}>UNDER DEVELOPMENT</span>
-        <div className={styles.promoMarquee}>
-          <span className={styles.promoMessage}>
-            This documentation site is currently under active migration. Some content may be
-            temporarily unavailable or in transition.
-          </span>
-        </div>
-        <button
-          onClick={onDismiss}
-          className={styles.promoDismiss}
-          aria-label="Dismiss promo banner"
-        >
-          ×
-        </button>
-      </div>
-    </div>
-  )
-}
-
-PromoBar.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  onDismiss: PropTypes.func.isRequired,
-}
-
-function HomepageHeader({ promoBarVisible }) {
+function HomepageHeader() {
   const [videoLoading, setVideoLoading] = useState(true)
 
   const handleVideoLoad = () => {
@@ -55,12 +23,7 @@ function HomepageHeader({ promoBarVisible }) {
   }
 
   return (
-    <header
-      className={clsx('hero hero--primary', styles.heroBanner, {
-        [styles.heroBannerWithPromo]: promoBarVisible,
-        [styles.heroBannerWithoutPromo]: !promoBarVisible,
-      })}
-    >
+    <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <div className={styles.heroContent}>
           <div className={styles.heroLeft}>
@@ -112,13 +75,7 @@ function HomepageHeader({ promoBarVisible }) {
   )
 }
 
-HomepageHeader.propTypes = {
-  promoBarVisible: PropTypes.bool.isRequired,
-}
-
 export default function Home() {
-  const [promoBarVisible, setPromoBarVisible] = React.useState(true)
-
   return (
     <Layout
       title="Developer center"
@@ -140,8 +97,7 @@ export default function Home() {
         />
         <meta name="twitter:image" content="/img/developer-center.png" />
       </Head>
-      <PromoBar isVisible={promoBarVisible} onDismiss={() => setPromoBarVisible(false)} />
-      <HomepageHeader promoBarVisible={promoBarVisible} />
+      <HomepageHeader />
       <main className={clsx('container', styles.container)}>
         {/* Avocado OS */}
         <div className={styles.stack}>

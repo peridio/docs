@@ -73,6 +73,24 @@ const config = {
       colorMode: {
         disableSwitch: true,
       },
+      announcementBar: {
+        id: 'docs-wip-announcement',
+        content: `
+          <div class="announcement-bar__wrapper">
+            <div class="announcement-bar__content">
+              <span class="announcement-bar__badge">UNDER DEVELOPMENT</span>
+              <div class="announcement-bar__marquee">
+                <span class="announcement-bar__message">
+                  This documentation site is currently under active migration. Some content may be
+                  temporarily unavailable or in transition.
+                </span>
+              </div>
+              <div class="announcement-bar__close-placeholder"></div>
+            </div>
+          </div>
+        `,
+        isCloseable: true,
+      },
       navbar: {
         logo: {
           alt: 'Peridio Logo',
