@@ -108,71 +108,7 @@ const config = {
             items: [
               {
                 type: 'html',
-                value: '<div class="dropdown__menu--section-title">GETTING STARTED</div>',
-              },
-              {
-                label: 'Overview',
-                to: '/getting-started/overview',
-              },
-              {
-                label: 'Provision Device',
-                to: '/getting-started/provision-device',
-              },
-              {
-                label: 'Hardware in the Loop',
-                to: '/getting-started/hardware-in-the-loop',
-              },
-              {
-                label: 'Desktop Deploy',
-                to: '/getting-started/desktop-deploy',
-              },
-              {
-                type: 'html',
-                value: '&nbsp;',
-              },
-              {
-                type: 'html',
-                value: '<div class="dropdown__menu--section-title">CORE PLATFORMS</div>',
-              },
-              {
-                label: 'Avocado OS',
-                to: '/avocado-linux/introduction',
-              },
-              {
-                label: 'Peridio Core',
-                to: '/peridio-core/introduction',
-              },
-              {
-                label: 'Supported Hardware',
-                to: '/hardware/supported-hardware',
-              },
-              {
-                label: 'Integration Guides',
-                to: '/integration',
-              },
-              {
-                type: 'html',
-                value: '&nbsp;',
-              },
-              {
-                type: 'html',
-                value: '<div class="dropdown__menu--section-title">RESOURCES</div>',
-              },
-              {
-                label: 'Tools',
-                to: '/tools',
-              },
-              {
-                label: 'Tunnels (Remote Access)',
-                to: '/tunnels/overview',
-              },
-              {
-                label: 'Webhooks',
-                to: '/integration/webhooks/overview',
-              },
-              {
-                label: 'Certificates',
-                to: '/integration/certificates/overview',
+                value: '<div class="dropdown__menu--grid-container"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">GETTING STARTED</div><a href="/getting-started/overview" class="dropdown__menu--link">Overview</a><a href="/getting-started/provision-device" class="dropdown__menu--link">Provision Device</a><a href="/getting-started/hardware-in-the-loop" class="dropdown__menu--link">Hardware in the Loop</a><a href="/getting-started/desktop-deploy" class="dropdown__menu--link">Desktop Deploy</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">CORE PLATFORMS</div><a href="/avocado-linux/introduction" class="dropdown__menu--link">Avocado OS</a><a href="/peridio-core/introduction" class="dropdown__menu--link">Peridio Core</a><a href="/hardware/supported-hardware" class="dropdown__menu--link">Supported Hardware</a><a href="/integration" class="dropdown__menu--link">Integration Guides</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">RESOURCES</div><a href="/tools" class="dropdown__menu--link">Tools</a><a href="/tunnels/overview" class="dropdown__menu--link">Tunnels (Remote Access)</a><a href="/integration/webhooks/overview" class="dropdown__menu--link">Webhooks</a><a href="/integration/certificates/overview" class="dropdown__menu--link">Certificates</a></div></div>',
               },
             ],
           },
@@ -180,46 +116,11 @@ const config = {
             type: 'dropdown',
             label: 'Featured Hardware',
             position: 'left',
+            className: 'featured-hardware-dropdown',
             items: [
               {
                 type: 'html',
-                value: '<div class="dropdown__menu--section-title">SILICON</div>',
-              },
-              {
-                label: 'NXP IMX8MP',
-                to: '/solutions/nxp/imx8mp',
-              },
-              {
-                label: 'NXP FRDM 93',
-                to: '/solutions/nxp/frdm-93',
-              },
-              {
-                label: 'Raspberry Pi',
-                to: '/solutions/raspberry-pi/raspberry-pi',
-              },
-              {
-                label: 'NVIDIA Jetson',
-                to: '/solutions/nvidia/jetson-orin-nano',
-              },
-              {
-                type: 'html',
-                value: '&nbsp;',
-              },
-              {
-                type: 'html',
-                value: '<div class="dropdown__menu--section-title">PRODUCTION READY</div>',
-              },
-              {
-                label: 'Advantech ICAM 540',
-                to: '/solutions/advantech/icam-540',
-              },
-              {
-                label: 'OnLogic FR201',
-                to: '/solutions/onlogic',
-              },
-              {
-                label: 'Seeed reTerminal',
-                to: '/solutions/seeed',
+                value: '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">SILICON</div><a href="/solutions/nxp/imx8mp" class="dropdown__menu--link">NXP IMX8MP</a><a href="/solutions/raspberry-pi/raspberry-pi" class="dropdown__menu--link">Raspberry Pi</a><a href="/solutions/nvidia/jetson-orin-nano" class="dropdown__menu--link">NVIDIA Jetson</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PRODUCTION READY</div><a href="/solutions/advantech/icam-540" class="dropdown__menu--link">Advantech ICAM 540</a><a href="/solutions/onlogic" class="dropdown__menu--link">OnLogic FR201</a><a href="/solutions/seeed" class="dropdown__menu--link">Seeed reTerminal</a></div></div>',
               },
             ],
           },
