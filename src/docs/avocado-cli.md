@@ -22,7 +22,7 @@ The recommended and easiest way to install Avocado CLI is to download a pre-buil
 2. Download the appropriate binary for your operating system from the latest release
 3. Extract the binary and place it in your PATH
 
-### (Option 2)  Install from Git
+### (Option 2) Install from Git
 
 You can install the latest version directly from the Git repository using Cargo:
 
@@ -65,4 +65,3 @@ cargo install --git https://github.com/avocado-linux/avocado-cli.git --force
 ```
 
 The `--force` flag will overwrite the existing installation.
-

@@ -136,8 +136,8 @@ const config = {
                 to: '/avocado-cli',
               },
               {
-                label: 'CLI',
-                to: '/cli',
+                label: 'Peridio CLI',
+                to: '/peridio-cli',
               },
               {
                 label: 'Device API',

@@ -67,7 +67,7 @@ openssl pkey -outform DER -pubin -in public.pem -pubout \
 ```
 
 :::info signing-keys-create pem via --path
-This conversion will not be necessary for long. It is planned for the Peridio CLI's [create-signing-key](/cli/signing-keys/create) command to support a `--path` option soon that would work with PEM files.
+This conversion will not be necessary for long. It is planned for the Peridio CLI's [create-signing-key](/peridio-cli/signing-keys/create) command to support a `--path` option soon that would work with PEM files.
 :::
 
 Register the public key with Peridio.

@@ -23,7 +23,7 @@ The device certificate is then supplied when making requests to the Device API a
 
 A device correctly supplying its certificate is half of the effort, the server must also know to trust the client's certificate. This can be can be achieved in a couple of ways:
 
-- The CLI's [device-certificates create](/cli/device-certificates/create) command.
+- The CLI's [device-certificates create](/peridio-cli/device-certificates/create) command.
   - Typically used in ad-hoc development contexts.
 - The Admin API's [create-a-device-certificate](/admin-api#device-certificates/operation/create-a-device-certificate) route.
   - Typically used in ad-hoc production contexts.

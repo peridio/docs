@@ -7,7 +7,7 @@ The Peridio EVK (Evaluation Kit) offers a streamlined approach to configuring an
 To get started with the Peridio EVK you will need access to a workstation with the following requirements:
 
 - Python 3.6+
-- [Peridio CLI](/cli)
+- [Peridio CLI](/peridio-cli)
 - docker
 
 ## Getting started

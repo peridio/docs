@@ -13,7 +13,7 @@ This guide walks through updating the `my-app` extension and delivering it to yo
 :::info
 Commands labeled "On Host" run from the root of your Avocado project. Steps that interact with Peridio Cloud use the `peridio` CLI. Ensure you have configured the CLI with your API key and selected organization/product.
 
-See [Tools › CLI](/tools/cli) for setting up the Peridio CLI.
+See [Tools › CLI](/tools/peridio-cli) for setting up the Peridio CLI.
 :::
 
 ### Make changes to `my-app`
@@ -75,7 +75,7 @@ peridio artifacts create \
 ```
 
 :::tip
-Record the returned `ARTIFACT_PRN` for the next step. You can also find it via `peridio artifacts list`. See the [CLI artifacts command](/cli/artifacts/create).
+Record the returned `ARTIFACT_PRN` for the next step. You can also find it via `peridio artifacts list`. See the [CLI artifacts command](/peridio-cli/artifacts/create).
 :::
 
 ### Create a new artifact version
@@ -91,7 +91,7 @@ peridio artifact-versions create \
 ```
 
 :::tip
-Record the returned `ARTIFACT_VERSION_PRN` for the next step. See the [CLI artifact-versions command](/cli/artifact-versions/create).
+Record the returned `ARTIFACT_VERSION_PRN` for the next step. See the [CLI artifact-versions command](/peridio-cli/artifact-versions/create).
 :::
 
 ### Upload the built extension as a binary
@@ -108,7 +108,7 @@ peridio binaries create \
 ```
 
 :::info
-Replace `PATH_TO_BUILT_MY_APP_IMAGE` with the path to the `my-app` extension image produced by `avocado build` for your target. See the [CLI binaries command](/cli/binaries/create).
+Replace `PATH_TO_BUILT_MY_APP_IMAGE` with the path to the `my-app` extension image produced by `avocado build` for your target. See the [CLI binaries command](/peridio-cli/binaries/create).
 :::
 
 ### Create a bundle containing your update
@@ -124,7 +124,7 @@ peridio bundles create \
 ```
 
 :::tip
-You can include multiple artifact versions by repeating `-a` or passing a comma-delimited list. See the [CLI bundles command](/cli/bundles/create).
+You can include multiple artifact versions by repeating `-a` or passing a comma-delimited list. See the [CLI bundles command](/peridio-cli/bundles/create).
 :::
 
 ### Deliver the bundle
@@ -142,7 +142,7 @@ peridio bundle-overrides create \
   --starts-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
-See the [CLI bundle-overrides command](/cli/bundle-overrides/create).
+See the [CLI bundle-overrides command](/peridio-cli/bundle-overrides/create).
 
 #### Release (standard workflow)
 
@@ -159,7 +159,7 @@ peridio releases create \
 ```
 
 :::tip
-For phased rollouts, add `--phase-value` and/or `--phase-tags`. See the [CLI releases command](/cli/releases/create) for details.
+For phased rollouts, add `--phase-value` and/or `--phase-tags`. See the [CLI releases command](/peridio-cli/releases/create) for details.
 :::
 
 ### Next steps
@@ -169,4 +169,4 @@ Device-side application of these updates is handled by the `peridiod` daemon. Th
 See also:
 
 - Bundle Management Guide: `/platform/guides/introduction-to-bundle-management`
-- CLI reference: `/cli/artifacts/create`, `/cli/artifact-versions/create`, `/cli/binaries/create`, `/cli/bundles/create`, `/cli/bundle-overrides/create`, `/cli/releases/create`
+- CLI reference: `/peridio-cli/artifacts/create`, `/peridio-cli/artifact-versions/create`, `/peridio-cli/binaries/create`, `/peridio-cli/bundles/create`, `/peridio-cli/bundle-overrides/create`, `/peridio-cli/releases/create`

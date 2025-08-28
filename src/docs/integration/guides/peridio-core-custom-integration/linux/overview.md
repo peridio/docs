@@ -75,4 +75,4 @@ Building and configuring reference designs will require access to a development 
 
 - [Yocto System Requirements](https://docs.yoctoproject.org/ref-manual/system-requirements.html).
 - [kas](https://kas.readthedocs.io/en/latest/userguide.html#dependencies-installation)
-- [Install and configure the Peridio CLI](/cli)
+- [Install and configure the Peridio CLI](/peridio-cli)

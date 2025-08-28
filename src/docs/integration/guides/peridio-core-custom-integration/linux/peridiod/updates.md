@@ -189,7 +189,7 @@ Example:
 }
 ```
 
-You can add this custom metadata to these records using [Peridio CLI](/cli) v0.22.0 or later or directly through the [Peridio Admin API](/admin-api).
+You can add this custom metadata to these records using [Peridio CLI](/peridio-cli) v0.22.0 or later or directly through the [Peridio Admin API](/admin-api).
 
 ## Distributions (Deprecated)
 
