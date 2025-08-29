@@ -7,7 +7,7 @@ Transform your OnLogic FR201 from development platform to production gateway wit
 ### Key Stats
 
 - **Fanless** - Silent Operation
-- **-40°C to +70°C** - Wide Temperature Range
+- **-20°C to +60°C** - Wide Temperature Range
 - **24/7** - Continuous Operation
 - **6x Faster** - Time to Production
 

@@ -17,7 +17,7 @@ const solutionData = {
       'Transform your OnLogic FR201 from development platform to production gateway with enterprise-grade Linux deployment',
     stats: [
       { value: 'Fanless', label: 'Silent Operation' },
-      { value: '-40°C to +70°C', label: 'Wide Temperature Range' },
+      { value: '-20°C to +60°C', label: 'Wide Temperature Range' },
       { value: '6x Faster', label: 'Time to Production' },
     ],
     primaryCTA: {
