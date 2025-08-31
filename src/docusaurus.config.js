@@ -142,7 +142,7 @@ const config = {
               {
                 type: 'html',
                 value:
-                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">AVOCADO</div><a href="/tools/avocado-cli" class="dropdown__menu--link">CLI</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PERIDIO CORE</div><a href="/tools/admin-api" class="dropdown__menu--link">Admin API</a><a href="/tools/peridio-admin-rust-sdk" class="dropdown__menu--link">Admin Rust SDK</a><a href="/tools/peridio-cli" class="dropdown__menu--link">CLI</a><a href="/tools/peridio-daemon" class="dropdown__menu--link">Daemon</a><a href="/tools/device-api" class="dropdown__menu--link">Device API</a></div></div>',
+                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">AVOCADO LINUX</div><a href="/tools/avocado-cli" class="dropdown__menu--link">CLI</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PERIDIO CORE</div><a href="/tools/admin-api" class="dropdown__menu--link">Admin API</a><a href="/tools/peridio-admin-rust-sdk" class="dropdown__menu--link">Admin Rust SDK</a><a href="/tools/peridio-cli" class="dropdown__menu--link">CLI</a><a href="/tools/peridio-daemon" class="dropdown__menu--link">Daemon</a><a href="/tools/device-api" class="dropdown__menu--link">Device API</a></div></div>',
               },
             ],
           },
