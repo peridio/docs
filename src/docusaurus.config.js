@@ -110,6 +110,7 @@ const config = {
           {
             type: 'dropdown',
             label: 'Documentation',
+            to: '/getting-started/overview',
             position: 'left',
             items: [
               {
@@ -128,34 +129,20 @@ const config = {
               {
                 type: 'html',
                 value:
-                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">SILICON</div><a href="/solutions/nxp/imx8mp" class="dropdown__menu--link">NXP IMX8MP</a><a href="/solutions/raspberry-pi/raspberry-pi" class="dropdown__menu--link">Raspberry Pi</a><a href="/solutions/nvidia/jetson-orin-nano" class="dropdown__menu--link">NVIDIA Jetson</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PRODUCTION READY</div><a href="/solutions/advantech/icam-540" class="dropdown__menu--link">Advantech ICAM 540</a><a href="/solutions/onlogic" class="dropdown__menu--link">OnLogic FR201</a><a href="/solutions/seeed" class="dropdown__menu--link">Seeed reTerminal</a></div></div>',
+                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">SILICON</div><a href="/solutions/nxp/imx8mp" class="dropdown__menu--link">NXP IMX8MP</a><a href="/solutions/raspberry-pi/raspberry-pi" class="dropdown__menu--link">Raspberry Pi</a><a href="/solutions/nvidia/jetson-orin-nano" class="dropdown__menu--link">NVIDIA Jetson</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PRODUCTION READY</div><a href="/solutions/advantech/icam-540" class="dropdown__menu--link">Advantech ICAM 540</a><a href="/solutions/onlogic" class="dropdown__menu--link">OnLogic FR201</a><a href="/solutions/seeed" class="dropdown__menu--link">Seeed reTerminal</a></div></div><div style="margin-top: 1.75rem; text-align: right;"><a href="/hardware/supported-hardware" style="font-size: 0.85rem; color: #666; opacity: 0.9; text-decoration: none; transition: opacity 0.2s ease;" onmouseover="this.style.opacity=\'1\'; this.style.color=\'#333\';" onmouseout="this.style.opacity=\'0.9\'; this.style.color=\'#666\';">View all supported hardware →</a></div>',
               },
             ],
           },
           {
             type: 'dropdown',
             label: 'Tools',
+            to: '/tools',
             position: 'right',
             items: [
               {
-                label: 'Avocado CLI',
-                to: '/avocado-cli',
-              },
-              {
-                label: 'Peridio CLI',
-                to: '/peridio-cli',
-              },
-              {
-                label: 'Device API',
-                to: '/device-api',
-              },
-              {
-                label: 'Admin API',
-                to: '/admin-api',
-              },
-              {
-                label: 'Peridio Daemon',
-                to: '/peridio-core/device-management/agent',
+                type: 'html',
+                value:
+                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">AVOCADO</div><a href="/tools/avocado-cli" class="dropdown__menu--link">CLI</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PERIDIO CORE</div><a href="/tools/admin-api" class="dropdown__menu--link">Admin API</a><a href="/tools/peridio-admin-rust-sdk" class="dropdown__menu--link">Admin Rust SDK</a><a href="/tools/peridio-cli" class="dropdown__menu--link">CLI</a><a href="/tools/peridio-daemon" class="dropdown__menu--link">Daemon</a><a href="/tools/device-api" class="dropdown__menu--link">Device API</a></div></div>',
               },
             ],
           },
