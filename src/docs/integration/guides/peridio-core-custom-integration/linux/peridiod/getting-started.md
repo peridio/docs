@@ -1,6 +1,6 @@
 # Getting Started
 
-`peridiod` is a reference implementation of a Peridio Agent for Embedded Linux.
+`peridiod` is a reference implementation of Peridio Daemon for Embedded Linux.
 
 Peridio offers several ways to integrate peridiod into your build workflow via the following integration paths:
 

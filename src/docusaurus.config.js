@@ -148,7 +148,7 @@ const config = {
                 to: '/admin-api',
               },
               {
-                label: 'Peridio Agent',
+                label: 'Peridio Daemon',
                 to: '/peridio-core/device-management/agent',
               },
             ],

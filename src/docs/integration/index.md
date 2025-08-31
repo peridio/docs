@@ -1,10 +1,10 @@
 # Overview
 
-This section provides comprehensive guides for integrating various Peridio features and services into your IoT infrastructure. Learn how to implement webhooks, configure external CDNs, manage certificates, and deploy the Peridio agent.
+This section provides comprehensive guides for integrating various Peridio features and services into your IoT infrastructure. Learn how to implement webhooks, configure external CDNs, manage certificates, and deploy Peridio Daemon.
 
 ## Core Integration Topics
 
-### Peridio Agent
+### Peridio Daemon
 
 The Peridio daemon (peridiod) is the core agent that runs on your devices to enable OTA updates and remote management capabilities.
 

@@ -132,7 +132,7 @@ Create immutable, reusable ordered sets of binaries that:
 
 ### Agent Software
 
-- Official Peridio Agent (peridiod)
+- Peridio Daemon (peridiod)
 - Custom agent development
 - SDK integration options
 

@@ -1,10 +1,10 @@
 # Agent
 
-An agent is the software that runs on devices and integrates with Peridio. You can develop and maintain your own agent or use the [Peridio Agent](/integration/guides/peridio-core-custom-integration/introduction#agent).
+An agent is the software that runs on devices and integrates with Peridio. You can develop and maintain your own agent or use the [Peridio Daemon](/integration/guides/peridio-core-custom-integration/introduction#agent).
 
-## Peridio Agent
+## Peridio Daemon
 
-The official agent is made available for use via a [buildroot external tree](https://buildroot.org/downloads/manual/manual.html#outside-br-custom), available on GitHub at [peridio/buildroot-external-peridio](https://github.com/peridio/buildroot-external-peridio). The underlying buildroot package's source code is also available on GitHub at [peridio/peridiod](https://github.com/peridio/peridiod).
+The official Peridio Daemon is made available for use via a [buildroot external tree](https://buildroot.org/downloads/manual/manual.html#outside-br-custom), available on GitHub at [peridio/buildroot-external-peridio](https://github.com/peridio/buildroot-external-peridio). The underlying buildroot package's source code is also available on GitHub at [peridio/peridiod](https://github.com/peridio/peridiod).
 
 ## Features and Capabilities
 
@@ -47,5 +47,5 @@ If you choose to develop your own agent, ensure it implements:
 
 For detailed integration instructions, see:
 
-- [Peridio Agent Integration](/integration/peridiod-agent)
+- [Peridio Daemon Integration](/integration/peridiod-agent)
 - [Device API Reference](/device-api)

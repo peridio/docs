@@ -6,7 +6,7 @@ This guide will walk you through creating and connecting to your first tunnel.
 
 - [Peridio CLI](https://github.com/peridio/morel/releases) (v0.22.1 or later)
 - A device registered with Peridio
-- Device running peridiod agent with tunnel support enabled
+- Device running Peridio Daemon (peridiod) with tunnel support enabled
 
 ## Creating Your First Tunnel
 
