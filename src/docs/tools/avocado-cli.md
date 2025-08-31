@@ -1,4 +1,4 @@
-# CLI
+# Avocado CLI
 
 [Reference](/avocado-cli) | [Source](https://github.com/avocado-linux/avocado-cli)
 

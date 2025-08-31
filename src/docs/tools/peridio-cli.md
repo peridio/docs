@@ -1,4 +1,4 @@
-# CLI
+# Peridio CLI
 
 [Reference](/peridio-cli) | [Source](https://github.com/peridio/peridio-cli)
 
