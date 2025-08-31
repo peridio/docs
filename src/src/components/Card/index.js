@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import styles from './styles.module.css'
 
@@ -14,6 +15,11 @@ export default function Card({ children, className, ...props }) {
   )
 }
 
+Card.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+}
+
 /**
  * Card Header component for consistent header styling
  */
@@ -25,6 +31,11 @@ export function CardHeader({ children, className, ...props }) {
   )
 }
 
+CardHeader.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+}
+
 /**
  * Card Body component for consistent body styling
  */
@@ -34,4 +45,9 @@ export function CardBody({ children, className, ...props }) {
       {children}
     </div>
   )
+}
+
+CardBody.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
 }
