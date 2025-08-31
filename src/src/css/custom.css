@@ -30,30 +30,6 @@ main {
   margin-top: 0 !important;
 }
 
-/* Override Docusaurus default navbar behavior */
-.navbar--fixed-top {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 1000 !important;
-}
-
-/* Ensure proper spacing for all content */
-.theme-doc-sidebar-container {
-  margin-top: 0 !important;
-}
-
-/* Ensure main documentation content is properly positioned */
-.theme-doc-layout-main {
-  margin-top: 0 !important;
-}
-
-/* Handle any other content containers */
-.container {
-  margin-top: 0 !important;
-}
-
 @font-face {
   font-family: "Avenir";
   src: url("/font/avenir-regular.otf");
@@ -61,10 +37,6 @@ main {
 
 html {
   font-family: "Avenir";
-}
-
-body {
-  padding-top: 60px;
 }
 
 html[data-theme="dark"] {
@@ -140,11 +112,6 @@ footer {
 .margin-top--md {
   margin-top: 0px !important;
   overflow: scroll;
-}
-
-/* Mega Menu Integration Styles */
-.navbar {
-  position: relative;
 }
 
 .navbar__inner {
