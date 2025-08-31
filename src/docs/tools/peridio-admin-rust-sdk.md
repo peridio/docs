@@ -1,4 +1,4 @@
-# Admin Rust SDK
+# Peridio Admin Rust SDK
 
 [Source](https://github.com/peridio/peridio-rust)
 

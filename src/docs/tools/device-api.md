@@ -1,4 +1,4 @@
-# Device API
+# Peridio Device API
 
 [Reference](/device-api)
 

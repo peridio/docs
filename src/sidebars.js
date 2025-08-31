@@ -261,7 +261,7 @@ export default {
     },
     {
       type: 'category',
-      label: 'Avocado OS',
+      label: 'Avocado Linux',
       collapsible: true,
       collapsed: true,
       items: [
@@ -623,10 +623,10 @@ export default {
         },
         {
           type: 'category',
-          label: 'Avocado',
+          label: 'Avocado Linux',
           collapsible: true,
           collapsed: true,
-          items: [{ type: 'doc', id: 'tools/avocado-cli', label: 'CLI' }],
+          items: [{ type: 'doc', id: 'tools/avocado-cli', label: 'Avocado CLI' }],
         },
         {
           type: 'category',
@@ -634,11 +634,11 @@ export default {
           collapsible: true,
           collapsed: true,
           items: [
-            { type: 'doc', id: 'tools/admin-api', label: 'Admin API' },
-            { type: 'doc', id: 'tools/peridio-admin-rust-sdk', label: 'Admin Rust SDK' },
-            { type: 'doc', id: 'tools/peridio-cli', label: 'CLI' },
-            { type: 'doc', id: 'tools/peridio-daemon', label: 'Daemon' },
-            { type: 'doc', id: 'tools/device-api', label: 'Device API' },
+            { type: 'doc', id: 'tools/admin-api', label: 'Peridio Admin API' },
+            { type: 'doc', id: 'tools/peridio-admin-rust-sdk', label: 'Peridio Admin Rust SDK' },
+            { type: 'doc', id: 'tools/peridio-cli', label: 'Peridio CLI' },
+            { type: 'doc', id: 'tools/peridio-daemon', label: 'Peridio Daemon' },
+            { type: 'doc', id: 'tools/device-api', label: 'Peridio Device API' },
           ],
         },
       ],
