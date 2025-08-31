@@ -1,0 +1,65 @@
+/**
+ * Card component styles based on the landing page design
+ * Provides consistent hover effects, shadows, borders, and layout
+ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+  height: 100%;
+}
+
+.card:hover {
+  box-shadow:
+    0 1px 3px rgba(60, 64, 67, 0.3),
+    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+}
+
+.cardHeader {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  color: var(--ifm-color-emphasis-800);
+  padding: 1.5rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardBody {
+  padding: 1.5rem;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Ensure cards work well with Docusaurus's Infima grid system */
+/* The col--6 class handles responsive behavior, so we just ensure the card fills its container */
+@media screen and (max-width: 996px) {
+  .card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* On smaller screens, add some spacing between stacked cards */
+@media screen and (max-width: 768px) {
+  .card {
+    margin-bottom: 1.5rem;
+  }
+
+  .cardBody {
+    padding: 1.25rem;
+  }
+}
