@@ -1,9 +1,5 @@
----
-title: Device API
----
-
 # Device API
 
-The Device API is the primary interface for devices to communicate with Peridio Cloud, enabling secure update management, status reporting, and device-to-cloud interactions. It provides RESTful endpoints designed specifically for device communications with support for X.509 certificate authentication and signed update verification.
+[Reference](/device-api)
 
-[View Full Device API Documentation →](/device-api)
+Device-facing API with X.509 authentication and signed update verification. Powers secure device-to-cloud communication and update distribution, providing RESTful endpoints specifically designed for embedded devices to interact with Peridio Cloud.

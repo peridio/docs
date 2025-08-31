@@ -463,3 +463,29 @@ html[data-theme="dark"] .menu__link--active:hover {
     min-width: auto !important;
   }
 }
+
+/* Tool Cards Enhanced Styling */
+.card {
+  border: 1px solid #e1e5e9 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.2s ease !important;
+  background-color: #ffffff !important;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
+  border-color: #c7ced4 !important;
+}
+
+/* Dark mode card styling */
+html[data-theme="dark"] .card {
+  background-color: #1b1b1d !important;
+  border: 1px solid #3c4043 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+html[data-theme="dark"] .card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+  border-color: #5f6368 !important;
+}

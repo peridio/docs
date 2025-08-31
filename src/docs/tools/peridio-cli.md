@@ -1,9 +1,5 @@
----
-title: Peridio CLI
----
+# CLI
 
-# Peridio CLI
+[Reference](/peridio-cli) | [Source](https://github.com/peridio/peridio-cli)
 
-The Peridio Command Line Interface (CLI) is a powerful tool for managing your IoT fleet, automating workflows, and integrating Peridio into your development pipeline. It provides command-line access to all Peridio Cloud features including device management, binary uploads, release creation, and remote access capabilities.
-
-[View Full CLI Documentation →](/peridio-cli)
+Command-line tool for fleet management and CI/CD integration. Manage devices, upload binaries, create releases, and establish remote access sessions with comprehensive access to all Peridio Cloud features from your terminal or automation scripts.

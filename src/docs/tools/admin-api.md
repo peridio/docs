@@ -1,9 +1,5 @@
----
-title: Admin API
----
-
 # Admin API
 
-The Admin API is a comprehensive REST API that provides programmatic access to all Peridio Cloud features, enabling custom integrations, automation, and building sophisticated management tools. It offers complete control over your Peridio infrastructure with full CRUD operations on all resources, advanced querying, and webhook management.
+[Reference](/admin-api)
 
-[View Full Admin API Documentation →](/admin-api)
+RESTful API for programmatic control of your IoT infrastructure. Build custom integrations, automate fleet operations, and manage devices at scale with comprehensive access to all Peridio Cloud features through standard HTTP endpoints.
