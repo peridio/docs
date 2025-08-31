@@ -4,9 +4,9 @@ Peridio can be integrated with any variant of the Android OS by programming agai
 
 ## Reference agent
 
-The code that runs on a device that integrates with Peridio is referred to as a Peridio Agent. For a platform-agnostic overview of its optional and required capabilities, please reference the [Peridio Agent](/integration/guides/peridio-core-custom-integration/introduction#agent) documentation.
+The code that runs on a device that integrates with Peridio is referred to as an agent. For a platform-agnostic overview of its optional and required capabilities, please reference the [agent](/integration/guides/peridio-core-custom-integration/introduction#agent) documentation.
 
-`peridiod`, the standard Peridio agent reference implementation, does not currently support Android-specific interfaces, e.g., interacting with Android APIs and libraries to:
+`peridiod`, the Peridio Daemon (Peridio's official agent implementation), does not currently support Android-specific interfaces, e.g., interacting with Android APIs and libraries to:
 
 - **Install APKs**: Managing package installations directly on the device using the Android Package Manager (e.g., `PackageInstaller` API).
 - **Perform A/B updates**: Orchestrating seamless updates using the Android A/B (seamless updates) system, which involves switching between active and inactive partitions while ensuring rollback protection.

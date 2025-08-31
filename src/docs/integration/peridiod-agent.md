@@ -1,4 +1,4 @@
-# Peridiod Agent
+# Peridio Daemon (peridiod)
 
 The Peridio daemon (peridiod) is the on-device agent that handles OTA updates, remote access, and device communication with Peridio Core.
 
@@ -37,7 +37,7 @@ yum install peridiod
 ### Container Deployment
 
 ```bash
-docker run -d --name peridio-agent \
+docker run -d --name peridiod \
   --privileged \
   -v /boot:/boot \
   -v /data:/data \
