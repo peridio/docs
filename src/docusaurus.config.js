@@ -35,7 +35,7 @@ const config = {
       'classic',
       {
         docs: {
-          breadcrumbs: false,
+          breadcrumbs: true,
           path: 'docs',
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
@@ -73,6 +73,11 @@ const config = {
       colorMode: {
         disableSwitch: true,
       },
+      docs: {
+        sidebar: {
+          hideable: true,
+        },
+      },
       announcementBar: {
         id: 'docs-wip-announcement',
         content: `
@@ -92,6 +97,7 @@ const config = {
         isCloseable: true,
       },
       navbar: {
+        hideOnScroll: true,
         logo: {
           alt: 'Peridio Logo',
           src: 'img/peridio-docs-logo.svg',
