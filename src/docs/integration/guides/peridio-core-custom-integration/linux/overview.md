@@ -4,12 +4,12 @@ Peridio can be integrated with virtually any embedded / desktop Linux runtime. T
 
 ## Reference agent
 
-`peridiod` is a reference implementation of a Peridio Agent for Embedded Linux. Peridio offers several ways to integrate peridiod into your build workflow via several integration paths:
+`peridiod` is a reference implementation of Peridio Daemon for Embedded Linux. Peridio offers several ways to integrate peridiod into your build workflow via several integration paths:
 
 - [yocto](build-tools/yocto)
 - [buildroot](build-tools/buildroot)
 
-For more information about the reference Linux agent, see [peridiod](peridiod/getting-started).
+For more information about Peridio Daemon, see [peridiod](peridiod/getting-started).
 
 ## Reference designs
 

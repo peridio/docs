@@ -14,7 +14,7 @@ This guide helps diagnose and resolve common issues with Peridio tunnels.
 **Possible Causes:**
 
 1. Device is offline
-2. Peridiod agent not running
+2. Peridio Daemon (peridiod) not running
 3. Network connectivity issues
 4. Firewall blocking outbound connections
 

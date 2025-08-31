@@ -1,10 +1,10 @@
 # Buildroot
 
-You can integrate the Peridio Agent into buildroot by leveraging the [buildroot external tree](https://buildroot.org/downloads/manual/manual.html#outside-br-custom).
+You can integrate Peridio Daemon into buildroot by leveraging the [buildroot external tree](https://buildroot.org/downloads/manual/manual.html#outside-br-custom).
 
 Checkout the Peridio external tree from [GitHub](https://github.com/peridio/buildroot-external-peridio).
 
-Pass the location to the Peridio external tree when configuring the build directory from within the Buildroot tree, you can validate the external Peridio Agent build options are present through `menuconfig` or `xconfig`.
+Pass the location to the Peridio external tree when configuring the build directory from within the Buildroot tree, you can validate the external Peridio Daemon build options are present through `menuconfig` or `xconfig`.
 
 ```shell
 make BR2_EXTERNAL=/path/to/buildroot-external-peridio menuconfig
