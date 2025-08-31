@@ -1,4 +1,4 @@
-# External CDN & Custom Binary Backends Overview
+# Overview
 
 External CDN integration allows you to use your own content delivery network and storage infrastructure with Peridio, providing enhanced control, performance, and cost optimization for your firmware distribution needs.
 

@@ -226,12 +226,12 @@ export default {
       dirName: 'avocado-cli',
     },
   ],
-  'dev-center': [
+  documentation: [
     {
       type: 'category',
       label: 'Getting Started',
       collapsible: true,
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: 'doc',
@@ -262,13 +262,14 @@ export default {
     {
       type: 'category',
       label: 'Avocado OS',
-      link: {
-        type: 'doc',
-        id: 'avocado-linux/introduction',
-      },
       collapsible: true,
       collapsed: true,
       items: [
+        {
+          type: 'doc',
+          id: 'avocado-linux/introduction',
+          label: 'Overview',
+        },
         'avocado-linux/system-requirements',
         'avocado-linux/architecture-overview',
         'avocado-linux/development-environment',
@@ -283,13 +284,14 @@ export default {
     {
       type: 'category',
       label: 'Peridio Core',
-      link: {
-        type: 'doc',
-        id: 'peridio-core/introduction',
-      },
       collapsible: true,
       collapsed: true,
       items: [
+        {
+          type: 'doc',
+          id: 'peridio-core/introduction',
+          label: 'Overview',
+        },
         {
           type: 'doc',
           id: 'peridio-core/core-concepts',
@@ -308,11 +310,12 @@ export default {
         {
           type: 'category',
           label: 'Device Management',
-          link: {
-            type: 'doc',
-            id: 'peridio-core/device-management/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'peridio-core/device-management/overview',
+              label: 'Overview',
+            },
             'peridio-core/device-management/agent',
             'peridio-core/device-management/ca-certificates',
             'peridio-core/device-management/cohorts',
@@ -328,11 +331,12 @@ export default {
         {
           type: 'category',
           label: 'Remote Access Tunnels',
-          link: {
-            type: 'doc',
-            id: 'tunnels/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'tunnels/overview',
+              label: 'Overview',
+            },
             'tunnels/getting-started',
             'tunnels/ssh-tunnels',
             'tunnels/http-tunnels',
@@ -343,11 +347,12 @@ export default {
         {
           type: 'category',
           label: 'Firmware Management',
-          link: {
-            type: 'doc',
-            id: 'peridio-core/firmware-management/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'peridio-core/firmware-management/overview',
+              label: 'Overview',
+            },
             'peridio-core/firmware-management/artifacts',
             'peridio-core/firmware-management/artifact-versions',
             'peridio-core/firmware-management/binaries',
@@ -364,11 +369,12 @@ export default {
         {
           type: 'category',
           label: 'OTA Updates',
-          link: {
-            type: 'doc',
-            id: 'peridio-core/ota/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'peridio-core/ota/overview',
+              label: 'Overview',
+            },
             'peridio-core/ota/avocado-side-loading',
             'peridio-core/ota/cohort-based-releases',
             'peridio-core/ota/quick-deploy-bundle-overrides',
@@ -378,11 +384,12 @@ export default {
         {
           type: 'category',
           label: 'Account Management',
-          link: {
-            type: 'doc',
-            id: 'peridio-core/account-management/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'peridio-core/account-management/overview',
+              label: 'Overview',
+            },
             'peridio-core/account-management/organizations',
             'peridio-core/account-management/users',
           ],
@@ -392,13 +399,14 @@ export default {
     {
       type: 'category',
       label: 'Supported Hardware',
-      link: {
-        type: 'doc',
-        id: 'hardware/supported-hardware',
-      },
       collapsible: true,
       collapsed: true,
       items: [
+        {
+          type: 'doc',
+          id: 'hardware/supported-hardware',
+          label: 'Overview',
+        },
         {
           type: 'category',
           label: 'Silicon',
@@ -425,11 +433,12 @@ export default {
         {
           type: 'category',
           label: 'Production Ready',
-          link: {
-            type: 'doc',
-            id: 'hardware/production-ready/index',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'hardware/production-ready/index',
+              label: 'Overview',
+            },
             {
               type: 'html',
               value:
@@ -452,34 +461,39 @@ export default {
     {
       type: 'category',
       label: 'Integration & Guides',
-      link: {
-        type: 'doc',
-        id: 'integration/index',
-      },
       collapsible: true,
       collapsed: true,
       items: [
         {
+          type: 'doc',
+          id: 'integration/index',
+          label: 'Overview',
+        },
+        {
           type: 'category',
           label: 'Peridio Core Rapid Setup',
-          link: {
-            type: 'doc',
-            id: 'integration/peridio-core-rapid-setup',
-          },
-          items: ['integration/evk'],
+          items: [
+            {
+              type: 'doc',
+              id: 'integration/peridio-core-rapid-setup',
+              label: 'Overview',
+            },
+            'integration/evk',
+          ],
         },
         'integration/peridiod-agent',
         'integration/cloud-delegated-updates',
         {
           type: 'category',
           label: 'Peridio Core Custom Integration',
-          link: {
-            type: 'doc',
-            id: 'integration/guides/peridio-core-custom-integration/introduction',
-          },
           collapsible: true,
           collapsed: false,
           items: [
+            {
+              type: 'doc',
+              id: 'integration/guides/peridio-core-custom-integration/introduction',
+              label: 'Overview',
+            },
             {
               type: 'category',
               label: 'Android',
@@ -539,11 +553,12 @@ export default {
         {
           type: 'category',
           label: 'Webhooks',
-          link: {
-            type: 'doc',
-            id: 'integration/webhooks/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'integration/webhooks/overview',
+              label: 'Overview',
+            },
             'integration/webhooks/configuration',
             'integration/webhooks/events-and-payloads',
             'integration/webhooks/security',
@@ -553,11 +568,12 @@ export default {
         {
           type: 'category',
           label: 'External CDN',
-          link: {
-            type: 'doc',
-            id: 'integration/external-cdn/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'integration/external-cdn/overview',
+              label: 'Overview',
+            },
             'integration/external-cdn/aws-s3-setup',
             'integration/external-cdn/aws-cloudfront-setup',
             'integration/external-cdn/geographic-distribution',
@@ -567,11 +583,12 @@ export default {
         {
           type: 'category',
           label: 'Certificates',
-          link: {
-            type: 'doc',
-            id: 'integration/certificates/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'integration/certificates/overview',
+              label: 'Overview',
+            },
             'integration/certificates/certificate-types',
             'integration/certificates/certificate-lifecycle',
             'integration/certificates/creation-methods',
@@ -581,11 +598,12 @@ export default {
         {
           type: 'category',
           label: 'Bundle Management',
-          link: {
-            type: 'doc',
-            id: 'integration/bundle-management/overview',
-          },
           items: [
+            {
+              type: 'doc',
+              id: 'integration/bundle-management/overview',
+              label: 'Overview',
+            },
             'integration/bundle-management/creating-bundles',
             'integration/bundle-management/creating-releases',
           ],
@@ -595,13 +613,14 @@ export default {
     {
       type: 'category',
       label: 'Tools',
-      link: {
-        type: 'doc',
-        id: 'tools/index',
-      },
       collapsible: true,
       collapsed: true,
       items: [
+        {
+          type: 'doc',
+          id: 'tools/index',
+          label: 'Overview',
+        },
         { type: 'doc', id: 'tools/avocado-cli', label: 'Avocado CLI' },
         { type: 'doc', id: 'tools/peridio-cli', label: 'Peridio CLI' },
         { type: 'doc', id: 'tools/device-api', label: 'Device API' },
@@ -611,13 +630,14 @@ export default {
     {
       type: 'category',
       label: 'Policies',
-      link: {
-        type: 'doc',
-        id: 'policies/index',
-      },
       collapsible: true,
       collapsed: true,
       items: [
+        {
+          type: 'doc',
+          id: 'policies/index',
+          label: 'Overview',
+        },
         { type: 'doc', id: 'policies/coc', label: 'Code of Conduct' },
         { type: 'doc', id: 'policies/privacy', label: 'Privacy Statement' },
       ],

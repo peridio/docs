@@ -1,4 +1,4 @@
-# Firmware Management Overview
+# Overview
 
 [Binaries](/platform/reference/binaries) are the assets you wish to distribute to your devices. There is no restriction on the format of their content. [Artifacts](/platform/reference/artifacts) are used to define types for your binaries, and [artifact versions](/platform/reference/artifact-versions) allow you to track a binary of a certain type across distinct version. [Bundles](/platform/reference/bundles) allow you to create immutable, reusable ordered sets of Binaries.
 

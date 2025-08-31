@@ -1,8 +1,4 @@
----
-title: Integration & Guides
----
-
-# Integration & Guides
+# Overview
 
 This section provides comprehensive guides for integrating various Peridio features and services into your IoT infrastructure. Learn how to implement webhooks, configure external CDNs, manage certificates, and deploy the Peridio agent.
 
