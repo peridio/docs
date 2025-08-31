@@ -1,8 +1,4 @@
----
-title: Bundle Management Overview
----
-
-# Bundle Management
+# Overview
 
 This guide serves as a comprehensive introduction to bundle management that covers the complete lifecycle of creating, managing, and distributing firmware bundles to your device fleet.
 

@@ -1,4 +1,4 @@
-# Tunnels Overview
+# Overview
 
 Tunnels provide secure remote access to your devices through Peridio's infrastructure. This section covers everything you need to know about establishing and managing remote connections to your fleet.
 

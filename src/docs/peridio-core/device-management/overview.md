@@ -1,4 +1,4 @@
-# Device Management
+# Overview
 
 ## Complete Control Over Your Connected Fleet
 

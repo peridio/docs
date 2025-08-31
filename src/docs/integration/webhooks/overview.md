@@ -1,4 +1,4 @@
-# Webhooks Overview
+# Overview
 
 Webhooks provide a powerful way to receive real-time notifications about events in your Peridio account. Instead of continuously polling the API for updates, webhooks allow Peridio to push event data directly to your application as events occur.
 
