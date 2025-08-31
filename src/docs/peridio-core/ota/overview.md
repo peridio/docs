@@ -1,8 +1,4 @@
----
-title: OTA Overview
----
-
-# Over-The-Air (OTA) Updates
+# Overview
 
 Peridio provides comprehensive OTA update capabilities that enable you to securely and reliably update your fleet of devices. Our OTA system supports multiple update strategies and deployment patterns to meet diverse operational requirements.
 

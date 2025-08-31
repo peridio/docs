@@ -3,7 +3,7 @@ title: Avocado OS Overview
 description: The Fast Track to Production-Ready Embedded Linux
 ---
 
-# Avocado OS Overview
+# Overview
 
 :::caution Under Development
 This documentation is currently under active development. Content and procedures may change as we refine the Avocado OS platform.

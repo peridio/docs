@@ -1,11 +1,10 @@
 ---
-title: Supported Hardware
 hide_table_of_contents: true
 ---
 
 import './support-matrix.css';
 
-# Supported Hardware
+# Overview
 
 Peridio supports a wide range of hardware platforms for IoT device management and OTA updates. Our platform integrates seamlessly with various processors, development boards, and production-ready systems.
 
