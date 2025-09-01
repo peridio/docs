@@ -626,7 +626,11 @@ export default {
           label: 'Avocado Linux',
           collapsible: true,
           collapsed: true,
-          items: [{ type: 'doc', id: 'tools/avocado-cli', label: 'Avocado CLI' }],
+          items: [
+            { type: 'doc', id: 'tools/avocado-cli', label: 'Avocado CLI' },
+            { type: 'doc', id: 'tools/avocado-control', label: 'Avocado Control' },
+            { type: 'doc', id: 'tools/meta-avocado', label: 'Meta Avocado' },
+          ],
         },
         {
           type: 'category',
