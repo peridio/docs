@@ -1,6 +1,6 @@
 # Agent
 
-An agent is the software that runs on devices and integrates with Peridio. You can develop and maintain your own agent or use the [Peridio Daemon](/integration/guides/peridio-core-custom-integration/introduction#agent).
+An agent is the software that runs on devices and integrates with Peridio. You can develop and maintain your own agent or use the [Peridio Daemon](/integration/guides/peridio-core-custom-integration/overview#agent).
 
 ## Peridio Daemon
 

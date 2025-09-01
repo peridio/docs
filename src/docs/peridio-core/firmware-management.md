@@ -12,5 +12,5 @@ Please see:
 
 For bundle and release management, see:
 
-- [Bundle Management Guide](/platform/guides/introduction-to-bundle-management)
+- [Bundle Management Guide](/platform/guides/bundle-management-overview)
 - [Platform Reference](/platform/reference/bundles)

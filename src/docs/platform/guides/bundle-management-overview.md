@@ -18,7 +18,7 @@ Bundle management comprises the following resources:
 
 The goal of this guide is to create a release for a signed binary.
 
-Creating a signed binary is outside the scope of this guide, see [Introduction to Binary Management](introduction-to-binary-management).
+Creating a signed binary is outside the scope of this guide, see [Introduction to Binary Management](binary-management-overview).
 
 ## Creating a bundle
 

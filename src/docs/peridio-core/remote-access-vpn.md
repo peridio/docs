@@ -13,4 +13,4 @@ Please see:
 For platform-level documentation, see:
 
 - [Platform Tunnels Reference](/platform/reference/tunnels)
-- [Introduction to Remote Access](/platform/guides/introduction-to-remote-access)
+- [Introduction to Remote Access](/platform/guides/remote-access-overview)

@@ -25,7 +25,7 @@ Firmware require the use of [fwup](https://github.com/fwup-home/fwup) archives a
 
 ## Installation
 
-When a device downloads a firmware it may extract from it like a ZIP, or apply a fwup task, or do whatever it sees fit to install or process the firmware. The code responsible for this functionality is the [agent](/integration/guides/peridio-core-custom-integration/introduction#agent).
+When a device downloads a firmware it may extract from it like a ZIP, or apply a fwup task, or do whatever it sees fit to install or process the firmware. The code responsible for this functionality is the [agent](/integration/guides/peridio-core-custom-integration/overview#agent).
 
 ## Time to live (TTL)
 

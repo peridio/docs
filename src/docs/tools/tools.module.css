@@ -13,7 +13,7 @@
 }
 
 .toolCard {
-  min-height: 250px;
+  min-height: 302px;
   height: 100%;
   display: flex;
   flex-direction: column;

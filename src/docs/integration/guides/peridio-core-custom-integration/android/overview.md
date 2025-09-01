@@ -4,7 +4,7 @@ Peridio can be integrated with any variant of the Android OS by programming agai
 
 ## Reference agent
 
-The code that runs on a device that integrates with Peridio is referred to as an agent. For a platform-agnostic overview of its optional and required capabilities, please reference the [agent](/integration/guides/peridio-core-custom-integration/introduction#agent) documentation.
+The code that runs on a device that integrates with Peridio is referred to as an agent. For a platform-agnostic overview of its optional and required capabilities, please reference the [agent](/integration/guides/peridio-core-custom-integration/overview#agent) documentation.
 
 `peridiod`, the Peridio Daemon (Peridio's official agent implementation), does not currently support Android-specific interfaces, e.g., interacting with Android APIs and libraries to:
 

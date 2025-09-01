@@ -165,7 +165,7 @@ export default {
           type: 'category',
           label: 'Binary Management',
           items: [
-            'platform/guides/introduction-to-binary-management',
+            'platform/guides/binary-management-overview',
             'platform/guides/multipart-uploads-with-binary-parts',
             'platform/guides/creating-artifacts',
             'platform/guides/creating-artifact-versions',
@@ -191,7 +191,7 @@ export default {
           type: 'category',
           label: 'Bundle Management',
           items: [
-            'platform/guides/introduction-to-bundle-management',
+            'platform/guides/bundle-management-overview',
             'platform/guides/creating-bundles',
             'platform/guides/creating-releases',
           ],
@@ -199,10 +199,7 @@ export default {
         {
           type: 'category',
           label: 'Remote Access',
-          items: [
-            'platform/guides/introduction-to-remote-access',
-            'platform/guides/creating-tunnels',
-          ],
+          items: ['platform/guides/remote-access-overview', 'platform/guides/creating-tunnels'],
         },
         {
           type: 'category',
@@ -268,7 +265,7 @@ export default {
       items: [
         {
           type: 'doc',
-          id: 'avocado-linux/introduction',
+          id: 'avocado-linux/overview',
           label: 'Overview',
         },
         'avocado-linux/system-requirements',
@@ -290,7 +287,7 @@ export default {
       items: [
         {
           type: 'doc',
-          id: 'peridio-core/introduction',
+          id: 'peridio-core/overview',
           label: 'Overview',
         },
         {
@@ -492,7 +489,7 @@ export default {
           items: [
             {
               type: 'doc',
-              id: 'integration/guides/peridio-core-custom-integration/introduction',
+              id: 'integration/guides/peridio-core-custom-integration/overview',
               label: 'Overview',
             },
             {

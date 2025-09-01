@@ -93,6 +93,6 @@ avocado provision -r dev
 
 ## Next Steps
 
-- Review the [Avocado Linux documentation](/avocado-linux/introduction)
+- Review the [Avocado Linux documentation](/avocado-linux/overview)
 - Set up your [development environment](/avocado-linux/development-environment)
 - Deploy your first [OTA update](/getting-started/first-ota-update)

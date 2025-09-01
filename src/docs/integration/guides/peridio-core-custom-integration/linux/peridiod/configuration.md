@@ -108,7 +108,7 @@ The following keys inform how the use of distributions will be applied in the sy
   - `pre_down` (path): A path to an executable script to be executed before tearing down the tunnel network interface.
   - `post_down` (path): A path to an executable script to be executed after tearing down the tunnel network interface.
 
-See the [introduction to remote access](/platform/guides/introduction-to-remote-access) for more information on configuring and using remote access tunnels.
+See the [introduction to remote access](/platform/guides/remote-access-overview) for more information on configuring and using remote access tunnels.
 
 ## Node configurations
 

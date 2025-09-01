@@ -168,5 +168,5 @@ Device-side application of these updates is handled by the `peridiod` daemon. Th
 
 See also:
 
-- Bundle Management Guide: `/platform/guides/introduction-to-bundle-management`
+- Bundle Management Guide: `/platform/guides/bundle-management-overview`
 - CLI reference: `/peridio-cli/artifacts/create`, `/peridio-cli/artifact-versions/create`, `/peridio-cli/binaries/create`, `/peridio-cli/bundles/create`, `/peridio-cli/bundle-overrides/create`, `/peridio-cli/releases/create`
