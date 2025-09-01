@@ -1,4 +1,4 @@
-# Overview
+# Raspberry Pi Zero 2 W
 
 ## Getting started
 

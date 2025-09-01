@@ -1,4 +1,4 @@
-# Overview
+# Linux
 
 Peridio can be integrated with virtually any embedded / desktop Linux runtime. The quickest way to get started with Peridio is to deploy one of our [reference designs](overview#reference-designs). Our references are a subset of boards we maintain which we have found to be common / interesting deployment targets. While deploying a reference example is the easiest path running Peridio, it is also the most opinionated about the workflow, as the remainder of this document goes on to describe. The opinions expressed in the reference designs are not requirements to use Peridio. If you require greater flexibility and control in your environment, Peridio can be integrated by leveraging an SDK or by programming against the [Device API](/device-api).
 

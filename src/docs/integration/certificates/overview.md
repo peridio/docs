@@ -1,4 +1,4 @@
-# Overview
+# Certificates
 
 Device authentication and security in Peridio relies on X.509 certificates for device identity and communication security.
 

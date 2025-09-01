@@ -1,4 +1,4 @@
-# System integrations
+# Peridio Core Custom Integration
 
 Peridio provides agents and reference designs for the following systems:
 

@@ -1,4 +1,4 @@
-# Overview
+# Reference
 
 [Organizations](/platform/reference/organizations) are the highest level of resource isolation in Peridio. Within an organization you can create [products](/platform/reference/products) and [cohorts](/platform/reference/cohorts) to categorize your [devices](/platform/reference/devices). Devices can be created manually, imported in bulk, and just-in-time provisioned.
 
