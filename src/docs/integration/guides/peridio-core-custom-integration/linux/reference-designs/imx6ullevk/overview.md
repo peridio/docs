@@ -1,4 +1,4 @@
-# Overview
+# i.MX6 ULL EVK
 
 <img src="/img/integration/linux/reference-designs/imx6ullevk.jpg" />
 

@@ -1,4 +1,4 @@
-# Overview
+# Account Management
 
 Account management in Peridio provides the foundation for organizing resources, controlling access, and managing users across your IoT infrastructure. This system enables secure multi-tenancy, role-based access control, and hierarchical resource organization.
 
