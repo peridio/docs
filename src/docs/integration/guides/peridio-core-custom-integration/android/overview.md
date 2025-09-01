@@ -1,4 +1,4 @@
-# Overview
+# Android
 
 Peridio can be integrated with any variant of the Android OS by programming against the Peridio [Device API](/device-api) via [direct API integration](/integration/guides/peridio-core-custom-integration/android/reference-designs/direct-api-integration).
 

@@ -236,6 +236,7 @@ export default {
         {
           type: 'doc',
           id: 'getting-started/overview',
+          label: 'Overview',
         },
         {
           type: 'doc',

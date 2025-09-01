@@ -1,4 +1,4 @@
-# Overview
+# Khadas VIM3
 
 <img src="/img/integration/linux/reference-designs/khadas-vim3.jpg" />
 
