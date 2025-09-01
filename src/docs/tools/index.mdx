@@ -8,25 +8,63 @@ import styles from './tools.module.css'
 
 # Tools
 
-Peridio provides a comprehensive suite of tools to accelerate embedded Linux development and simplify IoT fleet management. From building your first system image to managing millions of devices in production, these tools integrate seamlessly to support your entire product lifecycle.
+Build, deploy, and manage immutable embedded Linux systems with Peridio's integrated toolchain. From Yocto-based image creation and runtime extension management to enterprise-scale IoT fleet operations, these tools provide a complete solution for modern embedded Linux development and device management.
 
 ## Avocado Linux
 
-Fast-track your embedded Linux development with production-ready build systems and streamlined workflows. Avocado tools eliminate months of Yocto bring-up while maintaining full flexibility for customization.
+Build immutable embedded Linux systems with integrated tooling for development, deployment, and runtime management. Avocado tools provide everything from Yocto-based image creation to system extension management and hardware-in-the-loop testing.
 
 <div className={styles.toolsGrid}>
   <div className="row">
     <div className="col col--6">
-      <Card>
-        <CardBody>
-          <h3>CLI</h3>
-          <p>
-            Build and deploy embedded Linux systems with production-ready configurations.
-            Streamlines Yocto-based workflows from project initialization through hardware
-            provisioning.
-          </p>
-          <p>
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Avocado CLI</h3>
+            <p>
+              Build and deploy embedded Linux systems with production-ready configurations.
+              Streamlines Yocto-based workflows from project initialization through hardware
+              provisioning.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
             <Link to="/tools/avocado-cli">Overview</Link> | <Link to="/avocado-cli">Reference</Link>
+          </p>
+        </CardBody>
+      </Card>
+    </div>
+    <div className="col col--6">
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Avocado Control</h3>
+            <p>
+              CLI tool for managing Avocado Linux system extensions and hardware-in-the-loop (HITL)
+              testing. Provides runtime control for systemd-sysext based extensions with merge,
+              unmerge, and refresh operations.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
+            <Link to="/tools/avocado-control">Overview</Link> | <Link to="https://github.com/avocado-linux/avocado-control">Source</Link>
+          </p>
+        </CardBody>
+      </Card>
+    </div>
+  </div>
+
+  <div className="row">
+    <div className="col col--6">
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Meta Avocado</h3>
+            <p>
+              Avocado distro layer for Yocto that provides a complete immutable Linux distribution
+              built on systemd. Includes BSP layers for QEMU, Raspberry Pi, NXP, NVIDIA, and more.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
+            <Link to="/tools/meta-avocado">Overview</Link> | <Link to="https://github.com/avocado-linux/meta-avocado">Source</Link>
           </p>
         </CardBody>
       </Card>
@@ -41,13 +79,15 @@ Enterprise-grade infrastructure for managing IoT devices at scale. Deploy secure
 <div className={styles.toolsGrid}>
   <div className="row">
     <div className="col col--6">
-      <Card>
-        <CardBody>
-          <h3>Admin API</h3>
-          <p>
-            API for programmatic control of your IoT infrastructure. Build custom integrations, automate fleet operations, and manage devices at scale.
-          </p>
-          <p>
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Peridio Admin API</h3>
+            <p>
+              API for programmatic control of your IoT infrastructure. Build custom integrations, automate fleet operations, and manage devices at scale.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
             <Link to="/tools/admin-api">Overview</Link> | <Link to="/admin-api">Reference</Link>
           </p>
         </CardBody>
@@ -55,13 +95,15 @@ Enterprise-grade infrastructure for managing IoT devices at scale. Deploy secure
     </div>
 
     <div className="col col--6">
-      <Card>
-        <CardBody>
-          <h3>Admin Rust SDK</h3>
-          <p>
-            Rust SDK for the Admin API with type safety, async/await support, and automatic retry logic. Ideal for backend services and automation tools.
-          </p>
-          <p>
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Peridio Admin Rust SDK</h3>
+            <p>
+              Rust SDK for the Admin API with type safety, async/await support, and automatic retry logic. Ideal for backend services and automation tools.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
             <Link to="/tools/peridio-admin-rust-sdk">Overview</Link> | <Link to="https://github.com/peridio/peridio-rust">Source</Link>
           </p>
         </CardBody>
@@ -72,13 +114,15 @@ Enterprise-grade infrastructure for managing IoT devices at scale. Deploy secure
 
   <div className="row">
     <div className="col col--6">
-      <Card>
-        <CardBody>
-          <h3>CLI</h3>
-          <p>
-            Command-line tool for fleet management and CI/CD integration. Manage devices, upload binaries, create releases, and establish remote access sessions.
-          </p>
-          <p>
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Peridio CLI</h3>
+            <p>
+              Command-line tool for fleet management and CI/CD integration. Manage devices, upload binaries, create releases, and establish remote access sessions.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
             <Link to="/tools/peridio-cli">Overview</Link> | <Link to="/peridio-cli">Reference</Link> | <Link to="https://github.com/peridio/peridio-cli">Source</Link>
           </p>
         </CardBody>
@@ -86,13 +130,15 @@ Enterprise-grade infrastructure for managing IoT devices at scale. Deploy secure
     </div>
 
     <div className="col col--6">
-      <Card>
-        <CardBody>
-          <h3>Daemon</h3>
-          <p>
-            The official Peridio agent for embedded Linux devices. Handles OTA updates, status reporting, and secure cloud communication with minimal resource usage.
-          </p>
-          <p>
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Peridio Daemon</h3>
+            <p>
+              The official Peridio agent for embedded Linux devices. Handles OTA updates, status reporting, and secure cloud communication with minimal resource usage.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
             <Link to="/tools/peridio-daemon">Overview</Link> | <Link to="/integration/peridiod-agent">Reference</Link> | <Link to="https://github.com/peridio/peridiod">Source</Link>
           </p>
         </CardBody>
@@ -103,13 +149,15 @@ Enterprise-grade infrastructure for managing IoT devices at scale. Deploy secure
 
   <div className="row">
     <div className="col col--6">
-      <Card>
-        <CardBody>
-          <h3>Device API</h3>
-          <p>
-            Device-facing API with X.509 authentication and signed update verification. Powers secure device-to-cloud communication and update distribution.
-          </p>
-          <p>
+      <Card className={styles.toolCard}>
+        <CardBody className={styles.toolCardBody}>
+          <div className={styles.toolCardContent}>
+            <h3>Peridio Device API</h3>
+            <p>
+              Device-facing API with X.509 authentication and signed update verification. Powers secure device-to-cloud communication and update distribution.
+            </p>
+          </div>
+          <p className={styles.toolCardLinks}>
             <Link to="/tools/device-api">Overview</Link> | <Link to="/device-api">Reference</Link>
           </p>
         </CardBody>

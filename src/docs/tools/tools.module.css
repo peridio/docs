@@ -8,6 +8,31 @@
 
 .toolsGrid :global(.col) {
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolCard {
+  min-height: 250px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolCardBody {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
+
+.toolCardContent {
+  flex: 1;
+}
+
+.toolCardLinks {
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
 .toolsGrid h3 {
