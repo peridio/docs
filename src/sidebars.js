@@ -241,7 +241,7 @@ export default {
         {
           type: 'doc',
           id: 'getting-started/provision-device',
-          label: 'Provision Device',
+          label: 'Provision a Device',
         },
         {
           type: 'doc',
@@ -251,7 +251,7 @@ export default {
         {
           type: 'doc',
           id: 'getting-started/desktop-deploy',
-          label: 'Desktop Deploy',
+          label: 'Sideload an Update',
         },
         // {
         //   type: 'doc',

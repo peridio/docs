@@ -1,4 +1,4 @@
-# Provision with Avocado OS
+# Provision a Device
 
 Avocado OS is a Yocto-based embedded product framework that bridges rapid developer workflows and production-grade reliability. It delivers immutable, composable runtimes with deterministic, cryptographically verifiable images, fault-tolerant updates, and simplified secure boot. Using system extensions (sysext) and configuration extensions (confext), applications and configuration are layered cleanly and reproducibly—without the fragility of traditional runtime package management.
 
