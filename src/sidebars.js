@@ -280,6 +280,11 @@ export default {
         'avocado-linux/security-implementation',
         'avocado-linux/update-mechanisms',
         'avocado-linux/porting-guide',
+        {
+          type: 'category',
+          label: 'Reference',
+          items: ['avocado-linux/reference/config'],
+        },
       ],
     },
     {

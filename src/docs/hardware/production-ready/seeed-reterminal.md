@@ -88,7 +88,7 @@ avocado provision -r dev
 
 - [Seeed Studio Wiki](https://wiki.seeedstudio.com/reTerminal/)
 - [Hardware Datasheet](https://files.seeedstudio.com/wiki/ReTerminal/reTerminal.pdf)
-- [Peridio Integration Guide](/avocado-linux/system-requirements)
+- [Peridio Integration Guide](/avocado-linux/introduction)
 - [Community Forum](https://forum.seeedstudio.com/)
 
 ## Next Steps

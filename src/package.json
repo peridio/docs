@@ -5,9 +5,9 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "gen-peridio-cli": "node scripts/gen-cli.js",
-    "gen-avocado-cli": "node scripts/gen-avocado-cli.js",
-    "build": "docusaurus build",
+    "build-peridio-cli": "node scripts/build-peridio-cli.js",
+    "build-avocado-cli": "node scripts/build-avocado-cli.js",
+    "build": "bash scripts/build.sh",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -37,6 +37,7 @@
     "jsdom": "^26.1.0",
     "mobx": "^6.13.7",
     "prism-react-renderer": "^2.4.1",
+    "prop-types": "^15.8.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
@@ -63,7 +64,10 @@
     "@docusaurus/module-type-aliases": "^3.8.1",
     "@docusaurus/types": "^3.8.1",
     "@redocly/cli": "^1.25.8",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "prettier": "^3.0.0",
+    "raw-loader": "^4.0.2",
     "typescript": "^5.9.2"
   },
   "engines": {

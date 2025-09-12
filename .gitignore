@@ -27,3 +27,5 @@ content-master
 screenshots/
 spec-sheets/
 vibe/
+
+**/static/**/avocado-config.json

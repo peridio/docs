@@ -2,7 +2,7 @@
 
 Peridio provides agents and reference designs for the following systems:
 
-- [Avocado Linux](/avocado-linux/system-requirements)
+- [Avocado Linux](/avocado-linux/introduction)
 - [Linux](linux/overview)
 - [Android](android/overview)
 

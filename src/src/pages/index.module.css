@@ -610,6 +610,10 @@
   height: 3.5rem;
 }
 
+.resourceCard .featureIcon {
+  outline: none;
+}
+
 /* Peridio Core Logo */
 .peridioCoreLogo {
   width: 70%;

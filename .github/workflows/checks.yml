@@ -21,6 +21,8 @@ jobs:
       - name: ESLint
         run: npm --prefix src run lint
       - name: Prettier Check
-        run: npm --prefix src exec --no -- prettier --check .
+        run: |
+          cd src
+          npm exec -- prettier --check .
       - name: Docusaurus Build
         run: npm --prefix src run build

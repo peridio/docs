@@ -1,0 +1,667 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://avocado.com/schemas/avocado-config.json",
+  "title": "Avocado Configuration",
+  "description": "Configuration schema for Avocado CLI avocado.toml files. Defines project settings, build configurations, dependencies, and provisioning profiles for Avocado OS projects.",
+  "type": "object",
+  "properties": {
+    "default_target": {
+      "title": "Default target",
+      "$ref": "#/definitions/target",
+      "examples": ["jetson-orin-nano-devkit-nvme"]
+    },
+    "supported_targets": {
+      "title": "Supported targets",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["*"],
+          "description": "Support all available targets."
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/target"
+          },
+          "description": "List of specific supported target architectures."
+        }
+      ],
+      "description": "Defines which targets are supported by this project. Use '*' to support all targets, or provide an array of specific target names to limit support.",
+      "examples": ["*", ["raspberrypi4", "qemuarm64"]]
+    },
+    "src_dir": {
+      "title": "Source directory",
+      "type": "string",
+      "description": "Path to the source directory relative to the configuration file. If not specified, defaults to the directory containing the configuration file. This is where your project source code is located.",
+      "default": ".",
+      "examples": ["src", "./source"]
+    },
+    "runtime": {
+      "title": "Runtime configurations",
+      "type": "object",
+      "description": "Runtime-specific configurations for different targets. Each runtime configuration can specify target-specific dependencies and settings required for running on that platform.",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/runtimeConfig"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "raspberrypi4": {
+            "target": "raspberrypi4",
+            "dependencies": {
+              "wifi": {
+                "path": "../extensions/wifi"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sdk": {
+      "title": "SDK configuration",
+      "allOf": [
+        {
+          "$ref": "#/definitions/sdkConfig"
+        },
+        {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/sdkConfig"
+                },
+                {
+                  "type": ["string", "number", "boolean", "array", "object"]
+                }
+              ],
+              "description": "Target-specific SDK configuration that overrides the default SDK settings for a particular target architecture."
+            }
+          }
+        }
+      ],
+      "description": "SDK settings for building your Avocado OS project. Defines the build environment, dependencies, and compilation configurations."
+    },
+    "provision": {
+      "title": "Provisioning profiles",
+      "type": "object",
+      "description": "Provisioning profiles for deploying Avocado OS images to devices. Each profile can define different settings for development, production, or custom deployment scenarios.",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/provisionProfileConfig"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "development": {
+            "container_args": ["--device", "/dev/ttyUSB0"]
+          }
+        }
+      ]
+    },
+    "ext": {
+      "title": "Extensions",
+      "type": "object",
+      "description": "Extension configurations for both local extensions (defined in this file) and external extensions (referenced through dependencies). Extensions can be system extensions (sysext) or configuration extensions (confext).",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/extensionConfig"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "ext": {
+            "example-rust": {
+              "types": ["sysext", "confext"],
+              "dependencies": {
+                "example-rust-app": {
+                  "compile": "example-rust-app",
+                  "install": "example-rust-install.sh"
+                }
+              },
+              "sdk": {
+                "dependencies": {
+                  "nativesdk-rust": "*",
+                  "rust-cross-canadian-aarch64": "*",
+                  "nativesdk-cargo": "*",
+                  "nativesdk-binutils": "*",
+                  "nativesdk-gcc": "*",
+                  "nativesdk-glibc-dev": "*",
+                  "nativesdk-libgcc-dev": "*"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "target": {
+      "title": "Target platform",
+      "type": "string",
+      "enum": [
+        "imx8mp-evk",
+        "imx91-frdm",
+        "imx93-frdm",
+        "imx93-evk",
+        "qemuarm64",
+        "qemux86-64",
+        "reterminal",
+        "reterminal-dm",
+        "jetson-orin-nano-devkit-nvme",
+        "raspberrypi4",
+        "raspberrypi5"
+      ],
+      "description": "Target platform identifier for Avocado OS builds and deployments.",
+      "additionalProperties": false
+    },
+    "runtimeConfig": {
+      "title": "Runtime configuration",
+      "type": "object",
+      "description": "Runtime configuration for a specific target platform.",
+      "properties": {
+        "target": {
+          "title": "Target",
+          "$ref": "#/definitions/target"
+        },
+        "dependencies": {
+          "title": "Dependencies",
+          "$ref": "#/definitions/dependencies",
+          "description": "Runtime dependencies required for the target. Can include paths to local extensions or references to external packages.",
+          "examples": [
+            {
+              "wifi": {
+                "path": "../extensions/wifi"
+              },
+              "bluetooth": "*"
+            }
+          ]
+        }
+      },
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/runtimeConfig"
+            },
+            {
+              "type": ["string", "number", "boolean", "array", "object"]
+            }
+          ],
+          "description": "Target-specific runtime configuration or custom runtime properties."
+        }
+      },
+      "additionalProperties": true
+    },
+    "sdkConfig": {
+      "title": "SDK configuration",
+      "type": "object",
+      "description": "SDK configuration for building Avocado OS projects.",
+      "properties": {
+        "image": {
+          "title": "Docker image",
+          "type": "string",
+          "description": "Docker image to use for the SDK build environment. This provides the toolchain and build tools necessary for compilation.",
+          "examples": ["avocado/sdk:2.0"]
+        },
+        "dependencies": {
+          "title": "Dependencies",
+          "$ref": "#/definitions/dependencies",
+          "description": "SDK-level dependencies required for building the project. These are installed in the build environment.",
+          "examples": [
+            {
+              "cmake": "*",
+              "make": ">=4.0"
+            }
+          ]
+        },
+        "compile": {
+          "title": "Compile configurations",
+          "type": "object",
+          "description": "Compile configurations for specific extensions or components. Each entry defines how to build a particular extension.",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "$ref": "#/definitions/compileConfig"
+            }
+          },
+          "additionalProperties": false,
+          "examples": [
+            {
+              "wifi": {
+                "compile": "make",
+                "dependencies": {
+                  "libnl": "3.5.0"
+                }
+              }
+            }
+          ]
+        },
+        "repo_url": {
+          "title": "Repository URL",
+          "type": "string",
+          "description": "URL of the repository containing SDK resources. Can be overridden with the AVOCADO_SDK_REPO_URL environment variable.",
+          "examples": ["https://github.com/avocado-linux/sdk"]
+        },
+        "repo_release": {
+          "title": "Repository release",
+          "type": "string",
+          "description": "Specific release/tag of the SDK repository to use. Can be overridden with the AVOCADO_SDK_REPO_RELEASE environment variable.",
+          "examples": ["v2.0.0"]
+        },
+        "container_args": {
+          "title": "Container arguments",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional arguments to pass to the Docker container. Supports environment variable expansion using ${VAR_NAME} syntax.",
+          "examples": [["--network", "host"]]
+        }
+      },
+      "additionalProperties": false
+    },
+    "compileConfig": {
+      "title": "Compile configuration",
+      "type": "object",
+      "description": "Compilation configuration for a specific extension or component.",
+      "properties": {
+        "compile": {
+          "title": "Compile command",
+          "type": "string",
+          "description": "Compile command or script to execute for building this component.",
+          "examples": ["make"]
+        },
+        "dependencies": {
+          "$ref": "#/definitions/dependencies",
+          "description": "Build-time dependencies required for compiling this component.",
+          "examples": [
+            {
+              "libnl": "3.5.0",
+              "gcc": ">=9.0"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "provisionProfileConfig": {
+      "title": "Provision profile configuration",
+      "type": "object",
+      "description": "Configuration for a provisioning profile used to deploy Avocado OS images to devices.",
+      "properties": {
+        "container_args": {
+          "title": "Container arguments",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional arguments to pass to the provisioning container. Supports environment variable expansion using ${VAR_NAME} syntax.",
+          "examples": [
+            ["--device", "/dev/ttyUSB0"],
+            ["--privileged", "--network=host"]
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "extensionConfig": {
+      "title": "Extension configuration",
+      "type": "object",
+      "description": "Configuration for an Avocado OS extension (system extension or configuration extension).",
+      "properties": {
+        "version": {
+          "title": "Version",
+          "type": "string",
+          "description": "Extension version identifier. Used for tracking and dependency resolution.",
+          "examples": ["1.0.0"]
+        },
+        "types": {
+          "title": "Extension types",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["sysext", "confext"]
+          },
+          "description": "Extension types. 'sysext' for system extensions that provide system-level functionality, 'confext' for configuration extensions that provide configuration files.",
+          "examples": [["sysext"]]
+        },
+        "scopes": {
+          "title": "Scopes",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extension scopes that define where the extension applies. Used to control which parts of the system the extension affects.",
+          "examples": [["system"]]
+        },
+        "overlay": {
+          "title": "Overlay directory",
+          "type": "string",
+          "description": "Path to the overlay directory containing files to be included in the extension. These files will be overlaid onto the root filesystem.",
+          "examples": ["./overlay"]
+        },
+        "enable_services": {
+          "title": "Enable services",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of systemd services to enable when the extension is active. Services must be available in the extension or base system.",
+          "examples": [
+            {
+              "ext": {
+                "example-rust": {
+                  "enable_services": ["sshd.socket"]
+                }
+              }
+            }
+          ]
+        },
+        "modprobe": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Kernel modules to load when the extension is active. Modules must be available in the kernel or provided by the extension.",
+          "examples": [["overlay"]]
+        },
+        "dependencies": {
+          "$ref": "#/definitions/dependencies",
+          "description": "Package dependencies required by the extension. These will be installed when the extension is built or deployed.",
+          "examples": [
+            {
+              "ext": {
+                "example-rust": {
+                  "dependencies": {
+                    "example-rust-app": {
+                      "compile": "example-rust-app",
+                      "install": "example-rust-install.sh"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "sdk": {
+          "type": "object",
+          "description": "SDK-specific configuration for building this extension.",
+          "properties": {
+            "dependencies": {
+              "$ref": "#/definitions/dependencies",
+              "description": "Build-time dependencies specific to this extension.",
+              "examples": [
+                {
+                  "nativesdk-rust": "*",
+                  "rust-cross-canadian-aarch64": "*",
+                  "nativesdk-cargo": "*",
+                  "nativesdk-binutils": "*",
+                  "nativesdk-gcc": "*",
+                  "nativesdk-glibc-dev": "*",
+                  "nativesdk-libgcc-dev": "*"
+                }
+              ]
+            }
+          },
+          "additionalProperties": true,
+          "examples": [
+            {
+              "dependencies": {
+                "nativesdk-rust": "*",
+                "rust-cross-canadian-aarch64": "*",
+                "nativesdk-cargo": "*",
+                "nativesdk-binutils": "*",
+                "nativesdk-gcc": "*",
+                "nativesdk-glibc-dev": "*",
+                "nativesdk-libgcc-dev": "*"
+              }
+            }
+          ]
+        },
+        "users": {
+          "type": "object",
+          "description": "User accounts to create or configure when the extension is active.",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "$ref": "#/definitions/userConfig"
+            }
+          },
+          "additionalProperties": false,
+          "examples": [
+            {
+              "root": {
+                "password": ""
+              }
+            }
+          ]
+        },
+        "groups": {
+          "type": "object",
+          "description": "Groups to create or configure when the extension is active.",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "$ref": "#/definitions/groupConfig"
+            }
+          },
+          "additionalProperties": false,
+          "examples": [
+            {
+              "docker": {
+                "gid": 999
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "examples": [
+        {
+          "ext": {
+            "example-rust": {
+              "types": ["sysext", "confext"],
+              "dependencies": {
+                "example-rust-app": {
+                  "compile": "example-rust-app",
+                  "install": "example-rust-install.sh"
+                }
+              },
+              "sdk": {
+                "dependencies": {
+                  "nativesdk-rust": "*",
+                  "rust-cross-canadian-aarch64": "*",
+                  "nativesdk-cargo": "*",
+                  "nativesdk-binutils": "*",
+                  "nativesdk-gcc": "*",
+                  "nativesdk-glibc-dev": "*",
+                  "nativesdk-libgcc-dev": "*"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "userConfig": {
+      "type": "object",
+      "description": "Configuration for a user account.",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "User password. Use empty string for no password (passwordless). For security, consider using password hashes instead of plain text.",
+          "examples": [""]
+        },
+        "shell": {
+          "type": "string",
+          "description": "User's login shell. Must be a valid shell available in the system.",
+          "examples": ["/bin/bash"]
+        },
+        "home": {
+          "type": "string",
+          "description": "User's home directory path. Will be created if it doesn't exist.",
+          "examples": ["/home/developer"]
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of groups the user belongs to. Groups must exist or be defined in the extension.",
+          "examples": [["wheel", "docker"]]
+        }
+      },
+      "additionalProperties": false
+    },
+    "groupConfig": {
+      "type": "object",
+      "description": "Configuration for a system group.",
+      "properties": {
+        "gid": {
+          "type": "integer",
+          "description": "Group ID (GID). Should be unique across the system. Consider using IDs above 1000 for user groups.",
+          "minimum": 0,
+          "maximum": 65535,
+          "examples": [999]
+        }
+      },
+      "additionalProperties": false
+    },
+    "dependencies": {
+      "title": "Dependencies",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Version requirement string. Use '*' for any version, '>=X.Y' for minimum version, 'X.Y.Z' for exact version, or semantic version ranges.",
+          "examples": ["*", ">=1.0.0", "2.1.3"]
+        },
+        {
+          "type": "object",
+          "description": "Object defining extension dependencies or package dependencies with version constraints. For runtime dependencies, can define extension dependencies. For extension dependencies, can include SDK compile configurations.",
+          "patternProperties": {
+            "^[a-zA-Z0-9_.-]+$": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "Version constraint string. Use '*' for any version, '>=X.Y' for minimum version, 'X.Y.Z' for exact version, or semantic version ranges.",
+                  "examples": ["*", ">=1.0.0", "2.1.3"]
+                },
+                {
+                  "type": "object",
+                  "description": "Extension dependency object that can include path references for runtime dependencies or SDK compile configurations for extension dependencies.",
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "description": "Path to local extension dependency.",
+                      "examples": ["../extensions/wifi", "./local-ext"]
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "Version constraint for the dependency.",
+                      "examples": ["*", ">=1.0.0", "2.1.3"]
+                    },
+                    "sdk": {
+                      "type": "object",
+                      "description": "SDK compile configuration for this dependency.",
+                      "properties": {
+                        "compile": {
+                          "type": "string",
+                          "description": "Compile command for building this dependency.",
+                          "examples": ["make", "cmake --build ."]
+                        },
+                        "dependencies": {
+                          "$ref": "#/definitions/dependencies",
+                          "description": "Build-time dependencies for compiling this dependency."
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "examples": [
+        "*",
+        {
+          "cmake": ">=3.22.0",
+          "wifi": {
+            "path": "../extensions/wifi",
+            "sdk": {
+              "compile": "make",
+              "dependencies": {
+                "libnl": "3.5.0"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "default_target": "jetson-orin-nano-devkit-nvme",
+      "supported_targets": ["raspberrypi4", "qemuarm64"],
+      "src_dir": "src",
+      "sdk": {
+        "image": "avocado/sdk:2.0",
+        "dependencies": {
+          "cmake": "*"
+        },
+        "compile": {
+          "wifi": {
+            "compile": "make",
+            "dependencies": {
+              "libnl": "3.5.0"
+            }
+          }
+        }
+      },
+      "runtime": {
+        "raspberrypi4": {
+          "target": "raspberrypi4",
+          "dependencies": {
+            "wifi": {
+              "path": "../extensions/wifi"
+            }
+          }
+        }
+      },
+      "provision": {
+        "development": {
+          "container_args": ["--device", "/dev/ttyUSB0"]
+        }
+      },
+      "ext": {
+        "example-rust": {
+          "types": ["sysext", "confext"],
+          "dependencies": {
+            "example-rust-app": {
+              "compile": "example-rust-app",
+              "install": "example-rust-install.sh"
+            }
+          },
+          "sdk": {
+            "dependencies": {
+              "nativesdk-rust": "*",
+              "rust-cross-canadian-aarch64": "*",
+              "nativesdk-cargo": "*",
+              "nativesdk-binutils": "*",
+              "nativesdk-gcc": "*",
+              "nativesdk-glibc-dev": "*",
+              "nativesdk-libgcc-dev": "*"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
