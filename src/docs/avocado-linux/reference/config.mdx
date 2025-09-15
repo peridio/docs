@@ -1,12 +1,13 @@
 ---
-title: Config
+title: Avocado Config
 hide_table_of_contents: true
 ---
 
-import AvocadoConfigSchema from '../../../src/components/AvocadoConfigSchema'
+import SchemaDocs from '../../../src/components/SchemaDocs'
+import avocadoSchema from '../../../schemas/avocado-config.json'
 import Link from '@docusaurus/Link'
 
-# Config
+# Avocado Config
 
 The Avocado configuration file defines project settings, build configurations, dependencies, and provisioning profiles. This configuration file serves as the central hub for managing your Avocado Linux project, allowing you to specify everything from target hardware platforms to custom system extensions and user management policies.
 
@@ -14,7 +15,7 @@ The Avocado configuration file defines project settings, build configurations, d
 
 Available as a JSON Schema [here](/schemas/avocado-config.json).
 
-<AvocadoConfigSchema showLegend={false} showSearch={false} showExamples={true} />
+<SchemaDocs schema={avocadoSchema} options={{ includeExamples: true }} />
 
 ## Examples
 

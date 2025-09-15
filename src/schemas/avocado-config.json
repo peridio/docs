@@ -8,6 +8,7 @@
     "default_target": {
       "title": "Default target",
       "$ref": "#/definitions/target",
+      "description": "The default target platform for the project. This target is used when building the project if no target is specified.",
       "examples": ["jetson-orin-nano-devkit-nvme"]
     },
     "supported_targets": {
@@ -37,52 +38,12 @@
       "examples": ["src", "./source"]
     },
     "runtime": {
-      "title": "Runtime configurations",
-      "type": "object",
-      "description": "Runtime-specific configurations for different targets. Each runtime configuration can specify target-specific dependencies and settings required for running on that platform.",
-      "patternProperties": {
-        "^[a-zA-Z0-9_-]+$": {
-          "$ref": "#/definitions/runtimeConfig"
-        }
-      },
-      "additionalProperties": false,
-      "examples": [
-        {
-          "raspberrypi4": {
-            "target": "raspberrypi4",
-            "dependencies": {
-              "wifi": {
-                "path": "../extensions/wifi"
-              }
-            }
-          }
-        }
-      ]
+      "$ref": "#/definitions/runtimeConfig"
     },
     "sdk": {
-      "title": "SDK configuration",
-      "allOf": [
-        {
-          "$ref": "#/definitions/sdkConfig"
-        },
-        {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/sdkConfig"
-                },
-                {
-                  "type": ["string", "number", "boolean", "array", "object"]
-                }
-              ],
-              "description": "Target-specific SDK configuration that overrides the default SDK settings for a particular target architecture."
-            }
-          }
-        }
-      ],
-      "description": "SDK settings for building your Avocado OS project. Defines the build environment, dependencies, and compilation configurations."
+      "title": "SDK Configuration",
+      "$ref": "#/definitions/sdkConfig",
+      "description": "Configure the default Avocado SDK."
     },
     "provision": {
       "title": "Provisioning profiles",
@@ -143,7 +104,7 @@
   "additionalProperties": false,
   "definitions": {
     "target": {
-      "title": "Target platform",
+      "title": "Targett",
       "type": "string",
       "enum": [
         "imx8mp-evk",
@@ -158,13 +119,13 @@
         "raspberrypi4",
         "raspberrypi5"
       ],
-      "description": "Target platform identifier for Avocado OS builds and deployments.",
+      "description": "An identifier for the platform for Avocado OS builds and deployments.",
       "additionalProperties": false
     },
-    "runtimeConfig": {
-      "title": "Runtime configuration",
+    "targetDependencies": {
+      "title": "Target and dependencies",
       "type": "object",
-      "description": "Runtime configuration for a specific target platform.",
+      "description": "Configuration object containing target and dependencies.",
       "properties": {
         "target": {
           "title": "Target",
@@ -173,34 +134,46 @@
         "dependencies": {
           "title": "Dependencies",
           "$ref": "#/definitions/dependencies",
-          "description": "Runtime dependencies required for the target. Can include paths to local extensions or references to external packages.",
-          "examples": [
-            {
-              "wifi": {
-                "path": "../extensions/wifi"
-              },
-              "bluetooth": "*"
-            }
-          ]
+          "description": "Runtime dependencies required for the target. Can include paths to local extensions or references to external packages."
         }
       },
-      "patternProperties": {
-        "^[a-zA-Z0-9_-]+$": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/runtimeConfig"
-            },
-            {
-              "type": ["string", "number", "boolean", "array", "object"]
+      "additionalProperties": false
+    },
+    "targetRuntimeConfig": {
+      "title": "Target runtime configuration",
+      "description": "Runtime configuration for a specific target platform.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/targetDependencies"
+        },
+        {
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "$ref": "#/definitions/targetDependencies"
             }
-          ],
-          "description": "Target-specific runtime configuration or custom runtime properties."
+          }
         }
-      },
-      "additionalProperties": true
+      ],
+      "additionalProperties": false
     },
     "sdkConfig": {
-      "title": "SDK configuration",
+      "type": "object",
+      "description": "SDK configuration for building Avocado OS projects.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/targetSdkConfig"
+        },
+        {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "$ref": "#/definitions/targetSdkConfig"
+            }
+          }
+        }
+      ]
+    },
+    "targetSdkConfig": {
       "type": "object",
       "description": "SDK configuration for building Avocado OS projects.",
       "properties": {
@@ -278,6 +251,7 @@
           "examples": ["make"]
         },
         "dependencies": {
+          "title": "Dependencies",
           "$ref": "#/definitions/dependencies",
           "description": "Build-time dependencies required for compiling this component.",
           "examples": [
@@ -530,6 +504,39 @@
         }
       },
       "additionalProperties": false
+    },
+    "runtimeConfig": {
+      "type": "object",
+      "description": "Default dependencies and target for all runtimes, as well as per-runtime overrides.",
+      "properties": {
+        "dependencies": {
+          "title": "Dependencies",
+          "$ref": "#/definitions/dependencies",
+          "description": "Runtime dependencies required for the target. Can include paths to local extensions or references to external packages."
+        },
+        "target": {
+          "title": "Target",
+          "$ref": "#/definitions/target"
+        }
+      },
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/targetRuntimeConfig"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "raspberrypi4": {
+            "target": "raspberrypi4",
+            "dependencies": {
+              "wifi": {
+                "path": "../extensions/wifi"
+              }
+            }
+          }
+        }
+      ]
     },
     "dependencies": {
       "title": "Dependencies",

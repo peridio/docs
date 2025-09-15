@@ -29,7 +29,7 @@ export default function SchemaDocs({ schema, options = {} }: SchemaDocsProps) {
 
   return (
     <div className="schema-docs-container">
-      <DeckardSchema schema={schema} options={defaultOptions} />
+      <DeckardSchema schema={schema} options={defaultOptions} className="schema-docs" />
     </div>
   )
 }
