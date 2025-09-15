@@ -13,7 +13,9 @@ import {
 } from 'react-icons/hi2'
 import styles from './solution.module.css'
 
-const iconMap = {
+type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>
+
+const iconMap: Record<string, IconType> = {
   ServerStack: ServerStackIcon,
   Fire: FireIcon,
   ShieldCheck: ShieldCheckIcon,
@@ -27,7 +29,7 @@ const iconMap = {
 
 interface FeatureGridProps {
   features: Array<{
-    icon: string
+    icon: keyof typeof iconMap
     title: string
     description: string
   }>

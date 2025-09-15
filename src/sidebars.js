@@ -283,7 +283,13 @@ export default {
         {
           type: 'category',
           label: 'Reference',
-          items: ['avocado-linux/reference/config'],
+          items: [
+            {
+              type: 'doc',
+              id: 'avocado-linux/reference/config',
+              label: 'Avocado Config',
+            },
+          ],
         },
       ],
     },

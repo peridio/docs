@@ -4,9 +4,9 @@ var __publicField = (obj, key2, value) => __defNormalProp(obj, typeof key2 !== "
 var _a, _b;
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
 import * as React from "react";
-import React__default, { forwardRef, useState, useCallback, useLayoutEffect, createContext, useEffect, useContext, useRef, useId as useId$1, useMemo } from "react";
-import { HiArrowsRightLeft, HiArrowUturnRight, HiBarsArrowDown } from "react-icons/hi2";
+import React__default, { forwardRef, useState, useCallback, useLayoutEffect, createContext, useContext, useRef, useId as useId$1, useEffect, useMemo } from "react";
 import * as ReactDOM from "react-dom";
+import { HiArrowsRightLeft, HiArrowUturnRight } from "react-icons/hi2";
 const Badge = ({
   variant = "default",
   size = "sm",
@@ -77,19 +77,22 @@ const BadgeGroup = ({
       label,
       ":"
     ] }),
-    values.map((value, index2) => /* @__PURE__ */ jsx(
-      Badge,
-      {
-        variant: badgeVariant,
-        size: badgeSize,
-        clickable: !!onValueClick,
-        onClick: () => onValueClick == null ? void 0 : onValueClick(value),
-        title: onValueClick ? "Click to copy" : void 0,
-        "aria-label": onValueClick ? `Copy value ${JSON.stringify(value)}` : void 0,
-        children: JSON.stringify(value)
-      },
-      index2
-    ))
+    values.map((value, index2) => {
+      const displayValue = typeof value === "string" ? value : value === null ? "null" : value === void 0 ? "undefined" : typeof value === "boolean" || typeof value === "number" ? String(value) : JSON.stringify(value);
+      return /* @__PURE__ */ jsx(
+        Badge,
+        {
+          variant: badgeVariant,
+          size: badgeSize,
+          clickable: !!onValueClick,
+          onClick: () => onValueClick == null ? void 0 : onValueClick(value),
+          title: onValueClick ? "Click to copy" : void 0,
+          "aria-label": onValueClick ? `Copy value ${displayValue}` : void 0,
+          children: displayValue
+        },
+        index2
+      );
+    })
   ] });
 };
 const Divider = ({
@@ -256,11 +259,26 @@ function FaCopy(props) {
 function FaExclamationTriangle(props) {
   return GenIcon({ "attr": { "viewBox": "0 0 576 512" }, "child": [{ "tag": "path", "attr": { "d": "M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z" }, "child": [] }] })(props);
 }
+function FaEyeSlash(props) {
+  return GenIcon({ "attr": { "viewBox": "0 0 640 512" }, "child": [{ "tag": "path", "attr": { "d": "M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346 397.39a144.13 144.13 0 0 1-26 2.61zm313.82 58.1l-110.55-85.44a331.25 331.25 0 0 0 81.25-102.07 32.35 32.35 0 0 0 0-29.19C550.29 135.59 442.93 64 320 64a308.15 308.15 0 0 0-147.32 37.7L45.46 3.37A16 16 0 0 0 23 6.18L3.37 31.45A16 16 0 0 0 6.18 53.9l588.36 454.73a16 16 0 0 0 22.46-2.81l19.64-25.27a16 16 0 0 0-2.82-22.45zm-183.72-142l-39.3-30.38A94.75 94.75 0 0 0 416 256a94.76 94.76 0 0 0-121.31-92.21A47.65 47.65 0 0 1 304 192a46.64 46.64 0 0 1-1.54 10l-73.61-56.89A142.31 142.31 0 0 1 320 112a143.92 143.92 0 0 1 144 144c0 21.63-5.29 41.79-13.9 60.11z" }, "child": [] }] })(props);
+}
+function FaFolderOpen(props) {
+  return GenIcon({ "attr": { "viewBox": "0 0 576 512" }, "child": [{ "tag": "path", "attr": { "d": "M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152 224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0 112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z" }, "child": [] }] })(props);
+}
+function FaFolder(props) {
+  return GenIcon({ "attr": { "viewBox": "0 0 512 512" }, "child": [{ "tag": "path", "attr": { "d": "M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z" }, "child": [] }] })(props);
+}
+function FaKeyboard(props) {
+  return GenIcon({ "attr": { "viewBox": "0 0 576 512" }, "child": [{ "tag": "path", "attr": { "d": "M528 448H48c-26.51 0-48-21.49-48-48V112c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v288c0 26.51-21.49 48-48 48zM128 180v-40c0-6.627-5.373-12-12-12H76c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm-336 96v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm-336 96v-40c0-6.627-5.373-12-12-12H76c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12zm288 0v-40c0-6.627-5.373-12-12-12H172c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h232c6.627 0 12-5.373 12-12zm96 0v-40c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v40c0 6.627 5.373 12 12 12h40c6.627 0 12-5.373 12-12z" }, "child": [] }] })(props);
+}
 function FaLink(props) {
   return GenIcon({ "attr": { "viewBox": "0 0 512 512" }, "child": [{ "tag": "path", "attr": { "d": "M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z" }, "child": [] }] })(props);
 }
 function FaMapPin(props) {
   return GenIcon({ "attr": { "viewBox": "0 0 288 512" }, "child": [{ "tag": "path", "attr": { "d": "M112 316.94v156.69l22.02 33.02c4.75 7.12 15.22 7.12 19.97 0L176 473.63V316.94c-10.39 1.92-21.06 3.06-32 3.06s-21.61-1.14-32-3.06zM144 0C64.47 0 0 64.47 0 144s64.47 144 144 144 144-64.47 144-144S223.53 0 144 0zm0 76c-37.5 0-68 30.5-68 68 0 6.62-5.38 12-12 12s-12-5.38-12-12c0-50.73 41.28-92 92-92 6.62 0 12 5.38 12 12s-5.38 12-12 12z" }, "child": [] }] })(props);
+}
+function FaSitemap(props) {
+  return GenIcon({ "attr": { "viewBox": "0 0 640 512" }, "child": [{ "tag": "path", "attr": { "d": "M128 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32zm-24-80h192v48h48v-48h192v48h48v-57.59c0-21.17-17.23-38.41-38.41-38.41H344v-64h40c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32H256c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h40v64H94.41C73.23 224 56 241.23 56 262.41V320h48v-48zm264 80h-96c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32zm240 0h-96c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32z" }, "child": [] }] })(props);
 }
 function FaTimes(props) {
   return GenIcon({ "attr": { "viewBox": "0 0 352 512" }, "child": [{ "tag": "path", "attr": { "d": "M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" }, "child": [] }] })(props);
@@ -288,8 +306,8 @@ const Button = ({
     className
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ jsxs("button", { className: classes, disabled: disabled || loading, ...props, children: [
-    loading ? /* @__PURE__ */ jsx("span", { className: "btn-spinner", "aria-hidden": "true", children: "⟳" }) : null,
-    /* @__PURE__ */ jsx("span", { className: loading ? "btn-content-loading" : "btn-content", children })
+    loading ? /* @__PURE__ */ jsx("div", { className: "btn-spinner", "aria-hidden": "true", children: "⟳" }) : null,
+    /* @__PURE__ */ jsx("div", { className: loading ? "btn-content-loading" : "btn-content", children })
   ] });
 };
 const Input = forwardRef(
@@ -396,206 +414,232 @@ const Settings = ({
     },
     [onChange, siteKey]
   );
-  const handleOverlayClick = useCallback(
-    (e) => {
-      if (e.target === e.currentTarget) {
-        handleClose();
-      }
-    },
-    [handleClose]
-  );
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(
+    /* @__PURE__ */ jsx(Tooltip, { title: "Settings", content: "Configure schema display options", children: /* @__PURE__ */ jsx(
       Button,
       {
         variant: "ghost",
         size: "xs",
         className: "settings-trigger",
         onClick: handleToggleOpen,
-        title: "Schema display settings",
         "aria-label": "Schema display settings",
         children: /* @__PURE__ */ jsx(FaCog, {})
       }
-    ),
-    isOpen && /* @__PURE__ */ jsx("div", { className: "settings-overlay", onClick: handleOverlayClick, children: /* @__PURE__ */ jsxs("div", { className: "settings-modal", children: [
-      /* @__PURE__ */ jsxs("div", { className: "settings-header", children: [
-        /* @__PURE__ */ jsx("h3", { className: "settings-title", children: "Display Settings" }),
-        /* @__PURE__ */ jsx(
-          Button,
-          {
-            variant: "ghost",
-            size: "xs",
-            className: "settings-close",
-            onClick: handleClose,
-            "aria-label": "Close settings",
-            children: /* @__PURE__ */ jsx(FaTimes, {})
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "settings-content", children: [
-        /* @__PURE__ */ jsxs("div", { className: "settings-section", children: [
-          /* @__PURE__ */ jsx("h4", { className: "settings-section-title", children: "Examples" }),
-          /* @__PURE__ */ jsxs("div", { className: "settings-options", children: [
-            /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: options.includeExamples || false,
-                  onChange: (e) => handleOptionChange("includeExamples", e.target.checked)
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Show examples" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Display code examples for properties when available" })
+    ) }),
+    /* @__PURE__ */ jsxs(
+      Modal,
+      {
+        isOpen,
+        onClose: handleClose,
+        title: "Display Settings",
+        size: "md",
+        footer: /* @__PURE__ */ jsx("p", { className: "settings-note", children: "Settings are saved per-site and will persist between visits." }),
+        children: [
+          /* @__PURE__ */ jsxs("div", { className: "settings-section", children: [
+            /* @__PURE__ */ jsx("h4", { className: "settings-section-title", children: "Examples" }),
+            /* @__PURE__ */ jsxs("div", { className: "settings-options", children: [
+              /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: options.includeExamples || false,
+                    onChange: (e) => handleOptionChange("includeExamples", e.target.checked)
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Show examples" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Display code examples for properties when available" })
+                  ] })
+                ] })
+              ] }),
+              options.includeExamples && /* @__PURE__ */ jsxs("label", { className: "settings-option settings-sub-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: !options.examplesOnFocusOnly,
+                    onChange: (e) => handleOptionChange("examplesOnFocusOnly", !e.target.checked)
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Always show examples" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Show examples for all expanded properties, not just focused ones" })
+                  ] })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsx("div", { className: "settings-option", children: /* @__PURE__ */ jsx("div", { className: "settings-option-content", children: /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Default example language" }),
+                /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Choose the default format for code examples" }),
+                /* @__PURE__ */ jsxs("div", { style: { marginTop: "var(--schema-space-sm)" }, children: [
+                  /* @__PURE__ */ jsxs("label", { className: "settings-language-option", children: [
+                    /* @__PURE__ */ jsx(
+                      "input",
+                      {
+                        type: "radio",
+                        name: "defaultExampleLanguage",
+                        value: "yaml",
+                        checked: options.defaultExampleLanguage === "yaml",
+                        onChange: () => handleOptionChange("defaultExampleLanguage", "yaml")
+                      }
+                    ),
+                    /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                    /* @__PURE__ */ jsx("span", { children: "YAML" })
+                  ] }),
+                  /* @__PURE__ */ jsxs("label", { className: "settings-language-option", children: [
+                    /* @__PURE__ */ jsx(
+                      "input",
+                      {
+                        type: "radio",
+                        name: "defaultExampleLanguage",
+                        value: "json",
+                        checked: options.defaultExampleLanguage === "json",
+                        onChange: () => handleOptionChange("defaultExampleLanguage", "json")
+                      }
+                    ),
+                    /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                    /* @__PURE__ */ jsx("span", { children: "JSON" })
+                  ] }),
+                  /* @__PURE__ */ jsxs("label", { className: "settings-language-option", children: [
+                    /* @__PURE__ */ jsx(
+                      "input",
+                      {
+                        type: "radio",
+                        name: "defaultExampleLanguage",
+                        value: "toml",
+                        checked: options.defaultExampleLanguage === "toml",
+                        onChange: () => handleOptionChange("defaultExampleLanguage", "toml")
+                      }
+                    ),
+                    /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                    /* @__PURE__ */ jsx("span", { children: "TOML" })
+                  ] })
+                ] })
+              ] }) }) })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "settings-section", children: [
+            /* @__PURE__ */ jsx("h4", { className: "settings-section-title", children: "Navigation" }),
+            /* @__PURE__ */ jsxs("div", { className: "settings-options", children: [
+              /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: Boolean(options.searchable) === true,
+                    onChange: (e) => handleOptionChange("searchable", e.target.checked)
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Enable search" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Show search box to filter properties" })
+                  ] })
+                ] })
+              ] }),
+              options.searchable && /* @__PURE__ */ jsxs("label", { className: "settings-option settings-sub-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: options.searchIncludesExamples || false,
+                    onChange: (e) => handleOptionChange(
+                      "searchIncludesExamples",
+                      e.target.checked
+                    )
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Search examples content" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Include example values when searching properties" })
+                  ] })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: options.collapsible !== false,
+                    onChange: (e) => handleOptionChange("collapsible", e.target.checked)
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Collapsible properties" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Allow expanding and collapsing property details" })
+                  ] })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: options.autoExpand || false,
+                    onChange: (e) => handleOptionChange("autoExpand", e.target.checked)
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Auto-expand" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Expand all properties by default" })
+                  ] })
                 ] })
               ] })
-            ] }),
-            options.includeExamples && /* @__PURE__ */ jsxs("label", { className: "settings-option settings-sub-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: !options.examplesOnFocusOnly,
-                  onChange: (e) => handleOptionChange(
-                    "examplesOnFocusOnly",
-                    !e.target.checked
-                  )
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Always show examples" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Show examples for all expanded properties, not just focused ones" })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "settings-section", children: [
+            /* @__PURE__ */ jsx("h4", { className: "settings-section-title", children: "Display" }),
+            /* @__PURE__ */ jsxs("div", { className: "settings-options", children: [
+              /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: options.includeHeader !== false,
+                    onChange: (e) => handleOptionChange("includeHeader", e.target.checked)
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Show header" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Display schema title and description" })
+                  ] })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: options.includePropertiesTitle !== false,
+                    onChange: (e) => handleOptionChange("includePropertiesTitle", e.target.checked)
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
+                  /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
+                  /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Show “Properties” title" }),
+                    /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Display the “Properties” section heading" })
+                  ] })
                 ] })
               ] })
             ] })
           ] })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "settings-section", children: [
-          /* @__PURE__ */ jsx("h4", { className: "settings-section-title", children: "Navigation" }),
-          /* @__PURE__ */ jsxs("div", { className: "settings-options", children: [
-            /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: options.searchable !== false,
-                  onChange: (e) => handleOptionChange("searchable", e.target.checked)
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Enable search" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Show search box to filter properties" })
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: options.collapsible !== false,
-                  onChange: (e) => handleOptionChange("collapsible", e.target.checked)
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Collapsible properties" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Allow expanding and collapsing property details" })
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: options.autoExpand || false,
-                  onChange: (e) => handleOptionChange("autoExpand", e.target.checked)
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Auto-expand" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Expand all properties by default" })
-                ] })
-              ] })
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "settings-section", children: [
-          /* @__PURE__ */ jsx("h4", { className: "settings-section-title", children: "Display" }),
-          /* @__PURE__ */ jsxs("div", { className: "settings-options", children: [
-            /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: options.includeHeader !== false,
-                  onChange: (e) => handleOptionChange("includeHeader", e.target.checked)
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Show header" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Display schema title and description" })
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: options.includePropertiesTitle !== false,
-                  onChange: (e) => handleOptionChange(
-                    "includePropertiesTitle",
-                    e.target.checked
-                  )
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Show “Properties” title" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Display the “Properties” section heading" })
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("label", { className: "settings-option", children: [
-              /* @__PURE__ */ jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: options.includeDefinitions || false,
-                  onChange: (e) => handleOptionChange(
-                    "includeDefinitions",
-                    e.target.checked
-                  )
-                }
-              ),
-              /* @__PURE__ */ jsxs("div", { className: "settings-option-content", children: [
-                /* @__PURE__ */ jsx("div", { className: "settings-checkbox" }),
-                /* @__PURE__ */ jsxs("div", { className: "settings-option-text", children: [
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-label", children: "Show definitions" }),
-                  /* @__PURE__ */ jsx("div", { className: "settings-option-description", children: "Display schema definitions section" })
-                ] })
-              ] })
-            ] })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "settings-footer", children: /* @__PURE__ */ jsx("p", { className: "settings-note", children: "Settings are saved per-site and will persist between visits." }) })
-    ] }) })
+        ]
+      }
+    )
   ] });
 };
 function hasWindow() {
@@ -3064,10 +3108,8 @@ const useTooltipGlobalManager = () => {
   return context;
 };
 const TooltipGlobalManagerProvider = ({ children }) => {
-  const [showAllTooltips, setShowAllTooltips] = useState(false);
+  const [showAllTooltips] = useState(false);
   const [registeredTooltips] = useState(/* @__PURE__ */ new Map());
-  useEffect(() => {
-  }, []);
   const registerTooltip = useCallback(
     (id, showTooltip, hideTooltip) => {
       registeredTooltips.set(id, { show: showTooltip, hide: hideTooltip });
@@ -3080,32 +3122,6 @@ const TooltipGlobalManagerProvider = ({ children }) => {
     },
     [registeredTooltips]
   );
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      const isRevealKey = event.ctrlKey;
-      if (isRevealKey && !showAllTooltips) {
-        setShowAllTooltips(true);
-        registeredTooltips.forEach(({ show }) => {
-          show();
-        });
-      }
-    };
-    const handleKeyUp = (event) => {
-      const wasRevealKey = !event.ctrlKey;
-      if (wasRevealKey && showAllTooltips) {
-        setShowAllTooltips(false);
-        registeredTooltips.forEach(({ hide }) => {
-          hide();
-        });
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
-  }, [showAllTooltips, registeredTooltips]);
   const value = {
     showAllTooltips,
     registerTooltip,
@@ -3114,6 +3130,7 @@ const TooltipGlobalManagerProvider = ({ children }) => {
   return /* @__PURE__ */ jsx(TooltipGlobalManagerContext.Provider, { value, children });
 };
 const Tooltip = ({
+  title,
   content,
   children,
   placement = "top",
@@ -3126,17 +3143,22 @@ const Tooltip = ({
   showArrow = true,
   portal = true,
   maxWidth = 300,
-  clickableBounds = false
+  clickableBounds = false,
+  longPressDuration = 500,
+  nonInteractive = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [globalRevealOpen, setGlobalRevealOpen] = useState(false);
   const [isActiveForKeyboard, setIsActiveForKeyboard] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const arrowRef = useRef(null);
   const tooltipId = useId$1();
   const hoverTimeoutRef = useRef(null);
+  const longPressTimeoutRef = useRef(null);
+  const touchStartTimeRef = useRef(0);
   const globalManager = useTooltipGlobalManager();
-  const isVisible = isHovered || isPinned || globalRevealOpen;
+  const isVisible = isHovered || isPinned || globalRevealOpen || isFocused;
   const { refs, floatingStyles, context } = useFloating({
     open: isVisible,
     placement,
@@ -3160,11 +3182,13 @@ const Tooltip = ({
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
     }
-    document.dispatchEvent(
-      new CustomEvent("tooltip-keyboard-clear", {
-        detail: { excludeId: tooltipId }
-      })
-    );
+    if (typeof document !== "undefined") {
+      document.dispatchEvent(
+        new CustomEvent("tooltip-keyboard-clear", {
+          detail: { excludeId: tooltipId }
+        })
+      );
+    }
     setIsActiveForKeyboard(true);
     if (!isHovered) {
       hoverTimeoutRef.current = setTimeout(() => {
@@ -3185,13 +3209,61 @@ const Tooltip = ({
     }
   };
   const handleClick = (e) => {
+    if (nonInteractive) {
+      return;
+    }
     e.stopPropagation();
-    if (isPinned) {
-      setIsPinned(false);
-    } else if (isHovered) {
-      setIsPinned(true);
-    } else {
-      setIsPinned(true);
+    const now = Date.now();
+    const touchDuration = now - touchStartTimeRef.current;
+    if (touchDuration > longPressDuration) {
+      return;
+    }
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.blur();
+    }
+  };
+  const handleMouseDown = (e) => {
+    if (nonInteractive) {
+      return;
+    }
+    e.preventDefault();
+  };
+  const handleTouchStart = () => {
+    if (nonInteractive) {
+      return;
+    }
+    touchStartTimeRef.current = Date.now();
+    if (longPressTimeoutRef.current) {
+      clearTimeout(longPressTimeoutRef.current);
+    }
+    longPressTimeoutRef.current = setTimeout(() => {
+      if (isPinned) {
+        setIsPinned(false);
+      } else {
+        setIsPinned(true);
+      }
+    }, longPressDuration);
+  };
+  const handleTouchEnd = () => {
+    if (longPressTimeoutRef.current) {
+      clearTimeout(longPressTimeoutRef.current);
+      longPressTimeoutRef.current = null;
+    }
+  };
+  const handleFocus = () => {
+    if (nonInteractive) {
+      return;
+    }
+    setIsFocused(true);
+  };
+  const handleBlur = (e) => {
+    if (nonInteractive) {
+      return;
+    }
+    const currentTarget = e.currentTarget;
+    const relatedTarget = e.relatedTarget;
+    if (!currentTarget.contains(relatedTarget)) {
+      setIsFocused(false);
     }
   };
   useEffect(() => {
@@ -3219,7 +3291,7 @@ const Tooltip = ({
         }
       }
     };
-    if (isVisible && isActiveForKeyboard) {
+    if (isVisible && isActiveForKeyboard && typeof document !== "undefined") {
       document.addEventListener("keydown", handleKeyDown);
       return () => {
         document.removeEventListener("keydown", handleKeyDown);
@@ -3233,16 +3305,18 @@ const Tooltip = ({
         setIsActiveForKeyboard(false);
       }
     };
-    document.addEventListener(
-      "tooltip-keyboard-clear",
-      handleKeyboardClear
-    );
-    return () => {
-      document.removeEventListener(
+    if (typeof document !== "undefined") {
+      document.addEventListener(
         "tooltip-keyboard-clear",
         handleKeyboardClear
       );
-    };
+      return () => {
+        document.removeEventListener(
+          "tooltip-keyboard-clear",
+          handleKeyboardClear
+        );
+      };
+    }
   }, [tooltipId]);
   useEffect(() => {
     if (!isVisible) {
@@ -3257,12 +3331,12 @@ const Tooltip = ({
       }
     };
     const handleClickOutside = (event) => {
-      if (refs.reference.current && refs.floating.current && !refs.reference.current.contains(event.target) && !refs.floating.current.contains(event.target)) {
+      if (refs.reference.current && refs.floating.current && "contains" in refs.reference.current && !refs.reference.current.contains(event.target) && !refs.floating.current.contains(event.target)) {
         setIsPinned(false);
         setIsHovered(false);
       }
     };
-    if (isPinned) {
+    if (isPinned && typeof document !== "undefined") {
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("mousedown", handleClickOutside);
       return () => {
@@ -3275,6 +3349,9 @@ const Tooltip = ({
     return () => {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
+      }
+      if (longPressTimeoutRef.current) {
+        clearTimeout(longPressTimeoutRef.current);
       }
     };
   }, []);
@@ -3305,7 +3382,7 @@ const Tooltip = ({
     };
   }, [context.middlewareData.arrow, context.placement]);
   const renderTooltip = () => {
-    if (!isVisible || disabled || !content) {
+    if (!isVisible || disabled || !title) {
       return null;
     }
     return /* @__PURE__ */ jsxs(
@@ -3337,6 +3414,9 @@ const Tooltip = ({
         onMouseEnter: clickableBounds ? handleMouseEnter : void 0,
         onMouseLeave: clickableBounds ? handleMouseLeave : void 0,
         onClick: clickableBounds ? handleClick : (e) => e.stopPropagation(),
+        onFocus: clickableBounds ? handleFocus : void 0,
+        onBlur: clickableBounds ? handleBlur : void 0,
+        tabIndex: clickableBounds ? 0 : void 0,
         children: [
           /* @__PURE__ */ jsxs(
             "div",
@@ -3347,15 +3427,22 @@ const Tooltip = ({
                 gap: "8px"
               },
               children: [
-                /* @__PURE__ */ jsx("div", { style: { flex: 1 }, children: content }),
-                isPinned && /* @__PURE__ */ jsx(
+                /* @__PURE__ */ jsx("div", { style: { flex: 1 }, children: /* @__PURE__ */ jsxs("div", { children: [
+                  /* @__PURE__ */ jsx("strong", { children: title }),
+                  content && /* @__PURE__ */ jsxs(Fragment, { children: [
+                    /* @__PURE__ */ jsx("br", {}),
+                    content
+                  ] })
+                ] }) }),
+                /* @__PURE__ */ jsx(
                   GiPin,
                   {
                     size: 14,
                     style: {
-                      color: "#3b82f6",
+                      color: isPinned ? "#3b82f6" : "#cbd5e1",
                       flexShrink: 0,
-                      marginTop: "1px"
+                      marginTop: "1px",
+                      opacity: isPinned ? 1 : 0.5
                     }
                   }
                 )
@@ -3376,17 +3463,192 @@ const Tooltip = ({
       {
         ref: refs.setReference,
         className: `tooltip-trigger ${className}`.trim(),
-        style: { display: "inline-block", cursor: "help" },
+        style: {
+          display: "inline-block",
+          cursor: nonInteractive ? "default" : "help"
+        },
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
-        onClick: handleClick,
-        role: "button",
+        onMouseDown: nonInteractive ? void 0 : handleMouseDown,
+        onClick: nonInteractive ? void 0 : handleClick,
+        onTouchStart: nonInteractive ? void 0 : handleTouchStart,
+        onTouchEnd: nonInteractive ? void 0 : handleTouchEnd,
+        onFocus: nonInteractive ? void 0 : handleFocus,
+        onBlur: nonInteractive ? void 0 : handleBlur,
+        role: nonInteractive ? void 0 : "button",
+        tabIndex: nonInteractive ? void 0 : 0,
         "aria-describedby": isVisible ? tooltipId : void 0,
         children
       }
     ),
-    portal ? /* @__PURE__ */ jsx(FloatingPortal, { root: document.body, children: renderTooltip() }) : renderTooltip()
+    portal && typeof document !== "undefined" ? /* @__PURE__ */ jsx(FloatingPortal, { root: document.body, children: renderTooltip() }) : renderTooltip()
   ] });
+};
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  footer,
+  className = "",
+  size = "md",
+  closeOnOverlayClick = true,
+  closeOnEscape = true,
+  showCloseButton = true
+}) => {
+  const handleOverlayClick = useCallback(
+    (e) => {
+      if (closeOnOverlayClick && e.target === e.currentTarget) {
+        onClose();
+      }
+    },
+    [onClose, closeOnOverlayClick]
+  );
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (closeOnEscape && e.key === "Escape") {
+        onClose();
+      }
+    },
+    [onClose, closeOnEscape]
+  );
+  useEffect(() => {
+    if (isOpen && closeOnEscape) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [isOpen, handleKeyDown, closeOnEscape]);
+  if (!isOpen) return null;
+  const modalClasses = ["modal", `modal-${size}`, className].filter(Boolean).join(" ");
+  return /* @__PURE__ */ jsx("div", { className: "modal-overlay", onClick: handleOverlayClick, children: /* @__PURE__ */ jsxs("div", { className: modalClasses, children: [
+    /* @__PURE__ */ jsxs("div", { className: "modal-header", children: [
+      /* @__PURE__ */ jsx("h3", { className: "modal-title", children: title }),
+      showCloseButton && /* @__PURE__ */ jsx(
+        Button,
+        {
+          variant: "ghost",
+          size: "xs",
+          className: "modal-close",
+          onClick: onClose,
+          "aria-label": `Close ${title.toLowerCase()}`,
+          children: /* @__PURE__ */ jsx(FaTimes, {})
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "modal-content", children }),
+    footer && /* @__PURE__ */ jsx("div", { className: "modal-footer", children: footer })
+  ] }) });
+};
+const KeyboardModal = ({
+  isOpen,
+  onClose,
+  examplesHidden
+}) => {
+  return /* @__PURE__ */ jsx(
+    Modal,
+    {
+      isOpen,
+      onClose,
+      title: "Keyboard shortcuts",
+      size: "lg",
+      children: /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcuts-grid", children: [
+        /* @__PURE__ */ jsxs("div", { className: "keyboard-section", children: [
+          /* @__PURE__ */ jsx("h4", { className: "keyboard-section-title", children: "Navigation" }),
+          /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcuts", children: [
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "J" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Next property" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "K" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Previous property" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "H" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Collapse property" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "L" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Expand property" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "keyboard-section", children: [
+          /* @__PURE__ */ jsx("h4", { className: "keyboard-section-title", children: "Search" }),
+          /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcuts", children: [
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "S" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Focus search box" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "Esc" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Clear search" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "keyboard-section", children: [
+          /* @__PURE__ */ jsx("h4", { className: "keyboard-section-title", children: "Expand & collapse" }),
+          /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcuts", children: [
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsxs("div", { className: "keyboard-keys", children: [
+                /* @__PURE__ */ jsx("kbd", { children: "⌘" }),
+                " ",
+                /* @__PURE__ */ jsx("kbd", { children: "E" })
+              ] }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Expand all properties" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsxs("div", { className: "keyboard-keys", children: [
+                /* @__PURE__ */ jsx("kbd", { children: "⌘" }),
+                " ",
+                /* @__PURE__ */ jsx("kbd", { children: "Shift" }),
+                " ",
+                /* @__PURE__ */ jsx("kbd", { children: "E" })
+              ] }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Collapse all properties" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "keyboard-section", children: [
+          /* @__PURE__ */ jsx("h4", { className: "keyboard-section-title", children: "Display" }),
+          /* @__PURE__ */ jsx("div", { className: "keyboard-shortcuts", children: /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+            /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "E" }) }),
+            /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: examplesHidden ? "Show examples" : "Hide examples" })
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "keyboard-section", children: [
+          /* @__PURE__ */ jsx("h4", { className: "keyboard-section-title", children: "Tooltips" }),
+          /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcuts", children: [
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "Ctrl" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Show all tooltips" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "T" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Pin/unpin tooltip" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+              /* @__PURE__ */ jsx("div", { className: "keyboard-keys", children: /* @__PURE__ */ jsx("kbd", { children: "Esc" }) }),
+              /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Close tooltips" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "keyboard-section", children: [
+          /* @__PURE__ */ jsx("h4", { className: "keyboard-section-title", children: "Help" }),
+          /* @__PURE__ */ jsx("div", { className: "keyboard-shortcuts", children: /* @__PURE__ */ jsxs("div", { className: "keyboard-shortcut", children: [
+            /* @__PURE__ */ jsxs("div", { className: "keyboard-keys", children: [
+              /* @__PURE__ */ jsx("kbd", { children: "Shift" }),
+              " ",
+              /* @__PURE__ */ jsx("kbd", { children: "?" })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "keyboard-description", children: "Show keyboard shortcuts" })
+          ] }) })
+        ] })
+      ] })
+    }
+  );
 };
 function resolveReference(ref, rootSchema) {
   if (!ref.startsWith("#/")) {
@@ -3407,12 +3669,51 @@ function resolveSchema(schema2, rootSchema) {
     const resolved = resolveReference(schema2.$ref, rootSchema);
     if (resolved) {
       const { $ref: _$ref, ...rest } = schema2;
-      return {
+      const result = {
         ...resolved,
         ...rest,
-        description: schema2.description || resolved.description
+        description: schema2.description || resolved.description,
+        // Preserve original $ref for enum ID extraction
+        __originalRef: schema2.$ref
       };
+      if (result.allOf) {
+        return resolveSchema(result, rootSchema);
+      }
+      return result;
     }
+  }
+  if (schema2.allOf) {
+    const merged = { ...schema2 };
+    delete merged.allOf;
+    schema2.allOf.forEach((subSchema) => {
+      const resolvedSubSchema = resolveSchema(subSchema, rootSchema);
+      if (resolvedSubSchema.properties) {
+        merged.properties = {
+          ...merged.properties,
+          ...resolvedSubSchema.properties
+        };
+      }
+      if (resolvedSubSchema.patternProperties) {
+        merged.patternProperties = {
+          ...merged.patternProperties,
+          ...resolvedSubSchema.patternProperties
+        };
+      }
+      if (resolvedSubSchema.required) {
+        merged.required = [
+          ...merged.required || [],
+          ...resolvedSubSchema.required
+        ];
+      }
+      Object.keys(resolvedSubSchema).forEach((key2) => {
+        if (key2 !== "properties" && key2 !== "patternProperties" && key2 !== "required") {
+          if (merged[key2] === void 0) {
+            merged[key2] = resolvedSubSchema[key2];
+          }
+        }
+      });
+    });
+    return merged;
   }
   return schema2;
 }
@@ -3441,10 +3742,10 @@ function extractProperties(schema2, path, depth, rootSchema, recursionStack = []
       });
     });
   }
-  if (resolvedSchema.patternProperties) {
+  if (resolvedSchema.patternProperties && !resolvedSchema.oneOf && !resolvedSchema.anyOf) {
     Object.entries(resolvedSchema.patternProperties).forEach(
       ([pattern, propSchema], index2) => {
-        const patternKey = `__pattern_${index2}_${pattern.replace(/[^a-zA-Z0-9]/g, "_")}`;
+        const patternKey = `(pattern-${index2})`;
         const currentPath = [...path, patternKey];
         const patternPathKey = currentPath.join(".");
         if (newRecursionStack.includes(patternPathKey)) {
@@ -3460,7 +3761,7 @@ function extractProperties(schema2, path, depth, rootSchema, recursionStack = []
           __pattern: pattern
         };
         properties.push({
-          name: `{name}`,
+          name: `{pattern}`,
           schema: syntheticSchema,
           required: false,
           // Pattern properties are never required individually
@@ -3596,6 +3897,117 @@ function getUnsupportedFeatures(schema2) {
     unsupported.push("unevaluatedItems");
   }
   return unsupported;
+}
+function searchInSchema$1(schema2, rootSchema, query, searchIncludesExamples = false, propertyName, visited = /* @__PURE__ */ new Set(), depth = 0) {
+  var _a2, _b2;
+  if (depth > 10 || visited.has(schema2)) {
+    return false;
+  }
+  visited.add(schema2);
+  const queryLower = query.toLowerCase();
+  if (propertyName && propertyName.toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if ((_a2 = schema2.description) == null ? void 0 : _a2.toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if (getSchemaType(schema2).toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if (searchIncludesExamples && ((_b2 = schema2.examples) == null ? void 0 : _b2.some((example) => {
+    const exampleText = typeof example === "string" ? example : JSON.stringify(example);
+    return exampleText.toLowerCase().includes(queryLower);
+  }))) {
+    return true;
+  }
+  const resolved = resolveSchema(schema2, rootSchema);
+  if (resolved.properties) {
+    for (const [propName, propSchema] of Object.entries(resolved.properties)) {
+      if (searchInSchema$1(
+        propSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        propName,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.patternProperties) {
+    for (const [_pattern, propSchema] of Object.entries(
+      resolved.patternProperties
+    )) {
+      if (searchInSchema$1(
+        propSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.oneOf) {
+    for (const subSchema of resolved.oneOf) {
+      if (searchInSchema$1(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.allOf) {
+    for (const subSchema of resolved.allOf) {
+      if (searchInSchema$1(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.anyOf) {
+    for (const subSchema of resolved.anyOf) {
+      if (searchInSchema$1(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+function hashToPropertyKey(hash) {
+  if (!hash) return "";
+  const cleanHash = hash.startsWith("#") ? hash.substring(1) : hash;
+  return cleanHash.replace(/-(?![^(]*\))/g, ".");
+}
+function propertyKeyToHash(propertyKey) {
+  if (!propertyKey) return "";
+  return propertyKey.replace(/\.(?![^(]*\))/g, "-");
 }
 function useSystemTheme() {
   const [theme, setTheme] = useState(() => {
@@ -12717,49 +13129,24 @@ const ExamplesPanel = ({
   currentProperty,
   rootSchema,
   propertyPath,
-  onCopy
+  onCopy,
+  options
 }) => {
   const [selectedFormat, setSelectedFormat] = useState(() => {
+    const defaultLanguage = (options == null ? void 0 : options.defaultExampleLanguage) || "yaml";
     if (typeof window === "undefined") {
-      return "toml";
+      return defaultLanguage;
     }
     try {
-      return localStorage.getItem("deckard-examples-format") || "toml";
+      return localStorage.getItem("deckard-examples-format") || defaultLanguage;
     } catch {
-      return "toml";
+      return defaultLanguage;
     }
   });
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    const handleStorageChange = (e) => {
-      if (e.key === "deckard-examples-format" && e.newValue) {
-        const newFormat = e.newValue;
-        if (newFormat && ["json", "yaml", "toml"].includes(newFormat)) {
-          setSelectedFormat(newFormat);
-        }
-      }
-    };
-    window.addEventListener("storage", handleStorageChange);
-    const handleFormatChange = (e) => {
-      const newFormat = e.detail;
-      if (newFormat && ["json", "yaml", "toml"].includes(newFormat)) {
-        setSelectedFormat(newFormat);
-      }
-    };
-    window.addEventListener(
-      "deckard-format-change",
-      handleFormatChange
-    );
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener(
-        "deckard-format-change",
-        handleFormatChange
-      );
-    };
-  }, []);
+    const defaultLanguage = (options == null ? void 0 : options.defaultExampleLanguage) || "yaml";
+    setSelectedFormat(defaultLanguage);
+  }, [options == null ? void 0 : options.defaultExampleLanguage]);
   const [highlighter, setHighlighter] = useState(null);
   const [highlighterError, setHighlighterError] = useState(false);
   const [lineWrap, setLineWrap] = useState(false);
@@ -12907,15 +13294,6 @@ const ExamplesPanel = ({
             value: selectedFormat,
             onChange: (format) => {
               setSelectedFormat(format);
-              if (typeof window !== "undefined") {
-                try {
-                  localStorage.setItem("deckard-examples-format", format);
-                  window.dispatchEvent(
-                    new CustomEvent("deckard-format-change", { detail: format })
-                  );
-                } catch {
-                }
-              }
             },
             name: "format-selector",
             size: "md"
@@ -12928,7 +13306,7 @@ const ExamplesPanel = ({
             size: "xs",
             className: `wrap-toggle-button ${lineWrap ? "active" : ""}`,
             onClick: () => setLineWrap(!lineWrap),
-            title: lineWrap ? "Disable line wrap" : "Enable line wrap",
+            title: lineWrap ? "Disable line wrap." : "Enable line wrap.",
             children: lineWrap ? /* @__PURE__ */ jsx(HiArrowsRightLeft, {}) : /* @__PURE__ */ jsx(HiArrowUturnRight, { style: { transform: "scaleY(-1)" } })
           }
         )
@@ -12949,7 +13327,7 @@ const ExamplesPanel = ({
             onClick: (e) => {
               if (onCopy) {
                 onCopy(code, e.currentTarget);
-              } else if (typeof window !== "undefined") {
+              } else if (typeof window !== "undefined" && typeof document !== "undefined") {
                 navigator.clipboard.writeText(code).catch(() => {
                   const textArea = document.createElement("textarea");
                   textArea.value = code;
@@ -12960,7 +13338,7 @@ const ExamplesPanel = ({
                 });
               }
             },
-            title: "Copy this example",
+            title: "Copy this example.",
             children: /* @__PURE__ */ jsx(FaCopy, {})
           }
         )
@@ -13050,57 +13428,11 @@ const PropertyDetails = ({
   propertyStates,
   toggleProperty,
   focusedProperty,
-  onFocusChange
+  onFocusChange,
+  options,
+  searchQuery
 }) => {
   const constraints = getConstraints(property.schema);
-  useCallback(
-    (e) => {
-      e.stopPropagation();
-      const text2 = e.currentTarget.textContent || "";
-      if (text2.length > 2) {
-        onCopy(text2, e.currentTarget);
-      }
-    },
-    [onCopy]
-  );
-  const CodeBlock = ({ content }) => {
-    const [isWrapped, setIsWrapped] = useState(false);
-    const handleCopy = useCallback(() => {
-      onCopy(content, document.createElement("div"));
-    }, [content]);
-    const toggleWrap = useCallback(() => {
-      setIsWrapped((prev) => !prev);
-    }, []);
-    return /* @__PURE__ */ jsxs(
-      "div",
-      {
-        className: `code-block-container ${isWrapped ? "wrap-enabled" : ""}`,
-        children: [
-          /* @__PURE__ */ jsxs("div", { className: "code-controls", children: [
-            /* @__PURE__ */ jsx(
-              "button",
-              {
-                className: "code-control-button",
-                onClick: handleCopy,
-                title: "Copy to clipboard",
-                children: /* @__PURE__ */ jsx(FaCopy, {})
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              "button",
-              {
-                className: `code-control-button ${isWrapped ? "wrap-enabled" : ""}`,
-                onClick: toggleWrap,
-                title: "Toggle line wrap",
-                children: /* @__PURE__ */ jsx(HiBarsArrowDown, {})
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsx("pre", { children: /* @__PURE__ */ jsx("code", { children: content }) })
-        ]
-      }
-    );
-  };
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     property.schema.__isPatternProperty && property.schema.__pattern && /* @__PURE__ */ jsxs("div", { className: "pattern-info", children: [
       /* @__PURE__ */ jsx(Badge, { variant: "label", size: "xs", uppercase: true, children: "Pattern:" }),
@@ -13120,12 +13452,15 @@ const PropertyDetails = ({
       {
         oneOfOptions: property.schema.oneOf,
         rootSchema,
+        propertyPath: property.path,
         _onCopy: onCopy,
         onCopyLink,
         propertyStates,
         toggleProperty,
         focusedProperty,
-        onFocusChange
+        onFocusChange,
+        options,
+        searchQuery
       }
     ),
     property.schema.allOf && rootSchema && /* @__PURE__ */ jsx(
@@ -13139,7 +13474,9 @@ const PropertyDetails = ({
         toggleProperty,
         focusedProperty,
         onFocusChange,
-        propertyPath: property.path
+        propertyPath: property.path,
+        options,
+        searchQuery
       }
     ),
     getUnsupportedFeatures(property.schema).map((feature) => {
@@ -13208,29 +13545,116 @@ const PropertyDetails = ({
         feature
       );
     }),
-    constraints.length > 0 && /* @__PURE__ */ jsx("div", { className: "constraints", children: constraints.map((constraint, index2) => /* @__PURE__ */ jsx(
-      CodeSnippet,
-      {
-        code: `${constraint.label}: ${String(constraint.value)}`,
-        variant: "constraint",
-        size: "xs",
-        copyable: false
-      },
-      index2
-    )) }),
+    constraints.length > 0 && /* @__PURE__ */ jsx("div", { className: "constraints", children: constraints.map((constraint, index2) => {
+      if (["range", "length", "items", "multipleOf"].includes(
+        constraint.type
+      )) {
+        return /* @__PURE__ */ jsxs(Badge, { variant: "enum", size: "xs", children: [
+          constraint.label,
+          ": ",
+          String(constraint.value)
+        ] }, index2);
+      }
+      return /* @__PURE__ */ jsx(
+        CodeSnippet,
+        {
+          code: `${constraint.label}: ${String(constraint.value)}`,
+          variant: "constraint",
+          size: "xs",
+          copyable: false
+        },
+        index2
+      );
+    }) }),
     property.schema.enum && /* @__PURE__ */ jsx(
       BadgeGroup,
       {
         values: property.schema.enum,
         onValueClick: (value) => {
-          onCopy(JSON.stringify(value), document.createElement("div"));
+          const copyValue = typeof value === "string" ? value : value === null ? "null" : value === void 0 ? "undefined" : typeof value === "boolean" || typeof value === "number" ? String(value) : JSON.stringify(value);
+          const element2 = typeof document !== "undefined" ? document.createElement("div") : null;
+          onCopy(copyValue, element2);
         },
         badgeVariant: "enum",
         badgeSize: "xs"
       }
     ),
-    property.schema.default !== void 0 && /* @__PURE__ */ jsx("div", { className: "default-value", children: /* @__PURE__ */ jsx(CodeBlock, { content: JSON.stringify(property.schema.default) }) })
+    property.schema.default !== void 0 && /* @__PURE__ */ jsx(
+      BadgeGroup,
+      {
+        values: [property.schema.default],
+        label: "default",
+        showLabel: true,
+        onValueClick: (value) => {
+          const copyValue = value === null ? "null" : value === void 0 ? "undefined" : typeof value === "boolean" || typeof value === "number" ? String(value) : JSON.stringify(value);
+          const element2 = typeof document !== "undefined" ? document.createElement("div") : null;
+          onCopy(copyValue, element2);
+        },
+        badgeVariant: "default-value",
+        badgeSize: "xs"
+      }
+    )
   ] });
+};
+const getTypeDescription$1 = (type2) => {
+  switch (type2.toLowerCase()) {
+    case "string":
+      return "Text data - can contain letters, numbers, and symbols.";
+    case "number":
+      return "Numeric data - integers and decimal numbers.";
+    case "integer":
+      return "Whole number data - no decimal places allowed.";
+    case "boolean":
+      return "True or false value.";
+    case "array":
+      return "List of items - can contain multiple values.";
+    case "object":
+      return "Structured data with properties and values.";
+    case "null":
+      return "Represents no value or empty data.";
+    case "oneof":
+      return "Must match exactly one of the defined schemas.";
+    case "anyof":
+      return "Must match at least one of the defined schemas.";
+    case "enum":
+      return "Must be one of a specific set of predefined values.";
+    default:
+      if (type2.includes("|")) {
+        return "Can be one of multiple data types.";
+      }
+      return "The expected data type for this property.";
+  }
+};
+const getEnumId$1 = (schema2) => {
+  if (schema2.__originalRef && typeof schema2.__originalRef === "string") {
+    const match = schema2.__originalRef.match(/#\/definitions\/(.+)$/);
+    if (match && match[1].trim()) {
+      return match[1];
+    }
+  }
+  if (schema2.$ref && typeof schema2.$ref === "string") {
+    const match = schema2.$ref.match(/#\/definitions\/(.+)$/);
+    if (match && match[1].trim()) {
+      return match[1];
+    }
+  }
+  return null;
+};
+const getEnumDescription$1 = (schema2, rootSchema) => {
+  const refToUse = schema2.__originalRef || schema2.$ref;
+  if (refToUse && rootSchema) {
+    const enumId = getEnumId$1(schema2);
+    if (enumId && rootSchema.definitions && rootSchema.definitions[enumId]) {
+      const resolvedSchema = rootSchema.definitions[enumId];
+      if (resolvedSchema.description) {
+        return resolvedSchema.description;
+      }
+    }
+  }
+  if (schema2.description) {
+    return schema2.description;
+  }
+  return "No description provided for this enumerated type.";
 };
 const PropertyRow = ({
   property,
@@ -13246,12 +13670,18 @@ const PropertyRow = ({
   rootSchema,
   toggleProperty,
   focusedProperty,
-  onFocusChange
+  onFocusChange,
+  options,
+  searchQuery,
+  examplesHidden = false
 }) => {
   const [isActiveRoute, setIsActiveRoute] = useState(false);
+  const hasValidSchema = property.schema != null;
   const nestedProperties = useMemo(() => {
-    if (!property.schema.properties && !property.schema.patternProperties || !rootSchema)
+    if (!rootSchema || !hasValidSchema) return [];
+    if (property.schema.oneOf || property.schema.allOf) {
       return [];
+    }
     const props = extractProperties(
       property.schema,
       property.path,
@@ -13262,15 +13692,22 @@ const PropertyRow = ({
     return props.sort(
       (a, b) => a.name.localeCompare(b.name)
     );
-  }, [property.schema, property.path, property.depth, rootSchema]);
+  }, [
+    property.schema,
+    property.path,
+    property.depth,
+    rootSchema,
+    hasValidSchema
+  ]);
   const hasNestedProperties = nestedProperties.length > 0;
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
     const checkActiveRoute = () => {
-      const hash = window.location.hash.replace("#", "");
-      setIsActiveRoute(hash === propertyKey);
+      const hash = window.location.hash;
+      const fieldKey = hashToPropertyKey(hash);
+      setIsActiveRoute(fieldKey === propertyKey);
     };
     checkActiveRoute();
     const handleHashChange = () => checkActiveRoute();
@@ -13281,36 +13718,48 @@ const PropertyRow = ({
   const handleHeaderClick = useCallback(
     (e) => {
       e.stopPropagation();
-      if (collapsible) {
+      if (collapsible && hasValidSchema) {
         onToggle();
       }
       onFocusChange == null ? void 0 : onFocusChange(propertyKey);
     },
-    [collapsible, onToggle, propertyKey, onFocusChange]
+    [collapsible, onToggle, propertyKey, onFocusChange, hasValidSchema]
   );
   const handleKeyDown = useCallback(
     (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        if (collapsible) {
+        if (collapsible && hasValidSchema) {
           onToggle();
         }
       }
     },
-    [collapsible, onToggle]
+    [collapsible, onToggle, hasValidSchema]
   );
   const handleLinkClick = useCallback(
     (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!state.expanded) {
-        onToggle();
+      if (e.button === 1 || e.ctrlKey || e.metaKey) {
+        return;
       }
       onFocusChange == null ? void 0 : onFocusChange(propertyKey);
-      onCopyLink(propertyKey, e.currentTarget);
+      if (collapsible && hasValidSchema && !state.expanded) {
+        onToggle();
+      }
     },
-    [onCopyLink, propertyKey, state.expanded, onToggle, onFocusChange]
+    [
+      onFocusChange,
+      propertyKey,
+      collapsible,
+      hasValidSchema,
+      state.expanded,
+      onToggle
+    ]
   );
+  const linkHref = useMemo(() => {
+    if (typeof window === "undefined") return "#";
+    const anchor = `#${propertyKeyToHash(propertyKey)}`;
+    return `${window.location.origin}${window.location.pathname}${anchor}`;
+  }, [propertyKey]);
   const handleFieldClick = useCallback(
     (e) => {
       var _a2;
@@ -13339,7 +13788,9 @@ const PropertyRow = ({
         propertyStates,
         toggleProperty,
         focusedProperty,
-        onFocusChange
+        onFocusChange,
+        options,
+        searchQuery
       }
     );
   }, [
@@ -13350,20 +13801,23 @@ const PropertyRow = ({
     propertyStates,
     toggleProperty,
     focusedProperty,
-    onFocusChange
+    onFocusChange,
+    options,
+    searchQuery
   ]);
   const propertyClasses = [
     "property",
     property.depth > 0 ? "nested-property" : "",
     state.expanded ? "expanded" : "",
     property.depth > 0 ? `depth-${Math.min(property.depth, 3)}` : "",
-    includeExamples && hasExamples(property.schema) ? "has-examples" : ""
+    includeExamples && hasValidSchema && hasExamples(property.schema) ? "has-examples" : "",
+    !hasValidSchema ? "invalid-schema" : ""
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ jsxs(
     Row,
     {
       className: `${propertyClasses} ${focusedProperty === propertyKey ? "focused" : ""}`,
-      id: propertyKey.replace(/\./g, "-"),
+      id: propertyKeyToHash(propertyKey),
       "data-property-key": propertyKey,
       onClick: handleFieldClick,
       children: [
@@ -13373,41 +13827,89 @@ const PropertyRow = ({
             className: "row-header-container property-header-container",
             onClick: handleHeaderClick,
             onKeyDown: handleKeyDown,
-            tabIndex: collapsible ? 0 : -1,
-            role: collapsible ? "button" : void 0,
-            "aria-expanded": state.expanded,
-            "aria-label": state.expanded ? `Collapse ${property.name}` : `Expand ${property.name}`,
+            tabIndex: collapsible && hasValidSchema ? 0 : -1,
+            role: collapsible && hasValidSchema ? "button" : void 0,
+            "aria-expanded": hasValidSchema ? state.expanded : void 0,
+            "aria-label": hasValidSchema && state.expanded ? `Collapse ${property.name}` : hasValidSchema ? `Expand ${property.name}` : `${property.name} - Invalid schema`,
             style: {
-              cursor: collapsible ? "pointer" : "default"
+              cursor: collapsible && hasValidSchema ? "pointer" : "default"
             },
             children: [
               /* @__PURE__ */ jsxs("div", { className: "row-controls property-controls", children: [
-                isActiveRoute && /* @__PURE__ */ jsx(Tooltip, { content: "Current active route", placement: "top", children: /* @__PURE__ */ jsx(
-                  "span",
+                searchQuery && state.matchesSearch && /* @__PURE__ */ jsx(
+                  Tooltip,
                   {
-                    className: "row-button active-route-indicator",
-                    "aria-label": `${property.name} is the current active route`,
-                    children: /* @__PURE__ */ jsx(FaMapPin, {})
+                    title: state.isDirectMatch && state.hasNestedMatches ? "Direct and nested search match" : state.isDirectMatch ? "Direct search match" : "Indirect search match",
+                    content: state.isDirectMatch && state.hasNestedMatches ? "This property matches your search query and also contains nested matches." : state.isDirectMatch ? "This property matches your search query." : "This property has nested properties that match your search.",
+                    placement: "top",
+                    children: /* @__PURE__ */ jsx(
+                      "span",
+                      {
+                        className: `row-button search-hit-indicator ${state.isDirectMatch && state.hasNestedMatches ? "both-hit" : state.isDirectMatch ? "direct-hit" : "indirect-hit"}`,
+                        "aria-label": `${property.name} ${state.isDirectMatch && state.hasNestedMatches ? "matches search and contains nested matches" : state.isDirectMatch ? "matches current search" : "contains nested search matches"}`,
+                        children: state.isDirectMatch && state.hasNestedMatches ? /* @__PURE__ */ jsx(FaSitemap, {}) : state.isDirectMatch ? /* @__PURE__ */ jsx(FaFolder, {}) : /* @__PURE__ */ jsx(FaFolderOpen, {})
+                      }
+                    )
                   }
-                ) }),
-                /* @__PURE__ */ jsx(
-                  "button",
+                ),
+                examplesHidden && hasExamples(property.schema) && /* @__PURE__ */ jsx(
+                  Tooltip,
                   {
-                    className: "row-button link-button",
-                    onClick: handleLinkClick,
-                    title: "Copy link to this field",
-                    "aria-label": `Copy link to ${property.name} field`,
-                    children: /* @__PURE__ */ jsx(FaLink, {})
+                    title: "Examples hidden",
+                    content: "Examples are available for this property but are currently hidden. Press 'e' to show examples.",
+                    placement: "top",
+                    children: /* @__PURE__ */ jsx(
+                      "span",
+                      {
+                        className: "examples-hidden-indicator",
+                        "aria-label": `${property.name} has examples that are currently hidden`,
+                        children: /* @__PURE__ */ jsx(FaEyeSlash, {})
+                      }
+                    )
                   }
                 ),
                 /* @__PURE__ */ jsx(
-                  "button",
+                  Tooltip,
                   {
-                    className: "row-button expand-button",
-                    onClick: handleHeaderClick,
-                    tabIndex: -1,
-                    "aria-hidden": "true",
-                    children: state.expanded ? /* @__PURE__ */ jsx(FaChevronDown, {}) : /* @__PURE__ */ jsx(FaChevronRight, {})
+                    title: isActiveRoute ? "Current active route" : "Link to field",
+                    content: isActiveRoute ? "This field is currently focused via URL hash." : "Navigate to this field via URL.",
+                    placement: "top",
+                    children: /* @__PURE__ */ jsx(
+                      "a",
+                      {
+                        href: linkHref,
+                        className: `row-button link-button ${isActiveRoute ? "active-route" : ""}`,
+                        onClick: handleLinkClick,
+                        "aria-label": isActiveRoute ? `${property.name} is the current active route` : `Link to ${property.name} field`,
+                        children: isActiveRoute ? /* @__PURE__ */ jsx(FaMapPin, {}) : /* @__PURE__ */ jsx(FaLink, {})
+                      }
+                    )
+                  }
+                ),
+                collapsible && hasValidSchema && /* @__PURE__ */ jsx(
+                  Tooltip,
+                  {
+                    title: state.expanded ? "Collapse property" : "Expand property",
+                    content: state.expanded ? "Hide property details and nested properties." : "Show property details and nested properties.",
+                    placement: "top",
+                    children: /* @__PURE__ */ jsx(
+                      "button",
+                      {
+                        className: "row-button expand-button",
+                        onClick: handleHeaderClick,
+                        tabIndex: -1,
+                        "aria-hidden": "true",
+                        children: state.expanded ? /* @__PURE__ */ jsx(FaChevronDown, {}) : /* @__PURE__ */ jsx(FaChevronRight, {})
+                      }
+                    )
+                  }
+                ),
+                !hasValidSchema && /* @__PURE__ */ jsx(
+                  "span",
+                  {
+                    className: "invalid-schema-indicator",
+                    title: "Invalid schema data.",
+                    children: "⚠️"
                   }
                 )
               ] }),
@@ -13419,48 +13921,78 @@ const PropertyRow = ({
                     children: property.schema.__isPatternProperty ? /* @__PURE__ */ jsx(
                       Tooltip,
                       {
-                        content: /* @__PURE__ */ jsxs("div", { children: [
-                          /* @__PURE__ */ jsx("strong", { children: "Pattern Property" }),
-                          /* @__PURE__ */ jsx("br", {}),
-                          "This represents dynamic field names. Unlike fixed property names, this can match multiple different field names in your data."
-                        ] }),
+                        title: "Pattern property",
+                        content: "This represents dynamic field names. Unlike fixed property names, this can match multiple different field names in your data.",
                         placement: "top",
+                        nonInteractive: true,
                         children: /* @__PURE__ */ jsx(Badge, { variant: "pattern", size: "sm", children: property.name })
                       }
                     ) : property.name
                   }
                 ),
-                schemaType && /* @__PURE__ */ jsx(Badge, { variant: "type", size: "sm", children: schemaType }),
-                property.required && /* @__PURE__ */ jsx(Badge, { variant: "required", size: "sm", children: "required" }),
-                !state.expanded && property.schema.description && /* @__PURE__ */ jsx("span", { className: "property-description-inline", children: property.schema.description })
+                property.schema.enum || getEnumId$1(property.schema) ? /* @__PURE__ */ jsx(
+                  Tooltip,
+                  {
+                    title: "Data type",
+                    content: getEnumDescription$1(property.schema, rootSchema),
+                    placement: "top",
+                    nonInteractive: true,
+                    children: /* @__PURE__ */ jsx(Badge, { variant: "custom-type", size: "sm", children: getEnumId$1(property.schema) || "enum" })
+                  }
+                ) : schemaType && /* @__PURE__ */ jsx(
+                  Tooltip,
+                  {
+                    title: "Data type",
+                    content: getTypeDescription$1(schemaType),
+                    placement: "top",
+                    nonInteractive: true,
+                    children: /* @__PURE__ */ jsx(Badge, { variant: "type", size: "sm", children: schemaType })
+                  }
+                ),
+                property.required && /* @__PURE__ */ jsx(
+                  Tooltip,
+                  {
+                    title: "Required property",
+                    content: "This property must be present in valid data.",
+                    placement: "top",
+                    nonInteractive: true,
+                    children: /* @__PURE__ */ jsx(Badge, { variant: "required", size: "sm", children: "required" })
+                  }
+                ),
+                !state.expanded && hasValidSchema && property.schema.description && /* @__PURE__ */ jsx("span", { className: "property-description-inline", children: property.schema.description }),
+                !state.expanded && !hasValidSchema && /* @__PURE__ */ jsx("span", { className: "property-description-inline invalid-schema-description", children: "Schema data is undefined or invalid" })
               ] }) })
             ]
           }
         ),
-        state.expanded && /* @__PURE__ */ jsxs(Fragment, { children: [
+        state.expanded && hasValidSchema && /* @__PURE__ */ jsxs(Fragment, { children: [
           /* @__PURE__ */ jsx(
             "div",
             {
-              className: `schema-details ${includeExamples && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? "schema-details-split" : ""}`,
+              className: `schema-details ${includeExamples && !examplesHidden && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? "schema-details-split" : ""}`,
               "data-has-examples": hasExamples(property.schema),
               "data-include-examples": includeExamples,
-              "data-split-active": includeExamples && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true),
-              children: includeExamples && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? /* @__PURE__ */ jsxs(Fragment, { children: [
+              "data-split-active": includeExamples && !examplesHidden && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true),
+              children: includeExamples && !examplesHidden && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? /* @__PURE__ */ jsxs(Fragment, { children: [
                 /* @__PURE__ */ jsx("div", { className: "schema-details-left", children: renderPropertyDetails() }),
                 /* @__PURE__ */ jsx(
                   "div",
                   {
                     className: "schema-details-right",
                     "data-debug": "examples-panel-container",
-                    children: /* @__PURE__ */ jsx(
+                    children: rootSchema ? /* @__PURE__ */ jsx(
                       ExamplesPanel,
                       {
                         currentProperty: property.schema,
                         rootSchema,
                         propertyPath: property.path || [propertyKey],
-                        onCopy
+                        onCopy,
+                        options
                       }
-                    )
+                    ) : /* @__PURE__ */ jsx("div", { className: "examples-panel-unavailable", children: /* @__PURE__ */ jsxs("div", { className: "examples-panel-message", children: [
+                      /* @__PURE__ */ jsx("span", { className: "examples-panel-icon", children: "ⓘ" }),
+                      "Root schema unavailable"
+                    ] }) })
                   }
                 )
               ] }) : renderPropertyDetails()
@@ -13476,12 +14008,15 @@ const PropertyRow = ({
               onCopy,
               onCopyLink,
               collapsible,
-              includeExamples,
+              includeExamples: includeExamples && !examplesHidden,
               examplesOnFocusOnly,
               rootSchema,
               toggleProperty,
               focusedProperty,
-              onFocusChange
+              onFocusChange,
+              options,
+              searchQuery,
+              examplesHidden
             }
           )
         ] })
@@ -13521,7 +14056,10 @@ const Rows = ({
   focusedProperty,
   onFocusChange,
   showNoAdditionalProperties = false,
-  className = ""
+  className = "",
+  options,
+  searchQuery,
+  examplesHidden = false
 }) => {
   const rowsClasses = ["properties-rows", className].filter(Boolean).join(" ");
   return /* @__PURE__ */ jsxs("div", { className: rowsClasses, children: [
@@ -13541,11 +14079,14 @@ const Rows = ({
           collapsible,
           includeExamples,
           examplesOnFocusOnly,
-          propertyStates,
           rootSchema,
+          propertyStates,
           toggleProperty,
           focusedProperty,
-          onFocusChange
+          onFocusChange,
+          options,
+          searchQuery,
+          examplesHidden
         },
         propertyKey
       );
@@ -13556,12 +14097,15 @@ const Rows = ({
 const OneOfSelector = ({
   oneOfOptions,
   rootSchema,
+  propertyPath = [],
   _onCopy,
   onCopyLink,
   propertyStates: _propertyStates = {},
   toggleProperty,
   focusedProperty,
-  onFocusChange
+  onFocusChange,
+  options,
+  searchQuery
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const resolvedOptions = useMemo(
@@ -13571,11 +14115,19 @@ const OneOfSelector = ({
   const getOptionDisplay = useCallback(
     (option2, index2) => {
       var _a2;
+      let searchHitStatus = "none";
+      if (searchQuery == null ? void 0 : searchQuery.trim()) {
+        const hasMatch = searchInSchema$1(option2, rootSchema, searchQuery, true);
+        if (hasMatch) {
+          searchHitStatus = "direct";
+        }
+      }
       if (option2.title) {
         return {
           label: option2.title,
           type: option2.type || "object",
-          isReference: Boolean(oneOfOptions[index2].$ref)
+          isReference: Boolean(oneOfOptions[index2].$ref),
+          searchHitStatus
         };
       }
       if (oneOfOptions[index2].$ref) {
@@ -13584,7 +14136,8 @@ const OneOfSelector = ({
         return {
           label: displayName,
           type: "object",
-          isReference: true
+          isReference: true,
+          searchHitStatus
         };
       }
       if (option2.type) {
@@ -13592,16 +14145,18 @@ const OneOfSelector = ({
         return {
           label: types2.join(" | "),
           type: types2.join(" | "),
-          isReference: false
+          isReference: false,
+          searchHitStatus
         };
       }
       return {
         label: "Unknown",
         type: "unknown",
-        isReference: false
+        isReference: false,
+        searchHitStatus
       };
     },
-    [oneOfOptions]
+    [oneOfOptions, searchQuery, rootSchema]
   );
   const selectedOption = resolvedOptions[selectedIndex];
   const optionDisplays = resolvedOptions.map(getOptionDisplay);
@@ -13610,16 +14165,16 @@ const OneOfSelector = ({
     if (!(currentOption == null ? void 0 : currentOption.properties)) {
       return [];
     }
-    const oneOfPath = ["oneof", selectedIndex.toString()];
+    const basePath = propertyPath.length > 0 ? propertyPath : ["oneof", selectedIndex.toString()];
     const properties = extractProperties(
       currentOption,
-      oneOfPath,
+      basePath,
       0,
       rootSchema,
       []
     );
     return properties.sort((a, b) => a.name.localeCompare(b.name));
-  }, [resolvedOptions, selectedIndex, rootSchema]);
+  }, [resolvedOptions, selectedIndex, rootSchema, propertyPath]);
   const [internalPropertyStates, setInternalPropertyStates] = useState({});
   const oneOfPropertyStates = useMemo(() => {
     const states = {};
@@ -13628,7 +14183,9 @@ const OneOfSelector = ({
       states[key2] = internalPropertyStates[key2] || {
         expanded: false,
         hasDetails: true,
-        matchesSearch: true
+        matchesSearch: true,
+        isDirectMatch: false,
+        hasNestedMatches: false
       };
     });
     return states;
@@ -13643,7 +14200,9 @@ const OneOfSelector = ({
             ...prev[propertyKey],
             expanded: !((_a2 = prev[propertyKey]) == null ? void 0 : _a2.expanded),
             hasDetails: true,
-            matchesSearch: true
+            matchesSearch: true,
+            isDirectMatch: false,
+            hasNestedMatches: false
           }
         };
       });
@@ -13652,19 +14211,18 @@ const OneOfSelector = ({
     [toggleProperty]
   );
   return /* @__PURE__ */ jsxs("div", { className: "oneof-selector", children: [
-    "hehe",
     /* @__PURE__ */ jsx("div", { className: "oneof-tabs", children: optionDisplays.map((display, index2) => /* @__PURE__ */ jsx(
       "button",
       {
-        className: `oneof-tab ${selectedIndex === index2 ? "active" : ""}`,
+        className: `oneof-tab ${selectedIndex === index2 ? "active" : ""} ${display.searchHitStatus !== "none" ? `search-hit ${display.searchHitStatus}-hit` : ""}`,
         onClick: () => setSelectedIndex(index2),
-        title: display.isReference ? `Complex object: ${display.label}` : `Primitive types: ${display.type}`,
+        title: display.isReference ? `Complex object: ${display.label}${display.searchHitStatus !== "none" ? " (matches search)" : ""}` : `Primitive types: ${display.type}${display.searchHitStatus !== "none" ? " (matches search)" : ""}`,
         children: /* @__PURE__ */ jsx(
           Badge,
           {
             variant: display.isReference ? "reference" : "type",
             size: "md",
-            className: selectedIndex === index2 ? "selected" : "unselected",
+            className: `${selectedIndex === index2 ? "selected" : "unselected"} ${display.searchHitStatus !== "none" ? `search-hit ${display.searchHitStatus}-hit` : ""}`,
             children: display.label
           }
         )
@@ -13687,9 +14245,11 @@ const OneOfSelector = ({
           includeExamples: true,
           examplesOnFocusOnly: false,
           rootSchema,
-          toggleProperty: handleInternalToggle,
+          toggleProperty,
           focusedProperty,
-          onFocusChange
+          onFocusChange,
+          options,
+          searchQuery
         }
       ) })
     ] })
@@ -13704,7 +14264,9 @@ const AllOfSelector = ({
   toggleProperty,
   focusedProperty,
   onFocusChange,
-  propertyPath = []
+  propertyPath = [],
+  options,
+  searchQuery
 }) => {
   const mergedSchema = useMemo(() => {
     const resolvedOptions = allOfOptions.map((option2) => {
@@ -13713,15 +14275,10 @@ const AllOfSelector = ({
     const merged = {
       type: "object",
       properties: {},
-      required: [],
-      description: ""
+      required: []
     };
-    const descriptions = [];
     const allRequired = /* @__PURE__ */ new Set();
     resolvedOptions.forEach((option2, _index) => {
-      if (option2.description) {
-        descriptions.push(option2.description);
-      }
       if (option2.properties) {
         merged.properties = {
           ...merged.properties,
@@ -13742,19 +14299,15 @@ const AllOfSelector = ({
       }
     });
     merged.required = Array.from(allRequired);
-    if (descriptions.length > 0) {
-      merged.description = descriptions.join(" ");
-    }
     return merged;
   }, [allOfOptions, rootSchema]);
   const mergedProperties = useMemo(() => {
     if (!mergedSchema.properties && !mergedSchema.patternProperties) {
       return [];
     }
-    const allOfPath = [...propertyPath, "allof"];
     const properties = extractProperties(
       mergedSchema,
-      allOfPath,
+      propertyPath,
       0,
       rootSchema,
       []
@@ -13768,7 +14321,9 @@ const AllOfSelector = ({
       states[key2] = (propertyStates == null ? void 0 : propertyStates[key2]) || {
         expanded: false,
         hasDetails: true,
-        matchesSearch: true
+        matchesSearch: true,
+        isDirectMatch: false,
+        hasNestedMatches: false
       };
     });
     return states;
@@ -13780,7 +14335,6 @@ const AllOfSelector = ({
     [toggleProperty]
   );
   return /* @__PURE__ */ jsx("div", { className: "allof-selector", children: /* @__PURE__ */ jsxs("div", { className: "allof-content", children: [
-    mergedSchema.description && /* @__PURE__ */ jsx("div", { className: "allof-description", children: /* @__PURE__ */ jsx("div", { className: "property-description-block", children: mergedSchema.description }) }),
     mergedProperties.length > 0 && /* @__PURE__ */ jsx("div", { className: "allof-properties", children: /* @__PURE__ */ jsx(
       Rows,
       {
@@ -13796,9 +14350,11 @@ const AllOfSelector = ({
         includeExamples: true,
         examplesOnFocusOnly: false,
         rootSchema,
-        toggleProperty: handleAllOfToggle,
+        toggleProperty,
         focusedProperty,
-        onFocusChange
+        onFocusChange,
+        options,
+        searchQuery
       }
     ) }),
     mergedProperties.length === 0 && /* @__PURE__ */ jsx("div", { className: "allof-empty", children: /* @__PURE__ */ jsx("p", { children: "No properties found in the combined schemas." }) })
@@ -13826,6 +14382,179 @@ const SchemaWarning = ({
     ] })
   ] });
 };
+function isDirectPropertyMatch(schema2, rootSchema, query, searchIncludesExamples = false, propertyName, visited = /* @__PURE__ */ new Set(), depth = 0) {
+  var _a2, _b2;
+  if (depth > 10 || visited.has(schema2)) {
+    return false;
+  }
+  visited.add(schema2);
+  const queryLower = query.toLowerCase();
+  const resolved = resolveSchema(schema2, rootSchema);
+  if (propertyName && propertyName.toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if ((_a2 = resolved.description) == null ? void 0 : _a2.toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if (getSchemaType(resolved).toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if (searchIncludesExamples && ((_b2 = resolved.examples) == null ? void 0 : _b2.some((example) => {
+    const exampleText = typeof example === "string" ? example : JSON.stringify(example);
+    return exampleText.toLowerCase().includes(queryLower);
+  }))) {
+    return true;
+  }
+  if (resolved.oneOf) {
+    for (let i = 0; i < resolved.oneOf.length; i++) {
+      const subSchema = resolved.oneOf[i];
+      if (isDirectPropertyMatch(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.allOf) {
+    for (const subSchema of resolved.allOf) {
+      if (isDirectPropertyMatch(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.anyOf) {
+    for (const subSchema of resolved.anyOf) {
+      if (isDirectPropertyMatch(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+function searchInSchema(schema2, rootSchema, query, searchIncludesExamples = false, propertyName, visited = /* @__PURE__ */ new Set(), depth = 0) {
+  var _a2, _b2;
+  if (depth > 10 || visited.has(schema2)) {
+    return false;
+  }
+  visited.add(schema2);
+  const queryLower = query.toLowerCase();
+  if (propertyName && propertyName.toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if ((_a2 = schema2.description) == null ? void 0 : _a2.toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if (getSchemaType(schema2).toLowerCase().includes(queryLower)) {
+    return true;
+  }
+  if (searchIncludesExamples && ((_b2 = schema2.examples) == null ? void 0 : _b2.some((example) => {
+    const exampleText = typeof example === "string" ? example : JSON.stringify(example);
+    return exampleText.toLowerCase().includes(queryLower);
+  }))) {
+    return true;
+  }
+  const resolved = resolveSchema(schema2, rootSchema);
+  if (resolved.properties) {
+    for (const [propName, propSchema] of Object.entries(resolved.properties)) {
+      if (searchInSchema(
+        propSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        propName,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.patternProperties) {
+    for (const [_pattern, propSchema] of Object.entries(
+      resolved.patternProperties
+    )) {
+      if (searchInSchema(
+        propSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.oneOf) {
+    for (const subSchema of resolved.oneOf) {
+      if (searchInSchema(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.allOf) {
+    for (const subSchema of resolved.allOf) {
+      if (searchInSchema(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  if (resolved.anyOf) {
+    for (const subSchema of resolved.anyOf) {
+      if (searchInSchema(
+        subSchema,
+        rootSchema,
+        query,
+        searchIncludesExamples,
+        void 0,
+        visited,
+        depth + 1
+      )) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 const DEFAULT_OPTIONS = {
   includeHeader: true,
   includePropertiesTitle: true,
@@ -13833,9 +14562,11 @@ const DEFAULT_OPTIONS = {
   includeExamples: false,
   examplesOnFocusOnly: true,
   searchable: true,
+  searchIncludesExamples: false,
   collapsible: true,
   autoExpand: false,
-  theme: "auto"
+  theme: "auto",
+  defaultExampleLanguage: "yaml"
 };
 const loadStoredSettings = (siteKey) => {
   try {
@@ -13843,10 +14574,14 @@ const loadStoredSettings = (siteKey) => {
     const key2 = siteKey || window.location.hostname;
     const storageKey = `deckard-settings-${key2}`;
     const stored = localStorage.getItem(storageKey);
-    return stored ? JSON.parse(stored) : {};
+    const parsedSettings = stored ? JSON.parse(stored) : {};
+    if (parsedSettings.searchable === void 0) {
+      parsedSettings.searchable = true;
+    }
+    return parsedSettings;
   } catch (error2) {
     console.warn("Failed to load settings from localStorage:", error2);
-    return {};
+    return { searchable: true };
   }
 };
 const copyTimeouts = /* @__PURE__ */ new WeakMap();
@@ -13878,13 +14613,32 @@ const DeckardSchema = ({
   options = {},
   className
 }) => {
-  const storedSettings = loadStoredSettings();
-  const [currentOptions, setCurrentOptions] = useState({
-    ...DEFAULT_OPTIONS,
-    ...storedSettings,
-    ...options
-    // Props override localStorage settings
+  const storedSettings = loadStoredSettings(
+    typeof window !== "undefined" ? window.location.hostname : "default"
+  );
+  const [currentOptions, setCurrentOptions] = useState(() => {
+    const merged = {
+      ...DEFAULT_OPTIONS,
+      ...storedSettings,
+      ...options
+      // Props override localStorage settings
+    };
+    if (merged.searchable === void 0 || merged.searchable === null) {
+      merged.searchable = true;
+    }
+    return merged;
   });
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const siteKey = window.location.hostname;
+        const storageKey = `deckard-settings-${siteKey}`;
+        localStorage.setItem(storageKey, JSON.stringify(currentOptions));
+      } catch (error2) {
+        console.warn("Failed to persist settings to localStorage:", error2);
+      }
+    }
+  }, [currentOptions]);
   const mergedOptions = currentOptions;
   const {
     autoExpand,
@@ -13903,6 +14657,8 @@ const DeckardSchema = ({
     results: 0
   });
   const [focusedProperty, setFocusedProperty] = useState(null);
+  const [keyboardModalOpen, setKeyboardModalOpen] = useState(false);
+  const [examplesHidden, setExamplesHidden] = useState(false);
   const properties = useMemo(() => {
     const props = extractProperties(schema2, [], 0, schema2, []);
     return props.sort((a, b) => a.name.localeCompare(b.name));
@@ -13910,10 +14666,20 @@ const DeckardSchema = ({
   const filteredProperties = useMemo(() => {
     if (!searchState.query) return properties;
     return properties.filter((prop) => {
-      const searchText = `${prop.name} ${prop.schema.description || ""} ${getSchemaType(prop.schema)}`.toLowerCase();
-      return searchText.includes(searchState.query.toLowerCase());
+      return searchInSchema(
+        prop.schema,
+        schema2,
+        searchState.query,
+        currentOptions.searchIncludesExamples || false,
+        prop.name
+      );
     });
-  }, [properties, searchState.query, schema2]);
+  }, [
+    properties,
+    searchState.query,
+    schema2,
+    currentOptions.searchIncludesExamples
+  ]);
   useEffect(() => {
     const newStates = {};
     const initializePropertyStates = (schema22, path, depth, rootSchema) => {
@@ -13924,11 +14690,15 @@ const DeckardSchema = ({
           expanded: Boolean(autoExpand),
           hasDetails: true,
           // All fields are expandable now
-          matchesSearch: true
+          matchesSearch: true,
+          // Always true initially
+          isDirectMatch: false,
+          hasNestedMatches: false
         };
-        if (property.schema.properties || property.schema.patternProperties) {
+        const resolvedSchema = resolveSchema(property.schema, rootSchema);
+        if (resolvedSchema.properties || resolvedSchema.patternProperties) {
           initializePropertyStates(
-            property.schema,
+            resolvedSchema,
             property.path,
             depth + 1,
             rootSchema
@@ -13937,47 +14707,51 @@ const DeckardSchema = ({
       });
     };
     initializePropertyStates(schema2, [], 0, schema2);
+    setPropertyStates(newStates);
+  }, [schema2, autoExpand]);
+  useEffect(() => {
     const hash = typeof window !== "undefined" ? window.location.hash : "";
     if (hash) {
-      const fieldKey = hash.substring(1).replace(/-/g, ".");
-      const pathParts = fieldKey.split(".");
-      for (let i = 1; i <= pathParts.length; i++) {
-        const parentPath = pathParts.slice(0, i).join(".");
-        if (newStates[parentPath]) {
-          newStates[parentPath].expanded = true;
+      const fieldKey = hashToPropertyKey(hash);
+      setPropertyStates((prev) => {
+        const newStates = { ...prev };
+        const pathParts = fieldKey.split(".");
+        for (let i = 1; i <= pathParts.length; i++) {
+          const parentPath = pathParts.slice(0, i).join(".");
+          if (newStates[parentPath]) {
+            newStates[parentPath] = {
+              ...newStates[parentPath],
+              expanded: true
+            };
+          } else {
+            newStates[parentPath] = {
+              expanded: true,
+              hasDetails: true,
+              matchesSearch: true,
+              isDirectMatch: false,
+              hasNestedMatches: false
+            };
+          }
         }
-      }
-      if (newStates[fieldKey]) {
-        newStates[fieldKey].expanded = true;
-      }
+        return newStates;
+      });
       setFocusedProperty(fieldKey);
       setTimeout(() => {
         if (typeof document !== "undefined") {
           const targetElement = document.getElementById(
-            fieldKey.replace(/\./g, "-")
+            propertyKeyToHash(fieldKey)
           );
-          if (targetElement) {
-            const headerContainer = targetElement.querySelector(
-              ".property-header-container"
-            );
-            if (headerContainer) {
-              headerContainer.focus();
-            } else {
-              targetElement.setAttribute("tabindex", "-1");
-              targetElement.focus();
-            }
-            if (typeof targetElement.scrollIntoView === "function") {
-              targetElement.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-              });
-            }
+          if (targetElement && typeof targetElement.scrollIntoView === "function") {
+            targetElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+            targetElement.focus({ preventScroll: true });
           }
         }
       }, 100);
     }
-    setPropertyStates(newStates);
-  }, [schema2, autoExpand]);
+  }, []);
   useEffect(() => {
     setSearchState((prev) => ({
       ...prev,
@@ -14001,17 +14775,131 @@ const DeckardSchema = ({
       setSearchState((prev) => ({ ...prev, query }));
       if (query && collapsible) {
         const newStates = { ...propertyStates };
-        filteredProperties.forEach((prop) => {
-          var _a2;
-          const key2 = prop.path.join(".");
-          if ((_a2 = newStates[key2]) == null ? void 0 : _a2.hasDetails) {
-            newStates[key2] = { ...newStates[key2], expanded: true };
+        const queryLower = query.toLowerCase();
+        Object.keys(newStates).forEach((key2) => {
+          if (newStates[key2]) {
+            newStates[key2] = {
+              ...newStates[key2],
+              expanded: false,
+              matchesSearch: false,
+              isDirectMatch: false,
+              hasNestedMatches: false
+            };
+          }
+        });
+        const allMatches = /* @__PURE__ */ new Set();
+        const directMatches = /* @__PURE__ */ new Set();
+        Object.keys(newStates).forEach((key2) => {
+          var _a2, _b2;
+          const pathSegments = key2.split(".");
+          let currentSchema = resolveSchema(schema2, schema2);
+          let propertyName = "";
+          for (let i = 0; i < pathSegments.length; i++) {
+            const segment = pathSegments[i];
+            if (segment.startsWith("(pattern-") && segment.endsWith(")")) {
+              if (currentSchema.patternProperties) {
+                const patternEntries = Object.entries(
+                  currentSchema.patternProperties
+                );
+                const patternIndex = parseInt(
+                  ((_a2 = segment.match(/\(pattern-(\d+)\)/)) == null ? void 0 : _a2[1]) || "0"
+                );
+                if (patternEntries[patternIndex]) {
+                  const [_pattern, patternSchema] = patternEntries[patternIndex];
+                  currentSchema = resolveSchema(patternSchema, schema2);
+                  propertyName = "{pattern}";
+                }
+              }
+            } else if ((_b2 = currentSchema.properties) == null ? void 0 : _b2[segment]) {
+              currentSchema = resolveSchema(
+                currentSchema.properties[segment],
+                schema2
+              );
+              propertyName = segment;
+            }
+            if (i === pathSegments.length - 1) {
+              if (searchInSchema(
+                currentSchema,
+                schema2,
+                queryLower,
+                currentOptions.searchIncludesExamples || false,
+                propertyName
+              )) {
+                allMatches.add(key2);
+                const isDirect = isDirectPropertyMatch(
+                  currentSchema,
+                  schema2,
+                  queryLower,
+                  currentOptions.searchIncludesExamples || false,
+                  propertyName
+                );
+                if (isDirect) {
+                  directMatches.add(key2);
+                }
+              }
+            }
+          }
+        });
+        allMatches.forEach((matchKey) => {
+          if (newStates[matchKey]) {
+            const isDirect = directMatches.has(matchKey);
+            const hasChildMatches = Array.from(allMatches).some(
+              (otherKey) => otherKey !== matchKey && otherKey.startsWith(matchKey + ".")
+            );
+            newStates[matchKey] = {
+              ...newStates[matchKey],
+              expanded: false,
+              matchesSearch: true,
+              isDirectMatch: isDirect,
+              hasNestedMatches: hasChildMatches
+            };
+          }
+        });
+        allMatches.forEach((matchKey) => {
+          const pathSegments = matchKey.split(".");
+          for (let i = pathSegments.length - 1; i > 0; i--) {
+            const parentKey = pathSegments.slice(0, i).join(".");
+            if (newStates[parentKey] && !allMatches.has(parentKey)) {
+              newStates[parentKey] = {
+                ...newStates[parentKey],
+                expanded: false,
+                matchesSearch: true,
+                hasNestedMatches: true,
+                isDirectMatch: false
+              };
+              allMatches.add(parentKey);
+            } else if (newStates[parentKey] && directMatches.has(parentKey)) {
+              newStates[parentKey] = {
+                ...newStates[parentKey],
+                hasNestedMatches: true
+              };
+            }
+          }
+        });
+        setPropertyStates(newStates);
+      } else if (!query) {
+        const newStates = { ...propertyStates };
+        Object.keys(newStates).forEach((key2) => {
+          if (newStates[key2]) {
+            newStates[key2] = {
+              ...newStates[key2],
+              expanded: Boolean(autoExpand),
+              matchesSearch: true,
+              isDirectMatch: false,
+              hasNestedMatches: false
+            };
           }
         });
         setPropertyStates(newStates);
       }
     },
-    [propertyStates, filteredProperties, collapsible]
+    [
+      propertyStates,
+      collapsible,
+      schema2,
+      autoExpand,
+      currentOptions.searchIncludesExamples
+    ]
   );
   const expandAll = useCallback(() => {
     const newStates = { ...propertyStates };
@@ -14054,7 +14942,7 @@ const DeckardSchema = ({
         const rect = element2.getBoundingClientRect();
         const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 0;
         const isInView = rect.top >= 0 && rect.bottom <= viewportHeight;
-        if (!isInView) {
+        if (!isInView && typeof element2.scrollIntoView === "function") {
           element2.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }
@@ -14072,6 +14960,7 @@ const DeckardSchema = ({
       processedPaths.add(key2);
       navigable.push({ key: key2, depth: prop.depth, path: prop.path });
       if (((_a2 = propertyStates[key2]) == null ? void 0 : _a2.expanded) && prop.schema) {
+        const allNestedProps = [];
         const nested = extractProperties(
           prop.schema,
           prop.path,
@@ -14079,8 +14968,26 @@ const DeckardSchema = ({
           schema2,
           []
         );
-        nested.sort((a, b) => a.name.localeCompare(b.name));
-        nested.forEach((nestedProp) => addProperty(nestedProp, currentDepth + 1));
+        allNestedProps.push(...nested);
+        if (prop.schema.allOf) {
+          prop.schema.allOf.forEach((allOfSchema, _index) => {
+            const resolvedSchema = resolveSchema(allOfSchema, schema2);
+            if (resolvedSchema.properties || resolvedSchema.patternProperties) {
+              const allOfProps = extractProperties(
+                resolvedSchema,
+                prop.path,
+                prop.depth + 1,
+                schema2,
+                []
+              );
+              allNestedProps.push(...allOfProps);
+            }
+          });
+        }
+        allNestedProps.sort((a, b) => a.name.localeCompare(b.name));
+        allNestedProps.forEach(
+          (nestedProp) => addProperty(nestedProp, currentDepth + 1)
+        );
       }
     };
     filteredProperties.forEach((prop) => addProperty(prop, 0));
@@ -14183,11 +15090,16 @@ const DeckardSchema = ({
         }
         return;
       }
+      if (e.key === "Control" && !e.repeat) {
+        if (typeof document !== "undefined") {
+          document.documentElement.classList.add("tooltips-shimmer");
+        }
+      }
       if (["h", "j", "k", "l"].includes(e.key.toLowerCase())) {
         e.preventDefault();
         e.stopPropagation();
       }
-      if (e.key === "/") {
+      if (e.key === "s" && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
         e.preventDefault();
         if (typeof document !== "undefined") {
           const searchInput = document.querySelector(
@@ -14211,21 +15123,44 @@ const DeckardSchema = ({
         e.preventDefault();
         expandAll();
       }
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "E") {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "E" || e.key === "e")) {
         e.preventDefault();
         collapseAll();
+      }
+      if (e.key === "e" && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+        e.preventDefault();
+        setExamplesHidden((prev) => !prev);
+        return;
+      }
+      if (e.key === "?" && e.shiftKey && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        setKeyboardModalOpen(true);
+        return;
       }
       if (e.key === "Escape") {
         clearSearch();
       }
     };
+    const handleKeyUp = (e) => {
+      if (e.key === "Control") {
+        if (typeof document !== "undefined") {
+          document.documentElement.classList.remove("tooltips-shimmer");
+        }
+      }
+    };
     if (typeof document !== "undefined") {
       document.addEventListener("keydown", handleKeyDown, { capture: true });
-      return () => document.removeEventListener("keydown", handleKeyDown, {
-        capture: true
-      });
+      document.addEventListener("keyup", handleKeyUp, { capture: true });
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown, {
+          capture: true
+        });
+        document.removeEventListener("keyup", handleKeyUp, {
+          capture: true
+        });
+      };
     }
-  }, [expandAll, collapseAll, clearSearch, handleNavigation]);
+  }, [clearSearch, expandAll, collapseAll, handleNavigation]);
   useEffect(() => {
     const handleClickAway = (e) => {
       const target = e.target;
@@ -14280,7 +15215,7 @@ const DeckardSchema = ({
       if (typeof window === "undefined") {
         return;
       }
-      const anchor = `#${propertyKey}`;
+      const anchor = `#${propertyKeyToHash(propertyKey)}`;
       const url = `${window.location.origin}${window.location.pathname}${anchor}`;
       window.location.hash = anchor;
       element2.focus();
@@ -14317,41 +15252,91 @@ const DeckardSchema = ({
     },
     []
   );
+  const handleKeyboardModalToggle = useCallback(() => {
+    setKeyboardModalOpen((prev) => !prev);
+  }, []);
+  const handleKeyboardModalClose = useCallback(() => {
+    setKeyboardModalOpen(false);
+  }, []);
   return /* @__PURE__ */ jsx(TooltipGlobalManagerProvider, { children: /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsxs("div", { className: `schema-container ${className}`, children: [
     includeHeader && schema2.title && /* @__PURE__ */ jsxs("div", { className: "schema-header", children: [
       /* @__PURE__ */ jsx("h1", { children: schema2.title }),
       schema2.description && /* @__PURE__ */ jsx("p", { className: "schema-description", children: schema2.description })
     ] }),
+    includePropertiesTitle && /* @__PURE__ */ jsxs("div", { className: "properties-header", children: [
+      /* @__PURE__ */ jsx("h2", { children: "Properties" }),
+      /* @__PURE__ */ jsxs("div", { className: "header-controls", children: [
+        /* @__PURE__ */ jsx(
+          Tooltip,
+          {
+            title: "Keyboard shortcuts",
+            content: "View available keyboard shortcuts for navigation and controls",
+            children: /* @__PURE__ */ jsx(
+              "button",
+              {
+                className: "keyboard-button",
+                onClick: handleKeyboardModalToggle,
+                "aria-label": "View keyboard shortcuts",
+                children: /* @__PURE__ */ jsx(FaKeyboard, {})
+              }
+            )
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          Settings,
+          {
+            options: currentOptions,
+            onChange: handleSettingsChange,
+            siteKey: typeof window !== "undefined" ? window.location.hostname : "default"
+          }
+        )
+      ] })
+    ] }),
+    !includePropertiesTitle && /* @__PURE__ */ jsx("div", { className: "settings-only-header", children: /* @__PURE__ */ jsxs("div", { className: "header-controls", children: [
+      /* @__PURE__ */ jsx(
+        Tooltip,
+        {
+          title: "Keyboard shortcuts",
+          content: "View available keyboard shortcuts for navigation and controls",
+          children: /* @__PURE__ */ jsx(
+            "button",
+            {
+              className: "keyboard-button",
+              onClick: handleKeyboardModalToggle,
+              "aria-label": "View keyboard shortcuts",
+              children: /* @__PURE__ */ jsx(FaKeyboard, {})
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        Settings,
+        {
+          options: currentOptions,
+          onChange: handleSettingsChange,
+          siteKey: typeof window !== "undefined" ? window.location.hostname : "default"
+        }
+      )
+    ] }) }),
     searchable && /* @__PURE__ */ jsx("div", { className: "schema-search", children: /* @__PURE__ */ jsx(
       Input,
       {
         type: "search",
         variant: "search",
         size: "md",
-        placeholder: "Search properties... (press /)",
+        placeholder: "Search properties... (press 's')",
         value: searchState.query,
         onChange: (e) => handleSearch(e.target.value),
         tabIndex: 1
       }
     ) }),
-    includePropertiesTitle && /* @__PURE__ */ jsxs("div", { className: "properties-header", children: [
-      /* @__PURE__ */ jsx("h2", { children: "Properties" }),
-      /* @__PURE__ */ jsx(
-        Settings,
-        {
-          options: currentOptions,
-          onChange: handleSettingsChange
-        }
-      )
-    ] }),
-    !includePropertiesTitle && /* @__PURE__ */ jsx("div", { className: "settings-only-header", children: /* @__PURE__ */ jsx(
-      Settings,
-      {
-        options: currentOptions,
-        onChange: handleSettingsChange
-      }
-    ) }),
-    /* @__PURE__ */ jsx("div", { className: "properties-section", children: /* @__PURE__ */ jsx(
+    /* @__PURE__ */ jsx("div", { className: "properties-section", children: filteredProperties.length === 0 && searchState.query ? /* @__PURE__ */ jsxs("div", { className: "no-search-results", children: [
+      /* @__PURE__ */ jsx("div", { className: "no-search-results-icon", children: "🔍" }),
+      /* @__PURE__ */ jsxs("div", { className: "no-search-results-message", children: [
+        /* @__PURE__ */ jsx("h3", { children: "No properties match your search" }),
+        /* @__PURE__ */ jsx("p", { children: "Try adjusting your search terms or clearing the search to see all properties." })
+      ] })
+    ] }) : /* @__PURE__ */ jsx(
       Rows,
       {
         className: "properties-list",
@@ -14367,7 +15352,12 @@ const DeckardSchema = ({
         toggleProperty,
         focusedProperty,
         onFocusChange: setFocusedProperty,
-        showNoAdditionalProperties: schema2.additionalProperties === false
+        showNoAdditionalProperties: schema2.additionalProperties === false && !searchState.query,
+        options: {
+          defaultExampleLanguage: currentOptions.defaultExampleLanguage
+        },
+        searchQuery: searchState.query,
+        examplesHidden
       }
     ) }),
     includeDefinitions && schema2.definitions && /* @__PURE__ */ jsxs("div", { className: "definitions-section", children: [
@@ -14386,8 +15376,76 @@ const DeckardSchema = ({
           }
         )
       ] }, name))
-    ] })
+    ] }),
+    /* @__PURE__ */ jsx(
+      KeyboardModal,
+      {
+        isOpen: keyboardModalOpen,
+        onClose: handleKeyboardModalClose,
+        examplesHidden
+      }
+    )
   ] }) }) });
+};
+const getTypeDescription = (type2) => {
+  switch (type2.toLowerCase()) {
+    case "string":
+      return "Text data - can contain letters, numbers, and symbols.";
+    case "number":
+      return "Numeric data - integers and decimal numbers.";
+    case "integer":
+      return "Whole number data - no decimal places allowed.";
+    case "boolean":
+      return "True or false value.";
+    case "array":
+      return "List of items - can contain multiple values.";
+    case "object":
+      return "Structured data with properties and values.";
+    case "null":
+      return "Represents no value or empty data.";
+    case "oneof":
+      return "Must match exactly one of the defined schemas.";
+    case "anyof":
+      return "Must match at least one of the defined schemas.";
+    case "enum":
+      return "Must be one of a specific set of predefined values.";
+    default:
+      if (type2.includes("|")) {
+        return "Can be one of multiple data types.";
+      }
+      return "The expected data type for this property.";
+  }
+};
+const getEnumId = (schema2) => {
+  if (schema2.__originalRef && typeof schema2.__originalRef === "string") {
+    const match = schema2.__originalRef.match(/#\/definitions\/(.+)$/);
+    if (match && match[1].trim()) {
+      return match[1];
+    }
+  }
+  if (schema2.$ref && typeof schema2.$ref === "string") {
+    const match = schema2.$ref.match(/#\/definitions\/(.+)$/);
+    if (match && match[1].trim()) {
+      return match[1];
+    }
+  }
+  return null;
+};
+const getEnumDescription = (schema2, rootSchema) => {
+  const refToUse = schema2.__originalRef || schema2.$ref;
+  if (refToUse && rootSchema) {
+    const enumId = getEnumId(schema2);
+    if (enumId && rootSchema.definitions && rootSchema.definitions[enumId]) {
+      const resolvedSchema = rootSchema.definitions[enumId];
+      if (resolvedSchema.description) {
+        return resolvedSchema.description;
+      }
+    }
+  }
+  if (schema2.description) {
+    return schema2.description;
+  }
+  return "No description provided for this enumerated type.";
 };
 const PropertyField = ({
   property,
@@ -14403,16 +15461,20 @@ const PropertyField = ({
   rootSchema,
   _toggleProperty,
   focusedProperty,
-  onFocusChange
+  onFocusChange,
+  options,
+  searchQuery
 }) => {
   const [isActiveRoute, setIsActiveRoute] = useState(false);
+  const hasValidSchema = property.schema != null;
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
     const checkActiveRoute = () => {
       const hash = window.location.hash.replace("#", "");
-      setIsActiveRoute(hash === propertyKey);
+      const fieldKey = hash.replace(/-/g, ".");
+      setIsActiveRoute(fieldKey === propertyKey);
     };
     checkActiveRoute();
     const handleHashChange = () => checkActiveRoute();
@@ -14423,35 +15485,42 @@ const PropertyField = ({
   const handleHeaderClick = useCallback(
     (e) => {
       e.stopPropagation();
-      if (collapsible) {
+      if (collapsible && hasValidSchema) {
         onToggle();
       }
       onFocusChange == null ? void 0 : onFocusChange(propertyKey);
     },
-    [collapsible, onToggle, propertyKey, onFocusChange]
+    [collapsible, onToggle, propertyKey, onFocusChange, hasValidSchema]
   );
   const handleKeyDown = useCallback(
     (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        if (collapsible) {
+        if (collapsible && hasValidSchema) {
           onToggle();
         }
       }
     },
-    [collapsible, onToggle]
+    [collapsible, onToggle, hasValidSchema]
   );
   const handleLinkClick = useCallback(
     (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!state.expanded) {
-        onToggle();
+      if (e.button === 1 || e.ctrlKey || e.metaKey) {
+        return;
       }
       onFocusChange == null ? void 0 : onFocusChange(propertyKey);
-      onCopyLink(propertyKey, e.currentTarget);
+      if (collapsible && hasValidSchema && !state.expanded) {
+        onToggle();
+      }
     },
-    [onCopyLink, propertyKey, state.expanded, onToggle, onFocusChange]
+    [
+      onFocusChange,
+      propertyKey,
+      collapsible,
+      hasValidSchema,
+      state.expanded,
+      onToggle
+    ]
   );
   const handleFieldClick = useCallback(
     (e) => {
@@ -14470,15 +15539,46 @@ const PropertyField = ({
     },
     [propertyKey, onFocusChange]
   );
+  const linkHref = useMemo(() => {
+    if (typeof window === "undefined") return "#";
+    const anchor = `#${propertyKey}`;
+    return `${window.location.origin}${window.location.pathname}${anchor}`;
+  }, [propertyKey]);
   const renderPropertyDetails = useCallback(() => {
-    return /* @__PURE__ */ jsx(PropertyDetails, { property, onCopy });
-  }, [property, onCopy]);
+    return /* @__PURE__ */ jsx(
+      PropertyDetails,
+      {
+        property,
+        onCopy,
+        rootSchema,
+        onCopyLink,
+        propertyStates: _propertyStates,
+        toggleProperty: _toggleProperty,
+        focusedProperty,
+        onFocusChange,
+        options,
+        searchQuery
+      }
+    );
+  }, [
+    property,
+    onCopy,
+    rootSchema,
+    onCopyLink,
+    _propertyStates,
+    _toggleProperty,
+    focusedProperty,
+    onFocusChange,
+    options,
+    searchQuery
+  ]);
   const propertyClasses = [
     "property",
     property.depth > 0 ? "nested-property" : "",
     state.expanded ? "expanded" : "",
     property.depth > 0 ? `depth-${Math.min(property.depth, 3)}` : "",
-    includeExamples && hasExamples(property.schema) ? "has-examples" : ""
+    includeExamples && hasValidSchema && hasExamples(property.schema) ? "has-examples" : "",
+    !hasValidSchema ? "invalid-schema" : ""
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ jsxs(
     "div",
@@ -14491,22 +15591,23 @@ const PropertyField = ({
         /* @__PURE__ */ jsxs(
           "div",
           {
-            className: "property-header-container",
+            className: "row-header-container property-header-container",
             onClick: handleHeaderClick,
             onKeyDown: handleKeyDown,
-            tabIndex: collapsible ? 0 : -1,
-            role: collapsible ? "button" : void 0,
-            "aria-expanded": state.expanded,
-            "aria-label": state.expanded ? `Collapse ${property.name}` : `Expand ${property.name}`,
+            tabIndex: collapsible && hasValidSchema ? 0 : -1,
+            role: collapsible && hasValidSchema ? "button" : void 0,
+            "aria-expanded": hasValidSchema ? state.expanded : void 0,
+            "aria-label": hasValidSchema && state.expanded ? `Collapse ${property.name}` : hasValidSchema ? `Expand ${property.name}` : `${property.name} - Invalid schema`,
             style: {
-              cursor: collapsible ? "pointer" : "default"
+              cursor: collapsible && hasValidSchema ? "pointer" : "default"
             },
             children: [
               /* @__PURE__ */ jsxs("div", { className: "property-controls", children: [
                 isActiveRoute && /* @__PURE__ */ jsx(
                   Tooltip,
                   {
-                    content: "Current active route",
+                    title: "Current active route",
+                    content: "This field is currently focused via URL hash.",
                     placement: "top",
                     clickableBounds: true,
                     children: /* @__PURE__ */ jsx(
@@ -14519,24 +15620,49 @@ const PropertyField = ({
                     )
                   }
                 ),
-                /* @__PURE__ */ jsx(
-                  "button",
+                searchQuery && state.matchesSearch && !isActiveRoute && /* @__PURE__ */ jsx(
+                  Tooltip,
                   {
-                    className: "link-button",
-                    onClick: handleLinkClick,
-                    title: "Copy link to this field",
-                    "aria-label": `Copy link to ${property.name} field`,
-                    children: /* @__PURE__ */ jsx(FaLink, {})
+                    title: state.isDirectMatch && state.hasNestedMatches ? "Direct and nested search match" : state.isDirectMatch ? "Direct search match" : "Indirect search match",
+                    content: state.isDirectMatch && state.hasNestedMatches ? "This property matches your search query and also contains nested matches." : state.isDirectMatch ? "This property matches your search query." : "This property has nested properties that match your search.",
+                    placement: "top",
+                    children: /* @__PURE__ */ jsx(
+                      "span",
+                      {
+                        className: `row-button search-hit-indicator ${state.isDirectMatch && state.hasNestedMatches ? "both-hit" : state.isDirectMatch ? "direct-hit" : "indirect-hit"}`,
+                        "aria-label": `${property.name} ${state.isDirectMatch && state.hasNestedMatches ? "matches search and contains nested matches" : state.isDirectMatch ? "matches current search" : "contains nested search matches"}`,
+                        children: state.isDirectMatch && state.hasNestedMatches ? /* @__PURE__ */ jsx(FaSitemap, {}) : state.isDirectMatch ? /* @__PURE__ */ jsx(FaFolder, {}) : /* @__PURE__ */ jsx(FaFolderOpen, {})
+                      }
+                    )
                   }
                 ),
                 /* @__PURE__ */ jsx(
+                  "a",
+                  {
+                    href: linkHref,
+                    className: "link-button",
+                    onClick: handleLinkClick,
+                    title: "Link to this field.",
+                    "aria-label": `Link to ${property.name} field`,
+                    children: /* @__PURE__ */ jsx(FaLink, {})
+                  }
+                ),
+                collapsible && hasValidSchema && /* @__PURE__ */ jsx(
                   "button",
                   {
-                    className: "expand-button",
+                    className: "row-button expand-button",
                     onClick: handleHeaderClick,
                     tabIndex: -1,
                     "aria-hidden": "true",
                     children: state.expanded ? /* @__PURE__ */ jsx(FaChevronDown, {}) : /* @__PURE__ */ jsx(FaChevronRight, {})
+                  }
+                ),
+                !hasValidSchema && /* @__PURE__ */ jsx(
+                  "span",
+                  {
+                    className: "invalid-schema-indicator",
+                    title: "Invalid schema data.",
+                    children: "⚠️"
                   }
                 )
               ] }),
@@ -14548,25 +15674,51 @@ const PropertyField = ({
                     children: property.schema.__isPatternProperty ? /* @__PURE__ */ jsx(
                       Tooltip,
                       {
-                        content: /* @__PURE__ */ jsxs("div", { children: [
-                          /* @__PURE__ */ jsx("strong", { children: "Pattern Property" }),
-                          /* @__PURE__ */ jsx("br", {}),
-                          "This represents dynamic field names. Unlike fixed property names, this can match multiple different field names in your data."
-                        ] }),
+                        title: "Pattern property",
+                        content: "This represents dynamic field names. Unlike fixed property names, this can match multiple different field names in your data.",
                         placement: "top",
+                        nonInteractive: true,
                         children: /* @__PURE__ */ jsx(Badge, { variant: "pattern", size: "sm", children: property.name })
                       }
                     ) : property.name
                   }
                 ),
-                schemaType && /* @__PURE__ */ jsx(Badge, { variant: "type", size: "sm", children: schemaType }),
-                property.required && /* @__PURE__ */ jsx(Badge, { variant: "required", size: "sm", children: "required" }),
-                !state.expanded && property.schema.description && /* @__PURE__ */ jsx("span", { className: "property-description-inline", children: property.schema.description })
+                property.schema.enum || getEnumId(property.schema) ? /* @__PURE__ */ jsx(
+                  Tooltip,
+                  {
+                    title: "Data type",
+                    content: getEnumDescription(property.schema, rootSchema),
+                    placement: "top",
+                    nonInteractive: true,
+                    children: /* @__PURE__ */ jsx(Badge, { variant: "custom-type", size: "sm", children: getEnumId(property.schema) || "enum" })
+                  }
+                ) : schemaType && /* @__PURE__ */ jsx(
+                  Tooltip,
+                  {
+                    title: "Data type",
+                    content: getTypeDescription(schemaType),
+                    placement: "top",
+                    nonInteractive: true,
+                    children: /* @__PURE__ */ jsx(Badge, { variant: "type", size: "sm", children: schemaType })
+                  }
+                ),
+                property.required && /* @__PURE__ */ jsx(
+                  Tooltip,
+                  {
+                    title: "Required property",
+                    content: "This property must be present in valid data.",
+                    placement: "top",
+                    nonInteractive: true,
+                    children: /* @__PURE__ */ jsx(Badge, { className: "required-badge", variant: "required", children: "required" })
+                  }
+                ),
+                !state.expanded && hasValidSchema && property.schema.description && /* @__PURE__ */ jsx("span", { className: "property-description-inline", children: property.schema.description }),
+                !state.expanded && !hasValidSchema && /* @__PURE__ */ jsx("span", { className: "property-description-inline invalid-schema-description", children: "Schema data is undefined or invalid" })
               ] }) })
             ]
           }
         ),
-        state.expanded && /* @__PURE__ */ jsx(
+        state.expanded && hasValidSchema && /* @__PURE__ */ jsx(
           "div",
           {
             className: `schema-details ${includeExamples && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? "schema-details-split" : ""}`,
@@ -14580,15 +15732,19 @@ const PropertyField = ({
                 {
                   className: "schema-details-right",
                   "data-debug": "examples-panel-container",
-                  children: /* @__PURE__ */ jsx(
+                  children: rootSchema ? /* @__PURE__ */ jsx(
                     ExamplesPanel,
                     {
                       currentProperty: property.schema,
                       rootSchema,
                       propertyPath: property.path || [propertyKey],
-                      onCopy
+                      onCopy,
+                      options
                     }
-                  )
+                  ) : /* @__PURE__ */ jsx("div", { className: "examples-panel-unavailable", children: /* @__PURE__ */ jsxs("div", { className: "examples-panel-message", children: [
+                    /* @__PURE__ */ jsx("span", { className: "examples-panel-icon", children: "ⓘ" }),
+                    "Root schema unavailable"
+                  ] }) })
                 }
               )
             ] }) : renderPropertyDetails()
@@ -14623,7 +15779,10 @@ export {
   getSchemaType,
   getUnsupportedFeatures,
   hasExamples,
+  hashToPropertyKey,
+  propertyKeyToHash,
   resolveReference,
-  resolveSchema
+  resolveSchema,
+  searchInSchema$1 as searchInSchema
 };
 //# sourceMappingURL=index.esm.js.map
