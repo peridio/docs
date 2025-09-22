@@ -9,21 +9,14 @@ import Link from '@docusaurus/Link'
 
 # Avocado Config
 
-The Avocado configuration file defines project settings, build configurations, dependencies, and provisioning profiles. This configuration file serves as the central hub for managing your Avocado Linux project, allowing you to specify everything from target hardware platforms to custom system extensions and user management policies.
+The Avocado config defines your project from board support to provisioning, and everything in between.
 
 ## Schema
 
-Available as a JSON Schema [here](/schemas/avocado-config.json).
+Properties are well documented and provide detailed descriptions of their purpose and examples of their usage. Browse below or leverage the source [JSON schema](/schemas/avocado-config.json).
 
 <SchemaDocs schema={avocadoSchema} options={{ includeExamples: true }} />
 
 ## Examples
 
 For practical configuration examples, see the reference configurations in the [Avocado OS repository](https://github.com/avocado-linux/avocado-os/tree/main/references). These examples demonstrate common configuration patterns for different use cases and target platforms.
-
-## See Also
-
-- [System Extensions](../system-extensions.md)
-- [Build and Provisioning](../build-provisioning.md)
-- [Development Environment](../development-environment.md)
-- [User Management](../user-management.md)
