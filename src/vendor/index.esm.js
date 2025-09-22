@@ -3742,7 +3742,7 @@ function extractProperties(schema2, path, depth, rootSchema, recursionStack = []
       });
     });
   }
-  if (resolvedSchema.patternProperties && !resolvedSchema.oneOf && !resolvedSchema.anyOf) {
+  if (resolvedSchema.patternProperties) {
     Object.entries(resolvedSchema.patternProperties).forEach(
       ([pattern, propSchema], index2) => {
         const patternKey = `(pattern-${index2})`;
@@ -3754,8 +3754,8 @@ function extractProperties(schema2, path, depth, rootSchema, recursionStack = []
         const resolvedPropSchema = resolveSchema(propSchema, rootSchema);
         const syntheticSchema = {
           ...resolvedPropSchema,
-          // Keep original description without pattern info
-          description: resolvedPropSchema.description,
+          // Keep original description, but enhance it for pattern properties
+          description: resolvedPropSchema.description || "Dynamic property matching the pattern",
           // Add a custom property to identify this as a pattern property
           __isPatternProperty: true,
           __pattern: pattern
@@ -3773,8 +3773,38 @@ function extractProperties(schema2, path, depth, rootSchema, recursionStack = []
   }
   return properties;
 }
-function hasExamples(schema2) {
-  return !!(schema2.examples && schema2.examples.length > 0);
+function hasExamples(schema2, rootSchema) {
+  if (schema2.examples && schema2.examples.length > 0) {
+    return true;
+  }
+  if (schema2.oneOf && Array.isArray(schema2.oneOf) && rootSchema && !schema2.__isPatternProperty) {
+    return schema2.oneOf.some((option2) => {
+      const resolvedOption = resolveSchema(option2, rootSchema);
+      return resolvedOption.examples && resolvedOption.examples.length > 0;
+    });
+  }
+  if (schema2.patternProperties && rootSchema) {
+    return Object.values(schema2.patternProperties).some((patternSchema) => {
+      const resolvedPattern = resolveSchema(patternSchema, rootSchema);
+      return resolvedPattern.examples && resolvedPattern.examples.length > 0;
+    });
+  }
+  return false;
+}
+function getExamplesFromOneOf(schema2, rootSchema, selectedIndex = 0) {
+  if (schema2.examples && schema2.examples.length > 0) {
+    return schema2.examples;
+  }
+  if (schema2.oneOf && Array.isArray(schema2.oneOf) && schema2.oneOf[selectedIndex]) {
+    const selectedOption = resolveSchema(
+      schema2.oneOf[selectedIndex],
+      rootSchema
+    );
+    if (selectedOption.examples && selectedOption.examples.length > 0) {
+      return selectedOption.examples;
+    }
+  }
+  return [];
 }
 function getSchemaType(schema2, _rootSchema) {
   if (schema2.type) {
@@ -4008,6 +4038,10 @@ function hashToPropertyKey(hash) {
 function propertyKeyToHash(propertyKey) {
   if (!propertyKey) return "";
   return propertyKey.replace(/\.(?![^(]*\))/g, "-");
+}
+function extractOneOfIndexFromPath(propertyPath) {
+  const match = propertyPath.match(/\.oneOf\.(\d+)(?:\.|$)/);
+  return match ? parseInt(match[1], 10) : 0;
 }
 function useSystemTheme() {
   const [theme, setTheme] = useState(() => {
@@ -13132,6 +13166,10 @@ const ExamplesPanel = ({
   onCopy,
   options
 }) => {
+  const panelId = useMemo(() => {
+    const pathStr = propertyPath.join("-");
+    return `format-selector-${pathStr}-${Math.random().toString(36).substr(2, 9)}`;
+  }, [propertyPath]);
   const [selectedFormat, setSelectedFormat] = useState(() => {
     const defaultLanguage = (options == null ? void 0 : options.defaultExampleLanguage) || "yaml";
     if (typeof window === "undefined") {
@@ -13159,23 +13197,37 @@ const ExamplesPanel = ({
           propertyName: path[path.length - 1] || "property"
         };
       }
-      if (path.length > 0 && rootSchema) {
-        const parentPath = path.slice(0, -1);
-        let parentSchema = rootSchema;
-        for (const segment of parentPath) {
-          if (parentSchema.properties && parentSchema.properties[segment]) {
-            parentSchema = parentSchema.properties[segment];
-          } else if (parentSchema.patternProperties) {
-            const patternKeys = Object.keys(parentSchema.patternProperties);
-            if (patternKeys.length > 0) {
-              parentSchema = parentSchema.patternProperties[patternKeys[0]];
-            }
-          } else {
-            break;
+      if (schema2.oneOf && Array.isArray(schema2.oneOf) && rootSchema) {
+        for (const option2 of schema2.oneOf) {
+          const resolvedOption = resolveSchema(option2, rootSchema);
+          if (resolvedOption.examples && resolvedOption.examples.length > 0) {
+            return {
+              examples: resolvedOption.examples,
+              propertyName: path[path.length - 1] || "property"
+            };
           }
         }
-        if (parentPath.length >= 0) {
-          return findExamplesInHierarchy(parentSchema, parentPath);
+      }
+      if (schema2.patternProperties && rootSchema) {
+        for (const patternSchema of Object.values(schema2.patternProperties)) {
+          const resolvedPattern = resolveSchema(patternSchema, rootSchema);
+          if (resolvedPattern.examples && resolvedPattern.examples.length > 0) {
+            return {
+              examples: resolvedPattern.examples,
+              propertyName: path[path.length - 1] || "property"
+            };
+          }
+          if (resolvedPattern.oneOf && Array.isArray(resolvedPattern.oneOf)) {
+            for (const option2 of resolvedPattern.oneOf) {
+              const resolvedOption = resolveSchema(option2, rootSchema);
+              if (resolvedOption.examples && resolvedOption.examples.length > 0) {
+                return {
+                  examples: resolvedOption.examples,
+                  propertyName: path[path.length - 1] || "property"
+                };
+              }
+            }
+          }
         }
       }
       return {
@@ -13186,14 +13238,34 @@ const ExamplesPanel = ({
     return findExamplesInHierarchy(currentProperty, propertyPath);
   }, [currentProperty, rootSchema, propertyPath]);
   useEffect(() => {
-    createHighlighterCore({
-      themes: [everforestLight, everforestDark],
-      langs: [jsonLang, yamlLang, tomlLang],
-      engine: createOnigurumaEngine(import("./wasm-DDgzZJey.js"))
-    }).then(setHighlighter).catch((error2) => {
-      console.warn("Failed to initialize Shiki highlighter:", error2);
-      setHighlighterError(true);
-    });
+    let isMounted = true;
+    const abortController = new AbortController();
+    const initHighlighter = async () => {
+      try {
+        if (!isMounted) return;
+        const wasmModule = await import("./wasm-DDgzZJey.js");
+        if (!isMounted || abortController.signal.aborted) return;
+        const engine = createOnigurumaEngine(wasmModule);
+        const highlighterCore = await createHighlighterCore({
+          themes: [everforestLight, everforestDark],
+          langs: [jsonLang, yamlLang, tomlLang],
+          engine
+        });
+        if (isMounted && !abortController.signal.aborted) {
+          setHighlighter(highlighterCore);
+        }
+      } catch (error2) {
+        if (isMounted && !abortController.signal.aborted) {
+          console.warn("Failed to initialize Shiki highlighter:", error2);
+          setHighlighterError(true);
+        }
+      }
+    };
+    initHighlighter();
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
   const convertToToml = useCallback(
     (obj, fieldName) => {
@@ -13208,17 +13280,15 @@ const ExamplesPanel = ({
   );
   const convertToFormat = useCallback(
     (value, format) => {
-      const shouldWrapValue = typeof value !== "object" || value === null || Array.isArray(value);
-      const wrappedValue = shouldWrapValue ? { [propertyName]: value } : value;
       switch (format) {
         case "json":
-          return JSON.stringify(wrappedValue, null, 2);
+          return JSON.stringify(value, null, 2);
         case "yaml":
-          return dump(wrappedValue, { indent: 2, lineWidth: -1 });
+          return dump(value, { indent: 2, lineWidth: -1 });
         case "toml":
           return convertToToml(value, propertyName);
         default:
-          return JSON.stringify(wrappedValue, null, 2);
+          return JSON.stringify(value, null, 2);
       }
     },
     [convertToToml, propertyName]
@@ -13274,10 +13344,7 @@ const ExamplesPanel = ({
     });
   }, [examples, selectedFormat, convertToFormat, highlightCode]);
   if (!examples || examples.length === 0) {
-    return /* @__PURE__ */ jsxs("div", { className: "examples-panel", children: [
-      /* @__PURE__ */ jsx("div", { className: "examples-header", children: /* @__PURE__ */ jsx("h4", { className: "examples-title", children: "No Examples Available" }) }),
-      /* @__PURE__ */ jsx("div", { className: "examples-content", children: /* @__PURE__ */ jsx("div", { className: "no-examples-message", children: "No examples found for this property or its parent properties." }) })
-    ] });
+    return null;
   }
   return /* @__PURE__ */ jsxs("div", { className: "examples-panel", children: [
     /* @__PURE__ */ jsxs("div", { className: "examples-header", children: [
@@ -13295,7 +13362,7 @@ const ExamplesPanel = ({
             onChange: (format) => {
               setSelectedFormat(format);
             },
-            name: "format-selector",
+            name: panelId,
             size: "md"
           }
         ),
@@ -13352,6 +13419,25 @@ const ExamplesPanel = ({
       ) })
     ] }, index2)) })
   ] });
+};
+const ResponsiveSchemaLayout = ({
+  leftContent,
+  rightContent,
+  className = "",
+  hasSplit = false
+}) => {
+  const shouldSplit = hasSplit && rightContent;
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: `responsive-schema-layout ${shouldSplit ? "responsive-schema-layout-split" : ""} ${className}`,
+      "data-has-split": shouldSplit,
+      children: [
+        /* @__PURE__ */ jsx("div", { className: "responsive-schema-layout-left", children: leftContent }),
+        shouldSplit && rightContent && /* @__PURE__ */ jsx("div", { className: "responsive-schema-layout-right", children: rightContent })
+      ]
+    }
+  );
 };
 const Row = ({
   children,
@@ -13430,7 +13516,9 @@ const PropertyDetails = ({
   focusedProperty,
   onFocusChange,
   options,
-  searchQuery
+  searchQuery,
+  inSplitLayout: _inSplitLayout = false,
+  onOneOfSelectionChange: _onOneOfSelectionChange
 }) => {
   const constraints = getConstraints(property.schema);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -13447,22 +13535,6 @@ const PropertyDetails = ({
       )
     ] }),
     property.schema.description && /* @__PURE__ */ jsx("div", { className: "property-description-block", children: property.schema.description }),
-    property.schema.oneOf && rootSchema && /* @__PURE__ */ jsx(
-      OneOfSelector,
-      {
-        oneOfOptions: property.schema.oneOf,
-        rootSchema,
-        propertyPath: property.path,
-        _onCopy: onCopy,
-        onCopyLink,
-        propertyStates,
-        toggleProperty,
-        focusedProperty,
-        onFocusChange,
-        options,
-        searchQuery
-      }
-    ),
     property.schema.allOf && rootSchema && /* @__PURE__ */ jsx(
       AllOfSelector,
       {
@@ -13675,8 +13747,69 @@ const PropertyRow = ({
   searchQuery,
   examplesHidden = false
 }) => {
+  var _a2;
   const [isActiveRoute, setIsActiveRoute] = useState(false);
+  const [selectedOneOfOption, setSelectedOneOfOption] = useState(null);
+  const [selectedOneOfIndex, setSelectedOneOfIndex] = useState(0);
   const hasValidSchema = property.schema != null;
+  useEffect(() => {
+    if (property.schema.oneOf && property.schema.oneOf.length > 0 && rootSchema) {
+      let initialSelectedIndex = 0;
+      if (typeof window !== "undefined") {
+        const hash = window.location.hash;
+        if (hash) {
+          const propertyKeyFromHash = hashToPropertyKey(hash);
+          const hashIndex = extractOneOfIndexFromPath(propertyKeyFromHash);
+          if (hashIndex >= 0 && hashIndex < property.schema.oneOf.length) {
+            initialSelectedIndex = hashIndex;
+          }
+        }
+      }
+      const selectedOption = property.schema.oneOf[initialSelectedIndex];
+      const resolvedOption = resolveSchema(selectedOption, rootSchema);
+      setSelectedOneOfOption(resolvedOption);
+      setSelectedOneOfIndex(initialSelectedIndex);
+    }
+  }, [property.schema.oneOf, rootSchema]);
+  useEffect(() => {
+    if (!property.schema.oneOf || property.schema.oneOf.length === 0 || !rootSchema || typeof window === "undefined") {
+      return;
+    }
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (!hash) return;
+      const propertyKeyFromHash = hashToPropertyKey(hash);
+      const hashIndex = extractOneOfIndexFromPath(propertyKeyFromHash);
+      if (propertyKeyFromHash.startsWith(propertyKey) && hashIndex >= 0 && hashIndex < property.schema.oneOf.length) {
+        const selectedOption = property.schema.oneOf[hashIndex];
+        const resolvedOption = resolveSchema(selectedOption, rootSchema);
+        setSelectedOneOfOption(resolvedOption);
+        setSelectedOneOfIndex(hashIndex);
+      }
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [property.schema.oneOf, rootSchema, propertyKey]);
+  const isInSplitLayout = useMemo(() => {
+    if (!includeExamples || examplesHidden) return false;
+    if (examplesOnFocusOnly && focusedProperty !== propertyKey) return false;
+    if (property.schema.oneOf) {
+      if (selectedOneOfOption) {
+        return hasExamples(selectedOneOfOption, rootSchema);
+      }
+      return hasExamples(property.schema, rootSchema);
+    }
+    return hasExamples(property.schema, rootSchema);
+  }, [
+    includeExamples,
+    examplesHidden,
+    examplesOnFocusOnly,
+    focusedProperty,
+    propertyKey,
+    property.schema,
+    selectedOneOfOption,
+    rootSchema
+  ]);
   const nestedProperties = useMemo(() => {
     if (!rootSchema || !hasValidSchema) return [];
     if (property.schema.oneOf || property.schema.allOf) {
@@ -13700,6 +13833,39 @@ const PropertyRow = ({
     hasValidSchema
   ]);
   const hasNestedProperties = nestedProperties.length > 0;
+  const handleOneOfSelectionChange = useCallback(
+    (selectedIndex, selectedOption) => {
+      setSelectedOneOfOption(selectedOption);
+      setSelectedOneOfIndex(selectedIndex);
+    },
+    []
+  );
+  const oneOfNestedProperties = useMemo(() => {
+    if (!rootSchema || !hasValidSchema || !property.schema.oneOf || !selectedOneOfOption) {
+      return [];
+    }
+    if (selectedOneOfOption.properties) {
+      const selectedIndex = property.schema.oneOf.findIndex(
+        (option2) => option2 === selectedOneOfOption || option2.$ref && selectedOneOfOption.$ref && option2.$ref === selectedOneOfOption.$ref
+      );
+      return extractProperties(
+        selectedOneOfOption,
+        [...property.path, "oneOf", selectedIndex.toString()],
+        property.depth + 1,
+        rootSchema,
+        []
+      );
+    }
+    return [];
+  }, [
+    property.schema.oneOf,
+    selectedOneOfOption,
+    rootSchema,
+    hasValidSchema,
+    property.path,
+    property.depth
+  ]);
+  const hasOneOfNestedProperties = oneOfNestedProperties.length > 0;
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -13707,13 +13873,26 @@ const PropertyRow = ({
     const checkActiveRoute = () => {
       const hash = window.location.hash;
       const fieldKey = hashToPropertyKey(hash);
-      setIsActiveRoute(fieldKey === propertyKey);
+      if (fieldKey === propertyKey) {
+        setIsActiveRoute(true);
+        return;
+      }
+      if (property.schema.oneOf && property.schema.oneOf.length > 0) {
+        const oneOfRegex = new RegExp(
+          `^${propertyKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\.oneOf\\.[0-9]+$`
+        );
+        if (oneOfRegex.test(fieldKey)) {
+          setIsActiveRoute(true);
+          return;
+        }
+      }
+      setIsActiveRoute(false);
     };
     checkActiveRoute();
     const handleHashChange = () => checkActiveRoute();
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
-  }, [propertyKey]);
+  }, [propertyKey, property.schema.oneOf]);
   const schemaType = getSchemaType(property.schema);
   const handleHeaderClick = useCallback(
     (e) => {
@@ -13741,10 +13920,12 @@ const PropertyRow = ({
       if (e.button === 1 || e.ctrlKey || e.metaKey) {
         return;
       }
-      onFocusChange == null ? void 0 : onFocusChange(propertyKey);
-      if (collapsible && hasValidSchema && !state.expanded) {
-        onToggle();
-      }
+      setTimeout(() => {
+        onFocusChange == null ? void 0 : onFocusChange(propertyKey);
+        if (collapsible && hasValidSchema && !state.expanded) {
+          onToggle();
+        }
+      }, 0);
     },
     [
       onFocusChange,
@@ -13757,13 +13938,17 @@ const PropertyRow = ({
   );
   const linkHref = useMemo(() => {
     if (typeof window === "undefined") return "#";
-    const anchor = `#${propertyKeyToHash(propertyKey)}`;
+    let linkPropertyKey = propertyKey;
+    if (property.schema.oneOf && property.schema.oneOf.length > 0) {
+      linkPropertyKey = `${propertyKey}.oneOf.${selectedOneOfIndex}`;
+    }
+    const anchor = `#${propertyKeyToHash(linkPropertyKey)}`;
     return `${window.location.origin}${window.location.pathname}${anchor}`;
-  }, [propertyKey]);
+  }, [propertyKey, property.schema.oneOf, selectedOneOfIndex]);
   const handleFieldClick = useCallback(
     (e) => {
-      var _a2;
-      if (e.target.closest("button") || typeof window !== "undefined" && ((_a2 = window.getSelection()) == null ? void 0 : _a2.toString())) {
+      var _a3;
+      if (e.target.closest("button") || typeof window !== "undefined" && ((_a3 = window.getSelection()) == null ? void 0 : _a3.toString())) {
         return;
       }
       if (e.target.closest(".row-header-container")) {
@@ -13790,7 +13975,9 @@ const PropertyRow = ({
         focusedProperty,
         onFocusChange,
         options,
-        searchQuery
+        searchQuery,
+        inSplitLayout: isInSplitLayout,
+        onOneOfSelectionChange: handleOneOfSelectionChange
       }
     );
   }, [
@@ -13803,14 +13990,16 @@ const PropertyRow = ({
     focusedProperty,
     onFocusChange,
     options,
-    searchQuery
+    searchQuery,
+    isInSplitLayout,
+    handleOneOfSelectionChange
   ]);
   const propertyClasses = [
     "property",
     property.depth > 0 ? "nested-property" : "",
     state.expanded ? "expanded" : "",
     property.depth > 0 ? `depth-${Math.min(property.depth, 3)}` : "",
-    includeExamples && hasValidSchema && hasExamples(property.schema) ? "has-examples" : "",
+    includeExamples && hasValidSchema && hasExamples(property.schema, rootSchema) ? "has-examples" : "",
     !hasValidSchema ? "invalid-schema" : ""
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ jsxs(
@@ -13821,6 +14010,14 @@ const PropertyRow = ({
       "data-property-key": propertyKey,
       onClick: handleFieldClick,
       children: [
+        property.schema.oneOf && property.schema.oneOf.length > 0 && /* @__PURE__ */ jsx(
+          "span",
+          {
+            id: propertyKeyToHash(`${propertyKey}.oneOf.${selectedOneOfIndex}`),
+            style: { position: "absolute", visibility: "hidden" },
+            "aria-hidden": "true"
+          }
+        ),
         /* @__PURE__ */ jsxs(
           "div",
           {
@@ -13852,7 +14049,7 @@ const PropertyRow = ({
                     )
                   }
                 ),
-                examplesHidden && hasExamples(property.schema) && /* @__PURE__ */ jsx(
+                examplesHidden && hasExamples(property.schema, rootSchema) && /* @__PURE__ */ jsx(
                   Tooltip,
                   {
                     title: "Examples hidden",
@@ -13965,61 +14162,101 @@ const PropertyRow = ({
             ]
           }
         ),
-        state.expanded && hasValidSchema && /* @__PURE__ */ jsxs(Fragment, { children: [
+        state.expanded && hasValidSchema && /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsxs("div", { className: "property-content-container", children: [
           /* @__PURE__ */ jsx(
             "div",
             {
-              className: `schema-details ${includeExamples && !examplesHidden && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? "schema-details-split" : ""}`,
-              "data-has-examples": hasExamples(property.schema),
+              className: `schema-details ${isInSplitLayout ? "schema-details-split" : ""}`,
+              "data-has-examples": hasExamples(property.schema, rootSchema),
               "data-include-examples": includeExamples,
-              "data-split-active": includeExamples && !examplesHidden && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true),
-              children: includeExamples && !examplesHidden && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? /* @__PURE__ */ jsxs(Fragment, { children: [
+              "data-split-active": isInSplitLayout,
+              children: isInSplitLayout ? /* @__PURE__ */ jsxs(Fragment, { children: [
                 /* @__PURE__ */ jsx("div", { className: "schema-details-left", children: renderPropertyDetails() }),
                 /* @__PURE__ */ jsx(
                   "div",
                   {
                     className: "schema-details-right",
                     "data-debug": "examples-panel-container",
-                    children: rootSchema ? /* @__PURE__ */ jsx(
+                    children: rootSchema && hasExamples(
+                      selectedOneOfOption || property.schema,
+                      rootSchema
+                    ) && !(property.schema.__isPatternProperty && !hasExamples(property.schema, rootSchema)) && /* @__PURE__ */ jsx(
                       ExamplesPanel,
                       {
-                        currentProperty: property.schema,
+                        currentProperty: property.schema.__isPatternProperty ? {
+                          ...property.schema,
+                          // Remove oneOf to prevent fallback to oneOf examples
+                          // when pattern property itself has no examples
+                          oneOf: (((_a2 = property.schema.examples) == null ? void 0 : _a2.length) ?? 0) > 0 ? property.schema.oneOf : void 0
+                        } : selectedOneOfOption || property.schema,
                         rootSchema,
                         propertyPath: property.path || [propertyKey],
                         onCopy,
                         options
                       }
-                    ) : /* @__PURE__ */ jsx("div", { className: "examples-panel-unavailable", children: /* @__PURE__ */ jsxs("div", { className: "examples-panel-message", children: [
-                      /* @__PURE__ */ jsx("span", { className: "examples-panel-icon", children: "ⓘ" }),
-                      "Root schema unavailable"
-                    ] }) })
+                    )
                   }
                 )
               ] }) : renderPropertyDetails()
             }
           ),
-          hasNestedProperties && /* @__PURE__ */ jsx(
-            Rows,
-            {
-              className: "nested-properties",
-              properties: nestedProperties,
-              propertyStates: propertyStates || {},
-              onToggle: (propertyKey2) => toggleProperty == null ? void 0 : toggleProperty(propertyKey2),
-              onCopy,
-              onCopyLink,
-              collapsible,
-              includeExamples: includeExamples && !examplesHidden,
-              examplesOnFocusOnly,
-              rootSchema,
-              toggleProperty,
-              focusedProperty,
-              onFocusChange,
-              options,
-              searchQuery,
-              examplesHidden
-            }
-          )
-        ] })
+          (hasNestedProperties || hasOneOfNestedProperties || property.schema.oneOf) && /* @__PURE__ */ jsxs("div", { className: "nested-fields-sibling", children: [
+            hasNestedProperties && /* @__PURE__ */ jsx(
+              Rows,
+              {
+                className: "nested-properties",
+                properties: nestedProperties,
+                propertyStates: propertyStates || {},
+                onToggle: (propertyKey2) => toggleProperty == null ? void 0 : toggleProperty(propertyKey2),
+                onCopy,
+                onCopyLink,
+                collapsible,
+                includeExamples: includeExamples && !examplesHidden,
+                examplesOnFocusOnly,
+                rootSchema,
+                toggleProperty,
+                focusedProperty,
+                onFocusChange,
+                options,
+                searchQuery,
+                examplesHidden
+              }
+            ),
+            property.schema.oneOf && rootSchema && /* @__PURE__ */ jsx("div", { className: "oneof-selector-sibling-container", children: /* @__PURE__ */ jsx(
+              OneOfSelector,
+              {
+                oneOfOptions: property.schema.oneOf,
+                rootSchema,
+                propertyPath: property.path,
+                _onCopy: onCopy,
+                onCopyLink,
+                propertyStates,
+                toggleProperty,
+                focusedProperty,
+                onFocusChange,
+                options,
+                searchQuery,
+                initialSelectedIndex: (() => {
+                  if (typeof window === "undefined") return 0;
+                  const hash = window.location.hash;
+                  if (!hash) return 0;
+                  const propertyKeyFromHash = hashToPropertyKey(hash);
+                  const hashIndex = extractOneOfIndexFromPath(propertyKeyFromHash);
+                  if (hashIndex >= 0 && hashIndex < property.schema.oneOf.length) {
+                    return hashIndex;
+                  }
+                  return 0;
+                })(),
+                hideDescription: false,
+                disableNestedExamples: examplesHidden,
+                renderNestedProperties: true,
+                onSelectionChange: handleOneOfSelectionChange,
+                isActiveRoute,
+                propertyKey
+              }
+            ) })
+          ] })
+        ] }) })
       ]
     }
   );
@@ -14105,16 +14342,49 @@ const OneOfSelector = ({
   focusedProperty,
   onFocusChange,
   options,
-  searchQuery
+  searchQuery,
+  initialSelectedIndex = 0,
+  hideDescription: _hideDescription = false,
+  disableNestedExamples = false,
+  renderNestedProperties = true,
+  separateNestedProperties: _separateNestedProperties = false,
+  onSelectionChange,
+  isActiveRoute = false,
+  propertyKey
 }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  var _a2;
+  const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex);
+  useEffect(() => {
+    if (!isActiveRoute || !propertyKey || typeof window === "undefined" || !oneOfOptions.length) {
+      return;
+    }
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (!hash) return;
+      const propertyKeyFromHash = hashToPropertyKey(hash);
+      if (propertyKeyFromHash.startsWith(propertyKey)) {
+        const pathParts = propertyKeyFromHash.split(".");
+        const oneOfIndexStr = pathParts.find(
+          (part, index2) => pathParts[index2 - 1] === "oneOf" && !isNaN(Number(part))
+        );
+        if (oneOfIndexStr !== void 0) {
+          const hashIndex = parseInt(oneOfIndexStr, 10);
+          if (hashIndex >= 0 && hashIndex < oneOfOptions.length && hashIndex !== selectedIndex) {
+            setSelectedIndex(hashIndex);
+          }
+        }
+      }
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [isActiveRoute, propertyKey, oneOfOptions.length, selectedIndex]);
   const resolvedOptions = useMemo(
     () => oneOfOptions.map((option2) => resolveSchema(option2, rootSchema)),
     [oneOfOptions, rootSchema]
   );
   const getOptionDisplay = useCallback(
     (option2, index2) => {
-      var _a2;
+      var _a3;
       let searchHitStatus = "none";
       if (searchQuery == null ? void 0 : searchQuery.trim()) {
         const hasMatch = searchInSchema$1(option2, rootSchema, searchQuery, true);
@@ -14131,7 +14401,7 @@ const OneOfSelector = ({
         };
       }
       if (oneOfOptions[index2].$ref) {
-        const refName = ((_a2 = oneOfOptions[index2].$ref) == null ? void 0 : _a2.split("/").pop()) || "object";
+        const refName = ((_a3 = oneOfOptions[index2].$ref) == null ? void 0 : _a3.split("/").pop()) || "object";
         const displayName = refName.charAt(0).toUpperCase() + refName.slice(1);
         return {
           label: displayName,
@@ -14158,14 +14428,13 @@ const OneOfSelector = ({
     },
     [oneOfOptions, searchQuery, rootSchema]
   );
-  const selectedOption = resolvedOptions[selectedIndex];
   const optionDisplays = resolvedOptions.map(getOptionDisplay);
   const selectedProperties = useMemo(() => {
     const currentOption = resolvedOptions[selectedIndex];
     if (!(currentOption == null ? void 0 : currentOption.properties)) {
       return [];
     }
-    const basePath = propertyPath.length > 0 ? propertyPath : ["oneof", selectedIndex.toString()];
+    const basePath = [...propertyPath, "oneOf", selectedIndex.toString()];
     const properties = extractProperties(
       currentOption,
       basePath,
@@ -14191,14 +14460,14 @@ const OneOfSelector = ({
     return states;
   }, [selectedProperties, internalPropertyStates]);
   const handleInternalToggle = useCallback(
-    (propertyKey) => {
+    (propertyKey2) => {
       setInternalPropertyStates((prev) => {
-        var _a2;
+        var _a3;
         return {
           ...prev,
-          [propertyKey]: {
-            ...prev[propertyKey],
-            expanded: !((_a2 = prev[propertyKey]) == null ? void 0 : _a2.expanded),
+          [propertyKey2]: {
+            ...prev[propertyKey2],
+            expanded: !((_a3 = prev[propertyKey2]) == null ? void 0 : _a3.expanded),
             hasDetails: true,
             matchesSearch: true,
             isDirectMatch: false,
@@ -14206,16 +14475,33 @@ const OneOfSelector = ({
           }
         };
       });
-      toggleProperty == null ? void 0 : toggleProperty(propertyKey);
+      toggleProperty == null ? void 0 : toggleProperty(propertyKey2);
     },
     [toggleProperty]
   );
-  return /* @__PURE__ */ jsxs("div", { className: "oneof-selector", children: [
+  const selectedOptionDescription = (_a2 = resolvedOptions[selectedIndex]) == null ? void 0 : _a2.description;
+  const selectedOption = resolvedOptions[selectedIndex];
+  const selectedOptionHasExamples = selectedOption && hasExamples(selectedOption, rootSchema);
+  const leftContent = /* @__PURE__ */ jsxs("div", { className: "oneof-left-section", children: [
     /* @__PURE__ */ jsx("div", { className: "oneof-tabs", children: optionDisplays.map((display, index2) => /* @__PURE__ */ jsx(
       "button",
       {
         className: `oneof-tab ${selectedIndex === index2 ? "active" : ""} ${display.searchHitStatus !== "none" ? `search-hit ${display.searchHitStatus}-hit` : ""}`,
-        onClick: () => setSelectedIndex(index2),
+        onClick: () => {
+          setSelectedIndex(index2);
+          if (onSelectionChange) {
+            onSelectionChange(index2, resolvedOptions[index2]);
+          }
+          if (isActiveRoute && propertyKey && typeof window !== "undefined") {
+            const currentHash = window.location.hash;
+            const currentPropertyKey = hashToPropertyKey(currentHash);
+            if (currentPropertyKey.startsWith(propertyKey)) {
+              const newPropertyKey = `${propertyKey}.oneOf.${index2}`;
+              const newHash = `#${propertyKeyToHash(newPropertyKey)}`;
+              window.history.replaceState(null, "", newHash);
+            }
+          }
+        },
         title: display.isReference ? `Complex object: ${display.label}${display.searchHitStatus !== "none" ? " (matches search)" : ""}` : `Primitive types: ${display.type}${display.searchHitStatus !== "none" ? " (matches search)" : ""}`,
         children: /* @__PURE__ */ jsx(
           Badge,
@@ -14229,30 +14515,50 @@ const OneOfSelector = ({
       },
       index2
     )) }),
-    /* @__PURE__ */ jsxs("div", { className: "oneof-content", children: [
-      /* @__PURE__ */ jsx("div", { className: "oneof-description", children: selectedOption.description && /* @__PURE__ */ jsx("div", { className: "property-description-block", children: selectedOption.description }) }),
-      selectedProperties.length > 0 && /* @__PURE__ */ jsx("div", { className: "oneof-properties", children: /* @__PURE__ */ jsx(
-        Rows,
-        {
-          properties: selectedProperties,
-          propertyStates: oneOfPropertyStates,
-          onToggle: handleInternalToggle,
-          onCopy: _onCopy || (() => {
-          }),
-          onCopyLink: onCopyLink || (() => {
-          }),
-          collapsible: true,
-          includeExamples: true,
-          examplesOnFocusOnly: false,
-          rootSchema,
-          toggleProperty,
-          focusedProperty,
-          onFocusChange,
-          options,
-          searchQuery
-        }
-      ) })
-    ] })
+    selectedOptionDescription && /* @__PURE__ */ jsx("div", { className: "oneof-description", children: /* @__PURE__ */ jsx("div", { className: "property-description-block", children: selectedOptionDescription }) })
+  ] });
+  const rightContent = !disableNestedExamples && selectedOptionHasExamples ? /* @__PURE__ */ jsx("div", { className: "oneof-examples-section", children: /* @__PURE__ */ jsx(
+    ExamplesPanel,
+    {
+      currentProperty: selectedOption,
+      rootSchema,
+      propertyPath: [...propertyPath, "oneOf", selectedIndex.toString()],
+      options
+    }
+  ) }) : null;
+  return /* @__PURE__ */ jsxs("div", { className: "oneof-selector", children: [
+    /* @__PURE__ */ jsx(
+      ResponsiveSchemaLayout,
+      {
+        leftContent,
+        rightContent,
+        className: "oneof-main-content",
+        hasSplit: !disableNestedExamples && selectedOptionHasExamples
+      }
+    ),
+    renderNestedProperties && selectedProperties.length > 0 && /* @__PURE__ */ jsx("div", { className: "oneof-nested-properties", children: /* @__PURE__ */ jsx(
+      Rows,
+      {
+        className: "nested-properties",
+        properties: selectedProperties,
+        propertyStates: oneOfPropertyStates,
+        onToggle: handleInternalToggle,
+        onCopy: _onCopy || (() => {
+        }),
+        onCopyLink: onCopyLink || (() => {
+        }),
+        collapsible: true,
+        includeExamples: !disableNestedExamples,
+        examplesOnFocusOnly: false,
+        rootSchema,
+        toggleProperty: handleInternalToggle,
+        focusedProperty,
+        onFocusChange,
+        options,
+        searchQuery,
+        examplesHidden: disableNestedExamples
+      }
+    ) })
   ] });
 };
 const AllOfSelector = ({
@@ -14657,6 +14963,7 @@ const DeckardSchema = ({
     results: 0
   });
   const [focusedProperty, setFocusedProperty] = useState(null);
+  const [scrollTarget, setScrollTarget] = useState(null);
   const [keyboardModalOpen, setKeyboardModalOpen] = useState(false);
   const [examplesHidden, setExamplesHidden] = useState(false);
   const properties = useMemo(() => {
@@ -14710,48 +15017,56 @@ const DeckardSchema = ({
     setPropertyStates(newStates);
   }, [schema2, autoExpand]);
   useEffect(() => {
-    const hash = typeof window !== "undefined" ? window.location.hash : "";
-    if (hash) {
-      const fieldKey = hashToPropertyKey(hash);
-      setPropertyStates((prev) => {
-        const newStates = { ...prev };
-        const pathParts = fieldKey.split(".");
-        for (let i = 1; i <= pathParts.length; i++) {
-          const parentPath = pathParts.slice(0, i).join(".");
-          if (newStates[parentPath]) {
-            newStates[parentPath] = {
-              ...newStates[parentPath],
-              expanded: true
-            };
-          } else {
-            newStates[parentPath] = {
-              expanded: true,
-              hasDetails: true,
-              matchesSearch: true,
-              isDirectMatch: false,
-              hasNestedMatches: false
-            };
+    const handleHashNavigation = () => {
+      const hash = typeof window !== "undefined" ? window.location.hash : "";
+      if (hash) {
+        const fieldKey = hashToPropertyKey(hash);
+        setPropertyStates((prev) => {
+          const newStates = { ...prev };
+          const pathParts = fieldKey.split(".");
+          for (let i = 1; i <= pathParts.length; i++) {
+            const parentPath = pathParts.slice(0, i).join(".");
+            if (newStates[parentPath]) {
+              newStates[parentPath] = {
+                ...newStates[parentPath],
+                expanded: true
+              };
+            } else {
+              newStates[parentPath] = {
+                expanded: true,
+                hasDetails: true,
+                matchesSearch: true,
+                isDirectMatch: false,
+                hasNestedMatches: false
+              };
+            }
           }
-        }
-        return newStates;
-      });
-      setFocusedProperty(fieldKey);
-      setTimeout(() => {
-        if (typeof document !== "undefined") {
-          const targetElement = document.getElementById(
-            propertyKeyToHash(fieldKey)
-          );
-          if (targetElement && typeof targetElement.scrollIntoView === "function") {
-            targetElement.scrollIntoView({
-              behavior: "smooth",
-              block: "start"
-            });
-            targetElement.focus({ preventScroll: true });
-          }
-        }
-      }, 100);
+          return newStates;
+        });
+        setFocusedProperty(fieldKey);
+        setScrollTarget(fieldKey);
+      }
+    };
+    handleHashNavigation();
+    if (typeof window !== "undefined") {
+      window.addEventListener("hashchange", handleHashNavigation);
+      return () => window.removeEventListener("hashchange", handleHashNavigation);
     }
   }, []);
+  useEffect(() => {
+    if (scrollTarget && typeof document !== "undefined") {
+      const targetElement = document.getElementById(
+        propertyKeyToHash(scrollTarget)
+      );
+      if (targetElement && typeof targetElement.scrollIntoView === "function") {
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+      setScrollTarget(null);
+    }
+  }, [scrollTarget, propertyStates]);
   useEffect(() => {
     setSearchState((prev) => ({
       ...prev,
@@ -14922,31 +15237,29 @@ const DeckardSchema = ({
   }, []);
   const focusProperty = useCallback((propertyKey) => {
     setFocusedProperty(propertyKey);
-    setTimeout(() => {
-      if (typeof document === "undefined" || typeof window === "undefined") {
-        return;
-      }
-      const element2 = document.querySelector(
-        `[data-property-key="${propertyKey}"]`
+    if (typeof document === "undefined" || typeof window === "undefined") {
+      return;
+    }
+    const element2 = document.querySelector(
+      `[data-property-key="${propertyKey}"]`
+    );
+    if (element2) {
+      const headerContainer = element2.querySelector(
+        ".property-header-container"
       );
-      if (element2) {
-        const headerContainer = element2.querySelector(
-          ".property-header-container"
-        );
-        if (headerContainer) {
-          headerContainer.focus();
-        } else {
-          element2.setAttribute("tabindex", "-1");
-          element2.focus();
-        }
-        const rect = element2.getBoundingClientRect();
-        const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 0;
-        const isInView = rect.top >= 0 && rect.bottom <= viewportHeight;
-        if (!isInView && typeof element2.scrollIntoView === "function") {
-          element2.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
+      if (headerContainer) {
+        headerContainer.focus();
+      } else {
+        element2.setAttribute("tabindex", "-1");
+        element2.focus();
       }
-    }, 50);
+      const rect = element2.getBoundingClientRect();
+      const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+      const isInView = rect.top >= 0 && rect.bottom <= viewportHeight;
+      if (!isInView && typeof element2.scrollIntoView === "function") {
+        element2.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
   }, []);
   const getAllNavigableProperties = useCallback(() => {
     const navigable = [];
@@ -15218,6 +15531,7 @@ const DeckardSchema = ({
       const anchor = `#${propertyKeyToHash(propertyKey)}`;
       const url = `${window.location.origin}${window.location.pathname}${anchor}`;
       window.location.hash = anchor;
+      setScrollTarget(propertyKey);
       element2.focus();
       try {
         await navigator.clipboard.writeText(url);
@@ -15508,10 +15822,12 @@ const PropertyField = ({
       if (e.button === 1 || e.ctrlKey || e.metaKey) {
         return;
       }
-      onFocusChange == null ? void 0 : onFocusChange(propertyKey);
-      if (collapsible && hasValidSchema && !state.expanded) {
-        onToggle();
-      }
+      setTimeout(() => {
+        onFocusChange == null ? void 0 : onFocusChange(propertyKey);
+        if (collapsible && hasValidSchema && !state.expanded) {
+          onToggle();
+        }
+      }, 0);
     },
     [
       onFocusChange,
@@ -15577,7 +15893,7 @@ const PropertyField = ({
     property.depth > 0 ? "nested-property" : "",
     state.expanded ? "expanded" : "",
     property.depth > 0 ? `depth-${Math.min(property.depth, 3)}` : "",
-    includeExamples && hasValidSchema && hasExamples(property.schema) ? "has-examples" : "",
+    includeExamples && hasValidSchema && hasExamples(property.schema, rootSchema) ? "has-examples" : "",
     !hasValidSchema ? "invalid-schema" : ""
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ jsxs(
@@ -15721,18 +16037,18 @@ const PropertyField = ({
         state.expanded && hasValidSchema && /* @__PURE__ */ jsx(
           "div",
           {
-            className: `schema-details ${includeExamples && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? "schema-details-split" : ""}`,
-            "data-has-examples": hasExamples(property.schema),
+            className: `schema-details ${includeExamples && hasExamples(property.schema, rootSchema) && !property.schema.oneOf && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? "schema-details-split" : ""}`,
+            "data-has-examples": hasExamples(property.schema, rootSchema),
             "data-include-examples": includeExamples,
-            "data-split-active": includeExamples && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true),
-            children: includeExamples && hasExamples(property.schema) && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? /* @__PURE__ */ jsxs(Fragment, { children: [
+            "data-split-active": includeExamples && hasExamples(property.schema, rootSchema) && !property.schema.oneOf && (examplesOnFocusOnly ? focusedProperty === propertyKey : true),
+            children: includeExamples && hasExamples(property.schema, rootSchema) && !property.schema.oneOf && (examplesOnFocusOnly ? focusedProperty === propertyKey : true) ? /* @__PURE__ */ jsxs(Fragment, { children: [
               /* @__PURE__ */ jsx("div", { className: "schema-details-left", children: renderPropertyDetails() }),
               /* @__PURE__ */ jsx(
                 "div",
                 {
                   className: "schema-details-right",
                   "data-debug": "examples-panel-container",
-                  children: rootSchema ? /* @__PURE__ */ jsx(
+                  children: rootSchema && /* @__PURE__ */ jsx(
                     ExamplesPanel,
                     {
                       currentProperty: property.schema,
@@ -15741,10 +16057,7 @@ const PropertyField = ({
                       onCopy,
                       options
                     }
-                  ) : /* @__PURE__ */ jsx("div", { className: "examples-panel-unavailable", children: /* @__PURE__ */ jsxs("div", { className: "examples-panel-message", children: [
-                    /* @__PURE__ */ jsx("span", { className: "examples-panel-icon", children: "ⓘ" }),
-                    "Root schema unavailable"
-                  ] }) })
+                  )
                 }
               )
             ] }) : renderPropertyDetails()
@@ -15774,8 +16087,10 @@ export {
   Tooltip,
   TooltipGlobalManagerProvider,
   DeckardSchema as default,
+  extractOneOfIndexFromPath,
   extractProperties,
   getConstraints,
+  getExamplesFromOneOf,
   getSchemaType,
   getUnsupportedFeatures,
   hasExamples,
