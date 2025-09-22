@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://avocado.com/schemas/avocado-config.json",
+  "$id": "https://avocado.com/schemas/avocado-config/1.1.0.json",
   "title": "Avocado Configuration",
   "description": "Configuration schema for Avocado CLI avocado.toml files. Defines project settings, build configurations, dependencies, and provisioning profiles for Avocado OS projects.",
   "type": "object",
@@ -35,7 +35,7 @@
       "type": "string",
       "description": "Path to the source directory relative to the configuration file. If not specified, defaults to the directory containing the configuration file. This is where your project source code is located.",
       "default": ".",
-      "examples": ["src", "./source"]
+      "examples": ["."]
     },
     "runtime": {
       "$ref": "#/definitions/runtimeConfig"
@@ -103,6 +103,50 @@
   },
   "additionalProperties": false,
   "definitions": {
+    "version": {
+      "title": "Version",
+      "type": "string",
+      "enum": ["*"],
+      "description": "A semantic version string per https://semver.org/.",
+      "examples": ["*"]
+    },
+    "versionRequirement": {
+      "title": "Version requirement",
+      "type": "string",
+      "description": "Semantic version requirement string. Supports exact versions (e.g., '2.1.3'), minimum versions (e.g., '>=1.0.0'), ranges, and other semver patterns.",
+      "examples": ["1.0.0", ">=1.0.0", "~1.2.0", "^2.0.0", "2.1.3"]
+    },
+    "versionObject": {
+      "title": "Version object",
+      "type": "object",
+      "description": "For advanced dependency configuration, an object can be supplied.",
+      "properties": {
+        "ext": {
+          "type": "string",
+          "description": "Extension name to reference.",
+          "examples": ["avocado-ext-dev"]
+        },
+        "vsn": {
+          "$ref": "#/definitions/version"
+        },
+        "config": {
+          "type": "string",
+          "description": "Include an extension from another Avocado config by specifying a path to the other config. The path is relative to the src_dir.",
+          "examples": ["extensions/sshd-dev/avocado.toml"]
+        }
+      },
+      "examples": [
+        {
+          "ext": "avocado-ext-dev",
+          "vsn": "*"
+        },
+        {
+          "ext": "avocado-rust-ext",
+          "config": "extensions/sshd-dev/avocado.toml"
+        }
+      ],
+      "additionalProperties": true
+    },
     "target": {
       "title": "Targett",
       "type": "string",
@@ -127,10 +171,6 @@
       "type": "object",
       "description": "Configuration object containing target and dependencies.",
       "properties": {
-        "target": {
-          "title": "Target",
-          "$ref": "#/definitions/target"
-        },
         "dependencies": {
           "title": "Dependencies",
           "$ref": "#/definitions/dependencies",
@@ -142,18 +182,7 @@
     "targetRuntimeConfig": {
       "title": "Target runtime configuration",
       "description": "Runtime configuration for a specific target platform.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/targetDependencies"
-        },
-        {
-          "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
-              "$ref": "#/definitions/targetDependencies"
-            }
-          }
-        }
-      ],
+      "$ref": "#/definitions/targetDependencies",
       "additionalProperties": false
     },
     "sdkConfig": {
@@ -290,10 +319,7 @@
       "description": "Configuration for an Avocado OS extension (system extension or configuration extension).",
       "properties": {
         "version": {
-          "title": "Version",
-          "type": "string",
-          "description": "Extension version identifier. Used for tracking and dependency resolution.",
-          "examples": ["1.0.0"]
+          "$ref": "#/definitions/version"
         },
         "types": {
           "title": "Extension types",
@@ -507,16 +533,10 @@
     },
     "runtimeConfig": {
       "type": "object",
-      "description": "Default dependencies and target for all runtimes, as well as per-runtime overrides.",
+      "description": "Default dependencies for all runtimes, as well as per-runtime overrides.",
       "properties": {
         "dependencies": {
-          "title": "Dependencies",
-          "$ref": "#/definitions/dependencies",
-          "description": "Runtime dependencies required for the target. Can include paths to local extensions or references to external packages."
-        },
-        "target": {
-          "title": "Target",
-          "$ref": "#/definitions/target"
+          "$ref": "#/definitions/dependencies"
         }
       },
       "patternProperties": {
@@ -540,74 +560,35 @@
     },
     "dependencies": {
       "title": "Dependencies",
-      "oneOf": [
-        {
-          "type": "string",
-          "description": "Version requirement string. Use '*' for any version, '>=X.Y' for minimum version, 'X.Y.Z' for exact version, or semantic version ranges.",
-          "examples": ["*", ">=1.0.0", "2.1.3"]
-        },
-        {
-          "type": "object",
-          "description": "Object defining extension dependencies or package dependencies with version constraints. For runtime dependencies, can define extension dependencies. For extension dependencies, can include SDK compile configurations.",
-          "patternProperties": {
-            "^[a-zA-Z0-9_.-]+$": {
-              "oneOf": [
-                {
-                  "type": "string",
-                  "description": "Version constraint string. Use '*' for any version, '>=X.Y' for minimum version, 'X.Y.Z' for exact version, or semantic version ranges.",
-                  "examples": ["*", ">=1.0.0", "2.1.3"]
-                },
-                {
-                  "type": "object",
-                  "description": "Extension dependency object that can include path references for runtime dependencies or SDK compile configurations for extension dependencies.",
-                  "properties": {
-                    "path": {
-                      "type": "string",
-                      "description": "Path to local extension dependency.",
-                      "examples": ["../extensions/wifi", "./local-ext"]
-                    },
-                    "version": {
-                      "type": "string",
-                      "description": "Version constraint for the dependency.",
-                      "examples": ["*", ">=1.0.0", "2.1.3"]
-                    },
-                    "sdk": {
-                      "type": "object",
-                      "description": "SDK compile configuration for this dependency.",
-                      "properties": {
-                        "compile": {
-                          "type": "string",
-                          "description": "Compile command for building this dependency.",
-                          "examples": ["make", "cmake --build ."]
-                        },
-                        "dependencies": {
-                          "$ref": "#/definitions/dependencies",
-                          "description": "Build-time dependencies for compiling this dependency."
-                        }
-                      },
-                      "additionalProperties": true
-                    }
-                  },
-                  "additionalProperties": true
-                }
-              ]
+      "type": "object",
+      "description": "Object defining package and extension dependencies with version constraints.",
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "examples": ["i2c-tools", "arbitrary-identifier"],
+          "description": "Keys specified to match this pattern are either an existing package name or an arbitrary identifier when specifying a version object with an ext key.",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/version"
+            },
+            {
+              "$ref": "#/definitions/versionObject"
             }
-          },
-          "additionalProperties": false
+          ]
         }
-      ],
+      },
+      "additionalProperties": false,
       "examples": [
-        "*",
         {
-          "cmake": ">=3.22.0",
-          "wifi": {
-            "path": "../extensions/wifi",
-            "sdk": {
-              "compile": "make",
-              "dependencies": {
-                "libnl": "3.5.0"
-              }
-            }
+          "avocado-img-bootfiles": "*",
+          "avocado-img-rootfs": "*",
+          "avocado-img-initramfs": "*",
+          "avocado-ext-dev": {
+            "ext": "avocado-ext-dev",
+            "vsn": "*"
+          },
+          "example-rust-ext": {
+            "ext": "example-rust-ext",
+            "config": "extensions/sshd-dev/avocado.toml"
           }
         }
       ]
@@ -627,17 +608,17 @@
           "wifi": {
             "compile": "make",
             "dependencies": {
-              "libnl": "3.5.0"
+              "libnl": "*"
             }
           }
         }
       },
       "runtime": {
         "raspberrypi4": {
-          "target": "raspberrypi4",
           "dependencies": {
-            "wifi": {
-              "path": "../extensions/wifi"
+            "avocado-img-bootfiles": "*",
+            "wifi-ext": {
+              "ext": "wifi"
             }
           }
         }
@@ -652,6 +633,8 @@
           "types": ["sysext", "confext"],
           "dependencies": {
             "example-rust-app": {
+              "ext": "example-rust-app",
+              "vsn": "2.1.0",
               "compile": "example-rust-app",
               "install": "example-rust-install.sh"
             }
