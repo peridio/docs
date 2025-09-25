@@ -10,6 +10,7 @@ rules:
 openapi:
   scrollYOffset: 60
   disableSearch: true
+  hideDownloadButton: true
   theme:
     colors:
       primary:

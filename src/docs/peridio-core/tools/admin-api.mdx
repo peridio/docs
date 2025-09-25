@@ -1,0 +1,29 @@
+---
+title: Admin API
+hide_table_of_contents: true
+sidebar_position: 1
+---
+
+import ApiDocMdx from '@theme/ApiDocMdx'
+import { FiExternalLink } from 'react-icons/fi'
+
+<a
+  href="#"
+  onClick={() =>
+    window.open(
+      '/peridio-core/tools/admin-api/popout',
+      'adminApiPopout',
+      'width=1200,height=800,scrollbars=yes,resizable=yes,toolbar=no,location=no,directories=no,status=no,menubar=no'
+    )
+  }
+  style={{
+    display: 'inline-flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    cursor: 'pointer',
+  }}
+>
+  Popout <FiExternalLink size={14} />
+</a>
+
+<ApiDocMdx id="peridio-admin-api" />

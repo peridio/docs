@@ -9,21 +9,21 @@ const slides = [
     target: 'Jetson Xavier / Orin',
     image: '/img/nvidia-jetson-orin.jpg', // TODO: replace with real Jetson image
     overviewLink: '/solutions/nvidia/jetson-orin-nano',
-    getStartedLink: '/hardware/nvidia/jetson-orin-nano-evk',
+    getStartedLink: '/avocado-linux/guides/getting-started',
   },
   {
     vendor: 'Raspberry Pi',
     target: 'Raspberry Pi 4 / 5',
     image: '/img/raspberry-pi.jpg',
-    overviewLink: '/solutions/raspberry-pi/raspberry-pi',
-    getStartedLink: '/hardware/raspberry-pi/compute-module-4',
+    overviewLink: '/solutions/raspberry-pi',
+    getStartedLink: '/avocado-linux/guides/getting-started',
   },
   {
     vendor: 'NXP',
     target: 'i.MX8MP EVK',
     image: '/img/nxp-imx8p.jpg', // TODO: replace with real i.MX8 image
     overviewLink: '/solutions/nxp/imx8mp',
-    getStartedLink: '/hardware/nxp/imx8mp',
+    getStartedLink: '/avocado-linux/guides/getting-started',
   },
 ]
 

@@ -10,7 +10,11 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
   favicon: 'img/logo.svg',
   organizationName: 'peridio', // Usually your GitHub org/user name.
   projectName: 'peridio-docs', // Usually your repo name.
@@ -21,14 +25,19 @@ const config = {
   },
   plugins: [
     'docusaurus-plugin-image-zoom',
-    [
-      '@docusaurus/plugin-google-gtag',
-      /** @type {import('@docusaurus/plugin-google-gtag').Options} */
-      ({
-        trackingID: 'G-XN33JD9H3F',
-        anonymizeIP: true,
-      }),
-    ],
+    './plugins/yaml-loader-plugin',
+    ...(process.env.NODE_ENV === 'production'
+      ? [
+          [
+            '@docusaurus/plugin-google-gtag',
+            /** @type {import('@docusaurus/plugin-google-gtag').Options} */
+            ({
+              trackingID: 'G-XN33JD9H3F',
+              anonymizeIP: true,
+            }),
+          ],
+        ]
+      : []),
   ],
   presets: [
     [
@@ -54,13 +63,13 @@ const config = {
             id: 'peridio-admin-api',
             layout: { title: 'Admin API' },
             spec: 'openapi/peridio-admin-openapi.yaml',
-            route: 'admin-api',
+            route: 'peridio-core/tools/admin-api/popout',
           },
           {
             id: 'peridio-device-api',
             layout: { title: 'Device API' },
             spec: 'openapi/peridio-device-openapi.yaml',
-            route: 'device-api',
+            route: 'peridio-core/tools/device-api/popout',
           },
         ],
         config: './redocly.yaml',
@@ -110,13 +119,13 @@ const config = {
           {
             type: 'dropdown',
             label: 'Documentation',
-            to: '/getting-started/overview',
+            to: '/overview',
             position: 'left',
             items: [
               {
                 type: 'html',
                 value:
-                  '<div class="dropdown__menu--grid-container"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">GETTING STARTED</div><a href="/getting-started/overview" class="dropdown__menu--link">Overview</a><a href="/getting-started/provision-device" class="dropdown__menu--link">Provision a Device</a><a href="/getting-started/hardware-in-the-loop" class="dropdown__menu--link">Hardware in the Loop</a><a href="/getting-started/desktop-deploy" class="dropdown__menu--link">Sideload an Update</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">CORE PLATFORMS</div><a href="/avocado-linux/introduction" class="dropdown__menu--link">Avocado OS</a><a href="/peridio-core/introduction" class="dropdown__menu--link">Peridio Core</a><a href="/hardware/supported-hardware" class="dropdown__menu--link">Supported Hardware</a><a href="/integration" class="dropdown__menu--link">Integration Guides</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">RESOURCES</div><a href="/tools" class="dropdown__menu--link">Tools</a><a href="/tunnels/overview" class="dropdown__menu--link">Remote Access Tunnels</a><a href="/integration/webhooks/overview" class="dropdown__menu--link">Webhooks</a><a href="/integration/certificates/overview" class="dropdown__menu--link">Certificates</a></div></div>',
+                  '<div class="dropdown__menu--grid-container"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">GETTING STARTED</div><a href="/overview" class="dropdown__menu--link">Overview</a><a href="/avocado-linux/guides/getting-started" class="dropdown__menu--link">Getting started</a><a href="/avocado-linux/guides/hardware-in-the-loop" class="dropdown__menu--link">Hardware in the Loop</a><a href="/avocado-linux/guides/sideloading" class="dropdown__menu--link">Sideload an Update</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">CORE PLATFORMS</div><a href="/avocado-linux/overview" class="dropdown__menu--link">Avocado OS</a><a href="/peridio-core/introduction" class="dropdown__menu--link">Peridio Core</a><a href="/integration" class="dropdown__menu--link">Integration Guides</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">RESOURCES</div><a href="/peridio-core/tunnels/overview" class="dropdown__menu--link">Remote Access Tunnels</a><a href="/integration/webhooks/overview" class="dropdown__menu--link">Webhooks</a><a href="/integration/certificates/overview" class="dropdown__menu--link">Certificates</a></div></div>',
               },
             ],
           },
@@ -129,20 +138,19 @@ const config = {
               {
                 type: 'html',
                 value:
-                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">SEMICONDUCTORS</div><a href="/solutions/nxp/imx8mp" class="dropdown__menu--link">NXP IMX8MP</a><a href="/solutions/raspberry-pi/raspberry-pi" class="dropdown__menu--link">Raspberry Pi</a><a href="/solutions/nvidia/jetson-orin-nano" class="dropdown__menu--link">NVIDIA Jetson</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PRODUCTION READY</div><a href="/solutions/advantech/icam-540" class="dropdown__menu--link">Advantech ICAM 540</a><a href="/solutions/onlogic" class="dropdown__menu--link">OnLogic FR201</a><a href="/solutions/seeed" class="dropdown__menu--link">Seeed reTerminal</a></div></div><div style="margin-top: 1.75rem; text-align: right;"><a href="/hardware/supported-hardware" style="font-size: 0.85rem; color: #666; opacity: 0.9; text-decoration: none; transition: opacity 0.2s ease;" onmouseover="this.style.opacity=\'1\'; this.style.color=\'#333\';" onmouseout="this.style.opacity=\'0.9\'; this.style.color=\'#666\';">View all supported hardware →</a></div>',
+                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">SEMICONDUCTORS</div><a href="/solutions/nxp/imx8mp" class="dropdown__menu--link">NXP i.MX 8M Plus</a><a href="/solutions/raspberry-pi/raspberry-pi" class="dropdown__menu--link">Raspberry Pi</a><a href="/solutions/nvidia/jetson-orin-nano" class="dropdown__menu--link">NVIDIA Jetson</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PRODUCTION READY</div><a href="/solutions/advantech/icam-540" class="dropdown__menu--link">Advantech ICAM 540</a><a href="/solutions/onlogic" class="dropdown__menu--link">OnLogic FR201</a><a href="/solutions/seeed" class="dropdown__menu--link">Seeed reTerminal</a></div></div><div style="margin-top: 1.75rem; text-align: right;"><a href="/hardware/support-matrix" style="font-size: 0.85rem; color: #666; opacity: 0.9; text-decoration: none; transition: opacity 0.2s ease;" onmouseover="this.style.opacity=\'1\'; this.style.color=\'#333\';" onmouseout="this.style.opacity=\'0.9\'; this.style.color=\'#666\';">View all supported hardware →</a></div>',
               },
             ],
           },
           {
             type: 'dropdown',
             label: 'Tools',
-            to: '/tools',
             position: 'right',
             items: [
               {
                 type: 'html',
                 value:
-                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">AVOCADO LINUX</div><a href="/tools/avocado-cli" class="dropdown__menu--link">Avocado CLI</a><a href="/tools/avocado-control" class="dropdown__menu--link">Avocado Control</a><a href="/tools/meta-avocado" class="dropdown__menu--link">Meta Avocado</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PERIDIO CORE</div><a href="/tools/admin-api" class="dropdown__menu--link">Peridio Admin API</a><a href="/tools/peridio-admin-rust-sdk" class="dropdown__menu--link">Peridio Admin Rust SDK</a><a href="/tools/peridio-cli" class="dropdown__menu--link">Peridio CLI</a><a href="/tools/peridio-daemon" class="dropdown__menu--link">Peridio Daemon</a><a href="/tools/device-api" class="dropdown__menu--link">Peridio Device API</a></div></div>',
+                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">AVOCADO LINUX</div><a href="/avocado-linux/tools/avocado-cli/overview" class="dropdown__menu--link">Avocado CLI</a><a href="/avocado-linux/tools/avocado-control" class="dropdown__menu--link">Avocado Control</a><a href="/avocado-linux/tools/meta-avocado" class="dropdown__menu--link">Meta Avocado</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PERIDIO CORE</div><a href="/peridio-core/tools/admin-api" class="dropdown__menu--link">Admin API</a><a href="/peridio-core/tools/rust-sdk" class="dropdown__menu--link">Admin API Rust SDK</a><a href="/peridio-core/tools/peridio-cli/overview" class="dropdown__menu--link">Peridio CLI</a><a href="/peridio-core/tools/peridio-daemon/overview" class="dropdown__menu--link">Peridio Daemon</a><a href="/peridio-core/tools/device-api" class="dropdown__menu--link">Device API</a></div></div>',
               },
             ],
           },
@@ -202,6 +210,18 @@ const config = {
     }),
   headTags: [
     {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `
+        // Early gtag stub to prevent errors in development
+        if (typeof window !== 'undefined' && !window.gtag) {
+          window.gtag = function() {
+            console.warn('[DEV] gtag called but not loaded in development:', Array.from(arguments));
+          };
+        }
+      `,
+    },
+    {
       tagName: 'link',
       attributes: {
         rel: 'preconnect',
@@ -235,7 +255,17 @@ const config = {
       attributes: {
         async: 'true',
       },
-      innerHTML: `!function(){var e=["identify","page","startAutoPage","stopAutoPage","startAutoIdentify","stopAutoIdentify"];function t(o){return Object.assign([],e.reduce(function(r,n){return r[n]=function(){return o.push([n,[].slice.call(arguments)]),o},r},{}))}window.unify||(window.unify=t(window.unify)),window.unifyBrowser||(window.unifyBrowser=t(window.unifyBrowser));var n=document.createElement("script");n.async=!0,n.setAttribute("src","https://tag.unifyintent.com/v1/LDrzeMh2P67Pebcy3gyjWc/script.js"),n.setAttribute("data-api-key","wk_PdA49XZi_8rJCmEbbb3YJnXGDECJJvKA5wt6fdP14"),n.setAttribute("id","unifytag"),(document.body||document.head).appendChild(n)}();`,
+      innerHTML: `
+        // Defensive gtag stub for development
+        if (typeof window !== 'undefined' && !window.gtag) {
+          window.gtag = function() {
+            console.warn('[DEV] gtag called but not loaded in development:', arguments);
+          };
+        }
+
+        // UnifyIntent tracking
+        !function(){var e=["identify","page","startAutoPage","stopAutoPage","startAutoIdentify","stopAutoIdentify"];function t(o){return Object.assign([],e.reduce(function(r,n){return r[n]=function(){return o.push([n,[].slice.call(arguments)]),o},r},{}))}window.unify||(window.unify=t(window.unify)),window.unifyBrowser||(window.unifyBrowser=t(window.unifyBrowser));var n=document.createElement("script");n.async=!0,n.setAttribute("src","https://tag.unifyintent.com/v1/LDrzeMh2P67Pebcy3gyjWc/script.js"),n.setAttribute("data-api-key","wk_PdA49XZi_8rJCmEbbb3YJnXGDECJJvKA5wt6fdP14"),n.setAttribute("id","unifytag"),(document.body||document.head).appendChild(n)}();
+      `,
     },
   ],
 }

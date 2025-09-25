@@ -9,7 +9,7 @@
       "title": "Default target",
       "$ref": "#/definitions/target",
       "description": "The default target platform for the project. This target is used when building the project if no target is specified.",
-      "examples": ["jetson-orin-nano-devkit-nvme"]
+      "examples": ["jetson-orin-nano-devkit"]
     },
     "supported_targets": {
       "title": "Supported targets",
@@ -159,7 +159,7 @@
         "qemux86-64",
         "reterminal",
         "reterminal-dm",
-        "jetson-orin-nano-devkit-nvme",
+        "jetson-orin-nano-devkit",
         "raspberrypi4",
         "raspberrypi5"
       ],
@@ -596,7 +596,7 @@
   },
   "examples": [
     {
-      "default_target": "jetson-orin-nano-devkit-nvme",
+      "default_target": "jetson-orin-nano-devkit",
       "supported_targets": ["raspberrypi4", "qemuarm64"],
       "src_dir": "src",
       "sdk": {

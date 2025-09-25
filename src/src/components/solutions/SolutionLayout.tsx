@@ -1,6 +1,7 @@
 import React from 'react'
-import Layout from '@theme/Layout'
+
 import Head from '@docusaurus/Head'
+import Layout from '@theme/Layout'
 import SolutionHero from './SolutionHero'
 import ValueProposition from './ValueProposition'
 import TechSpecs from './TechSpecs'
@@ -106,10 +107,8 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
   } = props
 
   return (
-    <Layout>
+    <Layout title={`${title} | Peridio`} description={description}>
       <Head>
-        <title>{title} | Peridio</title>
-        <meta name="description" content={description} />
         {keywords && <meta name="keywords" content={keywords} />}
         <meta property="og:title" content={`${title} | Peridio`} />
         <meta property="og:description" content={description} />

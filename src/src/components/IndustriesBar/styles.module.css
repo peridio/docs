@@ -47,8 +47,6 @@
   padding: 1rem;
   width: 120px;
   height: 100px;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
   flex-shrink: 0;
 }
 

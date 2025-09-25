@@ -1,0 +1,103 @@
+{
+  "category": "Under Evaluation",
+  "devices": [
+    {
+      "name": "BeagleBone AI-64",
+      "url": null,
+      "external": false,
+      "features": {
+        "provisioning": "none",
+        "hitl": "none",
+        "sideLoading": "none",
+        "extensionOta": "none",
+        "osOta": "none",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "none"
+      }
+    },
+    {
+      "name": "Intel NUC",
+      "url": null,
+      "external": false,
+      "features": {
+        "provisioning": "none",
+        "hitl": "none",
+        "sideLoading": "none",
+        "extensionOta": "none",
+        "osOta": "none",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "none"
+      }
+    },
+    {
+      "name": "NVIDIA Jetson Nano",
+      "url": null,
+      "external": false,
+      "features": {
+        "provisioning": "none",
+        "hitl": "none",
+        "sideLoading": "none",
+        "extensionOta": "none",
+        "osOta": "none",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "none"
+      }
+    },
+    {
+      "name": "Qualcomm RB5",
+      "url": null,
+      "external": false,
+      "features": {
+        "provisioning": "none",
+        "hitl": "none",
+        "sideLoading": "none",
+        "extensionOta": "none",
+        "osOta": "none",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "none"
+      }
+    },
+    {
+      "name": "Raspberry Pi 5",
+      "url": null,
+      "external": false,
+      "features": {
+        "provisioning": "none",
+        "hitl": "none",
+        "sideLoading": "none",
+        "extensionOta": "none",
+        "osOta": "none",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "none"
+      }
+    },
+    {
+      "name": "STM32MP1 Discovery Kit",
+      "url": null,
+      "external": false,
+      "features": {
+        "provisioning": "none",
+        "hitl": "none",
+        "sideLoading": "none",
+        "extensionOta": "none",
+        "osOta": "none",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "none"
+      }
+    },
+    {
+      "name": "Toradex Modules",
+      "url": null,
+      "external": false,
+      "features": {
+        "provisioning": "none",
+        "hitl": "none",
+        "sideLoading": "none",
+        "extensionOta": "none",
+        "osOta": "none",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "none"
+      }
+    }
+  ]
+}

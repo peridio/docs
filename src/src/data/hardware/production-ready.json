@@ -1,0 +1,47 @@
+{
+  "category": "Production Ready",
+  "devices": [
+    {
+      "name": "Advantech ICAM-540",
+      "url": "/solutions/advantech/icam-540",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "OnLogic FR-201",
+      "url": "/solutions/onlogic/fr201",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Seeed reTerminal",
+      "url": "/solutions/seeed",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    }
+  ]
+}
