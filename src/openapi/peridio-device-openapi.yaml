@@ -12,22 +12,22 @@ info:
 
     The following headers may be supplied when requesting any route.
 
-    For critical context about how Peridio Cloud will interpret these headers, refer to the [device integration](/platform/reference/bundle-distribution#device-integration) section of the [bundle distribution](/platform/reference/bundle-distribution) reference.
+    For critical context about how Peridio Cloud will interpret these headers, refer to the [device integration](/peridio-core/reference/bundle-distribution#device-integration) section of the [bundle distribution](/peridio-core/reference/bundle-distribution) reference.
 
-    For context regarding deprecated headers, see [deployment eligibility](/platform/reference/deployments#deployment-eligibility).
+    For context regarding deprecated headers, see [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility).
 
     |key|value|description|
     |-|-|-|
     |peridio-release-prn|A release PRN.|Informs Peridio of what release is currently active on the device.|
     |peridio-bundle-prn|A bundle PRN.|Informs Peridio of what bundle is currently active on the device.|
     |peridio-release-version|A release version.|Informs Peridio of what release version is representative of the device's state.|
-    |x-peridio-architecture|A firmware architecture.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The architecture of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-platform|A firmware platform.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The platform of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-product|A firmware product.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The product of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-uuid|A firmware UUID.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The UUID of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-version|A firmware version.|Deprecated. See [deployment eligibility](/platform/reference/deployments#deployment-eligibility). The version of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-architecture|A firmware architecture.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The architecture of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-platform|A firmware platform.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The platform of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-product|A firmware product.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The product of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-uuid|A firmware UUID.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The UUID of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-version|A firmware version.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The version of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
   title: Peridio Device API
-  version: "1.0.0"
+  version: "1"
 servers:
   - url: https://device.cremini.peridio.com
 security:
@@ -200,7 +200,7 @@ paths:
       operationId: get-update
       summary: get update
       description: |
-        Returns information regarding whether an update is available via a [release](/platform/reference/releases) or [bundle override](/platform/reference/bundle-overrides).
+        Returns information regarding whether an update is available via a [release](/peridio-core/reference/releases) or [bundle override](/peridio-core/reference/bundle-overrides).
 
         ### Expandable
 

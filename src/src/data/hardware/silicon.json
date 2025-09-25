@@ -1,0 +1,75 @@
+{
+  "category": "Semiconductors",
+  "devices": [
+    {
+      "name": "NVIDIA Jetson Orin Nano Developer Kit",
+      "url": "/solutions/nvidia/jetson-orin-nano-developer-kit",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NXP i.MX 8MP EVK",
+      "url": "/solutions/nxp/imx8mp",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NXP i.MX 93 FRDM SBC",
+      "url": "/solutions/nxp/frdm-93",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Raspberry Pi 4 Model B",
+      "url": "/solutions/raspberry-pi",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Raspberry Pi 5",
+      "url": "/solutions/raspberry-pi/raspberry-pi-5",
+      "external": true,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    }
+  ]
+}

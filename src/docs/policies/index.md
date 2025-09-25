@@ -1,8 +1,7 @@
 ---
-title: 🚧 Policies
+title: 'Policies'
+description: 'Important policies and guidelines governing Peridio services usage and community participation, including Code of Conduct and Privacy Statement.'
 ---
-
-# 🚧 Policies
 
 This section contains important policies and guidelines that govern the use of Peridio services and participation in the Peridio community.
 

@@ -1,0 +1,14 @@
+---
+title: Provision
+hide_title: true
+sidebar_position: 2
+---
+
+import { default as ProvisionGuide, getDynamicToc } from '@site/src/components/ProvisionGuide'
+
+<ProvisionGuide
+  targetId="raspberrypi4"
+  inDevelopment={frontMatter.sidebar_custom_props?.inDevelopment}
+/>
+
+export const toc = getDynamicToc('raspberrypi4')

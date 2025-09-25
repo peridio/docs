@@ -1,0 +1,13 @@
+---
+title: Provision
+hide_title: true
+sidebar_position: 2
+sidebar_custom_props:
+  inDevelopment: true
+---
+
+import { default as ProvisionGuide, getDynamicToc } from '@site/src/components/ProvisionGuide'
+
+<ProvisionGuide targetId="fr201" inDevelopment={frontMatter.sidebar_custom_props?.inDevelopment} />
+
+export const toc = getDynamicToc('fr201')

@@ -1,0 +1,66 @@
+.provisionGuide {
+  max-width: 100%;
+}
+
+.provisionGuide h1 {
+  color: var(--ifm-heading-color);
+  margin-bottom: var(--ifm-heading-margin-bottom);
+}
+
+.provisionGuide h2 {
+  color: var(--ifm-heading-color);
+  margin-top: var(--ifm-h2-margin-top);
+  margin-bottom: var(--ifm-heading-margin-bottom);
+}
+
+.provisionGuide h3 {
+  color: var(--ifm-heading-color);
+  margin-top: var(--ifm-h3-margin-top);
+  margin-bottom: var(--ifm-heading-margin-bottom);
+}
+
+.provisionGuide p {
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+}
+
+.provisionGuide li {
+  margin-top: var(--ifm-list-item-margin);
+}
+
+.provisionGuide p code,
+.provisionGuide li code {
+  background-color: var(--ifm-code-background);
+  border: var(--ifm-code-border);
+  border-radius: var(--ifm-code-border-radius);
+  color: var(--ifm-code-color);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
+}
+
+.provisionGuide a {
+  color: var(--ifm-link-color);
+  text-decoration: var(--ifm-link-decoration);
+}
+
+.provisionGuide a:hover {
+  color: var(--ifm-link-hover-color);
+  text-decoration: var(--ifm-link-hover-decoration);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .provisionGuide {
+  color: var(--ifm-font-color-base);
+}
+
+[data-theme="dark"] .provisionGuide h1,
+[data-theme="dark"] .provisionGuide h2,
+[data-theme="dark"] .provisionGuide h3 {
+  color: var(--ifm-heading-color);
+}
+
+[data-theme="dark"] .provisionGuide p code,
+[data-theme="dark"] .provisionGuide li code {
+  background-color: var(--ifm-code-background);
+  color: var(--ifm-code-color);
+}

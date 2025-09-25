@@ -489,3 +489,91 @@ html[data-theme="dark"] .card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
   border-color: #5f6368 !important;
 }
+
+/* In Development Warning Styles */
+.admonition-warning.admonition-in-development {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-left: 4px solid #ffc107;
+}
+
+.admonition-warning.admonition-in-development .admonition-heading {
+  color: #856404;
+}
+
+.admonition-warning.admonition-in-development .admonition-content {
+  color: #856404;
+}
+
+/* Dark mode adjustments for development warnings */
+html[data-theme="dark"] .admonition-warning.admonition-in-development {
+  background-color: rgba(255, 193, 7, 0.08);
+  border-left-color: #ffc107;
+}
+
+html[data-theme="dark"] .admonition-warning.admonition-in-development .admonition-heading {
+  color: #ffc107;
+}
+
+html[data-theme="dark"] .admonition-warning.admonition-in-development .admonition-content {
+  color: #e6c46b;
+}
+
+/* Enhanced warning admonition styling for in-development content */
+.admonition[data-admonition-type="warning"] {
+  margin-bottom: 1.5rem;
+}
+
+.admonition[data-admonition-type="warning"] .admonition-heading {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admonition[data-admonition-type="warning"] .admonition-heading::before {
+  content: "⚠️";
+  font-size: 1.1em;
+}
+
+/* Development badges are now handled by the DocSidebarItem React component */
+/* CSS custom properties for development badge styling */
+:root {
+  --dev-badge-bg: rgba(255, 193, 7, 0.2);
+  --dev-badge-color: #856404;
+  --dev-badge-border: rgba(255, 193, 7, 0.5);
+  --dev-badge-hover-bg: rgba(255, 193, 7, 0.25);
+  --dev-badge-active-bg: rgba(255, 193, 7, 0.3);
+}
+
+html[data-theme="dark"] {
+  --dev-badge-bg: rgba(255, 193, 7, 0.15);
+  --dev-badge-color: #ffc107;
+  --dev-badge-border: rgba(255, 193, 7, 0.3);
+  --dev-badge-hover-bg: rgba(255, 193, 7, 0.2);
+  --dev-badge-active-bg: rgba(255, 193, 7, 0.25);
+}
+
+/* Development badge component styles */
+.dev-badge {
+  background: var(--dev-badge-bg);
+  color: var(--dev-badge-color);
+  border: 1px solid var(--dev-badge-border);
+  padding: 0.125rem 0.375rem;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+  line-height: 1;
+}
+
+/* Hover and active states for sidebar items with dev badges */
+.menu__link:hover .dev-badge {
+  background: var(--dev-badge-hover-bg);
+}
+
+.menu__link--active .dev-badge {
+  background: var(--dev-badge-active-bg);
+}

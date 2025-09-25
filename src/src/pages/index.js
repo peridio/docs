@@ -166,7 +166,7 @@ export default function Home() {
               </p>
               {/* Avocado OS Links Section */}
               <div className={styles.linkGrid}>
-                <Link to="/avocado-linux/introduction" className={styles.externalLink}>
+                <Link to="/avocado-linux/overview" className={styles.externalLink}>
                   <svg
                     width="16"
                     height="16"
@@ -319,7 +319,7 @@ export default function Home() {
               </p>
               {/* Peridio Core Links Section */}
               <div className={styles.linkGrid}>
-                <Link to="/peridio-core/introduction" className={styles.externalLink}>
+                <Link to="/peridio-core/guides/getting-started" className={styles.externalLink}>
                   <svg
                     width="16"
                     height="16"
@@ -334,7 +334,10 @@ export default function Home() {
                   </svg>
                   Overview
                 </Link>
-                <Link to="/peridio-core/device-management/overview" className={styles.externalLink}>
+                <Link
+                  to="/peridio-core/reference/device-management/overview"
+                  className={styles.externalLink}
+                >
                   <svg
                     width="16"
                     height="16"
@@ -349,7 +352,10 @@ export default function Home() {
                   </svg>
                   Device Management
                 </Link>
-                <Link to="/tunnels/overview" className={styles.externalLink}>
+                <Link
+                  to="/peridio-core/reference/remote-access/tunnels"
+                  className={styles.externalLink}
+                >
                   <svg
                     width="16"
                     height="16"
@@ -362,10 +368,10 @@ export default function Home() {
                       fill="currentColor"
                     />
                   </svg>
-                  Tunnels / Remote Access
+                  Remote Access Tunnels
                 </Link>
                 <Link
-                  to="/peridio-core/firmware-management/overview"
+                  to="/peridio-core/guides/binary-management/introduction-to-binary-management"
                   className={styles.externalLink}
                 >
                   <svg
@@ -403,7 +409,7 @@ export default function Home() {
               </p>
               {/* Get Started Links Section */}
               <div className={styles.linkGrid}>
-                <Link to="/getting-started/overview" className={styles.externalLink}>
+                <Link to="/avocado-linux/guides/getting-started" className={styles.externalLink}>
                   <svg
                     width="16"
                     height="16"
@@ -418,7 +424,7 @@ export default function Home() {
                   </svg>
                   Introduction
                 </Link>
-                <Link to="/getting-started/provision-device" className={styles.externalLink}>
+                <Link to="/hardware/qemu/x86-64/provision" className={styles.externalLink}>
                   <svg
                     width="16"
                     height="16"
@@ -433,7 +439,10 @@ export default function Home() {
                   </svg>
                   Provision Device
                 </Link>
-                <Link to="/getting-started/hardware-in-the-loop" className={styles.externalLink}>
+                <Link
+                  to="/avocado-linux/guides/hardware-in-the-loop"
+                  className={styles.externalLink}
+                >
                   <svg
                     width="16"
                     height="16"
@@ -483,10 +492,7 @@ export default function Home() {
           {/* Resource Cards Container */}
           <div className={styles.resourceCardsContainer}>
             {/* Build Tools */}
-            <Link
-              to="/integration/guides/peridio-core-custom-integration/linux/build-tools/yocto"
-              className={styles.resourceCard}
-            >
+            <div className={styles.resourceCard}>
               <div className={styles.featureIcon}>
                 <WrenchScrewdriverIcon className={styles.featureIconSvg} />
               </div>
@@ -495,10 +501,10 @@ export default function Home() {
                 Yocto & Buildroot integration with pre-configured layers and CI/CD pipeline
                 templates
               </p>
-            </Link>
+            </div>
 
             {/* Security */}
-            <Link to="/platform/reference/overview" className={styles.resourceCard}>
+            <div className={styles.resourceCard}>
               <div className={styles.featureIcon}>
                 <ShieldCheckIcon className={styles.featureIconSvg} />
               </div>
@@ -507,10 +513,10 @@ export default function Home() {
                 End-to-end device security with secure boot, device identity, and encrypted OTA
                 updates
               </p>
-            </Link>
+            </div>
 
             {/* Integrations */}
-            <Link to="/admin-api" className={styles.resourceCard}>
+            <div className={styles.resourceCard}>
               <div className={styles.featureIcon}>
                 <LinkIcon className={styles.featureIconSvg} />
               </div>
@@ -519,7 +525,7 @@ export default function Home() {
                 Connect your ecosystem with REST API, Command Line Interface and Webhooks to
                 seamlessly operate with your existing build systems services
               </p>
-            </Link>
+            </div>
           </div>
         </div>
 
