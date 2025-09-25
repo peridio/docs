@@ -4,7 +4,15 @@ const { exec } = require('node:child_process')
 const fs = require('node:fs')
 const path = require('node:path')
 
-const BASE_DOCS_DIR = path.resolve(__dirname, '..', 'docs', 'avocado-cli')
+const BASE_DOCS_DIR = path.resolve(
+  __dirname,
+  '..',
+  'docs',
+  'avocado-linux',
+  'tools',
+  'avocado-cli',
+  'commands'
+)
 
 function getSection(section, str) {
   const reCommandsSection = new RegExp(`${section}:\n((?: {2}.*\n)*)`, 'g')

@@ -1,5 +1,5 @@
 import React from 'react'
-import Layout from '@theme/Layout'
+
 import Head from '@docusaurus/Head'
 import SolutionHero from './SolutionHero'
 import ValueProposition from './ValueProposition'
@@ -106,7 +106,7 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
   } = props
 
   return (
-    <Layout>
+    <div>
       <Head>
         <title>{title} | Peridio</title>
         <meta name="description" content={description} />
@@ -139,6 +139,6 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
       {cta && <CTASection {...cta} />}
 
       {resources && <ResourceCards resources={resources} />}
-    </Layout>
+    </div>
   )
 }

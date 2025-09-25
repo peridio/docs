@@ -4,8 +4,6 @@ description: Privacy Statement for Avocado Linux
 slug: privacy
 ---
 
-# Privacy Statement
-
 ## Our Commitment to Privacy
 
 Avocado Linux is committed to protecting your privacy. This Privacy Statement explains our data practices regarding the information we collect.

@@ -22,7 +22,7 @@ function getSubCommands(help) {
 }
 
 function writeCommandGroup(cmd, subCommands) {
-  const dirPath = path.join('docs', 'peridio-cli', ...cmd)
+  const dirPath = path.join('docs', 'peridio-core', 'tools', 'peridio-cli', 'commands', ...cmd)
   fs.mkdir(dirPath, (err) => {
     if (err) {
       if (err.code !== 'EEXIST') {
@@ -34,7 +34,7 @@ function writeCommandGroup(cmd, subCommands) {
 }
 
 function writeCommand(cmd, help) {
-  const filePath = path.join('docs', 'peridio-cli', ...cmd)
+  const filePath = path.join('docs', 'peridio-core', 'tools', 'peridio-cli', 'commands', ...cmd)
   const fileContent = `\`\`\`\n${help}\n\`\`\``
   fs.writeFile(`${filePath}.md`, fileContent, (err) => {
     if (err) {
