@@ -9,6 +9,7 @@ import ProblemSolution from './ProblemSolution'
 import FeatureGrid from './FeatureGrid'
 import CTASection from './CTASection'
 import ResourceCards from './ResourceCards'
+import WorkInProgress from './WorkInProgress'
 
 interface SolutionLayoutProps {
   title: string
@@ -76,6 +77,11 @@ interface SolutionLayoutProps {
     content?: string
     videoUrl?: string
   }
+  workInProgress?: {
+    title: string
+    message: string
+    type: string
+  }
   children?: React.ReactNode
 }
 
@@ -95,6 +101,7 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
     features,
     cta,
     resources,
+    workInProgress,
     children,
   } = props
 
@@ -126,6 +133,8 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
       )}
 
       {features && <FeatureGrid features={features} />}
+
+      {workInProgress && <WorkInProgress {...workInProgress} />}
 
       {cta && <CTASection {...cta} />}
 

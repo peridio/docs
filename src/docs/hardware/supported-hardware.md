@@ -59,7 +59,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-full" title="Fully Supported">●</span></td>
     </tr>
     <tr className="category-header">
-      <td colSpan="8"><strong>Silicon</strong></td>
+      <td colSpan="8"><strong>Semiconductors</strong></td>
     </tr>
     <tr>
       <td><strong><a href="/hardware/nvidia/jetson-orin-nano-evk" target="_blank" rel="noopener noreferrer">NVIDIA Jetson Orin Nano EVK</a></strong></td>
@@ -71,7 +71,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-partial" title="In Development">●</span></td>
       <td><span className="status-full" title="Fully Supported">●</span></td>
     </tr>
-    <tr>
+    <!-- <tr>
       <td><strong>NVIDIA Jetson Orin NX Silicon</strong></td>
       <td><span className="status-partial" title="In Development">●</span></td>
       <td><span className="status-partial" title="In Development">●</span></td>
@@ -80,7 +80,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-partial" title="In Development">●</span></td>
       <td><span className="status-partial" title="In Development">●</span></td>
       <td><span className="status-partial" title="In Development">●</span></td>
-    </tr>
+    </tr> -->
     <tr>
       <td><strong><a href="/hardware/nxp/imx8mp" target="_blank" rel="noopener noreferrer">NXP i.MX 8MP EVK</a></strong></td>
       <td><span className="status-full" title="Fully Supported">●</span></td>
@@ -155,6 +155,16 @@ Peridio supports a wide range of hardware platforms for IoT device management an
   </thead>
   <tbody>
     <tr>
+      <td><strong>NVIDIA Jetson Nano</strong></td>
+      <td><span className="status-none" title="Not Supported">●</span></td>
+      <td><span className="status-none" title="Not Supported">●</span></td>
+      <td><span className="status-none" title="Not Supported">●</span></td>
+      <td><span className="status-none" title="Not Supported">●</span></td>
+      <td><span className="status-none" title="Not Supported">●</span></td>
+      <td><span className="status-none" title="Not Supported">●</span></td>
+      <td><span className="status-none" title="Not Supported">●</span></td>
+    </tr>
+    <tr>
       <td><strong>BeagleBone AI-64</strong></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
@@ -175,7 +185,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-none" title="Not Supported">●</span></td>
     </tr>
     <tr>
-      <td><strong>NVIDIA Jetson Nano</strong></td>
+      <td><strong>Qualcomm iQ9</strong></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
@@ -205,7 +215,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-none" title="Not Supported">●</span></td>
     </tr>
     <tr>
-      <td><strong>STM32MP1 Discovery Kit</strong></td>
+      <td><strong>STM32MP2 Discovery Kit</strong></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
@@ -215,7 +225,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
       <td><span className="status-none" title="Not Supported">●</span></td>
     </tr>
     <tr>
-      <td><strong>Toradex Modules</strong></td>
+      <td><strong>Microchip PIC64 RISC-V</strong></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
       <td><span className="status-none" title="Not Supported">●</span></td>
