@@ -1,16 +1,17 @@
 import React from 'react'
 import { HiOutlineWrenchScrewdriver as WrenchIcon } from 'react-icons/hi2'
-import styles from './WorkInProgress.module.css'
+import Link from '@docusaurus/Link'
+import styles from './ProvisioningComingSoon.module.css'
 
-interface WorkInProgressProps {
+interface ProvisioningComingSoonProps {
   title: string
   message: string
   type: string
 }
 
-export default function WorkInProgress({ title, message, type }: WorkInProgressProps) {
+export default function ProvisioningComingSoon({ title, message, type }: ProvisioningComingSoonProps) {
   return (
-    <section className={styles.workInProgress}>
+    <section className={styles.provisioningComingSoon}>
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.leftColumn}>
@@ -26,9 +27,13 @@ export default function WorkInProgress({ title, message, type }: WorkInProgressP
             <p className={styles.message}>{message}</p>
           </div>
           <div className={styles.rightColumn}>
-            <button className={styles.ctaButton}>
+            <Link 
+              to="https://www.peridio.com/provisioning-guide-updates"
+              className={styles.ctaButton}
+              target="_blank"
+            >
               Notify me when available
-            </button>
+            </Link>
           </div>
         </div>
       </div>

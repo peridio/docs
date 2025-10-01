@@ -1,4 +1,4 @@
-.workInProgress {
+.provisioningComingSoon {
   padding: 2.5rem 1.5rem;
   background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
   position: relative;
@@ -111,11 +111,12 @@
 .ctaButton:hover {
   background: #4c3ef0;
   color: white;
+  text-decoration: none;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .workInProgress {
+  .provisioningComingSoon {
     padding: 2rem 1.5rem;
     margin-top: -0.5rem;
   }
@@ -191,7 +192,7 @@
 }
 
 @media (max-width: 480px) {
-  .workInProgress {
+  .provisioningComingSoon {
     padding: 2rem 1rem;
     margin-top: -0.25rem;
   }
@@ -216,7 +217,7 @@
 }
 
 /* Dark mode adjustments */
-[data-theme='dark'] .workInProgress {
+[data-theme='dark'] .provisioningComingSoon {
   background: linear-gradient(180deg, #2a2a2c 0%, #1b1b1d 100%);
 }
 
@@ -256,4 +257,5 @@
 [data-theme='dark'] .ctaButton:hover {
   background: #4c3ef0;
   color: white;
+  text-decoration: none;
 }

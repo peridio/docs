@@ -9,7 +9,7 @@ import ProblemSolution from './ProblemSolution'
 import FeatureGrid from './FeatureGrid'
 import CTASection from './CTASection'
 import ResourceCards from './ResourceCards'
-import WorkInProgress from './WorkInProgress'
+import ProvisioningComingSoon from './ProvisioningComingSoon'
 
 interface SolutionLayoutProps {
   title: string
@@ -134,7 +134,7 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
 
       {features && <FeatureGrid features={features} />}
 
-      {workInProgress && <WorkInProgress {...workInProgress} />}
+      {workInProgress && <ProvisioningComingSoon {...workInProgress} />}
 
       {cta && <CTASection {...cta} />}
 
