@@ -3403,6 +3403,46 @@ paths:
       responses:
         "204":
           description: Ok.
+  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/deployments/{deployment_name}/stats:
+    get:
+      operationId: retrieve-device-deployment-stats
+      summary: Retrieve device deployment stats
+      tags:
+        - "Legacy Devices"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+        - name: deployment_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      attempts:
+                        type: integer
+                        example: 5
   /orgs/{organization_name}/products/{product_name}/firmwares:
     get:
       operationId: list-firmware
