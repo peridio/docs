@@ -155,10 +155,10 @@ const solutionData = {
       text: 'Get Started',
       link: '/hardware/raspberry-pi/compute-module-4',
     },
-    secondaryCTA: {
-      link: 'https://avocadolinux.org',
-      target: '_blank',
-    },
+    // secondaryCTA: {
+    //   link: 'https://avocadolinux.org',
+    //   target: '_blank',
+    // },
   },
 }
 

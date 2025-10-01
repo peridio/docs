@@ -158,10 +158,10 @@ const solutionData = {
       text: 'Get Started',
       link: '/hardware/nxp/imx8mp',
     },
-    secondaryCTA: {
-      link: 'https://docs.avocadolinux.org/supported-hardware/imx-8m-plus',
-      target: '_blank',
-    },
+    // secondaryCTA: {
+    //   link: 'https://docs.avocadolinux.org/supported-hardware/imx-8m-plus',
+    //   target: '_blank',
+    // },
   },
 }
 

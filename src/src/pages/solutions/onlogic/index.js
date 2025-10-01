@@ -153,6 +153,13 @@ const solutionData = {
       target: '_blank',
     },
   },
+
+  workInProgress: {
+    title: 'Provisioning Guide Coming Soon',
+    message:
+      "We're actively working on a comprehensive provisioning guide for the OnLogic FR201. This will include step-by-step instructions for device setup, configuration, and deployment.",
+    type: 'provisioning',
+  },
 }
 
 export default function OnLogicSolution() {

@@ -158,11 +158,11 @@ const solutionData = {
       text: 'Get Started',
       link: '/hardware/nvidia/jetson-orin-nano-evk',
     },
-    secondaryCTA: {
-      text: 'Visit Avocado Linux',
-      link: 'https://avocadolinux.org',
-      target: '_blank',
-    },
+    // secondaryCTA: {
+    //   text: 'Visit Avocado Linux',
+    //   link: 'https://avocadolinux.org',
+    //   target: '_blank',
+    // },
   },
 }
 
