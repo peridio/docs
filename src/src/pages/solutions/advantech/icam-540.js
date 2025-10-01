@@ -160,7 +160,8 @@ const solutionData = {
 
   workInProgress: {
     title: 'Provisioning Guide Coming Soon',
-    message: 'We\'re actively working on a comprehensive provisioning guide for the Advantech ICAM-540. This will include step-by-step instructions for device setup, configuration, and deployment.',
+    message:
+      "We're actively working on a comprehensive provisioning guide for the Advantech ICAM-540. This will include step-by-step instructions for device setup, configuration, and deployment.",
     type: 'provisioning',
   },
 }

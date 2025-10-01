@@ -6,7 +6,6 @@
   margin-top: -1rem;
 }
 
-
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -93,7 +92,7 @@
 }
 
 .ctaButton {
-  background: #5F51FF;
+  background: #5f51ff;
   color: white;
   border: none;
   padding: 0.875rem 2rem;
@@ -120,7 +119,7 @@
     padding: 2rem 1.5rem;
     margin-top: -0.5rem;
   }
-  
+
   .card {
     padding: 2rem;
     flex-direction: column;
@@ -129,59 +128,59 @@
     text-align: center;
     min-height: auto;
   }
-  
+
   .leftColumn {
     flex: none;
     width: 100%;
     text-align: center;
   }
-  
+
   .rightColumn {
     flex: none;
     width: 100%;
     justify-content: center;
     align-items: center;
   }
-  
+
   .mobileBadge {
     display: flex;
     justify-content: center;
     margin-bottom: 1.25rem;
   }
-  
+
   .titleRow {
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1.25rem;
   }
-  
+
   .titleRow .badge {
     display: none;
   }
-  
+
   .title {
     font-size: 1.25rem;
     text-align: center;
   }
-  
+
   .message {
     font-size: 0.9rem;
     text-align: center;
   }
-  
+
   .badge {
     padding: 0.4rem 0.8rem;
   }
-  
+
   .badgeIcon {
     font-size: 0.875rem;
   }
-  
+
   .badgeText {
     font-size: 0.7rem;
   }
-  
+
   .ctaButton {
     width: 100%;
     max-width: 300px;
@@ -196,20 +195,20 @@
     padding: 2rem 1rem;
     margin-top: -0.25rem;
   }
-  
+
   .card {
     padding: 1.75rem;
     gap: 1.75rem;
   }
-  
+
   .title {
     font-size: 1.25rem;
   }
-  
+
   .message {
     font-size: 0.9375rem;
   }
-  
+
   .ctaButton {
     max-width: 100%;
     padding: 1rem 1.75rem;
@@ -217,44 +216,44 @@
 }
 
 /* Dark mode adjustments */
-[data-theme='dark'] .provisioningComingSoon {
+[data-theme="dark"] .provisioningComingSoon {
   background: linear-gradient(180deg, #2a2a2c 0%, #1b1b1d 100%);
 }
 
-[data-theme='dark'] .card {
+[data-theme="dark"] .card {
   background: #2a2a2c;
   border: 1px solid #3c4043;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-[data-theme='dark'] .title {
+[data-theme="dark"] .title {
   color: white;
 }
 
-[data-theme='dark'] .message {
+[data-theme="dark"] .message {
   color: #b3b3b3;
 }
 
-[data-theme='dark'] .badge {
+[data-theme="dark"] .badge {
   background: #374151;
   color: #9ca3af;
   border: none;
 }
 
-[data-theme='dark'] .badgeIcon {
+[data-theme="dark"] .badgeIcon {
   color: #9ca3af;
 }
 
-[data-theme='dark'] .badgeText {
+[data-theme="dark"] .badgeText {
   color: #9ca3af;
 }
 
-[data-theme='dark'] .ctaButton {
-  background: #5F51FF;
+[data-theme="dark"] .ctaButton {
+  background: #5f51ff;
   color: white;
 }
 
-[data-theme='dark'] .ctaButton:hover {
+[data-theme="dark"] .ctaButton:hover {
   background: #4c3ef0;
   color: white;
   text-decoration: none;

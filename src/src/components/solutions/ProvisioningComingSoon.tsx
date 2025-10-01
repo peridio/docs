@@ -22,12 +22,14 @@ export default function ProvisioningComingSoon({ title, message }: ProvisioningC
               </div>
             </div>
             <div className={styles.titleRow}>
-              <Heading as="h3" className={styles.title}>{title}</Heading>
+              <Heading as="h3" className={styles.title}>
+                {title}
+              </Heading>
             </div>
             <p className={styles.message}>{message}</p>
           </div>
           <div className={styles.rightColumn}>
-            <Link 
+            <Link
               to="https://www.peridio.com/provisioning-guide-updates"
               className={styles.ctaButton}
               target="_blank"
