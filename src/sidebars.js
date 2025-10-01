@@ -421,7 +421,7 @@ export default {
         },
         {
           type: 'category',
-          label: 'Silicon',
+          label: 'Semiconductors',
           items: [
             {
               type: 'doc',
