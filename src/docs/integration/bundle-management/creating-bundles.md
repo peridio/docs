@@ -6,6 +6,10 @@ title: Creating Bundles
 
 This guide describes how to create bundles in Peridio, package binaries with metadata, and prepare them for distribution to your device fleet.
 
+**Important note**
+
+Custom metadata is fixed at the time the bundle is created. Changing the metadata on the artifact, artifact version, or binary will not change the custom metadata of the created bundle. You will need to create a new bundle for the latest metadata to be attached.
+
 ## Overview
 
 Bundles are immutable packages that contain one or more binaries along with custom metadata. They serve as the fundamental unit of distribution in Peridio's firmware management system.
