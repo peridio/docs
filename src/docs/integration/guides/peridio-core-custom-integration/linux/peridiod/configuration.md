@@ -14,7 +14,7 @@ The peridiod configuration has the following top level keys:
 - `update_poll_enabled`: (true | false) Enable or Disable update server polling
 - `update_poll_interval`: (non negative integer) The interval in which the update server should poll for updates. Defaults to every 30 min.
 - `trusted_signing_keys`: (list of strings) A list of raw ed25519 public signing keys. Binaries in peridio are signed by private keys that you own, this list should contain the public parts of the signing keys this device should trust installing.
-- `targets`: (list of strings) A list of binary target strings. When peridiod received a bundle, it will install only binaries with target strings in this list. Defaults to `["portable"]`
+- `targets`: (list of strings) A list of binary target strings. When peridiod receives a bundle, it will install only binaries with target strings in this list. Defaults to `["portable"]`
 - `node`: Node configuration settings
 
 For more information about X509 certificates, see [creating CA certificates](/platform/guides/creating-x509-certificates-with-openssl).
