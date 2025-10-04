@@ -14,15 +14,5 @@ jobs:
           node-version: 20.19.0
           cache-dependency-path: src/package-lock.json
           cache: "npm"
-      - name: Install dependencies
-        run: npm --prefix src ci
-      - name: OpenAPI Lint
-        run: npm --prefix src exec --no -- redocly lint --config src/redocly.yaml
-      - name: ESLint
-        run: npm --prefix src run lint
-      - name: Prettier Check
-        run: |
-          cd src
-          npm exec -- prettier --check .
-      - name: Docusaurus Build
-        run: npm --prefix src run build
+      - name: Run checks
+        run: ./scripts/checks.sh

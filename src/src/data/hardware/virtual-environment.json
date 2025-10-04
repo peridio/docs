@@ -1,0 +1,33 @@
+{
+  "category": "Virtual Environment",
+  "devices": [
+    {
+      "name": "QEMU ARM",
+      "url": "/hardware/qemu/arm/provision",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "QEMU x86-64",
+      "url": "/hardware/qemu/x86-64/provision",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "none",
+        "remoteAccessTunnels": "full"
+      }
+    }
+  ]
+}

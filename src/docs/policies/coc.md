@@ -4,8 +4,6 @@ description: The Code of Conduct for the Avocado Linux community
 slug: coc
 ---
 
-# Avocado Linux Code of Conduct
-
 ## Our Pledge
 
 We as members, contributors, and leaders pledge to make participation in our
