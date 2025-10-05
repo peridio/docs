@@ -1,6 +1,6 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const imx8mpData: SolutionData = {
+export const data: SolutionData = {
   title: 'NXP i.MX 8M Plus Industrial Vision | Edge AI Camera Systems | Peridio',
   description:
     'Deploy NXP i.MX 8M Plus for industrial vision and edge AI. 2.3 TOPS NPU, dual cameras, real-time processing. Production-ready with Peridio Fleet + Avocado OS.',
@@ -165,4 +165,4 @@ export const imx8mpData: SolutionData = {
   },
 }
 
-export default imx8mpData
+export default data

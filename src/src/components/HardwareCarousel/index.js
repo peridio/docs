@@ -6,16 +6,16 @@ import styles from './styles.module.css'
 const slides = [
   {
     vendor: 'NVIDIA',
-    target: 'Jetson Xavier / Orin',
+    target: 'Jetson Orin Nano',
     image: '/img/nvidia-jetson-orin.jpg', // TODO: replace with real Jetson image
     overviewLink: '/solutions/nvidia/jetson-orin-nano',
     getStartedLink: '/avocado-linux/guides/getting-started',
   },
   {
     vendor: 'Raspberry Pi',
-    target: 'Raspberry Pi 4 / 5',
+    target: 'Raspberry Pi 5',
     image: '/img/raspberry-pi.jpg',
-    overviewLink: '/solutions/raspberry-pi/raspberry-pi',
+    overviewLink: '/solutions/raspberry-pi/raspberry-pi-5',
     getStartedLink: '/avocado-linux/guides/getting-started',
   },
   {

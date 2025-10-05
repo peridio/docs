@@ -1,7 +1,7 @@
 import React from 'react'
 import SolutionLayout from '@site/src/components/solutions/SolutionLayout'
-import { raspberryPiData } from '@site/src/data/solutions/raspberry-pi'
+import { data } from '@site/src/data/solutions/raspberry-pi/raspberry-pi-4-model-b'
 
 export default function RaspberryPiSolution() {
-  return <SolutionLayout {...raspberryPiData} />
+  return <SolutionLayout {...data} />
 }

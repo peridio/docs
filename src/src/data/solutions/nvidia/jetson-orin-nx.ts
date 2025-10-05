@@ -1,6 +1,6 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const jetsonOrinNxData: SolutionData = {
+export const data: SolutionData = {
   title: 'NVIDIA Jetson Orin NX Production Linux | Day 1 Ready | Peridio',
   description:
     'Production-ready NVIDIA Jetson Orin NX deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for high-performance edge AI.',
@@ -166,4 +166,4 @@ export const jetsonOrinNxData: SolutionData = {
   },
 }
 
-export default jetsonOrinNxData
+export default data

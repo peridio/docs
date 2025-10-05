@@ -1,6 +1,6 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const rubikPiData: SolutionData = {
+export const data: SolutionData = {
   title: 'Qualcomm Rubik Pi Edge AI Development | Production-Ready Robotics | Peridio',
   description:
     'Deploy Qualcomm Rubik Pi (RB3 Gen 2) in production 3x faster with Peridio Fleet + Avocado OS. 15.5 TOPS AI performance, secure OTA updates, enterprise robotics support.',
@@ -156,4 +156,4 @@ export const rubikPiData: SolutionData = {
   },
 }
 
-export default rubikPiData
+export default data

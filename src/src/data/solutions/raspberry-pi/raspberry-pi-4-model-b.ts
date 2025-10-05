@@ -1,23 +1,23 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const raspberryPiData: SolutionData = {
-  title: 'Raspberry Pi Device Management | Production-Ready OTA',
+export const data: SolutionData = {
+  title: 'Raspberry Pi 4 Model B Device Management | Production-Ready OTA',
   description:
-    'Deploy Raspberry Pi devices in production with Peridio Fleet + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.',
+    'Deploy Raspberry Pi 4 Model B devices in production with Peridio Fleet + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.',
   keywords:
-    'raspberry pi, device management, ota updates, yocto, embedded linux, iot, edge computing, fleet management',
+    'raspberry pi 4 model b, device management, ota updates, yocto, embedded linux, iot, edge computing, fleet management',
   ogImage: '/img/raspberry-pi.jpg',
   canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi',
 
   hero: {
-    title: 'Production-Ready Raspberry Pi Deployment',
-    highlight: 'Raspberry Pi',
+    title: 'Production-Ready Raspberry Pi 4 Model B Deployment',
+    highlight: 'Raspberry Pi 4 Model B',
     subtitle:
-      'Transform your Raspberry Pi prototype into a secure, manageable fleet with Peridio + Avocado OS',
+      'Transform your Raspberry Pi 4 Model B prototype into a secure, manageable fleet with Peridio + Avocado OS',
     stats: [
       { value: '5x', label: 'Faster to Production' },
       { value: '80%', label: 'Lower TCO' },
-      { value: '$35', label: 'Starting Cost' },
+      { value: '$55', label: 'Starting Cost' },
     ],
     primaryCTA: {
       text: 'Get Started',
@@ -28,45 +28,55 @@ export const raspberryPiData: SolutionData = {
       link: 'https://peridio.com/book-a-meeting',
     },
     image: '/img/hardware/raspberry-pi/raspberrypi.png',
-    imageAlt: 'Raspberry Pi development board',
+    imageAlt: 'Raspberry Pi 4 Model B development board',
   },
 
   valueProposition: {
     title: 'Solution Overview',
     content:
-      "Raspberry Pi, enhanced with Avocado Linux and Peridio Fleet, bridges the gap between prototype and production deployment for edge computing and IoT applications. This integrated solution transforms the world's most popular single-board computer into an enterprise-ready platform with production-hardened Linux, atomic OTA updates, and centralized fleet management. By replacing the default Raspberry Pi OS with a Yocto-based, read-only root filesystem, teams eliminate common production issues like SD card corruption while gaining secure boot, remote diagnostics, and compliance features. Whether deploying industrial sensors, smart city infrastructure, or digital signage networks, the platform enables organizations to leverage Raspberry Pi's $35 starting price and vast ecosystem while meeting enterprise requirements for security, reliability, and scale.",
+      "Raspberry Pi 4 Model B, enhanced with Avocado Linux and Peridio Fleet, bridges the gap between prototype and production deployment for edge computing and IoT applications. This integrated solution transforms the proven ARM Cortex-A72 quad-core platform into an enterprise-ready device with production-hardened Linux, atomic OTA updates, and centralized fleet management. By replacing the default Raspberry Pi OS with a Yocto-based, read-only root filesystem, teams eliminate common production issues like SD card corruption while gaining secure boot, remote diagnostics, and compliance features. Whether deploying industrial sensors, smart city infrastructure, or digital signage networks, the Pi 4's mature hardware platform with up to 8GB RAM, Gigabit Ethernet, and USB 3.0 provides the reliability and performance needed for production deployments while maintaining the $55 price point and vast ecosystem compatibility.",
   },
 
   specs: [
     {
-      label: 'Raspberry Pi 5',
-      value: '2.4GHz Quad-core ARM Cortex-A76',
-      note: '8GB RAM, PCIe 2.0, dual 4K displays',
-    },
-    {
-      label: 'Raspberry Pi 4',
+      label: 'Processor',
       value: '1.8GHz Quad-core ARM Cortex-A72',
-      note: '8GB RAM, USB 3.0, Gigabit Ethernet',
+      note: '64-bit ARMv8 architecture, mature silicon',
     },
     {
-      label: 'Raspberry Pi Zero 2W',
-      value: '1GHz Quad-core ARM Cortex-A53',
-      note: '512MB RAM, WiFi/Bluetooth, ultra-compact',
+      label: 'Memory',
+      value: '2GB, 4GB, or 8GB LPDDR4',
+      note: 'LPDDR4-3200 SDRAM for reliable performance',
     },
     {
-      label: 'Compute Module 4',
-      value: 'Industrial form factor',
-      note: 'Custom carrier boards, extended temperature',
+      label: 'Connectivity',
+      value: 'Gigabit Ethernet, Wi-Fi 5, Bluetooth 5.0',
+      note: 'Dual-band 802.11ac, proven network stack',
+    },
+    {
+      label: 'USB Ports',
+      value: '2x USB 3.0, 2x USB 2.0',
+      note: 'High-speed peripherals and storage',
+    },
+    {
+      label: 'Display',
+      value: '2× micro HDMI ports (up to 4K@60Hz)',
+      note: '4K@60Hz on single display or dual 4K@30Hz',
     },
     {
       label: 'Storage',
-      value: 'eMMC, NVMe, USB boot',
-      note: 'SD cards supported for development only',
+      value: 'eMMC, USB boot, microSD',
+      note: 'USB boot recommended for production',
+    },
+    {
+      label: 'Power',
+      value: '5V/3A USB-C',
+      note: '15W maximum power consumption',
     },
     {
       label: 'Operating Temp',
-      value: '0°C to +70°C (standard)',
-      note: 'Industrial variants available',
+      value: '0°C to +50°C (ambient)',
+      note: 'Passive cooling sufficient for most applications',
     },
   ],
 
@@ -150,9 +160,9 @@ export const raspberryPiData: SolutionData = {
   ],
 
   cta: {
-    title: 'Ready to Scale Your Raspberry Pi Project?',
+    title: 'Ready to Scale Your Raspberry Pi 4 Model B Project?',
     subtitle:
-      'Transform your Raspberry Pi prototype into a secure, manageable production fleet with enterprise-grade reliability.',
+      'Transform your Raspberry Pi 4 Model B prototype into a secure, manageable production fleet with enterprise-grade reliability.',
     primaryCTA: {
       text: 'Get Started',
       link: '/hardware/raspberry-pi/raspberry-pi-4-model-b/provision',
@@ -165,4 +175,4 @@ export const raspberryPiData: SolutionData = {
   },
 }
 
-export default raspberryPiData
+export default data

@@ -45,7 +45,7 @@
     },
     {
       "name": "Raspberry Pi 4 Model B",
-      "url": "/solutions/raspberry-pi/raspberry-pi",
+      "url": "/solutions/raspberry-pi/raspberry-pi-4-model-b",
       "external": false,
       "features": {
         "provisioning": "full",
@@ -59,7 +59,7 @@
     },
     {
       "name": "Raspberry Pi 5",
-      "url": "/solutions/raspberry-pi/raspberry-pi",
+      "url": "/solutions/raspberry-pi/raspberry-pi-5",
       "external": false,
       "features": {
         "provisioning": "full",

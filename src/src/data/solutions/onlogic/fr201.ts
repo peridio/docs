@@ -1,6 +1,6 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const onlogicData: SolutionData = {
+export const data: SolutionData = {
   title: 'OnLogic FR201 Industrial Gateway | Production-Ready Edge Computing',
   description:
     'Deploy OnLogic FR201 fanless industrial gateways with atomic updates, protocol bridging, and enterprise fleet management. Production-ready software on industrial grade hardware.',
@@ -161,4 +161,4 @@ export const onlogicData: SolutionData = {
   },
 }
 
-export default onlogicData
+export default data

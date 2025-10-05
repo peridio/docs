@@ -17,7 +17,7 @@
     },
     {
       "name": "OnLogic FR-201",
-      "url": "/solutions/onlogic",
+      "url": "/solutions/onlogic/fr201",
       "external": false,
       "features": {
         "provisioning": "full",
@@ -31,7 +31,7 @@
     },
     {
       "name": "Seeed reTerminal",
-      "url": "/solutions/seeed",
+      "url": "/solutions/seeed/reterminal",
       "external": false,
       "features": {
         "provisioning": "full",

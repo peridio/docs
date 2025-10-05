@@ -1,6 +1,6 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const frdm93Data: SolutionData = {
+export const data: SolutionData = {
   title: 'NXP FRDM i.MX 93 Edge AI Development | Industrial Linux | Peridio',
   description:
     'Production-ready NXP FRDM i.MX 93 development with dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and secure edge connectivity. Enterprise OTA and fleet management.',
@@ -165,4 +165,4 @@ export const frdm93Data: SolutionData = {
   },
 }
 
-export default frdm93Data
+export default data

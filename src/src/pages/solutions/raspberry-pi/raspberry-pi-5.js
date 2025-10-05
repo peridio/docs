@@ -1,7 +1,7 @@
 import React from 'react'
 import SolutionLayout from '@site/src/components/solutions/SolutionLayout'
-import { data } from '@site/src/data/solutions/qualcomm/iq9'
+import { data } from '@site/src/data/solutions/raspberry-pi/raspberry-pi-5'
 
-export default function IQ9SolutionNew() {
+export default function RaspberryPiSolution() {
   return <SolutionLayout {...data} />
 }

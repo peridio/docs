@@ -1,16 +1,16 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const qualcommIq9Data: SolutionData = {
-  title: 'Qualcomm IQ-9 Premium Edge AI | Flagship Performance | Peridio',
+export const data: SolutionData = {
+  title: 'Qualcomm IQ9 Premium Edge AI | Flagship Performance | Peridio',
   description:
-    'Deploy Qualcomm IQ-9 (QCS8550) flagship edge AI platform with 45 TOPS performance. Production-ready with Peridio Fleet + Avocado OS for automotive and premium applications.',
+    'Deploy Qualcomm IQ9 (QCS8550) flagship edge AI platform with 45 TOPS performance. Production-ready with Peridio Fleet + Avocado OS for automotive and premium applications.',
   keywords:
-    'qualcomm iq-9, qcs8550, flagship edge ai, 45 tops, automotive ai, premium edge computing, device management, ota updates',
-  ogImage: '/img/iq-9.jpeg',
-  canonicalUrl: 'https://docs.peridio.com/solutions/qualcomm/iq-9',
+    'qualcomm iq9, qcs8550, flagship edge ai, 45 tops, automotive ai, premium edge computing, device management, ota updates',
+  ogImage: '/img/iq9.jpeg',
+  canonicalUrl: 'https://docs.peridio.com/solutions/qualcomm/iq9',
 
   hero: {
-    title: 'Premium Edge AI Performance with Qualcomm IQ-9',
+    title: 'Premium Edge AI Performance with Qualcomm IQ9',
     highlight: 'Premium Edge AI',
     subtitle:
       'Flagship-grade edge AI with 45 TOPS compute power, production-ready with Peridio Fleet + Avocado OS',
@@ -24,13 +24,13 @@ export const qualcommIq9Data: SolutionData = {
       link: 'https://peridio.com/book-a-meeting',
     },
     image: '/img/Qualcomm-IQ9.png',
-    imageAlt: 'Qualcomm IQ-9 QCS8550 development platform',
+    imageAlt: 'Qualcomm IQ9 QCS8550 development platform',
   },
 
   valueProposition: {
     title: 'Solution Overview',
     content:
-      'The Qualcomm IQ-9 (QCS8550), enhanced with Avocado Linux and Peridio Fleet, delivers flagship-grade edge AI performance with 45 TOPS of compute power in a production-ready platform. Built on a premium 4nm process, this solution brings smartphone-class AI capabilities to industrial and automotive applications, featuring an 8-core Kryo CPU, Adreno 740 GPU, and advanced Hexagon NPU for concurrent multi-model inference. The pre-integrated Linux environment with Wi-Fi 7, 5G, and comprehensive driver support eliminates months of complex SoC bring-up, while enterprise OTA and fleet management enable secure deployment at scale. Perfect for autonomous vehicles, advanced manufacturing, and smart city infrastructure, the IQ-9 platform transforms cutting-edge silicon into deployable edge AI systems with thermal management, hardware security, and 10+ years of support.',
+      'The Qualcomm IQ9 (QCS8550), enhanced with Avocado Linux and Peridio Fleet, delivers flagship-grade edge AI performance with 45 TOPS of compute power in a production-ready platform. Built on a premium 4nm process, this solution brings smartphone-class AI capabilities to industrial and automotive applications, featuring an 8-core Kryo CPU, Adreno 740 GPU, and advanced Hexagon NPU for concurrent multi-model inference. The pre-integrated Linux environment with Wi-Fi 7, 5G, and comprehensive driver support eliminates months of complex SoC bring-up, while enterprise OTA and fleet management enable secure deployment at scale. Perfect for autonomous vehicles, advanced manufacturing, and smart city infrastructure, the IQ9 platform transforms cutting-edge silicon into deployable edge AI systems with thermal management, hardware security, and 10+ years of support.',
   },
 
   specs: [
@@ -148,7 +148,7 @@ export const qualcommIq9Data: SolutionData = {
   cta: {
     title: 'Ready for Flagship Edge AI Performance?',
     subtitle:
-      'Transform your Qualcomm IQ-9 into the ultimate edge AI platform for the most demanding applications requiring flagship performance and enterprise reliability.',
+      'Transform your Qualcomm IQ9 into the ultimate edge AI platform for the most demanding applications requiring flagship performance and enterprise reliability.',
     primaryCTA: {
       text: 'Request Demo',
       link: 'https://peridio.com/book-a-meeting',
@@ -156,4 +156,4 @@ export const qualcommIq9Data: SolutionData = {
   },
 }
 
-export default qualcommIq9Data
+export default data

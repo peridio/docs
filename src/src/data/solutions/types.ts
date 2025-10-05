@@ -60,6 +60,11 @@ export interface SolutionData {
       target?: string
     }
   }
+  workInProgress?: {
+    title: string
+    message: string
+    type: string
+  }
   resources?: Array<{
     title: string
     description: string

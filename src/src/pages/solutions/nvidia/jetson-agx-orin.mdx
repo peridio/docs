@@ -1,7 +1,11 @@
+---
+draft: true
+---
+
 import React from 'react'
 import SolutionLayout from '@site/src/components/solutions/SolutionLayout'
-import { jetsonOrinNanoData } from '@site/src/data/solutions/nvidia/jetson-orin-nano'
+import { data } from '@site/src/data/solutions/nvidia/jetson-agx-orin'
 
 export default function JetsonOrinNanoSolution() {
-  return <SolutionLayout {...jetsonOrinNanoData} />
+  return <SolutionLayout {...data} />
 }

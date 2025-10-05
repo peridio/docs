@@ -1,4 +1,4 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
 export const icam540Data: SolutionData = {
   title: 'Advantech ICAM-540 Industrial AI Camera | Edge Vision Computing | Peridio',

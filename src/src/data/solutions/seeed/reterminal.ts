@@ -1,6 +1,6 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const seeedReterminalData: SolutionData = {
+export const data: SolutionData = {
   title: 'Seeed reTerminal Industrial HMI | Raspberry Pi CM4',
   description:
     'Deploy Seeed reTerminal industrial HMI with Raspberry Pi CM4, 5-inch touchscreen, and enterprise fleet management. Production-ready edge computing.',
@@ -165,4 +165,4 @@ export const seeedReterminalData: SolutionData = {
   },
 }
 
-export default seeedReterminalData
+export default data

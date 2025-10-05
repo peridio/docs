@@ -7,7 +7,7 @@ Join the Avocado Linux community for support, contributions, and staying up to d
 
 ## Getting help
 
-**[Discord Server](https://discord.gg/peridio)** - Join our community Discord for real-time help, technical discussions, and connecting with other developers.
+**[Discord Server](http://peridio.com/join-our-discord)** - Join our community Discord for real-time help, technical discussions, and connecting with other developers.
 
 **[GitHub](https://github.com/avocado-linux)** - All development happens in the open on GitHub. Browse the code, report issues, and contribute improvements.
 

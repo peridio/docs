@@ -1,6 +1,6 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const jetsonOrinNanoData: SolutionData = {
+export const data: SolutionData = {
   title: 'NVIDIA Jetson Orin Nano Production Linux | Day 1 Ready | Peridio',
   description:
     'Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for industrial AI.',
@@ -165,4 +165,4 @@ export const jetsonOrinNanoData: SolutionData = {
   },
 }
 
-export default jetsonOrinNanoData
+export default data

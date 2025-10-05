@@ -1,13 +1,13 @@
-import { SolutionData } from './types'
+import { SolutionData } from '../types'
 
-export const stm32mp257fDkData: SolutionData = {
+export const data: SolutionData = {
   title: 'STMicroelectronics STM32MP257F-DK Device Management | Production-Ready OTA | Peridio',
   description:
     'Deploy STM32MP257F-DK in production 4x faster with Peridio Fleet + Avocado OS. Yocto-based, secure OTA updates, enterprise support for industrial IoT.',
   keywords:
     'stm32mp257f-dk, stmicroelectronics, device management, ota updates, yocto, embedded linux, industrial iot, edge ai, dual core cortex-a35',
   ogImage: '/img/stmicro_STM32MP257F-DK.png',
-  canonicalUrl: 'https://docs.peridio.com/solutions/stmicro/stm32mp157d-dk',
+  canonicalUrl: 'https://docs.peridio.com/solutions/stmicroelectronics/stm32mp157d-dk',
 
   hero: {
     title: 'Skip 18 Months of STM32MP Development',
@@ -165,4 +165,4 @@ export const stm32mp257fDkData: SolutionData = {
   },
 }
 
-export default stm32mp257fDkData
+export default data

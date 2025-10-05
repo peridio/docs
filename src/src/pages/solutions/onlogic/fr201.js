@@ -1,7 +1,7 @@
 import React from 'react'
 import SolutionLayout from '@site/src/components/solutions/SolutionLayout'
-import { onlogicData } from '@site/src/data/solutions/onlogic'
+import { data } from '@site/src/data/solutions/onlogic/fr201'
 
 export default function OnLogicSolution() {
-  return <SolutionLayout {...onlogicData} />
+  return <SolutionLayout {...data} />
 }
