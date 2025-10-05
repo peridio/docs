@@ -233,11 +233,7 @@ avocado provision -r dev`
             </>
           )}
         </li>
-        {resolvedDiskSpace && (
-          <li>
-            Available disk space: <strong>{resolvedDiskSpace} GB</strong>
-          </li>
-        )}
+        {resolvedDiskSpace && <li>Available disk space: {resolvedDiskSpace} GB</li>}
         {resolvedRunType !== 'qemu' && (
           <li>
             A TTY serial console USB adapter to connect to the device&apos;s serial console for
@@ -278,20 +274,12 @@ avocado provision -r dev`
             The typical connection settings are:
           </p>
 
-          <ul>
-            <li>Baud rate: 115200</li>
-            <li>Data bits: 8</li>
-            <li>Parity: None</li>
-            <li>Stop bits: 1</li>
-            <li>Flow control: None</li>
-          </ul>
-
           <p>
-            Example using <code>screen</code>:
+            Example using <code>tio</code>:
           </p>
 
           <CodeBlock language="bash" title={hostMachine}>
-            {`screen /dev/ttyUSB0 115200`}
+            {`tio -b 115200 /dev/ttyUSB0`}
           </CodeBlock>
 
           <p>

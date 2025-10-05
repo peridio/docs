@@ -98,7 +98,7 @@ export const targetConfigs: Record<string, TargetConfig> = {
     displayName: 'Advantech ICAM-540',
     supportsMac: false,
     runType: 'usb-power-cycle',
-    diskSpace: 8,
+    diskSpace: 16,
   },
   reterminal: {
     target: 'reterminal',
