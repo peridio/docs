@@ -4,7 +4,7 @@
     {
       "name": "Advantech ICAM-540",
       "url": "/solutions/advantech/icam-540",
-      "external": true,
+      "external": false,
       "features": {
         "provisioning": "full",
         "hitl": "full",
@@ -17,8 +17,8 @@
     },
     {
       "name": "OnLogic FR-201",
-      "url": "/solutions/onlogic/fr201",
-      "external": true,
+      "url": "/solutions/onlogic",
+      "external": false,
       "features": {
         "provisioning": "full",
         "hitl": "full",
@@ -32,7 +32,7 @@
     {
       "name": "Seeed reTerminal",
       "url": "/solutions/seeed",
-      "external": true,
+      "external": false,
       "features": {
         "provisioning": "full",
         "hitl": "full",

@@ -78,7 +78,7 @@ function DeviceLink({ device }) {
 
   return (
     <strong>
-      <Link href={device.url}>{device.name}</Link>
+      <Link to={device.url}>{device.name}</Link>
     </strong>
   )
 }
