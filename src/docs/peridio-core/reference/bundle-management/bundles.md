@@ -29,6 +29,8 @@ For a detailed specification, see [bundle distribution](/peridio-core/reference/
 
 Each binary in a bundle can optionally have an arbitrary, user-defined JSON object associated with it. Custom metadata can be specified during bundle creation or defined earlier at various levels: on binaries, artifact versions, or artifacts. Metadata is inherited down this chain, with more specific definitions overriding broader ones.
 
+**Important Note**: Once a bundle is created, it's custom metadata is locked. Meaning if you change the custom metadata for the binary, artifact version, or artifact, the bundle's custom metadata will remain unchanged. Please create a new bundle to inherit the new information.
+
 ### Example 1: supplied only on artifact
 
 - Artifact **(A1)** has custom metadata defined on it.

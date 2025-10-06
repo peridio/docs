@@ -339,7 +339,7 @@ This sets up your device to automatically receive this new binary the next time 
 
 ```bash
 peridio --profile peridio-demo binaries create \
-  --target any \
+  --target portable \
   --content-path my-first-binary.fw \
   --signing-key-pair peridio-demo \
   --artifact-version-prn prn:1:8ced1740-7fbf-407e-9d6e-afec9399cc41:artifact_version:6ab0d328-a6fe-49b8-8659-cd927b6f3c8d \
@@ -387,7 +387,7 @@ Response:
     ],
     "size": 14,
     "state": "signed",
-    "target": "any",
+    "target": "portable",
     "updated_at": "2025-06-11T05:04:32.587422Z"
   },
   "bundle": {
@@ -398,10 +398,10 @@ Response:
     "organization_prn": "prn:1:8ced1740-7fbf-407e-9d6e-afec9399cc41",
     "prn": "prn:1:8ced1740-7fbf-407e-9d6e-afec9399cc41:bundle:482b9931-1444-4e9d-b40e-36076fc267b0",
     "updated_at": "2025-06-11T05:04:33.331001Z",
-    "name": "my-first-artifact@1.0.0/any"
+    "name": "my-first-artifact@1.0.0/portable"
   },
   "bundle_override": {
-    "name": "my-first-artifact@1.0.0/any",
+    "name": "my-first-artifact@1.0.0/portable",
     "description": "Auto-created bundle override for bundle prn:1:8ced1740-7fbf-407e-9d6e-afec9399cc41:bundle:482b9931-1444-4e9d-b40e-36076fc267b0",
     "inserted_at": "2025-06-11T05:04:33.574262Z",
     "organization_prn": "prn:1:8ced1740-7fbf-407e-9d6e-afec9399cc41",
@@ -500,7 +500,7 @@ Response:
         }
       ],
       "size": 14,
-      "target": "any",
+      "target": "portable",
       "url": "https://s3.us-east-2.amazonaws.com/peridio-cremini-default-web/binaries/3a0438c7-79e3-469b-9bc7-16380d1ef369/58d38d95-faaa-4203-8c08-71f2d8ee595b?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAX2ZJDQVUSZ5MP2R2%2F20250226%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250226T041329Z&X-Amz-Expires=86400&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEBoaCXVzLWVhc3QtMiJGMEQCIDBU6TxBsNPpdkPSZ62UI3K5DojAxkQoSqEOSZXM7W7eAiAdGy6J2ys%2F8dq8Cy0dnJnx7kjGyYxQjiYjEaDg8rLN8Sr1AwhTEAMaDDUzODU2NzczODcyOSIMEFTG9D6KISBLV6OqKtID%2F9G3zLpXH807FzgTutqujkYXp3GHOw1x2eqR3eqhVbzui0Tx11E%2B74XLYMew1Gt%2BoGEgAKud4VwNDg3snz2g93g7o%2FTJNCwaYtLVaHeT3Do%2Bm%2Ff700O6FsePZLlS5QmKTpHfpDds%2BxtRE%2FOojMjPIB5UHkiQq3H%2BE5nwnNOjntatsxVim63UkZ5mGRvnuwlc%2Fj0fSnaxv7YAcw78IAJ0pdNqdh0s82vTq%2FbdDNIrY4IdDIdXya%2FhmSEhTuw6PjOgcsibQrWFY9TQCKejGlZm%2B31yWK%2BGw9%2Byb%2BOAUkKCU55rvsuSkqukPxpaD3O9IxA7SqBvw1HhCioOrPXpBJJhqfoRgLfoQ8VoiZdOSxI%2FUmNNmmFiDXPElqjlpQgDT%2B8SHI%2FHO1UXf3avbMKZU6vkOuJzcgMT2NVlH9YR8DeEgdwwKrnn1tJ4F6M1PY%2FOd6cVkaVBRYPZypwPAuFmd19vAJnRQxD5ylt45RGgteLfdNd6thfaGNLuFEaLoXGMjJwkIUvqjeilZf6kBExZdX%2FocZBJ7aZSai36tdpOum5VjGooifNzakUsrHdLd7R4J9Jb914lD8FfvtGTD0%2FCZX0dvLEpoMuX9tDrx0GyjLDAc0cEeTDK6Pm9BjqmAQv9RvnZUmgCpLe680LtSp8fhmVbFOueSuiyES026131E7uOy56nE2jP02%2Bc7AJCkHf%2F%2Bhi5tQig0eEouGRJZHFx%2BPi2O3A%2FlS7%2Fe5J0kta874ysaI%2FWZat9opKPTPsDJwHanZIZJAI86AIq5md%2FZ%2Boay9E2G9ZKW9yiO7Do8UCN8qtyHUMf7765RwjzKN%2BAOref2yUQ4RPI7pUbZRBf7aLvE%2F0QYLg%3D&X-Amz-SignedHeaders=host&X-Amz-Signature=8c1d26e67e7e544eb04f0e1ae2157841129b02c67baa5a05d7952299f0b46fcb"
     }
   ]
