@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peridio.com/schemas/peridio-daemon-custom-metadata/1.0.0.json",
+  "title": "Peridio Daemon Custom Metadata",
+  "description": "Schema for custom metadata used by Peridio Daemon to configure binary installation behavior when associated with bundles.",
+  "type": "object",
+  "properties": {
+    "peridiod": {
+      "title": "Peridiod configuration",
+      "type": "object",
+      "description": "Configuration for how peridiod should install this binary.",
+      "required": ["installer"],
+      "properties": {
+        "installer": {
+          "title": "Installer type",
+          "type": "string",
+          "enum": ["fwup", "file", "deb", "rpm", "opkg", "swupdate"],
+          "description": "The installer module to use for this binary."
+        },
+        "installer_opts": {
+          "title": "Installer options",
+          "type": "object",
+          "description": "Options specific to the selected installer type.",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/fwupOpts"
+            },
+            {
+              "$ref": "#/definitions/fileOpts"
+            },
+            {
+              "$ref": "#/definitions/packageOpts"
+            },
+            {
+              "$ref": "#/definitions/swupdateOpts"
+            }
+          ]
+        },
+        "reboot_required": {
+          "title": "Reboot required",
+          "type": "boolean",
+          "description": "Whether a system reboot is required after installing this binary. If multiple binaries in a bundle require reboot, only one reboot occurs after all installations.",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["peridiod"],
+  "additionalProperties": true,
+  "definitions": {
+    "fwupOpts": {
+      "title": "FWUP installer options",
+      "type": "object",
+      "description": "Options for the fwup firmware update installer.",
+      "properties": {
+        "devpath": {
+          "title": "Device path",
+          "type": "string",
+          "description": "Block device path for the firmware update. Overrides global fwup.devpath configuration.",
+          "examples": ["/dev/mmcblk0", "/dev/sda", "/dev/nvme0n1"]
+        },
+        "task": {
+          "title": "Task",
+          "type": "string",
+          "description": "The fwup task to execute from the firmware archive.",
+          "default": "upgrade",
+          "examples": ["upgrade", "complete", "factory-reset"]
+        },
+        "env": {
+          "title": "Environment variables",
+          "type": "object",
+          "description": "Environment variables to set when executing fwup.",
+          "patternProperties": {
+            "^[A-Z_][A-Z0-9_]*$": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "examples": [
+            {
+              "NERVES_FW_PLATFORM": "rpi4",
+              "NERVES_FW_ARCHITECTURE": "arm"
+            }
+          ]
+        },
+        "extra_args": {
+          "title": "Extra arguments",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional command-line arguments to pass to fwup.",
+          "examples": [["--unsafe"], ["--enable-trim"], ["--verbose"]]
+        }
+      },
+      "additionalProperties": false
+    },
+    "fileOpts": {
+      "title": "File installer options",
+      "type": "object",
+      "description": "Options for the file installer.",
+      "required": ["name", "path"],
+      "properties": {
+        "name": {
+          "title": "Filename",
+          "type": "string",
+          "description": "The name of the file at the destination.",
+          "examples": ["config.json", "model.tflite", "database.db"]
+        },
+        "path": {
+          "title": "Path",
+          "type": "string",
+          "description": "The directory path where the file should be installed.",
+          "examples": ["/etc/myapp/", "/var/lib/ml/", "/opt/data/"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "packageOpts": {
+      "title": "Package installer options",
+      "type": "object",
+      "description": "Options for package installers (deb, rpm, opkg).",
+      "properties": {
+        "extra_args": {
+          "title": "Extra arguments",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional command-line arguments to pass to the package manager.",
+          "examples": [
+            ["--no-install-recommends"],
+            ["--nodeps", "--force"],
+            ["--force-reinstall", "--force-downgrade"]
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "swupdateOpts": {
+      "title": "SWUpdate installer options",
+      "type": "object",
+      "description": "Options for the SWUpdate installer.",
+      "properties": {
+        "extra_args": {
+          "title": "Extra arguments",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional command-line arguments to pass to swupdate.",
+          "examples": [["-p", "0"], ["-v"], ["-p", "0", "-v"]]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "peridiod": {
+        "installer": "fwup",
+        "installer_opts": {
+          "devpath": "/dev/mmcblk0",
+          "task": "upgrade",
+          "env": {
+            "NERVES_FW_PLATFORM": "rpi4"
+          }
+        },
+        "reboot_required": true
+      }
+    },
+    {
+      "peridiod": {
+        "installer": "file",
+        "installer_opts": {
+          "name": "config.json",
+          "path": "/etc/myapp/"
+        },
+        "reboot_required": false
+      }
+    },
+    {
+      "peridiod": {
+        "installer": "deb",
+        "installer_opts": {
+          "extra_args": ["--no-install-recommends"]
+        },
+        "reboot_required": false
+      }
+    },
+    {
+      "peridiod": {
+        "installer": "rpm",
+        "installer_opts": {
+          "extra_args": ["--nodeps"]
+        },
+        "reboot_required": false
+      }
+    },
+    {
+      "peridiod": {
+        "installer": "opkg",
+        "installer_opts": {
+          "extra_args": ["--force-reinstall"]
+        },
+        "reboot_required": false
+      }
+    },
+    {
+      "peridiod": {
+        "installer": "swupdate",
+        "installer_opts": {
+          "extra_args": ["-p", "0", "-v"]
+        },
+        "reboot_required": true
+      }
+    }
+  ]
+}

@@ -111,6 +111,7 @@ export default function ProvisionGuide({
   const resolvedDescription = config?.description || description
   const resolvedTitle = 'Provision'
   const resolvedRunType = config?.runType || manualRunType || 'qemu'
+  const resolvedAdditionalPrerequisites = config?.additionalPrerequisites || additionalPrerequisites
 
   const hostMachine = resolvedSupportsMac ? 'Development machine' : 'Host machine'
   const platformSupport = resolvedSupportsMac ? (
@@ -244,9 +245,8 @@ avocado provision -r dev`
           The latest version of the{' '}
           <Link href="/avocado-linux/tools/avocado-cli/overview">Avocado CLI</Link>.
         </li>
+        {resolvedAdditionalPrerequisites}
       </ul>
-
-      {additionalPrerequisites}
 
       <Heading as="h3" id="initialize-project">
         Initialize project

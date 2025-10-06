@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peridio.com/schemas/peridio-daemon-uboot-environment/1.0.0.json",
+  "title": "Peridio Daemon U-Boot Environment Variables",
+  "description": "Schema for U-Boot environment variables used by Peridio Daemon for update state tracking and device identity storage.",
+  "type": "object",
+  "properties": {
+    "peridio_vsn_current": {
+      "title": "Current version",
+      "type": "string",
+      "description": "Semantic version of the currently installed release. Set after successful update completion.",
+      "examples": ["1.2.3", "2.0.0-rc.1"]
+    },
+    "peridio_vsn_previous": {
+      "title": "Previous version",
+      "type": "string",
+      "description": "Semantic version of the previously installed release. Updated when a new version is successfully installed.",
+      "examples": ["1.2.2", "1.0.0"]
+    },
+    "peridio_vsn_progress": {
+      "title": "Version in progress",
+      "type": "string",
+      "description": "Semantic version of the release currently being installed. Cleared on successful completion or used for recovery on failure.",
+      "examples": ["1.2.4", "2.0.0"]
+    },
+    "peridio_via_current": {
+      "title": "Current release/override PRN",
+      "type": "string",
+      "description": "Peridio Resource Name (PRN) of the current installed release or bundle override.",
+      "examples": ["prn:1:1:release:1234567890", "prn:1:1:bundle-override:0987654321"]
+    },
+    "peridio_via_previous": {
+      "title": "Previous release/override PRN",
+      "type": "string",
+      "description": "PRN of the previously installed release or bundle override.",
+      "examples": ["prn:1:1:release:1234567889", "prn:1:1:bundle-override:0987654320"]
+    },
+    "peridio_via_progress": {
+      "title": "Release/override PRN in progress",
+      "type": "string",
+      "description": "PRN of the release or bundle override currently being installed.",
+      "examples": ["prn:1:1:release:1234567891"]
+    },
+    "peridio_bun_current": {
+      "title": "Current bundle PRN",
+      "type": "string",
+      "description": "PRN of the currently installed bundle.",
+      "examples": ["prn:1:1:bundle:abc123"]
+    },
+    "peridio_bun_previous": {
+      "title": "Previous bundle PRN",
+      "type": "string",
+      "description": "PRN of the previously installed bundle.",
+      "examples": ["prn:1:1:bundle:abc122"]
+    },
+    "peridio_bun_progress": {
+      "title": "Bundle PRN in progress",
+      "type": "string",
+      "description": "PRN of the bundle currently being installed.",
+      "examples": ["prn:1:1:bundle:abc124"]
+    },
+    "peridio_bin_current": {
+      "title": "Current binary tracking",
+      "type": "string",
+      "description": "Internal concatenated string of binary IDs and custom metadata SHA256 hashes. Used to detect changes between bundles.",
+      "examples": ["bin1:hash1,bin2:hash2"]
+    },
+    "peridio_bin_previous": {
+      "title": "Previous binary tracking",
+      "type": "string",
+      "description": "Previous bundle's binary IDs and metadata hashes.",
+      "examples": ["bin1:hash0,bin2:hash1"]
+    },
+    "peridio_bin_progress": {
+      "title": "Binary tracking in progress",
+      "type": "string",
+      "description": "Binary IDs and metadata hashes for the bundle being installed.",
+      "examples": ["bin1:hash2,bin2:hash3"]
+    },
+    "peridio_identity_private_key": {
+      "title": "Device private key",
+      "type": "string",
+      "description": "Base64-encoded PEM private key for device authentication. Only used when key_pair_source is 'uboot-env'.",
+      "examples": ["LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQ..."]
+    },
+    "peridio_identity_certificate": {
+      "title": "Device certificate",
+      "type": "string",
+      "description": "Base64-encoded PEM X.509 certificate for device authentication. Only used when key_pair_source is 'uboot-env'.",
+      "examples": ["LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSU..."]
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "peridio_vsn_current": "1.2.3",
+      "peridio_vsn_previous": "1.2.2",
+      "peridio_via_current": "prn:1:1:release:1234567890",
+      "peridio_via_previous": "prn:1:1:release:1234567889",
+      "peridio_bun_current": "prn:1:1:bundle:abc123",
+      "peridio_bun_previous": "prn:1:1:bundle:abc122"
+    },
+    {
+      "peridio_vsn_current": "2.0.0",
+      "peridio_vsn_previous": "1.9.0",
+      "peridio_vsn_progress": "2.1.0",
+      "peridio_via_current": "prn:1:1:release:5555555555",
+      "peridio_via_previous": "prn:1:1:release:4444444444",
+      "peridio_via_progress": "prn:1:1:release:6666666666",
+      "peridio_bun_current": "prn:1:1:bundle:xyz789",
+      "peridio_bun_previous": "prn:1:1:bundle:xyz788",
+      "peridio_bun_progress": "prn:1:1:bundle:xyz790"
+    },
+    {
+      "peridio_identity_private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQ...",
+      "peridio_identity_certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSU..."
+    }
+  ]
+}

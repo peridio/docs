@@ -1,0 +1,554 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peridio.com/schemas/peridio-daemon-config/1.0.0.json",
+  "title": "Peridio Daemon Configuration",
+  "description": "Configuration schema for Peridio Daemon (peridiod) configuration files. Defines device identity, update policies, remote access settings, and communication with the Peridio platform.",
+  "type": "object",
+  "required": ["version", "node"],
+  "properties": {
+    "version": {
+      "title": "Configuration version",
+      "type": "integer",
+      "const": 1,
+      "description": "The configuration version number. Currently only version 1 is supported."
+    },
+    "cache_dir": {
+      "title": "Cache directory",
+      "type": "string",
+      "description": "A location on disk where peridiod can store intermediate files. This directory must be writable.",
+      "default": "/var/lib/peridiod",
+      "examples": ["/var/lib/peridiod", "/var/peridiod", "/tmp/peridiod"]
+    },
+    "cache_log_enabled": {
+      "title": "Cache log enabled",
+      "type": "boolean",
+      "description": "Enable or disable cache logging.",
+      "default": true
+    },
+    "cache_log_level": {
+      "title": "Cache log level",
+      "type": "string",
+      "enum": ["debug", "info", "warning", "error"],
+      "description": "The logging level for cache operations.",
+      "default": "debug"
+    },
+    "cache_log_max_bytes": {
+      "title": "Cache log max bytes",
+      "type": "integer",
+      "description": "Maximum size in bytes for cache log files before rotation.",
+      "default": 10485760,
+      "minimum": 0
+    },
+    "cache_log_max_files": {
+      "title": "Cache log max files",
+      "type": "integer",
+      "description": "Maximum number of rotated cache log files to keep.",
+      "default": 0,
+      "minimum": 0
+    },
+    "cache_log_compress": {
+      "title": "Cache log compress",
+      "type": "boolean",
+      "description": "Whether to compress rotated cache log files.",
+      "default": true
+    },
+    "device_api": {
+      "title": "Device API configuration",
+      "type": "object",
+      "description": "Configuration for connecting to the Peridio device API endpoint.",
+      "properties": {
+        "url": {
+          "title": "API URL",
+          "type": "string",
+          "description": "The Peridio server device API URL. Format: hostname:port",
+          "default": "device.cremini.peridio.com:443",
+          "examples": ["device.cremini.peridio.com:443", "device.peridio.com:443"]
+        },
+        "certificate_path": {
+          "title": "Certificate path",
+          "type": "string",
+          "description": "Filesystem path to the device API CA certificate PEM file. If not specified, uses the bundled certificate.",
+          "examples": ["/etc/peridiod/ca-cert.pem"]
+        },
+        "verify": {
+          "title": "Verify SSL",
+          "type": "boolean",
+          "description": "Enable client-side SSL verification for device API connections.",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "distributions": {
+      "title": "Distributions configuration",
+      "type": "object",
+      "description": "Configuration for handling firmware distributions.",
+      "properties": {
+        "cache_download": {
+          "title": "Cache downloads",
+          "type": "boolean",
+          "description": "Whether to cache distribution downloads locally.",
+          "default": false
+        },
+        "download_parallel_count": {
+          "title": "Parallel download count",
+          "type": "integer",
+          "description": "Number of parallel download connections to use.",
+          "default": 1,
+          "minimum": 1
+        },
+        "download_parallel_chunk_bytes": {
+          "title": "Parallel chunk size",
+          "type": "integer",
+          "description": "Size in bytes of each parallel download chunk.",
+          "default": 5000000,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "fwup": {
+      "title": "FWUP configuration",
+      "type": "object",
+      "description": "Global configuration for the fwup firmware update tool.",
+      "properties": {
+        "devpath": {
+          "title": "Device path",
+          "type": "string",
+          "description": "The block storage device path to use for applying firmware updates.",
+          "default": "/dev/mmcblk0",
+          "examples": ["/dev/mmcblk0", "/dev/sda", "/dev/nvme0n1"]
+        },
+        "public_keys": {
+          "title": "Public keys",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of authorized public keys used when verifying update archives.",
+          "examples": [["abcd1234...", "efgh5678..."]]
+        },
+        "extra_args": {
+          "title": "Extra arguments",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extra arguments to pass to the fwup command. Useful for flags like --unsafe.",
+          "examples": [["--unsafe"], ["--verbose"]]
+        },
+        "env": {
+          "title": "Environment variables",
+          "type": "object",
+          "description": "Environment variables to set when executing fwup.",
+          "patternProperties": {
+            "^[A-Z_][A-Z0-9_]*$": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "examples": [{ "NERVES_FW_PLATFORM": "rpi4" }]
+        },
+        "stream_chunk_bytes": {
+          "title": "Stream chunk size",
+          "type": "integer",
+          "description": "Size in bytes of chunks when streaming firmware updates.",
+          "default": 5000000,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "title": "Node identity configuration",
+      "type": "object",
+      "description": "Configuration for device identity and authentication.",
+      "required": ["key_pair_source", "key_pair_config"],
+      "properties": {
+        "key_pair_source": {
+          "title": "Key pair source",
+          "type": "string",
+          "enum": ["file", "uboot-env", "env", "pkcs11"],
+          "description": "The source of the device's identity key pair and certificate."
+        },
+        "key_pair_config": {
+          "title": "Key pair configuration",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/keyPairConfigFile"
+            },
+            {
+              "$ref": "#/definitions/keyPairConfigUbootEnv"
+            },
+            {
+              "$ref": "#/definitions/keyPairConfigEnv"
+            },
+            {
+              "$ref": "#/definitions/keyPairConfigPKCS11"
+            }
+          ],
+          "description": "Configuration specific to the chosen key pair source."
+        }
+      },
+      "additionalProperties": false
+    },
+    "remote_shell": {
+      "title": "Remote shell",
+      "type": "boolean",
+      "description": "Enable or disable the remote shell (getty) feature for remote access.",
+      "default": false
+    },
+    "remote_iex": {
+      "title": "Remote IEx",
+      "type": "boolean",
+      "description": "Enable or disable the remote IEx feature. Useful for Nerves deployments. Takes precedence over remote_shell.",
+      "default": false
+    },
+    "remote_access_tunnels": {
+      "title": "Remote access tunnels",
+      "type": "object",
+      "description": "Configuration for WireGuard-based remote access tunnels.",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean",
+          "description": "Enable or disable remote access tunnels for the device.",
+          "default": false
+        },
+        "service_ports": {
+          "title": "Service ports",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "description": "List of device-side service ports that remote access tunnels can be opened for.",
+          "examples": [[22], [22, 80, 443]]
+        },
+        "persistent_keepalive": {
+          "title": "Persistent keepalive",
+          "type": "integer",
+          "description": "Interval in seconds for sending keepalive packets to maintain tunnels.",
+          "default": 25,
+          "minimum": 0
+        },
+        "port_range": {
+          "title": "Port range",
+          "type": "string",
+          "description": "Port range for tunnel endpoints. Format: start-end",
+          "pattern": "^[0-9]+-[0-9]+$",
+          "examples": ["51820-51920"]
+        },
+        "ipv4_cidrs": {
+          "title": "IPv4 CIDRs",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$"
+          },
+          "description": "IPv4 CIDR blocks to use for tunnel addresses.",
+          "examples": [["10.0.0.0/24"]]
+        },
+        "routing_table": {
+          "title": "Routing table",
+          "type": "integer",
+          "description": "Linux routing table number to use for tunnel routes.",
+          "default": 555,
+          "minimum": 1
+        },
+        "data_dir": {
+          "title": "Data directory",
+          "type": "string",
+          "description": "Directory for storing tunnel configuration and state.",
+          "examples": ["/var/lib/peridiod/tunnels"]
+        },
+        "hooks": {
+          "title": "Tunnel hooks",
+          "type": "object",
+          "description": "Scripts to execute at various tunnel lifecycle events.",
+          "properties": {
+            "pre_up": {
+              "title": "Pre-up script",
+              "type": "string",
+              "description": "Path to script executed before bringing up the tunnel interface.",
+              "examples": ["/etc/peridiod/hooks/pre-up.sh"]
+            },
+            "post_up": {
+              "title": "Post-up script",
+              "type": "string",
+              "description": "Path to script executed after bringing up the tunnel interface.",
+              "examples": ["/etc/peridiod/hooks/post-up.sh"]
+            },
+            "pre_down": {
+              "title": "Pre-down script",
+              "type": "string",
+              "description": "Path to script executed before tearing down the tunnel interface.",
+              "examples": ["/etc/peridiod/hooks/pre-down.sh"]
+            },
+            "post_down": {
+              "title": "Post-down script",
+              "type": "string",
+              "description": "Path to script executed after tearing down the tunnel interface.",
+              "examples": ["/etc/peridiod/hooks/post-down.sh"]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "update_poll_enabled": {
+      "title": "Update polling enabled",
+      "type": "boolean",
+      "description": "Enable or disable automatic polling for updates from the Peridio platform.",
+      "default": false
+    },
+    "update_poll_interval": {
+      "title": "Update poll interval",
+      "type": "integer",
+      "description": "Interval in milliseconds between update polls. Default is 30 minutes (1800000ms).",
+      "default": 1800000,
+      "minimum": 60000
+    },
+    "update_resume_max_boot_count": {
+      "title": "Update resume max boot count",
+      "type": "integer",
+      "description": "Maximum number of boot attempts before abandoning an update.",
+      "default": 10,
+      "minimum": 1
+    },
+    "trusted_signing_keys": {
+      "title": "Trusted signing keys",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of Base64-encoded Ed25519 public keys for verifying signed binaries. Only binaries signed with the corresponding private keys will be installed.",
+      "examples": [["I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="]]
+    },
+    "trusted_signing_key_dir": {
+      "title": "Trusted signing key directory",
+      "type": "string",
+      "description": "Directory containing trusted signing key files.",
+      "examples": ["/etc/peridiod/keys"]
+    },
+    "trusted_signing_key_threshold": {
+      "title": "Trusted signing key threshold",
+      "type": "integer",
+      "description": "Minimum number of valid signatures required to trust a binary.",
+      "default": 1,
+      "minimum": 1
+    },
+    "targets": {
+      "title": "Binary targets",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of binary target strings. Only binaries with matching target strings will be installed.",
+      "default": ["portable"],
+      "examples": [["portable"], ["arm64-v8"], ["rpi4", "rpi5"]]
+    },
+    "reboot_delay": {
+      "title": "Reboot delay",
+      "type": "integer",
+      "description": "Delay in milliseconds before executing a reboot after an update.",
+      "default": 5000,
+      "minimum": 0
+    },
+    "reboot_cmd": {
+      "title": "Reboot command",
+      "type": "string",
+      "description": "Command to execute for system reboot.",
+      "default": "reboot",
+      "examples": ["reboot", "systemctl reboot", "/sbin/reboot"]
+    },
+    "reboot_opts": {
+      "title": "Reboot options",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional arguments to pass to the reboot command.",
+      "examples": [["--force"], ["-f"]]
+    },
+    "reboot_sync_cmd": {
+      "title": "Reboot sync command",
+      "type": "string",
+      "description": "Command to sync filesystems before reboot.",
+      "default": "sync",
+      "examples": ["sync"]
+    },
+    "reboot_sync_opts": {
+      "title": "Reboot sync options",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional arguments to pass to the sync command.",
+      "examples": [[]]
+    },
+    "socket_enabled": {
+      "title": "Socket enabled",
+      "type": "boolean",
+      "description": "Enable or disable WebSocket connection to Peridio platform.",
+      "default": true
+    },
+    "network_monitor": {
+      "title": "Network monitor configuration",
+      "type": "object",
+      "description": "Configuration for network connectivity monitoring.",
+      "properties": {
+        "interface": {
+          "title": "Network interface",
+          "type": "string",
+          "description": "Network interface to monitor for connectivity.",
+          "examples": ["eth0", "wlan0"]
+        },
+        "check_interval": {
+          "title": "Check interval",
+          "type": "integer",
+          "description": "Interval in milliseconds between connectivity checks.",
+          "minimum": 1000
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "definitions": {
+    "keyPairConfigFile": {
+      "title": "File-based key pair configuration",
+      "type": "object",
+      "required": ["private_key_path", "certificate_path"],
+      "properties": {
+        "private_key_path": {
+          "title": "Private key path",
+          "type": "string",
+          "description": "Path on the filesystem to a PEM-encoded private key file.",
+          "examples": ["/etc/peridiod/device-key.pem"]
+        },
+        "certificate_path": {
+          "title": "Certificate path",
+          "type": "string",
+          "description": "Path on the filesystem to a PEM-encoded X.509 certificate file.",
+          "examples": ["/etc/peridiod/device.pem"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "keyPairConfigUbootEnv": {
+      "title": "U-Boot environment key pair configuration",
+      "type": "object",
+      "required": ["private_key", "certificate"],
+      "properties": {
+        "private_key": {
+          "title": "Private key variable",
+          "type": "string",
+          "description": "U-Boot environment variable containing a PEM-encoded private key.",
+          "examples": ["peridio_identity_private_key"]
+        },
+        "certificate": {
+          "title": "Certificate variable",
+          "type": "string",
+          "description": "U-Boot environment variable containing a PEM-encoded X.509 certificate.",
+          "examples": ["peridio_identity_certificate"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "keyPairConfigEnv": {
+      "title": "Environment variable key pair configuration",
+      "type": "object",
+      "required": ["private_key", "certificate"],
+      "properties": {
+        "private_key": {
+          "title": "Private key variable",
+          "type": "string",
+          "description": "System environment variable containing a Base64-encoded PEM private key.",
+          "examples": ["PERIDIO_PRIVATE_KEY"]
+        },
+        "certificate": {
+          "title": "Certificate variable",
+          "type": "string",
+          "description": "System environment variable containing a Base64-encoded PEM X.509 certificate.",
+          "examples": ["PERIDIO_CERTIFICATE"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "keyPairConfigPKCS11": {
+      "title": "PKCS#11 key pair configuration",
+      "type": "object",
+      "required": ["key_id", "cert_id"],
+      "properties": {
+        "key_id": {
+          "title": "Private key URI",
+          "type": "string",
+          "description": "PKCS#11 URI for private key operations.",
+          "examples": ["pkcs11:token=MCHP;object=device;type=private"]
+        },
+        "cert_id": {
+          "title": "Certificate URI",
+          "type": "string",
+          "description": "PKCS#11 URI for certificate operations.",
+          "examples": ["pkcs11:token=MCHP;object=device;type=cert"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "version": 1,
+      "update_poll_enabled": true,
+      "update_poll_interval": 1800000,
+      "trusted_signing_keys": ["I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="],
+      "node": {
+        "key_pair_source": "file",
+        "key_pair_config": {
+          "private_key_path": "/etc/peridiod/device-key.pem",
+          "certificate_path": "/etc/peridiod/device.pem"
+        }
+      }
+    },
+    {
+      "version": 1,
+      "cache_dir": "/var/lib/peridiod",
+      "update_poll_enabled": true,
+      "update_poll_interval": 1800000,
+      "remote_shell": true,
+      "targets": ["arm64-v8"],
+      "remote_access_tunnels": {
+        "enabled": true,
+        "service_ports": [22]
+      },
+      "node": {
+        "key_pair_source": "env",
+        "key_pair_config": {
+          "private_key": "PERIDIO_PRIVATE_KEY",
+          "certificate": "PERIDIO_CERTIFICATE"
+        }
+      },
+      "trusted_signing_keys": ["I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="]
+    },
+    {
+      "version": 1,
+      "update_poll_enabled": true,
+      "fwup": {
+        "devpath": "/dev/mmcblk0",
+        "env": {
+          "NERVES_FW_PLATFORM": "rpi4"
+        }
+      },
+      "node": {
+        "key_pair_source": "pkcs11",
+        "key_pair_config": {
+          "key_id": "pkcs11:token=MCHP;object=device;type=private",
+          "cert_id": "pkcs11:token=MCHP;object=device;type=cert"
+        }
+      },
+      "trusted_signing_keys": ["I93H7n/jHkfNqWik9uZf82Vi/HJuZ24EQBJnAtj9svU="]
+    }
+  ]
+}

@@ -27,43 +27,26 @@ For a detailed specification, see [bundle distribution](/peridio-core/reference/
 
 ## Custom metadata
 
-Each binary in a bundle can optionally have an arbitrary, user-defined JSON object associated with it. Custom metadata can be specified during bundle creation or defined earlier at various levels: on binaries, artifact versions, or artifacts. Metadata is inherited down this chain, with more specific definitions overriding broader ones.
+Custom metadata is used to provide additional information to an agent, like Peridio Daemon, that it can use to inform the download and installation of binaries.
 
-**Important Note**: Once a bundle is created, it's custom metadata is locked. Meaning if you change the custom metadata for the binary, artifact version, or artifact, the bundle's custom metadata will remain unchanged. Please create a new bundle to inherit the new information.
+### Optional per binary
 
-### Example 1: supplied only on artifact
+There is no single bundle-level custom metdata. Each binary in a bundle can optionally have its own custom metadata.
 
-- Artifact **(A1)** has custom metadata defined on it.
-- Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
-- Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
-- Creating a bundle with **(B1)**, but supplying no custom metadata.
+### Immutability
 
-In the bundle:
+Custom metadata is immutable as defined during bundle creation.
 
-- **(B1)** will have the custom metadata from **(A1)**.
+If an artifact, artifact version, or binary have their custom metadata changed after a bundle has been created, the bundle's custom metadata is not retroactively updated and will remain unchanged. You may create a new bundle to inherit the new information.
 
-### Example 2: supplied on artifact and binary
+### Inheritance
 
-- Artifact **(A1)** has custom metadata defined on it.
-- Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
-- Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
-- Binary **(B2)** for **(AV1)** has custom metadata defined on it.
-- Creating a bundle with **(B1)** and **(B2)**, but supplying no custom metadata.
+Custom metadata is sourced in an overriding fashion from four levels, from highest to lowest precedence:
 
-In the bundle:
+1. From bundle creation parameters
+2. Inherited from the binary
+3. Inherited from the artifact version
+4. Inherited from the artifact
 
-- **(B1)** will have the custom metadata from **(A1)**.
-- **(B2)** will have the custom metadata from **(B2)**.
-
-### Example 3: supplied on artifact, binary, and bundle
-
-- Artifact **(A1)** has custom metadata defined on it.
-- Artifact Version **(AV1)** for **(A1)** has no custom metadata defined on it.
-- Binary **(B1)** for **(AV1)** has no custom metadata defined on it.
-- Binary **(B2)** for **(AV1)** has custom metadata defined on it.
-- Creating a bundle with **(B1)** and **(B2)**, and supplying custom metadata for **(B2)**.
-
-In the bundle:
-
-- **(B1)** will have the custom metadata from **(A1)**.
-- **(B2)** will have the custom metadata supplied for **(B2)** at the time of bundle creation.
+This inheritance is considered a single time during bundle creation. Note that once a bundle is
+created it is immutable, including its custom metadata.

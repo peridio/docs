@@ -1,27 +1,38 @@
 ---
 title: Overview
 sidebar_position: 1
-description: 'Peridio Daemon is a lightweight background service for embedded devices handling OTA updates, device management, and secure platform communication.'
+description: 'Peridio Daemon is a lightweight service for managing OTA updates and device connectivity on embedded Linux systems.'
 ---
 
-The Peridio Daemon is a lightweight background service that runs on embedded devices to handle over-the-air updates, device management, and communication with the Peridio platform. It provides a secure, reliable way to keep your devices updated and connected.
+# Overview
 
-## Getting started
+Peridio Daemon (peridiod) is a lightweight background service that runs on embedded Linux devices to handle over-the-air updates and communication with the Peridio platform.
 
-The daemon can be integrated into your device firmware or installed as a system service. It handles update checks, downloads, and installations automatically according to your configured policies.
+## Key capabilities
 
-## Key features
+- **Automatic updates** - Polls for and installs firmware and application updates
+- **Multi-installer support** - Handles various update formats (fwup, deb, rpm, opkg, swupdate, file)
+- **Remote access tunnels** - Enables secure WireGuard-based remote access to devices
+- **Device authentication** - Uses X.509 certificates with multiple storage backends
+- **State tracking** - Maintains update state in U-Boot environment variables
 
-- Automatic update checking and installation
-- Secure communication with Peridio services
-- Configurable update policies and scheduling
-- Status reporting and telemetry
-- Remote access tunnel support
+## Architecture
 
-## Common use cases
+Peridiod runs as a single system service that connects to Peridio Cloud via WebSocket for real-time communication and HTTPS for downloads.
 
-- Autonomous device updates
-- Device status monitoring
-- Remote debugging and maintenance
-- Configuration synchronization
-- Security patch deployment
+The daemon supports multiple identity storage methods:
+
+- File-based certificates
+- Environment variables
+- U-Boot environment
+- PKCS#11 hardware security modules
+
+## Integration
+
+Peridiod integrates with existing embedded Linux workflows through:
+
+- Build system support (Yocto, Buildroot)
+- Package managers (RPM, DEB, OPKG)
+- Container orchestration (Docker, Kubernetes)
+- Direct binary deployment
+- Custom application frameworks
