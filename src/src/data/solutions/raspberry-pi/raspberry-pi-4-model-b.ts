@@ -175,4 +175,5 @@ export const data: SolutionData = {
   },
 }
 
+export const raspberryPi4ModelBData = data
 export default data

@@ -156,4 +156,6 @@ export const data: SolutionData = {
   },
 }
 
+export const rubikPiData = data
+export const qualcommRubikPiData = data
 export default data

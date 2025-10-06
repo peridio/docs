@@ -165,4 +165,5 @@ export const data: SolutionData = {
   },
 }
 
+export const stm32mp257fDkData = data
 export default data

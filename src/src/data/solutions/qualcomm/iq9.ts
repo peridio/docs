@@ -156,4 +156,5 @@ export const data: SolutionData = {
   },
 }
 
+export const qualcommIq9Data = data
 export default data

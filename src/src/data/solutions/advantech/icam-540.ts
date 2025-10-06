@@ -165,4 +165,5 @@ export const icam540Data: SolutionData = {
   },
 }
 
+export const advantechIcam540Data = icam540Data
 export default icam540Data

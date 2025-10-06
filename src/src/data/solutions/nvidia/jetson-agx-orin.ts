@@ -21,7 +21,7 @@ export const data: SolutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nvidia/jetson-agx-orin-developer-kit/provision',
+      link: '/hardware/nvidia/jetson-orin-nano-developer-kit/provision',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -156,7 +156,7 @@ export const data: SolutionData = {
       'Unlock the full potential of NVIDIA Jetson AGX Orin with production-grade software infrastructure for the most demanding edge AI applications.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nvidia/jetson-agx-orin-developer-kit/provision',
+      link: '/hardware/nvidia/jetson-orin-nano-developer-kit/provision',
     },
     secondaryCTA: {
       text: 'Learn More',
@@ -166,4 +166,6 @@ export const data: SolutionData = {
   },
 }
 
+export const jetsonAgxOrinData = data
+export const nvidiaJetsonAgxOrinData = data
 export default data

@@ -166,4 +166,6 @@ export const data: SolutionData = {
   },
 }
 
+export const jetsonOrinNxData = data
+export const nvidiaJetsonOrinNxData = data
 export default data

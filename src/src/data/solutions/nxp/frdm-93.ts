@@ -165,4 +165,6 @@ export const data: SolutionData = {
   },
 }
 
+export const frdm93Data = data
+export const nxpFrdm93Data = data
 export default data

@@ -165,4 +165,5 @@ export const data: SolutionData = {
   },
 }
 
+export const seeedReterminalData = data
 export default data

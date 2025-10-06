@@ -161,4 +161,6 @@ export const data: SolutionData = {
   },
 }
 
+export const onlogicData = data
+export const onlogicFr201Data = data
 export default data

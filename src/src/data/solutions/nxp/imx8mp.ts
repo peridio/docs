@@ -165,4 +165,6 @@ export const data: SolutionData = {
   },
 }
 
+export const imx8mpData = data
+export const nxpImx8mpData = data
 export default data

@@ -165,4 +165,6 @@ export const data: SolutionData = {
   },
 }
 
+export const jetsonOrinNanoData = data
+export const nvidiaJetsonOrinNanoData = data
 export default data

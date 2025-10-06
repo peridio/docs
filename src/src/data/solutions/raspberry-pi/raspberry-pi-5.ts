@@ -175,4 +175,5 @@ export const data: SolutionData = {
   },
 }
 
+export const raspberryPi5Data = data
 export default data
