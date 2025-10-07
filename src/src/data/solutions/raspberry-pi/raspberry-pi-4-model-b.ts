@@ -27,7 +27,7 @@ export const data: SolutionData = {
       text: 'Request Demo',
       link: 'https://peridio.com/book-a-meeting',
     },
-    image: '/img/hardware/raspberry-pi/raspberrypi.png',
+    image: '/img/hardware/raspberry-pi/raspberrypi4.png',
     imageAlt: 'Raspberry Pi 4 Model B development board',
   },
 
