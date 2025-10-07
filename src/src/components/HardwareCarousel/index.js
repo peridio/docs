@@ -14,7 +14,7 @@ const slides = [
   {
     vendor: 'Raspberry Pi',
     target: 'Raspberry Pi 5',
-    image: '/img/raspberry-pi.jpg',
+    image: '/img/raspberrypi-5.jpg',
     overviewLink: '/solutions/raspberry-pi/raspberry-pi-5',
     getStartedLink: '/avocado-linux/guides/getting-started',
   },
