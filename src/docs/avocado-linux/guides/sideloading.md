@@ -61,7 +61,7 @@ Options:
 
 ```
 
-## Clone the Avocado Extension Repository
+## Clone the Avocado extension repository
 
 Instead of initializing a new project, we'll use a pre-configured example that supports multiple targets. Clone the Avocado extension repository which contains a comprehensive example configuration.
 
@@ -71,7 +71,7 @@ Instead of initializing a new project, we'll use a pre-configured example that s
 git clone https://github.com/avocado-linux/avocado-ext.git
 ```
 
-## Navigate to the Development Runtime
+## Navigate to the development runtime
 
 The repository contains a full example configuration in the `runtimes/dev` directory that supports multiple hardware targets. Navigate to this directory:
 
@@ -83,7 +83,7 @@ cd avocado-ext/runtimes/dev
 
 This directory contains a comprehensive `avocado.toml` configuration file that supports multiple targets including Raspberry Pi 4, with all necessary dependencies and extensions pre-configured.
 
-## Set Target Architecture
+## Set target architecture
 
 Since the configuration supports multiple targets, we need to specify which target architecture we're building for by setting an environment variable:
 
@@ -195,11 +195,11 @@ avocado provision -r dev
 
 The provisioning process creates the necessary artifacts for flashing to your Raspberry Pi 4's SD card. The generated image includes your configured user credentials, extensions, and all the components needed to boot Avocado OS on your device.
 
-## SD Card Provisioning Configuration
+## SD card provisioning configuration
 
 The example repository includes pre-configured SD card provisioning profiles that grant the necessary system access for writing to SD cards. No additional configuration is required.
 
-## Write to SD Card
+## Write to SD card
 
 Now we're ready to write the Avocado OS image to your SD card. This process is interactive and requires you to insert the SD card at the right moment.
 
@@ -215,7 +215,7 @@ Make sure your SD card is **NOT** inserted before running the provisioning comma
 avocado provision --provision-profile sd -r dev
 ```
 
-#### Interactive Process
+#### Interactive process
 
 The provisioning process will guide you through the SD card writing:
 
@@ -281,7 +281,7 @@ You can now safely remove the SD card and use it to boot your device.
 [SUCCESS] Successfully provisioned runtime 'dev'
 ```
 
-## Boot Your Raspberry Pi 4
+## Boot your Raspberry Pi 4
 
 Once the SD card writing is complete:
 
@@ -296,11 +296,11 @@ Your Raspberry Pi 4 is now running Avocado OS and ready for development and side
 
 Now that your Raspberry Pi 4 is running Avocado OS, you can use sideloading to deploy updates over the network without reflashing the SD card. This enables rapid development iterations by allowing you to modify your project, rebuild components, and deploy changes directly to your running device.
 
-### Network Connectivity Requirements
+### Network connectivity requirements
 
 Your Raspberry Pi 4 and development workstation must be connected to the same local area network (LAN) and able to communicate with each other.
 
-#### Verify Network Connectivity
+#### Verify network connectivity
 
 First, determine how to connect to your device. The device uses the hostname `avocado-raspberrypi4` by default, but depending on your network setup, you may need to use the IP address instead.
 
@@ -326,7 +326,7 @@ Alternatively, you can add an entry to your `/etc/hosts` file to map the hostnam
 echo "192.168.0.103 avocado-raspberrypi4" | sudo tee -a /etc/hosts
 ```
 
-#### SSH Configuration for Development
+#### SSH configuration for development
 
 During development with frequent reflashing and updates, SSH host key checking may cause conflicts. Use this command to bypass host key verification:
 
@@ -340,11 +340,11 @@ Or with an IP address:
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.0.103
 ```
 
-### Making Project Changes
+### Making project changes
 
 Let's demonstrate sideloading by adding a new package to our system. We'll add the `tcpdump` network analysis tool to show how dependency changes can be deployed without reflashing.
 
-#### Verify Current State
+#### Verify current state
 
 First, SSH into your device and verify that `tcpdump` is not currently available:
 
@@ -355,7 +355,7 @@ tcpdump --version
 
 You should see an error indicating the command is not found.
 
-#### Add New Dependency
+#### Add new dependency
 
 In your development workstation's `runtimes/dev` directory, edit the `avocado.toml` file to add `tcpdump` to the application dependencies.
 
@@ -373,29 +373,29 @@ tcpdump = "*"
 ... snip ...
 ```
 
-#### Rebuild and Provision
+#### Rebuild and provision
 
 After making the dependency change, rebuild the components with the new package included:
 
-##### Install Dependencies
+##### Install dependencies
 
 ```bash
 avocado install -f
 ```
 
-##### Build Components
+##### Build components
 
 ```bash
 avocado build
 ```
 
-##### Provision Runtime
+##### Provision runtime
 
 ```bash
 avocado provision -r dev
 ```
 
-### Deploy via Sideloading
+### Deploy via sideloading
 
 Now deploy the updated system to your device using the `avocado deploy` command:
 
@@ -409,7 +409,7 @@ Replace `192.168.0.103` with your device's IP address or use the hostname if mDN
 avocado deploy -r dev -d avocado-raspberrypi4
 ```
 
-##### Deployment Process
+##### Deployment process
 
 The sideloading process will:
 
@@ -417,7 +417,7 @@ The sideloading process will:
 2. **Install the new system components**
 3. **Automatically reboot** the device to activate changes
 
-### Verify the Update
+### Verify the update
 
 After the device finishes rebooting (this may take a minute or two), SSH back into the device and verify that `tcpdump` is now available:
 
@@ -428,7 +428,7 @@ tcpdump --version
 
 You should now see the `tcpdump` version information, confirming that the package was successfully added to your system through sideloading!
 
-### Development Workflow
+### Development workflow
 
 This sideloading workflow enables rapid iteration during development:
 

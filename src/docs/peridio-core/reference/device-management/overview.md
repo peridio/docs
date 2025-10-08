@@ -8,7 +8,7 @@ description: 'Complete control over connected device fleets in Peridio Core - or
 
 Device Management in Peridio Core provides the foundation for organizing, provisioning, and maintaining your entire fleet of connected devices. From the moment a device is manufactured to its eventual decommissioning, Peridio gives you the tools to manage every aspect of its lifecycle.
 
-## Core Architecture
+## Core architecture
 
 Device management in Peridio follows a hierarchical structure designed to scale from prototypes to millions of production devices:
 
@@ -28,9 +28,9 @@ Logical groupings within products that enable sophisticated deployment strategie
 
 Individual device instances with unique identities, certificates, and operational data. Each device belongs to exactly one product and cohort.
 
-## Key Capabilities
+## Key capabilities
 
-### Secure Device Identity
+### Secure device identity
 
 Every device in Peridio has a cryptographically secure identity based on X.509 certificates. This ensures:
 
@@ -39,7 +39,7 @@ Every device in Peridio has a cryptographically secure identity based on X.509 c
 - Secure communication channels
 - Certificate lifecycle management
 
-### Flexible Provisioning
+### Flexible provisioning
 
 Peridio supports multiple provisioning workflows to match your manufacturing and deployment needs:
 
@@ -58,7 +58,7 @@ Monitor your entire fleet through comprehensive dashboards and analytics:
 - Update progress tracking
 - Custom tags and metadata
 
-### Granular Access Control
+### Granular access control
 
 Manage who can see and control different aspects of your fleet:
 
@@ -67,30 +67,30 @@ Manage who can see and control different aspects of your fleet:
 - API key scoping
 - Audit logging
 
-## Common Workflows
+## Common workflows
 
-### Manufacturing Integration
+### Manufacturing integration
 
 1. Generate CA certificates for your manufacturing line
 2. Configure JITP with default product and cohort assignments
 3. Devices automatically register when first powered on
 4. Track provisioning rates and manufacturing yield
 
-### Staged Deployments
+### Staged deployments
 
 1. Organize devices into cohorts (canary, beta, production)
 2. Deploy updates to canary cohort first
 3. Monitor metrics and rollback if needed
 4. Progressively roll out to larger cohorts
 
-### Field Diagnostics
+### Field diagnostics
 
 1. Query devices by tags, location, or status
 2. Access device logs and telemetry
 3. Initiate remote access sessions
 4. Quarantine problematic devices
 
-## Security Considerations
+## Security considerations
 
 Device management security is built on multiple layers:
 
@@ -100,7 +100,7 @@ Device management security is built on multiple layers:
 - **Audit trails** for compliance and forensics
 - **Automatic certificate rotation** before expiration
 
-## Integration Points
+## Integration points
 
 Device management integrates seamlessly with other Peridio Core features:
 
@@ -109,7 +109,7 @@ Device management integrates seamlessly with other Peridio Core features:
 - **Webhooks** - Receive real-time notifications of device events
 - **APIs** - Automate device operations programmatically
 
-## Next Steps
+## Next steps
 
 Explore the detailed documentation for each component:
 

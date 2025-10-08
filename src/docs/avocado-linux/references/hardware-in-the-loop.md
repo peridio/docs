@@ -20,7 +20,7 @@ This development model provides:
 
 The HITL system consists of three main components:
 
-### HITL Server
+### HITL server
 
 Runs on the host development machine and serves extensions over NFS. Started with:
 
@@ -28,7 +28,7 @@ Runs on the host development machine and serves extensions over NFS. Started wit
 avocado hitl server -e my-extension
 ```
 
-### Extension Mount
+### Extension mount
 
 Target device mounts the NFS share and overlays it onto the filesystem. Activated with:
 
@@ -36,11 +36,11 @@ Target device mounts the NFS share and overlays it onto the filesystem. Activate
 avocadoctl hitl mount -e my-extension -s <host-ip>
 ```
 
-### Live Overlay
+### Live overlay
 
 Extensions are mounted as overlay filesystems, allowing the immutable base system to remain unchanged while development artifacts are dynamically added.
 
-## Supported Targets
+## Supported targets
 
 HITL works with any Avocado target that includes the `avocado-hitl` package:
 
@@ -48,7 +48,7 @@ HITL works with any Avocado target that includes the `avocado-hitl` package:
 - **Physical hardware** - All supported Avocado hardware platforms
 - **Remote devices** - Any networked device with NFS client support
 
-## Development Workflow
+## Development workflow
 
 1. **Create extension** - Define your application as a system or configuration extension
 2. **Start HITL server** - Begin serving the extension over NFS from your host
@@ -56,7 +56,7 @@ HITL works with any Avocado target that includes the `avocado-hitl` package:
 4. **Iterate** - Make changes on host, test immediately on target
 5. **Deploy** - Build final images using the same extension definitions
 
-## Integration with Extensions
+## Integration with extensions
 
 HITL seamlessly integrates with Avocado's extension system:
 
@@ -65,7 +65,7 @@ HITL seamlessly integrates with Avocado's extension system:
 - **Multiple extensions** - Mount several extensions simultaneously
 - **Version management** - Switch between extension versions without device reboot
 
-## Security Considerations
+## Security considerations
 
 HITL is designed for development environments and includes several security implications:
 
@@ -74,7 +74,7 @@ HITL is designed for development environments and includes several security impl
 - **Development-only** - HITL should not be used in production environments
 - **Firewall configuration** - Ensure appropriate network access controls
 
-## Debugging Capabilities
+## Debugging capabilities
 
 HITL enables advanced debugging workflows:
 
@@ -83,27 +83,27 @@ HITL enables advanced debugging workflows:
 - **Performance profiling** - Profile running applications while iterating on code
 - **Memory analysis** - Debug memory issues in live applications
 
-## Best Practices
+## Best practices
 
-### Project Organization
+### Project organization
 
 - Structure extensions with clear separation of concerns
 - Use consistent naming conventions for extensions and artifacts
 - Maintain separate extensions for different application components
 
-### Development Environment
+### Development environment
 
 - Use dedicated development networks for HITL traffic
 - Configure proper hostname resolution between host and target
 - Set up automated testing pipelines that validate HITL changes
 
-### Version Control
+### Version control
 
 - Track extension configurations in version control
 - Use semantic versioning for extension releases
 - Maintain separate branches for HITL development and production releases
 
-## Common Patterns
+## Common patterns
 
 ### Multi-Extension Development
 
@@ -115,14 +115,14 @@ backend-api = { ext = "backend-api" }
 database = { ext = "database" }
 ```
 
-### Service Hot Reloading
+### Service hot reloading
 
 ```bash
 # On target, restart specific services after code changes
 systemctl restart my-application.service
 ```
 
-### Configuration Testing
+### Configuration testing
 
 ```bash
 # Mount configuration extension and test different settings
@@ -131,7 +131,7 @@ avocadoctl hitl mount -e config-testing -s 192.168.1.100
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 **NFS Mount Failures**
 
@@ -151,7 +151,7 @@ avocadoctl hitl mount -e config-testing -s 192.168.1.100
 - Verify mount command uses correct extension name and host IP
 - Check that systemd-sysext or systemd-confext services are running
 
-### Debugging Commands
+### Debugging commands
 
 ```bash
 # Check HITL server status
@@ -167,7 +167,7 @@ mount | grep nfs
 systemctl status systemd-sysext
 ```
 
-## Related Documentation
+### Related documentation
 
 - [Hardware-in-the-loop Guide](../guides/hardware-in-the-loop) - Step-by-step tutorial
 - [Extensions Reference](./extensions) - Understanding system and configuration extensions

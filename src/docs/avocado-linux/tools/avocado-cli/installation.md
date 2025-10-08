@@ -7,7 +7,7 @@ description: 'Install Avocado CLI for Avocado Linux development - download, extr
 1. Download an Avocado CLI tarball from the [releases page](https://github.com/avocado-linux/avocado-cli/releases).
 2. Extract the tarball using the following command:
    ```bash
-   tar -xzvf archive.tar.gz
+   tar -xzvf <tarball>
    ```
 3. Move the extracted binary to a directory in your PATH:
    ```bash

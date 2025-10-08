@@ -19,7 +19,7 @@ Any user with `user_update` and `org_user_permission_update` permissions can upd
 
 <img src="/img/console-fleet-view-full.png" />
 
-### Filter Controls
+### Filter controls
 
 There are several top-level filter controls which affect various parts of the Fleet View data.
 
@@ -29,19 +29,19 @@ The `Last Seen` filter narrows counts of devices to those that have connected to
 
 There are also top-level controls for `Product`, `Cohort` and `Tags`. These options will filter to a single product, cohort, or tag, respectively. These filters also apply to various parts of the Fleet View as noted below.
 
-### Device Count
+### Device count
 
 This chart shows a total count of devices over time, as well as a count of new devices created over time. Deleting devices will cause the total count to decrease.
 
 This chart is affected by the `Range`, `Last Seen`, `Product`, `Cohort`, and `Tags` filters.
 
-### Device Events
+### Device events
 
 This chart shows a count of device events over time. Click the device name in the chart's legend to toggle each data series on and off.
 
 This chart is affected by the `Range`, `Last Seen`, `Product`, `Cohort`, and `Tags` filters.
 
-### Release Adoption
+### Release adoption
 
 This chart shows device counts for up to five (5) releases over time. This data is sampled in near real-time, and therefore does not contain any data prior to _March 6, 2025_. As the count of devices on any given release changes from second to second, the shown count value represents an average count for the data point period (day, hour, 6h, 1h, 15m, or 5m period).
 
@@ -49,7 +49,7 @@ By default, this chart will show the _current_ top five releases by device count
 
 This chart also supports selecting/showing a `NULL` option, which represents a count of devices that are **not** on any release.
 
-### Release Distribution Details
+### Release distribution details
 
 This table shows all releases across the entire organization. By default, releases are ordered by cohort name and release version.
 
@@ -63,6 +63,6 @@ Lastly, there are statistics showing the percentage of devices that are on the g
 
 Hover table column headers to view more detailed descriptions. Hover percentage values to see actual device count numbers.
 
-## Additional Resources
+## Additional resources
 
 [Read our introductory blog post for Fleet View.](https://blog.peridio.com/introducing-fleet-view)

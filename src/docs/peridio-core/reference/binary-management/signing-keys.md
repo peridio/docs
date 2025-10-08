@@ -63,7 +63,7 @@ yDl5AUC5LMfgeVF1HMSEA/MX4OAIqCxXmQ62fFUCH2U=
 openssl genpkey -algorithm Ed25519 -out private.pem
 ```
 
-#### Derive a PEM public key From a PEM private key
+#### Derive a PEM public key from a PEM private key
 
 ```
 openssl pkey -in private.pem -pubout -out public.pem

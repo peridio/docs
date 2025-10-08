@@ -5,7 +5,7 @@ description: 'Enterprise-grade security features in Avocado Linux - hardware-bac
 
 Avocado supports enterprise-grade security capabilities including hardware-backed secure boot, filesystem integrity verification, hardware-encrypted storage, and atomic updates with automatic rollback. The platform provides the foundation and tooling to implement these production-ready security features while maintaining development velocity.
 
-## Secure Boot Support
+## Secure boot support
 
 Avocado enables hardware root of trust implementation with support for unbroken cryptographic chains:
 
@@ -16,7 +16,7 @@ Avocado enables hardware root of trust implementation with support for unbroken 
 
 Multi-vendor signing authority support accommodates complex supply chains while enabling end-to-end trust establishment.
 
-## Filesystem Integrity Capabilities
+## Filesystem integrity capabilities
 
 The platform supports dm-verity implementation for real-time block-level integrity verification through Merkle tree hashing. Avocado's extension system architecture enables independent hash trees for granular validation and rollback capabilities when configured.
 
@@ -31,7 +31,7 @@ Avocado facilitates LUKS encryption implementation with AES-256, supporting vari
 
 For systems without dedicated security hardware, the platform supports split-knowledge derivation approaches with Argon2id.
 
-## Atomic Update Architecture
+## Atomic update architecture
 
 Avocado's dual partition A/B update architecture supports:
 

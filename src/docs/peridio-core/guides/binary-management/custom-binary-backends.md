@@ -14,14 +14,14 @@ Custom binary backends let you store your binaries in your own cloud storage whi
 - **Performance** - Store binaries closer to your devices
 - **Security** - Maintain full control over your binary storage
 
-## Supported Backends
+## Supported backends
 
 Currently, Peridio supports:
 
 - **Amazon S3** - Direct storage in your S3 buckets
 - **Amazon CloudFront** - CDN distribution with signed URLs for enhanced security and performance
 
-## Setting Up Amazon S3 Backend
+## Setting up Amazon S3 backend
 
 ### Prerequisites
 
@@ -105,11 +105,11 @@ Once Peridio creates the necessary infrastructure, you'll receive a trust policy
 
 Apply this trust policy to your IAM role to complete the setup.
 
-## Setting Up Amazon CloudFront (Optional)
+## Setting up Amazon CloudFront (optional)
 
 CloudFront provides additional benefits like global distribution and signed URLs for enhanced security.
 
-### When to Use CloudFront
+### When to use CloudFront
 
 Consider CloudFront if you need:
 
@@ -146,22 +146,22 @@ Send Peridio the following information:
 
 - **TTL seconds** - How long download links remain valid (default is reasonable for most use cases)
 
-## Important Considerations
+## Important considerations
 
-### Timing and Activation
+### Timing and activation
 
 Setting up custom binary backends involves coordination between two systems:
 
 1. **Configuration gap** - There's a brief period where Peridio knows about your backend but AWS hasn't updated trust policies yet. During this time, Peridio will continue using the default storage.
 2. **Dual requirements** - Both upload and download configurations must be active before the system switches over to your custom backend
 
-### Security Best Practices
+### Security best practices
 
 - **Least privilege** - Only grant the minimum permissions needed
 - **External ID** - The trust policy uses your organization ID as an external ID for additional security
 - **Regular rotation** - Consider rotating your CloudFront signing keys periodically
 
-## Getting Help
+## Getting help
 
 If you encounter issues:
 

@@ -15,7 +15,7 @@ Extensions can be provided as plain directories, btrfs subvolumes, or disk image
 
 Configuration Extensions operate exclusively on the `/etc/` hierarchy, enabling runtime reconfiguration of OS services without deploying new code or complete OS updates. This allows independent management of system configuration, security policies, and environment-specific settings.
 
-## Development Workflow
+## Development workflow
 
 The extension system transforms embedded development from edit-compile-flash-boot-test cycles into interactive workflows:
 
@@ -27,7 +27,7 @@ Learn how to leverage these capabilities with [hardware-in-the-loop development]
 
 Extensions integrate with Avocado's SDK for declarative package selection, custom toolchain extensions, and versioned dependencies across development environments.
 
-## Security and Composition
+## Security and composition
 
 Extensions maintain security through compatibility enforcement via release files, cryptographic signature verification, and integrity checking during runtime. Multiple extensions compose together with clear isolation boundaries - each contains complete dependencies and cannot modify the immutable base system.
 

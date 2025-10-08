@@ -15,7 +15,7 @@ Our Code of Conduct outlines the standards and expectations for behavior within 
 
 Our Privacy Statement details how we collect, use, and protect your personal information when you use Peridio services. We are committed to maintaining the privacy and security of your data.
 
-## Why These Policies Matter
+## Why these policies matter
 
 These policies help ensure that:
 
@@ -32,7 +32,7 @@ If you have questions about any of our policies or need clarification on specifi
 - Reach out to our legal team for policy-specific inquiries
 - Visit our main website for additional resources
 
-## Updates to Policies
+## Updates to policies
 
 We may update these policies from time to time to reflect changes in our services, legal requirements, or community needs. When significant changes are made, we will notify users through appropriate channels.
 

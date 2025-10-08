@@ -25,6 +25,6 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 
 **[Remote Access Tunnels](/peridio-core/guides/remote-access/creating-tunnels)** - Secure SSH tunneling for remote device management and troubleshooting.
 
-## Request Hardware Support
+## Request hardware support
 
 If you'd like Peridio to support your hardware platform, <a href="https://www.peridio.com/contact" target="_blank" rel="noopener noreferrer">reach out to our team</a>.

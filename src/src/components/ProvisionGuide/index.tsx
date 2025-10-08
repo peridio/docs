@@ -92,7 +92,7 @@ export default function ProvisionGuide({
   if (targetId && !config) {
     return (
       <div>
-        <Heading as="h1">Target Configuration Not Found</Heading>
+        <Heading as="h1">Target configuration not found</Heading>
         <p>
           The target configuration for <code>{targetId}</code> could not be found. Please check that
           the target identifier is correct.
@@ -261,7 +261,7 @@ avocado provision -r dev`
       {resolvedRunType !== 'qemu' && (
         <>
           <Heading as="h3" id="setup-serial-console">
-            Setup serial console
+            Set up serial console
           </Heading>
 
           <p>

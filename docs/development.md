@@ -10,7 +10,7 @@ npm --prefix src install
 
 This command installs dependencies defined in `src/package.json`.
 
-## Development Server
+## Development server
 
 ```console
 npm --prefix src start
