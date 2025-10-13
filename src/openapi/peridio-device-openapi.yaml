@@ -12,20 +12,20 @@ info:
 
     The following headers may be supplied when requesting any route.
 
-    For critical context about how Peridio Cloud will interpret these headers, refer to the [device integration](/peridio-core/reference/bundle-distribution#device-integration) section of the [bundle distribution](/peridio-core/reference/bundle-distribution) reference.
+    For critical context about how Peridio Cloud will interpret these headers, refer to the [device integration](/peridio-core/reference/bundle-management/bundle-distribution#device-integration) section of the [bundle distribution](/peridio-core/reference/bundle-management/bundle-distribution) reference.
 
-    For context regarding deprecated headers, see [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility).
+    For context regarding deprecated headers, see [deployment eligibility](/peridio-core/reference/long-term-support/deployments#deployment-eligibility).
 
     |key|value|description|
     |-|-|-|
     |peridio-release-prn|A release PRN.|Informs Peridio of what release is currently active on the device.|
     |peridio-bundle-prn|A bundle PRN.|Informs Peridio of what bundle is currently active on the device.|
     |peridio-release-version|A release version.|Informs Peridio of what release version is representative of the device's state.|
-    |x-peridio-architecture|A firmware architecture.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The architecture of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-platform|A firmware platform.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The platform of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-product|A firmware product.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The product of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-uuid|A firmware UUID.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The UUID of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
-    |x-peridio-version|A firmware version.|Deprecated. See [deployment eligibility](/peridio-core/reference/deployments#deployment-eligibility). The version of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-architecture|A firmware architecture.|Deprecated. See [deployment eligibility](/peridio-core/reference/long-term-support/deployments#deployment-eligibility). The architecture of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-platform|A firmware platform.|Deprecated. See [deployment eligibility](/peridio-core/reference/long-term-support/deployments#deployment-eligibility). The platform of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-product|A firmware product.|Deprecated. See [deployment eligibility](/peridio-core/reference/long-term-support/deployments#deployment-eligibility). The product of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-uuid|A firmware UUID.|Deprecated. See [deployment eligibility](/peridio-core/reference/long-term-support/deployments#deployment-eligibility). The UUID of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
+    |x-peridio-version|A firmware version.|Deprecated. See [deployment eligibility](/peridio-core/reference/long-term-support/deployments#deployment-eligibility). The version of the device's currently active firmware. When supplying any `x-peridio` header, you should supply all `x-peridio` headers.|
   title: Peridio Device API
   version: "1"
 servers:
@@ -52,14 +52,14 @@ paths:
 
         ### Expandable
 
-        This endpoint has an expandable response. See [expanding responses](/admin-api#section/Expanding-Responses).
+        This endpoint has an expandable response. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
         - in: header
           name: peridio-release-prn
           schema:
-            description: See [global headers](#global-headers).
+            description: See [global headers](#).
             examples:
               [
                 prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0,
@@ -69,12 +69,12 @@ paths:
         - in: header
           name: peridio-release-version
           schema:
-            description: See [global headers](#global-headers).
+            description: See [global headers](#).
             $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
           required: false
         - name: expand
           description: |
-            See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
+            See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
             **Expandable Fields**
 
@@ -101,12 +101,12 @@ paths:
                       cohort:
                         $ref: "peridio-admin-openapi.yaml#/components/schemas/cohort"
                         description: |
-                          Expand required. See [expanding responses](#section/Expanding-Responses).
+                          Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
                           The cohort the device belongs to.
                       manifest:
                         description: |
-                          Expand required. See [expanding responses](#section/Expanding-Responses).
+                          Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
                           The manifest associated with the device's current bundle. Includes metadata about the binaries available to download, including a presigned download URL.
                         $ref: "#/components/schemas/manifest"
@@ -119,9 +119,9 @@ paths:
       operationId: get-device-update
       summary: get device update
       description: |
-        This functionality has been superceded by [get update](#devices/operation/get-update).
+        This functionality has been superceded by the [get update](#operation/get-update) operation.
 
-        Returns information regarding whether an update is available via a [deployment](/admin-api#deployments).
+        Returns information regarding whether an update is available via a [deployment](/peridio-core/tools/admin-api#deployments).
 
         If an update is available, additional information describing the update is returned including a presigned URL to acquire the update.
       tags:
@@ -130,13 +130,13 @@ paths:
         - in: header
           name: x-peridio-uuid
           schema:
-            description: See [global headers](#global-headers).
+            description: See [global headers](#).
             $ref: "peridio-admin-openapi.yaml#/components/schemas/firmware-uuid"
           required: true
         - in: header
           name: peridio-release-prn
           schema:
-            description: See [global headers](#global-headers).
+            description: See [global headers](#).
             examples:
               [
                 prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0,
@@ -146,7 +146,7 @@ paths:
         - in: header
           name: peridio-release-version
           schema:
-            description: See [global headers](#global-headers).
+            description: See [global headers](#).
             $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
           required: false
         - name: preflight
@@ -200,18 +200,18 @@ paths:
       operationId: get-update
       summary: get update
       description: |
-        Returns information regarding whether an update is available via a [release](/peridio-core/reference/releases) or [bundle override](/peridio-core/reference/bundle-overrides).
+        Returns information regarding whether an update is available via a [release](/peridio-core/reference/bundle-management/releases) or [bundle override](/peridio-core/reference/bundle-management/bundle-overrides).
 
         ### Expandable
 
-        This endpoint has an expandable response. By default, only the `status` field is returned. See [expanding responses](/admin-api#section/Expanding-Responses).
+        This endpoint has an expandable response. By default, only the `status` field is returned. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
       tags:
         - "Devices"
       parameters:
         - in: header
           name: peridio-release-prn
           schema:
-            description: See [global headers](#section/Global-Headers).
+            description: See [global headers](#).
             examples:
               [
                 prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:release:e4bf3021-b8d7-42d5-a1bd-52121427ebd0,
@@ -221,7 +221,7 @@ paths:
         - in: header
           name: peridio-bundle-prn
           schema:
-            description: See [global headers](#section/Global-Headers).
+            description: See [global headers](#).
             examples:
               [
                 prn:1:a1ed0c4e-f222-4bb3-89dc-48320018875d:bundle:ddd32c59-fc35-4202-a520-a4eddaa11fb3,
@@ -231,13 +231,13 @@ paths:
         - in: header
           name: peridio-release-version
           schema:
-            description: See [global headers](#section/Global-Headers).
+            description: See [global headers](#).
             examples: [1.0.0]
             $ref: "peridio-admin-openapi.yaml#/components/schemas/release-version"
           required: false
         - name: expand
           description: |
-            See [expanding responses](https://docs.peridio.com/admin-api#section/Expanding-Responses).
+            See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
             **Expandable Fields**
 
@@ -273,19 +273,19 @@ paths:
                       - "bundle_override"
                       - null
                     description: |
-                      Expand required. See [expanding responses](#section/Expanding-Responses).
+                      Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
                       The "source" of the bundle update - from a release, or a bundle override.
                   cohort:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/cohort"
                     description: |
-                      Expand required. See [expanding responses](#section/Expanding-Responses).
+                      Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
                       The cohort the device belongs to.
                   bundle_override:
                     type: object
                     description: |
-                      Expand required. See [expanding responses](#section/Expanding-Responses).
+                      Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
                       The source bundle override of the pending bundle.
                     properties:
@@ -306,13 +306,13 @@ paths:
                   release:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/release"
                     description: |
-                      Expand required. See [expanding responses](#section/Expanding-Responses).
+                      Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
                       The source release of the pending bundle.
                   bundle:
                     $ref: "peridio-admin-openapi.yaml#/components/schemas/bundle"
                     description: |
-                      Expand required. See [expanding responses](#section/Expanding-Responses).
+                      Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
                       The bundle associated with `release`.
                   manifest:
@@ -445,7 +445,7 @@ components:
         type: string
     manifest:
       description: |
-        Expand required. See [expanding responses](#section/Expanding-Responses).
+        Expand required. See [expanding responses](/peridio-core/tools/admin-api#section/Expanding-Responses).
 
         The manifest associated with `bundle`. Includes metadata about the binaries available to download, including a presigned download URL.
       type: array
