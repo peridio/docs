@@ -29,13 +29,13 @@ This guide will walk you through the process of provisioning an NVIDIA Jetson Or
 
 Locate the horizontal GPIO pins beneath the module on the topside of the carrier board:
 
-- Boot into recovery mode by shorting FC_REC to GND:
+- Boot into recovery mode:
   - <span style={{ color: 'blue' }}>blue</span>-<span style={{ color: 'blue' }}>blue</span>: short
-    FC_REC to GND
-- Connect your serial console adapter to the target device. This will allow you to monitor the boot process and interact with shells:
-  - <span style={{ color: 'violet' }}>violet</span>: GND to adapter UART GND
-  - <span style={{ color: 'green' }}>green</span>: UART TX to adapter UART RX
-  - <span style={{ color: 'blue' }}>blue</span>: UART RX to adapter UART TX
+    `FC REC` to `GND`
+- Connect your serial console adapter to the target device:
+  - <span style={{ color: 'violet' }}>violet</span>: `GND` to adapter UART GND
+  - <span style={{ color: 'green' }}>green</span>: `UART_TX` to adapter UART RX
+  - <span style={{ color: 'blue' }}>blue</span>: `UART_RX` to adapter UART TX
 
 <p>
   <img
@@ -143,7 +143,7 @@ This will allow the provisioning process to complete:
 ```
 
 1. Remove power from the target device
-2. Remove the jumper shorting FC_REC to GND to prevent the device from booting into recovery mode
+2. Remove the jumper shorting `FC REC` to `GND` to prevent the device from booting into recovery mode
 3. Remove the USB C cable from the target device
 4. Leave the serial console adapter connected
 
