@@ -2,16 +2,151 @@
 title: Provision
 hide_title: true
 sidebar_position: 2
-sidebar_custom_props:
-  inDevelopment: true
 ---
 
-import { default as ProvisionGuide, getDynamicToc } from '@site/src/components/ProvisionGuide'
+import Admonition from '@theme/Admonition'
+import CodeBlock from '@theme/CodeBlock'
+import Link from '@docusaurus/Link'
 
-<ProvisionGuide
-  targetId="jetson-orin-nano"
-  provisionProfile="tegraflash"
-  inDevelopment={frontMatter.sidebar_custom_props.inDevelopment}
-/>
+# Provision
 
-export const toc = getDynamicToc('jetson-orin-nano')
+This guide will walk you through the process of provisioning an NVIDIA Jetson Orin Nano using the Avocado CLI. For general information on provisioning, see the <Link href="/avocado-linux/references/provisioning">provisioning reference</Link>.
+
+## Prerequisites
+
+- NVIDIA Jetson Orin Nano Developer Kit
+  - An NVMe SSD (M.2 2280 form factor)
+- Host machine
+  - Ubuntu 22.04+ or Fedora 39+ per <Link href="/avocado-linux/references/provisioning#reliable-provisioning">reliable provisioning</Link>
+  - Support for `binfmt_misc` and `qemu-user-static`
+  - 16 GB available disk space
+  - The latest version of the <Link href="/avocado-linux/tools/avocado-cli/overview">Avocado CLI</Link>
+- Accessories
+  - A host-compatible-USB to 3.3 V TTY UART adapter for serial console access
+  - A host-compatible-USB to USB-C cable for provisioning
+
+## Connect GPIO
+
+Locate the horizontal GPIO pins beneath the module on the topside of the carrier board:
+
+- Boot into recovery mode by shorting FC_REC to GND:
+  - <span style={{ color: 'blue' }}>blue</span>-<span style={{ color: 'blue' }}>blue</span>: short
+    FC_REC to GND
+- Connect your serial console adapter to the target device. This will allow you to monitor the boot process and interact with shells:
+  - <span style={{ color: 'violet' }}>violet</span>: GND to adapter UART GND
+  - <span style={{ color: 'green' }}>green</span>: UART TX to adapter UART RX
+  - <span style={{ color: 'blue' }}>blue</span>: UART RX to adapter UART TX
+
+<p>
+  <img
+    src="/img/jetson-orin-nano-devkit-serial-console.png"
+    alt="Jetson Orin Nano DevKit Serial Console"
+    style={{ width: '100%', maxWidth: '720px', display: 'block', margin: '0 auto' }}
+  />
+</p>
+
+Connect to the serial console with a program like `tio`:
+
+<CodeBlock language="text" title="Host machine">
+  {`tio -b 115200 /dev/ttyUSB0
+[03:26:54.521] tio 3.9
+[03:26:54.521] Press ctrl-t q to quit
+[03:26:54.521] Warning: Could not open /dev/ttyUSB0 (No such file or directory)
+[03:26:54.521] Waiting for tty device..`}
+</CodeBlock>
+
+Replace <code>/dev/ttyUSB0</code> with the appropriate device path for your serial adapter.
+
+## Connect USB
+
+Connect the target device USB C to a host machine USB.
+
+Verify the target device is detected via USB only after having powered it, for example:
+
+<CodeBlock language="text" title="Host machine">
+  {`lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 035: ID 0403:6001 Future Technology Devices International, Ltd FT232 Serial (UART) IC
+Bus 002 Device 060: ID 0955:7523 NVIDIA Corp. APX`}
+</CodeBlock>
+
+The NVIDIA entry in the list of USB devices showing up after powering the device indicates it is connected to the host machine.
+
+## Create project
+
+Create the project directory and install dependencies.
+
+<CodeBlock title="Host machine">
+  {`avocado init --target jetson-orin-nano-devkit jetson-orin-nano-devkit && cd jetson-orin-nano-devkit
+avocado install --force`}
+</CodeBlock>
+
+## Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+<CodeBlock language="bash" title="Host machine">
+  {`avocado build
+avocado provision -r dev --provision-profile tegraflash`}
+</CodeBlock>
+
+The procedure will advance through a few steps:
+
+```
+== Step 1: Signing binaries at 2025-10-13T12:18:56+00:00 ==
+...
+== Step 2: Boot Jetson via RCM at 2025-10-13T12:19:27+00:00 ==
+...
+== Step 3: Sending flash sequence commands at 2025-10-13T12:19:41+00:00 ==
+...
+```
+
+During step 3, you will need to disconnect and reconnect the USB C cable from the target device.
+
+Wait till you see:
+
+```text
+The Jetson device is waiting for USB disconnect to proceed.
+Please manually disconnect and reconnect the USB cable now.
+
+Steps:
+  1. Unplug the USB-C cable from the Jetson device
+  2. Wait 2-3 seconds
+  3. Plug the USB-C cable back in
+
+Press Enter after reconnecting the USB cable...
+```
+
+Then do as it instructs, which will advance to step 4:
+
+```text
+== Step 4: Writing partitions on external storage device at 2025-10-13T12:23:11+00:00 ==
+```
+
+Wait until you see:
+
+```text
+== Step 5: Waiting for final status from device at 2025-10-13T12:27:40+00:00 ==
+Waiting for USB storage device flashpkg from 52e6d9b7.......
+```
+
+Once you see the above, perform the same reconnection procedure:
+
+1. Unplug the USB-C cable from the Jetson device
+2. Wait 2-3 seconds
+3. Plug the USB-C cable back in
+
+This will allow the provisioning process to complete:
+
+```text
+[SUCCESS] Successfully provisioned runtime 'dev'
+```
+
+1. Remove power from the target device
+2. Remove the jumper shorting FC_REC to GND to prevent the device from booting into recovery mode
+3. Remove the USB C cable from the target device
+4. Leave the serial console adapter connected
+
+## Run
+
+Apply power to the device. The device will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.

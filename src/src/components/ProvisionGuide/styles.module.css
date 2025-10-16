@@ -1,5 +1,6 @@
 .provisionGuide {
   max-width: 100%;
+  --ifm-h2-font-size: 2rem;
 }
 
 .provisionGuide h1 {

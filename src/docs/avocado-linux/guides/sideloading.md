@@ -99,7 +99,7 @@ This environment variable tells all subsequent Avocado commands to use the Raspb
 Run all subsequent commands in this guide from the `runtimes/dev` directory — the directory that contains the multi-target Avocado config (`avocado.toml`).
 :::
 
-## Pre-configured Setup
+## Pre-configured setup
 
 The example repository comes with a pre-configured `avocado.toml` that includes user credentials and all necessary settings for multiple hardware targets. The configuration is already set up with an empty root password for development convenience, so no additional credential setup is required.
 

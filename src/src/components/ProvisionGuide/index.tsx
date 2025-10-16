@@ -43,7 +43,7 @@ const baseToc = [
   {
     value: 'Initialize project',
     id: 'initialize-project',
-    level: 3,
+    level: 2,
   },
 ]
 
@@ -51,7 +51,7 @@ const serialConsoleToc = [
   {
     value: 'Setup serial console',
     id: 'setup-serial-console',
-    level: 3,
+    level: 2,
   },
 ]
 
@@ -112,6 +112,7 @@ export default function ProvisionGuide({
   const resolvedTitle = 'Provision'
   const resolvedRunType = config?.runType || manualRunType || 'qemu'
   const resolvedAdditionalPrerequisites = config?.additionalPrerequisites || additionalPrerequisites
+  console.log(resolvedAdditionalPrerequisites)
 
   const hostMachine = resolvedSupportsMac ? 'Development machine' : 'Host machine'
   const platformSupport = resolvedSupportsMac ? (
@@ -248,19 +249,9 @@ avocado provision -r dev`
         {resolvedAdditionalPrerequisites}
       </ul>
 
-      <Heading as="h3" id="initialize-project">
-        Initialize project
-      </Heading>
-
-      <p>Create the project directory and install dependencies.</p>
-
-      <CodeBlock language="bash" title={hostMachine}>
-        {initCommand}
-      </CodeBlock>
-
       {resolvedRunType !== 'qemu' && (
         <>
-          <Heading as="h3" id="setup-serial-console">
+          <Heading as="h2" id="setup-serial-console">
             Set up serial console
           </Heading>
 
@@ -288,6 +279,16 @@ avocado provision -r dev`
           </p>
         </>
       )}
+
+      <Heading as="h2" id="initialize-project">
+        Create project
+      </Heading>
+
+      <p>Create the project directory and install dependencies.</p>
+
+      <CodeBlock language="bash" title={hostMachine}>
+        {initCommand}
+      </CodeBlock>
 
       <Heading as="h2" id="provision">
         Provision

@@ -69,15 +69,6 @@ export const targetConfigs: Record<string, TargetConfig> = {
     diskSpace: 16,
     runType: 'usb-power-cycle',
     provisionProfile: 'tegraflash',
-    additionalPrerequisites: (
-      <>
-        <li>
-          A USB cable with USB-C connector for the Jetson device and USB-A (or compatible) connector
-          for the host machine to facilitate USB provisioning.
-        </li>
-        <li>An NVMe SSD (M.2 2280 form factor) installed in the Jetson Orin Nano for storage.</li>
-      </>
-    ),
   },
   'frdm-imx-93': {
     target: 'imx93-frdm',
