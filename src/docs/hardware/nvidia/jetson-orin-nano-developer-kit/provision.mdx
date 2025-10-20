@@ -30,16 +30,27 @@ This guide will walk you through the process of provisioning an NVIDIA Jetson Or
 Locate the horizontal GPIO pins beneath the module on the topside of the carrier board:
 
 - Boot into recovery mode:
-  - <span style={{ color: 'blue' }}>blue</span>-<span style={{ color: 'blue' }}>blue</span>: short
-    `FC REC` to `GND`
+  - <span style={{ border: '1px solid black', background: 'yellow', width: '100px' }}>
+      &nbsp;&nbsp;&nbsp;
+    </span>
+    yellow: short `FC REC` to `GND`
 - Connect your serial console adapter to the target device:
-  - <span style={{ color: 'violet' }}>violet</span>: `GND` to adapter UART GND
-  - <span style={{ color: 'green' }}>green</span>: `UART_TX` to adapter UART RX
-  - <span style={{ color: 'blue' }}>blue</span>: `UART_RX` to adapter UART TX
+  - <span style={{ border: '1px solid black', background: 'green', width: '100px' }}>
+      &nbsp;&nbsp;&nbsp;
+    </span>
+    green: `GND` to adapter UART GND
+  - <span style={{ border: '1px solid black', background: 'blue', width: '100px' }}>
+      &nbsp;&nbsp;&nbsp;
+    </span>
+    blue: `UART TXD` to adapter UART RX
+  - <span style={{ border: '1px solid black', background: 'violet', width: '100px' }}>
+      &nbsp;&nbsp;&nbsp;
+    </span>
+    violet: `UART RXD` to adapter UART TX
 
 <p>
   <img
-    src="/img/jetson-orin-nano-devkit-serial-console.png"
+    src="/img/jetson-orin-nano-devkit-serial-console.jpg"
     alt="Jetson Orin Nano DevKit Serial Console"
     style={{ width: '100%', maxWidth: '720px', display: 'block', margin: '0 auto' }}
   />
