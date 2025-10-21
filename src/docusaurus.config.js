@@ -60,6 +60,12 @@ const config = {
       {
         specs: [
           {
+            id: 'peridio-admin-api-v1',
+            layout: { title: 'Admin API v1' },
+            spec: 'openapi/peridio-admin-openapi-v1.yaml',
+            route: 'peridio-core/tools/admin-api/v1/popout',
+          },
+          {
             id: 'peridio-admin-api',
             layout: { title: 'Admin API' },
             spec: 'openapi/peridio-admin-openapi.yaml',

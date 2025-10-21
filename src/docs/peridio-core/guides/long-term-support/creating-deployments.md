@@ -32,4 +32,4 @@ peridio deployments create \
 
 ### API
 
-Use the Peridio Admin API [create-a-deployment](/peridio-core/tools/admin-api#deployments/operation/create-a-deployment) endpoint.
+Use the Peridio Admin API [create-a-deployment](/peridio-core/tools/admin-api/v1/popout#deployments/operation/create-a-deployment) endpoint.

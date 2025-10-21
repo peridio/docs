@@ -9,7 +9,7 @@ Firmware are the data you wish to distribute to devices.
 
 Superceded by [artifacts](/peridio-core/reference/binary-management/artifacts), [artifact versions](/peridio-core/reference/binary-management/artifact-versions), and [binaries](/peridio-core/reference/binary-management/binaries).
 
-Find additional information in the Admin API [firmware section](/peridio-core/tools/admin-api#firmware) and the [creating firmware](/peridio-core/guides/long-term-support/creating-firmware) guide.
+Find additional information in the Admin API [firmware section](/peridio-core/tools/admin-api/v1/popout#firmware) and the [creating firmware](/peridio-core/guides/long-term-support/creating-firmware) guide.
 
 ## Format
 

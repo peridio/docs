@@ -1,4 +1,6 @@
 apis:
+  peridio-admin-api-v1:
+    root: ./openapi/peridio-admin-openapi-v1.yaml
   peridio-admin-api:
     root: ./openapi/peridio-admin-openapi.yaml
   peridio-device-api:

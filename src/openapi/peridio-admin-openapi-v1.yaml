@@ -2,17 +2,11 @@
 openapi: 3.1.1
 info:
   title: Peridio Admin API
-  version: 2
+  version: 1
   license:
     name: Peridio
     url: https://github.com/peridio/parasola/blob/main/LICENSE
   description: |
-    # ❗Previous API Versions❗
-
-    You are currently viewing version 2 of the API. If you need an older version, see below:
-
-    - [Version 1](/peridio-core/tools/admin-api/v1/popout)
-
     # Expanding Responses
 
     Some endpoints are able to return more data than they normally do by expanding their response. When this is possible the endpoint will specify the `expand` field and will document which fields can be expanded. The expand field takes an array of string field names that identify which fields you wish to expand.
@@ -169,6 +163,7 @@ servers:
   - url: https://api.cremini.peridio.com
 security:
   - api_key: []
+    api_key_v2: []
 tags:
   - name: Bundles
     id: bundles
@@ -275,10 +270,17 @@ x-tagGroups:
       - API Key Events
       - Device Events
       - Webhook Events
+  - name: Legacy
+    tags:
+      - Legacy CA Certificates
+      - Legacy Device Certificates
+      - Legacy Devices
+      - Deployments
+      - Deployments v2
+      - Firmware
+      - Firmware v2
 paths:
   /artifacts:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-an-artifact
       summary: Create an artifact
@@ -344,18 +346,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /artifacts/{artifact_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: artifact_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-an-artifact
       summary: Retrieve an artifact
       tags:
         - "Artifacts"
+      parameters:
+        - name: artifact_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -370,6 +371,12 @@ paths:
       summary: Update an artifact
       tags:
         - "Artifacts"
+      parameters:
+        - name: artifact_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -396,12 +403,16 @@ paths:
       summary: Delete an artifact
       tags:
         - "Artifacts"
+      parameters:
+        - name: artifact_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
   /artifact_versions:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-an-artifact-version
       summary: Create an artifact version
@@ -450,7 +461,6 @@ paths:
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
-        |`version`||`:`, `~`, `-`|string|
 
       tags:
         - "Artifact Versions"
@@ -471,18 +481,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /artifact_versions/{artifact_version_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: artifact_version_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-an-artifact-version
       summary: Retrieve artifact version
       tags:
         - "Artifact Versions"
+      parameters:
+        - name: artifact_version_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -497,6 +506,12 @@ paths:
       summary: Update an artifact version
       tags:
         - "Artifact Versions"
+      parameters:
+        - name: artifact_version_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -521,12 +536,16 @@ paths:
       summary: Delete an artifact version
       tags:
         - "Artifact Versions"
+      parameters:
+        - name: artifact_version_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
   /binaries:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-binary
       summary: Create a binary
@@ -583,8 +602,7 @@ paths:
         |`hash`||`:`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
         |`prn`||`:`|string|
-        |`size`||`:`, `>`, `>=`, `<`, `<=`|integer|
-        |`state`||`:`|enum|
+        |`size`||`:`, `>`, `>=`, `<`, `<=` |integer|
         |`target`||`:`, `~`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
 
@@ -607,18 +625,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /binaries/{binary_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: binary_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-binary
       summary: Retrieve a binary
       tags:
         - "Binaries"
+      parameters:
+        - name: binary_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -633,6 +650,12 @@ paths:
       summary: Update a binary
       tags:
         - "Binaries"
+      parameters:
+        - name: binary_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -659,22 +682,16 @@ paths:
       summary: Delete a binary
       tags:
         - "Binaries"
+      parameters:
+        - name: binary_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
   /binaries/{binary_prn}/parts/{index}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: binary_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
-      - name: index
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/binary-part-index"
     put:
       operationId: create-a-binary-part
       summary: Create a Binary Part
@@ -682,6 +699,17 @@ paths:
         Create a binary part.
       tags:
         - "Binary Parts"
+      parameters:
+        - name: binary_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+        - name: index
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/binary-part-index"
       requestBody:
         required: true
         content:
@@ -708,18 +736,17 @@ paths:
                   binary_part:
                     $ref: "#/components/schemas/binary-part"
   /binaries/{binary_prn}/parts:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: binary_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: list-binary-parts
       summary: List binary parts
       tags:
         - "Binary Parts"
+      parameters:
+        - name: binary_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -730,8 +757,6 @@ paths:
                   binary_parts:
                     $ref: "#/components/schemas/array-of-binary-parts"
   /binary_signatures:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-binary-signature
       summary: Create a binary signature
@@ -768,24 +793,21 @@ paths:
                   binary_signature:
                     $ref: "#/components/schemas/binary-signature"
   /binary_signatures/{binary_signature_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: binary_signature_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     delete:
       operationId: delete-a-binary-signature
       summary: Delete a binary signature
       tags:
         - "Binary Signatures"
+      parameters:
+        - name: binary_signature_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: Ok.
   /bundles:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-bundle
       summary: Create a bundle
@@ -797,14 +819,14 @@ paths:
           application/json:
             schema:
               properties:
-                binaries:
-                  $ref: "#/components/schemas/array-of-binaries-with-metadata"
+                artifact_version_prns:
+                  $ref: "#/components/schemas/array-of-artifact-version-prns"
                 id:
                   $ref: "#/components/schemas/custom-id"
                 name:
                   $ref: "#/components/schemas/bundle-name"
               required:
-                - binaries
+                - artifact_version_prns
       responses:
         "201":
           description: Ok.
@@ -848,18 +870,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /bundles/{bundle_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: bundle_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-bundle
       summary: Retrieve a bundle
       tags:
         - "Bundles"
+      parameters:
+        - name: bundle_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -874,6 +895,12 @@ paths:
       summary: Update a bundle
       tags:
         - "Bundles"
+      parameters:
+        - name: bundle_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -896,12 +923,16 @@ paths:
       summary: Delete a bundle
       tags:
         - "Bundles"
+      parameters:
+        - name: bundle_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
   /ca_certificates:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-ca-certificate
       summary: Create a CA certificate
@@ -969,18 +1000,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /ca_certificates/{ca_certificate_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: ca_certificate_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     delete:
       operationId: delete-a-ca-certificate
       summary: Delete a CA certificate
       tags:
         - "CA Certificates"
+      parameters:
+        - name: ca_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
@@ -989,6 +1019,12 @@ paths:
       summary: Retrieve a CA certificate
       tags:
         - "CA Certificates"
+      parameters:
+        - name: ca_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -1003,6 +1039,12 @@ paths:
       summary: Update CA certificate
       tags:
         - "CA Certificates"
+      parameters:
+        - name: ca_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -1021,8 +1063,6 @@ paths:
                   ca_certificate:
                     $ref: "#/components/schemas/ca-certificate"
   /ca_certificates/verification_codes:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-ca-verification-code
       summary: Create a CA verification code
@@ -1036,8 +1076,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ca-verification-code"
   /cohorts:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-cohort
       summary: Create a cohort
@@ -1079,9 +1117,8 @@ paths:
         |-|-|-|-|
         |`description`||`:`, `~`|string|
         |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
-        |`name`||`:`, `~`, `-`|string|
+        |`name`||`:`, `~`|string|
         |`prn`||`:`|string|
-        |`product_prn`||`:`|string|
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
       tags:
         - "Cohorts"
@@ -1102,18 +1139,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /cohorts/{cohort_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: cohort_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-cohort
       summary: Retrieve a cohort
       tags:
         - Cohorts
+      parameters:
+        - name: cohort_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -1128,6 +1164,12 @@ paths:
       summary: Update a cohort
       tags:
         - Cohorts
+      parameters:
+        - name: cohort_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -1148,8 +1190,6 @@ paths:
                   cohort:
                     $ref: "#/components/schemas/cohort"
   /device_certificates:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-device-certificate
       summary: Create a device certificate
@@ -1211,18 +1251,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /device_certificates/{device_certificate_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: device_certificate_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-device-certificate
       summary: Retrieve a device certificate
       tags:
         - "Device Certificates"
+      parameters:
+        - name: device_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-certificate-prn"
       responses:
         "200":
           description: Ok.
@@ -1237,12 +1276,16 @@ paths:
       summary: Delete a device certificate
       tags:
         - "Device Certificates"
+      parameters:
+        - name: device_certificate_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-certificate-prn"
       responses:
         "204":
           description: No Content.
   /devices:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-device
       summary: Create a device
@@ -1321,18 +1364,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /devices/{device_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: device_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/device-prn"
     get:
       operationId: retrieve-a-device
       summary: Retrieve a device
       tags:
         - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -1347,6 +1389,12 @@ paths:
       summary: Update a device
       tags:
         - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -1379,27 +1427,32 @@ paths:
       summary: Delete a device
       tags:
         - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
   /devices/{device_prn}/update:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: device_prn
-        in: path
-        required: true
-        schema:
-          description: The PRN of the device you wish to check for an update for.
-          $ref: "#/components/schemas/device-prn"
     post:
       security:
-        - api_key: []
+        - api_key_v2: []
       operationId: devices-get-update
       summary: Get device update
       description: |
-        This is the endpoint devices use to check for updates.
+        Returns information regarding whether an update is available via a [release](/peridio-core/reference/bundle-management/releases) or [bundle override](/peridio-core/reference/bundle-management/bundle-overrides).
       tags:
         - "Devices"
+      parameters:
+        - name: device_prn
+          in: path
+          required: true
+          schema:
+            description: The PRN of the device you wish to check for an update for.
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -1462,21 +1515,18 @@ paths:
                   manifest:
                     $ref: "#/components/schemas/manifest"
   /events:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     get:
       operationId: list-events
       summary: List events
       description: |
-        List events across all types.
+        List all possible events (Device, Webhooks, API Key, etc.) within the specified time range.
 
-        Event schema varies significantly by type. Consult the webhook documentation for full event schemas and definitions.
+        The date range may be adjusted via query parameters.
       tags:
-        - Events
+        - "Events"
       parameters:
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/order"
-        - $ref: "#/components/parameters/search"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/event_inserted_at_lt"
         - $ref: "#/components/parameters/event_inserted_at_gte"
@@ -1496,8 +1546,6 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /products:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     get:
       operationId: list-products
       summary: List products
@@ -1571,18 +1619,17 @@ paths:
                   product:
                     $ref: "#/components/schemas/product"
   /products/{product_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: product_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/product-prn"
     get:
       operationId: retrieve-a-product
       summary: Retrieve a product
       tags:
         - "Products"
+      parameters:
+        - name: product_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -1597,6 +1644,12 @@ paths:
       summary: Update a product
       tags:
         - "Products"
+      parameters:
+        - name: product_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -1622,8 +1675,6 @@ paths:
                   data:
                     $ref: "#/components/schemas/product"
   /releases:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-release
       summary: Create a release
@@ -1729,18 +1780,17 @@ paths:
                   releases:
                     $ref: "#/components/schemas/array-of-releases"
   /releases/{release_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: release_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-release
       summary: Retrieve a release
       tags:
         - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -1755,6 +1805,12 @@ paths:
       summary: Update a release
       tags:
         - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -1798,17 +1854,21 @@ paths:
       summary: Delete a release
       tags:
         - Releases
+      parameters:
+        - name: release_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
   /signing_keys:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-signing-key
       summary: Create a signing key
       tags:
-        - "Signing Keys"
+        - Signing Keys
       requestBody:
         required: true
         content:
@@ -1848,7 +1908,7 @@ paths:
         |`value`||`:`|string|
 
       tags:
-        - "Signing Keys"
+        - Signing Keys
       parameters:
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/order"
@@ -1866,18 +1926,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /signing_keys/{signing_key_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: signing_key_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-signing-key
       summary: Retrieve a signing key
       tags:
-        - "Signing Keys"
+        - Signing Keys
+      parameters:
+        - name: signing_key_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -1891,7 +1950,13 @@ paths:
       operationId: update-a-signing-key
       summary: Update a signing key
       tags:
-        - "Signing Keys"
+        - Signing Keys
+      parameters:
+        - name: signing_key_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: true
         content:
@@ -1915,13 +1980,17 @@ paths:
       operationId: delete-a-signing-key
       summary: Delete a signing key
       tags:
-        - "Signing Keys"
+        - Signing Keys
+      parameters:
+        - name: signing_key_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "204":
           description: No Content.
   /tunnels:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     get:
       operationId: list-tunnels
       summary: List tunnels
@@ -1938,9 +2007,8 @@ paths:
         `state` can be one of `requested`, `open`, `closed`.
 
       tags:
-        - Tunnels
+        - "Tunnels"
       parameters:
-        - $ref: "#/components/parameters/x-api-version"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/order"
         - $ref: "#/components/parameters/search"
@@ -2006,18 +2074,17 @@ paths:
                   tunnel:
                     $ref: "#/components/schemas/tunnel"
   /tunnels/{tunnel_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: tunnel_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-tunnel
       summary: Retrieve a tunnel
       tags:
-        - Tunnels
+        - "Tunnels"
+      parameters:
+        - name: tunnel_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -2036,7 +2103,13 @@ paths:
           - allows changing a tunnel to a closed state.
           - allows extending the expiration (the number of seconds from current time).
       tags:
-        - Tunnels
+        - "Tunnels"
+      parameters:
+        - name: tunnel_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/tunnel-prn"
       requestBody:
         required: true
         content:
@@ -2067,8 +2140,6 @@ paths:
                           state:
                             examples: ["closed"]
   /users/auth:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: authenticate-a-user
       summary: Authenticate a user
@@ -2103,8 +2174,6 @@ paths:
                   data:
                     $ref: "#/components/schemas/user-me"
   /users/me:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     get:
       operationId: get-user-me
       summary: Get user me
@@ -2120,8 +2189,6 @@ paths:
                   data:
                     $ref: "#/components/schemas/user-me"
   /web-console-shells:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-web-console-shell
       summary: Create a web console shell
@@ -2132,7 +2199,10 @@ paths:
 
         You must supply either:
 
-          - `device_prn` and `organization_prn`
+          - `device_prn`
+
+        Or:
+
           - `device_identifier` and `organization_prn`
       tags:
         - "Web Console"
@@ -2183,13 +2253,11 @@ paths:
                     example: https://console.peridio.com/organizations/20301a4f-edca-46ea-89c0-2e92c3dcb0b9/devices/5b615a57-3712-481c-80bb-281f79b1533e/shell/aa63c5e7-d8c7-43e6-a7f5-9f8b63c91ed6
                     description: This value is sensitive. Anyone with access to a self-authenticating URL can use it until it has been consumed or expired.
   /webhooks:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: create-a-webhook
       summary: Create a webhook
       tags:
-        - Webhooks
+        - "Webhooks"
       requestBody:
         required: true
         content:
@@ -2232,7 +2300,7 @@ paths:
         |`updated_at`||`:`, `>`, `>=`, `<`, `<=` |date-time|
 
       tags:
-        - Webhooks
+        - "Webhooks"
       parameters:
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/order"
@@ -2250,18 +2318,17 @@ paths:
                   next_page:
                     $ref: "#/components/schemas/next-page"
   /webhooks/{webhook_prn}:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
-      - name: webhook_prn
-        in: path
-        required: true
-        schema:
-          $ref: "#/components/schemas/prn"
     get:
       operationId: retrieve-a-webhook
       summary: Retrieve a webhook
       tags:
-        - Webhooks
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -2275,9 +2342,8 @@ paths:
       operationId: update-a-webhook
       summary: Update a webhook
       tags:
-        - Webhooks
+        - "Webhooks"
       parameters:
-        - $ref: "#/components/parameters/x-api-version"
         - name: webhook_prn
           in: path
           required: true
@@ -2310,9 +2376,8 @@ paths:
       operationId: delete-a-webhook
       summary: Delete a webhook
       tags:
-        - Webhooks
+        - "Webhooks"
       parameters:
-        - $ref: "#/components/parameters/x-api-version"
         - name: webhook_prn
           in: path
           required: true
@@ -2322,13 +2387,17 @@ paths:
         "204":
           description: Ok.
   /webhooks/{webhook_prn}/roll_secret:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: roll-secret-webhook
       summary: Roll a webhook's secret
       tags:
-        - Webhooks
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       requestBody:
         required: false
         content:
@@ -2352,13 +2421,17 @@ paths:
                           secret:
                             $ref: "#/components/schemas/webhook-secret"
   /webhooks/{webhook_prn}/test_fire:
-    parameters:
-      - $ref: "#/components/parameters/x-api-version"
     post:
       operationId: test-fire-webhook
       summary: Test fire a webhook
       tags:
-        - Webhooks
+        - "Webhooks"
+      parameters:
+        - name: webhook_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
       responses:
         "200":
           description: Ok.
@@ -2368,9 +2441,1175 @@ paths:
                 properties:
                   event:
                     $ref: "#/components/schemas/webhook-test-fire-event"
+  # legacy routes
+  /deployments:
+    post:
+      operationId: create-a-deployment
+      summary: Create a deployment
+      tags:
+        - "Deployments v2"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                conditions:
+                  $ref: "#/components/schemas/deployment-conditions"
+                  required:
+                    - tags
+                delta_updatable:
+                  $ref: "#/components/schemas/delta-updatable"
+                  default: false
+                firmware_uuid:
+                  $ref: "#/components/schemas/firmware-uuid"
+                name:
+                  $ref: "#/components/schemas/deployment-name"
+                product_prn:
+                  $ref: "#/components/schemas/product-prn"
+              required:
+                - conditions
+                - firmware_uuid
+                - name
+                - product_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployment:
+                    $ref: "#/components/schemas/deployment"
+    get:
+      operationId: list-deployments
+      summary: List deployments
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Operators|Value|
+        |-|-|-|
+        |`inserted_at`|`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`is_active`|`:`|boolean|
+        |`name`|`:`, `~`|string|
+        |`prn`|`:`|string|
+        |`updated_at`|`:`, `>`, `>=`, `<`, `<=` |date-time|
+      tags:
+        - "Deployments v2"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployments:
+                    $ref: "#/components/schemas/array-of-deployments"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /deployments/{deployment_prn}:
+    get:
+      operationId: retrieve-a-deployment
+      summary: Retrieve a deployment
+      tags:
+        - "Deployments v2"
+      parameters:
+        - name: deployment_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-prn"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployment:
+                    $ref: "#/components/schemas/deployment"
+    patch:
+      operationId: update-a-deployment
+      summary: Update a deployment
+      description: |
+        When updating a deployment, you can modify its `firmware_uuid` only if you also pass its associated `product_prn`
+      tags:
+        - "Deployments v2"
+      parameters:
+        - prn: deployment_prn
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-prn"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                deployment:
+                  type: object
+                  properties:
+                    name:
+                      $ref: "#/components/schemas/deployment-name"
+                    conditions:
+                      $ref: "#/components/schemas/deployment-conditions"
+                    delta_updatable:
+                      $ref: "#/components/schemas/delta-updatable"
+                    firmware_uuid:
+                      $ref: "#/components/schemas/firmware-uuid"
+                    is_active:
+                      $ref: "#/components/schemas/deployment-is-active"
+                    product_prn:
+                      $ref: "#/components/schemas/product-prn"
+              required:
+                - deployment
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  deployment:
+                    $ref: "#/components/schemas/deployment"
+    delete:
+      operationId: delete-a-deployment
+      summary: Delete a deployment
+      tags:
+        - "Deployments v2"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: deployment_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-name"
+      responses:
+        "204":
+          description: Ok.
+  /firmwares:
+    post:
+      operationId: create-a-firmware
+      summary: Create a firmware
+      tags:
+        - "Firmware v2"
+      parameters:
+        - name: product_prn
+          required: true
+          schema:
+            $ref: "#/components/schemas/prn"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/prn"
+                firmware:
+                  type: string
+                  format: binary
+                  description: Reference [firmware file requirements](/peridio-core/reference/binary-management/firmware#firmware-file-requirements).
+                ttl:
+                  type: integer
+              required:
+                - firmware
+                - product_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  firmware:
+                    $ref: "#/components/schemas/firmware"
+        "422":
+          description: Unprocessable Content.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    get:
+      operationId: list-firmware
+      summary: List firmware
+      tags:
+        - "Firmware v2"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  firmwares:
+                    $ref: "#/components/schemas/array-of-firmware"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /firmwares/{firmware_uuid}:
+    delete:
+      operationId: delete-a-firmware
+      summary: Delete a firmware
+      tags:
+        - "Firmware v2"
+      parameters:
+        - name: firmware_uuid
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/firmware-uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - product_prn
+      responses:
+        "204":
+          description: No Content.
+    get:
+      operationId: retrieve-a-firmware
+      summary: Retrieve a firmware
+      description: |
+        ### Expandable
+
+        This endpoint has an expandable response. See [expanding responses](#section/Expanding-Responses).
+      tags:
+        - "Firmware v2"
+      parameters:
+        - name: firmware_uuid
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/firmware-uuid"
+        - name: expand
+          description: |
+            See [expanding responses](#section/Expanding-Responses).
+
+            **Expandable Fields**
+
+            For more information on each field, reference the response.
+
+            - `url`
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_prn:
+                  $ref: "#/components/schemas/prn"
+              required:
+                - product_prn
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  firmware:
+                    allOf:
+                      - $ref: "#/components/schemas/firmware"
+                      - type: object
+                        properties:
+                          url:
+                            $ref: "#/components/schemas/firmware-expand-url"
+  /orgs/{organization_name}/ca_certificates:
+    get:
+      operationId: list-ca-certificates
+      summary: List CA certificates
+      tags:
+        - "Legacy CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/array-of-ca-certificates"
+    post:
+      operationId: create-a-ca-certificate
+      summary: Create a CA certificate
+      tags:
+        - "Legacy CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                certificate:
+                  description: Base64 encoded CA certificate.
+                  type: string
+                verification_certificate:
+                  description: >
+                    Base64 encoded verification certificate.
+
+                    See: [create-a-ca-verification-code](#operation/create-a-ca-verification-code)
+                  type: string
+                description:
+                  type: string
+              required:
+                - certificate
+                - verification_certificate
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ca-certificate"
+  /orgs/{organization_name}/ca_certificates/{ca_certificate_serial}:
+    delete:
+      operationId: delete-a-ca-certificate
+      summary: Delete a CA certificate
+      tags:
+        - "Legacy CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: ca_certificate_serial
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/ca-certificate-serial"
+      responses:
+        "204":
+          description: Ok.
+    get:
+      operationId: retrieve-a-ca-certificate
+      summary: Retrieve a CA certificate
+      tags:
+        - "Legacy CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: ca_certificate_serial
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/ca-certificate-serial"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ca-certificate"
+    put:
+      operationId: update-a-ca-certificate
+      summary: Update CA certificate
+      tags:
+        - "Legacy CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: ca_certificate_serial
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/ca-certificate-serial"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  type: string
+                jitp:
+                  $ref: "#/components/schemas/ca-jitp"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ca-certificate"
+  /orgs/{organization_name}/ca_certificates/verification_codes:
+    post:
+      operationId: create-a-ca-verification-code
+      summary: Create a CA verification code
+      tags:
+        - "Legacy CA Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ca-verification-code"
+  /orgs/{organization_name}/products/{product_name}/deployments:
+    get:
+      operationId: list-deployments
+      summary: List deployments
+      tags:
+        - "Deployments"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/array-of-deployments"
+    post:
+      operationId: create-a-deployment
+      summary: Create a deployment
+      tags:
+        - "Deployments"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                conditions:
+                  $ref: "#/components/schemas/deployment-conditions"
+                  required:
+                    - tags
+                delta_updatable:
+                  $ref: "#/components/schemas/delta-updatable"
+                  default: false
+                firmware:
+                  $ref: "#/components/schemas/firmware-uuid"
+                is_active:
+                  description: Must be `false`.
+                  $ref: "#/components/schemas/deployment-is-active"
+                name:
+                  $ref: "#/components/schemas/deployment-name"
+              required:
+                - conditions
+                - firmware
+                - is_active
+                - name
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/deployment"
+  /orgs/{organization_name}/products/{product_name}/deployments/{deployment_name}:
+    delete:
+      operationId: delete-a-deployment
+      summary: Delete a deployment
+      tags:
+        - "Legacy Deployments"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: deployment_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-name"
+      responses:
+        "204":
+          description: Ok.
+    get:
+      operationId: retrieve-a-deployment
+      summary: Retrieve a deployment
+      tags:
+        - "Legacy Deployments"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: deployment_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/deployment"
+    put:
+      operationId: update-a-deployment
+      summary: Update a deployment
+      tags:
+        - "Legacy Deployments"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: deployment_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-name"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                deployment:
+                  type: object
+                  properties:
+                    name:
+                      $ref: "#/components/schemas/deployment-name"
+                    conditions:
+                      $ref: "#/components/schemas/deployment-conditions"
+                    delta_updatable:
+                      $ref: "#/components/schemas/delta-updatable"
+                    firmware:
+                      $ref: "#/components/schemas/firmware-uuid"
+                    is_active:
+                      $ref: "#/components/schemas/deployment-is-active"
+              required:
+                - deployment
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/deployment"
+  /orgs/{organization_name}/products/{product_name}/devices:
+    get:
+      operationId: list-devices
+      summary: List devices
+      tags:
+        - "Legacy Devices"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/array-of-devices"
+    post:
+      operationId: create-a-device
+      summary: Create a device
+      tags:
+        - "Legacy Devices"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                cohort_prn:
+                  $ref: "#/components/schemas/cohort-prn"
+                description:
+                  $ref: "#/components/schemas/device-description"
+                healthy:
+                  $ref: "#/components/schemas/device-healthy"
+                identifier:
+                  $ref: "#/components/schemas/device-identifier"
+                last_communication:
+                  description: This field is ignored and has no effect.
+                  $ref: "#/components/schemas/device-last-communication"
+                tags:
+                  $ref: "#/components/schemas/array-of-device-tags"
+                target:
+                  $ref: "#/components/schemas/target-triplet"
+              required:
+                - identifier
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/device"
+  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}:
+    delete:
+      operationId: delete-a-device
+      summary: Delete a device
+      tags:
+        - "Legacy Devices"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+      responses:
+        "204":
+          description: Ok.
+    get:
+      operationId: retrieve-a-device
+      summary: Retrieve a device
+      tags:
+        - "Legacy Devices"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/device"
+    put:
+      operationId: update-a-device
+      summary: Update a device
+      tags:
+        - "Legacy Devices"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                cohort_prn:
+                  $ref: "#/components/schemas/cohort-prn"
+                description:
+                  $ref: "#/components/schemas/device-description"
+                healthy:
+                  $ref: "#/components/schemas/device-healthy"
+                last_communication:
+                  description: This field is ignored and has no effect.
+                  $ref: "#/components/schemas/device-last-communication"
+                tags:
+                  $ref: "#/components/schemas/array-of-device-tags"
+                target:
+                  $ref: "#/components/schemas/target-triplet"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/device"
+  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates:
+    get:
+      operationId: list-device-certificates
+      summary: List device certificates
+      tags:
+        - "Legacy Device Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/array-of-device-certificates"
+    post:
+      operationId: create-a-device-certificate
+      summary: Create a device certificate
+      tags:
+        - "Legacy Device Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                cert:
+                  $ref: "#/components/schemas/device-certificate-pem-base64"
+              required:
+                - cert
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/device-certificate"
+  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/certificates/{certificate_serial}:
+    get:
+      operationId: retrieve-a-device-certificate
+      summary: Retrieve a device certificate
+      tags:
+        - "Legacy Device Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+        - name: certificate_serial
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-certificate-serial"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/device-certificate"
+    delete:
+      operationId: delete-a-device-certificate
+      summary: Delete a device certificate
+      tags:
+        - "Legacy Device Certificates"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+        - name: certificate_serial
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-certificate-serial"
+      responses:
+        "204":
+          description: Ok.
+  /orgs/{organization_name}/products/{product_name}/devices/{device_identifier}/deployments/{deployment_name}/stats:
+    get:
+      operationId: retrieve-device-deployment-stats
+      summary: Retrieve device deployment stats
+      tags:
+        - "Legacy Devices"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: device_identifier
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/device-identifier"
+        - name: deployment_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/deployment-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      attempts:
+                        type: integer
+                        example: 5
+  /orgs/{organization_name}/products/{product_name}/firmwares:
+    get:
+      operationId: list-firmware
+      summary: List firmware
+      tags:
+        - "Firmware"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/array-of-firmware"
+    post:
+      operationId: create-a-firmware
+      summary: Create a firmware
+      tags:
+        - "Firmware"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                firmware:
+                  type: string
+                  format: binary
+                  description: Reference [firmware file requirements](/peridio-core/reference/binary-management/firmware#firmware-file-requirements).
+                ttl:
+                  type: integer
+              required:
+                - firmware
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/firmware"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                properties:
+                  errors:
+                    oneOf:
+                      - type: string
+                        const: "invalid_signature"
+                      - type: object
+                        properties:
+                          detail:
+                            type: string
+                            const: "Internal Server Error"
+  /orgs/{organization_name}/products/{product_name}/firmwares/{firmware_uuid}:
+    delete:
+      operationId: delete-a-firmware
+      summary: Delete a firmware
+      tags:
+        - "Firmware"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: firmware_uuid
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/firmware-uuid"
+      responses:
+        "204":
+          description: No Content.
+    get:
+      operationId: retrieve-a-firmware
+      summary: Retrieve a firmware
+      description: |
+        ### Expandable
+
+        This endpoint has an expandable response. See [expanding responses](#section/Expanding-Responses).
+      tags:
+        - "Firmware"
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/organization-name"
+        - name: product_name
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/product-name"
+        - name: firmware_uuid
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/firmware-uuid"
+        - name: expand
+          description: |
+            See [expanding responses](#section/Expanding-Responses).
+
+            **Expandable Fields**
+
+            For more information on each field, reference the response.
+
+            - `url`
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/firmware"
+                      - type: object
+                        properties:
+                          url:
+                            $ref: "#/components/schemas/firmware-expand-url"
 components:
   securitySchemes:
     api_key:
+      type: apiKey
+      name: Authorization
+      in: "header"
+      description: Legacy API Keys. The header value must be `Bearer API_KEY_VALUE`.
+    api_key_v2:
       type: apiKey
       name: Authorization
       in: "header"
@@ -2490,14 +3729,6 @@ components:
           - created
           - request_failed
           - test_fire
-    x-api-version:
-      name: x-api-version
-      in: header
-      required: true
-      description: API version for endpoints
-      schema:
-        type: string
-        enum: [2]
   schemas:
     api-key-created-event:
       type: object
@@ -2539,34 +3770,18 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/artifact"
-    array-of-ordered-binaries:
+    array-of-ordered-artifact-versions:
       type: array
       items:
-        type: object
-        properties:
-          prn:
-            $ref: "#/components/schemas/prn"
-          index:
-            type: integer
+        $ref: "#/components/schemas/artifact-version-item"
     array-of-artifact-versions:
       type: array
       items:
         $ref: "#/components/schemas/artifact-version"
-    array-of-binary-prns:
+    array-of-artifact-version-prns:
       type: array
       items:
         $ref: "#/components/schemas/prn"
-    array-of-binaries-with-metadata:
-      type: array
-      items:
-        type: object
-        properties:
-          prn:
-            $ref: "#/components/schemas/prn"
-          custom_metadata:
-            $ref: "#/components/schemas/custom-metadata"
-        required:
-          - prn
     array-of-binaries:
       type: array
       items:
@@ -2673,6 +3888,13 @@ components:
       type: string
       minLength: 1
       maxLength: 128
+    artifact-version-item:
+      type: object
+      properties:
+        prn:
+          $ref: "#/components/schemas/prn"
+        index:
+          type: integer
     artifact-version:
       type: object
       properties:
@@ -2831,8 +4053,8 @@ components:
     bundle:
       type: object
       properties:
-        binaries:
-          $ref: "#/components/schemas/array-of-ordered-binaries"
+        artifact_versions:
+          $ref: "#/components/schemas/array-of-ordered-artifact-versions"
         name:
           $ref: "#/components/schemas/bundle-name"
         organization_prn:
