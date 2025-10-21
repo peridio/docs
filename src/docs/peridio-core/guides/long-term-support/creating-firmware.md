@@ -91,4 +91,4 @@ peridio firmwares create \
 
 ### API
 
-Use the Peridio Admin API [create a firmware](/peridio-core/tools/admin-api#firmware/operation/create-a-firmware) endpoint.
+Use the Peridio Admin API [create a firmware](/peridio-core/tools/admin-api/v1/popout#firmware/operation/create-a-firmware) endpoint.
