@@ -1,0 +1,29 @@
+{
+  "category": "QUALCOMM DRAGONWING ECOSYSTEM",
+  "devices": [
+    {
+      "name": "Advantech ICAM 300",
+      "vendor": "Advantech",
+      "chipset": "QCS6490",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "PI-SG565D Smart MOB Development Board",
+      "vendor": "Quectel",
+      "chipset": "QCS6490",
+      "productType": "Development Kit"
+    },
+    {
+      "name": "IQ-9075",
+      "vendor": "Qualcomm",
+      "chipset": "IQ-9075",
+      "productType": "SOM"
+    },
+    {
+      "name": "Rubik Pi 3",
+      "vendor": "Thundercomm",
+      "chipset": "QCS6490",
+      "productType": "Development Kit"
+    }
+  ]
+}

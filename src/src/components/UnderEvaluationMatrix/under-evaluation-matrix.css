@@ -1,0 +1,115 @@
+/* Under Evaluation Matrix Styles - Inherits from SupportMatrix */
+.support-matrix-container {
+  overflow-x: auto;
+  margin: 2rem -1rem;
+  padding: 0 1rem;
+}
+
+.support-matrix {
+  width: max-content;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+html[data-theme="dark"] .support-matrix {
+  background: #1e1e1e;
+}
+
+.support-matrix thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+html[data-theme="dark"] .support-matrix thead {
+  background: linear-gradient(135deg, #4c5aaf 0%, #5a3d7f 100%);
+}
+
+.support-matrix th {
+  padding: 1rem 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.support-matrix th:first-child {
+  text-align: left;
+  min-width: 200px;
+}
+
+.support-matrix tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+html[data-theme="dark"] .support-matrix tbody tr {
+  border-bottom: 1px solid #374151;
+}
+
+.support-matrix tbody tr:hover {
+  background: #f7fafc;
+}
+
+html[data-theme="dark"] .support-matrix tbody tr:hover {
+  background: #2d2d2d;
+}
+
+.support-matrix td {
+  padding: 0.75rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.support-matrix td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+/* Category Header Rows */
+.category-header {
+  background: #e2e8f0 !important;
+  font-weight: 700;
+  border-top: 2px solid #cbd5e1;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+html[data-theme="dark"] .category-header {
+  background: #374151 !important;
+  border-top: 2px solid #4b5563;
+  border-bottom: 2px solid #4b5563;
+}
+
+.category-header:hover {
+  background: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .category-header:hover {
+  background: #374151 !important;
+}
+
+.category-header td {
+  padding: 1rem 1rem;
+  text-align: left !important;
+  color: #0f172a;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+html[data-theme="dark"] .category-header td {
+  color: #f1f5f9;
+  font-weight: 700;
+}
+
+/* Additional styling for better readability */
+.support-matrix strong {
+  color: #1e293b;
+}
+
+html[data-theme="dark"] .support-matrix strong {
+  color: #e2e8f0;
+}

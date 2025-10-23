@@ -1,0 +1,17 @@
+{
+  "category": "RENESAS RZ ECOSYSTEM",
+  "devices": [
+    {
+      "name": "SolidRun IIoT-200 RZ/G2L Gateway",
+      "vendor": "SolidRun",
+      "chipset": "RZ/G2L",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "RZ/V2M",
+      "vendor": "Renesas",
+      "chipset": "RZ/V2M",
+      "productType": "SOM"
+    }
+  ]
+}

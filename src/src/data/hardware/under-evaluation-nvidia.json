@@ -1,0 +1,29 @@
+{
+  "category": "NVIDIA JETSON ECOSYSTEM",
+  "devices": [
+    {
+      "name": "ASUS IoT Rugged Edge (PE1100N, PE100N)",
+      "vendor": "ASUS IoT",
+      "chipset": "Orin NX, Orin Nano",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "CompuLab EdgeAI-ORN",
+      "vendor": "CompuLab",
+      "chipset": "Orin Nano, Orin NX",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "Connect Tech Rudi Embedded System",
+      "vendor": "Connect Tech",
+      "chipset": "Jetson NX, Jetson AGX",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "Jetson AGX Thor",
+      "vendor": "NVIDIA",
+      "chipset": "Jetson AGX Thor",
+      "productType": "Development Kit"
+    }
+  ]
+}

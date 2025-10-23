@@ -6,6 +6,7 @@ description: 'Hardware compatibility matrix for Peridio platform - supported pro
 ---
 
 import SupportMatrix from '@site/src/components/SupportMatrix';
+import UnderEvaluationMatrix from '@site/src/components/UnderEvaluationMatrix';
 
 Peridio supports a wide range of hardware platforms for IoT device management and OTA updates. Our platform integrates seamlessly with various processors, development boards, and production-ready systems.
 
@@ -24,6 +25,10 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 **OTA** - Complete operating system updates with rollback protection and atomic operations.
 
 **[Remote Access Tunnels](/peridio-core/guides/remote-access/creating-tunnels)** - Secure SSH tunneling for remote device management and troubleshooting.
+
+## Additional Hardware Under Evaluation
+
+<UnderEvaluationMatrix />
 
 ## Request hardware support
 
