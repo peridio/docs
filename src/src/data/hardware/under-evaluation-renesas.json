@@ -8,9 +8,9 @@
       "productType": "Production Ready"
     },
     {
-      "name": "RZ/V2M",
+      "name": "RZ/V2H",
       "vendor": "Renesas",
-      "chipset": "RZ/V2M",
+      "chipset": "RZ/V2H",
       "productType": "SOM"
     }
   ]
