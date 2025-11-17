@@ -5,6 +5,7 @@ import Heading from '@theme/Heading'
 import Link from '@docusaurus/Link'
 
 import styles from './styles.module.css'
+import LinuxAutoMountWarning from '../shared/LinuxAutoMountWarning'
 import { getTargetConfig, targetConfigs, RunType } from '../../data/targetConfigs'
 
 export interface ProvisionGuideProps {
@@ -248,6 +249,8 @@ avocado provision -r dev`
         </li>
         {resolvedAdditionalPrerequisites}
       </ul>
+
+      {resolvedRunType !== 'qemu' && <LinuxAutoMountWarning />}
 
       {resolvedRunType !== 'qemu' && (
         <>
