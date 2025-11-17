@@ -27,6 +27,31 @@ declare module '@theme/Heading' {
   export default Heading
 }
 
+declare module '@theme/Admonition' {
+  import { ReactNode } from 'react'
+  interface AdmonitionProps {
+    type?: 'note' | 'tip' | 'info' | 'caution' | 'danger' | 'warning'
+    title?: string
+    icon?: ReactNode
+    children?: ReactNode
+  }
+  const Admonition: React.ComponentType<AdmonitionProps>
+  export default Admonition
+}
+
+declare module '@theme/CodeBlock' {
+  import { ReactNode } from 'react'
+  interface CodeBlockProps {
+    children?: ReactNode
+    className?: string
+    language?: string
+    title?: string
+    showLineNumbers?: boolean
+  }
+  const CodeBlock: React.ComponentType<CodeBlockProps>
+  export default CodeBlock
+}
+
 declare module '@theme/Layout' {
   interface LayoutProps {
     children?: React.ReactNode
@@ -43,6 +68,20 @@ declare module '@theme/Layout' {
   }
   const Layout: React.ComponentType<LayoutProps>
   export default Layout
+}
+
+declare module '@theme/DocSidebarItem' {
+  import type { ComponentType } from 'react'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const DocSidebarItem: ComponentType<any>
+  export default DocSidebarItem
+}
+
+declare module '@theme-original/DocSidebarItem' {
+  import type { ComponentType } from 'react'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const DocSidebarItem: ComponentType<any>
+  export default DocSidebarItem
 }
 
 declare module '*.module.css' {
