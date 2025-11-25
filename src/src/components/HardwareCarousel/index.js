@@ -5,24 +5,24 @@ import styles from './styles.module.css'
 
 const slides = [
   {
-    vendor: 'NVIDIA',
-    target: 'Jetson Orin Nano',
-    image: '/img/nvidia-jetson-orin.jpg', // TODO: replace with real Jetson image
-    overviewLink: '/solutions/nvidia/jetson-orin-nano',
+    vendor: 'Advantech',
+    target: 'ICAM-540',
+    image: '/img/Advantech_icam540.jpg',
+    overviewLink: '/solutions/advantech/icam-540',
     getStartedLink: '/avocado-linux/guides/getting-started',
   },
   {
-    vendor: 'Raspberry Pi',
-    target: 'Raspberry Pi 5',
-    image: '/img/raspberrypi-5.jpg',
-    overviewLink: '/solutions/raspberry-pi/raspberry-pi-5',
+    vendor: 'OnLogic',
+    target: 'FR201',
+    image: '/img/OnLogic_FR201.jpg',
+    overviewLink: '/solutions/onlogic/fr201',
     getStartedLink: '/avocado-linux/guides/getting-started',
   },
   {
-    vendor: 'NXP',
-    target: 'i.MX8MP EVK',
-    image: '/img/nxp-imx8p.jpg', // TODO: replace with real i.MX8 image
-    overviewLink: '/solutions/nxp/imx8mp',
+    vendor: 'Seeed',
+    target: 'reTerminal',
+    image: '/img/Seeed_Reterminal.jpg',
+    overviewLink: '/solutions/seeed/reterminal',
     getStartedLink: '/avocado-linux/guides/getting-started',
   },
 ]
