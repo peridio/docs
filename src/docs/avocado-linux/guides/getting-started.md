@@ -31,6 +31,12 @@ Jump directly to hardware-specific guides. You'll follow the same core workflows
 
 - [NVIDIA Jetson Orin Nano](/hardware/nvidia/jetson-orin-nano-developer-kit/provision)
 - [Raspberry Pi 4 Model B](/hardware/raspberry-pi/raspberry-pi-4-model-b/provision)
+- [ICAM-540](/hardware/advantech/icam-540/provision)
+- [NXP i.MX8M](/hardware/nxp/imx8mp/provision)
+- [OnLogic FR201](/hardware/onlogic/fr201/provision)
+- [Seeed reTerminal](/hardware/seeed/reterminal/provision)
+- [QEMU ARM](/hardware/qemu/arm/provision)
+- [QEMU x86-64](/hardware/qemu/x86-64/provision)
 
 **Custom hardware?** [Contact us](https://www.peridio.com/contact) for support with your specific platform.
 
