@@ -151,17 +151,14 @@ export const icam540Data: SolutionData = {
     subtitle:
       'Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.',
     primaryCTA: {
+      text: 'Provision Guide',
+      link: '/hardware/advantech/icam-540/provision',
+    },
+    secondaryCTA: {
       text: 'Request a Demo',
       link: 'https://peridio.com/book-a-meeting',
       target: '_blank',
     },
-  },
-
-  workInProgress: {
-    title: 'Provisioning Guide Coming Soon',
-    message:
-      "We're actively working on a comprehensive provisioning guide for the Advantech ICAM-540. This will include step-by-step instructions for device setup, configuration, and deployment.",
-    type: 'provisioning',
   },
 }
 

@@ -151,17 +151,14 @@ export const data: SolutionData = {
     subtitle:
       'Transform your Seeed reTerminal HMIs into a production fleet. Get deterministic Linux, secure OTA orchestration, and enterprise fleet management - all production-ready from Day 1.',
     primaryCTA: {
+      text: 'Provision Guide',
+      link: '/hardware/seeed/reterminal/provision',
+    },
+    secondaryCTA: {
       text: 'Request a Demo',
       link: 'https://peridio.com/book-a-meeting',
       target: '_blank',
     },
-  },
-
-  workInProgress: {
-    title: 'Provisioning Guide Coming Soon',
-    message:
-      "We're actively working on a comprehensive provisioning guide for the Seeed reTerminal. This will include step-by-step instructions for device setup, configuration, and deployment.",
-    type: 'provisioning',
   },
 }
 

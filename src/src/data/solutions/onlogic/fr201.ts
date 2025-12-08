@@ -147,17 +147,14 @@ export const data: SolutionData = {
     subtitle:
       'Transform your OnLogic FR201 systems into a managed gateway fleet with atomic updates, remote diagnostics, and enterprise support.',
     primaryCTA: {
+      text: 'Provision Guide',
+      link: '/hardware/onlogic/fr201/provision',
+    },
+    secondaryCTA: {
       text: 'Request a Demo',
       link: 'https://peridio.com/book-a-meeting',
       target: '_blank',
     },
-  },
-
-  workInProgress: {
-    title: 'Provisioning Guide Coming Soon',
-    message:
-      "We're actively working on a comprehensive provisioning guide for the OnLogic FR201. This will include step-by-step instructions for device setup, configuration, and deployment.",
-    type: 'provisioning',
   },
 }
 
