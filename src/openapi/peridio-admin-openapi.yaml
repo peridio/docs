@@ -2539,15 +2539,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/artifact"
-    array-of-ordered-binaries:
-      type: array
-      items:
-        type: object
-        properties:
-          prn:
-            $ref: "#/components/schemas/prn"
-          index:
-            type: integer
     array-of-artifact-versions:
       type: array
       items:
@@ -2832,7 +2823,7 @@ components:
       type: object
       properties:
         binaries:
-          $ref: "#/components/schemas/array-of-ordered-binaries"
+          $ref: "#/components/schemas/array-of-binaries-with-metadata"
         name:
           $ref: "#/components/schemas/bundle-name"
         organization_prn:
@@ -2854,11 +2845,11 @@ components:
       example: true
       type: boolean
     bundle-name:
-      oneOf:
-        - type: "null"
-        - type: string
-          minLength: 1
-          maxLength: 128
+      - type: string
+        nullable: true
+        minLength: 1
+        maxLength: 128
+        example: "bundle-name"
     bundle-override-prn:
       allOf:
         - $ref: "#/components/schemas/prn"
