@@ -3724,6 +3724,7 @@ components:
           - claimed_release
           - checked_for_release
           - connected
+          - disconnected
           - updated
           - authentication_failed
           - created
@@ -4252,6 +4253,7 @@ components:
             - $ref: "#/components/schemas/api-key-created-event"
             - $ref: "#/components/schemas/device-updated-event"
             - $ref: "#/components/schemas/device-connected-event"
+            - $ref: "#/components/schemas/device-disconnected-event"
             - $ref: "#/components/schemas/device-release-changed-event"
             - $ref: "#/components/schemas/device-claimed-release-event"
             - $ref: "#/components/schemas/device-checked-for-release-event"
@@ -4271,6 +4273,7 @@ components:
                 - claimed_release
                 - checked_for_release
                 - connected
+                - disconnected
                 - updated
                 - authentication_failed
                 - created
@@ -4790,6 +4793,49 @@ components:
           type: integer
           enum:
             - 1
+    device-disconnected-event:
+      type: object
+      properties:
+        data:
+          type: object
+          description: Data associated with the `device` event type.
+          properties:
+            type:
+              type: string
+              enum:
+                - disconnected
+            data:
+              type: object
+              description: Data associated with the `disconnected` subevent type.
+              properties:
+                connected_event_prn:
+                  oneOf:
+                    - type: "null"
+                    - $ref: "#/components/schemas/event-prn"
+                  description: The PRN of the connected event associated with this disconnection, if available.
+                device:
+                  type: object
+                  description: The device that disconnected.
+                  properties:
+                    prn:
+                      $ref: "#/components/schemas/device-prn"
+                    identifier:
+                      $ref: "#/components/schemas/device-identifier"
+                    cohort:
+                      $ref: "#/components/schemas/device-event-cohort"
+        inserted_at:
+          type: string
+          format: date-time
+        prn:
+          $ref: "#/components/schemas/event-prn"
+        type:
+          type: string
+          enum:
+            - device
+        version:
+          type: integer
+          enum:
+            - 1
     device-release-changed-event:
       type: object
       properties:
@@ -4938,6 +4984,7 @@ components:
         - checked_for_release
         - claimed_release
         - connected
+        - disconnected
         - release_changed
     authority-key-identifier:
       type: string
@@ -5541,6 +5588,29 @@ webhooks:
           application/json:
             schema:
               $ref: "#/components/schemas/device-connected-event"
+      responses:
+        200:
+          description: Ok.
+  device_disconnected:
+    post:
+      security: []
+      summary: Disconnected
+      description: |
+        See the [webhooks reference](/peridio-core/reference/integration-management/webhooks#supported-events) for a list of supported events.
+
+        This event is created when a device disconnects from the device websocket.
+      operationId: device-disconnected
+      tags:
+        - Device Events
+      parameters:
+        - $ref: "#/components/parameters/peridio-signature"
+        - $ref: "#/components/parameters/peridio-published-at"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/device-disconnected-event"
       responses:
         200:
           description: Ok.
