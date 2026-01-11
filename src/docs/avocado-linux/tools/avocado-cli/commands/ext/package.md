@@ -4,13 +4,16 @@ Package extension sysroot into an RPM
 Usage: avocado ext package [OPTIONS] --extension <EXTENSION>
 
 Options:
-  -C, --config <CONFIG>                 Path to avocado.toml configuration file [default: avocado.toml]
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -e, --extension <EXTENSION>           Name of the extension to package
   -t, --target <TARGET>                 Target architecture
       --out-dir <OUTPUT_DIR>            Output directory on host for the RPM package (relative or absolute path). If not specified, RPM stays in container at $AVOCADO_PREFIX/output/extensions
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
   -h, --help                            Print help
 
 ```
