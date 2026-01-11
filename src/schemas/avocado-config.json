@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://avocado.com/schemas/avocado-config/1.1.0.json",
+  "$id": "https://avocado.com/schemas/avocado-config/1.2.0.json",
   "title": "Avocado Configuration",
-  "description": "Configuration schema for Avocado CLI avocado.toml files. Defines project settings, build configurations, dependencies, and provisioning profiles for Avocado OS projects.",
+  "description": "Configuration schema for Avocado CLI avocado.yaml files. Defines project settings, build configurations, packages, and provisioning profiles for Avocado OS projects.",
   "type": "object",
   "properties": {
     "default_target": {
@@ -37,15 +37,38 @@
       "default": ".",
       "examples": ["."]
     },
-    "runtime": {
-      "$ref": "#/definitions/runtimeConfig"
+    "distro": {
+      "title": "Distribution configuration",
+      "$ref": "#/definitions/distroConfig",
+      "description": "Distribution-specific configuration for the Avocado OS project."
+    },
+    "runtimes": {
+      "title": "Runtimes",
+      "type": "object",
+      "description": "Runtime configurations for different deployment scenarios. Each runtime can specify extensions, packages, and target-specific settings.",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/runtimeConfig"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "dev": {
+            "extensions": ["avocado-ext-dev", "avocado-ext-sshd-dev"],
+            "packages": {
+              "avocado-runtime": "*"
+            }
+          }
+        }
+      ]
     },
     "sdk": {
       "title": "SDK Configuration",
       "$ref": "#/definitions/sdkConfig",
       "description": "Configure the default Avocado SDK."
     },
-    "provision": {
+    "provision_profiles": {
       "title": "Provisioning profiles",
       "type": "object",
       "description": "Provisioning profiles for deploying Avocado OS images to devices. Each profile can define different settings for development, production, or custom deployment scenarios.",
@@ -63,42 +86,52 @@
         }
       ]
     },
-    "ext": {
+    "extensions": {
       "title": "Extensions",
       "type": "object",
-      "description": "Extension configurations for both local extensions (defined in this file) and external extensions (referenced through dependencies). Extensions can be system extensions (sysext) or configuration extensions (confext).",
+      "description": "Extension configurations for both local extensions (defined in this file) and remote extensions (fetched from package repositories, git, or local paths).",
       "patternProperties": {
-        "^[a-zA-Z0-9_-]+$": {
+        "^[a-zA-Z0-9_{}. -]+$": {
           "$ref": "#/definitions/extensionConfig"
         }
       },
       "additionalProperties": false,
       "examples": [
         {
-          "ext": {
-            "example-rust": {
-              "types": ["sysext", "confext"],
-              "dependencies": {
-                "example-rust-app": {
-                  "compile": "example-rust-app",
-                  "install": "example-rust-install.sh"
-                }
-              },
-              "sdk": {
-                "dependencies": {
-                  "nativesdk-rust": "*",
-                  "rust-cross-canadian-aarch64": "*",
-                  "nativesdk-cargo": "*",
-                  "nativesdk-binutils": "*",
-                  "nativesdk-gcc": "*",
-                  "nativesdk-glibc-dev": "*",
-                  "nativesdk-libgcc-dev": "*"
-                }
+          "example-rust": {
+            "types": ["sysext", "confext"],
+            "packages": {
+              "example-rust-app": {
+                "compile": "example-rust-app",
+                "install": "example-rust-install.sh"
+              }
+            },
+            "sdk": {
+              "packages": {
+                "nativesdk-rust": "*",
+                "rust-cross-canadian-aarch64": "*",
+                "nativesdk-cargo": "*"
               }
             }
           }
         }
       ]
+    },
+    "signing_keys": {
+      "title": "Signing keys",
+      "type": "array",
+      "description": "Mapping of friendly names to signing key IDs. Acts as a local bridge between the config and the global signing keys registry.",
+      "items": {
+        "type": "object",
+        "patternProperties": {
+          "^[a-zA-Z0-9_-]+$": {
+            "type": "string",
+            "description": "Signing key ID (e.g., sha256-abc123)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "examples": [[{ "my-key": "sha256-abc123" }, { "other-key": "sha256-def456" }]]
     }
   },
   "additionalProperties": false,
@@ -106,9 +139,8 @@
     "version": {
       "title": "Version",
       "type": "string",
-      "enum": ["*"],
-      "description": "A semantic version string per https://semver.org/.",
-      "examples": ["*"]
+      "description": "A version string. Use '*' for any version, or a specific semantic version.",
+      "examples": ["*", "1.0.0", "0.23.0"]
     },
     "versionRequirement": {
       "title": "Version requirement",
@@ -116,39 +148,8 @@
       "description": "Semantic version requirement string. Supports exact versions (e.g., '2.1.3'), minimum versions (e.g., '>=1.0.0'), ranges, and other semver patterns.",
       "examples": ["1.0.0", ">=1.0.0", "~1.2.0", "^2.0.0", "2.1.3"]
     },
-    "versionObject": {
-      "title": "Version object",
-      "type": "object",
-      "description": "For advanced dependency configuration, an object can be supplied.",
-      "properties": {
-        "ext": {
-          "type": "string",
-          "description": "Extension name to reference.",
-          "examples": ["avocado-ext-dev"]
-        },
-        "vsn": {
-          "$ref": "#/definitions/version"
-        },
-        "config": {
-          "type": "string",
-          "description": "Include an extension from another Avocado config by specifying a path to the other config. The path is relative to the src_dir.",
-          "examples": ["extensions/sshd-dev/avocado.toml"]
-        }
-      },
-      "examples": [
-        {
-          "ext": "avocado-ext-dev",
-          "vsn": "*"
-        },
-        {
-          "ext": "avocado-rust-ext",
-          "config": "extensions/sshd-dev/avocado.toml"
-        }
-      ],
-      "additionalProperties": true
-    },
     "target": {
-      "title": "Targett",
+      "title": "Target",
       "type": "string",
       "enum": [
         "imx8mp-evk",
@@ -166,28 +167,189 @@
       "description": "An identifier for the platform for Avocado OS builds and deployments.",
       "additionalProperties": false
     },
-    "targetDependencies": {
-      "title": "Target and dependencies",
+    "distroConfig": {
+      "title": "Distribution configuration",
       "type": "object",
-      "description": "Configuration object containing target and dependencies.",
+      "description": "Distribution-specific settings.",
       "properties": {
-        "dependencies": {
-          "title": "Dependencies",
-          "$ref": "#/definitions/dependencies",
-          "description": "Runtime dependencies required for the target. Can include paths to local extensions or references to external packages."
+        "channel": {
+          "title": "Channel",
+          "type": "string",
+          "description": "Distribution channel (e.g., 'apollo', 'blackbird').",
+          "examples": ["apollo-edge", "blackbird-stable"]
+        },
+        "version": {
+          "title": "Version",
+          "type": "string",
+          "description": "Distribution version string.",
+          "examples": ["0.1.0"]
         }
       },
       "additionalProperties": false
     },
-    "targetRuntimeConfig": {
-      "title": "Target runtime configuration",
-      "description": "Runtime configuration for a specific target platform.",
-      "$ref": "#/definitions/targetDependencies",
+    "extensionSource": {
+      "title": "Extension source",
+      "type": "object",
+      "description": "Source configuration for fetching a remote extension. Supports package repositories, git repositories, and local filesystem paths.",
+      "oneOf": [
+        {
+          "type": "object",
+          "title": "Package source",
+          "description": "Extension from the Avocado package repository.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["package"],
+              "description": "Source type: package repository."
+            },
+            "version": {
+              "type": "string",
+              "description": "Version to fetch (e.g., '0.1.0' or '*').",
+              "examples": ["*", "1.0.0"]
+            },
+            "package": {
+              "type": "string",
+              "description": "Optional RPM package name (defaults to extension name if not specified).",
+              "examples": ["avocado-bsp-raspberrypi4"]
+            },
+            "repo_name": {
+              "type": "string",
+              "description": "Optional custom repository name.",
+              "examples": ["avocado-extras"]
+            },
+            "include": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional list of config sections to include from the remote extension. Supports dot-separated paths (e.g., 'provision_profiles.tegraflash') and wildcards (e.g., 'provision_profiles.*'). The extension's own section is always included.",
+              "examples": [["provision_profiles.*", "sdk.compile.tegraflash"]]
+            }
+          },
+          "required": ["type", "version"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "title": "Git source",
+          "description": "Extension from a git repository.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["git"],
+              "description": "Source type: git repository."
+            },
+            "url": {
+              "type": "string",
+              "description": "Git repository URL.",
+              "examples": ["https://github.com/avocado-linux/extensions.git"]
+            },
+            "ref": {
+              "type": "string",
+              "description": "Git ref (branch, tag, or commit hash).",
+              "examples": ["main", "v1.0.0", "abc123"]
+            },
+            "sparse_checkout": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional sparse checkout paths.",
+              "examples": [["extensions/my-ext"]]
+            },
+            "include": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional list of config sections to include from the remote extension.",
+              "examples": [["provision_profiles.*"]]
+            }
+          },
+          "required": ["type", "url"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "title": "Path source",
+          "description": "Extension from a local filesystem path.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["path"],
+              "description": "Source type: local filesystem path."
+            },
+            "path": {
+              "type": "string",
+              "description": "Path to the extension directory (relative to config or absolute).",
+              "examples": ["../extensions/my-ext", "/opt/extensions/my-ext"]
+            },
+            "include": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional list of config sections to include from the extension.",
+              "examples": [["sdk.compile.*"]]
+            }
+          },
+          "required": ["type", "path"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "runtimeConfig": {
+      "title": "Runtime configuration",
+      "type": "object",
+      "description": "Configuration for a runtime deployment scenario.",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "Target platform for this runtime (overrides default_target)."
+        },
+        "extensions": {
+          "title": "Extensions",
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of extension names to include in this runtime. Extensions must be defined in the 'extensions' section.",
+          "examples": [["avocado-ext-dev", "avocado-ext-sshd-dev"]]
+        },
+        "packages": {
+          "title": "Packages",
+          "$ref": "#/definitions/packages",
+          "description": "Package dependencies for this runtime."
+        },
+        "stone_include_paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional stone include paths for this runtime."
+        },
+        "stone_manifest": {
+          "type": "string",
+          "description": "Path to a custom stone manifest file."
+        },
+        "signing": {
+          "$ref": "#/definitions/signingConfig",
+          "description": "Signing configuration for this runtime."
+        }
+      },
+      "additionalProperties": true
+    },
+    "signingConfig": {
+      "title": "Signing configuration",
+      "type": "object",
+      "description": "Configuration for image signing.",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Name of the signing key to use (references a key from signing_keys section).",
+          "examples": ["my-key"]
+        },
+        "checksum_algorithm": {
+          "type": "string",
+          "enum": ["sha256", "blake3"],
+          "default": "sha256",
+          "description": "Checksum algorithm to use for signing."
+        }
+      },
+      "required": ["key"],
       "additionalProperties": false
     },
     "sdkConfig": {
       "type": "object",
-      "description": "SDK configuration for building Avocado OS projects.",
+      "description": "SDK configuration for building Avocado OS projects. Supports target-specific overrides using target names as keys.",
       "allOf": [
         {
           "$ref": "#/definitions/targetSdkConfig"
@@ -212,10 +374,10 @@
           "description": "Docker image to use for the SDK build environment. This provides the toolchain and build tools necessary for compilation.",
           "examples": ["avocado/sdk:2.0"]
         },
-        "dependencies": {
-          "title": "Dependencies",
-          "$ref": "#/definitions/dependencies",
-          "description": "SDK-level dependencies required for building the project. These are installed in the build environment.",
+        "packages": {
+          "title": "Packages",
+          "$ref": "#/definitions/packages",
+          "description": "SDK-level packages required for building the project. These are installed in the build environment.",
           "examples": [
             {
               "cmake": "*",
@@ -237,7 +399,7 @@
             {
               "wifi": {
                 "compile": "make",
-                "dependencies": {
+                "packages": {
                   "libnl": "3.5.0"
                 }
               }
@@ -264,6 +426,22 @@
           },
           "description": "Additional arguments to pass to the Docker container. Supports environment variable expansion using ${VAR_NAME} syntax.",
           "examples": [["--network", "host"]]
+        },
+        "disable_weak_dependencies": {
+          "title": "Disable weak dependencies",
+          "type": "boolean",
+          "description": "Disable installation of weak dependencies when installing packages.",
+          "default": false
+        },
+        "host_uid": {
+          "title": "Host UID",
+          "type": "integer",
+          "description": "Host UID for bindfs permission translation (overrides libc::getuid())."
+        },
+        "host_gid": {
+          "title": "Host GID",
+          "type": "integer",
+          "description": "Host GID for bindfs permission translation (overrides libc::getgid())."
         }
       },
       "additionalProperties": false
@@ -277,12 +455,18 @@
           "title": "Compile command",
           "type": "string",
           "description": "Compile command or script to execute for building this component.",
-          "examples": ["make"]
+          "examples": ["make", "./build.sh"]
         },
-        "dependencies": {
-          "title": "Dependencies",
-          "$ref": "#/definitions/dependencies",
-          "description": "Build-time dependencies required for compiling this component.",
+        "clean": {
+          "title": "Clean command",
+          "type": "string",
+          "description": "Path to clean script relative to src_dir, executed during 'ext clean' command.",
+          "examples": ["./clean.sh", "make clean"]
+        },
+        "packages": {
+          "title": "Packages",
+          "$ref": "#/definitions/packages",
+          "description": "Build-time packages required for compiling this component.",
           "examples": [
             {
               "libnl": "3.5.0",
@@ -309,6 +493,12 @@
             ["--device", "/dev/ttyUSB0"],
             ["--privileged", "--network=host"]
           ]
+        },
+        "state_file": {
+          "title": "State file",
+          "type": "string",
+          "description": "Path to state file relative to src_dir for persisting state between provision runs. Defaults to '.avocado/provision-{profile}.state' when not specified.",
+          "examples": [".avocado/provision-dev.state"]
         }
       },
       "additionalProperties": true
@@ -316,8 +506,12 @@
     "extensionConfig": {
       "title": "Extension configuration",
       "type": "object",
-      "description": "Configuration for an Avocado OS extension (system extension or configuration extension).",
+      "description": "Configuration for an Avocado OS extension (system extension or configuration extension). Extensions can be local (defined in this file) or remote (fetched from a source).",
       "properties": {
+        "source": {
+          "$ref": "#/definitions/extensionSource",
+          "description": "Source configuration for remote extensions. If not specified, the extension is considered local and must be fully defined in this config."
+        },
         "version": {
           "$ref": "#/definitions/version"
         },
@@ -329,7 +523,7 @@
             "enum": ["sysext", "confext"]
           },
           "description": "Extension types. 'sysext' for system extensions that provide system-level functionality, 'confext' for configuration extensions that provide configuration files.",
-          "examples": [["sysext"]]
+          "examples": [["sysext"], ["sysext", "confext"]]
         },
         "scopes": {
           "title": "Scopes",
@@ -343,7 +537,7 @@
         "overlay": {
           "title": "Overlay directory",
           "type": "string",
-          "description": "Path to the overlay directory containing files to be included in the extension. These files will be overlaid onto the root filesystem.",
+          "description": "Path to the overlay directory containing files to be included in the extension. The value should be relative to the src_dir. These files will be overlaid onto the root filesystem.",
           "examples": ["./overlay"]
         },
         "enable_services": {
@@ -353,76 +547,38 @@
             "type": "string"
           },
           "description": "List of systemd services to enable when the extension is active. Services must be available in the extension or base system.",
-          "examples": [
-            {
-              "ext": {
-                "example-rust": {
-                  "enable_services": ["sshd.socket"]
-                }
-              }
-            }
-          ]
+          "examples": [["sshd.socket", "my-service.service"]]
         },
         "modprobe": {
+          "title": "Kernel modules",
           "type": "array",
           "items": {
             "type": "string"
           },
           "description": "Kernel modules to load when the extension is active. Modules must be available in the kernel or provided by the extension.",
-          "examples": [["overlay"]]
+          "examples": [["overlay", "br_netfilter"]]
         },
-        "dependencies": {
-          "$ref": "#/definitions/dependencies",
-          "description": "Package dependencies required by the extension. These will be installed when the extension is built or deployed.",
-          "examples": [
-            {
-              "ext": {
-                "example-rust": {
-                  "dependencies": {
-                    "example-rust-app": {
-                      "compile": "example-rust-app",
-                      "install": "example-rust-install.sh"
-                    }
-                  }
-                }
-              }
-            }
-          ]
+        "packages": {
+          "$ref": "#/definitions/packages",
+          "description": "Package dependencies required by the extension. These will be installed when the extension is built or deployed."
         },
         "sdk": {
           "type": "object",
           "description": "SDK-specific configuration for building this extension.",
           "properties": {
-            "dependencies": {
-              "$ref": "#/definitions/dependencies",
-              "description": "Build-time dependencies specific to this extension.",
+            "packages": {
+              "$ref": "#/definitions/packages",
+              "description": "Build-time packages specific to this extension.",
               "examples": [
                 {
                   "nativesdk-rust": "*",
                   "rust-cross-canadian-aarch64": "*",
-                  "nativesdk-cargo": "*",
-                  "nativesdk-binutils": "*",
-                  "nativesdk-gcc": "*",
-                  "nativesdk-glibc-dev": "*",
-                  "nativesdk-libgcc-dev": "*"
+                  "nativesdk-cargo": "*"
                 }
               ]
             }
           },
-          "additionalProperties": true,
-          "examples": [
-            {
-              "dependencies": {
-                "nativesdk-rust": "*",
-                "rust-cross-canadian-aarch64": "*",
-                "nativesdk-cargo": "*",
-                "nativesdk-binutils": "*",
-                "nativesdk-gcc": "*",
-                "nativesdk-glibc-dev": "*",
-                "nativesdk-libgcc-dev": "*"
-              }
-            }
-          ]
+          "additionalProperties": true
         },
         "users": {
           "type": "object",
@@ -459,33 +615,7 @@
           ]
         }
       },
-      "additionalProperties": true,
-      "examples": [
-        {
-          "ext": {
-            "example-rust": {
-              "types": ["sysext", "confext"],
-              "dependencies": {
-                "example-rust-app": {
-                  "compile": "example-rust-app",
-                  "install": "example-rust-install.sh"
-                }
-              },
-              "sdk": {
-                "dependencies": {
-                  "nativesdk-rust": "*",
-                  "rust-cross-canadian-aarch64": "*",
-                  "nativesdk-cargo": "*",
-                  "nativesdk-binutils": "*",
-                  "nativesdk-gcc": "*",
-                  "nativesdk-glibc-dev": "*",
-                  "nativesdk-libgcc-dev": "*"
-                }
-              }
-            }
-          }
-        }
-      ]
+      "additionalProperties": true
     },
     "userConfig": {
       "type": "object",
@@ -531,47 +661,33 @@
       },
       "additionalProperties": false
     },
-    "runtimeConfig": {
+    "packages": {
+      "title": "Packages",
       "type": "object",
-      "description": "Default dependencies for all runtimes, as well as per-runtime overrides.",
-      "properties": {
-        "dependencies": {
-          "$ref": "#/definitions/dependencies"
-        }
-      },
-      "patternProperties": {
-        "^[a-zA-Z0-9_-]+$": {
-          "$ref": "#/definitions/targetRuntimeConfig"
-        }
-      },
-      "additionalProperties": false,
-      "examples": [
-        {
-          "raspberrypi4": {
-            "target": "raspberrypi4",
-            "dependencies": {
-              "wifi": {
-                "path": "../extensions/wifi"
-              }
-            }
-          }
-        }
-      ]
-    },
-    "dependencies": {
-      "title": "Dependencies",
-      "type": "object",
-      "description": "Object defining package and extension dependencies with version constraints.",
+      "description": "Object defining package dependencies with version constraints.",
       "patternProperties": {
         "^[a-zA-Z0-9_.-]+$": {
-          "examples": ["i2c-tools", "arbitrary-identifier"],
-          "description": "Keys specified to match this pattern are either an existing package name or an arbitrary identifier when specifying a version object with an ext key.",
+          "description": "Package name with version constraint. Can be a simple version string or an object with additional configuration.",
           "oneOf": [
             {
               "$ref": "#/definitions/version"
             },
             {
-              "$ref": "#/definitions/versionObject"
+              "type": "object",
+              "description": "Advanced package configuration.",
+              "properties": {
+                "compile": {
+                  "type": "string",
+                  "description": "Reference to a compile configuration section in sdk.compile.",
+                  "examples": ["my-app"]
+                },
+                "install": {
+                  "type": "string",
+                  "description": "Path to an install script for this package.",
+                  "examples": ["install.sh"]
+                }
+              },
+              "additionalProperties": true
             }
           ]
         }
@@ -579,17 +695,12 @@
       "additionalProperties": false,
       "examples": [
         {
+          "avocado-runtime": "*"
+        },
+        {
           "avocado-img-bootfiles": "*",
           "avocado-img-rootfs": "*",
-          "avocado-img-initramfs": "*",
-          "avocado-ext-dev": {
-            "ext": "avocado-ext-dev",
-            "vsn": "*"
-          },
-          "example-rust-ext": {
-            "ext": "example-rust-ext",
-            "config": "extensions/sshd-dev/avocado.toml"
-          }
+          "avocado-img-initramfs": "*"
         }
       ]
     }
@@ -599,56 +710,72 @@
       "default_target": "jetson-orin-nano-devkit",
       "supported_targets": ["raspberrypi4", "qemuarm64"],
       "src_dir": "src",
+      "distro": {
+        "channel": "stable",
+        "version": "1.0.0"
+      },
       "sdk": {
         "image": "avocado/sdk:2.0",
-        "dependencies": {
+        "packages": {
           "cmake": "*"
         },
         "compile": {
           "wifi": {
             "compile": "make",
-            "dependencies": {
+            "clean": "./clean.sh",
+            "packages": {
               "libnl": "*"
             }
           }
         }
       },
-      "runtime": {
-        "raspberrypi4": {
-          "dependencies": {
+      "runtimes": {
+        "dev": {
+          "extensions": ["avocado-ext-dev", "wifi"],
+          "packages": {
             "avocado-img-bootfiles": "*",
-            "wifi-ext": {
-              "ext": "wifi"
-            }
+            "avocado-img-rootfs": "*"
           }
         }
       },
-      "provision": {
+      "provision_profiles": {
         "development": {
           "container_args": ["--device", "/dev/ttyUSB0"]
         }
       },
-      "ext": {
-        "example-rust": {
-          "types": ["sysext", "confext"],
-          "dependencies": {
-            "example-rust-app": {
-              "ext": "example-rust-app",
-              "vsn": "2.1.0",
-              "compile": "example-rust-app",
-              "install": "example-rust-install.sh"
+      "extensions": {
+        "avocado-ext-dev": {
+          "source": {
+            "type": "package",
+            "version": "*"
+          }
+        },
+        "avocado-bsp-{{ avocado.target }}": {
+          "source": {
+            "type": "package",
+            "version": "*",
+            "include": ["provision_profiles.*"]
+          }
+        },
+        "wifi": {
+          "types": ["sysext"],
+          "overlay": "./extensions/wifi/overlay",
+          "packages": {
+            "wifi-driver": {
+              "compile": "wifi",
+              "install": "install-wifi.sh"
             }
           },
           "sdk": {
-            "dependencies": {
-              "nativesdk-rust": "*",
-              "rust-cross-canadian-aarch64": "*",
-              "nativesdk-cargo": "*",
-              "nativesdk-binutils": "*",
-              "nativesdk-gcc": "*",
-              "nativesdk-glibc-dev": "*",
-              "nativesdk-libgcc-dev": "*"
+            "packages": {
+              "nativesdk-gcc": "*"
             }
+          }
+        },
+        "my-local-ext": {
+          "source": {
+            "type": "path",
+            "path": "../extensions/my-ext"
           }
         }
       }

@@ -1,17 +1,13 @@
 ```
-Provision a runtime
+Sign runtime images (shortcut for 'runtime sign')
 
-Usage: avocado runtime provision [OPTIONS] --runtime <RUNTIME>
+Usage: avocado sign [OPTIONS]
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
-  -r, --runtime <RUNTIME>               Runtime name to provision
+  -r, --runtime <RUNTIME>               Runtime name to sign (if not provided, signs all runtimes with signing config)
   -t, --target <TARGET>                 Target architecture
-      --profile <PROVISION_PROFILE>     Provision profile to use
-      --env <ENV>                       Environment variables to pass to the provision process
-      --out <OUT>                       Output path relative to src_dir for provisioning artifacts
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
