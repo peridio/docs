@@ -16,6 +16,45 @@
       }
     },
     {
+      "name": "Advantech MIC-715-OX",
+      "url": "https://www.advantech.com/en/products/965e4edb-fb98-429e-89ed-9a0a8435a7be/mic-715-ox/mod_97a36574-38e0-40f4-9a80-560bba9413eb",
+      "external": true,
+      "features": {
+        "provisioning": "partial",
+        "hitl": "partial",
+        "sideLoading": "partial",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "remoteAccessTunnels": "partial"
+      }
+    },
+    {
+      "name": "Advantech TPC-115W",
+      "url": "https://www.advantech.com/en-us/products/5a7fd990-fe4d-4bf0-b2cc-30d3204a4718/tpc-115w/mod_3e061744-445d-44de-bb1c-d122509a58b4",
+      "external": true,
+      "features": {
+        "provisioning": "partial",
+        "hitl": "partial",
+        "sideLoading": "partial",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "remoteAccessTunnels": "partial"
+      }
+    },
+    {
+      "name": "Advantech MIC-733-AO",
+      "url": "https://www.advantech.com/en-eu/products/965e4edb-fb98-429e-89ed-9a0a8435a7be/mic-733/mod_09861425-4950-46ab-ad39-1b5522881218",
+      "external": true,
+      "features": {
+        "provisioning": "partial",
+        "hitl": "partial",
+        "sideLoading": "partial",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "remoteAccessTunnels": "partial"
+      }
+    },
+    {
       "name": "OnLogic FR201",
       "url": "/solutions/onlogic/fr201",
       "external": false,
