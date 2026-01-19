@@ -1,4 +1,5 @@
 ---
+sidebar_position: 3
 title: 'Hardware in the loop'
 description: 'Hardware-in-the-loop development with Avocado OS - iterate against live targets with NFS-mounted extensions for fast feedback loops and interactive debugging.'
 ---

@@ -1,4 +1,5 @@
 ---
+sidebar_position: 2
 title: 'Getting started'
 description: 'Complete guide to Avocado Linux development - provision devices, hardware-in-the-loop development, and sideload updates for embedded systems.'
 ---

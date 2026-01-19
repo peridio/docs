@@ -1,4 +1,5 @@
 ---
+sidebar_position: 4
 title: 'Sideloading'
 description: 'Deploy firmware updates directly from desktop to Raspberry Pi 4 using Avocado OS sideloading - rapid testing without cloud infrastructure for development workflows.'
 ---
