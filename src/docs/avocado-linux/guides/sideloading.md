@@ -213,7 +213,7 @@ Make sure your SD card is **NOT** inserted before running the provisioning comma
 #### Command
 
 ```bash
-avocado provision --provision-profile sd -r dev
+avocado provision --profile sd -r dev
 ```
 
 #### Interactive process

@@ -136,7 +136,7 @@ avocado install --force`
 
   const provisionCommand = resolvedProvisionProfile
     ? `avocado build
-avocado provision -r dev --provision-profile ${resolvedProvisionProfile}`
+avocado provision -r dev --profile ${resolvedProvisionProfile}`
     : `avocado build
 avocado provision -r dev`
 
