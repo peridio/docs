@@ -42,13 +42,13 @@ Options:
           Limit the concurrency of jobs that create and upload binary parts. [default: 2x the core count, to a maximum of 16]
 
   -s, --signing-key-pair <SIGNING_KEY_PAIR>
-          The name of a signing key pair in your Peridio CLI config. This will dictate both the private key to create a binary signature with as well as the signing key Peridio will use to verify the binary signature
+          The name(s) of signing key pair(s) in your Peridio CLI config. This will dictate both the private key to create a binary signature with as well as the signing key Peridio will use to verify the binary signature. Multiple pairs can be specified for multiple signatures
 
       --signing-key-private <SIGNING_KEY_PRIVATE>
-          A path to a PKCS#8 private key encoded as a pem to create a binary signature binary with
+          Path(s) to PKCS#8 private key(s) encoded as pem to create binary signature(s) with. Multiple keys can be specified for multiple signatures
 
       --signing-key-prn <SIGNING_KEY_PRN>
-          The PRN of the signing key Peridio will use to verify the binary signature
+          The PRN(s) of the signing key(s) Peridio will use to verify the binary signature(s). Must match the number of private keys provided
 
       --skip-upload
           Create the binary record but do not upload its content nor sign it
