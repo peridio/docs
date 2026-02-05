@@ -172,6 +172,10 @@ security:
 tags:
   - name: Bundles
     id: bundles
+  - name: Bundle Overrides
+    id: bundle-overrides
+  - name: Bundle Signatures
+    id: bundle-signatures
   - name: Users
     id: users
   - name: Artifacts
@@ -268,6 +272,8 @@ x-tagGroups:
   - name: Release Management
     tags:
       - Bundles
+      - Bundle Overrides
+      - Bundle Signatures
       - Releases
   - name: Events
     tags:
@@ -732,6 +738,40 @@ paths:
   /binary_signatures:
     parameters:
       - $ref: "#/components/parameters/x-api-version"
+    get:
+      operationId: list-binary-signatures
+      summary: List binary signatures
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`binary_prn`||`:`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`prn`||`:`|string|
+        |`signing_key_prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+
+      tags:
+        - "Binary Signatures"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  binary_signatures:
+                    $ref: "#/components/schemas/array-of-binary-signatures"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
     post:
       operationId: create-a-binary-signature
       summary: Create a binary signature
@@ -752,12 +792,20 @@ paths:
                   $ref: "#/components/schemas/prn"
                 signing_key_prn:
                   $ref: "#/components/schemas/prn"
+                  description: The PRN of the signing key. Either this or signing_key_keyid must be provided.
+                signing_key_keyid:
+                  type: string
+                  description: The keyid of the signing key. Either this or signing_key_prn must be provided.
                 signature:
-                  $ref: "#/components/schemas/binary-signature-signature"
+                  $ref: "#/components/schemas/ed25519-signature"
               required:
                 - binary_prn
-                - signing_key_prn
                 - signature
+              oneOf:
+                - required:
+                    - signing_key_prn
+                - required:
+                    - signing_key_keyid
       responses:
         "201":
           description: Ok.
@@ -783,6 +831,331 @@ paths:
       responses:
         "204":
           description: Ok.
+  /binaries/{binary_prn}/download_url:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+      - name: binary_prn
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/prn"
+    get:
+      operationId: get-binary-download-url
+      summary: Get binary download URL
+      description: Returns a pre-signed URL for downloading the binary.
+      tags:
+        - "Binaries"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  download_url:
+                    type: string
+                    format: uri
+                    description: A pre-signed URL for downloading the binary.
+  /bundle_overrides:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+    post:
+      operationId: create-a-bundle-override
+      summary: Create a bundle override
+      tags:
+        - "Bundle Overrides"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                bundle_prn:
+                  $ref: "#/components/schemas/bundle-prn"
+                name:
+                  $ref: "#/components/schemas/bundle-override-name"
+                description:
+                  $ref: "#/components/schemas/bundle-override-description"
+                starts_at:
+                  $ref: "#/components/schemas/bundle-override-starts-at"
+                ends_at:
+                  $ref: "#/components/schemas/bundle-override-ends-at"
+              required:
+                - bundle_prn
+                - name
+                - starts_at
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle_override:
+                    $ref: "#/components/schemas/bundle-override"
+    get:
+      operationId: list-bundle-overrides
+      summary: List bundle overrides
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`bundle_prn`||`:`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`name`||`:`, `~`, `-`|string|
+        |`prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+
+      tags:
+        - "Bundle Overrides"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle_overrides:
+                    $ref: "#/components/schemas/array-of-bundle-overrides"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /bundle_overrides/{bundle_override_prn}:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+      - name: bundle_override_prn
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/bundle-override-prn"
+    get:
+      operationId: retrieve-a-bundle-override
+      summary: Retrieve a bundle override
+      tags:
+        - "Bundle Overrides"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle_override:
+                    $ref: "#/components/schemas/bundle-override"
+    patch:
+      operationId: update-a-bundle-override
+      summary: Update a bundle override
+      tags:
+        - "Bundle Overrides"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                bundle_prn:
+                  $ref: "#/components/schemas/bundle-prn"
+                name:
+                  $ref: "#/components/schemas/bundle-override-name"
+                description:
+                  $ref: "#/components/schemas/bundle-override-description"
+                starts_at:
+                  $ref: "#/components/schemas/bundle-override-starts-at"
+                ends_at:
+                  $ref: "#/components/schemas/bundle-override-ends-at"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle_override:
+                    $ref: "#/components/schemas/bundle-override"
+    delete:
+      operationId: delete-a-bundle-override
+      summary: Delete a bundle override
+      tags:
+        - "Bundle Overrides"
+      responses:
+        "204":
+          description: No Content.
+  /bundle_overrides/{bundle_override_prn}/devices:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+      - name: bundle_override_prn
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/bundle-override-prn"
+    post:
+      operationId: add-device-to-bundle-override
+      summary: Add a device to a bundle override
+      tags:
+        - "Bundle Overrides"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                device_prn:
+                  $ref: "#/components/schemas/device-prn"
+              required:
+                - device_prn
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  device:
+                    $ref: "#/components/schemas/bundle-override-device"
+    get:
+      operationId: list-bundle-override-devices
+      summary: List devices in a bundle override
+      tags:
+        - "Bundle Overrides"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  devices:
+                    $ref: "#/components/schemas/array-of-bundle-override-devices"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /bundle_overrides/{bundle_override_prn}/devices/{device_prn}:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+      - name: bundle_override_prn
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/bundle-override-prn"
+      - name: device_prn
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/device-prn"
+    delete:
+      operationId: remove-device-from-bundle-override
+      summary: Remove a device from a bundle override
+      tags:
+        - "Bundle Overrides"
+      responses:
+        "204":
+          description: No Content.
+  /bundle_signatures:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+    post:
+      operationId: create-a-bundle-signature
+      summary: Create a bundle signature
+      tags:
+        - "Bundle Signatures"
+      description: |
+        Attach a signature to a bundle.
+
+        This endpoint must be used against a bundle that is already created. The
+        request will fail if the signature is invalid.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                bundle_prn:
+                  $ref: "#/components/schemas/bundle-prn"
+                signing_key_prn:
+                  $ref: "#/components/schemas/prn"
+                  description: The PRN of the signing key. Either this or signing_key_keyid must be provided.
+                signing_key_keyid:
+                  type: string
+                  description: The keyid of the signing key. Either this or signing_key_prn must be provided.
+                signature:
+                  $ref: "#/components/schemas/ed25519-signature"
+              required:
+                - bundle_prn
+                - signature
+              oneOf:
+                - required:
+                    - signing_key_prn
+                - required:
+                    - signing_key_keyid
+      responses:
+        "201":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle_signature:
+                    $ref: "#/components/schemas/bundle-signature"
+    get:
+      operationId: list-bundle-signatures
+      summary: List bundle signatures
+      description: |
+        **Search**
+
+        This resource has the following searchable fields.
+
+        |Key|Required|Operators|Value|
+        |-|-|-|-|
+        |`bundle_prn`||`:`|string|
+        |`inserted_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+        |`prn`||`:`|string|
+        |`signing_key_prn`||`:`|string|
+        |`updated_at`||`:`, `>`, `>=`, `<`, `<=`|date-time|
+
+      tags:
+        - "Bundle Signatures"
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/order"
+        - $ref: "#/components/parameters/search"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle_signatures:
+                    $ref: "#/components/schemas/array-of-bundle-signatures"
+                  next_page:
+                    $ref: "#/components/schemas/next-page"
+  /bundle_signatures/{bundle_signature_prn}:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+      - name: bundle_signature_prn
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/prn"
+    delete:
+      operationId: delete-a-bundle-signature
+      summary: Delete a bundle signature
+      tags:
+        - "Bundle Signatures"
+      responses:
+        "204":
+          description: No Content.
   /bundles:
     parameters:
       - $ref: "#/components/parameters/x-api-version"
@@ -899,6 +1272,39 @@ paths:
       responses:
         "204":
           description: No Content.
+  /bundles/{bundle_prn}/signatures:
+    parameters:
+      - $ref: "#/components/parameters/x-api-version"
+      - name: bundle_prn
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/prn"
+    get:
+      operationId: get-bundle-signatures
+      summary: Get bundle signatures
+      description: Returns the signatures associated with a bundle.
+      tags:
+        - "Bundle Signatures"
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                properties:
+                  bundle_signatures:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        signature:
+                          $ref: "#/components/schemas/ed25519-signature"
+                        signing_key_prn:
+                          $ref: "#/components/schemas/prn"
+                        keyid:
+                          type: string
+                          description: The keyid of the signing key.
   /ca_certificates:
     parameters:
       - $ref: "#/components/parameters/x-api-version"
@@ -1353,8 +1759,6 @@ paths:
           application/json:
             schema:
               properties:
-                product_prn:
-                  $ref: "#/components/schemas/product-prn"
                 cohort_prn:
                   $ref: "#/components/schemas/cohort-prn"
                 description:
@@ -2563,6 +2967,10 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/binary"
+    array-of-binary-signatures:
+      type: array
+      items:
+        $ref: "#/components/schemas/binary-signature"
     array-of-binary-parts:
       type: array
       items:
@@ -2571,6 +2979,18 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/bundle"
+    array-of-bundle-overrides:
+      type: array
+      items:
+        $ref: "#/components/schemas/bundle-override"
+    array-of-bundle-override-devices:
+      type: array
+      items:
+        $ref: "#/components/schemas/bundle-override-device"
+    array-of-bundle-signatures:
+      type: array
+      items:
+        $ref: "#/components/schemas/bundle-signature"
     array-of-ca-certificates:
       type: array
       items:
@@ -2754,10 +3174,12 @@ components:
         - "signable"
         - "signed"
         - "destroyed"
-    binary-signature-signature:
+    ed25519-signature:
       type: string
+      minLength: 128
+      maxLength: 128
       description: |
-        The lowercase hex encoding of the ed25519 signature of the base16 encoding of the SHA256 hash of the binary.
+        The lowercase hex encoding of the ed25519 signature of the base16 encoding of the SHA256 hash of the resource.
     binary-signature:
       type: object
       properties:
@@ -2768,9 +3190,12 @@ components:
         prn:
           $ref: "#/components/schemas/prn"
         signature:
-          $ref: "#/components/schemas/binary-signature-signature"
+          $ref: "#/components/schemas/ed25519-signature"
         signing_key_prn:
           $ref: "#/components/schemas/prn"
+        keyid:
+          type: string
+          description: The keyid of the signing key.
         inserted_at:
           type: string
           format: date-time
@@ -2825,6 +3250,9 @@ components:
       properties:
         binaries:
           $ref: "#/components/schemas/array-of-binaries-with-metadata"
+        hash:
+          type: string
+          description: The hash of the bundle, computed from the hashes of its binaries.
         name:
           $ref: "#/components/schemas/bundle-name"
         organization_prn:
@@ -2846,15 +3274,93 @@ components:
       example: true
       type: boolean
     bundle-name:
-      - type: string
-        nullable: true
-        minLength: 1
-        maxLength: 128
-        example: "bundle-name"
+      type: string
+      nullable: true
+      minLength: 1
+      maxLength: 256
+      example: "my-bundle"
+    bundle-override:
+      type: object
+      properties:
+        bundle_prn:
+          $ref: "#/components/schemas/bundle-prn"
+        description:
+          oneOf:
+            - $ref: "#/components/schemas/bundle-override-description"
+            - type: "null"
+        ends_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        inserted_at:
+          type: string
+          format: date-time
+        name:
+          $ref: "#/components/schemas/bundle-override-name"
+        organization_prn:
+          $ref: "#/components/schemas/prn"
+        prn:
+          $ref: "#/components/schemas/bundle-override-prn"
+        starts_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    bundle-override-description:
+      type: string
+      minLength: 1
+      maxLength: 256
+    bundle-override-device:
+      type: object
+      properties:
+        device_prn:
+          $ref: "#/components/schemas/device-prn"
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    bundle-override-ends-at:
+      type: string
+      format: date-time
+      description: The time at which the bundle override ends. Must be after starts_at.
+    bundle-override-name:
+      type: string
+      minLength: 1
+      maxLength: 128
     bundle-override-prn:
       allOf:
         - $ref: "#/components/schemas/prn"
         - example: "prn:1:be4d30b4-de6b-47cd-85ea-a75e23fd63ef:bundle_override:b3f1f699-3bc8-4c77-bda2-b974595d5e3f"
+    bundle-override-starts-at:
+      type: string
+      format: date-time
+      description: The time at which the bundle override starts.
+    bundle-signature:
+      type: object
+      properties:
+        bundle_prn:
+          $ref: "#/components/schemas/bundle-prn"
+        organization_prn:
+          $ref: "#/components/schemas/prn"
+        prn:
+          $ref: "#/components/schemas/prn"
+        signature:
+          $ref: "#/components/schemas/ed25519-signature"
+        signing_key_prn:
+          $ref: "#/components/schemas/prn"
+        keyid:
+          type: string
+          description: The keyid of the signing key.
+        inserted_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     target-triplet:
       type: string
       minLength: 1
@@ -4080,7 +4586,7 @@ components:
       type: object
       properties:
         signature:
-          $ref: "#/components/schemas/binary-signature-signature"
+          $ref: "#/components/schemas/ed25519-signature"
         signing_key_prn:
           $ref: "#/components/schemas/prn"
         public_value:
@@ -4119,7 +4625,7 @@ components:
                   type: object
                   properties:
                     signature:
-                      $ref: "#/components/schemas/binary-signature-signature"
+                      $ref: "#/components/schemas/ed25519-signature"
                     signing_key_prn:
                       $ref: "#/components/schemas/prn"
           size:
