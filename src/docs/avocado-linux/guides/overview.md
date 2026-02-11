@@ -32,6 +32,8 @@ These guides are also linked from the getting started meta guide:
 
 - **[Hardware-in-the-loop](./hardware-in-the-loop.md)** — Iterate at web development speeds with live code mounting
 - **[Sideload an update](./sideloading.md)** — Push updates directly from your development machine
+- **[Cross-compilation](./cross-compilation.md)** — Cross-compile applications and kernel modules with the SDK
+- **[Custom kernel](./custom-kernel.md)** — Bring your own Linux kernel to an Avocado runtime
 
 ## Getting help
 
