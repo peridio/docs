@@ -100,7 +100,7 @@ Run the VM using the SDK passing args for host networking, so the guest (the dev
 #### Command
 
 ```bash title="On Host"
-avocado sdk run -iE --container-arg "--net=host" vm dev
+avocado sdk run -iE vm dev
 ```
 
 #### Output
