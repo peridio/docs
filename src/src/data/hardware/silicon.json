@@ -1,5 +1,5 @@
 {
-  "category": "Semiconductors",
+  "category": "Semiconductors & Modules",
   "devices": [
     {
       "name": "NVIDIA Jetson Orin Nano Developer Kit",
@@ -12,6 +12,19 @@
         "extensionOta": "partial",
         "osOta": "partial",
         "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Grinn AstraSOM-1680",
+      "url": "/solutions/grinn/astrasom-1680",
+      "external": false,
+      "features": {
+        "provisioning": "partial",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
         "remoteAccessTunnels": "full"
       }
     },
