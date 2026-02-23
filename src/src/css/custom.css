@@ -428,9 +428,6 @@ html[data-theme="dark"] .menu__link--active:hover {
   text-transform: uppercase !important;
   letter-spacing: 0.8px !important;
   margin-top: 0.5rem !important;
-  height: 2.6em !important;
-  display: flex !important;
-  align-items: flex-end !important;
 }
 
 /* Style the navigation links to match the image */
