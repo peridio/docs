@@ -4,5 +4,4 @@ import { rubikPiData } from '@site/src/data/solutions/qualcomm/rubik-pi'
 
 export default function QualcommRubikPiSolution() {
   return <SolutionLayout {...rubikPiData} />
-
 }

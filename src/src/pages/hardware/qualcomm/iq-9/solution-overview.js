@@ -4,5 +4,4 @@ import { qualcommIq9Data } from '@site/src/data/solutions/qualcomm/iq9'
 
 export default function QualcommIQ9Solution() {
   return <SolutionLayout {...qualcommIq9Data} />
-
 }

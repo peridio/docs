@@ -4,5 +4,4 @@ import { icam540Data } from '@site/src/data/solutions/advantech/icam-540'
 
 export default function ICAM540Solution() {
   return <SolutionLayout {...icam540Data} />
-
 }

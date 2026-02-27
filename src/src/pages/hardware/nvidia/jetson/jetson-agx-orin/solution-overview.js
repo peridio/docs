@@ -1,7 +1,7 @@
 import React from 'react'
 import SolutionLayout from '@site/src/components/solutions/SolutionLayout'
-import { data as jetsonAgxOrinData } from '@site/src/data/solutions/nvidia/jetson-agx-orin'
+import { jetsonAgxOrinData } from '@site/src/data/solutions/nvidia/jetson-agx-orin'
 
-export default function JetsonOrinNXSolution() {
+export default function JetsonAgxOrinSolution() {
   return <SolutionLayout {...jetsonAgxOrinData} />
 }

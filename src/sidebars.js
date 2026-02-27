@@ -53,6 +53,23 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Grinn',
+          items: [
+            {
+              type: 'category',
+              label: 'AstraSOM-1680',
+              items: [
+                {
+                  type: 'html',
+                  value:
+                    '<a href="/solutions/grinn/astrasom-1680" target="_blank" rel="noopener noreferrer" class="menu__link" style="display: block;">Solution overview</a>',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'NXP',
           items: [
             {

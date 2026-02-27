@@ -4,5 +4,4 @@ import { stm32mp257fDkData } from '@site/src/data/solutions/stmicroelectronics/s
 
 export default function STM32MP257FDKSolution() {
   return <SolutionLayout {...stm32mp257fDkData} />
-
 }

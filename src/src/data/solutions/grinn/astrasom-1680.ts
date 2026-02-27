@@ -66,7 +66,7 @@ export const data: SolutionData = {
     },
     {
       label: 'Display',
-      value: '2× MIPI DSI + HDMI TX 2.1 (4K60)',
+      value: 'MIPI DSI + HDMI TX 2.1 (4K60)',
       note: 'Multi-display output for HMI and visual feedback',
     },
     {
@@ -81,7 +81,7 @@ export const data: SolutionData = {
     },
     {
       label: 'Connectivity',
-      value: 'USB 3.0, USB 2.0, PCIe ×2 Gen 2.0, GbE MAC',
+      value: 'USB 3.0, USB 2.0, PCIe Gen2 2 lane, GbE MAC',
       note: 'Flexible high-speed peripheral and network connectivity',
     },
     {
