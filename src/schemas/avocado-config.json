@@ -117,6 +117,12 @@
         }
       ]
     },
+    "cli_requirement": {
+      "title": "CLI version requirement",
+      "$ref": "#/definitions/versionRequirement",
+      "description": "Minimum Avocado CLI version required to use this configuration. If the running CLI version does not satisfy this requirement, an error is raised with an upgrade prompt. Uses semver requirement syntax.",
+      "examples": [">=0.26.0", "^0.26"]
+    },
     "signing_keys": {
       "title": "Signing keys",
       "type": "array",
@@ -134,7 +140,7 @@
       "examples": [[{ "my-key": "sha256-abc123" }, { "other-key": "sha256-def456" }]]
     }
   },
-  "additionalProperties": false,
+  "additionalProperties": true,
   "definitions": {
     "version": {
       "title": "Version",
@@ -170,19 +176,48 @@
     "distroConfig": {
       "title": "Distribution configuration",
       "type": "object",
-      "description": "Distribution-specific settings.",
+      "description": "Distribution-specific settings including feed year, stability channel, and repository configuration.",
       "properties": {
         "channel": {
           "title": "Channel",
           "type": "string",
-          "description": "Distribution channel (e.g., 'apollo', 'blackbird').",
-          "examples": ["apollo-edge", "blackbird-stable"]
+          "description": "Distribution stability channel (e.g., 'edge', 'stable'). Can be overridden with the AVOCADO_DISTRO_CHANNEL environment variable.",
+          "examples": ["edge", "stable"]
         },
-        "version": {
-          "title": "Version",
+        "release": {
+          "title": "Release",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "integer" }
+          ],
+          "description": "Distribution feed year (e.g., '2024' or 2024). Accepts both strings and integers. Can be overridden with the AVOCADO_DISTRO_RELEASE environment variable. Previously named 'version' which is still accepted as an alias.",
+          "examples": ["2024", 2024]
+        },
+        "repo": {
+          "title": "Repository configuration",
+          "$ref": "#/definitions/distroRepoConfig",
+          "description": "Repository configuration for package downloads. Replaces the deprecated sdk.repo_url and sdk.repo_release fields."
+        }
+      },
+      "additionalProperties": false
+    },
+    "distroRepoConfig": {
+      "title": "Distribution repository configuration",
+      "type": "object",
+      "description": "Repository URL and release version configuration. When releasever is not set, it is derived from '{release}/{channel}' (e.g., '2024/edge').",
+      "properties": {
+        "url": {
+          "title": "Repository URL",
           "type": "string",
-          "description": "Distribution version string.",
-          "examples": ["0.1.0"]
+          "description": "URL of the package repository. Defaults to https://repo.avocadolinux.org. Can be overridden with the AVOCADO_REPO_URL environment variable (or legacy AVOCADO_SDK_REPO_URL).",
+          "default": "https://repo.avocadolinux.org",
+          "examples": ["https://repo.avocadolinux.org"]
+        },
+        "releasever": {
+          "title": "Release version",
+          "type": "string",
+          "description": "Explicit releasever override for DNF --releasever. When not set, derived from distro.release and distro.channel as '{release}/{channel}'. Can be overridden with the AVOCADO_RELEASEVER environment variable (or legacy AVOCADO_SDK_REPO_RELEASE).",
+          "examples": ["2024/edge", "2024/stable"]
         }
       },
       "additionalProperties": false
@@ -407,16 +442,18 @@
           ]
         },
         "repo_url": {
-          "title": "Repository URL",
+          "title": "Repository URL (deprecated)",
           "type": "string",
-          "description": "URL of the repository containing SDK resources. Can be overridden with the AVOCADO_SDK_REPO_URL environment variable.",
-          "examples": ["https://github.com/avocado-linux/sdk"]
+          "description": "Deprecated: use distro.repo.url instead. URL of the package repository. Can be overridden with the AVOCADO_REPO_URL environment variable (or legacy AVOCADO_SDK_REPO_URL).",
+          "examples": ["https://repo.avocadolinux.org"],
+          "deprecated": true
         },
         "repo_release": {
-          "title": "Repository release",
+          "title": "Repository release (deprecated)",
           "type": "string",
-          "description": "Specific release/tag of the SDK repository to use. Can be overridden with the AVOCADO_SDK_REPO_RELEASE environment variable.",
-          "examples": ["v2.0.0"]
+          "description": "Deprecated: use distro.repo.releasever instead. Explicit releasever for DNF --releasever. Can be overridden with the AVOCADO_RELEASEVER environment variable (or legacy AVOCADO_SDK_REPO_RELEASE).",
+          "examples": ["2024/edge"],
+          "deprecated": true
         },
         "container_args": {
           "title": "Container arguments",
@@ -707,17 +744,18 @@
   },
   "examples": [
     {
+      "cli_requirement": ">=0.26.0",
       "default_target": "jetson-orin-nano-devkit",
       "supported_targets": ["raspberrypi4", "qemuarm64"],
       "src_dir": "src",
       "distro": {
-        "channel": "stable",
-        "version": "1.0.0"
+        "release": "2024",
+        "channel": "edge"
       },
       "sdk": {
-        "image": "avocado/sdk:2.0",
+        "image": "docker.io/avocadolinux/sdk:2024-edge",
         "packages": {
-          "cmake": "*"
+          "avocado-sdk-toolchain": "*"
         },
         "compile": {
           "wifi": {
@@ -733,8 +771,7 @@
         "dev": {
           "extensions": ["avocado-ext-dev", "wifi"],
           "packages": {
-            "avocado-img-bootfiles": "*",
-            "avocado-img-rootfs": "*"
+            "avocado-runtime": "*"
           }
         }
       },

@@ -22,6 +22,27 @@ By default, the CLI looks for a configuration file named `avocado.toml` in the c
 
 For detailed information about all available configuration options, see the [config schema](./config-schema.mdx).
 
+## Environment variables
+
+Environment variables take precedence over configuration file values. When set, they override the corresponding config field.
+
+| Environment variable     | Config equivalent        | Description                                              |
+| ------------------------ | ------------------------ | -------------------------------------------------------- |
+| `AVOCADO_TARGET`         | `default_target`         | Target architecture for builds and deployments.          |
+| `AVOCADO_REPO_URL`       | `distro.repo.url`        | Package repository URL.                                  |
+| `AVOCADO_RELEASEVER`     | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).             |
+| `AVOCADO_DISTRO_RELEASE` | `distro.release`         | Distribution feed year (e.g., `2024`).                   |
+| `AVOCADO_DISTRO_CHANNEL` | `distro.channel`         | Distribution stability channel (e.g., `edge`, `stable`). |
+
+### Legacy environment variables
+
+The following environment variables are deprecated but still supported as fallbacks:
+
+| Legacy variable            | Replacement          |
+| -------------------------- | -------------------- |
+| `AVOCADO_SDK_REPO_URL`     | `AVOCADO_REPO_URL`   |
+| `AVOCADO_SDK_REPO_RELEASE` | `AVOCADO_RELEASEVER` |
+
 ## Examples
 
 Example configuration files are available in the [Avocado OS repository](https://github.com/avocado-linux/avocado-os/tree/main/references). These examples demonstrate common configuration patterns for different use cases and target platforms.
