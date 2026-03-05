@@ -32,8 +32,8 @@ distro:
   release: 2024
   channel: edge
   repo:
-    url: https://repo.avocadolinux.org  # optional, this is the default
-    releasever: 2024/edge               # optional, derived from release/channel when omitted
+    url: https://repo.avocadolinux.org # optional, this is the default
+    releasever: 2024/edge # optional, derived from release/channel when omitted
 ```
 
 The `release` field specifies the feed year and `channel` specifies the stability tier (`edge` or `stable`). The entire `repo` section is optional. When omitted, `url` defaults to `https://repo.avocadolinux.org` and `releasever` is derived automatically as `{release}/{channel}` (e.g., `2024/edge`).
@@ -42,12 +42,12 @@ The `repo.url` and `repo.releasever` fields replace the deprecated `sdk.repo_url
 
 All repository settings can be overridden with environment variables:
 
-| Environment variable     | Config field              | Description                         |
-| ------------------------ | ------------------------- | ----------------------------------- |
-| `AVOCADO_REPO_URL`       | `distro.repo.url`         | Package repository URL              |
-| `AVOCADO_RELEASEVER`     | `distro.repo.releasever`  | DNF releasever (e.g., `2024/edge`)  |
-| `AVOCADO_DISTRO_RELEASE` | `distro.release`          | Feed year (e.g., `2024`)            |
-| `AVOCADO_DISTRO_CHANNEL` | `distro.channel`          | Stability channel (e.g., `edge`)    |
+| Environment variable     | Config field             | Description                        |
+| ------------------------ | ------------------------ | ---------------------------------- |
+| `AVOCADO_REPO_URL`       | `distro.repo.url`        | Package repository URL             |
+| `AVOCADO_RELEASEVER`     | `distro.repo.releasever` | DNF releasever (e.g., `2024/edge`) |
+| `AVOCADO_DISTRO_RELEASE` | `distro.release`         | Feed year (e.g., `2024`)           |
+| `AVOCADO_DISTRO_CHANNEL` | `distro.channel`         | Stability channel (e.g., `edge`)   |
 
 ## Security and verification
 

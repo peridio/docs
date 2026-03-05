@@ -186,10 +186,7 @@
         },
         "release": {
           "title": "Release",
-          "oneOf": [
-            { "type": "string" },
-            { "type": "integer" }
-          ],
+          "oneOf": [{ "type": "string" }, { "type": "integer" }],
           "description": "Distribution feed year (e.g., '2024' or 2024). Accepts both strings and integers. Can be overridden with the AVOCADO_DISTRO_RELEASE environment variable. Previously named 'version' which is still accepted as an alias.",
           "examples": ["2024", 2024]
         },
