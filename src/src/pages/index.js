@@ -34,7 +34,7 @@ function HomepageHeader() {
             <p className={clsx('hero__subtitle', styles.hero_subtitle)}>
               Launch faster with field-proven infrastructure and Avocado OS.
             </p>
-            <div className={styles.heroSearch}>
+            {/* <div className={styles.heroSearch}>
               <div className={styles.searchPlaceholder}>
                 <input
                   type="text"
@@ -46,7 +46,7 @@ function HomepageHeader() {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
           <div className={styles.heroRight}>
             <div className={styles.videoPlaceholder}>
