@@ -180,11 +180,11 @@ const config = {
           },
         ],
       },
-      algolia: {
-        appId: 'EBXD92WI74',
-        apiKey: '94b06f9c5bf6a24e020120fa38784bca',
-        indexName: 'peridio',
-      },
+      // algolia: {
+      //   appId: 'EBXD92WI74',
+      //   apiKey: '94b06f9c5bf6a24e020120fa38784bca',
+      //   indexName: 'peridio',
+      // },
       zoom: {
         selector: '.markdown > img',
         background: {
