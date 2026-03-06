@@ -1,13 +1,16 @@
 ```
 Provision a runtime
 
-Usage: avocado runtime provision [OPTIONS] --runtime <RUNTIME>
+Usage: avocado runtime provision [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]  Runtime name
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
-  -r, --runtime <RUNTIME>               Runtime name to provision
+  -r, --runtime <RUNTIME>               Runtime name (alias for positional NAME)
   -t, --target <TARGET>                 Target architecture
       --profile <PROVISION_PROFILE>     Provision profile to use
       --env <ENV>                       Environment variables to pass to the provision process

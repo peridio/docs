@@ -1,11 +1,14 @@
 ```
 List dependencies for extensions
 
-Usage: avocado ext deps [OPTIONS]
+Usage: avocado ext deps [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]  Extension name (if not provided, shows all extensions)
 
 Options:
   -C, --config <CONFIG>        Path to avocado.yaml configuration file [default: avocado.yaml]
-  -e, --extension <EXTENSION>  Name of the extension to show dependencies for (if not provided, shows all extensions)
+  -e, --extension <EXTENSION>  Extension name (alias for positional NAME)
   -t, --target <TARGET>        Target architecture
       --runs-on <USER@HOST>    Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)

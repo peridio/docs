@@ -34,6 +34,7 @@ These guides are also linked from the getting started meta guide:
 - **[Sideload an update](./sideloading.md)** — Push updates directly from your development machine
 - **[Cross-compilation](./cross-compilation.md)** — Cross-compile applications and kernel modules with the SDK
 - **[Custom kernel](./custom-kernel.md)** — Bring your own Linux kernel to an Avocado runtime
+- **[Seeding the var partition](./seeding-var-partition.md)** — Pre-populate persistent storage with files and Docker image caches at build time
 
 ## Getting help
 

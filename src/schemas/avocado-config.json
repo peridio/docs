@@ -121,7 +121,13 @@
       "title": "CLI version requirement",
       "$ref": "#/definitions/versionRequirement",
       "description": "Minimum Avocado CLI version required to use this configuration. If the running CLI version does not satisfy this requirement, an error is raised with an upgrade prompt. Uses semver requirement syntax.",
-      "examples": [">=0.26.0", "^0.26"]
+      "examples": [">=0.27.0", "^0.27"]
+    },
+    "source_date_epoch": {
+      "title": "Source date epoch",
+      "type": "integer",
+      "description": "Fixed Unix timestamp used for reproducible extension image builds. When set, this value is passed to mksquashfs and mkfs.erofs as the source timestamp, ensuring identical byte output for the same inputs regardless of build time. Defaults to 0 when not specified.",
+      "examples": [1700000000, 0]
     },
     "signing_keys": {
       "title": "Signing keys",
@@ -355,9 +361,70 @@
         "signing": {
           "$ref": "#/definitions/signingConfig",
           "description": "Signing configuration for this runtime."
+        },
+        "var_files": {
+          "title": "Var files",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/varFileMapping"
+          },
+          "description": "Static files to copy from the source directory onto the var partition at build time. Each entry maps a source path (relative to src_dir) to a destination path on the var partition. Directories are copied recursively. The dest for a directory should end with /.",
+          "examples": [
+            [
+              { "source": "config/app-defaults/", "dest": "lib/myapp/" },
+              { "source": "certs/device.pem", "dest": "lib/myapp/certs/device.pem" }
+            ]
+          ]
+        },
+        "kernel": {
+          "title": "Kernel configuration",
+          "type": "object",
+          "description": "Kernel configuration for this runtime. Use 'package' to install a pre-built kernel RPM, or 'compile'+'install' to cross-compile and install a custom kernel.",
+          "properties": {
+            "package": {
+              "type": "string",
+              "description": "Pre-built kernel RPM package name to install.",
+              "examples": ["avocado-kernel-jetson"]
+            },
+            "version": {
+              "type": "string",
+              "description": "Version constraint for the kernel package.",
+              "examples": ["*", "6.1.0"]
+            },
+            "compile": {
+              "type": "string",
+              "description": "References an sdk.compile section to use for kernel compilation.",
+              "examples": ["my-kernel"]
+            },
+            "install": {
+              "type": "string",
+              "description": "Path to install script relative to src_dir, run after kernel compilation with $AVOCADO_RUNTIME_BUILD_DIR set.",
+              "examples": ["kernel-install.sh"]
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": true
+    },
+    "varFileMapping": {
+      "title": "Var file mapping",
+      "type": "object",
+      "description": "A source-to-destination mapping for seeding static files onto the var partition at build time.",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Source path relative to src_dir. Can be a file or directory. Directories are copied recursively.",
+          "examples": ["config/app-defaults/", "certs/device.pem"]
+        },
+        "dest": {
+          "type": "string",
+          "description": "Destination path relative to the var partition root (e.g., 'lib/myapp/' maps to '/var/lib/myapp/' on the device). End with / for directories.",
+          "examples": ["lib/myapp/", "lib/myapp/certs/device.pem"]
+        }
+      },
+      "required": ["source", "dest"],
+      "additionalProperties": false
     },
     "signingConfig": {
       "title": "Signing configuration",
@@ -507,6 +574,133 @@
               "gcc": ">=9.0"
             }
           ]
+        },
+        "package": {
+          "title": "Package configuration",
+          "$ref": "#/definitions/packageConfig",
+          "description": "RPM packaging metadata. When present, 'avocado sdk package <section>' can produce one or more architecture-specific RPMs from this compile section's output."
+        }
+      },
+      "additionalProperties": false
+    },
+    "packageConfig": {
+      "title": "Package configuration",
+      "type": "object",
+      "description": "RPM packaging metadata for a compiled SDK section. Enables 'avocado sdk package' to produce an installable RPM.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "RPM package name. Defaults to the compile section name if not specified.",
+          "examples": ["my-lib", "avocado-wifi-driver"]
+        },
+        "version": {
+          "type": "string",
+          "description": "Package version in semver format. Required.",
+          "examples": ["1.2.3", "0.1.0"]
+        },
+        "release": {
+          "type": "string",
+          "description": "RPM release field. Defaults to '1'.",
+          "default": "1",
+          "examples": ["1", "2"]
+        },
+        "install": {
+          "type": "string",
+          "description": "Path to install script relative to src_dir. The script is called with $DESTDIR set to a staging directory; files staged there are packaged into the RPM. Required.",
+          "examples": ["pkg-install.sh", "scripts/install.sh"]
+        },
+        "summary": {
+          "type": "string",
+          "description": "One-line summary of the package.",
+          "examples": ["My shared library"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Full description of the package.",
+          "examples": ["A cross-compiled shared library for the target."]
+        },
+        "license": {
+          "type": "string",
+          "description": "SPDX license identifier.",
+          "examples": ["MIT", "Apache-2.0", "GPL-2.0-only"]
+        },
+        "arch": {
+          "type": "string",
+          "description": "Override the target architecture in the RPM spec. Defaults to the build target architecture.",
+          "examples": ["aarch64", "x86_64", "noarch"]
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Vendor name for the package.",
+          "examples": ["Acme Corp"]
+        },
+        "url": {
+          "type": "string",
+          "description": "URL for the package homepage or source repository.",
+          "examples": ["https://example.com/my-lib"]
+        },
+        "requires": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "RPM Requires dependencies for the package.",
+          "examples": [["openssl >= 3.0", "glibc"]]
+        },
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Glob patterns for files to include in the main package (relative to $DESTDIR). Defaults to all files if not specified.",
+          "examples": [["usr/bin/**", "usr/lib/*.so*"]]
+        },
+        "split": {
+          "type": "object",
+          "description": "Optional sub-package splitting (Yocto-style). Each key is a sub-package name; each value is a splitPackageConfig.",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "$ref": "#/definitions/splitPackageConfig"
+            }
+          },
+          "additionalProperties": false,
+          "examples": [
+            {
+              "my-lib-dev": {
+                "summary": "Development headers for my-lib",
+                "files": ["usr/include/**", "usr/lib/*.a"]
+              }
+            }
+          ]
+        }
+      },
+      "required": ["version", "install"],
+      "additionalProperties": false
+    },
+    "splitPackageConfig": {
+      "title": "Split package configuration",
+      "type": "object",
+      "description": "Configuration for a sub-package produced by splitting a compiled SDK section.",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "description": "One-line summary for the sub-package.",
+          "examples": ["Development headers for my-lib"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Full description for the sub-package."
+        },
+        "license": {
+          "type": "string",
+          "description": "SPDX license identifier for the sub-package."
+        },
+        "requires": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "RPM Requires for the sub-package."
+        },
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Glob patterns for files to include in this sub-package (relative to $DESTDIR). Files claimed by a sub-package are excluded from the main package.",
+          "examples": [["usr/include/**", "usr/lib/*.a"]]
         }
       },
       "additionalProperties": false
@@ -647,9 +841,59 @@
               }
             }
           ]
+        },
+        "filesystem": {
+          "title": "Filesystem format",
+          "type": "string",
+          "enum": ["squashfs", "erofs"],
+          "default": "squashfs",
+          "description": "Filesystem format for the extension's .raw image. 'squashfs' (default) is widely supported. 'erofs' offers better random-access read performance and smaller images for some workloads.",
+          "examples": ["squashfs", "erofs"]
+        },
+        "var_files": {
+          "title": "Var files",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Glob patterns for files within the extension sysroot that belong on the var partition rather than the read-only .raw image. Files matching these patterns are excluded from the image during 'avocado ext image'. Paths are relative to the sysroot root.",
+          "examples": [["var/lib/docker/**", "var/lib/containerd/**"], ["var/lib/pgsql/**"]]
+        },
+        "docker_images": {
+          "title": "Docker images",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/dockerImageRef"
+          },
+          "description": "Docker images to pull and pre-cache onto the var partition at build time. When declared, the CLI automatically adds --privileged to the SDK container args and runs a temporary dockerd to pull images for the target architecture. Requires var_files to exclude var/lib/docker/** from the .raw image.",
+          "examples": [
+            [
+              { "image": "docker.io/library/redis", "tag": "7-alpine" },
+              { "image": "docker.io/library/nginx", "tag": "1.25" }
+            ]
+          ]
         }
       },
       "additionalProperties": true
+    },
+    "dockerImageRef": {
+      "title": "Docker image reference",
+      "type": "object",
+      "description": "A Docker image reference for var partition priming.",
+      "properties": {
+        "image": {
+          "type": "string",
+          "description": "Full image reference including registry and repository (e.g., docker.io/library/redis).",
+          "examples": ["docker.io/library/redis", "ghcr.io/myorg/myapp"]
+        },
+        "tag": {
+          "type": "string",
+          "description": "Image tag.",
+          "examples": ["7-alpine", "latest", "1.25"]
+        }
+      },
+      "required": ["image", "tag"],
+      "additionalProperties": false
     },
     "userConfig": {
       "type": "object",

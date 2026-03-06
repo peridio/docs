@@ -1,13 +1,16 @@
 ```
 Install dependencies into runtime installroots
 
-Usage: avocado runtime install [OPTIONS]
+Usage: avocado runtime install [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]  Runtime name (if not provided, installs for all runtimes)
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
-  -r, --runtime <RUNTIME>               Runtime name to install dependencies for (if not provided, installs for all runtimes)
+  -r, --runtime <RUNTIME>               Runtime name (alias for positional NAME)
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands

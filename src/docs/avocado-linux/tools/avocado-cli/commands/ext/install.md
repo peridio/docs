@@ -1,13 +1,16 @@
 ```
 Install dependencies into extension sysroots
 
-Usage: avocado ext install [OPTIONS]
+Usage: avocado ext install [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]  Extension name (if not provided, installs all extensions)
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
-  -e, --extension <EXTENSION>           Name of the extension to install (if not provided, installs all extensions)
+  -e, --extension <EXTENSION>           Extension name (alias for positional NAME)
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands

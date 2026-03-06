@@ -1,12 +1,15 @@
 ```
 Build sysext and/or confext extensions from configuration
 
-Usage: avocado ext build [OPTIONS] --extension <EXTENSION>
+Usage: avocado ext build [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]  Extension name (must be defined in config)
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -e, --extension <EXTENSION>           Name of the extension to build (must be defined in config)
+  -e, --extension <EXTENSION>           Extension name (alias for positional NAME)
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands

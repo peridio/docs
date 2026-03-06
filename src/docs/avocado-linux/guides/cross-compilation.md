@@ -410,8 +410,102 @@ The SDK environment provides these variables for cross-compilation scripts:
 
 The SDK handles container orchestration, package installation, and environment setup. Your scripts focus on the actual build logic for your specific codebase.
 
+## Packaging
+
+Once you have cross-compiled output, you can distribute it as RPM packages using `avocado sdk package` and `avocado ext package`.
+
+### Packaging a compile section as an RPM
+
+Add a `package` block to any `sdk.compile` section and run `avocado sdk package`:
+
+```yaml
+sdk:
+  compile:
+    my-lib:
+      compile: compile.sh
+      packages:
+        openssl-dev: '*'
+      package:
+        version: '1.2.3'
+        install: pkg-install.sh # stages files to $DESTDIR
+        summary: 'My cross-compiled library'
+        license: MIT
+        # Optional: split into sub-packages (Yocto-style)
+        split:
+          my-lib-dev:
+            summary: 'Development headers for my-lib'
+            files:
+              - usr/include/**
+              - usr/lib/*.a
+```
+
+The install script stages files relative to `$DESTDIR`:
+
+```bash
+#!/usr/bin/env bash
+set -e
+
+install -D -m 755 output/libmy.so "$DESTDIR/usr/lib/libmy.so.1.2.3"
+ln -sf libmy.so.1.2.3 "$DESTDIR/usr/lib/libmy.so"
+install -D -m 644 include/my.h "$DESTDIR/usr/include/my.h"
+```
+
+Build and package:
+
+```bash
+avocado sdk compile my-lib          # compile first
+avocado sdk package my-lib --out ./dist/  # create RPM(s) in ./dist/
+```
+
+The `--out` flag copies the resulting RPM(s) to the host. Without it, RPMs stay inside the SDK container.
+
+See [`avocado sdk package`](../tools/avocado-cli/commands/sdk/package) for the complete field reference including sub-package splitting.
+
+### Packaging an extension as an RPM
+
+Use `avocado ext package` to bundle an extension's source directory as an RPM that can be published to a package feed and consumed as a remote extension:
+
+```bash
+avocado ext package my-app --out ./dist/
+```
+
+This packages the extension's **source directory** (the directory containing `avocado.yaml`) into an RPM. A warning is printed reminding you to verify the build first — run `avocado ext build my-app` before packaging.
+
+The extension config must include RPM metadata under a `package` block:
+
+```yaml
+# extensions/my-app/avocado.yaml
+extensions:
+  my-app:
+    version: '1.0.0'
+    types: [sysext]
+    packages:
+      my-lib: '*'
+    package:
+      version: '1.0.0'
+      release: '1'
+      summary: 'My application extension'
+      license: MIT
+```
+
+### Publishing and consuming packaged extensions
+
+Once packaged, publish the RPM to your package feed. Other projects can then consume the extension as a remote package source:
+
+```yaml
+extensions:
+  my-app:
+    version: '1.0.0'
+    source:
+      type: package
+      version: '1.0.0'
+```
+
+This completes the round-trip: cross-compile → package → publish → consume as a managed remote extension.
+
 ## What's next
 
 - [Extensions reference](../references/extensions) for complete configuration options
+- [Seeding the var partition](./seeding-var-partition) for pre-populating persistent storage at build time
 - [Hardware-in-the-loop development](./hardware-in-the-loop) for testing compiled code on live devices
 - [Sideloading updates](./sideloading) for deploying extensions to devices

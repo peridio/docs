@@ -647,23 +647,105 @@ For detailed information on mutability modes and write routing behavior, see the
 - [systemd-sysext mutability modes](https://www.freedesktop.org/software/systemd/man/latest/systemd-sysext.html#--mutable=BOOL)
 - [sysext.conf configuration](https://www.freedesktop.org/software/systemd/man/latest/sysext.conf.html)
 
+## Var partition integration
+
+Extension images are read-only. Any paths that must be writable at runtime — Docker image layers, database files, application caches — belong on the **var partition** (`/var`), not inside the `.raw` image.
+
+### `var_files`
+
+Declare glob patterns for paths inside the extension sysroot that belong on the var partition. During `avocado ext image`, files matching these patterns are **excluded** from the read-only `.raw` image:
+
+```yaml
+extensions:
+  my-app:
+    version: '1.0.0'
+    types: [sysext]
+    packages:
+      moby-engine: '*'
+    var_files:
+      - var/lib/docker/**
+      - var/lib/containerd/**
+```
+
+Paths are relative to the sysroot root (not `/`). The matching files will not appear in the squashfs/erofs image; they are expected to live on the writable var partition at runtime.
+
+Use this for any directory your application creates on first start and writes to at runtime (Docker storage, PostgreSQL data dirs, application caches).
+
+### `docker_images`
+
+Declare Docker images to pull and pre-cache onto the var partition at build time. This allows containers to start on first boot without internet access:
+
+```yaml
+extensions:
+  my-app:
+    version: '1.0.0'
+    types: [sysext]
+    var_files:
+      - var/lib/docker/**
+    docker_images:
+      - image: docker.io/library/redis
+        tag: '7-alpine'
+      - image: docker.io/library/nginx
+        tag: '1.25'
+```
+
+Each entry requires:
+
+| Field   | Description                              |
+| ------- | ---------------------------------------- |
+| `image` | Full image reference (registry/org/name) |
+| `tag`   | Image tag                                |
+
+When any extension in a runtime declares `docker_images`, `avocado build` automatically:
+
+1. Adds `--privileged` to the SDK container args (required for Docker-in-Docker)
+2. Starts a temporary `dockerd` inside the SDK container with its data-root pointing at the var partition staging area
+3. Pulls each image for the target architecture
+4. Shuts down `dockerd` and includes the populated data-root in the var partition image
+
+The `var_files` exclusion and `docker_images` priming work together: `var_files` ensures the Docker storage directories are not baked into the read-only extension image, while `docker_images` seeds those same directories with pre-pulled content on the var partition.
+
+See the [seeding the var partition guide](../guides/seeding-var-partition) for a complete walkthrough.
+
+### `filesystem`
+
+Choose the filesystem format for the extension's `.raw` image:
+
+```yaml
+extensions:
+  my-app:
+    filesystem: erofs # or 'squashfs' (default)
+```
+
+| Value      | Description                                                                  |
+| ---------- | ---------------------------------------------------------------------------- |
+| `squashfs` | Default. Widely supported, good general-purpose compression.                 |
+| `erofs`    | Better random-access read performance and smaller images for some workloads. |
+
+Both formats produce a `.raw` image file that is handled identically by the runtime.
+
+---
+
 ## Configuration reference
 
-| Property          | Type   | Description                                       |
-| ----------------- | ------ | ------------------------------------------------- |
-| `types`           | array  | Extension types: `sysext`, `confext`              |
-| `version`         | string | Semantic version                                  |
-| `scopes`          | array  | Activation scopes: `system`, `initrd`             |
-| `overlay`         | string | Path to overlay directory (relative to `src_dir`) |
-| `packages`        | object | Runtime package dependencies                      |
-| `sdk.packages`    | object | Build-time SDK dependencies                       |
-| `enable_services` | array  | Systemd services to enable                        |
-| `modprobe`        | array  | Kernel modules to load                            |
-| `on_merge`        | array  | Commands to run after merge                       |
-| `on_unmerge`      | array  | Commands to run before unmerge                    |
-| `users`           | object | Real user account configuration                   |
-| `groups`          | object | Group configuration                               |
-| `source`          | object | External source (package, git, path)              |
+| Property          | Type   | Description                                                    |
+| ----------------- | ------ | -------------------------------------------------------------- |
+| `types`           | array  | Extension types: `sysext`, `confext`                           |
+| `version`         | string | Semantic version                                               |
+| `filesystem`      | string | Image format: `squashfs` (default) or `erofs`                  |
+| `scopes`          | array  | Activation scopes: `system`, `initrd`                          |
+| `overlay`         | string | Path to overlay directory (relative to `src_dir`)              |
+| `packages`        | object | Runtime package dependencies                                   |
+| `sdk.packages`    | object | Build-time SDK dependencies                                    |
+| `enable_services` | array  | Systemd services to enable                                     |
+| `modprobe`        | array  | Kernel modules to load                                         |
+| `on_merge`        | array  | Commands to run after merge                                    |
+| `on_unmerge`      | array  | Commands to run before unmerge                                 |
+| `users`           | object | Real user account configuration                                |
+| `groups`          | object | Group configuration                                            |
+| `source`          | object | External source (package, git, path)                           |
+| `var_files`       | array  | Glob patterns excluded from `.raw` image (var partition paths) |
+| `docker_images`   | array  | Docker images to pre-cache on var partition at build time      |
 
 ## Development workflow
 

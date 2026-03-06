@@ -1,7 +1,10 @@
 ```
 Check out files from extension sysroot to source directory
 
-Usage: avocado ext checkout [OPTIONS] --extension <EXTENSION> --ext-path <EXT_PATH> --src-path <SRC_PATH>
+Usage: avocado ext checkout [OPTIONS] [NAME] --ext-path <EXT_PATH> --src-path <SRC_PATH>
+
+Arguments:
+  [NAME]  Extension name
 
 Options:
   -C, --config <CONFIG>
@@ -9,7 +12,7 @@ Options:
   -v, --verbose
           Enable verbose output
   -e, --extension <EXTENSION>
-          Name of the extension to checkout from
+          Extension name (alias for positional NAME)
   -t, --target <TARGET>
           Target architecture
       --ext-path <EXT_PATH>
