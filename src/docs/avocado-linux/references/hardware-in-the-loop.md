@@ -107,12 +107,14 @@ HITL enables advanced debugging workflows:
 
 ### Multi-Extension Development
 
-```toml
-# avocado.toml
-[runtime.dev.dependencies]
-frontend-app = { ext = "frontend-app" }
-backend-api = { ext = "backend-api" }
-database = { ext = "database" }
+```yaml
+# avocado.yaml
+runtimes:
+  dev:
+    extensions:
+      - frontend-app
+      - backend-api
+      - database
 ```
 
 ### Service hot reloading

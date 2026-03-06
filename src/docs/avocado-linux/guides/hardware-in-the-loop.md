@@ -18,42 +18,45 @@ Run all commands in this guide from the root of your Avocado project on your hos
 
 Edit your Avocado config to include a new extension. In this example, it will be called `my-app`.
 
-```toml title="avocado.toml"
-default_target = "qemux86-64"
-supported_targets = ["qemux86-64"]
+```yaml title="avocado.yaml"
+default_target: qemux86-64
+supported_targets:
+  - qemux86-64
 
-[runtime.dev]
-target = "qemux86-64"
+runtimes:
+  dev:
+    extensions:
+      - avocado-dev
+      # highlight-added-start
+      - my-app
+      # highlight-added-end
+    packages:
+      avocado-img-bootfiles: '*'
+      avocado-img-rootfs: '*'
+      avocado-img-initramfs: '*'
 
-[runtime.dev.dependencies]
-avocado-img-bootfiles = "*"
-avocado-img-rootfs = "*"
-avocado-img-initramfs = "*"
-avocado-dev = { ext = "avocado-dev" }
-# highlight-added-start
-my-app = { ext = "my-app" }
-# highlight-added-end
+sdk:
+  image: avocadolinux/sdk:apollo-edge
+  packages:
+    nativesdk-qemu-system-x86-64: '*'
 
-[sdk]
-image = "avocadolinux/sdk:apollo-edge"
-
-[sdk.dependencies]
-nativesdk-qemu-system-x86-64 = "*"
-
-[ext.avocado-dev]
-types = ["sysext", "confext"]
-
-[ext.avocado-dev.dependencies]
-avocado-hitl = "*"
-
-[ext.avocado-dev.sdk.dependencies]
-nativesdk-avocado-hitl = "*"
-
-# highlight-added-start
-[ext.my-app]
-types = ["sysext", "confext"]
-version = "1.0.0"
-# highlight-added-end
+extensions:
+  avocado-dev:
+    types:
+      - sysext
+      - confext
+    packages:
+      avocado-hitl: '*'
+    sdk:
+      packages:
+        nativesdk-avocado-hitl: '*'
+  # highlight-added-start
+  my-app:
+    types:
+      - sysext
+      - confext
+    version: '1.0.0'
+  # highlight-added-end
 ```
 
 ### Building the extension

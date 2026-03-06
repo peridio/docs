@@ -82,7 +82,7 @@ The repository contains a full example configuration in the `runtimes/dev` direc
 cd avocado-ext/runtimes/dev
 ```
 
-This directory contains a comprehensive `avocado.toml` configuration file that supports multiple targets including Raspberry Pi 4, with all necessary dependencies and extensions pre-configured.
+This directory contains a comprehensive `avocado.yaml` configuration file that supports multiple targets including Raspberry Pi 4, with all necessary dependencies and extensions pre-configured.
 
 ## Set target architecture
 
@@ -97,12 +97,12 @@ export AVOCADO_TARGET="raspberrypi4"
 This environment variable tells all subsequent Avocado commands to use the Raspberry Pi 4 target configuration.
 
 :::info
-Run all subsequent commands in this guide from the `runtimes/dev` directory — the directory that contains the multi-target Avocado config (`avocado.toml`).
+Run all subsequent commands in this guide from the `runtimes/dev` directory — the directory that contains the multi-target Avocado config (`avocado.yaml`).
 :::
 
 ## Pre-configured setup
 
-The example repository comes with a pre-configured `avocado.toml` that includes user credentials and all necessary settings for multiple hardware targets. The configuration is already set up with an empty root password for development convenience, so no additional credential setup is required.
+The example repository comes with a pre-configured `avocado.yaml` that includes user credentials and all necessary settings for multiple hardware targets. The configuration is already set up with an empty root password for development convenience, so no additional credential setup is required.
 
 ## Install dependencies
 
@@ -358,18 +358,20 @@ You should see an error indicating the command is not found.
 
 #### Add new dependency
 
-In your development workstation's `runtimes/dev` directory, edit the `avocado.toml` file to add `tcpdump` to the application dependencies.
+In your development workstation's `runtimes/dev` directory, edit the `avocado.yaml` file to add `tcpdump` to the application dependencies.
 
-Find the `[ext.app.dependencies]` section and add the `tcpdump` line:
+Find the `extensions.app.packages` section and add the `tcpdump` line:
 
-```toml title="avocado.toml"
+```yaml title="avocado.yaml"
 ... snip ...
 
-[ext.app.dependencies]
-i2c-tools = "*"
-# highlight-added-start
-tcpdump = "*"
-# highlight-added-end
+extensions:
+  app:
+    packages:
+      i2c-tools: '*'
+      # highlight-added-start
+      tcpdump: '*'
+      # highlight-added-end
 
 ... snip ...
 ```
@@ -414,13 +416,13 @@ avocado deploy -r dev -d avocado-raspberrypi4
 
 The sideloading process will:
 
-1. **Transfer updated images** to the device over the network
-2. **Install the new system components**
-3. **Automatically reboot** the device to activate changes
+1. **Collect artifact hashes** from the build output and generate signed TUF metadata
+2. **Start a local HTTP server** to serve the update repository
+3. **SSH into the device** and run `avocadoctl runtime add` pointing at the hosted repository, causing the device to pull and apply the updated images
 
 ### Verify the update
 
-After the device finishes rebooting (this may take a minute or two), SSH back into the device and verify that `tcpdump` is now available:
+After the update completes, SSH back into the device and verify that `tcpdump` is now available:
 
 ```bash
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@avocado-raspberrypi4
@@ -433,7 +435,7 @@ You should now see the `tcpdump` version information, confirming that the packag
 
 This sideloading workflow enables rapid iteration during development:
 
-1. **Make changes** to your `avocado.toml` configuration
+1. **Make changes** to your `avocado.yaml` configuration
 2. **Rebuild** with `avocado install -f && avocado build && avocado provision -r dev`
 3. **Deploy** with `avocado deploy -r dev -d <device-address>`
 4. **Test** your changes on the live device

@@ -87,8 +87,10 @@ extensions:
         tag: '7-alpine'
       - image: docker.io/library/nginx
         tag: '1.25'
-    var_files:
-      - var/lib/docker/**
+
+  sdk:
+    packages:
+      nativesdk-docker: '*'
 ```
 
 Each `docker_images` entry requires:

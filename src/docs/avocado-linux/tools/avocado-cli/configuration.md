@@ -18,7 +18,7 @@ The Avocado CLI can be configured three ways, from highest to lowest precedence:
 
 The Avocado CLI uses a single configuration file to define your project settings, build configurations, dependencies, and provisioning profiles.
 
-By default, the CLI looks for a configuration file named `avocado.toml` in the current working directory. This can be configured to use a different file name or location.
+By default, the CLI looks for a configuration file named `avocado.yaml` in the current working directory. This can be configured to use a different file name or location.
 
 For detailed information about all available configuration options, see the [config schema](./config-schema.mdx).
 

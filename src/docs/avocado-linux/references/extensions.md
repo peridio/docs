@@ -618,15 +618,16 @@ Extensions with only `initrd` scope are not merged in userspace. Extensions with
 
 Mutability determines whether merged extension hierarchies are writable or read-only once activated. In immutable mode, extension content is overlaid as read-only. In mutable mode, writes are redirected through write routing directories or temporarily allowed depending on the mode.
 
-Mutability is configured through the `avocadoctl` configuration file (`/etc/avocadoctl/config.toml`) with separate settings for sysext and confext:
+Mutability is configured through the `avocadoctl` configuration file (`/etc/avocadoctl/config.yaml`) with separate settings for sysext and confext:
 
-```toml
-[avocado.ext]
-# System extensions mutability (/usr, /opt)
-sysext_mutable = "ephemeral"
+```yaml
+avocado:
+  ext:
+    # System extensions mutability (/usr, /opt)
+    sysext_mutable: ephemeral
 
-# Configuration extensions mutability (/etc)
-confext_mutable = "ephemeral"
+    # Configuration extensions mutability (/etc)
+    confext_mutable: ephemeral
 ```
 
 Available mutability modes:
