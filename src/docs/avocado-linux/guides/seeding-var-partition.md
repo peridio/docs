@@ -79,9 +79,6 @@ Add a `docker_images` list to any extension in the runtime:
 extensions:
   my-app:
     version: '1.0.0'
-    types: [sysext]
-    packages:
-      moby-engine: '*'
     docker_images:
       - image: docker.io/library/redis
         tag: '7-alpine'
@@ -143,16 +140,7 @@ extensions:
   my-app:
     version: '1.0.0'
     types: [sysext]
-    packages:
-      moby-engine: '*'
-      moby-containerd: '*'
-    enable_services:
-      - docker.service
-    # Files to exclude from the read-only .raw image
-    var_files:
-      - var/lib/docker/**
-      - var/lib/containerd/**
-    # Docker images to pull into the var partition at build time
+
     docker_images:
       - image: docker.io/library/redis
         tag: '7-alpine'
