@@ -11,12 +11,12 @@ avocadoctl status [OPTIONS]
 
 ### Global Options
 
-| Option | Description |
-|---|---|
-| `-c`, `--config <PATH>` | Path to configuration file |
-| `-v`, `--verbose` | Enable verbose output |
-| `-o`, `--output <FORMAT>` | Output format |
-| `--socket <ADDRESS>` | Varlink socket address |
+| Option                    | Description                |
+| ------------------------- | -------------------------- |
+| `-c`, `--config <PATH>`   | Path to configuration file |
+| `-v`, `--verbose`         | Enable verbose output      |
+| `-o`, `--output <FORMAT>` | Output format              |
+| `--socket <ADDRESS>`      | Varlink socket address     |
 
 ### Examples
 

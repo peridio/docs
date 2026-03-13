@@ -11,8 +11,8 @@ avocadoctl ext unmerge [OPTIONS]
 
 ### Options
 
-| Option | Description |
-|---|---|
+| Option      | Description                                             |
+| ----------- | ------------------------------------------------------- |
 | `--unmount` | Also unmount all persistent loops for `.raw` extensions |
 
 ### Examples

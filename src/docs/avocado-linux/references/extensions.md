@@ -781,13 +781,13 @@ You can add additional packages to customize the base system and configure the i
 
 ```yaml
 rootfs:
-  filesystem: erofs.lz4   # default
+  filesystem: erofs.lz4 # default
   packages:
     avocado-pkg-rootfs: '*'
     my-custom-base-package: '*'
 
 initramfs:
-  filesystem: cpio.zst   # default
+  filesystem: cpio.zst # default
   packages:
     avocado-pkg-initramfs: '*'
 ```
@@ -811,19 +811,19 @@ The `filesystem` property controls the image format and compression algorithm us
 
 **Rootfs formats:**
 
-| Value       | Description                                                      |
-| ----------- | ---------------------------------------------------------------- |
+| Value       | Description                                                                    |
+| ----------- | ------------------------------------------------------------------------------ |
 | `erofs.lz4` | EROFS with LZ4 compression (default). Fast decompression, good for boot speed. |
-| `erofs.zst` | EROFS with Zstandard compression. Better compression ratio.      |
+| `erofs.zst` | EROFS with Zstandard compression. Better compression ratio.                    |
 
 **Initramfs formats:**
 
-| Value      | Description                                                      |
-| ---------- | ---------------------------------------------------------------- |
+| Value      | Description                                                                     |
+| ---------- | ------------------------------------------------------------------------------- |
 | `cpio.zst` | CPIO archive with Zstandard compression (default). Requires `CONFIG_RD_ZSTD=y`. |
-| `cpio.lz4` | CPIO archive with LZ4 compression. Requires `CONFIG_RD_LZ4=y`.  |
-| `cpio.gz`  | CPIO archive with gzip compression. Widest kernel support.       |
-| `cpio`     | Uncompressed CPIO archive. No kernel decompression config required. |
+| `cpio.lz4` | CPIO archive with LZ4 compression. Requires `CONFIG_RD_LZ4=y`.                  |
+| `cpio.gz`  | CPIO archive with gzip compression. Widest kernel support.                      |
+| `cpio`     | Uncompressed CPIO archive. No kernel decompression config required.             |
 
 :::tip
 Compressed formats require kernel decompression support built in. For example, `erofs.zst` requires `CONFIG_EROFS_FS_ZIP_ZSTD=y` and `cpio.zst` requires `CONFIG_RD_ZSTD=y`. BSP extensions can set the filesystem format per-platform to match the kernel's decompression capabilities. See the [custom kernel guide](../guides/custom-kernel) for kernel configuration details.

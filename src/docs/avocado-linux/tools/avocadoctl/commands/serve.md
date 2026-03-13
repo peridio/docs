@@ -11,8 +11,8 @@ avocadoctl serve [OPTIONS]
 
 ### Options
 
-| Option | Description |
-|---|---|
+| Option                | Description                                                  |
+| --------------------- | ------------------------------------------------------------ |
 | `--address <ADDRESS>` | Listen address. Default: `unix:/run/avocado/avocadoctl.sock` |
 
 ### Examples

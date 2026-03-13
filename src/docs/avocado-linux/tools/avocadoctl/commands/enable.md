@@ -11,14 +11,14 @@ avocadoctl enable [OPTIONS] <EXTENSION>...
 
 ### Options
 
-| Option | Description |
-|---|---|
+| Option                   | Description                                                 |
+| ------------------------ | ----------------------------------------------------------- |
 | `--os-release <VERSION>` | OS release version. Defaults to the current system version. |
 
 ### Arguments
 
-| Argument | Description |
-|---|---|
+| Argument       | Description                                      |
+| -------------- | ------------------------------------------------ |
 | `EXTENSION...` | One or more extension names to enable (required) |
 
 ### Examples

@@ -34,11 +34,11 @@ Mount one or more extension directories from an NFS server. The server must expo
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `serverIp` | `string` | IP address of the NFS server |
-| `serverPort` | `?string` | NFS server port. Defaults to the standard NFS port if omitted. |
-| `extensions` | `[]string` | List of extension names to mount from the server |
+| Field        | Type       | Description                                                    |
+| ------------ | ---------- | -------------------------------------------------------------- |
+| `serverIp`   | `string`   | IP address of the NFS server                                   |
+| `serverPort` | `?string`  | NFS server port. Defaults to the standard NFS port if omitted. |
+| `extensions` | `[]string` | List of extension names to mount from the server               |
 
 **Returns:** Empty on success.
 
@@ -89,8 +89,8 @@ Unmount previously mounted NFS extensions.
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field        | Type       | Description                        |
+| ------------ | ---------- | ---------------------------------- |
 | `extensions` | `[]string` | List of extension names to unmount |
 
 **Returns:** Empty on success.
@@ -139,10 +139,10 @@ varlink_object_unref(parameters);
 
 Returned when an NFS mount operation fails for a specific extension.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter   | Type     | Description                             |
+| ----------- | -------- | --------------------------------------- |
 | `extension` | `string` | The extension name that failed to mount |
-| `reason` | `string` | Human-readable failure description |
+| `reason`    | `string` | Human-readable failure description      |
 
 **Trigger:** NFS server unreachable, export not found, permission denied, or filesystem error during mount.
 
@@ -150,9 +150,9 @@ Returned when an NFS mount operation fails for a specific extension.
 
 Returned when an NFS unmount operation fails for a specific extension.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter   | Type     | Description                               |
+| ----------- | -------- | ----------------------------------------- |
 | `extension` | `string` | The extension name that failed to unmount |
-| `reason` | `string` | Human-readable failure description |
+| `reason`    | `string` | Human-readable failure description        |
 
 **Trigger:** Extension not currently mounted, busy filesystem preventing unmount, or filesystem error during unmount.

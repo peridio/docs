@@ -70,35 +70,35 @@ error UpdateFailed (reason: string)
 
 Basic identity of a runtime.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | `string` | Runtime name |
+| Field     | Type     | Description            |
+| --------- | -------- | ---------------------- |
+| `name`    | `string` | Runtime name           |
 | `version` | `string` | Runtime version string |
 
 ### ManifestExtension
 
 An extension declared in the runtime manifest.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | `string` | Extension name |
-| `version` | `string` | Extension version string |
+| Field     | Type      | Description                                                   |
+| --------- | --------- | ------------------------------------------------------------- |
+| `name`    | `string`  | Extension name                                                |
+| `version` | `string`  | Extension version string                                      |
 | `imageId` | `?string` | Image digest used to verify the downloaded extension artifact |
 
 ### Runtime
 
 Full description of a runtime, including its manifest metadata, constituent extensions, and activation state.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | `string` | Unique runtime identifier (hex digest) |
-| `manifestVersion` | `int` | Manifest schema version |
-| `builtAt` | `string` | ISO 8601 timestamp of when the runtime was built |
-| `runtime` | `RuntimeInfo` | Runtime name and version |
-| `extensions` | `[]ManifestExtension` | Extensions included in this runtime |
-| `active` | `bool` | `true` if this is the currently active runtime |
-| `osBuildId` | `?string` | OS image build identifier. A change in this value triggers an OS update on activation. |
-| `initramfsBuildId` | `?string` | Initramfs build identifier |
+| Field              | Type                  | Description                                                                            |
+| ------------------ | --------------------- | -------------------------------------------------------------------------------------- |
+| `id`               | `string`              | Unique runtime identifier (hex digest)                                                 |
+| `manifestVersion`  | `int`                 | Manifest schema version                                                                |
+| `builtAt`          | `string`              | ISO 8601 timestamp of when the runtime was built                                       |
+| `runtime`          | `RuntimeInfo`         | Runtime name and version                                                               |
+| `extensions`       | `[]ManifestExtension` | Extensions included in this runtime                                                    |
+| `active`           | `bool`                | `true` if this is the currently active runtime                                         |
+| `osBuildId`        | `?string`             | OS image build identifier. A change in this value triggers an OS update on activation. |
+| `initramfsBuildId` | `?string`             | Initramfs build identifier                                                             |
 
 ## Methods
 
@@ -112,8 +112,8 @@ List all available runtimes, both staged and active.
 
 **Returns:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field      | Type        | Description                 |
+| ---------- | ----------- | --------------------------- |
 | `runtimes` | `[]Runtime` | Array of all known runtimes |
 
 **C Example:**
@@ -165,18 +165,18 @@ Stage a new runtime by downloading its manifest and artifacts from a TUF reposit
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `url` | `string` | TUF repository URL |
-| `authToken` | `?string` | Optional bearer token for authenticated endpoints |
+| Field          | Type      | Description                                                                                                  |
+| -------------- | --------- | ------------------------------------------------------------------------------------------------------------ |
+| `url`          | `string`  | TUF repository URL                                                                                           |
+| `authToken`    | `?string` | Optional bearer token for authenticated endpoints                                                            |
 | `artifactsUrl` | `?string` | Optional separate URL for artifact downloads. If omitted, artifacts are fetched from the TUF repository URL. |
 
 **Returns (streaming):**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `message` | `string` | Progress message |
-| `done` | `bool` | `true` on the final reply |
+| Field     | Type       | Description                                                |
+| --------- | ---------- | ---------------------------------------------------------- |
+| `message` | `string`   | Progress message                                           |
+| `done`    | `bool`     | `true` on the final reply                                  |
 | `runtime` | `?Runtime` | The staged runtime object, present only in the final reply |
 
 **Streaming:** Yes. Call with `VARLINK_CALL_MORE` to receive download and verification progress.
@@ -242,16 +242,16 @@ Stage a new runtime from a local manifest file. The manifest references artifact
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field          | Type     | Description                              |
+| -------------- | -------- | ---------------------------------------- |
 | `manifestPath` | `string` | Absolute path to the local manifest file |
 
 **Returns (streaming):**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `message` | `string` | Progress message |
-| `done` | `bool` | `true` on the final reply |
+| Field     | Type       | Description                                                |
+| --------- | ---------- | ---------------------------------------------------------- |
+| `message` | `string`   | Progress message                                           |
+| `done`    | `bool`     | `true` on the final reply                                  |
 | `runtime` | `?Runtime` | The staged runtime object, present only in the final reply |
 
 **Streaming:** Yes. Call with `VARLINK_CALL_MORE` to receive progress updates.
@@ -309,9 +309,9 @@ Remove a staged runtime by its ID or an unambiguous ID prefix.
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | `string` | Runtime ID or unique prefix |
+| Field | Type     | Description                 |
+| ----- | -------- | --------------------------- |
+| `id`  | `string` | Runtime ID or unique prefix |
 
 **Returns:** Empty on success.
 
@@ -362,17 +362,17 @@ Activate a staged runtime. If the runtime's `osBuildId` differs from the current
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | `string` | Runtime ID or unique prefix |
+| Field | Type     | Description                 |
+| ----- | -------- | --------------------------- |
+| `id`  | `string` | Runtime ID or unique prefix |
 
 **Returns (streaming):**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `message` | `string` | Progress message (e.g., writing OS image, enabling extensions) |
-| `done` | `bool` | `true` on the final reply |
-| `runtime` | `?Runtime` | The activated runtime object, present only in the final reply |
+| Field     | Type       | Description                                                    |
+| --------- | ---------- | -------------------------------------------------------------- |
+| `message` | `string`   | Progress message (e.g., writing OS image, enabling extensions) |
+| `done`    | `bool`     | `true` on the final reply                                      |
+| `runtime` | `?Runtime` | The activated runtime object, present only in the final reply  |
 
 **Streaming:** Yes. Call with `VARLINK_CALL_MORE` to receive progress updates. This is especially useful during OS updates, which may take significant time.
 
@@ -440,14 +440,14 @@ Inspect the details of a specific runtime. If `id` is omitted, the currently act
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | `?string` | Runtime ID or unique prefix. Omit to inspect the active runtime. |
+| Field | Type      | Description                                                      |
+| ----- | --------- | ---------------------------------------------------------------- |
+| `id`  | `?string` | Runtime ID or unique prefix. Omit to inspect the active runtime. |
 
 **Returns:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field     | Type      | Description             |
+| --------- | --------- | ----------------------- |
 | `runtime` | `Runtime` | The full runtime object |
 
 **C Example:**
@@ -519,9 +519,9 @@ varlink_object_unref(parameters);
 
 Returned when the specified runtime ID does not match any known runtime.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | The ID that was not found |
+| Parameter | Type     | Description               |
+| --------- | -------- | ------------------------- |
+| `id`      | `string` | The ID that was not found |
 
 **Trigger:** Passing an unknown ID to `Remove`, `Activate`, or `Inspect`.
 
@@ -529,9 +529,9 @@ Returned when the specified runtime ID does not match any known runtime.
 
 Returned when the specified ID prefix matches more than one runtime. The response includes the list of matching candidate IDs so the caller can present them to the user or retry with a longer prefix.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | The ambiguous prefix |
+| Parameter    | Type       | Description                       |
+| ------------ | ---------- | --------------------------------- |
+| `id`         | `string`   | The ambiguous prefix              |
 | `candidates` | `[]string` | Full IDs of all matching runtimes |
 
 **Trigger:** Passing a short ID prefix to `Remove`, `Activate`, or `Inspect` that matches multiple runtimes.
@@ -548,9 +548,9 @@ Returned when attempting to remove the currently active runtime. The active runt
 
 Returned when staging a new runtime fails during download, verification, or installation.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `reason` | `string` | Human-readable failure description |
+| Parameter | Type     | Description                        |
+| --------- | -------- | ---------------------------------- |
+| `reason`  | `string` | Human-readable failure description |
 
 **Trigger:** TUF metadata verification failure, artifact download error, disk space exhaustion, or corrupt manifest in `AddFromUrl` or `AddFromManifest`.
 
@@ -558,8 +558,8 @@ Returned when staging a new runtime fails during download, verification, or inst
 
 Returned when the OS update triggered by `Activate` fails.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `reason` | `string` | Human-readable failure description |
+| Parameter | Type     | Description                        |
+| --------- | -------- | ---------------------------------- |
+| `reason`  | `string` | Human-readable failure description |
 
 **Trigger:** OS image write failure, bootloader configuration error, or extension enable/merge failure during `Activate`.

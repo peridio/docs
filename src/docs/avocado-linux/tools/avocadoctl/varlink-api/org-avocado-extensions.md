@@ -70,28 +70,28 @@ error CommandFailed (command: string, message: string)
 
 Represents an extension image or directory available on the filesystem.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | `string` | Extension name (derived from the image filename) |
-| `version` | `?string` | Extension version, if embedded in the image metadata |
-| `path` | `string` | Absolute path to the extension image or directory |
-| `isSysext` | `bool` | `true` if this is a system extension (overlays `/usr`) |
-| `isConfext` | `bool` | `true` if this is a configuration extension (overlays `/etc`) |
-| `isDirectory` | `bool` | `true` if the extension is a plain directory rather than an image file |
+| Field         | Type      | Description                                                            |
+| ------------- | --------- | ---------------------------------------------------------------------- |
+| `name`        | `string`  | Extension name (derived from the image filename)                       |
+| `version`     | `?string` | Extension version, if embedded in the image metadata                   |
+| `path`        | `string`  | Absolute path to the extension image or directory                      |
+| `isSysext`    | `bool`    | `true` if this is a system extension (overlays `/usr`)                 |
+| `isConfext`   | `bool`    | `true` if this is a configuration extension (overlays `/etc`)          |
+| `isDirectory` | `bool`    | `true` if the extension is a plain directory rather than an image file |
 
 ### ExtensionStatus
 
 Represents the current status of an extension, including whether it is merged into the running system.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | `string` | Extension name |
-| `version` | `?string` | Extension version |
-| `isSysext` | `bool` | `true` if this is a system extension |
-| `isConfext` | `bool` | `true` if this is a configuration extension |
-| `isMerged` | `bool` | `true` if the extension is currently merged into the root filesystem |
-| `origin` | `?string` | Origin identifier (e.g., the TUF target name) |
-| `imageId` | `?string` | Image digest or build identifier |
+| Field       | Type      | Description                                                          |
+| ----------- | --------- | -------------------------------------------------------------------- |
+| `name`      | `string`  | Extension name                                                       |
+| `version`   | `?string` | Extension version                                                    |
+| `isSysext`  | `bool`    | `true` if this is a system extension                                 |
+| `isConfext` | `bool`    | `true` if this is a configuration extension                          |
+| `isMerged`  | `bool`    | `true` if the extension is currently merged into the root filesystem |
+| `origin`    | `?string` | Origin identifier (e.g., the TUF target name)                        |
+| `imageId`   | `?string` | Image digest or build identifier                                     |
 
 ## Methods
 
@@ -105,8 +105,8 @@ List all available extensions in the extensions directory.
 
 **Returns:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field        | Type          | Description                          |
+| ------------ | ------------- | ------------------------------------ |
 | `extensions` | `[]Extension` | Array of available extension objects |
 
 **C Example:**
@@ -156,10 +156,10 @@ Merge all enabled extensions into the running system using `systemd-sysext` and 
 
 **Returns (streaming):**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field     | Type     | Description                                  |
+| --------- | -------- | -------------------------------------------- |
 | `message` | `string` | Progress message describing the current step |
-| `done` | `bool` | `true` on the final reply |
+| `done`    | `bool`   | `true` on the final reply                    |
 
 **Streaming:** Yes. Call with `VARLINK_CALL_MORE` to receive progress updates.
 
@@ -206,16 +206,16 @@ Unmerge extensions from the running system.
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field     | Type    | Description                                                        |
+| --------- | ------- | ------------------------------------------------------------------ |
 | `unmount` | `?bool` | If `true`, also unmount the extension images. Defaults to `false`. |
 
 **Returns (streaming):**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field     | Type     | Description                                  |
+| --------- | -------- | -------------------------------------------- |
 | `message` | `string` | Progress message describing the current step |
-| `done` | `bool` | `true` on the final reply |
+| `done`    | `bool`   | `true` on the final reply                    |
 
 **Streaming:** Yes. Call with `VARLINK_CALL_MORE` to receive progress updates.
 
@@ -265,10 +265,10 @@ Unmerge and then re-merge all enabled extensions. This is equivalent to calling 
 
 **Returns (streaming):**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field     | Type     | Description                                  |
+| --------- | -------- | -------------------------------------------- |
 | `message` | `string` | Progress message describing the current step |
-| `done` | `bool` | `true` on the final reply |
+| `done`    | `bool`   | `true` on the final reply                    |
 
 **Streaming:** Yes. Call with `VARLINK_CALL_MORE` to receive progress updates.
 
@@ -315,17 +315,17 @@ Enable one or more extensions for a specific OS release version. Enabling an ext
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `extensions` | `[]string` | List of extension names to enable |
-| `osRelease` | `?string` | Target OS release version. If omitted, the current OS release is used. |
+| Field        | Type       | Description                                                            |
+| ------------ | ---------- | ---------------------------------------------------------------------- |
+| `extensions` | `[]string` | List of extension names to enable                                      |
+| `osRelease`  | `?string`  | Target OS release version. If omitted, the current OS release is used. |
 
 **Returns:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `enabled` | `int` | Number of extensions successfully enabled |
-| `failed` | `int` | Number of extensions that failed to enable |
+| Field     | Type  | Description                                |
+| --------- | ----- | ------------------------------------------ |
+| `enabled` | `int` | Number of extensions successfully enabled  |
+| `failed`  | `int` | Number of extensions that failed to enable |
 
 **C Example:**
 
@@ -371,18 +371,18 @@ Disable extensions for a specific OS release version. Disabled extensions will n
 
 **Parameters:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `extensions` | `?[]string` | List of extension names to disable. Omit if using `all`. |
-| `all` | `?bool` | If `true`, disable all extensions. |
-| `osRelease` | `?string` | Target OS release version. If omitted, the current OS release is used. |
+| Field        | Type        | Description                                                            |
+| ------------ | ----------- | ---------------------------------------------------------------------- |
+| `extensions` | `?[]string` | List of extension names to disable. Omit if using `all`.               |
+| `all`        | `?bool`     | If `true`, disable all extensions.                                     |
+| `osRelease`  | `?string`   | Target OS release version. If omitted, the current OS release is used. |
 
 **Returns:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `disabled` | `int` | Number of extensions successfully disabled |
-| `failed` | `int` | Number of extensions that failed to disable |
+| Field      | Type  | Description                                 |
+| ---------- | ----- | ------------------------------------------- |
+| `disabled` | `int` | Number of extensions successfully disabled  |
+| `failed`   | `int` | Number of extensions that failed to disable |
 
 **C Example:**
 
@@ -420,8 +420,8 @@ Show the current merge status of all extensions.
 
 **Returns:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field        | Type                | Description                       |
+| ------------ | ------------------- | --------------------------------- |
 | `extensions` | `[]ExtensionStatus` | Array of extension status objects |
 
 **C Example:**
@@ -465,9 +465,9 @@ varlink_object_unref(parameters);
 
 Returned when a referenced extension name does not exist in the extensions directory.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `name` | `string` | The extension name that was not found |
+| Parameter | Type     | Description                           |
+| --------- | -------- | ------------------------------------- |
+| `name`    | `string` | The extension name that was not found |
 
 **Trigger:** Passing an unknown extension name to `Enable` or `Disable`.
 
@@ -475,9 +475,9 @@ Returned when a referenced extension name does not exist in the extensions direc
 
 Returned when the merge operation fails.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `reason` | `string` | Human-readable description of the failure |
+| Parameter | Type     | Description                               |
+| --------- | -------- | ----------------------------------------- |
+| `reason`  | `string` | Human-readable description of the failure |
 
 **Trigger:** `systemd-sysext merge` or `systemd-confext merge` exits with a non-zero status, or an internal error occurs during the merge process.
 
@@ -485,9 +485,9 @@ Returned when the merge operation fails.
 
 Returned when the unmerge operation fails.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `reason` | `string` | Human-readable description of the failure |
+| Parameter | Type     | Description                               |
+| --------- | -------- | ----------------------------------------- |
+| `reason`  | `string` | Human-readable description of the failure |
 
 **Trigger:** `systemd-sysext unmerge` or `systemd-confext unmerge` exits with a non-zero status.
 
@@ -495,8 +495,8 @@ Returned when the unmerge operation fails.
 
 Returned when the extension configuration is invalid.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter | Type     | Description                              |
+| --------- | -------- | ---------------------------------------- |
 | `message` | `string` | Description of the configuration problem |
 
 **Trigger:** Malformed extension metadata, missing required fields, or incompatible OS release versions.
@@ -505,9 +505,9 @@ Returned when the extension configuration is invalid.
 
 Returned when an external command executed during extension management fails.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `command` | `string` | The command that failed |
+| Parameter | Type     | Description                               |
+| --------- | -------- | ----------------------------------------- |
+| `command` | `string` | The command that failed                   |
 | `message` | `string` | The command's error output or exit status |
 
 **Trigger:** Any subprocess invoked during merge, unmerge, enable, or disable operations exits with a non-zero status.

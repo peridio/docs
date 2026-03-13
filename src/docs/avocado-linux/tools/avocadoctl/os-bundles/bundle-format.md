@@ -61,17 +61,17 @@ The `bundle.json` file inside an `.aos` archive describes how to apply the OS up
 
 ## Top-Level Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `format_version` | integer | Yes | Bundle format version. |
-| `platform` | string | Yes | Target hardware platform identifier. |
-| `architecture` | string | Yes | Target CPU architecture (e.g., `aarch64`, `x86-64`). |
-| `os_build_id` | string | Yes | Identifier for this rootfs build version. |
-| `initramfs_build_id` | string | No | Identifier for this initramfs build version. |
-| `update` | object | No | Update configuration. Omit if the bundle is metadata-only. |
-| `verify` | object | No | Post-update verification for the rootfs. |
-| `verify_initramfs` | object | No | Post-update verification for the initramfs. |
-| `layout` | object | No | Partition layout for MBR-based targets. |
+| Field                | Type    | Required | Description                                                |
+| -------------------- | ------- | -------- | ---------------------------------------------------------- |
+| `format_version`     | integer | Yes      | Bundle format version.                                     |
+| `platform`           | string  | Yes      | Target hardware platform identifier.                       |
+| `architecture`       | string  | Yes      | Target CPU architecture (e.g., `aarch64`, `x86-64`).       |
+| `os_build_id`        | string  | Yes      | Identifier for this rootfs build version.                  |
+| `initramfs_build_id` | string  | No       | Identifier for this initramfs build version.               |
+| `update`             | object  | No       | Update configuration. Omit if the bundle is metadata-only. |
+| `verify`             | object  | No       | Post-update verification for the rootfs.                   |
+| `verify_initramfs`   | object  | No       | Post-update verification for the initramfs.                |
+| `layout`             | object  | No       | Partition layout for MBR-based targets.                    |
 
 ## Slot Detection Strategies
 
@@ -88,8 +88,8 @@ Reads a U-Boot environment variable to determine the active slot.
 }
 ```
 
-| Field | Description |
-|-------|-------------|
+| Field | Description                                                                                |
+| ----- | ------------------------------------------------------------------------------------------ |
 | `var` | U-Boot environment variable name containing the active slot identifier (e.g., "a" or "b"). |
 
 ### command
@@ -103,8 +103,8 @@ Runs a shell command whose stdout output is the active slot identifier.
 }
 ```
 
-| Field | Description |
-|-------|-------------|
+| Field     | Description                                                                                           |
+| --------- | ----------------------------------------------------------------------------------------------------- |
 | `command` | Array of command and arguments to execute. The command's stdout is trimmed and used as the slot name. |
 
 ### sdboot-efi
@@ -121,22 +121,22 @@ Uses systemd-boot EFI partition mappings. Maps slot names to EFI partition devic
 }
 ```
 
-| Field | Description |
-|-------|-------------|
+| Field        | Description                                      |
+| ------------ | ------------------------------------------------ |
 | `partitions` | Map of slot names to EFI partition device paths. |
 
 ## Artifacts
 
 Each entry in `update.artifacts` describes a file to write to a partition.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `name` | string | Yes | Artifact name (e.g., "rootfs", "initramfs"). |
-| `file` | string | Yes | Filename within the `.aos` archive. |
-| `sha256` | string | Yes | Expected SHA-256 hash of the artifact file. |
-| `size` | integer | No | File size in bytes. |
-| `slot_targets` | object | Yes | Map of slot names to target partitions. |
-| `slot_targets.{slot}.partition` | string | Yes | Partition identifier (PARTLABEL for GPT, name for MBR layout). |
+| Field                           | Type    | Required | Description                                                    |
+| ------------------------------- | ------- | -------- | -------------------------------------------------------------- |
+| `name`                          | string  | Yes      | Artifact name (e.g., "rootfs", "initramfs").                   |
+| `file`                          | string  | Yes      | Filename within the `.aos` archive.                            |
+| `sha256`                        | string  | Yes      | Expected SHA-256 hash of the artifact file.                    |
+| `size`                          | integer | No       | File size in bytes.                                            |
+| `slot_targets`                  | object  | Yes      | Map of slot names to target partitions.                        |
+| `slot_targets.{slot}.partition` | string  | Yes      | Partition identifier (PARTLABEL for GPT, name for MBR layout). |
 
 ## Activation Actions
 
@@ -195,24 +195,24 @@ The optional `update.rollback` array has the same format as `activate`. These ac
 
 The `verify` and `verify_initramfs` objects define how to confirm the OS update was successful after reboot.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `type` | string | Verification type (e.g., `os-release`). |
-| `field` | string | Field name to check in `/etc/os-release`. |
+| Field      | Type   | Description                                                             |
+| ---------- | ------ | ----------------------------------------------------------------------- |
+| `type`     | string | Verification type (e.g., `os-release`).                                 |
+| `field`    | string | Field name to check in `/etc/os-release`.                               |
 | `expected` | string | Expected value. Update is considered successful when the field matches. |
 
 ## Partition Layout (MBR)
 
 The optional `layout` object is used on MBR-based systems where partitions are identified by offset rather than label.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `device` | string | Block device path (e.g., `/dev/mmcblk0`). |
-| `block_size` | integer | Optional block size in bytes. |
-| `partitions` | array | List of partition definitions. |
-| `partitions[].name` | string | Partition name for referencing in `slot_targets`. |
-| `partitions[].offset` | number | Partition start offset. |
-| `partitions[].offset_unit` | string | Unit for offset (e.g., `MiB`, `sectors`). |
-| `partitions[].size` | number | Partition size. |
-| `partitions[].size_unit` | string | Unit for size (e.g., `MiB`, `GiB`). |
-| `partitions[].expand` | string | Optional expand strategy. |
+| Field                      | Type    | Description                                       |
+| -------------------------- | ------- | ------------------------------------------------- |
+| `device`                   | string  | Block device path (e.g., `/dev/mmcblk0`).         |
+| `block_size`               | integer | Optional block size in bytes.                     |
+| `partitions`               | array   | List of partition definitions.                    |
+| `partitions[].name`        | string  | Partition name for referencing in `slot_targets`. |
+| `partitions[].offset`      | number  | Partition start offset.                           |
+| `partitions[].offset_unit` | string  | Unit for offset (e.g., `MiB`, `sectors`).         |
+| `partitions[].size`        | number  | Partition size.                                   |
+| `partitions[].size_unit`   | string  | Unit for size (e.g., `MiB`, `GiB`).               |
+| `partitions[].expand`      | string  | Optional expand strategy.                         |

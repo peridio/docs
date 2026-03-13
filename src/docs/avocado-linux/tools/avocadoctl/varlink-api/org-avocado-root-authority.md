@@ -41,21 +41,21 @@ error ParseFailed (reason: string)
 
 A single signing key trusted by this device.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `keyId` | `string` | Hex-encoded key identifier (SHA-256 of the canonical key representation) |
-| `keyType` | `string` | Key algorithm (e.g., `ed25519`, `ecdsa-sha2-nistp256`, `rsa`) |
-| `roles` | `[]string` | TUF roles this key is authorized for (e.g., `root`, `targets`, `snapshot`, `timestamp`) |
+| Field     | Type       | Description                                                                             |
+| --------- | ---------- | --------------------------------------------------------------------------------------- |
+| `keyId`   | `string`   | Hex-encoded key identifier (SHA-256 of the canonical key representation)                |
+| `keyType` | `string`   | Key algorithm (e.g., `ed25519`, `ecdsa-sha2-nistp256`, `rsa`)                           |
+| `roles`   | `[]string` | TUF roles this key is authorized for (e.g., `root`, `targets`, `snapshot`, `timestamp`) |
 
 ### RootAuthorityInfo
 
 The parsed contents of the TUF root metadata.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `version` | `int` | Root metadata version number. Increments on each root key rotation. |
-| `expires` | `string` | ISO 8601 expiration timestamp of the root metadata |
-| `keys` | `[]TrustedKey` | All trusted signing keys declared in the root metadata |
+| Field     | Type           | Description                                                         |
+| --------- | -------------- | ------------------------------------------------------------------- |
+| `version` | `int`          | Root metadata version number. Increments on each root key rotation. |
+| `expires` | `string`       | ISO 8601 expiration timestamp of the root metadata                  |
+| `keys`    | `[]TrustedKey` | All trusted signing keys declared in the root metadata              |
 
 ## Methods
 
@@ -69,8 +69,8 @@ Return the device's current trust anchor information. If no `root.json` has been
 
 **Returns:**
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field       | Type                 | Description                                                    |
+| ----------- | -------------------- | -------------------------------------------------------------- |
 | `authority` | `?RootAuthorityInfo` | Trust anchor information, or `null` if no root metadata exists |
 
 **C Example:**
@@ -163,8 +163,8 @@ Returned when no `root.json` file exists at `/var/lib/avocado/metadata/root.json
 
 Returned when `root.json` exists but cannot be parsed.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `reason` | `string` | Description of the parse error |
+| Parameter | Type     | Description                    |
+| --------- | -------- | ------------------------------ |
+| `reason`  | `string` | Description of the parse error |
 
 **Trigger:** Corrupt or malformed `root.json`, unsupported metadata version, or missing required fields in the root metadata file.

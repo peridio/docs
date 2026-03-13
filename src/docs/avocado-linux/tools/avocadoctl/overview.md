@@ -55,9 +55,9 @@ avocadoctl operates in a client-daemon model. The daemon listens on a Unix socke
 
 ## Global Flags
 
-| Flag | Description |
-|------|-------------|
-| `-c, --config <FILE>` | Path to custom config file (default: `/etc/avocado/avocadoctl.conf`) |
-| `-v, --verbose` | Enable verbose output |
-| `-o, --output <FORMAT>` | Output format: `table` (default) or `json` |
-| `--socket <ADDRESS>` | Varlink daemon socket address (overrides config) |
+| Flag                    | Description                                                          |
+| ----------------------- | -------------------------------------------------------------------- |
+| `-c, --config <FILE>`   | Path to custom config file (default: `/etc/avocado/avocadoctl.conf`) |
+| `-v, --verbose`         | Enable verbose output                                                |
+| `-o, --output <FORMAT>` | Output format: `table` (default) or `json`                           |
+| `--socket <ADDRESS>`    | Varlink daemon socket address (overrides config)                     |

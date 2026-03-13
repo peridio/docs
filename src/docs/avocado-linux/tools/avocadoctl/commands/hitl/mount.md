@@ -11,15 +11,15 @@ avocadoctl hitl mount [OPTIONS] -s <SERVER_IP> <EXTENSION>...
 
 ### Options
 
-| Option | Description |
-|---|---|
+| Option                          | Description                      |
+| ------------------------------- | -------------------------------- |
 | `-s`, `--server-ip <SERVER_IP>` | NFS server IP address (required) |
-| `-e`, `--server-port <PORT>` | NFS server port |
+| `-e`, `--server-port <PORT>`    | NFS server port                  |
 
 ### Arguments
 
-| Argument | Description |
-|---|---|
+| Argument       | Description                          |
+| -------------- | ------------------------------------ |
 | `EXTENSION...` | One or more extension names to mount |
 
 ### Examples

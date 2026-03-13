@@ -15,7 +15,7 @@ Options:
 
   -C, --config <CONFIG>
           Path to avocado.yaml configuration file
-          
+
           [default: avocado.yaml]
 
   -v, --verbose

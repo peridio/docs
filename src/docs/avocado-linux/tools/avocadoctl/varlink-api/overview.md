@@ -168,9 +168,9 @@ if (varlink_reply_is_error(reply, &error_name)) {
 
 ## Available Interfaces
 
-| Interface | Description |
-|-----------|-------------|
-| [org.avocado.Extensions](./org-avocado-extensions) | Extension management (merge, unmerge, enable, disable) |
-| [org.avocado.Runtimes](./org-avocado-runtimes) | Runtime lifecycle (add, activate, remove, inspect) |
-| [org.avocado.Hitl](./org-avocado-hitl) | Hardware-in-the-loop NFS testing |
-| [org.avocado.RootAuthority](./org-avocado-root-authority) | TUF trust anchor information |
+| Interface                                                 | Description                                            |
+| --------------------------------------------------------- | ------------------------------------------------------ |
+| [org.avocado.Extensions](./org-avocado-extensions)        | Extension management (merge, unmerge, enable, disable) |
+| [org.avocado.Runtimes](./org-avocado-runtimes)            | Runtime lifecycle (add, activate, remove, inspect)     |
+| [org.avocado.Hitl](./org-avocado-hitl)                    | Hardware-in-the-loop NFS testing                       |
+| [org.avocado.RootAuthority](./org-avocado-root-authority) | TUF trust anchor information                           |

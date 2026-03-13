@@ -11,9 +11,9 @@ avocadoctl runtime remove [OPTIONS] <ID>
 
 ### Arguments
 
-| Argument | Description |
-|---|---|
-| `ID` | Runtime ID or unambiguous prefix |
+| Argument | Description                      |
+| -------- | -------------------------------- |
+| `ID`     | Runtime ID or unambiguous prefix |
 
 ### Examples
 

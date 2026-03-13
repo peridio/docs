@@ -16,9 +16,9 @@ avocadoctl runtime add [OPTIONS] (--url <URL> | --manifest <PATH>)
 
 ### Options
 
-| Option | Description |
-|---|---|
-| `--url <URL>` | TUF repository URL |
+| Option              | Description                        |
+| ------------------- | ---------------------------------- |
+| `--url <URL>`       | TUF repository URL                 |
 | `--manifest <PATH>` | Path to local `manifest.json` file |
 
 ### Examples

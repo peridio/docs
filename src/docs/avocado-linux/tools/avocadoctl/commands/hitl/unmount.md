@@ -11,8 +11,8 @@ avocadoctl hitl unmount [OPTIONS] <EXTENSION>...
 
 ### Arguments
 
-| Argument | Description |
-|---|---|
+| Argument       | Description                            |
+| -------------- | -------------------------------------- |
 | `EXTENSION...` | One or more extension names to unmount |
 
 ### Examples

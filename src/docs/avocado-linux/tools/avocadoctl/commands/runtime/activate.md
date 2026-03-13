@@ -19,9 +19,9 @@ avocadoctl runtime activate [OPTIONS] <ID>
 
 ### Arguments
 
-| Argument | Description |
-|---|---|
-| `ID` | Runtime ID or unambiguous prefix |
+| Argument | Description                      |
+| -------- | -------------------------------- |
+| `ID`     | Runtime ID or unambiguous prefix |
 
 ### Examples
 

@@ -11,9 +11,9 @@ avocadoctl runtime inspect [OPTIONS] [ID]
 
 ### Arguments
 
-| Argument | Description |
-|---|---|
-| `ID` | Runtime ID or unambiguous prefix. Inspects the active runtime if omitted. |
+| Argument | Description                                                               |
+| -------- | ------------------------------------------------------------------------- |
+| `ID`     | Runtime ID or unambiguous prefix. Inspects the active runtime if omitted. |
 
 ### Examples
 

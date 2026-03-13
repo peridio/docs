@@ -11,15 +11,15 @@ avocadoctl disable [OPTIONS] [EXTENSION]...
 
 ### Options
 
-| Option | Description |
-|---|---|
+| Option                   | Description                                                 |
+| ------------------------ | ----------------------------------------------------------- |
 | `--os-release <VERSION>` | OS release version. Defaults to the current system version. |
-| `--all` | Disable all extensions |
+| `--all`                  | Disable all extensions                                      |
 
 ### Arguments
 
-| Argument | Description |
-|---|---|
+| Argument       | Description                                                              |
+| -------------- | ------------------------------------------------------------------------ |
 | `EXTENSION...` | One or more extension names to disable (required unless `--all` is used) |
 
 ### Examples
