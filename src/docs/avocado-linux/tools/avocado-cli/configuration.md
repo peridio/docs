@@ -43,6 +43,55 @@ The following environment variables are deprecated but still supported as fallba
 | `AVOCADO_SDK_REPO_URL`     | `AVOCADO_REPO_URL`   |
 | `AVOCADO_SDK_REPO_RELEASE` | `AVOCADO_RELEASEVER` |
 
+## Connect configuration
+
+The `connect` section stores defaults for Avocado Connect platform commands, so you don't need to pass `--org` and `--project` on every invocation. This section is typically populated by running `avocado connect init`.
+
+```yaml
+connect:
+  org: my-org-id
+  project: my-project-id
+  server_key: <hex-encoded TUF public key>
+```
+
+| Field        | Description                                                                                    |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| `org`        | Default organization ID for `avocado connect` commands                                         |
+| `project`    | Default project ID for `avocado connect` commands                                              |
+| `server_key` | Connect server's TUF signing public key (hex). Per-runtime `signing.server_key` overrides this |
+
+## Rootfs configuration
+
+The `rootfs` section configures the shared rootfs sysroot used by runtime builds.
+
+```yaml
+rootfs:
+  filesystem: erofs-lz4 # default
+  packages:
+    avocado-pkg-rootfs: '*'
+```
+
+| Field        | Default     | Description                                 |
+| ------------ | ----------- | ------------------------------------------- |
+| `filesystem` | `erofs-lz4` | Image format: `erofs-lz4` or `erofs-zst`    |
+| `packages`   |             | Map of package names to version constraints |
+
+## Initramfs configuration
+
+The `initramfs` section configures the initramfs sysroot used for the early boot environment.
+
+```yaml
+initramfs:
+  filesystem: cpio.zst # default
+  packages:
+    avocado-pkg-initramfs: '*'
+```
+
+| Field        | Default    | Description                                                |
+| ------------ | ---------- | ---------------------------------------------------------- |
+| `filesystem` | `cpio.zst` | Image format: `cpio`, `cpio.zst`, `cpio.lz4`, or `cpio.gz` |
+| `packages`   |            | Map of package names to version constraints                |
+
 ## Examples
 
 Example configuration files are available in the [Avocado OS repository](https://github.com/avocado-linux/avocado-os/tree/main/references). These examples demonstrate common configuration patterns for different use cases and target platforms.
