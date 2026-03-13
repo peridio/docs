@@ -217,9 +217,7 @@ runtimes:
       - config
       - app
     packages:
-      avocado-img-bootfiles: '*'
-      avocado-img-rootfs: '*'
-      avocado-img-initramfs: '*'
+      avocado-runtime: '*'
 
   prod:
     extensions:
@@ -227,12 +225,12 @@ runtimes:
       - config-prod
       - app
     packages:
-      avocado-img-bootfiles: '*'
-      avocado-img-rootfs: '*'
-      avocado-img-initramfs: '*'
+      avocado-runtime: '*'
 ```
 
 This pattern enables you to include development tools, debugging utilities, and verbose logging in `dev` while keeping `prod` minimal and secure.
+
+The rootfs and initramfs images are built automatically from their respective package sysroots during `avocado runtime build`. See [rootfs and initramfs](#rootfs-and-initramfs) for details.
 
 ## Building extensions
 
@@ -759,6 +757,103 @@ The extension system transforms embedded development from edit-compile-flash-boo
 Extensions integrate with Avocado's SDK for declarative package selection, custom toolchain extensions, and versioned dependencies across development environments.
 
 Learn how to leverage these capabilities with [hardware-in-the-loop development](../guides/hardware-in-the-loop).
+
+## Rootfs and initramfs
+
+Avocado builds the root filesystem (rootfs) and initial RAM filesystem (initramfs) images from RPM packages during `avocado runtime build`. These are top-level, config-wide concepts — all runtimes produced from a single `avocado.yaml` share the same rootfs and initramfs.
+
+### Configuration
+
+The `rootfs` and `initramfs` sections are optional top-level keys in `avocado.yaml`. When omitted, they default to their respective base packages:
+
+```yaml
+# Optional — these are the defaults if omitted
+rootfs:
+  packages:
+    avocado-pkg-rootfs: '*'
+
+initramfs:
+  packages:
+    avocado-pkg-initramfs: '*'
+```
+
+You can add additional packages to customize the base system and configure the image format:
+
+```yaml
+rootfs:
+  filesystem: erofs.lz4   # default
+  packages:
+    avocado-pkg-rootfs: '*'
+    my-custom-base-package: '*'
+
+initramfs:
+  filesystem: cpio.zst   # default
+  packages:
+    avocado-pkg-initramfs: '*'
+```
+
+The `filesystem` property can also be set by a BSP extension, allowing per-platform defaults. Include the `rootfs` or `initramfs` section from your BSP extension to inherit platform-specific filesystem formats:
+
+```yaml
+extensions:
+  avocado-bsp-{{ avocado.target }}:
+    source:
+      type: package
+      include:
+        - rootfs
+        - initramfs
+        - provision_profiles.*
+```
+
+### Filesystem formats
+
+The `filesystem` property controls the image format and compression algorithm used for the rootfs and initramfs images.
+
+**Rootfs formats:**
+
+| Value       | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `erofs.lz4` | EROFS with LZ4 compression (default). Fast decompression, good for boot speed. |
+| `erofs.zst` | EROFS with Zstandard compression. Better compression ratio.      |
+
+**Initramfs formats:**
+
+| Value      | Description                                                      |
+| ---------- | ---------------------------------------------------------------- |
+| `cpio.zst` | CPIO archive with Zstandard compression (default). Requires `CONFIG_RD_ZSTD=y`. |
+| `cpio.lz4` | CPIO archive with LZ4 compression. Requires `CONFIG_RD_LZ4=y`.  |
+| `cpio.gz`  | CPIO archive with gzip compression. Widest kernel support.       |
+| `cpio`     | Uncompressed CPIO archive. No kernel decompression config required. |
+
+:::tip
+Compressed formats require kernel decompression support built in. For example, `erofs.zst` requires `CONFIG_EROFS_FS_ZIP_ZSTD=y` and `cpio.zst` requires `CONFIG_RD_ZSTD=y`. BSP extensions can set the filesystem format per-platform to match the kernel's decompression capabilities. See the [custom kernel guide](../guides/custom-kernel) for kernel configuration details.
+:::
+
+### How it works
+
+During `avocado sdk install`, package sysroots are created for both rootfs and initramfs alongside the SDK. These sysroots contain the installed RPM packages and serve as the base for image creation:
+
+- `$AVOCADO_PREFIX/rootfs/` — rootfs sysroot (also used for extension RPM deduplication)
+- `$AVOCADO_PREFIX/initramfs/` — initramfs sysroot
+
+During `avocado runtime build`, these sysroots are copied to temporary work directories where post-processing is applied:
+
+1. **Usrmerge symlinks** — `/bin` → `usr/bin`, `/sbin` → `usr/sbin`, `/lib` → `usr/lib`
+2. **Systemd presets** — service units are enabled via preset files
+3. **Machine ID** — an empty `/etc/machine-id` is created for stateless systemd on read-only rootfs
+4. **Linker cache** — `ld.so.cache` is generated for the read-only rootfs
+5. **OS identity** — `AVOCADO_OS_BUILD_ID` is injected into `/usr/lib/os-release`
+6. **Image creation** — rootfs is packaged using the configured filesystem format (default: `erofs.lz4`), initramfs as cpio (default: `cpio.zst`)
+
+The shared sysroots are never modified — work copies ensure extensions continue to prime correctly from the rootfs RPM database.
+
+### Relationship to extensions
+
+Extensions overlay the rootfs at runtime via systemd-sysext and systemd-confext. The rootfs provides the immutable base system, while extensions deliver user-defined functionality. Extension RPM deduplication uses the rootfs sysroot's RPM database to avoid duplicating packages already present in the base system.
+
+### Cleaning
+
+`avocado sdk clean` removes both the rootfs and initramfs sysroots along with the SDK. Use `avocado runtime clean` to remove built images for a specific runtime.
 
 ## Security and composition
 

@@ -134,8 +134,7 @@ Installing:
 ... snip ...
 
 Installed:
-  avocado-img-bootfiles-1.0-r0.avocado_raspberrypi4   avocado-img-initramfs-1.0-r0.avocado_raspberrypi4
-  avocado-img-rootfs-1.0-r0.avocado_raspberrypi4
+  avocado-runtime-1.0-r0.avocado_raspberrypi4
 
 Complete!
 [SUCCESS] Successfully installed packages for runtime 'dev'

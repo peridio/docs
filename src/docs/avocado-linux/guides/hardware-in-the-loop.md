@@ -31,9 +31,7 @@ runtimes:
       - my-app
       # highlight-added-end
     packages:
-      avocado-img-bootfiles: '*'
-      avocado-img-rootfs: '*'
-      avocado-img-initramfs: '*'
+      avocado-runtime: '*'
 
 sdk:
   image: avocadolinux/sdk:apollo-edge
