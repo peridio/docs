@@ -10,7 +10,6 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -f, --force                           Force re-fetch even if already installed
-  -e, --extension <EXTENSION>           Extension name (alias for positional NAME)
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)

@@ -1,12 +1,14 @@
 ```
 Sign runtime images (shortcut for 'runtime sign')
 
-Usage: avocado sign [OPTIONS]
+Usage: avocado sign [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]  Runtime name to sign (if not provided, signs all runtimes with signing config)
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -r, --runtime <RUNTIME>               Runtime name to sign (if not provided, signs all runtimes with signing config)
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands

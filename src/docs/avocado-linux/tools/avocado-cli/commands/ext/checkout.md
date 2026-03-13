@@ -1,7 +1,7 @@
 ```
 Check out files from extension sysroot to source directory
 
-Usage: avocado ext checkout [OPTIONS] [NAME] --ext-path <EXT_PATH> --src-path <SRC_PATH>
+Usage: avocado ext checkout [OPTIONS] --ext-path <EXT_PATH> --src-path <SRC_PATH> [NAME]
 
 Arguments:
   [NAME]  Extension name
@@ -11,8 +11,6 @@ Options:
           Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose
           Enable verbose output
-  -e, --extension <EXTENSION>
-          Extension name (alias for positional NAME)
   -t, --target <TARGET>
           Target architecture
       --ext-path <EXT_PATH>

@@ -9,7 +9,6 @@ Arguments:
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -e, --extension <EXTENSION>           Extension name (alias for positional NAME)
   -t, --target <TARGET>                 Target architecture
       --out-dir <OUTPUT_DIR>            Output directory on host for the RPM package (relative or absolute path). If not specified, RPM stays in container at $AVOCADO_PREFIX/output/extensions
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime

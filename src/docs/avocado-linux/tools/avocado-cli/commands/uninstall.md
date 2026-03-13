@@ -4,15 +4,15 @@ Remove packages from an extension, runtime, or SDK and update avocado.yaml
 Usage: avocado uninstall [OPTIONS] <PACKAGES>...
 
 Arguments:
-  <PACKAGES>...                         Packages to remove
+  <PACKAGES>...  Packages to remove
 
 Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -e, --extension <EXTENSION>           Extension to remove packages from
   -r, --runtime <RUNTIME>               Runtime to remove packages from
       --sdk                             Remove packages from the SDK
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands

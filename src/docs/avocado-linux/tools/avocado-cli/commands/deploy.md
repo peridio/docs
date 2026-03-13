@@ -1,12 +1,14 @@
 ```
 Deploy a runtime to a device (shortcut for 'runtime deploy')
 
-Usage: avocado deploy [OPTIONS] --runtime <RUNTIME> --device <DEVICE>
+Usage: avocado deploy [OPTIONS] --device <DEVICE> [NAME]
+
+Arguments:
+  [NAME]  Runtime name (must be defined in config)
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -r, --runtime <RUNTIME>               Runtime name to deploy
   -t, --target <TARGET>                 Target architecture
   -d, --device <DEVICE>                 Device to deploy to as [user@]host[:port] (e.g. root@192.168.1.100:2222)
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
