@@ -1,13 +1,17 @@
 ```
-Create a new cohort
+Deploy a runtime to a cohort
 
-Usage: avocado connect cohorts create [OPTIONS] --name <NAME>
+Usage: avocado connect deploy [OPTIONS]
 
 Options:
       --org <ORG>                  Organization ID (or set connect.org in avocado.yaml)
       --project <PROJECT>          Project ID (or set connect.project in avocado.yaml)
-      --name <NAME>                Cohort name
-      --description <DESCRIPTION>  Cohort description
+      --runtime <RUNTIME>          Runtime ID (skip interactive prompt)
+      --cohort <COHORT>            Cohort ID (skip interactive prompt)
+      --name <NAME>                Deployment name (auto-generated if omitted)
+      --description <DESCRIPTION>  Description for the deployment
+  -t, --tag <TAG>                  Filter by tags — only deploy to devices with these tags (repeatable)
+      --activate                   Activate immediately (skip draft status)
   -C, --config <CONFIG>            Path to avocado.yaml configuration file [default: avocado.yaml]
       --profile <PROFILE>          Profile name (defaults to the active default profile)
       --runs-on <USER@HOST>        Run command on remote host using local volume via NFS (format: user@host)

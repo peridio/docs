@@ -15,7 +15,7 @@ Options:
 
   -C, --config <CONFIG>
           Path to avocado.yaml configuration file
-
+          
           [default: avocado.yaml]
 
   -v, --verbose
@@ -50,6 +50,9 @@ Options:
 
       --sdk-arch <ARCH>
           SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
 
   -h, --help
           Print help (see a summary with '-h')
