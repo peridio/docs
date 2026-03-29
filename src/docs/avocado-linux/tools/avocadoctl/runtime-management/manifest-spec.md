@@ -21,12 +21,14 @@ The runtime manifest is a JSON file that describes a complete runtime configurat
     {
       "name": "my-app",
       "version": "2.1.0",
-      "image_id": "f47ac10b-58cc-5372-8567-0e02b2c3d479"
+      "image_id": "f47ac10b-58cc-5372-8567-0e02b2c3d479",
+      "sha256": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
     },
     {
       "name": "my-config",
       "version": "1.0.0",
-      "image_id": "7c9e6679-7425-540b-8c36-e23b1e3b1e81"
+      "image_id": "7c9e6679-7425-540b-8c36-e23b1e3b1e81",
+      "sha256": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3"
     }
   ],
   "os_bundle": {
@@ -53,7 +55,8 @@ The runtime manifest is a JSON file that describes a complete runtime configurat
     {
       "name": "my-app",
       "version": "0.1.0",
-      "image_id": "f47ac10b-58cc-5372-8567-0e02b2c3d479"
+      "image_id": "f47ac10b-58cc-5372-8567-0e02b2c3d479",
+      "sha256": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
     }
   ]
 }
@@ -73,6 +76,8 @@ The runtime manifest is a JSON file that describes a complete runtime configurat
 | `extensions[].name`            | string  | Yes      | Extension name.                                                                                                  |
 | `extensions[].version`         | string  | Yes      | Extension version.                                                                                               |
 | `extensions[].image_id`        | string  | No       | UUIDv5 content-addressable image identifier. When present, the image file is `{image_id}.raw`.                   |
+| `extensions[].image_type`      | string  | No       | Image format. Absent for raw squashfs/erofs images, `"kab"` for KAB-wrapped images.                              |
+| `extensions[].sha256`          | string  | Yes      | SHA-256 hash of the extension image file for integrity verification.                                             |
 | `os_bundle`                    | object  | No       | Optional OS bundle reference for rootfs/initramfs updates.                                                       |
 | `os_bundle.image_id`           | string  | Yes\*    | UUIDv5 identifier for the OS bundle image file. \*Required if `os_bundle` is present.                            |
 | `os_bundle.sha256`             | string  | Yes\*    | SHA-256 hash of the OS bundle `.raw` file for integrity verification.                                            |
@@ -81,7 +86,7 @@ The runtime manifest is a JSON file that describes a complete runtime configurat
 
 ## Image ID Scheme
 
-Extension and OS bundle images use UUIDv5 content-addressable identifiers. IDs are generated deterministically from the fixed namespace UUID `7488fa35-6390-425b-bbbf-b156cfe1eed2` and the extension name/version. This provides deduplication: runtimes that share the same extension at the same version reference the same image file.
+Extension and OS bundle images use UUIDv5 content-addressable identifiers. IDs are generated deterministically from the fixed namespace UUID `7488fa35-6390-425b-bbbf-b156cfe1eed2` and the SHA-256 hash of the image contents. This provides deduplication: runtimes that share identical image content reference the same image file. The `sha256` field in each extension and OS bundle entry is used to verify image integrity before the runtime is applied.
 
 ## Image Resolution
 
