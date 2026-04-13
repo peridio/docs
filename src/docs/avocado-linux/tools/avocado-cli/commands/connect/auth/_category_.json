@@ -1,5 +1,6 @@
 {
   "label": "Auth",
   "collapsible": true,
-  "collapsed": true
+  "collapsed": true,
+  "className": "sidebar-monospace"
 }

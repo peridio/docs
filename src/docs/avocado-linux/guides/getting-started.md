@@ -20,7 +20,7 @@ Before you begin, consider what hardware you'll use. You can choose from any of 
 Start with QEMU for the fastest path to understanding core concepts. QEMU is a virtual target that runs on your development machine, so you can experience the full workflow without waiting for hardware.
 :::
 
-Whichever hardware you choose, it will have an overview of its features and specifications. For example, the [NVIDIA Jetson Orin Nano](/hardware/nvidia/jetson-orin-nano-developer-kit/provision) has a powerful GPU and high-speed connectivity, while the [Raspberry Pi 4 Model B](/hardware/raspberry-pi/raspberry-pi-4-model-b/provision) is a low-cost, versatile option.
+Whichever hardware you choose, it will have an overview of its features and specifications. For example, the [NVIDIA Jetson Orin Nano](/hardware/nvidia/jetson-orin-nano-developer-kit) has a powerful GPU and high-speed connectivity, while the [Raspberry Pi 4 Model B](/hardware/raspberry-pi/raspberry-pi-4-model-b) is a low-cost, versatile option.
 
 ### Evaluate with virtual device
 
@@ -30,14 +30,14 @@ In this case, continue to the [three step journey](#the-three-step-journey).
 
 Jump directly to hardware-specific guides. You'll follow the same core workflows, but on physical devices:
 
-- [NVIDIA Jetson Orin Nano](/hardware/nvidia/jetson-orin-nano-developer-kit/provision)
-- [Raspberry Pi 4 Model B](/hardware/raspberry-pi/raspberry-pi-4-model-b/provision)
-- [ICAM-540](/hardware/advantech/icam-540/provision)
-- [NXP i.MX8M](/hardware/nxp/imx8mp/provision)
-- [OnLogic FR201](/hardware/onlogic/fr201/provision)
-- [Seeed reTerminal](/hardware/seeed/reterminal/provision)
-- [QEMU ARM](/hardware/qemu/arm/provision)
-- [QEMU x86-64](/hardware/qemu/x86-64/provision)
+- [NVIDIA Jetson Orin Nano](/hardware/nvidia/jetson-orin-nano-developer-kit)
+- [Raspberry Pi 4 Model B](/hardware/raspberry-pi/raspberry-pi-4-model-b)
+- [ICAM-540](/hardware/advantech/icam-540)
+- [NXP i.MX8M](/hardware/nxp/imx8mp)
+- [OnLogic FR201](/hardware/onlogic/fr201)
+- [Seeed reTerminal](/hardware/seeed/reterminal)
+- [QEMU ARM](/getting-started/qemu)
+- [QEMU x86-64](/getting-started/qemu)
 
 **Custom hardware?** [Contact us](https://www.peridio.com/contact) for support with your specific platform.
 
@@ -56,7 +56,7 @@ Before starting, ensure you have:
 
 **Where to go:**
 
-- **QEMU users:** [Provision with QEMU](../../../hardware/qemu/x86-64/provision)
+- **QEMU users:** [Provision with QEMU](../../../getting-started/qemu)
 - **Hardware users:** Follow your device-specific provision guide
 
 **Key outcomes:**
@@ -120,4 +120,4 @@ The workflows are designed to build progressively – each guide assumes you've 
 2. Review the [community resources](/avocado-linux/community) for help options
 3. [Join our community](https://www.peridio.com/contact) for support
 
-Ready to begin? Start with [provisioning your first device](../../../hardware/qemu/x86-64/provision).
+Ready to begin? Start with [provisioning your first device](../../../getting-started/qemu).

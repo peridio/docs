@@ -23,8 +23,8 @@ Platform-specific provisioning instructions that follow the same core workflows.
 
 ### Physical hardware
 
-- **[NVIDIA Jetson Orin Nano](../../hardware/nvidia/jetson-orin-nano-developer-kit/provision)** — AI/ML edge platform with GPU acceleration
-- **[Raspberry Pi 4 Model B](../../hardware/raspberry-pi/raspberry-pi-4-model-b/provision)** — Popular single-board computer for IoT and learning
+- **[NVIDIA Jetson Orin Nano](/hardware/nvidia/jetson-orin-nano-developer-kit)** — AI/ML edge platform with GPU acceleration
+- **[Raspberry Pi 4 Model B](/hardware/raspberry-pi/raspberry-pi-4-model-b)** — Popular single-board computer for IoT and learning
 
 ## Individual workflow guides
 

@@ -1,5 +1,6 @@
 {
   "label": "Claim Tokens",
   "collapsible": true,
-  "collapsed": true
+  "collapsed": true,
+  "className": "sidebar-monospace"
 }

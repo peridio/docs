@@ -166,7 +166,7 @@ export default function Home() {
               </p>
               {/* Avocado OS Links Section */}
               <div className={styles.linkGrid}>
-                <Link to="/avocado-linux/overview" className={styles.externalLink}>
+                <Link to="/about" className={styles.externalLink}>
                   <svg
                     width="16"
                     height="16"
@@ -319,7 +319,7 @@ export default function Home() {
               </p>
               {/* Peridio Core Links Section */}
               <div className={styles.linkGrid}>
-                <Link to="/peridio-core/guides/getting-started" className={styles.externalLink}>
+                <Link to="https://console.peridio.com" className={styles.externalLink}>
                   <svg
                     width="16"
                     height="16"
@@ -335,7 +335,7 @@ export default function Home() {
                   Overview
                 </Link>
                 <Link
-                  to="/peridio-core/reference/device-management/overview"
+                  to="https://console.peridio.com"
                   className={styles.externalLink}
                 >
                   <svg
@@ -353,7 +353,7 @@ export default function Home() {
                   Device Management
                 </Link>
                 <Link
-                  to="/peridio-core/reference/remote-access/tunnels"
+                  to="https://console.peridio.com"
                   className={styles.externalLink}
                 >
                   <svg
@@ -371,7 +371,7 @@ export default function Home() {
                   Remote Access Tunnels
                 </Link>
                 <Link
-                  to="/peridio-core/guides/binary-management/introduction-to-binary-management"
+                  to="https://console.peridio.com"
                   className={styles.externalLink}
                 >
                   <svg
@@ -409,7 +409,7 @@ export default function Home() {
               </p>
               {/* Get Started Links Section */}
               <div className={styles.linkGrid}>
-                <Link to="/avocado-linux/guides/getting-started" className={styles.externalLink}>
+                <Link to="/getting-started" className={styles.externalLink}>
                   <svg
                     width="16"
                     height="16"
@@ -440,7 +440,7 @@ export default function Home() {
                   Provision Device
                 </Link>
                 <Link
-                  to="/avocado-linux/guides/hardware-in-the-loop"
+                  to="/guides/hardware-in-the-loop"
                   className={styles.externalLink}
                 >
                   <svg
