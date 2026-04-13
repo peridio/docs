@@ -1,0 +1,25 @@
+```
+Remove packages from an extension, runtime, or SDK and update avocado.yaml
+
+Usage: avocado uninstall [OPTIONS] <PACKAGES>...
+
+Arguments:
+  <PACKAGES>...  Packages to remove
+
+Options:
+  -e, --extension <EXTENSION>           Extension to remove packages from
+  -r, --runtime <RUNTIME>               Runtime to remove packages from
+      --sdk                             Remove packages from the SDK
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
+  -t, --target <TARGET>                 Target architecture
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+  -h, --help                            Print help
+
+```

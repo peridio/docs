@@ -1,0 +1,84 @@
+---
+title: Raspberry Pi 5
+description: Getting started with Avocado OS on Raspberry Pi 5.
+sidebar_position: 2
+---
+
+import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+
+# Raspberry Pi 5
+
+This guide walks you through building and deploying Avocado OS to a Raspberry Pi 5 using an SD card.
+
+## Prerequisites
+
+- Raspberry Pi 5
+- microSD card (8 GB+)
+- SD card reader connected to your host machine
+- macOS 10.12+ or Linux (Ubuntu 22.04+, Fedora 39+)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
+- The latest version of the [Avocado CLI](/developer-reference/avocado-cli/overview)
+- 8 GB available disk space
+- A TTY serial console USB adapter ([this or similar](https://www.amazon.com/dp/B07WX2DSVB)) — must be set to 3.3V
+
+If you have a serial console adapter connected, use a terminal program like `tio`:
+
+```bash
+tio -b 115200 /dev/ttyUSB0
+```
+
+Replace `/dev/ttyUSB0` with the appropriate device path for your adapter.
+
+<LinuxAutoMountWarning />
+
+## Initialize
+
+Create a new project targeting the Raspberry Pi 5.
+
+```bash
+avocado init --target raspberrypi5 raspberrypi5
+cd raspberrypi5
+```
+
+## Install
+
+Install the SDK toolchain, extension dependencies, and runtime packages.
+
+```bash
+avocado install -f
+```
+
+## Build
+
+Build the system image.
+
+```bash
+avocado build
+```
+
+## Provision
+
+Insert your SD card and provision the `dev` runtime. The `sd` profile writes the image directly to the SD card.
+
+```bash
+avocado provision -r dev --profile sd
+```
+
+The CLI will detect available block devices and prompt you to select the SD card. Verify you select the correct device — this operation will overwrite the target disk.
+
+## Run
+
+1. Insert the SD card into the Raspberry Pi 5
+2. Apply power to the device
+
+The device will boot from the SD card with the provisioned system. Log in as `root` with an empty password.
+
+### SSH access
+
+Once booted, you can SSH into the device if you know its IP address:
+
+```bash
+ssh root@<device-ip>
+```
+
+The `dev` runtime includes an SSH server with passwordless root login for development purposes.

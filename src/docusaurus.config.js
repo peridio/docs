@@ -37,6 +37,16 @@ const config = {
         breadcrumbs: true,
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'guides',
+        path: 'docs-guides',
+        routeBasePath: 'developer-reference',
+        sidebarPath: require.resolve('./sidebars-guides.js'),
+        breadcrumbs: true,
+      },
+    ],
     ...(process.env.NODE_ENV === 'production'
       ? [
           [

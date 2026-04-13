@@ -1,0 +1,23 @@
+```
+Deploy a runtime to a cohort
+
+Usage: avocado connect deploy [OPTIONS]
+
+Options:
+      --org <ORG>                  Organization ID (or set connect.org in avocado.yaml)
+      --project <PROJECT>          Project ID (or set connect.project in avocado.yaml)
+      --runtime <RUNTIME>          Runtime ID (skip interactive prompt)
+      --cohort <COHORT>            Cohort ID (skip interactive prompt)
+      --name <NAME>                Deployment name (auto-generated if omitted)
+      --description <DESCRIPTION>  Description for the deployment
+  -t, --tag <TAG>                  Filter by tags — only deploy to devices with these tags (repeatable)
+      --activate                   Activate immediately (skip draft status)
+  -C, --config <CONFIG>            Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>          Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>        Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
+  -h, --help                       Print help
+
+```

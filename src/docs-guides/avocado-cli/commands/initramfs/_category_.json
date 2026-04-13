@@ -1,0 +1,6 @@
+{
+  "label": "Initramfs",
+  "collapsible": true,
+  "collapsed": true,
+  "className": "sidebar-monospace"
+}
