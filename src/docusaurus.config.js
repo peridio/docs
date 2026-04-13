@@ -47,6 +47,16 @@ const config = {
         breadcrumbs: true,
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'changelog',
+        path: 'docs-changelog',
+        routeBasePath: 'changelog',
+        sidebarPath: require.resolve('./sidebars-changelog.js'),
+        breadcrumbs: true,
+      },
+    ],
     ...(process.env.NODE_ENV === 'production'
       ? [
           [

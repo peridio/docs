@@ -1,4 +1,6 @@
 {
   "label": "Changelog",
-  "position": 5
+  "position": 5,
+  "collapsible": true,
+  "collapsed": true
 }

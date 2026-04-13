@@ -1,0 +1,35 @@
+.feed {
+  padding-bottom: 4rem;
+}
+
+.monthLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--ifm-color-emphasis-200);
+}
+
+.section {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
+}
+
+.versionHeading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--ifm-heading-color);
+}
+
+.separator {
+  margin: 3rem 0 2rem;
+  border: 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.sentinel {
+  height: 1px;
+}
