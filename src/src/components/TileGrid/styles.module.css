@@ -1,0 +1,102 @@
+.tileGrid {
+  display: grid;
+  gap: 1rem;
+  margin: 0 0 2rem;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  overflow: hidden;
+  min-height: 260px;
+}
+
+.tile:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-decoration: none !important;
+}
+
+.tileTop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.25rem;
+  background-color: var(--ifm-color-emphasis-100);
+  isolation: isolate;
+}
+
+.tileTop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--tile-bg);
+  background-size: 200px auto;
+  background-position: center;
+  background-repeat: repeat;
+  filter: grayscale(1);
+}
+
+.tileTopFade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    var(--ifm-background-color) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.tileIcon {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background-color: var(--color-bg-body);
+  color: var(--ifm-color-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.tileBottom {
+  padding: 1.25rem;
+  text-align: left;
+  flex: 1;
+}
+
+.tileTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.tileDescription {
+  font-size: 0.85rem;
+  color: var(--ifm-color-content-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .tileGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .tileGrid {
+    grid-template-columns: 1fr !important;
+  }
+}

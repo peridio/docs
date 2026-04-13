@@ -1,0 +1,92 @@
+.terminal {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  margin: 2rem 0;
+  max-width: 680px;
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.titleBar {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: #2a2a2e;
+  position: relative;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.titleText {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #888;
+  font-size: 0.78rem;
+}
+
+.body {
+  background: #1a1a1e;
+  color: #e0e0e0;
+  padding: 16px;
+  height: 420px;
+  overflow-y: auto;
+  white-space: pre;
+}
+
+.promptLine {
+  color: var(--ifm-color-primary);
+}
+
+.outputLine {
+  color: #a0a5ad;
+}
+
+.checkLine {
+  color: #a0a5ad;
+}
+
+.checkMark {
+  color: #10b981;
+}
+
+.successTag {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.infoTag {
+  color: #3b82f6;
+}
+
+.cursor {
+  color: var(--ifm-color-primary);
+  font-size: 0.8em;
+  animation: none;
+}
+
+/* Scrollbar */
+.body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.body::-webkit-scrollbar-thumb {
+  background: #3a3a3e;
+  border-radius: 3px;
+}

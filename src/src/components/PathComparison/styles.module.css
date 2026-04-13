@@ -1,0 +1,218 @@
+/* Option B: Card-based path comparison */
+.pathGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.pathCard {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pathCard.highlight {
+  border: 2px solid var(--ifm-color-primary);
+}
+
+.pathHeader {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  text-align: center;
+}
+
+.pathHeader h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.pathHeader.muted {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.pathHeader.primary {
+  background: var(--ifm-color-primary);
+  border-bottom-color: var(--ifm-color-primary);
+}
+
+.pathHeader.primary h4 {
+  color: #fff;
+}
+
+.pathBody {
+  padding: 1.25rem;
+  font-size: 0.85rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-500);
+  margin-bottom: 0.35rem;
+}
+
+.pathBody ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  list-style: none;
+}
+
+.pathBody ul li {
+  position: relative;
+  padding-left: 0.25rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+}
+
+.pathBody ul li::before {
+  position: absolute;
+  left: -1.1rem;
+  font-size: 0.8rem;
+}
+
+.pros li::before {
+  content: '+';
+  color: var(--ifm-color-success);
+  font-weight: 700;
+}
+
+.cons li::before {
+  content: '\2013';
+  color: var(--ifm-color-danger);
+  font-weight: 400;
+}
+
+.wins li::before {
+  content: '\2713';
+  color: var(--ifm-color-primary);
+  font-weight: 700;
+}
+
+@media screen and (max-width: 768px) {
+  .pathGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Option C: Dedicated PathComparison component */
+.comparisonWrapper {
+  margin-bottom: 1.5rem;
+}
+
+.pathRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pathBlock {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pathBlockHeader {
+  padding: 0.75rem 1.25rem;
+  background: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pathBlockHeader h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.pathBlockHeader .subtitle {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-500);
+  font-weight: 400;
+}
+
+.pathBlockBody {
+  padding: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.pathBlockBody .section {
+  margin-bottom: 0.75rem;
+}
+
+.pathBlockBody .section:last-child {
+  margin-bottom: 0;
+}
+
+.bridgeDivider {
+  text-align: center;
+  padding: 0.5rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-500);
+  letter-spacing: 0.03em;
+}
+
+.resolutionBlock {
+  border: 2px solid var(--ifm-color-primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.resolutionHeader {
+  padding: 0.75rem 1.25rem;
+  background: var(--ifm-color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resolutionHeader h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.resolutionHeader .subtitle {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+
+.resolutionBody {
+  padding: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.resolutionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 2rem;
+}
+
+.resolutionGrid li {
+  line-height: 1.4;
+}
+
+@media screen and (max-width: 768px) {
+  .pathRow {
+    grid-template-columns: 1fr;
+  }
+
+  .resolutionGrid {
+    grid-template-columns: 1fr;
+  }
+}

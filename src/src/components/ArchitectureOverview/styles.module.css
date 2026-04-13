@@ -1,0 +1,295 @@
+/* 16:9 wrapper with subtle dot-grid texture */
+.wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle, var(--color-border-subtle) 1px, transparent 1px) 0 0 / 20px 20px,
+    var(--color-bg-muted);
+  display: flex;
+  flex-direction: column;
+  padding: clamp(0.75rem, 2.5%, 1.5rem);
+  box-sizing: border-box;
+  border: 1px solid var(--color-border-default);
+  margin-bottom: 1.5rem;
+}
+
+/* Section headings row */
+.headings {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  width: 100%;
+  margin-bottom: clamp(0.4rem, 1.2%, 0.75rem);
+}
+
+.heading {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(0.7rem, 1.6vw, 1.1rem);
+  color: var(--color-text-heading);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.headingSpacer {
+  width: clamp(2rem, 5%, 4rem);
+}
+
+/* Main grid: 3 content columns + 2 arrow gutters */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Dashed container box shared by all three columns */
+.zone {
+  position: relative;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: 8px;
+  padding: clamp(1.8rem, 4%, 2.4rem) clamp(0.5rem, 2%, 1rem) clamp(0.5rem, 2%, 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.35rem, 1%, 0.6rem);
+  min-height: 0;
+}
+
+/* Corner label (Build System, Dev Tools, Runtime) */
+.zoneLabel {
+  position: absolute;
+  top: -0.55em;
+  left: 0.75rem;
+  background: var(--color-bg-muted);
+  padding: 0 0.4rem;
+  font-size: clamp(0.55rem, 1vw, 0.72rem);
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Arrow gutter between columns */
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2rem, 5%, 4rem);
+  position: relative;
+}
+
+.arrow::before {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 1.5px;
+  background: var(--color-border-strong);
+}
+
+.arrow::after {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-top: 1.5px solid var(--color-border-strong);
+  border-right: 1.5px solid var(--color-border-strong);
+  transform: rotate(45deg);
+  margin-left: -4px;
+  flex-shrink: 0;
+}
+
+/* Green pill item */
+.pill {
+  background: var(--color-brand-50);
+  color: var(--color-text-primary);
+  border-radius: 6px;
+  padding: clamp(0.3rem, 0.8%, 0.55rem) clamp(0.5rem, 1.5%, 0.85rem);
+  font-size: clamp(0.58rem, 1.15vw, 0.82rem);
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.3;
+  border: 1px solid color-mix(in srgb, var(--color-brand-200) 40%, transparent);
+}
+
+/* SDK icon row */
+.iconRow {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.4rem, 1.5%, 1rem);
+}
+
+.iconItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.iconBox {
+  width: clamp(1.6rem, 4vw, 2.8rem);
+  height: clamp(1.6rem, 4vw, 2.8rem);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid;
+}
+
+.iconBox svg {
+  width: 55%;
+  height: 55%;
+}
+
+.iconBoxCode {
+  composes: iconBox;
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+  color: #2e7d32;
+}
+
+.iconBoxExt {
+  composes: iconBox;
+  background: #e3f2fd;
+  border-color: #90caf9;
+  color: #1565c0;
+}
+
+.iconBoxAvocado {
+  composes: iconBox;
+  background: #e8f5e9;
+  border-color: #81c784;
+  color: #388e3c;
+}
+
+.iconLabel {
+  font-size: clamp(0.42rem, 0.8vw, 0.6rem);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+/* Runtime nested "Merged RootFS" sub-box */
+.mergedRootfs {
+  border: 1.5px dashed var(--color-border-default);
+  border-radius: 6px;
+  padding: clamp(1.4rem, 3%, 1.8rem) clamp(0.35rem, 1%, 0.65rem) clamp(0.35rem, 1%, 0.65rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.3rem, 0.8%, 0.5rem);
+  position: relative;
+}
+
+.mergedRootfsLabel {
+  position: absolute;
+  top: -0.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-bg-muted);
+  padding: 0 0.4rem;
+  font-size: clamp(0.48rem, 0.85vw, 0.65rem);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Dark mode overrides */
+html[data-theme="dark"] .wrapper {
+  background:
+    radial-gradient(circle, var(--color-border-subtle) 0.5px, transparent 0.5px) 0 0 / 20px 20px,
+    var(--color-bg-surface);
+}
+
+html[data-theme="dark"] .zoneLabel,
+html[data-theme="dark"] .mergedRootfsLabel {
+  background: var(--color-bg-surface);
+}
+
+html[data-theme="dark"] .pill {
+  background: var(--color-brand-dark-a15, rgba(44, 254, 210, 0.12));
+  color: var(--color-brand-300, #9d93f5);
+  border-color: var(--color-brand-dark-a18, rgba(44, 254, 210, 0.18));
+}
+
+html[data-theme="dark"] .iconBoxCode {
+  background: rgba(46, 125, 50, 0.15);
+  border-color: rgba(129, 199, 132, 0.3);
+  color: #81c784;
+}
+
+html[data-theme="dark"] .iconBoxExt {
+  background: rgba(21, 101, 192, 0.15);
+  border-color: rgba(144, 202, 249, 0.3);
+  color: #90caf9;
+}
+
+html[data-theme="dark"] .iconBoxAvocado {
+  background: rgba(56, 142, 60, 0.15);
+  border-color: rgba(129, 199, 132, 0.3);
+  color: #81c784;
+}
+
+/* Responsive: single column on narrow screens */
+@media (max-width: 768px) {
+  .wrapper {
+    aspect-ratio: auto;
+  }
+
+  .headings {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .headingSpacer {
+    display: none;
+  }
+
+  .heading {
+    display: none;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: clamp(0.3rem, 1%, 0.5rem);
+  }
+
+  .arrow {
+    width: 100%;
+    height: 2rem;
+    flex-direction: column;
+  }
+
+  .arrow::before {
+    width: 1.5px;
+    height: 60%;
+  }
+
+  .arrow::after {
+    transform: rotate(135deg);
+    margin-left: 0;
+    margin-top: -4px;
+  }
+
+  .zone {
+    padding: 1.6rem 0.75rem 0.75rem;
+  }
+
+  .mobileHeading {
+    display: block;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-text-heading);
+    margin-bottom: 0.35rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobileHeading {
+    display: none;
+  }
+}
