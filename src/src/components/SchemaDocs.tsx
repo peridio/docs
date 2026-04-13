@@ -21,7 +21,13 @@ export default function SchemaDocs({ schema, options = {} }: SchemaDocsProps) {
 
   if (!schema) {
     return (
-      <div style={{ padding: '1rem', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
+      <div
+        style={{
+          padding: '1rem',
+          border: '1px solid var(--color-border-default)',
+          borderRadius: '4px',
+        }}
+      >
         <p>Schema not found or failed to load.</p>
       </div>
     )

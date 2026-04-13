@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
+    "start": "docusaurus start --port 6001",
     "build-peridio-cli": "node scripts/build-peridio-cli.js",
     "build-avocado-cli": "node scripts/build-avocado-cli.js",
+    "sync-references": "node scripts/sync-references.js",
     "build": "bash scripts/build.sh",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

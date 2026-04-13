@@ -70,6 +70,50 @@ declare module '@theme/Layout' {
   export default Layout
 }
 
+declare module '@theme/NavbarItem' {
+  import type { ComponentType, ComponentProps } from 'react'
+  export interface Props extends ComponentProps<'a'> {
+    type?: string
+    label?: string
+    position?: 'left' | 'right'
+    to?: string
+    href?: string
+    items?: Props[]
+  }
+  const NavbarItem: ComponentType<Props>
+  export default NavbarItem
+}
+
+declare module '@theme/Navbar/ColorModeToggle' {
+  import type { ComponentType } from 'react'
+  const NavbarColorModeToggle: ComponentType<{ className?: string }>
+  export default NavbarColorModeToggle
+}
+
+declare module '@theme/SearchBar' {
+  import type { ComponentType } from 'react'
+  const SearchBar: ComponentType
+  export default SearchBar
+}
+
+declare module '@theme/Navbar/MobileSidebar/Toggle' {
+  import type { ComponentType } from 'react'
+  const NavbarMobileSidebarToggle: ComponentType
+  export default NavbarMobileSidebarToggle
+}
+
+declare module '@theme/Navbar/Logo' {
+  import type { ComponentType } from 'react'
+  const NavbarLogo: ComponentType
+  export default NavbarLogo
+}
+
+declare module '@theme/Navbar/Search' {
+  import type { ComponentType, ReactNode } from 'react'
+  const NavbarSearch: ComponentType<{ children?: ReactNode }>
+  export default NavbarSearch
+}
+
 declare module '@theme/DocSidebarItem' {
   import type { ComponentType } from 'react'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
