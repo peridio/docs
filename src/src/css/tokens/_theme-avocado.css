@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Avocado Linux Theme
+
+   To activate: add data-site-theme="avocado" to the <html> element.
+
+   Dark-first palette built around a mint-green brand color from
+   avocadolinux.org. Overrides primitive tokens only — semantic tokens
+   cascade automatically through the entire UI.
+   ========================================================================== */
+
+html[data-site-theme="avocado"] {
+  /* ---------- Brand (mint-green) ---------- */
+  --color-brand-50: #b3f7e8;
+  --color-brand-100: #b3f7e8;
+  --color-brand-200: #58fedf;
+  --color-brand-300: #58fedf;
+  --color-brand-400: #2cfed2;
+  --color-brand-500: #27e7bd;
+  --color-brand-600: #27e7bd;
+  --color-brand-700: #1a9a7e;
+  --color-brand-800: #0a3d32;
+  --color-brand-900: #0d3d32;
+
+  /* Brand alpha overlays (light mode — based on mint-dark #1a9a7e) */
+  --color-brand-a6: rgba(26, 154, 126, 0.06);
+  --color-brand-a8: rgba(26, 154, 126, 0.08);
+  --color-brand-a10: rgba(26, 154, 126, 0.1);
+
+  /* ---------- Dark-mode surfaces ---------- */
+  --color-dark-0: #1c1c1c;
+  --color-dark-50: #1c1c1c;
+  --color-dark-100: #222222;
+  --color-dark-200: #333333;
+  --color-dark-300: #494949;
+  --color-dark-400: #4f4f4f;
+
+  /* ---------- Gradient stops ---------- */
+  --color-gradient-cta-start: #27e7bd;
+  --color-gradient-cta-end: #084d42;
+  --color-gradient-cta-dark-start: #1a9a7e;
+  --color-gradient-cta-dark-end: #0a3d32;
+
+  /* ---------- Infima primary scale (mint) ---------- */
+  --ifm-color-primary-dark: #0a3d32;
+  --ifm-color-primary-darker: #0d3d32;
+  --ifm-color-primary-darkest: #084d42;
+  --ifm-color-primary-light: #2cfed2;
+  --ifm-color-primary-lighter: #58fedf;
+  --ifm-color-primary-lightest: #b3f7e8;
+}
+
+html[data-site-theme="avocado"][data-theme="dark"] {
+  /* Brand alpha overlays (dark mode — based on mint-bright #2cfed2) */
+  --color-brand-dark-a10: rgba(44, 254, 210, 0.1);
+  --color-brand-dark-a12: rgba(44, 254, 210, 0.12);
+  --color-brand-dark-a15: rgba(44, 254, 210, 0.15);
+  --color-brand-dark-a18: rgba(44, 254, 210, 0.18);
+}

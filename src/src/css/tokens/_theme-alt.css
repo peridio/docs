@@ -1,0 +1,48 @@
+/* ==========================================================================
+   Peridio Theme — "Corporate Blue"
+
+   To activate: add data-site-theme="peridio" to the <html> element.
+
+   Overrides primitive tokens only. Semantic tokens reference primitives,
+   so changes cascade automatically through the entire UI.
+   ========================================================================== */
+
+html[data-site-theme="peridio"] {
+  /* Brand: corporate blue instead of indigo/purple */
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a5f;
+
+  /* Brand alpha overlays (recalculated for blue) */
+  --color-brand-a6: rgba(29, 78, 216, 0.06);
+  --color-brand-a8: rgba(29, 78, 216, 0.08);
+  --color-brand-a10: rgba(29, 78, 216, 0.1);
+
+  /* Gradient: blue tones */
+  --color-gradient-cta-start: #1d4ed8;
+  --color-gradient-cta-end: #1e3a5f;
+  --color-gradient-cta-dark-start: #1e40af;
+  --color-gradient-cta-dark-end: #1e3a5f;
+
+  /* Infima primary scale (blue) */
+  --ifm-color-primary-dark: #1e40af;
+  --ifm-color-primary-darker: #1e3a8a;
+  --ifm-color-primary-darkest: #172554;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+}
+
+html[data-site-theme="peridio"][data-theme="dark"] {
+  --color-brand-dark-a10: rgba(59, 130, 246, 0.1);
+  --color-brand-dark-a12: rgba(59, 130, 246, 0.12);
+  --color-brand-dark-a15: rgba(59, 130, 246, 0.15);
+  --color-brand-dark-a18: rgba(59, 130, 246, 0.18);
+}

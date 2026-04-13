@@ -1,0 +1,99 @@
+/* ==========================================================================
+   Primitive Color Tokens
+   Raw palette values — theme-invariant. Never consumed directly by components.
+   Semantic tokens in _semantics.css reference these.
+   ========================================================================== */
+
+:root {
+  /* ---------- Brand (indigo/purple) ---------- */
+  --color-brand-50: #f3e8ff;
+  --color-brand-100: #e8e0ff;
+  --color-brand-200: #c4b5fd;
+  --color-brand-300: #9d93f5;
+  --color-brand-400: #7b6ff0;
+  --color-brand-500: #6b5cf7;
+  --color-brand-600: #5f51ff;
+  --color-brand-700: #3424ee; /* Primary brand color */
+  --color-brand-800: #2d1ed5;
+  --color-brand-900: #2e1a47;
+
+  /* Brand alpha — sidebar/card overlays (light mode base) */
+  --color-brand-a6: rgba(52, 36, 238, 0.06);
+  --color-brand-a8: rgba(52, 36, 238, 0.08);
+  --color-brand-a10: rgba(52, 36, 238, 0.1);
+
+  /* Brand alpha — sidebar/card overlays (dark mode base) */
+  --color-brand-dark-a10: rgba(123, 111, 240, 0.1);
+  --color-brand-dark-a12: rgba(123, 111, 240, 0.12);
+  --color-brand-dark-a15: rgba(123, 111, 240, 0.15);
+  --color-brand-dark-a18: rgba(123, 111, 240, 0.18);
+
+  /* ---------- Neutral (consolidated gray scale) ---------- */
+  --color-neutral-0: #ffffff;
+  --color-neutral-25: #fafafa;
+  --color-neutral-50: #f8f9fa;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* ---------- Dark-mode surfaces (warm-gray scale) ---------- */
+  --color-dark-0: #1a1a1e;
+  --color-dark-50: #1b1b1d;
+  --color-dark-100: #222226;
+  --color-dark-200: #2a2a2e;
+  --color-dark-300: #333333;
+  --color-dark-400: #4b5563;
+
+  /* ---------- Green ---------- */
+  --color-green-100: #e6f9ed;
+  --color-green-200: #dcfce7;
+  --color-green-400: #6ee7a0;
+  --color-green-500: #10b981;
+  --color-green-600: #16a34a;
+  --color-green-700: #2e7d32;
+  --color-green-800: #166534;
+
+  /* ---------- Red ---------- */
+  --color-red-100: #fee2e2;
+  --color-red-500: #dc2626;
+  --color-red-700: #d32f2f;
+
+  /* ---------- Amber ---------- */
+  --color-amber-100: #fef3c7;
+  --color-amber-400: #ffc107;
+  --color-amber-500: #f59e0b;
+  --color-amber-800: #92400e;
+  --color-amber-900: #856404;
+
+  /* ---------- Blue (tags) ---------- */
+  --color-blue-100: #e8f0fe;
+  --color-blue-700: #1a56db;
+  --color-blue-dark-bg: #1e3a5f;
+  --color-blue-dark-text: #93bbfc;
+
+  /* Green tag dark variants */
+  --color-green-dark-bg: #1a3a2a;
+  --color-green-dark-text: #6ee7a0;
+
+  /* Amber tag dark variants */
+  --color-amber-dark-bg: #4a3728;
+  --color-amber-dark-text: #fcd34d;
+
+  /* Purple tag (reuses brand) — --color-brand-50 for light bg, --color-brand-900 for dark bg */
+
+  /* ---------- Gradient stops ---------- */
+  --color-gradient-cta-start: var(--color-neutral-500);
+  --color-gradient-cta-end: var(--color-neutral-700);
+  --color-gradient-cta-dark-start: var(--color-neutral-600);
+  --color-gradient-cta-dark-end: var(--color-neutral-900);
+
+  /* ---------- Code diff ---------- */
+  --color-diff-added: rgba(63, 185, 80, 0.28);
+  --color-diff-removed: rgba(248, 81, 73, 0.22);
+}
