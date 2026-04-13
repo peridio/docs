@@ -1,0 +1,129 @@
+.selectorBox {
+  box-shadow: inset 0 0 0 1px var(--ifm-color-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 66%;
+}
+
+.selectorHeader {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.selectorIcon {
+  color: var(--ifm-color-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.selectorTitle {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.selectorDescription {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.dropdownWrapper {
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-content);
+  outline: none;
+}
+
+.searchInput:focus {
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: calc(-1.5rem - 2px);
+  right: calc(-1.5rem - 2px);
+  margin-top: 4px;
+  background: #ffffff;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  padding-top: 0.5rem;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: none;
+  background: none;
+  color: var(--ifm-color-content);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background: rgba(123, 111, 240, 0.1);
+}
+
+.dropdownItemActive {
+  background: rgba(123, 111, 240, 0.15);
+}
+
+.dropdownName {
+  font-weight: 500;
+}
+
+.dropdownTarget {
+  font-size: 0.8rem;
+  color: var(--ifm-color-content-secondary);
+  background: var(--ifm-color-emphasis-100);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.targetInfo {
+  margin-top: 2rem;
+}
+
+.warningBox {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--ifm-color-content);
+}
+
+html[data-theme="dark"] .dropdown {
+  background: #1a1a1e;
+}
+
+.cautionBox {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--ifm-color-content);
+}

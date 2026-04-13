@@ -1,0 +1,74 @@
+/* SupportMatrix — domain-specific styles (status dots + legend) */
+
+/* Status indicators */
+.statusFull,
+.statusPartial,
+.statusNone {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: help;
+  transition: transform 0.2s ease;
+}
+
+.statusFull:hover,
+.statusPartial:hover,
+.statusNone:hover {
+  transform: scale(1.2);
+}
+
+.statusFull {
+  color: var(--color-status-success);
+}
+
+.statusPartial {
+  color: var(--color-status-warning);
+}
+
+.statusNone {
+  color: var(--color-status-neutral);
+}
+
+/* Legend */
+.legend {
+  display: inline-block;
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  background: var(--color-bg-muted);
+  border-radius: 8px;
+  border: 1px solid var(--color-border-default);
+}
+
+.legendTitle {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+}
+
+.legendList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+  .legendList {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}

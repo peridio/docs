@@ -148,7 +148,7 @@ export const data: SolutionData = {
       'Transform your OnLogic FR201 systems into a managed gateway fleet with atomic updates, remote diagnostics, and enterprise support.',
     primaryCTA: {
       text: 'Provision Guide',
-      link: '/hardware/onlogic/fr201/provision',
+      link: '/hardware/onlogic/fr201',
     },
     secondaryCTA: {
       text: 'Request a Demo',

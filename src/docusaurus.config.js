@@ -27,6 +27,16 @@ const config = {
   plugins: [
     'docusaurus-plugin-image-zoom',
     './plugins/yaml-loader-plugin',
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'hardware',
+        path: 'docs-hardware',
+        routeBasePath: 'hardware',
+        sidebarPath: require.resolve('./sidebars-hardware.js'),
+        breadcrumbs: true,
+      },
+    ],
     ...(process.env.NODE_ENV === 'production'
       ? [
           [

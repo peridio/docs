@@ -21,7 +21,7 @@ export const data: SolutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nxp/imx8mp/provision',
+      link: '/hardware/nxp/imx8mp',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -155,7 +155,7 @@ export const data: SolutionData = {
       'Transform your NXP i.MX 8M Plus into a secure, deployable industrial vision platform ready for harsh environments.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nxp/imx8mp/provision',
+      link: '/hardware/nxp/imx8mp',
     },
     // secondaryCTA: {
     //   text: 'Learn More',

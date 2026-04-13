@@ -1,0 +1,9 @@
+{
+  "label": "Jetson Orin NX",
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "index"
+  }
+}

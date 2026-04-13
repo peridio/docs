@@ -1,0 +1,99 @@
+---
+title: 'Production-Ready Intel x86-64-v2 Deployment'
+sidebar_position: 0
+description: 'Deploy Intel x86-64-v2 devices in production with Avocado OS. Broad compatibility with Intel and AMD hardware from Nehalem/Bulldozer era onward for industrial and edge computing.'
+---
+
+# Intel x86-64-v2
+
+Generic x86-64 microarchitecture level 2 target for broad Intel and AMD hardware compatibility
+
+<!-- TODO: Add product image -->
+
+**x86-64-v2** Instruction Set | **Broad Compatibility** | **Industrial & Edge**
+
+## Overview
+
+The Intel x86-64-v2 target in Avocado OS provides a generic, production-ready Linux image compatible with a wide range of Intel and AMD processors supporting the x86-64-v2 microarchitecture level. This includes processors from Intel Nehalem (2008) and AMD Bulldozer (2011) onward — covering the vast majority of x86 hardware deployed in industrial and edge computing today. The x86-64-v2 level requires SSE3, SSE4.1, SSE4.2, SSSE3, POPCNT, and CMPXCHG16B instructions, ensuring optimal baseline performance without sacrificing hardware reach. Use this target for industrial PCs, edge gateways, and any x86 deployment where broad hardware compatibility matters more than squeezing out the last percentage of performance from newer instruction sets.
+
+## Specifications
+
+| Specification | Value                   | Notes                               |
+| ------------- | ----------------------- | ----------------------------------- |
+| Architecture  | x86-64-v2               | SSE4.2, POPCNT, CMPXCHG16B required |
+| Intel Support | Nehalem and newer       | Core i-series 1st gen+, Xeon E5/E7+ |
+| AMD Support   | Bulldozer and newer     | FX-series, Ryzen, EPYC              |
+| Boot          | UEFI                    | Legacy BIOS not supported           |
+| Storage       | NVMe, SATA, USB         | Standard block devices              |
+| Networking    | Onboard Ethernet, Wi-Fi | Hardware-dependent                  |
+
+## Use Cases
+
+### Industrial PCs & Gateways
+
+Deploy Avocado OS on existing x86 industrial hardware — OnLogic, Advantech, Beckhoff, and others. One image, many form factors.
+
+### Edge Servers
+
+Rack-mounted or compact edge servers running inference, data aggregation, or protocol translation with full x86 software compatibility.
+
+### Legacy Hardware Refresh
+
+Modernize existing x86 deployments with an immutable, OTA-updatable OS without replacing hardware.
+
+## Challenges and Solutions
+
+| Challenge                                    | Solution                                       |
+| -------------------------------------------- | ---------------------------------------------- |
+| Diverse x86 hardware landscape               | Generic v2 target covers 15+ years of hardware |
+| OS maintenance across hardware variants      | Single Avocado OS image for all compatible x86 |
+| Security patching for long-lived deployments | Atomic OTA updates with automatic rollback     |
+| No dedicated embedded Linux team             | Avocado OS handles BSP and kernel maintenance  |
+| Hardware refresh disrupts software stack     | Same OS image runs on old and new x86 hardware |
+
+## Key Features
+
+### Broad Hardware Compatibility
+
+A single image runs on any x86-64-v2 capable processor — Intel or AMD, desktop or industrial, from 2008 to today.
+
+### Production Hardening
+
+Immutable SquashFS root filesystem with A/B partitioning. No filesystem corruption, no failed updates in the field.
+
+### Atomic OTA Updates
+
+Safe over-the-air updates with automatic rollback. Keep deployed x86 fleets current without on-site visits.
+
+### Standard Linux Environment
+
+Full systemd, containers, and standard Linux tooling. Your existing x86 applications run without modification.
+
+### Long-Term Support
+
+Kernel and security maintenance from Avocado OS. Deploy once, maintain for years without rebuilding your OS from scratch.
+
+## x86-64-v2 vs x86-64-v3
+
+Choose **x86-64-v2** for maximum hardware compatibility. Choose [x86-64-v3](/hardware/intel/x86-64-v3) if all your target hardware supports AVX2 (Intel Haswell / AMD Excavator and newer) for improved performance with vectorized workloads.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `intel-x86-64-v2`. The provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile usb
+```
+
+### Run
+
+After provisioning completes, insert the provisioned media into the target device and power it on.
+
+The device will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.

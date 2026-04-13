@@ -1,0 +1,90 @@
+---
+title: 'Production-Ready Raspberry Pi 5 Deployment'
+sidebar_position: 0
+description: 'Deploy Raspberry Pi 5 devices in production with Avocado Connect + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.'
+---
+
+import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+
+# Raspberry Pi 5
+
+Transform your Raspberry Pi 5 prototype into a secure, manageable fleet with Peridio + Avocado OS
+
+<div className="hardware-hero-image">
+  <img src="/img/hardware/raspberry-pi/Raspberrypi5.png" alt="Raspberry Pi 5 development board" />
+</div>
+
+**5x** Faster to Production | **80%** Lower TCO | **$60** Starting Cost
+
+## Overview
+
+Raspberry Pi 5, enhanced with Avocado Linux and Avocado Connect, represents the cutting-edge of single-board computer deployment for edge computing and IoT applications. This integrated solution harnesses the Pi 5's powerful 2.4GHz quad-core ARM Cortex-A76 processor and advanced features like PCIe 2.0 connectivity to create an enterprise-ready platform with production-hardened Linux, atomic OTA updates, and centralized fleet management. By replacing the default Raspberry Pi OS with a Yocto-based, read-only root filesystem, teams eliminate common production issues while gaining secure boot, remote diagnostics, and compliance features. Whether deploying AI-powered edge computing, high-resolution digital signage, or advanced IoT gateways, the Pi 5's next-generation performance with dual 4K@60fps displays, faster I/O, and enhanced processing power enables organizations to build sophisticated applications while maintaining the $60 price point and vast ecosystem compatibility.
+
+## Specifications
+
+| Specification | Value                                    | Notes                                              |
+| ------------- | ---------------------------------------- | -------------------------------------------------- |
+| Processor     | 2.4GHz Quad-core ARM Cortex-A76          | 64-bit ARMv8.2 architecture, 2-3x Pi 4 performance |
+| Memory        | 4GB or 8GB LPDDR4X                       | LPDDR4X-4267 SDRAM for maximum throughput          |
+| Connectivity  | Gigabit Ethernet, Wi-Fi 5, Bluetooth 5.0 | Dual-band 802.11ac, enhanced antenna design        |
+| PCIe          | PCIe 2.0 x1 interface                    | NVMe SSDs, HAT+ expansion, high-speed peripherals  |
+| Display       | Dual 4K@60Hz HDMI outputs                | HDMI 2.1 with HDR support, enhanced graphics       |
+| USB Ports     | 2x USB 3.0, 2x USB 2.0                   | Improved USB stack and power delivery              |
+| Storage       | NVMe via PCIe, USB boot, microSD         | Native NVMe support for enterprise storage         |
+| Power         | 5V/5A USB-C with PD support              | 25W maximum power, active cooling recommended      |
+
+## Use Cases
+
+### Industrial IoT Sensors
+
+Environmental monitoring, predictive maintenance, and quality control with secure data collection and edge processing.
+
+### Smart City Infrastructure
+
+Traffic monitoring, air quality sensors, and smart lighting with centralized management and real-time updates.
+
+### Digital Signage & Kiosks
+
+Retail displays, information kiosks, and interactive installations with content management and remote monitoring.
+
+## Challenges and Solutions
+
+| Challenge                                          | Solution                           |
+| -------------------------------------------------- | ---------------------------------- |
+| Prototypes work great, production deployment fails | Production-hardened Linux OS       |
+| SD card corruption in industrial environments      | Read-only root with atomic updates |
+| No secure OTA update mechanism                     | Enterprise OTA orchestration       |
+| Manual fleet management doesn't scale              | Centralized fleet management       |
+| Security vulnerabilities in default OS             | Built-in security compliance       |
+
+## Key Features
+
+### Production Hardening
+
+Read-only root filesystem, secure boot, and A/B partitioning eliminate SD card corruption and failed updates.
+
+### Fleet-Scale OTA
+
+Deploy updates to thousands of devices with phased rollouts, rollback capabilities, and real-time monitoring.
+
+### Zero-Trust Security
+
+Code signing, device certificates, and encrypted communication secure your entire fleet from day one.
+
+### Rapid Development
+
+Pre-built Yocto layers and containerized applications accelerate your time-to-market from months to weeks.
+
+### Cross-Platform Ready
+
+Develop on Pi, deploy across ARM architectures. Reuse software stacks on industrial SoCs when you scale.
+
+### Fleet Intelligence
+
+Real-time telemetry, remote diagnostics, and predictive maintenance keep your devices healthy and operational.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Raspberry Pi 5 Getting Started](/developer-reference/getting-started/raspberry-pi) guide to begin. This target is `raspberrypi5`.

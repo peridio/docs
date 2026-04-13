@@ -1,0 +1,107 @@
+---
+title: 'Production-Ready NXP FRDM i.MX 91 Deployment'
+sidebar_position: 0
+description: 'Deploy NXP FRDM i.MX 91 devices in production with Avocado OS. Low-power Cortex-A55, EdgeLock security, Wi-Fi 6, and dual Gigabit Ethernet for IoT and industrial edge.'
+---
+
+import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+
+# NXP FRDM i.MX 91
+
+Low-power single Cortex-A55 platform with EdgeLock secure enclave, Wi-Fi 6, and dual Gigabit Ethernet for secure IoT and industrial edge applications
+
+**1.4GHz** Cortex-A55 | **1GB** LPDDR4 | **Wi-Fi 6** + BLE 5.4
+
+<div className="hardware-hero-image">
+  <img src="/img/hardware/nxp/nxp-FRDM-imx-91.png" alt="NXP FRDM i.MX 91 development board" />
+</div>
+
+## Overview
+
+The NXP FRDM i.MX 91 development board, paired with Avocado OS, delivers a production-ready low-power Linux platform for IoT and industrial edge applications. Built around the i.MX 91 processor with a single Cortex-A55 core at 1.4GHz, this board strikes the balance between compute capability and power efficiency that edge devices demand. With onboard Wi-Fi 6, Bluetooth LE 5.4, dual Gigabit Ethernet (including TSN support), and NXP's EdgeLock secure enclave, teams can build secure, connected devices without months of BSP work. Avocado OS provides an immutable Yocto-based Linux with atomic OTA updates, so your devices stay secure and maintainable across their entire lifecycle.
+
+## Specifications
+
+| Specification | Value                          | Notes                                 |
+| ------------- | ------------------------------ | ------------------------------------- |
+| Processor     | Cortex-A55 @ 1.4GHz            | Single-core, 64-bit ARMv8.2-A         |
+| Memory        | 1GB LPDDR4                     | 16-bit interface                      |
+| Storage       | 8GB eMMC 5.1                   | MicroSD 3.0 slot available            |
+| Wireless      | Wi-Fi 6 + BLE 5.4 / 802.15.4   | Onboard module, optional M.2 Key-E    |
+| Ethernet      | 2x Gigabit Ethernet            | Port 0: ENET, Port 1: TSN             |
+| USB           | USB 2.0 Type-C, USB 2.0 Type-A | Additional Type-C for debug           |
+| Expansion     | 40-pin (2x20) I/O header       | CAN, ADC, I2C/I3C via 2x5 pin header  |
+| Security      | EdgeLock Secure Enclave        | Secure boot, crypto, tamper detection |
+
+## Use Cases
+
+### IoT Gateways
+
+Aggregate sensor data with dual Ethernet and wireless connectivity. Low power consumption enables solar-powered and battery-backed deployments.
+
+### Industrial Sensors
+
+CAN bus and ADC interfaces connect directly to industrial equipment. EdgeLock security ensures data integrity from sensor to cloud.
+
+### Smart Building Controllers
+
+Wi-Fi 6 and 802.15.4 support for Thread/Zigbee networks. Compact form factor fits into panel-mount enclosures.
+
+## Challenges and Solutions
+
+| Challenge                               | Solution                                        |
+| --------------------------------------- | ----------------------------------------------- |
+| Low-power Linux BSP setup takes months  | Pre-integrated Avocado OS BSP                   |
+| Security configuration for IoT devices  | EdgeLock secure enclave pre-configured          |
+| Maintaining OTA for constrained devices | Atomic A/B updates with automatic rollback      |
+| Multi-protocol connectivity complexity  | Wi-Fi 6, BLE, 802.15.4, Ethernet out of the box |
+| Long-term OS maintenance burden         | Avocado OS long-term support and CVE patching   |
+
+## Key Features
+
+### Low-Power Edge Computing
+
+Single Cortex-A55 core delivers Linux-capable compute at a fraction of the power budget of multi-core SoCs. Ideal for always-on edge devices.
+
+### EdgeLock Security
+
+Hardware root of trust with secure boot, encrypted storage, and runtime attestation. Meet compliance requirements without custom security engineering.
+
+### Dual Ethernet with TSN
+
+Two Gigabit Ethernet ports with Time-Sensitive Networking support on Port 1. Bridge IT and OT networks with deterministic latency.
+
+### Production Hardening
+
+Read-only root filesystem with atomic OTA updates. No SD card corruption, no failed updates, no manual intervention in the field.
+
+### Wireless Connectivity
+
+Onboard Wi-Fi 6 and BLE 5.4 with 802.15.4 for Thread/Zigbee. Connect to any wireless ecosystem from a single board.
+
+### Rapid Development
+
+Hardware-in-the-loop development with Avocado OS. Edit code locally, test on hardware instantly — no rebuild required.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `imx91-frdm`. The provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+<LinuxAutoMountWarning />
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile sd
+```
+
+### Run
+
+After provisioning completes, insert the SD card into your target device and power it on.
+
+The device will boot from the SD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.

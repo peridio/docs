@@ -21,7 +21,7 @@ export const data: SolutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/raspberry-pi/raspberry-pi-5/provision',
+      link: '/hardware/raspberry-pi/raspberry-pi-5',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -165,7 +165,7 @@ export const data: SolutionData = {
       'Transform your Raspberry Pi 5 prototype into a secure, manageable production fleet with enterprise-grade reliability.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/raspberry-pi/raspberry-pi-5/provision',
+      link: '/hardware/raspberry-pi/raspberry-pi-5',
     },
     // secondaryCTA: {
     //   text: 'Learn More',

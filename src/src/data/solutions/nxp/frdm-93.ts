@@ -21,7 +21,7 @@ export const data: SolutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nxp/frdm-imx-93/provision',
+      link: '/hardware/nxp/frdm-imx-93',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -155,7 +155,7 @@ export const data: SolutionData = {
       'Transform your NXP FRDM i.MX 93 from development board to production-ready edge AI platform with heterogeneous processing and fleet management.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nxp/frdm-imx-93/provision',
+      link: '/hardware/nxp/frdm-imx-93',
     },
     secondaryCTA: {
       text: 'Learn More',

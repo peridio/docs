@@ -1,0 +1,10 @@
+{
+  "label": "Raspberry Pi Zero 2 W",
+  "position": 7,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "index"
+  }
+}

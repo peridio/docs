@@ -1,0 +1,86 @@
+---
+title: 'Fast-Track Your Jetson Production Deployment'
+sidebar_position: 0
+description: 'Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Avocado Connect + Avocado OS. Enterprise Linux, secure OTA, and fleet management for industrial AI.'
+---
+
+# Jetson Orin Nano DK
+
+Production-grade software for the industry's leading AI edge hardware. Deploy NVIDIA Jetson Orin Nano fleets from day 1 with deterministic Linux, secure OTA, and fleet management
+
+<div className="hardware-hero-image">
+  <img src="/img/jetson-nano.png" alt="NVIDIA Jetson Orin Nano development kit" />
+</div>
+
+**Day 1** Production Ready | **10+** Year Support | **67** TOPS AI Performance
+
+## Overview
+
+The NVIDIA Jetson Orin Nano represents the pinnacle of AI edge computing hardware, delivering 67 TOPS of performance in an efficient, compact form factor. When paired with Avocado Linux and Avocado Connect, this industry-leading platform gains the production-grade software infrastructure it deserves. Teams can accelerate their time to market with enterprise Linux, atomic OTA updates, and fleet management built in from day one. This powerful combination enables you to fully leverage Jetson's exceptional AI capabilities while our integrated platform handles the complex infrastructure requirements. The result is a secure, scalable edge AI solution that matches Jetson's hardware excellence with enterprise-grade software, backed by 10+ years of support and cross-platform portability across the entire NVIDIA Jetson family.
+
+## Specifications
+
+| Specification         | Value                             | Notes                                         |
+| --------------------- | --------------------------------- | --------------------------------------------- |
+| AI Performance        | 67 TOPS (8GB) / 34 TOPS (4GB)     | Up to 142x performance of Jetson Nano         |
+| GPU                   | 1024/512-core NVIDIA Ampere GPU   | CUDA-X and TensorRT for real-time inference   |
+| CPU                   | 6-core Arm Cortex-A78AE @ 1.7 GHz | Armv8.2 64-bit with safety features           |
+| Memory                | 8GB/4GB LPDDR5                    | 102/51 GB/s bandwidth for multi-sensor vision |
+| Power                 | 7-25W                             | Scalable to battery-powered devices           |
+| Operating Temperature | -40°C to +70°C                    | Rugged industrial environments                |
+
+## Use Cases
+
+### Industrial Smart Cameras
+
+Multi-camera CSI input for AI tasks like object detection and quality inspection. OTA supports model updates in production.
+
+### Autonomous Mobile Robots
+
+Real-time sensor fusion and navigation processing. Avocado OS supports ROS2 and containers with scalable fleet rollouts.
+
+### Edge AI Gateways
+
+Run generative AI or LLMs locally with NVMe and optional 10-GbE. Managed Linux keeps them secure in harsh environments.
+
+## Challenges and Solutions
+
+| Challenge                                               | Solution                       |
+| ------------------------------------------------------- | ------------------------------ |
+| Developer kits aren't production-ready                  | Production-ready OS in minutes |
+| Custom Yocto builds require significant time investment | Pre-integrated Jetson BSPs     |
+| OTA infrastructure requires dedicated teams             | Enterprise OTA orchestration   |
+| Security compliance adds complexity                     | Built-in security compliance   |
+| Fleet management built from scratch                     | Managed fleet operations       |
+
+## Key Features
+
+### Rapid Deployment
+
+Boot deterministic Linux on Jetson in minutes. Hardware-in-the-loop tools reduce iteration from weeks to hours.
+
+### Production Security
+
+Secure boot, dm-verity, and LUKS encryption across all architectures. Reproducible images simplify certification.
+
+### Fleet Management
+
+Register and manage devices in Avocado Connect. Phased releases, cohort targeting, SBOM, and CVE patching.
+
+### Composable Architecture
+
+Build systems using modular layers and standard secure components. Avoid the fragility of DIY Yocto.
+
+### Cross-Platform
+
+Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio, NXP i.MX8MP).
+
+### Long-term Support
+
+10+ years of kernel/security maintenance. Combined with Jetson's industrial lifecycle ensures device longevity.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Jetson Orin Nano Getting Started](/developer-reference/getting-started/jetson) guide to begin. This target is `jetson-orin-nano-devkit`.

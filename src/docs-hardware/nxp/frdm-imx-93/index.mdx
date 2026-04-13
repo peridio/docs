@@ -1,0 +1,105 @@
+---
+title: 'Edge AI Development with NXP FRDM i.MX 93'
+sidebar_position: 0
+description: 'Production-ready NXP FRDM i.MX 93 development with dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and secure edge connectivity. Enterprise OTA and fleet management.'
+---
+
+import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+
+# NXP FRDM i.MX 93
+
+Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock secure enclave, and industrial connectivity for edge AI applications
+
+<div className="hardware-hero-image">
+  <img src="/img/hardware/nxp/NXP-FRDM-MCXN947.png" alt="NXP FRDM i.MX 93 development board" />
+</div>
+
+**1.7GHz** Dual Cortex-A55 | **0.5 TOPS** Ethos U-65 NPU | **2GB** LPDDR4X Memory
+
+## Overview
+
+The NXP FRDM i.MX 93 development platform, enhanced with Avocado Linux and Avocado Connect, delivers a production-ready heterogeneous computing solution for edge AI applications. This integrated platform combines dual Cortex-A55 application processors, a Cortex-M33 real-time core, and an Ethos U-65 NPU to enable sophisticated edge processing with 0.5 TOPS of AI performance. The pre-integrated Linux and RTOS environment eliminates months of complex multi-core development, while EdgeLock security and atomic OTA updates ensure enterprise-grade deployment from prototype to production. Teams can leverage industrial connectivity options including CAN FD and Gigabit Ethernet to build secure, scalable edge AI systems that operate reliably in -40°C to +85°C environments with 10+ years of platform support.
+
+## Specifications
+
+| Specification    | Value                             | Notes                                |
+| ---------------- | --------------------------------- | ------------------------------------ |
+| Applications CPU | Dual Cortex-A55 @ 1.7GHz          | 64-bit ARM v8.2-A architecture       |
+| Real-time CPU    | Cortex-M33 @ 250MHz               | Dedicated real-time processing       |
+| AI Accelerator   | Ethos U-65 NPU                    | 0.5 TOPS for edge AI inference       |
+| Memory           | 2GB LPDDR4X                       | 16GB eMMC storage included           |
+| Connectivity     | Gigabit Ethernet, CAN FD, USB 3.0 | Industrial and automotive interfaces |
+| Operating Temp   | -40°C to +85°C                    | Industrial temperature range         |
+
+## Use Cases
+
+### Edge AI Vision Systems
+
+Real-time object detection and classification with Ethos U-65 NPU. Process camera streams locally with low latency for industrial inspection.
+
+### Industrial HMI Controllers
+
+Rich graphical interfaces on Cortex-A55 with real-time control on Cortex-M33. Heterogeneous processing for responsive industrial control panels.
+
+### Smart IoT Gateways
+
+Bridge OT and IT networks with secure EdgeLock enclave. Local AI processing reduces cloud dependency and improves response times.
+
+## Challenges and Solutions
+
+| Challenge                                | Solution                             |
+| ---------------------------------------- | ------------------------------------ |
+| Complex heterogeneous architecture setup | Pre-integrated Linux + RTOS system   |
+| Linux and RTOS integration challenges    | Optimized NPU drivers and frameworks |
+| NPU optimization requires expertise      | Secure OTA for both cores            |
+| Security configuration complexity        | EdgeLock security pre-configured     |
+| Long development cycles for edge AI      | Production-ready in weeks not months |
+
+## Key Features
+
+### Heterogeneous Processing
+
+Seamless Linux on Cortex-A55 with RTOS on Cortex-M33. Pre-configured inter-core communication for optimal workload distribution.
+
+### Edge AI Acceleration
+
+Ethos U-65 NPU with optimized TensorFlow Lite and ONNX runtime. Hardware acceleration for computer vision and anomaly detection.
+
+### EdgeLock Security
+
+Hardware root of trust with secure enclave. Secure boot, encrypted storage, and runtime attestation built-in.
+
+### Dual-OS Fleet Management
+
+Unified OTA updates for Linux and RTOS partitions. Coordinate updates across heterogeneous cores with rollback protection.
+
+### Industrial Linux Stack
+
+Yocto-based Linux with real-time patches. Pre-integrated industrial protocols and containerization support.
+
+### Multi-Core Analytics
+
+Monitor both application and real-time cores. Track AI inference performance and system health metrics.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `imx93-frdm`. The provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+<LinuxAutoMountWarning />
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile sd
+```
+
+### Run
+
+After provisioning completes, insert the SD card into your target device and power it on.
+
+The device will boot from the SD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
