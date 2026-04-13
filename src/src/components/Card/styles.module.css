@@ -8,8 +8,8 @@
   flex-direction: column;
   flex: 1;
   width: 100%;
-  background-color: #fff;
-  border: 1px solid #dadce0;
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 8px;
   transition: box-shadow 0.3s ease;
   overflow: hidden;
@@ -18,12 +18,16 @@
 
 .card:hover {
   box-shadow:
-    0 1px 3px rgba(60, 64, 67, 0.3),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+    0 1px 3px var(--color-card-shadow),
+    0 4px 8px 3px var(--color-card-shadow-hover);
 }
 
 .cardHeader {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-gradient-surface-from) 0%,
+    var(--color-gradient-surface-to) 100%
+  );
   color: var(--ifm-color-emphasis-800);
   padding: 1.5rem;
   border-top-left-radius: 8px;

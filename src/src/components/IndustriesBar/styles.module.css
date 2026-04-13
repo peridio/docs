@@ -8,7 +8,7 @@
     "Segoe UI",
     Roboto,
     sans-serif;
-  background-color: #f5f5f7;
+  background-color: var(--color-bg-muted);
   border-radius: 12px;
 }
 
@@ -16,15 +16,15 @@
   font-size: 1.125rem;
   font-weight: 500;
   margin-bottom: 2.5rem;
-  color: #202124;
+  color: var(--color-text-primary);
   letter-spacing: -0.01em;
 }
 
 .industries-main-title {
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 1rem;
-  color: #202124;
+  color: var(--color-text-primary);
 }
 
 .industries-container {
@@ -53,13 +53,13 @@
 .industry-icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #5f6368;
+  color: var(--color-text-secondary);
 }
 
 .industry-item span:last-child {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #3c4043;
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 

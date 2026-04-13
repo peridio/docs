@@ -19,6 +19,7 @@ const config = {
   organizationName: 'peridio', // Usually your GitHub org/user name.
   projectName: 'peridio-docs', // Usually your repo name.
   trailingSlash: false,
+  clientModules: ['./src/clientModules/copyInlineCode.js'],
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
