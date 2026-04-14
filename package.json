@@ -1,0 +1,26 @@
+{
+  "name": "peridio-docs",
+  "private": true,
+  "description": "Root proxy — install and run scripts from src/",
+  "scripts": {
+    "postinstall": "npm --prefix src install",
+    "docusaurus": "npm --prefix src run docusaurus",
+    "start": "npm --prefix src run start",
+    "build-peridio-cli": "npm --prefix src run build-peridio-cli",
+    "build-avocado-cli": "npm --prefix src run build-avocado-cli",
+    "sync-references": "npm --prefix src run sync-references",
+    "build": "npm --prefix src run build",
+    "swizzle": "npm --prefix src run swizzle",
+    "deploy": "npm --prefix src run deploy",
+    "clear": "npm --prefix src run clear",
+    "serve": "npm --prefix src run serve",
+    "write-translations": "npm --prefix src run write-translations",
+    "write-heading-ids": "npm --prefix src run write-heading-ids",
+    "format": "npm --prefix src run format",
+    "lint": "npm --prefix src run lint",
+    "typecheck": "npm --prefix src run typecheck"
+  },
+  "engines": {
+    "node": ">=20.0"
+  }
+}

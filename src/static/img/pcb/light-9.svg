@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+<style>
+.t { fill: none; stroke: #3424ee; stroke-linecap: round; stroke-linejoin: round; }
+.t1 { stroke-opacity: 0.09; stroke-width: 1.5; }
+.t2 { stroke-opacity: 0.07; stroke-width: 1; }
+.v { fill: #3424ee; fill-opacity: 0.1; }
+.vr { fill: none; stroke: #3424ee; stroke-opacity: 0.09; stroke-width: 1; }
+</style>
+<!-- Pattern 9: Split and merge -->
+<path class="t t1" d="M0,75 L40,75 L55,55 L140,55 L155,75 L200,75"/>
+<path class="t t1" d="M40,75 L55,95 L140,95 L155,75"/>
+<path class="t t2" d="M95,55 L95,35 L105,25"/>
+<path class="t t2" d="M95,95 L95,115 L105,125"/>
+<circle class="v" cx="40" cy="75" r="3"/>
+<circle class="vr" cx="40" cy="75" r="5.5"/>
+<circle class="v" cx="155" cy="75" r="3"/>
+<circle class="vr" cx="155" cy="75" r="5.5"/>
+<circle class="v" cx="105" cy="25" r="3"/>
+<circle class="vr" cx="105" cy="25" r="5.5"/>
+<circle class="v" cx="105" cy="125" r="3"/>
+<circle class="vr" cx="105" cy="125" r="5.5"/>
+<circle class="v" cx="95" cy="55" r="3"/>
+<circle class="vr" cx="95" cy="55" r="5.5"/>
+</svg>

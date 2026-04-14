@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+<style>
+.t { fill: none; stroke: #7b6ff0; stroke-linecap: round; stroke-linejoin: round; }
+.t1 { stroke-opacity: 0.14; stroke-width: 1.5; }
+.t2 { stroke-opacity: 0.1; stroke-width: 1; }
+.v { fill: #7b6ff0; fill-opacity: 0.15; }
+.vr { fill: none; stroke: #7b6ff0; stroke-opacity: 0.14; stroke-width: 1; }
+</style>
+<!-- Pattern 2: Diagonal highway -->
+<path class="t t1" d="M0,10 L190,140"/>
+<path class="t t1" d="M0,30 L170,140"/>
+<path class="t t2" d="M50,40 L40,40 L20,40"/>
+<path class="t t2" d="M120,100 L130,100 L155,100"/>
+<path class="t t2" d="M80,80 L90,80 L110,80"/>
+<circle class="v" cx="20" cy="40" r="3"/>
+<circle class="vr" cx="20" cy="40" r="5.5"/>
+<circle class="v" cx="155" cy="100" r="3"/>
+<circle class="vr" cx="155" cy="100" r="5.5"/>
+<circle class="v" cx="110" cy="80" r="3"/>
+<circle class="vr" cx="110" cy="80" r="5.5"/>
+<circle class="v" cx="140" cy="120" r="3"/>
+<circle class="vr" cx="140" cy="120" r="5.5"/>
+</svg>

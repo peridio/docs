@@ -8,16 +8,16 @@
       "productType": "Production Ready"
     },
     {
-      "name": "FRDM-i.MX 93",
-      "vendor": "NXP",
-      "chipset": "i.MX 93",
-      "productType": "Development Kit"
-    },
-    {
       "name": "FRDM-i.MX 95",
       "vendor": "NXP",
       "chipset": "i.MX 95",
       "productType": "Development Kit"
+    },
+    {
+      "name": "Ara240 16GB M.2 Module",
+      "vendor": "NXP",
+      "chipset": "Ara240 NPU",
+      "productType": "AI Accelerator"
     }
   ]
 }

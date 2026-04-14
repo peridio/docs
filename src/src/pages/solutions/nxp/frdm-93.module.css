@@ -82,7 +82,7 @@
 }
 
 .ctaPrimary {
-  background: #5f51ff;
+  background: var(--color-accent-button);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -94,7 +94,7 @@
 }
 
 .ctaPrimary:hover {
-  background: #4a3dff;
+  background: var(--color-accent-button-hover);
   color: white;
   text-decoration: none;
 }
@@ -113,8 +113,8 @@
 }
 
 .ctaSecondary:hover {
-  background: #5f51ff;
-  border-color: #5f51ff;
+  background: var(--color-accent-button);
+  border-color: var(--color-accent-button);
   color: white;
   text-decoration: none;
 }
@@ -149,7 +149,11 @@
 .problemSolution .container {
   border-radius: 12px;
   padding: 2rem;
-  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-gradient-surface-from) 0%,
+    var(--color-gradient-surface-to) 100%
+  );
   min-height: 450px;
   display: flex;
   flex-direction: column;
@@ -163,16 +167,16 @@
 
 .sectionHeader h2 {
   font-size: 2rem;
-  font-weight: 600;
-  color: #1d1d1f;
+  font-weight: 400;
+  color: var(--color-text-primary);
   margin-bottom: 1rem;
-  font-family: "Avenir", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   letter-spacing: -0.02em;
 }
 
 .sectionHeader p {
   font-size: 1.125rem;
-  color: #86868b;
+  color: var(--color-text-tertiary);
   line-height: 1.5;
   max-width: 600px;
   margin: 0 auto;
@@ -189,10 +193,10 @@
 
 .challengeCard,
 .solutionCard {
-  background: white;
+  background: var(--color-bg-surface);
   border-radius: 12px;
   padding: 2rem;
-  border: 1px solid #f2f2f2;
+  border: 1px solid var(--color-border-subtle);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -203,7 +207,7 @@
 }
 
 .solutionCard {
-  border: 1px solid #f2f2f2;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .cardHeader {
@@ -225,13 +229,13 @@
 }
 
 .challengeIcon {
-  background: #ffebee;
-  color: #d32f2f;
+  background: var(--color-status-danger-bg);
+  color: var(--color-red-700);
 }
 
 .solutionIcon {
-  background: #e8f5e8;
-  color: #2e7d32;
+  background: var(--color-status-success-bg);
+  color: var(--color-green-700);
 }
 
 .challengeIcon svg,
@@ -243,7 +247,7 @@
 .cardHeader h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1d1d1f;
+  color: var(--color-text-primary);
   margin: 0;
   font-family: "Avenir", sans-serif;
   letter-spacing: -0.01em;
@@ -258,7 +262,7 @@
 .challengeItem,
 .solutionItem {
   padding: 1rem 0;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid var(--color-border-subtle);
   display: flex;
   align-items: center;
 }
@@ -272,16 +276,16 @@
 .solutionText {
   font-size: 1rem;
   line-height: 1.5;
-  color: #424245;
+  color: var(--color-text-secondary);
   font-family: "Avenir", sans-serif;
 }
 
 .challengeText {
-  color: #6b6b6b;
+  color: var(--color-text-tertiary);
 }
 
 .solutionText {
-  color: #1d1d1f;
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 
@@ -296,7 +300,7 @@
   text-align: center;
   margin-bottom: 2rem;
   font-family: "Avenir", sans-serif;
-  font-weight: bold;
+  font-weight: 400;
   color: var(--ifm-font-color-base);
 }
 
@@ -317,7 +321,7 @@
   text-align: center;
   padding: 2.25rem;
   border-radius: 12px;
-  background: #f5f5f7;
+  background: var(--color-bg-muted);
   transition: transform 0.2s;
   display: flex;
   flex-direction: column;
@@ -333,7 +337,7 @@
   height: 4.25rem;
   margin: 0 auto 1.25rem auto;
   display: block;
-  color: #666666;
+  color: var(--color-text-secondary);
 }
 
 .feature h3 {
@@ -366,7 +370,11 @@
 .specs .container {
   border-radius: 12px;
   padding: 2rem;
-  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-gradient-surface-from) 0%,
+    var(--color-gradient-surface-to) 100%
+  );
   min-height: 450px;
   display: flex;
   flex-direction: column;
@@ -374,9 +382,9 @@
 }
 
 .specs .sectionTitle {
-  color: #1d1d1f;
+  color: var(--color-text-primary);
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 400;
   text-align: center;
   margin-bottom: 3rem;
   font-family: "Avenir", sans-serif;
@@ -384,10 +392,10 @@
 }
 
 .specs .specsTable {
-  background-color: white;
+  background-color: var(--color-bg-surface);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px var(--color-card-shadow);
 }
 
 .specsRow {
@@ -396,12 +404,12 @@
   gap: 3rem;
   align-items: center;
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid var(--color-border-subtle);
   transition: background-color 0.2s ease;
 }
 
 .specsRow:hover {
-  background-color: #fafafa;
+  background-color: var(--color-bg-hover);
 }
 
 .specsRow:last-child {
@@ -410,7 +418,7 @@
 
 .specLabel {
   font-weight: 500;
-  color: #86868b;
+  color: var(--color-text-tertiary);
   font-family: "Avenir", sans-serif;
   font-size: 1rem;
 }
@@ -418,12 +426,12 @@
 .specValue {
   font-weight: 600;
   font-family: "Avenir", sans-serif;
-  color: #1d1d1f;
+  color: var(--color-text-primary);
   font-size: 1.125rem;
 }
 
 .specNote {
-  color: #86868b;
+  color: var(--color-text-tertiary);
   font-size: 0.875rem;
   font-family: "Avenir", sans-serif;
   line-height: 1.4;
@@ -451,7 +459,7 @@
   text-align: center;
   padding: 1.5rem;
   border-radius: 10px;
-  background: #f5f5f7;
+  background: var(--color-bg-muted);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -460,7 +468,7 @@
 .benefit h3 {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
-  color: #333333;
+  color: var(--color-text-primary);
   font-family: "Avenir", sans-serif;
   font-weight: bold;
 }
@@ -551,8 +559,8 @@
 .ctaContent h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
-  font-family: "Avenir", sans-serif;
-  font-weight: bold;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 400;
 }
 
 .ctaContent p {
@@ -598,7 +606,7 @@
   color: inherit;
   transition: all 0.2s ease;
   position: relative;
-  background: #f5f5f7;
+  background: var(--color-bg-muted);
   text-align: center;
 }
 
@@ -611,7 +619,7 @@
 .resourceCard h3 {
   font-size: 1.15rem;
   margin-bottom: 0.5rem;
-  color: #333333;
+  color: var(--color-text-primary);
   font-family: "Avenir", sans-serif;
   font-weight: bold;
   text-align: center;
@@ -664,7 +672,7 @@
 
   .challengeCard,
   .solutionCard {
-    border: 1px solid #f2f2f2;
+    border: 1px solid var(--color-border-subtle);
   }
 
   .featureGrid {

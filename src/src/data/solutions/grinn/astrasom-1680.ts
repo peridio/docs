@@ -26,7 +26,7 @@ export const data: SolutionData = {
     },
     secondaryCTA: {
       text: 'Get Started',
-      link: '/avocado-linux/guides/getting-started',
+      link: '/developer-reference/getting-started',
     },
     image: '/img/grinn-astra-som-1680.png',
     imageAlt: 'Grinn AstraSOM-1680 system-on-module',
@@ -176,7 +176,7 @@ export const data: SolutionData = {
       'Transform the Grinn AstraSOM-1680 into a managed smart camera platform with atomic updates, remote diagnostics, and enterprise support.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/avocado-linux/guides/getting-started',
+      link: '/developer-reference/getting-started',
     },
     secondaryCTA: {
       text: 'Request a Demo',

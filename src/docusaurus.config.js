@@ -16,9 +16,10 @@ const config = {
     },
   },
   favicon: 'img/logo.svg',
-  organizationName: 'peridio', // Usually your GitHub org/user name.
-  projectName: 'peridio-docs', // Usually your repo name.
+  organizationName: 'peridio',
+  projectName: 'peridio-docs',
   trailingSlash: false,
+  clientModules: ['./src/clientModules/copyInlineCode.js'],
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -26,6 +27,36 @@ const config = {
   plugins: [
     'docusaurus-plugin-image-zoom',
     './plugins/yaml-loader-plugin',
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'hardware',
+        path: 'docs-hardware',
+        routeBasePath: 'hardware',
+        sidebarPath: require.resolve('./sidebars-hardware.js'),
+        breadcrumbs: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'guides',
+        path: 'docs-guides',
+        routeBasePath: 'developer-reference',
+        sidebarPath: require.resolve('./sidebars-guides.js'),
+        breadcrumbs: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'changelog',
+        path: 'docs-changelog',
+        routeBasePath: 'changelog',
+        sidebarPath: require.resolve('./sidebars-changelog.js'),
+        breadcrumbs: true,
+      },
+    ],
     ...(process.env.NODE_ENV === 'production'
       ? [
           [
@@ -45,40 +76,13 @@ const config = {
       {
         docs: {
           breadcrumbs: true,
-          path: 'docs',
+          path: 'docs-overview',
           routeBasePath: '/',
-          sidebarPath: require.resolve('./sidebars.js'),
-          id: 'docs1',
+          sidebarPath: require.resolve('./sidebars-overview.js'),
         },
         theme: {
           customCss: [require.resolve('./src/css/custom.css')],
         },
-      },
-    ],
-    [
-      'redocusaurus',
-      {
-        specs: [
-          {
-            id: 'peridio-admin-api-v1',
-            layout: { title: 'Admin API v1' },
-            spec: 'openapi/peridio-admin-openapi-v1.yaml',
-            route: 'peridio-core/tools/admin-api/v1/popout',
-          },
-          {
-            id: 'peridio-admin-api',
-            layout: { title: 'Admin API' },
-            spec: 'openapi/peridio-admin-openapi.yaml',
-            route: 'peridio-core/tools/admin-api/popout',
-          },
-          {
-            id: 'peridio-device-api',
-            layout: { title: 'Device API' },
-            spec: 'openapi/peridio-device-openapi.yaml',
-            route: 'peridio-core/tools/device-api/popout',
-          },
-        ],
-        config: './redocly.yaml',
       },
     ],
   ],
@@ -86,18 +90,21 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       colorMode: {
-        disableSwitch: true,
+        defaultMode: 'light',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
       },
       docs: {
         sidebar: {
-          hideable: true,
+          hideable: false,
         },
       },
       navbar: {
-        hideOnScroll: true,
+        hideOnScroll: false,
         logo: {
           alt: 'Peridio Logo',
           src: 'img/peridio-docs-logo.svg',
+          srcDark: 'img/peridio-docs-logo-dark.svg',
           style: {
             height: '25px',
             marginTop: '3px',
@@ -105,98 +112,94 @@ const config = {
         },
         items: [
           {
-            type: 'dropdown',
-            label: 'Documentation',
-            to: '/overview',
+            to: '/',
+            label: 'Product Documentation',
             position: 'left',
-            items: [
-              {
-                type: 'html',
-                value:
-                  '<div class="dropdown__menu--grid-container"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">GETTING STARTED</div><a href="/avocado-linux/guides/getting-started" class="dropdown__menu--link">Getting started</a><a href="/avocado-linux/guides/hardware-in-the-loop" class="dropdown__menu--link">Hardware in the Loop</a><a href="/avocado-linux/guides/sideloading" class="dropdown__menu--link">Sideload an Update</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">CORE PLATFORMS</div><a href="/overview" class="dropdown__menu--link">Overview</a><a href="/avocado-linux/overview" class="dropdown__menu--link">Avocado OS</a><a href="/peridio-core/overview" class="dropdown__menu--link">Peridio Core</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">RESOURCES</div><a href="/peridio-core/reference/remote-access/tunnels" class="dropdown__menu--link">Remote Access Tunnels</a><a href="/peridio-core/reference/integration-management/webhooks" class="dropdown__menu--link">Webhooks</a><a href="/peridio-core/reference/device-management/ca-certificates" class="dropdown__menu--link">CA Certificates</a></div></div>',
-              },
-            ],
+            activeBaseRegex: '^/(about|features|core-concepts|security|faqs|policies)?$',
           },
           {
-            type: 'dropdown',
-            label: 'Featured Hardware',
+            to: '/hardware/support-matrix',
+            label: 'Hardware',
             position: 'left',
-            className: 'featured-hardware-dropdown',
-            items: [
-              {
-                type: 'html',
-                value:
-                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">SEMICONDUCTORS &amp; MODULES</div><a href="/solutions/nxp/imx8mp" class="dropdown__menu--link">NXP i.MX 8M Plus</a><a href="/solutions/raspberry-pi/raspberry-pi-5" class="dropdown__menu--link">Raspberry Pi 5</a><a href="/solutions/nvidia/jetson-orin-nano" class="dropdown__menu--link">NVIDIA Jetson</a><a href="/solutions/grinn/astrasom-1680" class="dropdown__menu--link">Grinn AstraSOM-1680</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PRODUCTION READY</div><a href="/solutions/advantech/icam-540" class="dropdown__menu--link">Advantech ICAM-540</a><a href="/solutions/onlogic/fr201" class="dropdown__menu--link">OnLogic FR201</a><a href="/solutions/seeed/reterminal" class="dropdown__menu--link">Seeed reTerminal</a></div></div><div style="margin-top: 1.75rem; text-align: right;"><a href="/hardware/support-matrix" style="font-size: 0.85rem; color: #666; opacity: 0.9; text-decoration: none; transition: opacity 0.2s ease;" onmouseover="this.style.opacity=\'1\'; this.style.color=\'#333\';" onmouseout="this.style.opacity=\'0.9\'; this.style.color=\'#666\';">View all supported hardware →</a></div>',
-              },
-            ],
+            activeBasePath: 'hardware',
           },
           {
-            type: 'dropdown',
-            label: 'Tools',
-            position: 'right',
-            items: [
-              {
-                type: 'html',
-                value:
-                  '<div class="dropdown__menu--grid-container dropdown__menu--hardware"><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">AVOCADO LINUX</div><a href="/avocado-linux/tools/avocado-cli/overview" class="dropdown__menu--link">Avocado CLI</a><a href="/avocado-linux/tools/avocado-control" class="dropdown__menu--link">Avocado Control</a><a href="/avocado-linux/tools/meta-avocado" class="dropdown__menu--link">Meta Avocado</a></div><div class="dropdown__menu--column"><div class="dropdown__menu--section-title">PERIDIO CORE</div><a href="/peridio-core/tools/admin-api" class="dropdown__menu--link">Admin API</a><a href="/peridio-core/tools/rust-sdk" class="dropdown__menu--link">Admin API Rust SDK</a><a href="/peridio-core/tools/peridio-cli/overview" class="dropdown__menu--link">Peridio CLI</a><a href="/peridio-core/tools/peridio-daemon/overview" class="dropdown__menu--link">Peridio Daemon</a><a href="/peridio-core/tools/device-api" class="dropdown__menu--link">Device API</a></div></div>',
-              },
-            ],
+            to: '/developer-reference/getting-started',
+            label: 'Developer Reference',
+            position: 'left',
+            activeBasePath: 'developer-reference',
           },
           {
-            href: 'https://console.peridio.com',
-            label: 'Web Console',
-            position: 'right',
+            to: '/changelog/april-2026/0.34.0',
+            label: 'Changelog',
+            position: 'left',
+            activeBasePath: 'changelog',
           },
         ],
       },
-      footer: {
-        links: [],
-        copyright: `Copyright © ${new Date().getFullYear()} Peridio.`,
-      },
+      footer: undefined,
       prism: {
-        theme: themes.dracula,
-        darkTheme: themes.dracula,
+        theme: themes.oneLight,
+        darkTheme: themes.oneDark,
         additionalLanguages: ['bash', 'toml'],
-        // Enable custom magic comments for colored line highlighting
-        // See: https://docusaurus.io/docs/markdown-features/code-blocks#highlighting-with-metadata-string
         magicComments: [
-          // Keep neutral highlight support (default)
           {
             className: 'docusaurus-highlight-code-line',
             line: 'highlight-next-line',
             block: { start: 'highlight-start', end: 'highlight-end' },
           },
-          // Added lines (green)
           {
             className: 'code-block-line--added',
             line: 'highlight-added',
             block: { start: 'highlight-added-start', end: 'highlight-added-end' },
           },
-          // Removed lines (red)
           {
             className: 'code-block-line--removed',
             line: 'highlight-removed',
             block: { start: 'highlight-removed-start', end: 'highlight-removed-end' },
           },
+          {
+            className: 'code-block-line--blue',
+            line: 'highlight-blue',
+            block: { start: 'highlight-blue-start', end: 'highlight-blue-end' },
+          },
+          {
+            className: 'code-block-line--purple',
+            line: 'highlight-purple',
+            block: { start: 'highlight-purple-start', end: 'highlight-purple-end' },
+          },
+          {
+            className: 'code-block-line--green',
+            line: 'highlight-green',
+            block: { start: 'highlight-green-start', end: 'highlight-green-end' },
+          },
+          {
+            className: 'code-block-line--orange',
+            line: 'highlight-orange',
+            block: { start: 'highlight-orange-start', end: 'highlight-orange-end' },
+          },
         ],
       },
-      // algolia: {
-      //   appId: 'EBXD92WI74',
-      //   apiKey: '94b06f9c5bf6a24e020120fa38784bca',
-      //   indexName: 'peridio',
-      // },
       zoom: {
         selector: '.markdown > img',
         background: {
           light: 'rgb(255, 255, 255)',
           dark: 'rgb(50, 50, 50)',
         },
-        config: {
-          // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
-        },
+        config: {},
       },
     }),
   headTags: [
+    {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `
+        // Set the active site theme
+        // Options: 'peridio' (purple, default), 'avocado' (green), 'alt' (blue)
+        // To switch: change the value below and rebuild
+        // document.documentElement.setAttribute('data-site-theme', 'avocado');
+      `,
+    },
     {
       tagName: 'script',
       attributes: {},
@@ -228,7 +231,7 @@ const config = {
       tagName: 'link',
       attributes: {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&family=Spline+Sans:wght@300..700&display=swap',
       },
     },
     {

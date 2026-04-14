@@ -3,7 +3,8 @@
   "devices": [
     {
       "name": "QEMU ARM",
-      "url": "/hardware/qemu/arm/provision",
+      "target": "qemuarm64",
+      "url": "/developer-reference/getting-started/qemu",
       "external": false,
       "features": {
         "provisioning": "full",
@@ -17,7 +18,8 @@
     },
     {
       "name": "QEMU x86-64",
-      "url": "/hardware/qemu/x86-64/provision",
+      "target": "qemux86-64",
+      "url": "/developer-reference/getting-started/qemu",
       "external": false,
       "features": {
         "provisioning": "full",

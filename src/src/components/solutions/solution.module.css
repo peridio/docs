@@ -148,29 +148,29 @@
 /* Specifications Section */
 .specs {
   padding: 5rem 1.5rem;
-  background: #f8f9fa;
+  background: var(--color-bg-muted);
 }
 
 .sectionTitle {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 400;
   text-align: center;
   margin-bottom: 3rem;
-  font-family: "Avenir", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .specsTable {
-  background: white;
+  background: var(--color-bg-surface);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--color-card-shadow);
 }
 
 .specsRow {
   display: grid;
   grid-template-columns: 200px 1fr auto;
   padding: 1.25rem;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--color-border-default);
   align-items: center;
 }
 
@@ -180,24 +180,24 @@
 
 .specLabel {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .specValue {
-  color: #555;
+  color: var(--color-text-secondary);
   padding: 0 1rem;
 }
 
 .specNote {
   font-size: 0.875rem;
-  color: #6c757d;
+  color: var(--color-text-tertiary);
   font-style: italic;
 }
 
 /* Use Cases Section */
 .useCases {
   padding: 5rem 1.5rem;
-  background: white;
+  background: var(--color-bg-surface);
 }
 
 .useCaseGrid {
@@ -221,18 +221,18 @@
 .useCase h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .useCase p {
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.6;
 }
 
 /* Problem/Solution Section */
 .problemSolution {
   padding: 5rem 1.5rem;
-  background: #f8f9fa;
+  background: var(--color-bg-muted);
 }
 
 .sectionHeader {
@@ -242,12 +242,12 @@
 
 .sectionHeader h2 {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 400;
   margin-bottom: 0.5rem;
 }
 
 .sectionHeader p {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 1.1rem;
 }
 
@@ -259,10 +259,10 @@
 
 .challengeCard,
 .solutionCard {
-  background: white;
+  background: var(--color-bg-surface);
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--color-card-shadow);
 }
 
 .cardHeader {
@@ -283,13 +283,13 @@
 }
 
 .challengeIcon {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--color-status-danger-bg);
+  color: var(--color-status-danger);
 }
 
 .solutionIcon {
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--color-status-success-bg);
+  color: var(--color-status-success-text);
 }
 
 .cardHeader h3 {
@@ -300,7 +300,7 @@
 .challengeItem,
 .solutionItem {
   padding: 0.75rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .challengeItem:last-child,
@@ -310,14 +310,14 @@
 
 .challengeText,
 .solutionText {
-  color: #4b5563;
+  color: var(--color-text-secondary);
   line-height: 1.6;
 }
 
 /* Features Section */
 .features {
   padding: 5rem 1.5rem;
-  background: white;
+  background: var(--color-bg-surface);
 }
 
 .featureGrid {
@@ -335,24 +335,28 @@
   width: 64px;
   height: 64px;
   margin: 0 auto 1.5rem;
-  color: #5f51ff;
+  color: var(--color-accent-button);
 }
 
 .feature h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .feature p {
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.6;
 }
 
 /* CTA Section */
 .cta {
   padding: 5rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-gradient-cta-from) 0%,
+    var(--color-gradient-cta-to) 100%
+  );
   color: white;
 }
 
@@ -385,7 +389,7 @@
 /* Resources Section */
 .resources {
   padding: 5rem 1.5rem;
-  background: #f8f9fa;
+  background: var(--color-bg-muted);
 }
 
 .resourceGrid {
@@ -395,29 +399,29 @@
 }
 
 .resourceCard {
-  background: white;
+  background: var(--color-bg-surface);
   padding: 1.5rem;
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.2s;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--color-border-default);
   display: block;
 }
 
 .resourceCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px var(--color-card-shadow-hover);
   transform: translateY(-2px);
   text-decoration: none;
 }
 
 .resourceCard h3 {
-  color: #333;
+  color: var(--color-text-primary);
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
 
 .resourceCard p {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -598,22 +602,22 @@
 /* Solution Overview Section */
 .solutionOverview {
   padding: 3rem 2rem;
-  background: white;
+  background: var(--color-bg-surface);
   text-align: center;
 }
 
 .overviewTitle {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 400;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--color-text-primary);
   text-align: center;
 }
 
 .overviewContent {
   font-size: 1.125rem;
   line-height: 1.7;
-  color: #666;
+  color: var(--color-text-secondary);
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -628,8 +632,8 @@
   aspect-ratio: 16/9;
   border-radius: 12px;
   overflow: hidden;
-  background: #f5f5f5;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-muted);
+  box-shadow: 0 4px 16px var(--color-card-shadow);
 }
 
 .videoFrame {
@@ -665,8 +669,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #e0e0e0;
-  border-top-color: #333;
+  border: 3px solid var(--color-border-default);
+  border-top-color: var(--color-text-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 0 auto 1rem;
@@ -679,7 +683,7 @@
 }
 
 .loadingText {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
 }
 

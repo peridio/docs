@@ -152,7 +152,7 @@ export const icam540Data: SolutionData = {
       'Transform your Advantech ICAM-540 cameras into a managed vision fleet with atomic updates, remote diagnostics, and enterprise support.',
     primaryCTA: {
       text: 'Provision Guide',
-      link: '/hardware/advantech/icam-540/provision',
+      link: '/hardware/advantech/icam-540',
     },
     secondaryCTA: {
       text: 'Request a Demo',

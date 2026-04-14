@@ -1,34 +1,23 @@
 import React from 'react'
 import DocItem from '@theme-original/DocItem'
-import Heading from '@theme/Heading'
-import PropTypes from 'prop-types'
-
-function SpecSheetLayout(props) {
-  // Custom layout for spec sheets
-  return (
-    <div style={{ border: '2px solid red', padding: '20px' }}>
-      <Heading as="h1">SPEC SHEET</Heading>
-      <DocItem {...props} />
-    </div>
-  )
-}
+import ChangelogInfiniteScroll from '../../components/ChangelogInfiniteScroll'
 
 export default function DocItemWrapper(props) {
-  const { route } = props.content.metadata
+  const { content } = props
+  const permalink = content.metadata.permalink
 
-  if (route && route.source.includes('solutions')) {
-    return <SpecSheetLayout {...props} />
+  // Changelog pages get infinite scroll
+  if (permalink?.startsWith('/changelog/') && permalink !== '/changelog/') {
+    return <ChangelogInfiniteScroll initialContent={content} />
+  }
+
+  if (permalink === '/hardware/support-matrix') {
+    return (
+      <div className="support-matrix-doc-page">
+        <DocItem {...props} />
+      </div>
+    )
   }
 
   return <DocItem {...props} />
-}
-
-DocItemWrapper.propTypes = {
-  content: PropTypes.shape({
-    metadata: PropTypes.shape({
-      route: PropTypes.shape({
-        source: PropTypes.string,
-      }),
-    }),
-  }),
 }
