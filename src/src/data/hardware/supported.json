@@ -1,0 +1,260 @@
+{
+  "category": "",
+  "devices": [
+    {
+      "name": "Advantech ICAM-540",
+      "target": "icam-540",
+      "url": "/hardware/advantech/icam-540",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Grinn AstraSOM-1680",
+      "target": null,
+      "url": "/hardware/grinn/astrasom-1680",
+      "external": false,
+      "features": {
+        "provisioning": "partial",
+        "hitl": "partial",
+        "sideLoading": "partial",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "partial"
+      }
+    },
+    {
+      "name": "Intel x86-64-v2",
+      "target": "intel-x86-64-v2",
+      "url": "/hardware/intel/x86-64-v2",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Intel x86-64-v3",
+      "target": "intel-x86-64-v3",
+      "url": "/hardware/intel/x86-64-v3",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NVIDIA Jetson AGX Orin Developer Kit",
+      "target": "jetson-agx-orin-devkit",
+      "url": "/hardware/nvidia/jetson-agx-orin",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NVIDIA Jetson Orin Nano Developer Kit",
+      "target": "jetson-orin-nano-devkit",
+      "url": "/hardware/nvidia/jetson-orin-nano-developer-kit",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NXP FRDM i.MX 91",
+      "target": "imx91-frdm",
+      "url": "/hardware/nxp/frdm-imx-91",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NXP i.MX 8MP EVK",
+      "target": "imx8mp-evk",
+      "url": "/hardware/nxp/imx8mp",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NXP i.MX 93 EVK",
+      "target": "imx93-evk",
+      "url": "/hardware/nxp/imx93-evk",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "NXP i.MX 93 FRDM SBC",
+      "target": "imx93-frdm",
+      "url": "/hardware/nxp/frdm-imx-93",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "OnLogic FR201",
+      "target": "fr201",
+      "url": "/hardware/onlogic/fr201",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Raspberry Pi 4 Model B",
+      "target": "raspberrypi4",
+      "url": "/hardware/raspberry-pi/raspberry-pi-4-model-b",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Raspberry Pi 5",
+      "target": "raspberrypi5",
+      "url": "/hardware/raspberry-pi/raspberry-pi-5",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Raspberry Pi Zero 2 W",
+      "target": "raspberrypi0-2w",
+      "url": "/hardware/raspberry-pi/raspberry-pi-zero-2-w",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Seeed reTerminal",
+      "target": "reterminal",
+      "url": "/hardware/seeed/reterminal",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "Seeed reTerminal DM",
+      "target": "reterminal-dm",
+      "url": "/hardware/seeed/reterminal-dm",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    },
+    {
+      "name": "STMicroelectronics STM32MP257F-DK",
+      "target": "stm32mp257f-dk",
+      "url": "/hardware/stmicroelectronics/stm32mp257f-dk",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "partial",
+        "sideLoading": "full",
+        "extensionOta": "partial",
+        "osOta": "partial",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
+    }
+  ]
+}

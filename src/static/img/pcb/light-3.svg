@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+<style>
+.t { fill: none; stroke: #3424ee; stroke-linecap: round; stroke-linejoin: round; }
+.t1 { stroke-opacity: 0.09; stroke-width: 1.5; }
+.t2 { stroke-opacity: 0.07; stroke-width: 1; }
+.v { fill: #3424ee; fill-opacity: 0.1; }
+.vr { fill: none; stroke: #3424ee; stroke-opacity: 0.09; stroke-width: 1; }
+</style>
+<!-- Pattern 3: Fan-out from left -->
+<path class="t t1" d="M0,50 L60,50 L75,35 L200,35"/>
+<path class="t t1" d="M0,75 L100,75 L200,75"/>
+<path class="t t2" d="M0,100 L60,100 L75,115 L200,115"/>
+<circle class="v" cx="60" cy="50" r="3"/>
+<circle class="vr" cx="60" cy="50" r="5.5"/>
+<circle class="v" cx="100" cy="75" r="3"/>
+<circle class="vr" cx="100" cy="75" r="5.5"/>
+<circle class="v" cx="60" cy="100" r="3"/>
+<circle class="vr" cx="60" cy="100" r="5.5"/>
+<circle class="v" cx="175" cy="35" r="3"/>
+<circle class="vr" cx="175" cy="35" r="5.5"/>
+<circle class="v" cx="175" cy="115" r="3"/>
+<circle class="vr" cx="175" cy="115" r="5.5"/>
+</svg>

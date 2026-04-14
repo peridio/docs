@@ -1,0 +1,99 @@
+---
+title: 'Production-Ready Intel x86-64-v3 Deployment'
+sidebar_position: 0
+description: 'Deploy Intel x86-64-v3 devices in production with Avocado OS. Optimized for Intel Haswell+ and AMD Excavator+ with AVX2 for edge AI and compute-intensive workloads.'
+---
+
+# Intel x86-64-v3
+
+High-performance x86-64 microarchitecture level 3 target optimized for AVX2-capable Intel and AMD hardware
+
+<!-- TODO: Add product image -->
+
+**x86-64-v3** Instruction Set | **AVX2 Optimized** | **Edge AI & Compute**
+
+## Overview
+
+The Intel x86-64-v3 target in Avocado OS provides a production-ready Linux image optimized for modern Intel and AMD processors supporting the x86-64-v3 microarchitecture level. This includes Intel Haswell (2013) and AMD Excavator (2015) onward, enabling AVX2, BMI1/BMI2, FMA, and other advanced instructions that significantly accelerate compute-intensive workloads like AI inference, signal processing, and data compression. Use this target when your deployment hardware is known to support AVX2 and you want the performance benefits of a higher baseline instruction set.
+
+## Specifications
+
+| Specification | Value                   | Notes                                   |
+| ------------- | ----------------------- | --------------------------------------- |
+| Architecture  | x86-64-v3               | AVX2, BMI1/2, FMA, F16C, MOVBE required |
+| Intel Support | Haswell and newer       | Core i-series 4th gen+, Xeon E3/E5 v3+  |
+| AMD Support   | Excavator and newer     | Ryzen, EPYC, Athlon (Zen-based)         |
+| Boot          | UEFI                    | Legacy BIOS not supported               |
+| Storage       | NVMe, SATA, USB         | Standard block devices                  |
+| Networking    | Onboard Ethernet, Wi-Fi | Hardware-dependent                      |
+
+## Use Cases
+
+### Edge AI Inference
+
+AVX2 acceleration for CPU-based inference with frameworks like OpenVINO, ONNX Runtime, and TensorFlow Lite. Maximize throughput without a discrete GPU.
+
+### Data Processing Gateways
+
+High-throughput data aggregation, compression, and protocol translation at the edge. AVX2 speeds up common data pipeline operations.
+
+### Compute-Intensive Edge Workloads
+
+Signal processing, video transcoding, encryption, and scientific computing benefit from the wider SIMD registers and fused multiply-add.
+
+## Challenges and Solutions
+
+| Challenge                                   | Solution                                       |
+| ------------------------------------------- | ---------------------------------------------- |
+| CPU inference performance on generic images | AVX2-optimized binaries for higher throughput  |
+| Diverse modern x86 hardware                 | Single image for all v3-capable processors     |
+| Security patching for edge deployments      | Atomic OTA updates with automatic rollback     |
+| OS maintenance across fleet                 | Avocado OS handles kernel and BSP maintenance  |
+| Performance tuning for edge workloads       | Compiler-optimized for v3 instruction baseline |
+
+## Key Features
+
+### AVX2-Optimized Performance
+
+All system libraries and packages compiled with AVX2 baseline. Measurable performance gains for vectorized workloads compared to x86-64-v2.
+
+### Production Hardening
+
+Immutable SquashFS root filesystem with A/B partitioning. No filesystem corruption, no failed updates in the field.
+
+### Atomic OTA Updates
+
+Safe over-the-air updates with automatic rollback. Keep deployed x86 fleets current without on-site visits.
+
+### Standard Linux Environment
+
+Full systemd, containers, and standard Linux tooling. Your existing x86 applications run without modification.
+
+### Long-Term Support
+
+Kernel and security maintenance from Avocado OS. Deploy once, maintain for years without rebuilding your OS from scratch.
+
+## x86-64-v3 vs x86-64-v2
+
+Choose **x86-64-v3** for best performance on modern hardware (Intel Haswell+ / AMD Excavator+). Choose [x86-64-v2](/hardware/intel/x86-64-v2) if you need to support older processors or mixed-generation deployments.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `intel-x86-64-v3`. The provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile usb
+```
+
+### Run
+
+After provisioning completes, insert the provisioned media into the target device and power it on.
+
+The device will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.

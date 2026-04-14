@@ -1,0 +1,58 @@
+---
+sidebar_position: 0
+title: 'About Avocado OS'
+description: 'Embedded Linux distribution built on Yocto. Pre-built packages, composable extensions, immutable rootFS, and a declarative config.'
+---
+
+import TerminalDemo from '@site/src/components/TerminalDemo'
+import { PathComparisonCards } from '@site/src/components/PathComparison'
+
+# Avocado OS
+
+A binary distribution for embedded Linux built on Yocto. We compile the world into pre-built RPM packages — you declare what you need in a YAML file, and the CLI assembles a deterministic, immutable Linux image. No BitBake. No multi-hour builds. No Yocto expertise required.
+
+---
+
+## Why This Exists
+
+<PathComparisonCards />
+
+Embedded Linux has always forced this dichotomy of choice. Yocto sets you up for success with deterministic runtimes and reproducibility — but the learning curve is steep and the talent pool is tiny. Desktop distributions like Ubuntu get you moving fast, but you're applying mutations at runtime. Devices drift. Reproducing a bug on your desk becomes guesswork.
+
+Avocado threads the needle. We use Yocto to compile the world into pre-built packages — you declare what you need, and the CLI assembles an immutable, signed image. Package management that feels familiar, but at build time, not runtime. Same production guarantees. No state drift. No BitBake. No multi-hour builds on your machine.
+
+---
+
+## How It Works
+
+Define your target, runtimes, and extensions in `avocado.yaml`.
+Run three commands.
+You have a bootable image.
+
+<TerminalDemo />
+
+Your application code lives in extensions that overlay onto the immutable root via systemd-sysext. Update your app without rebuilding the OS. Switch hardware targets by changing one line.
+
+---
+
+## What's Under the Hood
+
+![How Avocado OS works — from build services through package repositories, image assembly, to testing and delivery](/img/how-it-works.png)
+
+- **Yocto-built package feeds** — RPM packages per architecture and target. Resolved by DNF5. Versioned and immutable.
+- **Composable extensions** — systemd-sysext and confext. dm-verity signed. Overlaid at boot. No container runtime.
+- **Immutable rootFS** — SquashFS, read-only. A/B boot slots. BTRFS `/var` for extensions and data.
+- **Declarative config** — `avocado.yaml` defines target, runtimes, extensions, packages, overlay, SDK tools. One file.
+- **Cross-compilation SDK** — Composable. Declare `nativesdk-rust`, `nativesdk-go`, whatever you need. Automatically configured for your target arch.
+- **Hardware-in-the-loop** — NFS mount your code onto running hardware. Edit locally, see it on the device. No rebuild cycle.
+- **Normalized provisioning** — `avocado provision` handles tegraflash, SD cards, USB boot, fuse burning. One command across all targets.
+
+---
+
+## Next Steps
+
+- [Get started](/developer-reference/getting-started) — Build and deploy your first image
+- [Features](/features) — Architecture decisions and tradeoffs
+- [Core Concepts](/core-concepts) — avocado.yaml, runtimes, extensions, packages, systemd
+- [Explore supported hardware](/hardware/support-matrix) — NVIDIA, NXP, Qualcomm, Raspberry Pi, Intel, and more
+- [References](/developer-reference/references/explore) — Working example projects

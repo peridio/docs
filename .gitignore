@@ -29,3 +29,8 @@ spec-sheets/
 vibe/
 
 **/static/**/avocado-config.json
+
+# Generated reference docs (built from external repo)
+src/docs-guides/references/
+src/.cache-references/
+src/static/generated/

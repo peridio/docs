@@ -1,71 +1,25 @@
 import React from 'react'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
-import './support-matrix.css'
-
-// Import JSON data files
-import productionReadyData from '../../data/hardware/production-ready.json'
-import siliconData from '../../data/hardware/silicon.json'
+import DataTable from '../DataTable'
+import { StatusIndicator } from '../DataTable/StatusIndicator'
+import { Legend } from '../DataTable/Legend'
+import styles from '../DataTable/styles.module.css'
+import supportedData from '../../data/hardware/supported.json'
 import virtualEnvironmentData from '../../data/hardware/virtual-environment.json'
-
-const statusConfig = {
-  full: {
-    className: 'status-full',
-    title: 'Fully Supported',
-    symbol: '●',
-  },
-  partial: {
-    className: 'status-partial',
-    title: 'In Development',
-    symbol: '●',
-  },
-  none: {
-    className: 'status-none',
-    title: 'Not Supported',
-    symbol: '●',
-  },
-}
-
-const featureColumns = [
-  { key: 'provisioning', label: 'Provisioning' },
-  { key: 'hitl', label: 'HITL' },
-  { key: 'sideLoading', label: 'Sideloading' },
-  { key: 'ota', label: 'OTA' },
-  { key: 'remoteAccessTunnels', label: 'Remote Access Tunnels' },
-]
 
 function getCombinedOtaStatus(features) {
   const extensionOta = features.extensionOta || 'none'
   const osOta = features.osOta || 'none'
-
-  // If either is full, return full
-  if (extensionOta === 'full' || osOta === 'full') {
-    return 'full'
-  }
-
-  // If either is partial, return partial
-  if (extensionOta === 'partial' || osOta === 'partial') {
-    return 'partial'
-  }
-
-  // Otherwise return none
+  if (extensionOta === 'full' || osOta === 'full') return 'full'
+  if (extensionOta === 'partial' || osOta === 'partial') return 'partial'
   return 'none'
-}
-
-function StatusIndicator({ status }) {
-  const config = statusConfig[status] || statusConfig.none
-  return (
-    <span className={config.className} title={config.title}>
-      {config.symbol}
-    </span>
-  )
 }
 
 function DeviceLink({ device }) {
   if (!device.url) {
     return <strong>{device.name}</strong>
   }
-
   if (device.external) {
     return (
       <strong>
@@ -75,7 +29,6 @@ function DeviceLink({ device }) {
       </strong>
     )
   }
-
   return (
     <strong>
       <Link to={device.url}>{device.name}</Link>
@@ -83,76 +36,66 @@ function DeviceLink({ device }) {
   )
 }
 
-function SupportMatrixTable({ data, showCategoryHeaders = true }) {
-  return (
-    <div className="support-matrix-container">
-      <table className="support-matrix">
-        <thead>
-          <tr>
-            <th>Hardware</th>
-            {featureColumns.map((column) => (
-              <th key={column.key}>{column.label}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((categoryData, categoryIndex) => (
-            <React.Fragment key={categoryIndex}>
-              {showCategoryHeaders && (
-                <tr className="category-header">
-                  <td colSpan={featureColumns.length + 1}>
-                    <strong>{categoryData.category}</strong>
-                  </td>
-                </tr>
-              )}
-              {categoryData.devices.map((device, deviceIndex) => (
-                <tr key={`${categoryIndex}-${deviceIndex}`}>
-                  <td>
-                    <DeviceLink device={device} />
-                  </td>
-                  {featureColumns.map((column) => (
-                    <td key={column.key}>
-                      <StatusIndicator
-                        status={
-                          column.key === 'ota'
-                            ? getCombinedOtaStatus(device.features)
-                            : device.features[column.key]
-                        }
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
-function SupportLegend() {
-  return (
-    <div className="support-legend">
-      <Heading as="h3">Legend</Heading>
-      <ul>
-        {Object.entries(statusConfig).map(([status, config]) => (
-          <li key={status}>
-            <span className={config.className}>{config.symbol}</span> {config.title}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+const columns = [
+  {
+    key: 'name',
+    header: 'Hardware',
+    width: '28%',
+    align: 'left',
+    render: (device) => <DeviceLink device={device} />,
+  },
+  {
+    key: 'target',
+    header: 'Target',
+    width: '30%',
+    align: 'left',
+    render: (device) => (device.target ? <code>{device.target}</code> : '—'),
+  },
+  {
+    key: 'provisioning',
+    header: 'Provisioning',
+    render: (d) => <StatusIndicator status={d.features.provisioning} />,
+  },
+  {
+    key: 'hitl',
+    header: 'HITL',
+    render: (d) => <StatusIndicator status={d.features.hitl} />,
+  },
+  {
+    key: 'sideLoading',
+    header: 'Sideload',
+    render: (d) => <StatusIndicator status={d.features.sideLoading} />,
+  },
+  {
+    key: 'ota',
+    header: 'OTA',
+    render: (d) => <StatusIndicator status={getCombinedOtaStatus(d.features)} />,
+  },
+  {
+    key: 'remoteAccessTunnels',
+    header: 'Tunnels',
+    render: (d) => <StatusIndicator status={d.features.remoteAccessTunnels} />,
+  },
+]
 
 export default function SupportMatrix() {
-  const mainSupportData = [productionReadyData, siliconData, virtualEnvironmentData]
+  const data = [
+    { category: supportedData.category, rows: supportedData.devices },
+    {
+      category: virtualEnvironmentData.category,
+      rows: virtualEnvironmentData.devices,
+    },
+  ]
 
   return (
     <div>
-      <SupportMatrixTable data={mainSupportData} />
-      <SupportLegend />
+      <div className={styles.sectionHeader}>
+        <Heading as="h2" id="supported">
+          Supported
+        </Heading>
+        <Legend />
+      </div>
+      <DataTable columns={columns} data={data} ariaLabel="Hardware support matrix" />
     </div>
   )
 }

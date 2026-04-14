@@ -10,8 +10,8 @@ export const data: SolutionData = {
   canonicalUrl: 'https://docs.peridio.com/solutions/nvidia/jetson-orin-nx',
 
   hero: {
-    title: 'Fast-Track Your Orin NX Production Deployment',
-    highlight: 'Orin NX Production Deployment',
+    title: 'Fast-Track Your Jetson Orin NX Deployment',
+    highlight: 'Jetson Orin NX',
     subtitle:
       'Production-grade software for high-performance AI edge computing. Deploy NVIDIA Jetson Orin NX fleets from day 1 with deterministic Linux, secure OTA, and fleet management',
     stats: [
@@ -21,7 +21,7 @@ export const data: SolutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nvidia/jetson-orin-nano-developer-kit/provision',
+      link: '/hardware/nvidia/jetson-orin-nano-developer-kit',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -156,7 +156,7 @@ export const data: SolutionData = {
       'Empower your NVIDIA Jetson Orin NX with production-grade software infrastructure for secure, scalable high-performance AI.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nvidia/jetson-orin-nano-developer-kit/provision',
+      link: '/hardware/nvidia/jetson-orin-nano-developer-kit',
     },
     secondaryCTA: {
       text: 'Learn More',

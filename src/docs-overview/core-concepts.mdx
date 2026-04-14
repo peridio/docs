@@ -1,0 +1,338 @@
+---
+title: 'Core Concepts'
+sidebar_position: 2
+description: 'Key concepts in Avocado OS - avocado.yaml, runtimes, extensions, packages, overlays, systemd integration, and lifecycle hooks.'
+---
+
+Avocado OS is built around a few core concepts that work together to deliver a composable, immutable embedded Linux platform. This page introduces each concept and how they relate.
+
+```text
+// highlight-removed-start
+
+            Yocto + BSPs ──▶ Package Feeds (RPM)                                 <-  we do this for you
+                            │
+                            ▼
+// highlight-removed-end
+// highlight-orange-start
+                      avocado.yaml                                               <- your config
+               ┌─────────────────────────┐
+               │ target: raspberrypi5    │
+               │                         │
+               │ runtimes:               │
+               │   dev:                  │
+               │     extensions:         │
+               │       - my-app          │                                       <- your app
+               │       - avocado-ext-dev │
+               └─────────────────────────┘
+                            │
+                            ▼
+// highlight-orange-end
+// highlight-green-start
+
+                     avocado install         resolve and install packages
+                            │
+                            ▼
+                      avocado build          compile, image, sign extensions
+                            │
+                            ▼
+                     avocado provision       flash to hardware
+                            │
+                            ▼
+// highlight-green-end
+// highlight-blue-start
+
+                  On-Device (hardware)                                           <- your os
+               ┌─────────────────────────┐
+               │ /var  BTRFS  read-write │  extensions (SquashFS, dm-verity)
+               ├─────────────────────────┤
+               │ systemd-sysext merge    │  extensions → /usr, /etc
+               ├────────────┬────────────┤
+               │ rootFS (A) │ rootFS (B) │  SquashFS, read-only
+               ├────────────┼────────────┤
+               │ BSP+K  (A) │ BSP+K  (B) │  kernel, initramfs
+               ├────────────┼────────────┤
+               │ Boot   (A) │ Boot   (B) │  bootloader
+               └────────────┴────────────┘
+
+// highlight-blue-end
+```
+
+---
+
+## avocado.yaml
+
+The `avocado.yaml` file is the single source of truth for your Avocado project. It declares everything — your target hardware, your runtimes, your extensions, your SDK configuration. One file defines your entire system. As Justin puts it, "it feels a lot like infrastructure as code."
+
+```yaml
+target: raspberrypi5 # ◀ target hardware
+
+runtimes: # ◀ named deployment profiles
+  dev:
+    extensions:
+      - my-app
+      - avocado-ext-dev
+  prod:
+    extensions:
+      - my-app
+      - monitoring
+
+extensions: # ◀ your application + dependencies
+  my-app:
+    types:
+      - sysext
+      - confext
+    version: '1.0.0'
+    packages: # ◀ packages from Avocado feeds
+      curl: '*'
+      openssl: '*'
+    overlay: overlays/my-app # ◀ your files, configs, binaries
+    enable_services: # ◀ systemd services to start
+      - my-app.service
+    sdk:
+      packages: # ◀ host-side cross-compilation tools
+        nativesdk-rust: '*'
+```
+
+This configuration assembles what you want in your image. Change a line, run `avocado build`, and you have a new image in minutes. The config can also be multi-target — decorate it so that the same project builds for Raspberry Pi, Jetson, or NXP with target-specific extensions resolved automatically.
+
+---
+
+## Runtimes
+
+Runtimes define which extensions are composed together for a given deployment. Think of them as named profiles — different combinations of the same building blocks for different purposes.
+
+```yaml
+runtimes: # ◀ define as many as you need
+  dev: # ◀ for engineering
+    extensions:
+      - my-app
+      - avocado-ext-dev #   SSH, debugging tools
+      - monitoring
+  prod: # ◀ for production
+    extensions:
+      - my-app
+      - monitoring
+  factory: # ◀ for manufacturing
+    extensions:
+      - my-app
+      - eol-tests #   end-of-line hardware tests
+      - provisioner
+```
+
+A `dev` runtime includes SSH access and debugging tools so engineers can iterate on hardware. A `prod` runtime is stripped to essentials. A `factory` runtime runs end-of-line unit tests during manufacturing — did the camera enumerate? Is the network interface up? — then hands off to the production runtime.
+
+Switch between runtimes with one command. The same extensions, different compositions. Every runtime produces a deployable image that's deterministic and reproducible.
+
+---
+
+## Extensions
+
+Extensions are the building blocks of the system. Every piece of user-defined functionality ships as an extension — application binaries, configuration files, kernel modules, systemd services. Avocado's extension system builds on systemd's sysext and confext mechanisms, which means extensions inherit dm-verity integrity checking and LUKS encryption support out of the box. The secure boot chain extends all the way through the extension layer.
+
+### Extension types
+
+**System Extensions (sysext)** extend the `/usr/` and `/opt/` hierarchies. Use sysext for application binaries, libraries, systemd service units, and kernel modules.
+
+**Configuration Extensions (confext)** extend the `/etc/` hierarchy. Use confext for configuration files, user accounts, network settings, and service configurations.
+
+An extension can be both simultaneously:
+
+```yaml
+extensions:
+  my-app:
+    types: # ◀ extension types
+      - sysext #   binaries → /usr/bin/, /usr/lib/
+      - confext #   config → /etc/my-app/, /etc/systemd/
+    version: '1.0.0'
+```
+
+### Defining extensions
+
+Extensions are declared in your `avocado.yaml`. Declare what packages you need, what files to overlay, what services to enable — Avocado handles the rest. Application developers declare their dependencies directly, without going back to a systems integration team. That's the bottleneck this architecture eliminates.
+
+```yaml
+extensions:
+  my-app: # ◀ your application
+    types:
+      - sysext
+      - confext
+    version: '1.0.0'
+    packages: # ◀ declare dependencies
+      curl: '*'
+      gstreamer1.0: '*'
+    overlay: overlays/my-app # ◀ your compiled binaries + configs
+    enable_services: # ◀ start on boot
+      - my-app.service
+      - my-app-healthcheck.timer
+    sdk:
+      packages: # ◀ cross-compilation tools
+        nativesdk-rust: '*'
+
+  networking-tools: # ◀ a simple tools extension
+    types:
+      - sysext
+    version: '1.0.0'
+    packages:
+      wget: '*'
+      iperf3: '*'
+      tcpdump: '*'
+```
+
+### External extension sources
+
+Extensions can be sourced from the Avocado package repository, git repositories, or local paths:
+
+```yaml
+extensions:
+  avocado-ext-dev: # ◀ from Avocado package repo
+    source:
+      type: package
+      version: '*'
+
+  custom-drivers: # ◀ from your own git repo
+    source:
+      type: git
+      url: https://github.com/org/extensions.git
+      ref: v1.2.0
+
+  shared-libs: # ◀ from a local path
+    source:
+      type: path
+      path: ../shared/extensions/libs
+```
+
+### Extension merging at runtime
+
+At boot time, `avocadoctl` merges extensions into the running system using systemd-sysext and systemd-confext. The base system remains immutable — extensions overlay on top, making their files visible at `/usr/`, `/opt/`, and `/etc/` without modifying the read-only root filesystem.
+
+This is fundamentally different from Docker containers. There's no isolation layer, no network namespace overhead, no `--privileged` flags to pass. As Justin explains — embedded systems are single-purpose special devices running a special task. You don't want isolation. You want integration. Systemd extensions give you the composability of containers without pretending your device is a cloud server.
+
+---
+
+## Packages
+
+Avocado uses Yocto as an elaborate package builder — compiling the world into pre-built RPM packages so you never have to. These packages are not installed at runtime. They're composed into extensions at development time, producing deterministic images.
+
+```yaml
+extensions:
+  my-app:
+    packages: # ◀ runtime packages → on device
+      curl: '*'
+      openssl: '*'
+      python3: '*'
+    sdk:
+      packages: # ◀ SDK packages → host-side tools
+        nativesdk-rust: '*'
+        nativesdk-go: '*'
+```
+
+### Package feeds
+
+Package feeds are organized by architecture and target. Packages built generically for ARMv8 are available to any ARMv8 target. If a specific target has a machine-specific override — say, a hardware-accelerated video encoder — the target-specific package takes priority automatically.
+
+Under the hood, Avocado uses DNF5 to resolve packages from RPM repositories. The feeds are versioned and immutable — the same feed version always produces the same packages. This is what makes builds deterministic.
+
+### Managed and unmanaged packages
+
+**Managed packages** are served from Avocado's repositories. Most are public and generally available.
+
+:::tip don't see what you want?
+If you wish a package was available from Avocado, please submit a request. Enterprise users can reach out via Slack, community users via [Discord](https://www.peridio.com/join-our-discord).
+:::
+
+**Unmanaged packages** are built and included by you — via overlay files, cross-compilation in the SDK, or sourced from your own private RPM repositories.
+
+---
+
+## Overlay
+
+Overlays let you include arbitrary files in your extension — application binaries you've compiled elsewhere, configuration templates, static assets, anything. The `overlay` property points to a directory whose structure mirrors where files end up on the device:
+
+```yaml
+extensions:
+  my-app:
+    types:
+      - sysext
+      - confext
+    version: '1.0.0'
+    overlay: overlays/my-app # ◀ point to your files
+```
+
+The directory structure:
+
+```text
+overlays/my-app/
+├── usr/
+│   └── bin/
+│       └── my-app           # → /usr/bin/my-app (sysext)
+├── etc/
+│   ├── my-app/
+│   │   └── config.toml      # → /etc/my-app/config.toml (confext)
+│   └── systemd/
+│       └── system/
+│           └── my-app.service  # → systemd service unit
+```
+
+Files under `usr/` become part of the sysext image. Files under `etc/` become part of the confext image. This is how you bring your own compiled binaries, scripts, models, or any file that isn't covered by a package.
+
+---
+
+## systemd
+
+Avocado OS is built on systemd and leverages it throughout the system — from extension merging (systemd-sysext/confext) to service management, user creation (systemd-sysusers), and boot orchestration. Your application runs as a standard systemd service. No proprietary abstractions, no container runtimes — just Linux.
+
+```yaml
+extensions:
+  my-app:
+    types:
+      - sysext
+      - confext
+    version: '1.0.0'
+    enable_services: # ◀ started automatically at boot
+      - my-app.service
+      - my-app-healthcheck.timer
+```
+
+The corresponding service unit lives in your overlay:
+
+```ini
+# overlays/my-app/etc/systemd/system/my-app.service
+[Unit]
+Description=My Application
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/my-app
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+When the extension is merged at boot, systemd picks up the service unit and starts it. Standard `systemctl` commands work — `status`, `logs`, `restart`. Everything that exists in the Linux ecosystem for managing systemd services applies directly.
+
+---
+
+## Lifecycle Hooks
+
+Extensions can run custom commands at key points in their lifecycle. Use `on_merge` for commands that run after the extension is activated, and `on_unmerge` for cleanup before deactivation:
+
+```yaml
+extensions:
+  my-app:
+    version: '1.0.0'
+    on_merge: # ◀ runs after extension activates
+      - systemctl restart --no-block my-app.service
+    on_unmerge: # ◀ runs before deactivation
+      - systemctl stop my-app.service
+```
+
+Certain hooks are added automatically based on extension contents — you don't need to declare these:
+
+- Extensions containing **kernel modules** automatically run `depmod`
+- Extensions containing **shared libraries** automatically run `ldconfig`
+- Extensions containing **sysusers.d** configuration automatically run `systemd-sysusers`
+
+This means that if your extension ships a kernel module for a custom driver, the module dependency tree is rebuilt automatically when the extension merges. If it ships a shared library, the linker cache is updated. The system does the right thing without you having to remember the incantations.

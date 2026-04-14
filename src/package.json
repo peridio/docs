@@ -5,8 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build-peridio-cli": "node scripts/build-peridio-cli.js",
-    "build-avocado-cli": "node scripts/build-avocado-cli.js",
+    "sync-references": "node scripts/sync-references.js",
     "build": "bash scripts/build.sh",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -45,6 +44,7 @@
     "react-loadable": "5.5.0",
     "redocusaurus": "^2.5.0",
     "search-insights": "2.17.3",
+    "turndown": "^7.2.4",
     "url-loader": "^4.1.1"
   },
   "browserslist": {

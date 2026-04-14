@@ -1,0 +1,109 @@
+---
+title: 'Industrial HMI with Seeed reTerminal DM'
+sidebar_position: 0
+description: 'Deploy Seeed reTerminal DM industrial HMI with Raspberry Pi CM4, 10.1-inch touchscreen, RS485, CAN bus, and DI/DO for industrial automation and edge computing.'
+---
+
+import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+
+# Seeed reTerminal DM
+
+Industrial-grade 10.1" HMI with Raspberry Pi CM4, RS485, CAN bus, DI/DO, PoE, and optional 4G/LoRa for factory automation and edge computing
+
+<!-- TODO: Add product image -->
+
+**10.1"** IPS Touchscreen | **1.5GHz** Quad-Core ARM | **RS485/CAN/DI/DO** | **IP65** Front Panel
+
+## Overview
+
+The Seeed reTerminal DM, paired with Avocado OS, is a production-ready industrial HMI and edge computing platform. Built around the Raspberry Pi CM4 with 8GB RAM and 32GB eMMC, the reTerminal DM steps up from the standard reTerminal with a 10.1-inch 1280x800 IPS touchscreen, native industrial I/O (RS485, RS232, CAN bus, 4 DI / 4 DO), and support for PoE, 4G LTE, and LoRa expansion. The IP65-rated front panel and 12-24V DC power input make it ready for factory floor and panel-mount deployment. Avocado OS provides the immutable Yocto-based Linux, atomic OTA updates, and fleet management that turn this hardware into a scalable industrial platform — deploy one or thousands with the same confidence.
+
+## Specifications
+
+| Specification | Value            | Notes                                        |
+| ------------- | ---------------- | -------------------------------------------- |
+| Processor     | Raspberry Pi CM4 | Quad-core Cortex-A72 @ 1.5GHz                |
+| Memory        | 8GB LPDDR4       | On CM4 module                                |
+| Storage       | 32GB eMMC        | Optional M.2 NVMe SSD (2280 M-Key)           |
+| Display       | 10.1" IPS LCD    | 1280x800, 10-point capacitive touch, 400 nit |
+| Serial        | RS485, RS232     | Via terminal blocks                          |
+| CAN           | CAN bus          | Industrial protocol support                  |
+| Digital I/O   | 4 DI / 4 DO      | Configurable digital inputs and outputs      |
+| Ethernet      | Gigabit Ethernet | PoE supported                                |
+| Wireless      | Wi-Fi 5 + BT 5.0 | Optional 4G LTE, LoRa modules                |
+| Power         | 12-24V DC        | Terminal block or PoE                        |
+| Front Panel   | IP65 rated       | 7H pencil hardness touchscreen               |
+| Backlight     | 30,000 hours     | Industrial longevity                         |
+
+## Use Cases
+
+### Factory HMI Panels
+
+Machine control interfaces with real-time PLC communication over RS485 and CAN bus. 10.1" touchscreen provides operator visibility on the factory floor.
+
+### Building Automation
+
+HVAC/BMS monitoring and control with DI/DO for sensor and relay integration. PoE simplifies cabling in multi-site deployments.
+
+### Edge IoT Gateway
+
+Aggregate data from industrial sensors via RS485/CAN, process locally, and forward over Ethernet or 4G. Optional LoRa for wide-area sensor networks.
+
+## Challenges and Solutions
+
+| Challenge                                      | Solution                                         |
+| ---------------------------------------------- | ------------------------------------------------ |
+| Consumer OS unreliable for 24/7 industrial use | Immutable Avocado OS with read-only root         |
+| Manual HMI provisioning doesn't scale          | Zero-touch provisioning and fleet management     |
+| UI updates risk bricking deployed panels       | Atomic A/B updates with instant rollback         |
+| Industrial protocol integration complexity     | RS485, RS232, CAN bus native on the board        |
+| No centralized visibility across sites         | Single dashboard for monitoring entire HMI fleet |
+
+## Key Features
+
+### Industrial I/O Built In
+
+RS485, RS232, CAN bus, and 4 DI / 4 DO channels directly on the device. Connect to PLCs, sensors, and actuators without additional hardware.
+
+### 10.1" Industrial Display
+
+1280x800 IPS panel with 400 nit brightness, 10-point multi-touch, and IP65 front panel rating. Readable in bright factory environments.
+
+### Flexible Connectivity
+
+Gigabit Ethernet with PoE, Wi-Fi, Bluetooth, and expansion slots for 4G LTE and LoRa. Stay connected in any deployment scenario.
+
+### Production Hardening
+
+Avocado OS provides an immutable root filesystem with atomic OTA updates. No filesystem corruption, no bricked panels in the field.
+
+### NVMe Expansion
+
+M.2 2280 M-Key slot for NVMe SSD storage. Handle data logging, local databases, and edge analytics with fast persistent storage.
+
+### Fleet-Scale Deployment
+
+Deploy identical configurations across sites with group-based fleet management. Phased rollouts and real-time health monitoring keep your fleet running.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `reterminal-dm`. The provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+<LinuxAutoMountWarning />
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile sd
+```
+
+### Run
+
+After provisioning completes, insert the SD card into your target device and power it on.
+
+The device will boot from the SD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.

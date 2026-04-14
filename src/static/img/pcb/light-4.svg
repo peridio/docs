@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+<style>
+.t { fill: none; stroke: #3424ee; stroke-linecap: round; stroke-linejoin: round; }
+.t1 { stroke-opacity: 0.09; stroke-width: 1.5; }
+.t2 { stroke-opacity: 0.07; stroke-width: 1; }
+.v { fill: #3424ee; fill-opacity: 0.1; }
+.vr { fill: none; stroke: #3424ee; stroke-opacity: 0.09; stroke-width: 1; }
+</style>
+<!-- Pattern 4: Zigzag pair -->
+<path class="t t1" d="M0,25 L40,25 L65,50 L105,50 L130,75 L200,75"/>
+<path class="t t1" d="M0,45 L30,45 L55,70 L95,70 L120,95 L200,95"/>
+<path class="t t2" d="M65,50 L55,40 L55,20"/>
+<path class="t t2" d="M120,95 L130,105 L130,130"/>
+<circle class="v" cx="55" cy="20" r="3"/>
+<circle class="vr" cx="55" cy="20" r="5.5"/>
+<circle class="v" cx="105" cy="50" r="3"/>
+<circle class="vr" cx="105" cy="50" r="5.5"/>
+<circle class="v" cx="130" cy="130" r="3"/>
+<circle class="vr" cx="130" cy="130" r="5.5"/>
+<circle class="v" cx="55" cy="70" r="3"/>
+<circle class="vr" cx="55" cy="70" r="5.5"/>
+</svg>

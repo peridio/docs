@@ -1,0 +1,213 @@
+/* ==========================================================================
+   Semantic Color Tokens
+   These are the tokens consumed by components. They map primitives to UI meaning.
+   Light mode defaults in :root, dark overrides in html[data-theme="dark"].
+   ========================================================================== */
+
+/* ---- Light mode (default) ---- */
+:root {
+  /* Backgrounds */
+  --color-bg-body: var(--color-neutral-0);
+  --color-bg-surface: var(--color-neutral-0);
+  --color-bg-surface-raised: var(--color-neutral-0);
+  --color-bg-muted: var(--color-neutral-50);
+  --color-bg-subtle: var(--color-neutral-100);
+  --color-bg-hover: var(--color-neutral-50);
+  --color-bg-overlay: rgba(0, 0, 0, 0.15);
+
+  /* Text */
+  --color-text-primary: var(--color-neutral-800);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-tertiary: var(--color-neutral-500);
+  --color-text-heading: var(--color-neutral-800);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-text-on-brand: var(--color-neutral-0);
+
+  /* Borders */
+  --color-border-default: var(--color-neutral-200);
+  --color-border-subtle: var(--color-neutral-100);
+  --color-border-strong: var(--color-neutral-300);
+
+  /* Accent / interactive */
+  --color-accent-primary: var(--color-brand-700);
+  --color-accent-primary-hover: var(--color-brand-800);
+  --color-accent-link: #fff;
+  --color-accent-button: var(--color-brand-600);
+  --color-accent-button-hover: var(--color-brand-800);
+
+  /* Sidebar */
+  --color-sidebar-hover: var(--color-neutral-50);
+  --color-sidebar-active: var(--color-brand-a8);
+  --color-sidebar-active-hover: var(--color-brand-a10);
+
+  /* Cards */
+  --color-card-bg: var(--color-neutral-0);
+  --color-card-border: var(--color-neutral-300);
+  --color-card-shadow: rgba(0, 0, 0, 0.08);
+  --color-card-shadow-hover: rgba(0, 0, 0, 0.12);
+
+  /* Status */
+  --color-status-success: var(--color-green-500);
+  --color-status-warning: var(--color-amber-500);
+  --color-status-danger: var(--color-red-500);
+  --color-status-neutral: var(--color-neutral-400);
+  --color-status-danger-bg: var(--color-red-100);
+  --color-status-danger-text: var(--color-red-500);
+  --color-status-success-bg: var(--color-green-200);
+  --color-status-success-text: var(--color-green-600);
+
+  /* Tags (ReferenceList) */
+  --color-tag-language-bg: var(--color-blue-100);
+  --color-tag-language-text: var(--color-blue-700);
+  --color-tag-experimental-bg: var(--color-amber-100);
+  --color-tag-experimental-text: var(--color-amber-800);
+  --color-tag-target-bg: var(--color-green-100);
+  --color-tag-target-text: var(--color-green-800);
+  --color-tag-topic-bg: var(--color-brand-50);
+  --color-tag-topic-text: #6b21a8;
+
+  /* Gradients (stop pairs — assemble in component CSS) */
+  --color-gradient-cta-from: var(--color-gradient-cta-start);
+  --color-gradient-cta-to: var(--color-gradient-cta-end);
+  --color-gradient-surface-from: var(--color-neutral-0);
+  --color-gradient-surface-to: var(--color-neutral-50);
+
+  /* Code highlights */
+  --color-code-highlight: rgba(0, 0, 0, 0.1);
+  --color-code-added: var(--color-diff-added);
+  --color-code-removed: var(--color-diff-removed);
+
+  /* Dev badge (amber warning system) */
+  --color-dev-badge-bg: rgba(255, 193, 7, 0.2);
+  --color-dev-badge-text: var(--color-amber-900);
+  --color-dev-badge-border: rgba(255, 193, 7, 0.5);
+  --color-dev-badge-hover-bg: rgba(255, 193, 7, 0.25);
+  --color-dev-badge-active-bg: rgba(255, 193, 7, 0.3);
+
+  /* Dropdown menus */
+  --color-dropdown-bg: var(--color-neutral-0);
+  --color-dropdown-border: var(--color-neutral-200);
+  --color-dropdown-text: var(--color-neutral-800);
+  --color-dropdown-text-muted: var(--color-neutral-600);
+  --color-dropdown-hover-bg: var(--color-neutral-50);
+  --color-dropdown-hover-text: var(--color-neutral-800);
+
+  /* Admonition (in-development warning) */
+  --color-admonition-warning-bg: rgba(255, 193, 7, 0.1);
+  --color-admonition-warning-border: var(--color-amber-400);
+  --color-admonition-warning-text: var(--color-amber-900);
+
+  /* ---- Infima bridge ---- */
+  --ifm-color-primary: var(--color-accent-primary);
+  --ifm-color-primary-dark: #2d1ed5;
+  --ifm-color-primary-darker: #2919c9;
+  --ifm-color-primary-darkest: #2215a5;
+  --ifm-color-primary-light: #5044f1;
+  --ifm-color-primary-lighter: #5c51f2;
+  --ifm-color-primary-lightest: #7e75f5;
+  --ifm-link-color: var(--color-accent-link);
+  --ifm-color-content-secondary: var(--color-text-secondary);
+  --ifm-footer-background-color: var(--color-bg-body);
+  --ifm-breadcrumb-color-active: var(--color-text-primary);
+}
+
+/* ---- Dark mode ---- */
+html[data-theme="dark"] {
+  /* Backgrounds */
+  --color-bg-body: var(--color-dark-0);
+  --color-bg-surface: var(--color-dark-100);
+  --color-bg-surface-raised: var(--color-dark-200);
+  --color-bg-muted: var(--color-dark-50);
+  --color-bg-subtle: var(--color-dark-200);
+  --color-bg-hover: var(--color-dark-200);
+  --color-bg-overlay: rgba(0, 0, 0, 0.3);
+
+  /* Text */
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #a0a5ad;
+  --color-text-tertiary: var(--color-neutral-400);
+  --color-text-heading: #f0f0f0;
+
+  /* Borders */
+  --color-border-default: var(--color-dark-300);
+  --color-border-subtle: var(--color-dark-200);
+  --color-border-strong: var(--color-dark-400);
+
+  /* Accent / interactive */
+  --color-accent-primary: var(--color-brand-400);
+  --color-accent-primary-hover: var(--color-brand-300);
+  --color-accent-link: #fff;
+  --color-accent-button: var(--color-brand-600);
+  --color-accent-button-hover: var(--color-brand-500);
+
+  /* Sidebar */
+  --color-sidebar-hover: var(--color-dark-200);
+  --color-sidebar-active: var(--color-brand-dark-a15);
+  --color-sidebar-active-hover: var(--color-brand-dark-a18);
+
+  /* Cards */
+  --color-card-bg: var(--color-dark-50);
+  --color-card-border: var(--color-dark-300);
+  --color-card-shadow: rgba(0, 0, 0, 0.25);
+  --color-card-shadow-hover: rgba(0, 0, 0, 0.35);
+
+  /* Status */
+  --color-status-success: var(--color-green-400);
+  --color-status-warning: var(--color-amber-400);
+  --color-status-danger-bg: rgba(220, 38, 38, 0.15);
+  --color-status-danger-text: var(--color-red-500);
+  --color-status-success-bg: rgba(16, 185, 129, 0.15);
+  --color-status-success-text: var(--color-green-500);
+
+  /* Tags (ReferenceList) */
+  --color-tag-language-bg: var(--color-blue-dark-bg);
+  --color-tag-language-text: var(--color-blue-dark-text);
+  --color-tag-experimental-bg: var(--color-amber-dark-bg);
+  --color-tag-experimental-text: var(--color-amber-dark-text);
+  --color-tag-target-bg: var(--color-green-dark-bg);
+  --color-tag-target-text: var(--color-green-dark-text);
+  --color-tag-topic-bg: var(--color-brand-900);
+  --color-tag-topic-text: var(--color-brand-200);
+
+  /* Gradients */
+  --color-gradient-cta-from: var(--color-gradient-cta-dark-start);
+  --color-gradient-cta-to: var(--color-gradient-cta-dark-end);
+  --color-gradient-surface-from: var(--color-dark-200);
+  --color-gradient-surface-to: var(--color-dark-0);
+
+  /* Code highlights */
+  --color-code-highlight: rgba(0, 0, 0, 0.3);
+
+  /* Dev badge */
+  --color-dev-badge-bg: rgba(255, 193, 7, 0.15);
+  --color-dev-badge-text: var(--color-amber-400);
+  --color-dev-badge-border: rgba(255, 193, 7, 0.3);
+  --color-dev-badge-hover-bg: rgba(255, 193, 7, 0.2);
+  --color-dev-badge-active-bg: rgba(255, 193, 7, 0.25);
+
+  /* Dropdown menus */
+  --color-dropdown-bg: var(--color-dark-100);
+  --color-dropdown-border: var(--color-dark-300);
+  --color-dropdown-text: #e0e0e0;
+  --color-dropdown-text-muted: #a0a5ad;
+  --color-dropdown-hover-bg: var(--color-dark-200);
+  --color-dropdown-hover-text: #f0f0f0;
+
+  /* Admonition */
+  --color-admonition-warning-bg: rgba(255, 193, 7, 0.08);
+  --color-admonition-warning-text: var(--color-amber-400);
+
+  /* ---- Infima bridge (dark) ---- */
+  --ifm-color-primary: var(--color-accent-primary);
+  --ifm-link-color: var(--color-accent-link);
+  --ifm-color-content-secondary: var(--color-text-secondary);
+  --ifm-color-content-inverse: var(--color-neutral-0);
+  --ifm-footer-background-color: var(--color-bg-body);
+  --ifm-background-color: var(--color-bg-body);
+  --ifm-background-surface-color: var(--color-bg-surface);
+  --ifm-breadcrumb-color-active: var(--color-text-primary);
+  --ifm-breadcrumb-item-background-active: var(--color-dark-200);
+  --ifm-font-color-base: var(--color-text-primary);
+  --ifm-heading-color: var(--color-text-heading);
+  --ifm-toc-border-color: var(--color-border-default);
+}

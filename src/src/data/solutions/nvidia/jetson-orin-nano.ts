@@ -21,7 +21,7 @@ export const data: SolutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nvidia/jetson-orin-nano-developer-kit/provision',
+      link: '/hardware/nvidia/jetson-orin-nano-developer-kit',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -155,7 +155,7 @@ export const data: SolutionData = {
       'Empower your NVIDIA Jetson Orin Nano with production-grade software infrastructure for secure, scalable industrial AI.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/nvidia/jetson-orin-nano-developer-kit/provision',
+      link: '/hardware/nvidia/jetson-orin-nano-developer-kit',
     },
     // secondaryCTA: {
     //   text: 'Visit Avocado Linux',

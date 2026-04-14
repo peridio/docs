@@ -4,20 +4,23 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
+@import "./tokens/_primitives.css";
+@import "./tokens/_semantics.css";
+@import "./tokens/_theme-alt.css";
+@import "./tokens/_theme-avocado.css";
+
+/* Non-color Infima overrides — colors are owned by the token system
+   (_primitives.css → _semantics.css → _theme-*.css) */
 :root {
-  --ifm-footer-background-color: white;
-  --ifm-color-primary: #3424ee;
-  --ifm-link-color: #3424ee;
-  --ifm-color-content-secondary: #525860;
-  --ifm-color-primary-dark: #212028;
-  --ifm-color-primary-darker: #1f1f25;
-  --ifm-color-primary-darkest: #1a191f;
-  --ifm-color-primary-light: #292830;
-  --ifm-color-primary-lighter: #2b2933;
-  --ifm-color-primary-lightest: #302f39;
-  --ifm-breadcrumb-color-active: black;
-  --ifm-font-family-base: "Avenir";
+  --ifm-navbar-height: 5rem;
+  --ifm-font-family-base: "Inter", sans-serif;
+}
+
+/* Center sidebar + content as a unit, like Roboflow */
+[class*="docRoot"] {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding-top: 1.5rem !important;
 }
 
 /* Ensure main content is not hidden behind fixed navbar and promo bar */
@@ -30,61 +33,129 @@ main {
   margin-top: 0 !important;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
 @font-face {
   font-family: "Avenir";
   src: url("/font/avenir-regular.otf");
 }
 
 html {
-  font-family: "Avenir";
+  font-family: "Inter", sans-serif;
 }
 
-html[data-theme="dark"] {
-  --ifm-color-content-secondary: #525860;
-  --ifm-breadcrumb-item-background-active: white;
-  --ifm-color-content-inverse: white;
-  --ifm-footer-background-color: black;
-  --ifm-background-color: black;
-  --ifm-background-surface-color: black;
-  --ifm-breadcrumb-color-active: black;
+/* Dark-mode colors are owned by the token system
+   (_semantics.css html[data-theme="dark"] block) */
+
+.theme-doc-markdown a:hover {
+  text-decoration-style: solid;
+  text-decoration-color: #fff;
 }
+
+h2,
+.schema-container h2 {
+  font-family: "Spline Sans", sans-serif;
+  font-weight: 400;
+}
+
+/* Dark mode Infima overrides are handled by _semantics.css */
 
 html[data-theme="dark"] .breadcrumbs .breadcrumbs__item a {
-  background-color: white;
+  background-color: #2a2a2e;
+  color: #e0e0e0;
+}
+
+html[data-theme="dark"] .navbar {
+  background-color: #1a1a1e;
+}
+
+html[data-theme="dark"] footer {
+  background-color: #1a1a1e;
 }
 
 .docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--color-code-highlight);
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
 
-html[data-theme="dark"] .docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
 /* Colored code line highlights for added/removed (custom magic comments) */
 .code-block-line--added {
-  background-color: rgba(63, 185, 80, 0.28);
+  background-color: var(--color-code-added);
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
 
 .code-block-line--removed {
-  background-color: rgba(248, 81, 73, 0.22);
+  background-color: var(--color-code-removed);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+/* Diagram highlight colors */
+.code-block-line--blue {
+  background-color: rgba(52, 36, 238, 0.12);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-line--purple {
+  background-color: rgba(139, 92, 246, 0.14);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-line--green {
+  background-color: rgba(16, 185, 129, 0.14);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-line--orange {
+  background-color: rgba(245, 158, 11, 0.14);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+/* Diagram highlight colors */
+.code-block-line--blue {
+  background-color: rgba(52, 36, 238, 0.12);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-line--purple {
+  background-color: rgba(139, 92, 246, 0.14);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-line--green {
+  background-color: rgba(16, 185, 129, 0.14);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-line--orange {
+  background-color: rgba(245, 158, 11, 0.14);
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
 
 html[data-theme="dark"] .navbar {
-  border-bottom: 1px solid var(--ifm-toc-border-color);
-}
-
-footer {
-  border-top: 1px solid var(--ifm-toc-border-color);
+  background-color: var(--ifm-background-color);
+  border-bottom: 1px solid var(--color-border-default);
 }
 
 .hero__title {
@@ -96,7 +167,7 @@ footer {
 
 .redocusaurus .redoc-markdown table td:nth-child(1),
 .redocusaurus table table td:nth-child(1) {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-border-default);
 }
 
 /*override Tabs component styles*/
@@ -114,10 +185,141 @@ footer {
   overflow: scroll;
 }
 
+/* Two-row navbar: logo on top, nav tabs below */
+.navbar {
+  height: auto !important;
+}
+
 .navbar__inner {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Row 1: Logo + theme toggle */
+.navbar__row--top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0;
+}
+
+/* Row 2: Navigation links */
+.navbar__row--links {
+}
+
+.navbar__items--nav {
+  display: flex;
+}
+
+/* Nav link styles — underline active indicators */
+.navbar__items--nav > a {
+  padding: 0.35rem 0;
+  margin-right: 2rem;
+  margin-bottom: 0;
+  position: relative;
+  bottom: -1px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--ifm-color-emphasis-600);
+  border-bottom: 3px solid transparent;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.navbar__items--nav > a:hover {
+  background: none;
+  color: #fff;
+  border-bottom-color: transparent;
+}
+
+.navbar__items--nav > a.navbar__link--active {
+  font-weight: 500;
+  color: var(--ifm-font-color-base);
+  border-bottom: 3px solid var(--ifm-color-primary);
+}
+
+/* Duplicate icon definitions and icon-hiding rule removed — icons are defined below at lines 350+ */
+
+/* Left items container — wrap so logo is row 1, links are row 2 */
+.navbar__items:not(.navbar__items--right) {
+  flex-wrap: wrap !important;
+}
+
+/* Logo takes full width of its row to force links below */
+.navbar__brand {
+  flex: 1 0 100% !important;
+  padding: 0.6rem 0;
+}
+
+/* Nav link items sit below logo */
+.navbar__items:not(.navbar__items--right) > .navbar__link {
+  padding: 0.6rem 0;
+  margin-right: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+}
+
+.navbar__items:not(.navbar__items--right) > .navbar__link:hover {
+  background: none;
+  border-bottom-color: var(--ifm-color-primary);
+}
+
+.navbar__items:not(.navbar__items--right) > .navbar__link--active {
+  font-weight: 700;
+  border-bottom: 2px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+/* Nav icons — using mask so color follows text color */
+.navbar__items:not(.navbar__items--right) > .navbar__link::before {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: 0.35em;
+  vertical-align: -0.2em;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 0.7;
+}
+
+.navbar__items:not(.navbar__items--right) > .navbar__link:hover::before,
+.navbar__items:not(.navbar__items--right) > .navbar__link--active::before {
+  opacity: 1;
+}
+
+/* Product Documentation — book icon */
+.navbar__link[href="/"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25'/%3E%3C/svg%3E");
+}
+
+/* Hardware — circuit/cpu icon */
+.navbar__link[href="/hardware/support-matrix"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z'/%3E%3C/svg%3E");
+}
+
+/* Developer Reference — code bracket icon */
+.navbar__link[href="/developer-reference/getting-started"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5'/%3E%3C/svg%3E");
+}
+
+/* Changelog — list icon */
+.navbar__link[href^="/changelog"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z'/%3E%3C/svg%3E");
 }
 
 /* Ensure proper z-index stacking */
@@ -137,78 +339,432 @@ footer {
   z-index: 10000;
 }
 
-/* Mobile fallback - handled by mega menu component */
+/* Hide links row on mobile — sidebar handles navigation */
 @media (max-width: 996px) {
-  /* Mobile styles are handled in the MegaMenuNavbar component */
+  .navbar__row--links {
+    display: none;
+  }
 }
 
-/* Sidebar Styles */
-/* Remove border radius from all menu items for straight edges */
+/* ==========================================================================
+   Sidebar Styles — Always-expanded, flat navigation
+   ========================================================================== */
+
+/* Base — sidebar menu items */
 .menu__link {
-  border-radius: 0 !important;
+  border-radius: 6px !important;
+  font-size: 0.85rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  line-height: 1.45;
+  display: flex;
+  align-items: center;
 }
 
-/* Active sidebar items - bold with left border */
-.menu__link--active {
-  font-weight: bold;
+/* Sidebar nav — breathing room */
+nav.menu {
+  padding: 0.25rem 0.6rem !important;
+  padding-bottom: 20px !important;
+  margin-right: 20px;
+}
+
+/* ---------- Hide collapse controls ---------- */
+
+/* Hide the collapse sidebar button */
+[class*="collapseSidebarButton"],
+button[title="Collapse sidebar"],
+.theme-doc-sidebar-container button[class*="collapse"] {
+  display: none !important;
+}
+
+/* Hide carets ONLY on first-level (top-level) categories */
+.theme-doc-sidebar-menu
+  > .menu__list
+  > .menu__list-item
+  > .menu__list-item-collapsible
+  .menu__caret,
+.theme-doc-sidebar-menu
+  > .menu__list
+  > .menu__list-item
+  > .menu__list-item-collapsible
+  .menu__link--sublist-caret::after,
+.theme-doc-sidebar-menu
+  > .menu__list
+  > .menu__list-item
+  > .menu__list-item-collapsible
+  .menu__link--sublist::after {
+  display: none !important;
+}
+
+/* ---------- Hide collapse controls ---------- */
+
+/* Hide the collapse sidebar button */
+[class*="collapseSidebarButton"],
+button[title="Collapse sidebar"],
+.theme-doc-sidebar-container button[class*="collapse"] {
+  display: none !important;
+}
+
+/* Hide carets ONLY on first-level (top-level) categories.
+   NOTE: `.theme-doc-sidebar-menu` and `.menu__list` are on the SAME <ul>
+   (see DocSidebar/Desktop/Content/index.tsx), so the direct-descendant chain
+   jumps straight from the sidebar root to `.menu__list-item`. */
+.theme-doc-sidebar-menu > .menu__list-item > .menu__list-item-collapsible .menu__caret,
+.theme-doc-sidebar-menu
+  > .menu__list-item
+  > .menu__list-item-collapsible
+  .menu__link--sublist-caret::after,
+.theme-doc-sidebar-menu
+  > .menu__list-item
+  > .menu__list-item-collapsible
+  .menu__link--sublist::after {
+  display: none !important;
+}
+
+/* ---------- First-level category header styling ---------- */
+
+/* Top-level category labels — bold section headers */
+.menu__list-item-collapsible .menu__link {
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+  color: inherit !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.35rem !important;
+  margin-top: 1.2rem !important;
+  background: none !important;
+}
+
+/* Preserve header styling on non-collapsible top-level categories when a child is active.
+   Docusaurus adds `menu__link--active` to the category header whenever any descendant is
+   active, but only adds `menu__link--sublist` when `collapsible: true` — so the generic
+   active-item rule (.menu__link--active:not(.menu__link--sublist)) leaks onto
+   non-collapsible category headers and strips the bold/heading styling. */
+.theme-doc-sidebar-menu > .menu__list-item > .menu__list-item-collapsible > .menu__link--active {
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+  color: inherit !important;
+  background-color: transparent !important;
+  border-left: none !important;
+  padding-left: var(--ifm-menu-link-padding-horizontal) !important;
+}
+
+/* Nested (collapsible) category labels — match regular child items */
+.menu__list .menu__list .menu__list-item-collapsible .menu__link {
+  font-weight: 400 !important;
+  font-size: 0.85rem !important;
+  margin-top: 0 !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  background: none !important;
+  color: var(--ifm-color-emphasis-700) !important;
+}
+
+/* First top-level category — no extra top margin */
+.theme-doc-sidebar-menu
+  > .menu__list-item:first-child
+  > .menu__list-item-collapsible
+  > .menu__link {
+  margin-top: 0 !important;
+}
+
+/* Remove hover/active background on top-level category headers */
+.menu__list-item-collapsible:hover {
+  background: none !important;
+}
+
+.menu__list-item-collapsible > .menu__link:hover {
+  background: none !important;
+  color: inherit !important;
+}
+
+/* Restore hover for nested collapsible categories */
+.menu__list .menu__list .menu__list-item-collapsible:hover {
+  background: rgba(52, 36, 238, 0.06) !important;
+}
+
+/* Dark mode top-level category header color */
+html[data-theme="dark"] .menu__list-item-collapsible > .menu__link {
+  color: inherit !important;
+}
+
+html[data-theme="dark"] .menu__list-item-collapsible > .menu__link:hover {
+  color: inherit !important;
+}
+
+/* Dark mode nested category — restore normal colors */
+html[data-theme="dark"] .menu__list .menu__list .menu__list-item-collapsible .menu__link {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+
+/* Top-level non-category items — match parent heading style */
+.theme-doc-sidebar-item-link-level-1 > .menu__link {
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+}
+
+/* CLI/CTL command items — monospace font for commands categories and all their children */
+.sidebar-monospace .menu__link,
+.sidebar-monospace .menu__link span,
+.sidebar-monospace .menu__list .menu__link,
+.sidebar-monospace .menu__list .menu__link span {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+  font-size: 0.75rem !important;
+  text-transform: lowercase !important;
+}
+
+/* ---------- Child item styling ---------- */
+
+/* Child items — smaller, lighter weight */
+.menu__list .menu__list .menu__link:not(.menu__link--sublist) {
+  font-weight: 400 !important;
+  font-size: 0.85rem !important;
+  color: var(--ifm-color-emphasis-700);
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+/* Active sidebar items — primary color with left border */
+.menu__link--active:not(.menu__link--sublist) {
+  font-weight: 500 !important;
+  color: var(--ifm-color-primary) !important;
   border-left: 3px solid var(--ifm-color-primary);
   padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
-  border-radius: 0 !important;
+  background-color: rgba(52, 36, 238, 0.06);
+  border-radius: 6px !important;
 }
 
-/* Active category labels that are also links */
-.menu__list-item--collapsed .menu__link--active,
-.menu__list-item .menu__link--active {
-  font-weight: bold;
-  border-left: 3px solid var(--ifm-color-primary);
-  padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
-  border-radius: 0 !important;
-}
-
-/* Hover state - light purple for all menu items */
-.menu__link:hover,
-.menu__list .menu__list-item-collapsible:hover,
-.menu__list-item-collapsible:hover > .menu__link,
-.menu__list-item-collapsible:hover > .menu__link--sublist {
-  background-color: rgba(52, 36, 238, 0.1); /* Light purple based on primary color */
+/* Hover state — subtle highlight */
+.menu__link:not(.menu__link--sublist):hover {
+  background-color: rgba(52, 36, 238, 0.06);
   color: var(--ifm-color-primary);
-  border-radius: 0 !important;
+  border-radius: 6px !important;
 }
 
-/* Category labels hover state - including caret */
-.menu__caret:hover,
-.menu__link--sublist:hover,
-.menu__link--sublist-caret:hover {
+/* Active + hover */
+.menu__link--active:not(.menu__link--sublist):hover {
+  font-weight: 500 !important;
+  border-left: 3px solid var(--ifm-color-primary);
   background-color: rgba(52, 36, 238, 0.1);
-  color: var(--ifm-color-primary);
-}
-
-/* Master category items hover (Getting Started, Avocado OS, etc.) */
-.theme-doc-sidebar-menu > .menu__list > .menu__list-item > .menu__link:hover,
-.theme-doc-sidebar-menu > .menu__list > .menu__list-item > .menu__link--sublist:hover,
-.menu__list > .menu__list-item > .menu__list-item-collapsible:hover > .menu__link {
-  background-color: rgba(52, 36, 238, 0.1);
-  color: var(--ifm-color-primary);
-}
-
-/* Ensure active items stay bold with border even on hover */
-.menu__link--active:hover {
-  font-weight: bold;
-  border-left: 3px solid var(--ifm-color-primary);
-  background-color: rgba(52, 36, 238, 0.15); /* Slightly darker purple for active hover */
   padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
-  border-radius: 0 !important;
+  border-radius: 6px !important;
 }
 
-/* Dark mode adjustments */
-html[data-theme="dark"] .menu__link:hover,
-html[data-theme="dark"] .menu__list-item-collapsible:hover > .menu__link,
-html[data-theme="dark"] .menu__list-item-collapsible:hover > .menu__link--sublist {
-  background-color: rgba(52, 36, 238, 0.2);
+/* Dark mode child items */
+html[data-theme="dark"] .menu__list .menu__list .menu__link:not(.menu__link--sublist) {
+  color: var(--ifm-color-emphasis-600);
 }
 
-html[data-theme="dark"] .menu__link--active:hover {
-  background-color: rgba(52, 36, 238, 0.25);
+html[data-theme="dark"] .menu__link:not(.menu__link--sublist):hover {
+  background-color: rgba(123, 111, 240, 0.12);
+}
+
+html[data-theme="dark"] .menu__link--active:not(.menu__link--sublist) {
+  background-color: rgba(123, 111, 240, 0.1);
+}
+
+html[data-theme="dark"] .menu__link--active:not(.menu__link--sublist):hover {
+  background-color: rgba(123, 111, 240, 0.18);
+}
+
+/* Bottom padding so the last sidebar item has breathing room */
+.theme-doc-sidebar-menu {
+  padding-bottom: 3rem !important;
+}
+
+/* ==========================================================================
+   Hide breadcrumbs
+   ========================================================================== */
+
+/* ==========================================================================
+   Overview page cards
+   ========================================================================== */
+
+.overview-card {
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  height: 100%;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.overview-card:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 2px 12px rgba(52, 36, 238, 0.08);
+}
+
+svg.overview-card__icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 0.75rem;
+  color: var(--ifm-color-primary);
+}
+
+.overview-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.overview-card p {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+html[data-theme="dark"] .overview-card {
+  border-color: var(--ifm-toc-border-color);
+}
+
+html[data-theme="dark"] .overview-card:hover {
+  border-color: var(--ifm-link-color);
+  box-shadow: 0 2px 12px rgba(123, 111, 240, 0.12);
+}
+
+html[data-theme="dark"] .overview-card p {
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* ==========================================================================
+   Getting Started cards
+   ========================================================================== */
+
+a.getting-started-card {
+  display: block;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  height: 100%;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+a.getting-started-card:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 4px 16px rgba(52, 36, 238, 0.1);
+  transform: translateY(-2px);
+}
+
+.getting-started-card__icon {
+  color: var(--ifm-color-primary);
+  margin-bottom: 1rem;
+}
+
+.getting-started-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.getting-started-card p {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.getting-started-card__cta {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+}
+
+html[data-theme="dark"] a.getting-started-card:hover {
+  border-color: var(--ifm-link-color);
+  box-shadow: 0 4px 16px rgba(123, 111, 240, 0.15);
+}
+
+html[data-theme="dark"] .getting-started-card p {
+  color: var(--ifm-color-emphasis-500);
+}
+
+.getting-started-card__logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(15%) sepia(90%) saturate(6000%) hue-rotate(246deg)
+    brightness(90%) contrast(110%);
+}
+
+html[data-theme="dark"] .getting-started-card__logo {
+  filter: brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(2000%) hue-rotate(220deg)
+    brightness(110%) contrast(90%);
+}
+
+/* Remove border between sidebar and main content */
+.theme-doc-sidebar-container {
+  border-right: none !important;
+}
+
+/* Auto-hide sidebar scrollbar — show only while hovering */
+.theme-doc-sidebar-container .thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar:hover {
+  scrollbar-color: var(--ifm-color-emphasis-300) transparent;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-emphasis-300);
+}
+
+/* Add spacing between sidebar and main content (desktop only — sidebar isn't shown on mobile) */
+@media (min-width: 997px) {
+  .docMainContainer_TBSr,
+  [class*="docMainContainer"] {
+    padding-left: 6rem !important;
+  }
+}
+
+/* Hide prev/next navigation buttons */
+.pagination-nav {
+  display: none !important;
+}
+
+/* Hide breadcrumbs entirely */
+.breadcrumbs,
+nav[aria-label="Breadcrumbs"],
+[class*="breadcrumbsContainer"] {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Mobile sidebar — constrain width
+   ========================================================================== */
+
+.navbar-sidebar {
+  max-width: 75vw !important;
+  width: 300px !important;
+}
+
+.navbar-sidebar__items {
+  max-width: 100% !important;
+}
+
+.navbar-sidebar .menu {
+  padding: 0.5rem !important;
 }
 
 .dropdown__menu {
@@ -219,7 +775,45 @@ html[data-theme="dark"] .menu__link--active:hover {
   font-weight: bold;
   font-size: 0.9rem;
   min-width: 200px;
-  color: #1c1e21;
+  color: var(--color-text-primary);
+}
+
+html[data-theme="dark"] .dropdown__menu--section-title {
+  color: var(--color-dropdown-text-muted) !important;
+}
+
+html[data-theme="dark"] .navbar__item.dropdown .dropdown__menu,
+html[data-theme="dark"] .dropdown__menu {
+  background: var(--color-dropdown-bg) !important;
+  border: 1px solid var(--color-dropdown-border) !important;
+}
+
+html[data-theme="dark"] .dropdown__menu--link {
+  color: var(--color-dropdown-text) !important;
+}
+
+html[data-theme="dark"] .dropdown__menu--link:hover {
+  color: var(--color-dropdown-hover-text) !important;
+  background-color: var(--color-dropdown-hover-bg) !important;
+}
+
+html[data-theme="dark"] .dropdown__menu--section-title {
+  color: #a0a5ad !important;
+}
+
+html[data-theme="dark"] .navbar__item.dropdown .dropdown__menu,
+html[data-theme="dark"] .dropdown__menu {
+  background: #222226 !important;
+  border: 1px solid #3a3a3e !important;
+}
+
+html[data-theme="dark"] .dropdown__menu--link {
+  color: #e0e0e0 !important;
+}
+
+html[data-theme="dark"] .dropdown__menu--link:hover {
+  color: #f0f0f0 !important;
+  background-color: #2a2a2e !important;
 }
 
 /* Multi-column dropdown menu styles */
@@ -229,8 +823,8 @@ html[data-theme="dark"] .menu__link--active:hover {
   min-width: auto !important;
   width: fit-content !important;
   padding: 2rem !important;
-  background: white !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  background: var(--color-dropdown-bg) !important;
+  box-shadow: 0 4px 12px var(--color-bg-overlay) !important;
   border-radius: 8px !important;
 }
 
@@ -265,9 +859,9 @@ html[data-theme="dark"] .menu__link--active:hover {
 .dropdown__menu--section-title {
   font-weight: bold !important;
   font-size: 0.85rem !important;
-  color: #555 !important;
+  color: var(--color-dropdown-text-muted) !important;
   margin-bottom: 1rem !important;
-  border-bottom: 1px solid #e1e5e9 !important;
+  border-bottom: 1px solid var(--color-border-default) !important;
   padding-bottom: 0.75rem !important;
   text-transform: uppercase !important;
   letter-spacing: 0.8px !important;
@@ -281,7 +875,7 @@ html[data-theme="dark"] .menu__link--active:hover {
 .dropdown__menu--link {
   display: block !important;
   padding: 0.25rem 0 !important;
-  color: #333 !important;
+  color: var(--color-dropdown-text) !important;
   text-decoration: none !important;
   font-size: 0.9rem !important;
   transition: background-color 0.2s ease !important;
@@ -290,9 +884,9 @@ html[data-theme="dark"] .menu__link--active:hover {
 
 /* Hover state to match the image */
 .dropdown__menu--link:hover {
-  color: #333 !important;
+  color: var(--color-dropdown-hover-text) !important;
   text-decoration: none !important;
-  background-color: #f5f5f5 !important;
+  background-color: var(--color-dropdown-hover-bg) !important;
   border-radius: 3px !important;
   padding: 0.25rem 0.5rem !important;
   margin: 0 -0.5rem !important;
@@ -313,56 +907,30 @@ html[data-theme="dark"] .menu__link--active:hover {
 
 /* Tool Cards Enhanced Styling */
 .card {
-  border: 1px solid #e1e5e9 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid var(--color-border-default) !important;
+  box-shadow: 0 2px 8px var(--color-card-shadow) !important;
   transition: all 0.2s ease !important;
-  background-color: #ffffff !important;
+  background-color: var(--color-card-bg) !important;
 }
 
 .card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 4px 16px var(--color-card-shadow-hover) !important;
   transform: translateY(-1px) !important;
-  border-color: #c7ced4 !important;
-}
-
-/* Dark mode card styling */
-html[data-theme="dark"] .card {
-  background-color: #1b1b1d !important;
-  border: 1px solid #3c4043 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
-}
-
-html[data-theme="dark"] .card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
-  border-color: #5f6368 !important;
+  border-color: var(--color-border-strong) !important;
 }
 
 /* In Development Warning Styles */
 .admonition-warning.admonition-in-development {
-  background-color: rgba(255, 193, 7, 0.1);
-  border-left: 4px solid #ffc107;
+  background-color: var(--color-admonition-warning-bg);
+  border-left: 4px solid var(--color-admonition-warning-border);
 }
 
 .admonition-warning.admonition-in-development .admonition-heading {
-  color: #856404;
+  color: var(--color-admonition-warning-text);
 }
 
 .admonition-warning.admonition-in-development .admonition-content {
-  color: #856404;
-}
-
-/* Dark mode adjustments for development warnings */
-html[data-theme="dark"] .admonition-warning.admonition-in-development {
-  background-color: rgba(255, 193, 7, 0.08);
-  border-left-color: #ffc107;
-}
-
-html[data-theme="dark"] .admonition-warning.admonition-in-development .admonition-heading {
-  color: #ffc107;
-}
-
-html[data-theme="dark"] .admonition-warning.admonition-in-development .admonition-content {
-  color: #e6c46b;
+  color: var(--color-admonition-warning-text);
 }
 
 /* Enhanced warning admonition styling for in-development content */
@@ -383,21 +951,13 @@ html[data-theme="dark"] .admonition-warning.admonition-in-development .admonitio
 }
 
 /* Development badges are now handled by the DocSidebarItem React component */
-/* CSS custom properties for development badge styling */
+/* Dev badge vars bridge to semantic tokens from _semantics.css */
 :root {
-  --dev-badge-bg: rgba(255, 193, 7, 0.2);
-  --dev-badge-color: #856404;
-  --dev-badge-border: rgba(255, 193, 7, 0.5);
-  --dev-badge-hover-bg: rgba(255, 193, 7, 0.25);
-  --dev-badge-active-bg: rgba(255, 193, 7, 0.3);
-}
-
-html[data-theme="dark"] {
-  --dev-badge-bg: rgba(255, 193, 7, 0.15);
-  --dev-badge-color: #ffc107;
-  --dev-badge-border: rgba(255, 193, 7, 0.3);
-  --dev-badge-hover-bg: rgba(255, 193, 7, 0.2);
-  --dev-badge-active-bg: rgba(255, 193, 7, 0.25);
+  --dev-badge-bg: var(--color-dev-badge-bg);
+  --dev-badge-color: var(--color-dev-badge-text);
+  --dev-badge-border: var(--color-dev-badge-border);
+  --dev-badge-hover-bg: var(--color-dev-badge-hover-bg);
+  --dev-badge-active-bg: var(--color-dev-badge-active-bg);
 }
 
 /* Development badge component styles */
@@ -423,4 +983,74 @@ html[data-theme="dark"] {
 
 .menu__link--active .dev-badge {
   background: var(--dev-badge-active-bg);
+}
+
+/* ── Reference page GitHub link ─────────────────────────── */
+
+.reference-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+}
+
+.reference-github-link::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z'/%3E%3C/svg%3E");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+.reference-github-link:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+/* Hide generated reference pages from sidebar */
+.hidden {
+  display: none;
+}
+
+/* ── Inline code click-to-copy tooltip ─────────────────────── */
+.theme-doc-markdown code:not(pre code) {
+  cursor: pointer;
+}
+
+.code-copy-tooltip {
+  position: fixed;
+  z-index: 9999;
+  transform: translate(-50%, -100%);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  background: #1a1a1e;
+  color: #fff;
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    transform 0.15s;
+}
+
+.code-copy-tooltip--visible {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 4px));
+}
+
+html[data-theme="dark"] .code-copy-tooltip {
+  background: #e5e5e5;
+  color: #1a1a1e;
 }

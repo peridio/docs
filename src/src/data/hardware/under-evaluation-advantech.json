@@ -1,0 +1,29 @@
+{
+  "category": "ADVANTECH",
+  "devices": [
+    {
+      "name": "Advantech MIC-715-OX",
+      "vendor": "Advantech",
+      "chipset": "NVIDIA Orin NX",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "Advantech TPC-115W",
+      "vendor": "Advantech",
+      "chipset": "Intel",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "Advantech ICAM 300",
+      "vendor": "Advantech",
+      "chipset": "QCS6490",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "Advantech MIC-733-AO",
+      "vendor": "Advantech",
+      "chipset": "NVIDIA Orin",
+      "productType": "Production Ready"
+    }
+  ]
+}

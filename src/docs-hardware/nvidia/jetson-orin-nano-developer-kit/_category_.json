@@ -1,0 +1,9 @@
+{
+  "label": "Jetson Orin Nano DK",
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "index"
+  }
+}

@@ -2,3 +2,15 @@
 build
 node_modules
 vendor
+.cache-references
+
+# Generated reference docs (rebuilt from external repo at build time)
+docs-guides/references/
+
+# MDX files with inline JSX styles that break when Prettier reformats across lines
+docs-guides/getting-started/index.mdx
+docs-overview/avocado-connect/overview.mdx
+docs-overview/resources.mdx
+docs-hardware/raspberry-pi/raspberry-pi-zero-2-w/index.mdx
+docs-hardware/stmicroelectronics/stm32mp257f-dk/index.mdx
+docs-hardware/grinn/astrasom-1680/index.mdx

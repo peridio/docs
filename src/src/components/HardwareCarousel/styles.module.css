@@ -128,7 +128,7 @@
 }
 
 .link {
-  background: #5f51ff;
+  background: var(--color-accent-button);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -142,7 +142,7 @@
 }
 
 .link:hover {
-  background: #4a3dff;
+  background: var(--color-accent-button-hover);
   color: white;
   text-decoration: none;
 }

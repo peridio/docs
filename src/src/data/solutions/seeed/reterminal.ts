@@ -152,7 +152,7 @@ export const data: SolutionData = {
       'Transform your Seeed reTerminal HMIs into a production fleet. Get deterministic Linux, secure OTA orchestration, and enterprise fleet management - all production-ready from Day 1.',
     primaryCTA: {
       text: 'Provision Guide',
-      link: '/hardware/seeed/reterminal/provision',
+      link: '/hardware/seeed/reterminal',
     },
     secondaryCTA: {
       text: 'Request a Demo',

@@ -21,7 +21,7 @@ export const data: SolutionData = {
     ],
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/stmicroelectronics/stm32mp257f-dk/provision',
+      link: '/hardware/stmicroelectronics/stm32mp257f-dk',
     },
     secondaryCTA: {
       text: 'Request Demo',
@@ -155,7 +155,7 @@ export const data: SolutionData = {
       'Transform your STMicroelectronics STM32MP257F-DK from development kit to secure, deployable industrial platform.',
     primaryCTA: {
       text: 'Get Started',
-      link: '/hardware/stmicroelectronics/stm32mp257f-dk/provision',
+      link: '/hardware/stmicroelectronics/stm32mp257f-dk',
     },
     secondaryCTA: {
       text: 'Learn More',

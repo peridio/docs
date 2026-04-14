@@ -6,7 +6,7 @@ import typescriptParser from '@typescript-eslint/parser'
 
 export default [
   {
-    ignores: ['build', 'vendor'],
+    ignores: ['build', 'vendor', '.cache-references'],
   },
   {
     files: ['**/*.{js,jsx}'],
@@ -38,6 +38,8 @@ export default [
       ...docusaurusPlugin.configs.recommended.rules,
       // Disable prop-types since TypeScript provides better type checking
       'react/prop-types': 'off',
+      // React 17+ JSX transform — no need to import React for JSX
+      'react/react-in-jsx-scope': 'off',
     },
   },
   {
@@ -69,6 +71,7 @@ export default [
       ...docusaurusPlugin.configs.recommended.rules,
       ...typescriptPlugin.configs.recommended.rules,
       'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
     },
   },
 ]
