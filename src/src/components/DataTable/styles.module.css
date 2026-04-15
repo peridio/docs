@@ -111,11 +111,12 @@
   color: var(--color-text-secondary);
 }
 
-.table .cellLeft {
+.table .th.cellLeft,
+.table .cell.cellLeft {
   text-align: left;
 }
 
-.table .cellLeft:first-child {
+.table .cell.cellLeft:first-child {
   font-weight: 500;
   color: var(--color-text-primary);
 }
@@ -271,7 +272,7 @@
 
 .table a:hover {
   text-decoration-style: solid;
-  text-decoration-color: #fff;
+  text-decoration-color: var(--color-text-primary);
 }
 
 .table a:focus-visible {

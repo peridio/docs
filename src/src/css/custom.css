@@ -232,7 +232,7 @@ html[data-theme="dark"] .navbar {
 
 .navbar__items--nav > a:hover {
   background: none;
-  color: #fff;
+  color: var(--ifm-color-primary);
   border-bottom-color: transparent;
 }
 
