@@ -18,23 +18,23 @@ The EdgeAI-ORN supports NVIDIA Jetson Orin Nano and Orin NX modules, delivering 
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| Module Options | Orin NX 16GB (157 TOPS), Orin NX 8GB, Orin Nano 8GB, Orin Nano 4GB | |
-| Memory | 4/8/16GB LPDDR5 | |
-| Storage | M.2 M-Key PCIe Gen 4 x4 NVMe (up to 2280) | |
-| USB | 4x USB 3.2, 2x USB 2.0 | |
-| Display | 1x HDMI | |
-| Ethernet | 2x Ethernet | |
-| Serial | Isolated COM port | |
-| CAN | CAN-FD (isolated) | |
-| Camera Input | GMSL2, FPD-Link IV, MIPI CSI-2 (up to 4 inputs) | |
-| Security | TPM 2.0 | |
-| Dimensions | 59 x 157 x 130 mm | |
-| Weight | ~1.2 kg | |
-| Power | 12V (60W or 120W PSU options) | |
-| Operating Temp | -25 to 75C | |
-| Mil Standard | MIL-STD-810G | |
+| Specification  | Value                                                              | Notes |
+| -------------- | ------------------------------------------------------------------ | ----- |
+| Module Options | Orin NX 16GB (157 TOPS), Orin NX 8GB, Orin Nano 8GB, Orin Nano 4GB |       |
+| Memory         | 4/8/16GB LPDDR5                                                    |       |
+| Storage        | M.2 M-Key PCIe Gen 4 x4 NVMe (up to 2280)                          |       |
+| USB            | 4x USB 3.2, 2x USB 2.0                                             |       |
+| Display        | 1x HDMI                                                            |       |
+| Ethernet       | 2x Ethernet                                                        |       |
+| Serial         | Isolated COM port                                                  |       |
+| CAN            | CAN-FD (isolated)                                                  |       |
+| Camera Input   | GMSL2, FPD-Link IV, MIPI CSI-2 (up to 4 inputs)                    |       |
+| Security       | TPM 2.0                                                            |       |
+| Dimensions     | 59 x 157 x 130 mm                                                  |       |
+| Weight         | ~1.2 kg                                                            |       |
+| Power          | 12V (60W or 120W PSU options)                                      |       |
+| Operating Temp | -25 to 75C                                                         |       |
+| Mil Standard   | MIL-STD-810G                                                       |       |
 
 ## Use Cases
 

@@ -18,23 +18,23 @@ The MIC-733-AO is a high-performance AI inference system built on the NVIDIA Jet
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| Processor (32G) | 8-core NVIDIA Arm Cortex-A78AE | 2MB L2 + 4MB L3 |
-| Processor (64G) | 12-core NVIDIA Arm Cortex-A78AE | 3MB L2 + 6MB L3 |
-| GPU (32G) | 1792-core Ampere, 56 Tensor Cores @ 930MHz | |
-| GPU (64G) | 2048-core Ampere, 64 Tensor Cores @ 1.3GHz | |
-| AI Performance | Up to 275 TOPS | |
-| Memory | 32GB or 64GB 256-bit LPDDR5 | |
-| Storage | 64GB eMMC | |
-| Display | 1x HDMI (3840x2160 @ 60Hz) | |
-| Ethernet | 4x GbE (optional PoE IEEE 802.3af/at) | |
-| USB | 2x USB 3.2 Gen 2, 1x USB 2.0 ext, 1x USB 2.0 int | |
-| Expansion | 2x Mini-PCIe, 2x M.2 | |
-| Digital I/O | 4-ch DI, 4-ch DO | |
-| Dimensions | 192 x 230 x 87 mm | |
-| Operating Temp | -10 to 60C | |
-| Cooling | Fanless | |
+| Specification   | Value                                            | Notes           |
+| --------------- | ------------------------------------------------ | --------------- |
+| Processor (32G) | 8-core NVIDIA Arm Cortex-A78AE                   | 2MB L2 + 4MB L3 |
+| Processor (64G) | 12-core NVIDIA Arm Cortex-A78AE                  | 3MB L2 + 6MB L3 |
+| GPU (32G)       | 1792-core Ampere, 56 Tensor Cores @ 930MHz       |                 |
+| GPU (64G)       | 2048-core Ampere, 64 Tensor Cores @ 1.3GHz       |                 |
+| AI Performance  | Up to 275 TOPS                                   |                 |
+| Memory          | 32GB or 64GB 256-bit LPDDR5                      |                 |
+| Storage         | 64GB eMMC                                        |                 |
+| Display         | 1x HDMI (3840x2160 @ 60Hz)                       |                 |
+| Ethernet        | 4x GbE (optional PoE IEEE 802.3af/at)            |                 |
+| USB             | 2x USB 3.2 Gen 2, 1x USB 2.0 ext, 1x USB 2.0 int |                 |
+| Expansion       | 2x Mini-PCIe, 2x M.2                             |                 |
+| Digital I/O     | 4-ch DI, 4-ch DO                                 |                 |
+| Dimensions      | 192 x 230 x 87 mm                                |                 |
+| Operating Temp  | -10 to 60C                                       |                 |
+| Cooling         | Fanless                                          |                 |
 
 ## Use Cases
 

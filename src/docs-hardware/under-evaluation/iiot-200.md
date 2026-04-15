@@ -18,21 +18,21 @@ The SolidRun IIoT-200 is a compact, power-efficient industrial IoT gateway built
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| CPU | Dual Arm Cortex-A55 @ 1.2GHz | |
-| GPU | Arm Mali-G31 | |
-| Video Codec | H.264 | |
-| Memory | Up to 2GB DDR4 (16-bit) | |
-| Storage | Up to 128GB eMMC, SD card slot | |
-| Ethernet | 2x Gigabit Ethernet | |
-| Serial | RS232, RS485 | |
-| CAN | CAN-FD | |
-| USB | 2x USB 2.0 | |
-| Wireless | Dual-band Wi-Fi 802.11ac, Bluetooth 5.0 | |
-| Power | Wide power range, PoE option | |
-| Dimensions | 120 x 80 x 30 mm | |
-| Mounting | DIN rail | |
+| Specification | Value                                   | Notes |
+| ------------- | --------------------------------------- | ----- |
+| CPU           | Dual Arm Cortex-A55 @ 1.2GHz            |       |
+| GPU           | Arm Mali-G31                            |       |
+| Video Codec   | H.264                                   |       |
+| Memory        | Up to 2GB DDR4 (16-bit)                 |       |
+| Storage       | Up to 128GB eMMC, SD card slot          |       |
+| Ethernet      | 2x Gigabit Ethernet                     |       |
+| Serial        | RS232, RS485                            |       |
+| CAN           | CAN-FD                                  |       |
+| USB           | 2x USB 2.0                              |       |
+| Wireless      | Dual-band Wi-Fi 802.11ac, Bluetooth 5.0 |       |
+| Power         | Wide power range, PoE option            |       |
+| Dimensions    | 120 x 80 x 30 mm                        |       |
+| Mounting      | DIN rail                                |       |
 
 ## Use Cases
 

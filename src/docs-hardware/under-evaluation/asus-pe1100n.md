@@ -18,23 +18,23 @@ The ASUS IoT PE1100N packs NVIDIA Jetson Orin performance into a 1.25-liter fanl
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| Module Options | NVIDIA Jetson Orin NX / Orin Nano | |
-| AI Performance | Up to 100 TOPS (Orin NX 16GB) | |
-| Memory | 8GB or 16GB LPDDR5 | |
-| Display | HDMI | |
-| Ethernet | Dual LAN | |
-| USB | USB 3.2, USB Type-A | |
-| Serial | COM ports, optional CAN bus | |
-| Digital I/O | DIO | |
-| Expansion | M.2 E-Key (WiFi/BT), M.2 B-Key (4G/5G), M.2 M-Key (NVMe) | |
-| Wireless | Onboard Wi-Fi + Bluetooth, optional 4G/5G | |
-| GPS | Built-in | |
-| Dimensions | 152 x 114 x 72 mm (~1.25L) | |
-| Weight | 1.4 kg | |
-| Power | 12-24V DC, 10-25W | |
-| Cooling | Fanless | |
+| Specification  | Value                                                    | Notes |
+| -------------- | -------------------------------------------------------- | ----- |
+| Module Options | NVIDIA Jetson Orin NX / Orin Nano                        |       |
+| AI Performance | Up to 100 TOPS (Orin NX 16GB)                            |       |
+| Memory         | 8GB or 16GB LPDDR5                                       |       |
+| Display        | HDMI                                                     |       |
+| Ethernet       | Dual LAN                                                 |       |
+| USB            | USB 3.2, USB Type-A                                      |       |
+| Serial         | COM ports, optional CAN bus                              |       |
+| Digital I/O    | DIO                                                      |       |
+| Expansion      | M.2 E-Key (WiFi/BT), M.2 B-Key (4G/5G), M.2 M-Key (NVMe) |       |
+| Wireless       | Onboard Wi-Fi + Bluetooth, optional 4G/5G                |       |
+| GPS            | Built-in                                                 |       |
+| Dimensions     | 152 x 114 x 72 mm (~1.25L)                               |       |
+| Weight         | 1.4 kg                                                   |       |
+| Power          | 12-24V DC, 10-25W                                        |       |
+| Cooling        | Fanless                                                  |       |
 
 ## Use Cases
 

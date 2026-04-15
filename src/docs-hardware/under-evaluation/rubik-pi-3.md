@@ -18,23 +18,23 @@ The Thundercomm Rubik Pi 3 is a compact single-board computer built on the Qualc
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| Processor | Qualcomm QCS6490, Kryo 670 octa-core | 6nm process |
-| AI Performance | 12 TOPS | Hexagon Processor with fused AI-accelerator |
-| GPU | Adreno 643L | |
-| Memory | 8GB LPDDR4x | |
-| Storage | 128GB UFS 2.2 | |
-| Display (HDMI) | 1x HDMI 1.4 (4K@30) | |
-| Display (USB-C) | 1x USB-C DP 1.4 (4K@60) | |
-| Camera | 2x 22-pin 4-lane MIPI CSI | Raspberry Pi compatible |
-| USB | 1x USB 2.0, 2x USB 3.0, 1x USB 3.1 Gen1 Type-C | |
-| Ethernet | Gigabit Ethernet | |
-| Wireless | Wi-Fi 5, Bluetooth 5.2 | |
-| Expansion | M.2 M-Key, 40-pin GPIO header | |
-| Dimensions | 100 x 75 mm | |
-| Power | ~4W (CPU) / ~8W (full load) | |
-| OS Support | Ubuntu, Yocto Linux, Android, Debian | |
+| Specification   | Value                                          | Notes                                       |
+| --------------- | ---------------------------------------------- | ------------------------------------------- |
+| Processor       | Qualcomm QCS6490, Kryo 670 octa-core           | 6nm process                                 |
+| AI Performance  | 12 TOPS                                        | Hexagon Processor with fused AI-accelerator |
+| GPU             | Adreno 643L                                    |                                             |
+| Memory          | 8GB LPDDR4x                                    |                                             |
+| Storage         | 128GB UFS 2.2                                  |                                             |
+| Display (HDMI)  | 1x HDMI 1.4 (4K@30)                            |                                             |
+| Display (USB-C) | 1x USB-C DP 1.4 (4K@60)                        |                                             |
+| Camera          | 2x 22-pin 4-lane MIPI CSI                      | Raspberry Pi compatible                     |
+| USB             | 1x USB 2.0, 2x USB 3.0, 1x USB 3.1 Gen1 Type-C |                                             |
+| Ethernet        | Gigabit Ethernet                               |                                             |
+| Wireless        | Wi-Fi 5, Bluetooth 5.2                         |                                             |
+| Expansion       | M.2 M-Key, 40-pin GPIO header                  |                                             |
+| Dimensions      | 100 x 75 mm                                    |                                             |
+| Power           | ~4W (CPU) / ~8W (full load)                    |                                             |
+| OS Support      | Ubuntu, Yocto Linux, Android, Debian           |                                             |
 
 ## Use Cases
 

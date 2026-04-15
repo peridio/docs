@@ -18,21 +18,21 @@ The FRDM-i.MX 95 is NXP's Freedom development board for the i.MX 95 applications
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| CPU | 6x Arm Cortex-A55 @ up to 2.0GHz | |
-| Safety CPU | 1x Arm Cortex-M7 + 1x Arm Cortex-M33 | |
-| GPU | Arm Mali | |
-| NPU | eIQ Neutron, 2.0 TOPS | |
-| VPU | 4K Video Processing Unit | |
-| ISP | Integrated Image Signal Processor | |
-| Memory | 8GB LPDDR4X (32-bit) | |
-| Storage | 32GB eMMC 5.1 | |
-| Ethernet | 1x Gigabit (RGMII) | Supports XFI/USXGMII |
-| USB | USB 3 | |
-| PCIe | PCIe Gen 3 | |
-| Wireless | Wi-Fi 6 (802.11ax) + Bluetooth 5.3 | SoC integrated |
-| Expansion | M.2 M-Key (for NXP Ara NPU modules) | |
+| Specification | Value                                | Notes                |
+| ------------- | ------------------------------------ | -------------------- |
+| CPU           | 6x Arm Cortex-A55 @ up to 2.0GHz     |                      |
+| Safety CPU    | 1x Arm Cortex-M7 + 1x Arm Cortex-M33 |                      |
+| GPU           | Arm Mali                             |                      |
+| NPU           | eIQ Neutron, 2.0 TOPS                |                      |
+| VPU           | 4K Video Processing Unit             |                      |
+| ISP           | Integrated Image Signal Processor    |                      |
+| Memory        | 8GB LPDDR4X (32-bit)                 |                      |
+| Storage       | 32GB eMMC 5.1                        |                      |
+| Ethernet      | 1x Gigabit (RGMII)                   | Supports XFI/USXGMII |
+| USB           | USB 3                                |                      |
+| PCIe          | PCIe Gen 3                           |                      |
+| Wireless      | Wi-Fi 6 (802.11ax) + Bluetooth 5.3   | SoC integrated       |
+| Expansion     | M.2 M-Key (for NXP Ara NPU modules)  |                      |
 
 ## Use Cases
 

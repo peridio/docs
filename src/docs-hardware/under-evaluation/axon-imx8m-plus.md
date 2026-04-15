@@ -18,23 +18,23 @@ The AXON-IMX8M-PLUS is an ultra-compact (37x58mm) System-on-Module built on the 
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| CPU | Quad Cortex-A53 @ up to 1.8GHz | |
-| Real-Time Core | Cortex-M7 @ up to 800MHz | |
-| NPU | 2.3 TOPS | NXP Neural Processing Unit |
-| GPU (3D) | Vivante GC7000UL | |
-| GPU (2D) | Vivante GC520L | |
-| Memory | 1GB / 2GB / 4GB / 8GB LPDDR4 | |
-| Storage | 32GB eMMC | |
-| Display | Full-HD HDMI, MIPI DSI, Dual-channel LVDS | |
-| Camera | 2x MIPI-CSI2 | |
-| Ethernet | Gigabit Ethernet | |
-| Wireless | Optional Wi-Fi 5 (802.11ac) + Bluetooth | QCA9377 |
-| Connector | 4x 80-pin Hirose B2B | Vibration resistant |
-| Module Size | 37 x 58 mm | |
-| Temp Range | Commercial: 0 to 70C / Industrial: -40 to 85C | |
-| OS Support | Yocto Linux, Ubuntu, Android, FreeRTOS | |
+| Specification  | Value                                         | Notes                      |
+| -------------- | --------------------------------------------- | -------------------------- |
+| CPU            | Quad Cortex-A53 @ up to 1.8GHz                |                            |
+| Real-Time Core | Cortex-M7 @ up to 800MHz                      |                            |
+| NPU            | 2.3 TOPS                                      | NXP Neural Processing Unit |
+| GPU (3D)       | Vivante GC7000UL                              |                            |
+| GPU (2D)       | Vivante GC520L                                |                            |
+| Memory         | 1GB / 2GB / 4GB / 8GB LPDDR4                  |                            |
+| Storage        | 32GB eMMC                                     |                            |
+| Display        | Full-HD HDMI, MIPI DSI, Dual-channel LVDS     |                            |
+| Camera         | 2x MIPI-CSI2                                  |                            |
+| Ethernet       | Gigabit Ethernet                              |                            |
+| Wireless       | Optional Wi-Fi 5 (802.11ac) + Bluetooth       | QCA9377                    |
+| Connector      | 4x 80-pin Hirose B2B                          | Vibration resistant        |
+| Module Size    | 37 x 58 mm                                    |                            |
+| Temp Range     | Commercial: 0 to 70C / Industrial: -40 to 85C |                            |
+| OS Support     | Yocto Linux, Ubuntu, Android, FreeRTOS        |                            |
 
 ## Use Cases
 

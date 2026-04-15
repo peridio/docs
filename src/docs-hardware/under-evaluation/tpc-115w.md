@@ -18,22 +18,22 @@ The TPC-115W is a 15.6-inch industrial touch panel computer built on the NXP i.M
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| Processor | NXP i.MX 8M Mini, Quad Cortex-A53 @ 1.8GHz | |
-| Memory | Up to 4GB DDR4 | |
-| Storage | 16GB eMMC, 1MB FRAM | Power failure backup |
-| Display | 15.6" FHD (1920x1080) TFT LCD, 450 nits | 16:9 |
-| Touch | 10-point P-CAP, 7H hardness, true-flat | |
-| Ethernet | 2x GbE (1x PoE-PD IEEE 802.3at) | |
-| USB | 2x USB 2.0 | |
-| Serial | 1x RS-232, 1x RS-232/422/485 | |
-| CAN | 2x CAN 2.0B (120 ohm, up to 1Mb/s) | |
-| Wireless | Wi-Fi, Bluetooth (via mPCIe) | |
-| Power | 24VDC +/-20%, 13W typ / 16W max | |
-| IP Rating | IP66 front panel | |
-| Operating Temp | -20 to 60C | |
-| Weight | 7 kg (15.4 lb) | |
+| Specification  | Value                                      | Notes                |
+| -------------- | ------------------------------------------ | -------------------- |
+| Processor      | NXP i.MX 8M Mini, Quad Cortex-A53 @ 1.8GHz |                      |
+| Memory         | Up to 4GB DDR4                             |                      |
+| Storage        | 16GB eMMC, 1MB FRAM                        | Power failure backup |
+| Display        | 15.6" FHD (1920x1080) TFT LCD, 450 nits    | 16:9                 |
+| Touch          | 10-point P-CAP, 7H hardness, true-flat     |                      |
+| Ethernet       | 2x GbE (1x PoE-PD IEEE 802.3at)            |                      |
+| USB            | 2x USB 2.0                                 |                      |
+| Serial         | 1x RS-232, 1x RS-232/422/485               |                      |
+| CAN            | 2x CAN 2.0B (120 ohm, up to 1Mb/s)         |                      |
+| Wireless       | Wi-Fi, Bluetooth (via mPCIe)               |                      |
+| Power          | 24VDC +/-20%, 13W typ / 16W max            |                      |
+| IP Rating      | IP66 front panel                           |                      |
+| Operating Temp | -20 to 60C                                 |                      |
+| Weight         | 7 kg (15.4 lb)                             |                      |
 
 ## Use Cases
 

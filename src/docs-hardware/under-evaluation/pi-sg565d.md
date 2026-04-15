@@ -18,21 +18,21 @@ The Quectel PI-SG565D (Pi H1) is a compact single-board computer built on the Qu
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| Processor | Qualcomm QCS6490, Kryo 670 octa-core | 6nm process |
-| AI Performance | 12 TOPS | |
-| GPU | Adreno 643L | |
-| Memory | 8GB LPDDR4X | |
-| Storage | 128GB UFS | |
-| Display | DP over USB-C (4K@60) + HDMI 2.0 | |
-| Camera | 2x 4-lane MIPI CSI | |
-| Wireless | Wi-Fi 5 (802.11ac), Bluetooth 5.0 | |
-| Ethernet | Gigabit Ethernet | |
-| USB | USB Type-C (power + DP), USB Type-A | |
-| Expansion | PCIe, M.2 | |
-| Dimensions | 108 x 68 x 20.77 mm | |
-| OS Support | Yocto Linux, Debian | |
+| Specification  | Value                                | Notes       |
+| -------------- | ------------------------------------ | ----------- |
+| Processor      | Qualcomm QCS6490, Kryo 670 octa-core | 6nm process |
+| AI Performance | 12 TOPS                              |             |
+| GPU            | Adreno 643L                          |             |
+| Memory         | 8GB LPDDR4X                          |             |
+| Storage        | 128GB UFS                            |             |
+| Display        | DP over USB-C (4K@60) + HDMI 2.0     |             |
+| Camera         | 2x 4-lane MIPI CSI                   |             |
+| Wireless       | Wi-Fi 5 (802.11ac), Bluetooth 5.0    |             |
+| Ethernet       | Gigabit Ethernet                     |             |
+| USB            | USB Type-C (power + DP), USB Type-A  |             |
+| Expansion      | PCIe, M.2                            |             |
+| Dimensions     | 108 x 68 x 20.77 mm                  |             |
+| OS Support     | Yocto Linux, Debian                  |             |
 
 ## Use Cases
 

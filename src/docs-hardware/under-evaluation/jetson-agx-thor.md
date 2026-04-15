@@ -18,23 +18,23 @@ The NVIDIA Jetson AGX Thor is the flagship Jetson module, delivering 2070 FP4 TF
 
 ## Specifications
 
-| Specification | Value | Notes |
-| --- | --- | --- |
-| CPU | 14-core Arm Neoverse-V3AE | |
-| GPU | 2560-core Blackwell, 96 Tensor Cores | |
-| AI Performance | 2070 FP4 TFLOPS / 1035 FP8 TFLOPS | |
-| Memory | 128GB LPDDR5X (273 GB/s) | |
-| Storage | PCIe Gen5 NVMe | 1TB in dev kit |
-| Video Decode | Up to 10x 4Kp60 or 4x 8Kp30 | H.265, H.264, AV1, VP9 |
-| Video Encode | Up to 6x 4Kp60 | H.265, H.264 |
-| Camera | 16x CSI-2 lanes, 20+ cameras | |
-| Networking | QSFP 4x25GbE + RJ45 Multi-GbE | |
-| Display | Dual HDMI 2.1 + DP 1.4a | |
-| USB | 3x USB 3.2, USB-C | |
-| PCIe | Up to 8 lanes Gen5 | |
-| Other I/O | CAN, I2C, UART, PWM, SPI, GPIO | |
-| Module Size | ~87 x 100 mm (699-pin B2B) | |
-| Power | 40-130W configurable | |
+| Specification  | Value                                | Notes                  |
+| -------------- | ------------------------------------ | ---------------------- |
+| CPU            | 14-core Arm Neoverse-V3AE            |                        |
+| GPU            | 2560-core Blackwell, 96 Tensor Cores |                        |
+| AI Performance | 2070 FP4 TFLOPS / 1035 FP8 TFLOPS    |                        |
+| Memory         | 128GB LPDDR5X (273 GB/s)             |                        |
+| Storage        | PCIe Gen5 NVMe                       | 1TB in dev kit         |
+| Video Decode   | Up to 10x 4Kp60 or 4x 8Kp30          | H.265, H.264, AV1, VP9 |
+| Video Encode   | Up to 6x 4Kp60                       | H.265, H.264           |
+| Camera         | 16x CSI-2 lanes, 20+ cameras         |                        |
+| Networking     | QSFP 4x25GbE + RJ45 Multi-GbE        |                        |
+| Display        | Dual HDMI 2.1 + DP 1.4a              |                        |
+| USB            | 3x USB 3.2, USB-C                    |                        |
+| PCIe           | Up to 8 lanes Gen5                   |                        |
+| Other I/O      | CAN, I2C, UART, PWM, SPI, GPIO       |                        |
+| Module Size    | ~87 x 100 mm (699-pin B2B)           |                        |
+| Power          | 40-130W configurable                 |                        |
 
 ## Use Cases
 
