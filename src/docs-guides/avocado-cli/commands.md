@@ -488,6 +488,28 @@ Options:
 
 ---
 
+### `avocado connect clean`
+
+```
+Remove connect configuration (connect section, connect-config extension, and device config overlay)
+
+Usage: avocado connect clean [OPTIONS]
+
+Options:
+  -r, --runtime <RUNTIME>    Runtime to remove connect-config extension from (default: dev) [default: dev]
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+  -h, --help                 Print help
+
+```
+
+Removes Connect state from the project: strips the `connect:` section and the `avocado-ext-connect-config` extension from `avocado.yaml`, and deletes `overlay/etc/avocado-conn/`. Operations are idempotent — missing items are skipped with an info message.
+
+---
+
 ### `avocado connect deploy`
 
 ```
@@ -1114,6 +1136,7 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -t, --target <TARGET>                 Target architecture
+  -r, --runtime <RUNTIME>               Runtime to build the extension against (kernel/rootfs context). Resolves from AVOCADO_RUNTIME / default_runtime / sole-runtime when omitted
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
@@ -1147,6 +1170,8 @@ Options:
           Path within the extension sysroot to checkout (e.g., /etc/config.json or /etc for directory)
       --src-path <SRC_PATH>
           Destination path in source directory (relative to src root)
+  -r, --runtime <RUNTIME>
+          Runtime context for the checkout (selects which sysroot tree the files come from)
       --container-tool <CONTAINER_TOOL>
           Container tool to use (docker/podman) [default: docker]
       --runs-on <USER@HOST>
@@ -1178,6 +1203,7 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -t, --target <TARGET>                 Target architecture
+  -r, --runtime <RUNTIME>               Runtime context for the clean. Falls through to per-target behavior when no runtime resolves
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
@@ -1228,6 +1254,7 @@ Options:
   -v, --verbose                         Enable verbose output
   -e, --extension <EXTENSION>           Name of the extension to operate on
   -t, --target <TARGET>                 Target architecture
+  -r, --runtime <RUNTIME>               Runtime context for the dnf operation (scopes which extension sysroot tree dnf operates on)
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
@@ -1280,6 +1307,7 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -t, --target <TARGET>                 Target architecture
+  -r, --runtime <RUNTIME>               Runtime to image the extension under (kernel/rootfs context). Same resolution rules as ext build -r
       --out <OUT_DIR>                   Output directory on host to copy the resulting image to
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
@@ -1354,6 +1382,7 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -t, --target <TARGET>                 Target architecture
+  -r, --runtime <RUNTIME>               Runtime context for the package operation
       --out-dir <OUTPUT_DIR>            Output directory on host for the RPM package (relative or absolute path). If not specified, RPM stays in container at $AVOCADO_PREFIX/output/extensions
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands

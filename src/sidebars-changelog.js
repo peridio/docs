@@ -8,7 +8,7 @@ const sidebars = {
       label: 'April 2026',
       collapsible: false,
       collapsed: false,
-      items: ['april-2026/0.34.0'],
+      items: ['april-2026/0.36.0', 'april-2026/0.35.0', 'april-2026/0.34.0'],
     },
     {
       type: 'category',
