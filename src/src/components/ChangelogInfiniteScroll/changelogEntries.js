@@ -1,6 +1,8 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
 // -- April 2026 --
+import V0_36_0 from '../../../docs-changelog/april-2026/0.36.0.md'
+import V0_35_0 from '../../../docs-changelog/april-2026/0.35.0.md'
 import V0_34_0 from '../../../docs-changelog/april-2026/0.34.0.md'
 // -- March 2026 --
 import V0_33_0 from '../../../docs-changelog/march-2026/0.33.0.md'
@@ -41,6 +43,22 @@ import V0_8_0 from '../../../docs-changelog/september-2025/0.8.0.md'
  * Order matches sidebars-changelog.js exactly.
  */
 export const entries = [
+  {
+    version: '0.36.0',
+    monthSlug: 'april-2026',
+    monthLabel: 'April 2026',
+    permalink: '/changelog/april-2026/0.36.0',
+    Component: V0_36_0,
+  },
+
+  {
+    version: '0.35.0',
+    monthSlug: 'april-2026',
+    monthLabel: 'April 2026',
+    permalink: '/changelog/april-2026/0.35.0',
+    Component: V0_35_0,
+  },
+
   {
     version: '0.34.0',
     monthSlug: 'april-2026',
