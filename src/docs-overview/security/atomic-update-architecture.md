@@ -20,8 +20,8 @@ Avocado maintains two complete boot slots:
 Disk layout
 ├── Boot A        (bootloader, kernel, device tree)
 ├── Boot B        (bootloader, kernel, device tree)
-├── RootFS A      (immutable SquashFS + dm-verity)
-├── RootFS B      (immutable SquashFS + dm-verity)
+├── RootFS A      (immutable erofs + dm-verity)
+├── RootFS B      (immutable erofs + dm-verity)
 └── var partition  (BTRFS — extensions, data, state)
     ├── /var/lib/extensions
     └── /var/lib/overlays

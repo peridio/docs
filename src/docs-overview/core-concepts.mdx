@@ -9,19 +9,19 @@ Avocado OS is built around a few core concepts that work together to deliver a c
 ```text
 // highlight-removed-start
 
-            Yocto + BSPs ──▶ Package Feeds (RPM)                                 <-  we do this for you
+            Yocto + BSPs ──▶ Package Feeds (RPM)        <--  we do this for you
                             │
                             ▼
 // highlight-removed-end
 // highlight-orange-start
-                      avocado.yaml                                               <- your config
+                      avocado.yaml                      <-- your config
                ┌─────────────────────────┐
                │ target: raspberrypi5    │
                │                         │
                │ runtimes:               │
                │   dev:                  │
                │     extensions:         │
-               │       - my-app          │                                       <- your app
+               │       - my-app          │              <-- your app
                │       - avocado-ext-dev │
                └─────────────────────────┘
                             │
@@ -41,13 +41,13 @@ Avocado OS is built around a few core concepts that work together to deliver a c
 // highlight-green-end
 // highlight-blue-start
 
-                  On-Device (hardware)                                           <- your os
+                  On-Device (hardware)                  <-- your os
                ┌─────────────────────────┐
-               │ /var  BTRFS  read-write │  extensions (SquashFS, dm-verity)
+               │ /var  BTRFS  read-write │
                ├─────────────────────────┤
                │ systemd-sysext merge    │  extensions → /usr, /etc
                ├────────────┬────────────┤
-               │ rootFS (A) │ rootFS (B) │  SquashFS, read-only
+               │ rootFS (A) │ rootFS (B) │  immutable, read-only
                ├────────────┼────────────┤
                │ BSP+K  (A) │ BSP+K  (B) │  kernel, initramfs
                ├────────────┼────────────┤
@@ -56,6 +56,8 @@ Avocado OS is built around a few core concepts that work together to deliver a c
 
 // highlight-blue-end
 ```
+
+Filesystem technology for the rootFS and extensions is configurable in `avocado.yaml` — `erofs` is the default.
 
 ---
 

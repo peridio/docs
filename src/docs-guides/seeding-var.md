@@ -19,7 +19,7 @@ Files on the var partition are writable and are not managed by the extension sys
 
 ### Extension images vs. var data
 
-When `avocado ext image` builds a `.raw` image from an extension's sysroot, it creates a read-only squashfs or erofs image that is merged into `/usr` and `/opt` at runtime. Files that belong on the var partition must **not** be baked into the read-only image — they need to be on the writable partition.
+When `avocado ext image` builds a `.raw` image from an extension's sysroot, it creates a read-only erofs image that is merged into `/usr` and `/opt` at runtime. Files that belong on the var partition must **not** be baked into the read-only image — they need to be on the writable partition.
 
 Avocado provides two mechanisms for getting data onto the var partition at build time:
 
@@ -121,7 +121,7 @@ extensions:
       - var/lib/docker/** # exclude from .raw, lives on var partition
 ```
 
-Without this, `avocado ext image` would try to bake the Docker storage directory into the read-only squashfs image, which is not what you want.
+Without this, `avocado ext image` would try to bake the Docker storage directory into the read-only erofs image, which is not what you want.
 
 ### 4. Complete example
 

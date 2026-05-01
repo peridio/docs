@@ -1296,7 +1296,7 @@ Options:
 ### `avocado ext image`
 
 ```
-Create squashfs image from system extension
+Create erofs image from system extension
 
 Usage: avocado ext image [OPTIONS] [NAME]
 

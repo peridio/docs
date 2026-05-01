@@ -846,8 +846,8 @@
           "title": "Filesystem format",
           "type": "string",
           "enum": ["squashfs", "erofs"],
-          "default": "squashfs",
-          "description": "Filesystem format for the extension's .raw image. 'squashfs' (default) is widely supported. 'erofs' offers better random-access read performance and smaller images for some workloads.",
+          "default": "erofs",
+          "description": "Filesystem format for the extension's .raw image. 'erofs' (default) is widely supported. 'erofs' offers better random-access read performance and smaller images for some workloads.",
           "examples": ["squashfs", "erofs"]
         },
         "var_files": {

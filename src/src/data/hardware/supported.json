@@ -18,17 +18,17 @@
     },
     {
       "name": "Grinn AstraSOM-1680",
-      "target": null,
+      "target": "grinn-astra-1680-sbc",
       "url": "/hardware/grinn/astrasom-1680",
       "external": false,
       "features": {
-        "provisioning": "partial",
-        "hitl": "partial",
-        "sideLoading": "partial",
-        "extensionOta": "partial",
-        "osOta": "partial",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "partial"
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
+        "remoteAccessTunnels": "full"
       }
     },
     {
@@ -68,11 +68,11 @@
       "external": false,
       "features": {
         "provisioning": "full",
-        "hitl": "partial",
+        "hitl": "full",
         "sideLoading": "full",
-        "extensionOta": "partial",
-        "osOta": "partial",
-        "secureBoot": "partial",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "full",
         "remoteAccessTunnels": "full"
       }
     },
@@ -98,7 +98,7 @@
       "external": false,
       "features": {
         "provisioning": "full",
-        "hitl": "partial",
+        "hitl": "full",
         "sideLoading": "full",
         "extensionOta": "full",
         "osOta": "full",
@@ -128,7 +128,7 @@
       "external": false,
       "features": {
         "provisioning": "full",
-        "hitl": "partial",
+        "hitl": "full",
         "sideLoading": "full",
         "extensionOta": "full",
         "osOta": "full",
@@ -203,7 +203,7 @@
       "external": false,
       "features": {
         "provisioning": "full",
-        "hitl": "partial",
+        "hitl": "full",
         "sideLoading": "full",
         "extensionOta": "full",
         "osOta": "full",

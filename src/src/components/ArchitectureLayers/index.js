@@ -14,10 +14,10 @@ const data = [
         layer: 'Board Support Package',
         description: 'Hardware-specific kernel, initramfs, and drivers',
       },
-      { layer: 'Avocado Linux', description: 'Immutable base OS (SquashFS, read-only)' },
+      { layer: 'Avocado Linux', description: 'Immutable base OS (erofs, read-only)' },
       {
         layer: 'Avocado Extensions',
-        description: 'Applications, configs, kernel modules (SquashFS, read-only)',
+        description: 'Applications, configs, kernel modules (erofs, read-only)',
       },
       {
         layer: 'System Storage',

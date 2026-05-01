@@ -14,10 +14,10 @@ Avocado OS uses dm-verity to provide continuous, block-level integrity verificat
 
 ### Immutable root filesystem
 
-The Avocado root filesystem is a read-only SquashFS image. Nothing at runtime can modify it — there is no writable root. This is the foundation that makes dm-verity practical: you can compute a complete hash tree at build time because the filesystem will never change.
+The Avocado root filesystem is a read-only image. Nothing at runtime can modify it — there is no writable root. This is the foundation that makes dm-verity practical: you can compute a complete hash tree at build time because the filesystem will never change.
 
 ```
-Root filesystem (SquashFS)
+Root filesystem
 ├── Read-only mount
 ├── dm-verity hash tree computed at build time
 └── Every block verified on read against Merkle tree
