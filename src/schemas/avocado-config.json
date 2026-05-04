@@ -173,8 +173,16 @@
         "reterminal",
         "reterminal-dm",
         "jetson-orin-nano-devkit",
+        "jetson-agx-orin-devkit",
         "raspberrypi4",
-        "raspberrypi5"
+        "raspberrypi5",
+        "raspberrypi0-2w",
+        "grinn-astra-1680-sbc",
+        "icam-540",
+        "intel-x86-64-v2",
+        "intel-x86-64-v3",
+        "fr201",
+        "stm32mp257f-dk"
       ],
       "description": "An identifier for the platform for Avocado OS builds and deployments.",
       "additionalProperties": false
@@ -847,7 +855,7 @@
           "type": "string",
           "enum": ["squashfs", "erofs"],
           "default": "erofs",
-          "description": "Filesystem format for the extension's .raw image. 'erofs' (default) is widely supported. 'erofs' offers better random-access read performance and smaller images for some workloads.",
+          "description": "Filesystem format for the extension's .raw image. 'erofs' (default) offers better random-access read performance and smaller images for some workloads. 'squashfs' is also supported and widely available.",
           "examples": ["squashfs", "erofs"]
         },
         "var_files": {
