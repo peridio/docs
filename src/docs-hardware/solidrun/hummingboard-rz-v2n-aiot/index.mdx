@@ -1,0 +1,130 @@
+---
+title: 'HummingBoard RZ/V2N AIOT'
+sidebar_position: 0
+description: 'Deploy the SolidRun HummingBoard RZ/V2N AIOT for Physical AI and edge vision. DRP-AI3 with 15 Sparse / 4 Dense TOPS, quad Cortex-A55 + Cortex-M33, dual GbE, industrial I/O. Production-ready with Avocado OS + Peridio Core.'
+---
+
+# HummingBoard RZ/V2N AIOT
+
+Industrial-grade Physical AI platform with 15 Sparse / 4 Dense TOPS DRP-AI3, real-time Cortex-M33, and ruggedized industrial connectivity.
+
+<img
+  src="/img/solidrun-hummingboard-rz-v2n.png"
+  alt="SolidRun HummingBoard RZ/V2N AIOT industrial SBC"
+  style={{ display: 'block', margin: '0 auto' }}
+/>
+
+**15S / 4D** TOPS DRP-AI3 NPU | **Quad A55 + M33** Multi-Core Processing | **-40°C** Industrial Temperature
+
+## Overview
+
+The SolidRun HummingBoard RZ/V2N AIOT, powered by Avocado OS and Peridio Core, delivers a production-ready platform for Physical AI applications that demand on-device vision, real-time control, and industrial-grade deployment. Built on the Renesas RZ/V2N SoM with quad Arm Cortex-A55 cores up to 1.8 GHz, a Cortex-M33 real-time core, and the DRP-AI3 accelerator delivering 15 Sparse / 4 Dense TOPS, this compact industrial SBC enables sophisticated computer vision, multi-sensor fusion, ROS 2 robotics, and HMI workloads at the edge — without cloud dependency. Dual Gigabit Ethernet, optional PoE, optional LTE, RS232/RS485 serial, dual CAN-FD, and MIPI-DSI display support make it a true industrial gateway, while a -40°C to +85°C temperature range and optional extruded aluminum enclosure handle harsh environments. Combined with Avocado OS — atomic OTA updates, secure boot, verified boot, and fleet-wide CVE tracking — and Peridio Core's centralized fleet management, the platform replaces 12+ months of BSP and infrastructure work with a complete, validated stack ready for production.
+
+## Specifications
+
+| Specification  | Value                                                           | Notes                                         |
+| -------------- | --------------------------------------------------------------- | --------------------------------------------- |
+| SoM            | Renesas RZ/V2N                                                  | Vision-AI optimized industrial SoC            |
+| CPU            | Quad Cortex-A55 @ up to 1.8 GHz                                 | Application processors for Linux workloads    |
+| Real-Time Core | Cortex-M33                                                      | Dedicated real-time control processing        |
+| AI Accelerator | DRP-AI3, 15 Sparse / 4 Dense TOPS                               | On-device vision AI without cloud dependency  |
+| Memory         | Up to 8 GB LPDDR4                                               | High-bandwidth memory for vision pipelines    |
+| Storage        | Up to 128 GB eMMC + microSD                                     | On-board storage with removable media support |
+| Camera         | 1× MIPI-CSI (4 lanes)                                           | Production camera module support              |
+| Video          | 4K Encode / 4K Decode                                           | Hardware-accelerated video pipeline           |
+| Display        | MIPI-DSI                                                        | Industrial HMI display support                |
+| Networking     | 2× Gigabit Ethernet RJ45, Wi-Fi a/b/g/n/ac, Bluetooth           | Dual wired + dual-band wireless connectivity  |
+| Cellular       | M.2 B-Key LTE (eSIM, NanoSIM)                                   | Optional cellular for remote sites            |
+| Industrial I/O | 2× RS232, 2× RS485 (or RS232 + RS485), 2× CAN-FD                | Drop-in factory floor integration             |
+| USB            | 1× USB 3.2, 2× USB 2.0                                          | Peripheral and accessory expansion            |
+| Power          | 7 V – 32 V wide input, PoE 802.3at, reverse polarity protection | Flexible powering for industrial deployments  |
+| Operating Temp | -40°C to +85°C                                                  | Industrial and harsh environments             |
+| Dimensions     | PCBA 88 × 135 mm; optional enclosure 150 × 145 × 40 mm          | Compact SBC with optional aluminum enclosure  |
+
+## Use Cases
+
+### Smart Camera & Computer Vision
+
+On-device inference for defect detection, classification, and quality control. The DRP-AI3 NPU runs production vision models natively via TensorFlow, PyTorch, and ONNX, with fleet-wide model updates delivered over the air across thousands of deployed devices.
+
+### Industrial Automation & HMI
+
+Machine vision, process control, and operator interfaces on the factory floor. RS232, RS485, dual CAN-FD, and optional PoE provide drop-in integration into existing industrial environments, while MIPI-DSI display support enables responsive HMI workflows alongside real-time control on the Cortex-M33.
+
+### Autonomous Machines & Robotics
+
+Multi-sensor fusion and on-device perception for ROS 2-based robotics and autonomous systems. The DRP-AI3 accelerator and quad-core Cortex-A55 handle vision and decision-making, while the Cortex-M33 manages real-time motion and sensor loops — a complete Physical AI compute stack in a single SBC.
+
+## Challenges and Solutions
+
+| Challenge                                            | Solution                                                            |
+| ---------------------------------------------------- | ------------------------------------------------------------------- |
+| 12+ months of custom BSP integration                 | Pre-integrated Avocado OS BSP for the RZ/V2N SoM                    |
+| Building OTA and fleet infrastructure from scratch   | Peridio Core: OTA, observability, fleet management                  |
+| Deploying and updating vision models in the field    | Fleet-wide model updates over the air                               |
+| Coordinating Linux + real-time workloads (A55 + M33) | Pre-integrated multi-core support                                   |
+| Industrial-grade reliability requirements            | -40°C to +85°C operation with industrial I/O and aluminum enclosure |
+| Securing devices across distributed deployments      | Secure boot, verified boot, FDE, fleet-wide CVE tracking            |
+| Long-lived production fleets                         | LTS aligned with CIP™ for 10-year lifecycle support                |
+
+## Key Features
+
+### Industrial-Grade OS
+
+Avocado OS provides a production-hardened, Yocto-based embedded Linux runtime with deterministic builds, secure boot, verified boot, and full-disk encryption out of the box.
+
+### DRP-AI3 NPU Acceleration
+
+15 Sparse / 4 Dense TOPS of on-device AI acceleration on the Renesas RZ/V2N, with native support for TensorFlow, PyTorch, and ONNX plus a comprehensive vision library and dataflow compiler — designed specifically for vision-heavy Physical AI workloads.
+
+### Real-Time Processing
+
+A dedicated Cortex-M33 real-time core handles latency-sensitive tasks — motor control, sensor polling, and deterministic I/O — while the quad Cortex-A55 cores up to 1.8 GHz run the Linux application stack.
+
+### Industrial Connectivity
+
+Dual Gigabit Ethernet with optional PoE 802.3at, optional LTE cellular, Wi-Fi/Bluetooth, RS232, RS485, dual CAN-FD, and MIPI-DSI HMI display — drop-in connectivity for factories, perimeters, and remote sites with a 7–32 V wide-input power range.
+
+### Fleet Management
+
+Peridio Core delivers atomic OTA updates with delta compression, A/B rollback, staged rollouts, fleet dashboard, health monitoring, remote debugging, and secure tunnel access.
+
+### Long-Term Support
+
+LTS commitments aligned with the Civil Infrastructure Platform (CIP™), whose kernels target a 10-year lifecycle, ensure your fleet stays patched, supported, and shippable for the long haul.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `rzv2n-sr-som`. The provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+:::warning Linux Auto-mounting
+
+Some Linux operating systems, like Ubuntu, will attempt to auto-mount mass storage devices. This can interfere with Avocado's ability to finalize provisioning a device.
+
+Before provisioning, disable auto-mounting. The following example is for Ubuntu (GNOME desktop); the same commands apply to other GNOME-based distributions such as Fedora Workstation.
+
+```bash title="Ubuntu (GNOME desktop)"
+gsettings set org.gnome.desktop.media-handling automount false
+gsettings set org.gnome.desktop.media-handling automount-open false
+```
+
+:::
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile sd
+```
+
+### Run
+
+After provisioning completes, insert the microSD card into your target device and power it on.
+
+The device will boot from the microSD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
+
+For board-level setup details — power, console, boot mode selection, and peripheral wiring — see SolidRun's [HummingBoard RZ/V2N IIoT SBC Quick Start Guide](https://dev.solid-run.com/renesas/rz-v2n/sbc-platform/hummingboard-iiot-rz-v2n-som-quick-start-guide).

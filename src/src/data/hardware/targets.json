@@ -508,5 +508,57 @@
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/intel/x86-64-v2"
+  },
+  "grinn-astra-1680-sbc": {
+    "name": "Grinn AstraSOM-1680",
+    "target": "grinn-astra-1680-sbc",
+    "category": "sd",
+    "provisioning": {
+      "profile": "sd",
+      "media": "microSD card (8GB+)",
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": [
+        "Grinn AstraSOM-1680",
+        "microSD card (8GB+)",
+        "SD card reader",
+        "TTY serial console USB adapter (3.3V)"
+      ],
+      "provisionCommand": "avocado provision -r dev --profile sd",
+      "bootInstructions": "Insert the SD card into the device and apply power.",
+      "warnings": ["linuxAutoMount"]
+    },
+    "serial": {
+      "baud": 115200,
+      "voltage": "3.3V",
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/grinn/astrasom-1680"
+  },
+  "rzv2n-sr-som": {
+    "name": "SolidRun HummingBoard RZ/V2N AIOT",
+    "target": "rzv2n-sr-som",
+    "category": "sd",
+    "provisioning": {
+      "profile": "sd",
+      "media": "microSD card (8GB+)",
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": [
+        "SolidRun HummingBoard RZ/V2N AIOT",
+        "microSD card (8GB+)",
+        "SD card reader",
+        "TTY serial console USB adapter (3.3V)"
+      ],
+      "provisionCommand": "avocado provision -r dev --profile sd",
+      "bootInstructions": "Insert the SD card into the device and apply power.",
+      "warnings": ["linuxAutoMount"]
+    },
+    "serial": {
+      "baud": 115200,
+      "voltage": "3.3V",
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/solidrun/hummingboard-rz-v2n-aiot"
   }
 }

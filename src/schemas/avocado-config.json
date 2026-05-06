@@ -182,7 +182,8 @@
         "intel-x86-64-v2",
         "intel-x86-64-v3",
         "fr201",
-        "stm32mp257f-dk"
+        "stm32mp257f-dk",
+        "rzv2n-sr-som"
       ],
       "description": "An identifier for the platform for Avocado OS builds and deployments.",
       "additionalProperties": false

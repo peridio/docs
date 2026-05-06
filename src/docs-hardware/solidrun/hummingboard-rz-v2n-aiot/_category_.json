@@ -1,0 +1,9 @@
+{
+  "label": "HummingBoard RZ/V2N AIOT",
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "index"
+  }
+}
