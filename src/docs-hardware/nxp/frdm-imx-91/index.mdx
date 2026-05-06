@@ -2,17 +2,35 @@
 title: 'Production-Ready NXP FRDM i.MX 91 Deployment'
 sidebar_position: 0
 description: 'Deploy NXP FRDM i.MX 91 devices in production with Avocado OS. Low-power Cortex-A55, EdgeLock security, Wi-Fi 6, and dual Gigabit Ethernet for IoT and industrial edge.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# NXP FRDM i.MX 91
-
-Low-power single Cortex-A55 platform with EdgeLock secure enclave, Wi-Fi 6, and dual Gigabit Ethernet for secure IoT and industrial edge applications
-
-![NXP FRDM i.MX 91](/img/hardware/nxp/FRDM-IMX91.png)
-
-**1.4GHz** Cortex-A55 | **1GB** LPDDR4 | **Wi-Fi 6** + BLE 5.4
+<HardwareHero
+  vendor="NXP"
+  vendorUrl="https://www.nxp.com/design/design-center/development-boards-and-designs/FRDM-IMX91"
+  model="NXP FRDM i.MX 91"
+  tagline="Low-power single Cortex-A55 platform with EdgeLock secure enclave, Wi-Fi 6, and dual Gigabit Ethernet for secure IoT and industrial edge applications."
+  image="/img/hardware/nxp/FRDM-IMX91.png"
+  imageAlt="NXP FRDM i.MX 91"
+  stats={[
+    { value: '1.4 GHz', label: 'Cortex-A55' },
+    { value: '1GB', label: 'LPDDR4 Memory' },
+    { value: 'Wi-Fi 6 + BLE 5.4', label: 'Wireless Connectivity' },
+    { value: '8GB eMMC 5.1', label: 'On-Board Storage' },
+    { value: '2x GbE + TSN', label: 'Industrial Networking' },
+    { value: 'EdgeLock', label: 'Secure Enclave' },
+  ]}
+  target="imx91-frdm"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

@@ -2,17 +2,35 @@
 title: 'Edge AI Development with NXP FRDM i.MX 93'
 sidebar_position: 0
 description: 'Production-ready NXP FRDM i.MX 93 development with dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and secure edge connectivity. Enterprise OTA and fleet management.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# NXP FRDM i.MX 93
-
-Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock secure enclave, and industrial connectivity for edge AI applications
-
-![NXP FRDM i.MX 93 development board](/img/hardware/nxp/NXP-FRDM-MCXN947.png)
-
-**1.7GHz** Dual Cortex-A55 | **0.5 TOPS** Ethos U-65 NPU | **2GB** LPDDR4X Memory
+<HardwareHero
+  vendor="NXP"
+  vendorUrl="https://www.nxp.com/design/design-center/development-boards-and-designs/FRDM-IMX93"
+  model="NXP FRDM i.MX 93"
+  tagline="Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock secure enclave, and industrial connectivity for edge AI applications."
+  image="/img/hardware/nxp/NXP-FRDM-MCXN947.png"
+  imageAlt="NXP FRDM i.MX 93 development board"
+  stats={[
+    { value: '1.7 GHz', label: 'Dual Cortex-A55' },
+    { value: '0.5 TOPS', label: 'Ethos U-65 NPU' },
+    { value: '2GB', label: 'LPDDR4X Memory' },
+    { value: 'Cortex-M33', label: '250 MHz Real-Time Core' },
+    { value: 'GbE + CAN FD', label: 'Industrial Connectivity' },
+    { value: '-40 to 85°C', label: 'Industrial Temperature' },
+  ]}
+  target="imx93-frdm"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

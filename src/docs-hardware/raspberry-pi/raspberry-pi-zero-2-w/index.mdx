@@ -2,21 +2,35 @@
 title: 'Production-Ready Raspberry Pi Zero 2 W Deployment'
 sidebar_position: 0
 description: 'Deploy Raspberry Pi Zero 2 W devices in production with Avocado OS. Quad-core Cortex-A53, Wi-Fi, Bluetooth in a compact 65x30mm form factor for IoT and embedded applications.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# Raspberry Pi Zero 2 W
-
-Ultra-compact quad-core ARM platform with wireless connectivity for space-constrained IoT and embedded deployments
-
-<img
-  src="/img/hardware/raspberry-pi/raspberrypi-zero-2w.png"
-  alt="Raspberry Pi Zero 2 W"
-  style={{ maxWidth: '500px', width: '100%', display: 'block', margin: '0 auto' }}
+<HardwareHero
+  vendor="Raspberry Pi"
+  vendorUrl="https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/"
+  model="Raspberry Pi Zero 2 W"
+  tagline="Ultra-compact quad-core ARM platform with wireless connectivity for space-constrained IoT and embedded deployments."
+  image="/img/hardware/raspberry-pi/raspberrypi-zero-2w.png"
+  imageAlt="Raspberry Pi Zero 2 W"
+  stats={[
+    { value: '1 GHz', label: 'Quad-Core Cortex-A53' },
+    { value: '512MB', label: 'LPDDR2 SDRAM' },
+    { value: '65 x 30mm', label: 'Compact Form Factor' },
+    { value: '$15', label: 'Starting Cost' },
+    { value: 'Wi-Fi + BLE 4.2', label: 'Onboard Wireless' },
+    { value: 'CSI-2 + GPIO', label: 'Camera & HAT Expansion' },
+  ]}
+  target="raspberrypi0-2w"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
 />
-
-**1GHz** Quad-Core Cortex-A53 | **512MB** SDRAM | **65x30mm** Form Factor | **$15** Starting Cost
 
 ## Overview
 

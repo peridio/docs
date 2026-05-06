@@ -2,17 +2,35 @@
 title: 'Industrial HMI with Seeed reTerminal'
 sidebar_position: 0
 description: 'Deploy Seeed reTerminal industrial HMI with Raspberry Pi CM4, 5-inch touchscreen, and enterprise fleet management. Production-ready edge computing.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# Seeed reTerminal
-
-Production-Ready Yocto Linux for reTerminal in Days, Not Months. Build industrial HMI applications with the security and scalability of Yocto, plus the rapid development cycles your team needs.
-
-![Seeed reTerminal industrial HMI](/img/hardware/seeed/seeed_reterminal.png)
-
-**5"** IPS Touchscreen | **1.5GHz** Quad-Core ARM | **IP64** Front Panel | **&lt;30s** Cold boot to UI | **1000+** Fleet scalability | **7yr** Avocado OS LTS
+<HardwareHero
+  vendor="Seeed Studio"
+  vendorUrl="https://www.seeedstudio.com/ReTerminal-with-CM4-p-4904.html"
+  model="Seeed reTerminal"
+  tagline="Production-Ready Yocto Linux for reTerminal in Days, Not Months. Build industrial HMI applications with the security and scalability of Yocto, plus the rapid development cycles your team needs."
+  image="/img/hardware/seeed/seeed_reterminal.png"
+  imageAlt="Seeed reTerminal industrial HMI"
+  stats={[
+    { value: '5"', label: 'IPS Touchscreen' },
+    { value: '1.5 GHz', label: 'Quad-Core ARM (CM4)' },
+    { value: 'IP64', label: 'Front Panel Rating' },
+    { value: '<30s', label: 'Cold Boot to UI' },
+    { value: '1000+', label: 'Fleet Scalability' },
+    { value: '7 Years', label: 'Avocado OS LTS' },
+  ]}
+  target="reterminal"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

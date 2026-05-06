@@ -2,21 +2,35 @@
 title: 'Skip 18 Months of STM32MP Development'
 sidebar_position: 0
 description: 'Deploy STM32MP257F-DK in production 4x faster with Avocado Connect + Avocado OS. Yocto-based, secure OTA updates, enterprise support for industrial IoT.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# STM32MP Development
-
-Production-ready STMicroelectronics STM32MP257F-DK deployment in 4 months with Avocado Connect + Avocado OS
-
-<img
-  src="/img/stmicro_STM32MP257F-DK.png"
-  alt="STMicroelectronics STM32MP257F-DK development kit"
-  style={{ maxWidth: '400px', width: '100%', display: 'block', margin: '0 auto' }}
+<HardwareHero
+  vendor="STMicroelectronics"
+  vendorUrl="https://www.st.com/en/evaluation-tools/stm32mp257f-dk.html"
+  model="STM32MP Development"
+  tagline="Production-ready STMicroelectronics STM32MP257F-DK deployment in 4 months with Avocado Connect + Avocado OS."
+  image="/img/stmicro_STM32MP257F-DK.png"
+  imageAlt="STMicroelectronics STM32MP257F-DK development kit"
+  stats={[
+    { value: '10x Faster', label: 'Development Cycle' },
+    { value: '3x', label: 'Fewer Engineers' },
+    { value: '1.35 TOPS', label: 'NPU AI Performance' },
+    { value: '1.5 GHz', label: 'Dual Cortex-A35' },
+    { value: 'Cortex-M33', label: '400 MHz Real-Time Core' },
+    { value: '-40 to 85°C', label: 'Industrial Temperature' },
+  ]}
+  target="stm32mp257f-dk"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
 />
-
-**10x** Faster Development | **3x** Fewer Engineers | **1.35** TOPS AI Performance
 
 ## Overview
 

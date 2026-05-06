@@ -2,17 +2,33 @@
 title: 'Industrial HMI with Seeed reTerminal DM'
 sidebar_position: 0
 description: 'Deploy Seeed reTerminal DM industrial HMI with Raspberry Pi CM4, 10.1-inch touchscreen, RS485, CAN bus, and DI/DO for industrial automation and edge computing.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# Seeed reTerminal DM
-
-Industrial-grade 10.1" HMI with Raspberry Pi CM4, RS485, CAN bus, DI/DO, PoE, and optional 4G/LoRa for factory automation and edge computing
-
-<!-- TODO: Add product image -->
-
-**10.1"** IPS Touchscreen | **1.5GHz** Quad-Core ARM | **RS485/CAN/DI/DO** | **IP65** Front Panel
+<HardwareHero
+  vendor="Seeed Studio"
+  vendorUrl="https://www.seeedstudio.com/ReTerminal-DM-p-5616.html"
+  model="Seeed reTerminal DM"
+  tagline="Industrial-grade 10.1-inch HMI with Raspberry Pi CM4, RS485, CAN bus, DI/DO, PoE, and optional 4G/LoRa for factory automation and edge computing."
+  stats={[
+    { value: '10.1"', label: 'IPS Touchscreen' },
+    { value: '1.5 GHz', label: 'Quad-Core ARM (CM4)' },
+    { value: 'RS485/CAN/DI/DO', label: 'Industrial I/O' },
+    { value: 'IP65', label: 'Front Panel Rating' },
+    { value: '8GB / 32GB eMMC', label: 'On-Board Memory & Storage' },
+    { value: 'PoE + 4G/LoRa', label: 'Flexible Connectivity' },
+  ]}
+  target="reterminal-dm"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

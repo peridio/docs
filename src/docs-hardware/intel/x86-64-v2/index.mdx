@@ -2,15 +2,31 @@
 title: 'Production-Ready Intel x86-64-v2 Deployment'
 sidebar_position: 0
 description: 'Deploy Intel x86-64-v2 devices in production with Avocado OS. Broad compatibility with Intel and AMD hardware from Nehalem/Bulldozer era onward for industrial and edge computing.'
+hide_title: true
 ---
 
-# Intel x86-64-v2
+import HardwareHero from '@site/src/components/HardwareHero'
 
-Generic x86-64 microarchitecture level 2 target for broad Intel and AMD hardware compatibility
-
-<!-- TODO: Add product image -->
-
-**x86-64-v2** Instruction Set | **Broad Compatibility** | **Industrial & Edge**
+<HardwareHero
+  vendor="Intel"
+  model="Intel x86-64-v2"
+  tagline="Generic x86-64 microarchitecture level 2 target for broad Intel and AMD hardware compatibility."
+  stats={[
+    { value: 'x86-64-v2', label: 'Instruction Set' },
+    { value: 'Broad', label: 'Hardware Compatibility' },
+    { value: 'Industrial & Edge', label: 'Deployment Target' },
+    { value: 'Nehalem+', label: 'Intel Support' },
+    { value: 'Bulldozer+', label: 'AMD Support' },
+    { value: 'UEFI', label: 'Boot Mode' },
+  ]}
+  target="intel-x86-64-v2"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

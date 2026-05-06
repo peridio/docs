@@ -2,15 +2,31 @@
 title: 'Production-Ready Intel x86-64-v3 Deployment'
 sidebar_position: 0
 description: 'Deploy Intel x86-64-v3 devices in production with Avocado OS. Optimized for Intel Haswell+ and AMD Excavator+ with AVX2 for edge AI and compute-intensive workloads.'
+hide_title: true
 ---
 
-# Intel x86-64-v3
+import HardwareHero from '@site/src/components/HardwareHero'
 
-High-performance x86-64 microarchitecture level 3 target optimized for AVX2-capable Intel and AMD hardware
-
-<!-- TODO: Add product image -->
-
-**x86-64-v3** Instruction Set | **AVX2 Optimized** | **Edge AI & Compute**
+<HardwareHero
+  vendor="Intel"
+  model="Intel x86-64-v3"
+  tagline="High-performance x86-64 microarchitecture level 3 target optimized for AVX2-capable Intel and AMD hardware."
+  stats={[
+    { value: 'x86-64-v3', label: 'Instruction Set' },
+    { value: 'AVX2', label: 'Optimized SIMD' },
+    { value: 'Edge AI & Compute', label: 'Deployment Target' },
+    { value: 'Haswell+', label: 'Intel Support' },
+    { value: 'Excavator+', label: 'AMD Support' },
+    { value: 'UEFI', label: 'Boot Mode' },
+  ]}
+  target="intel-x86-64-v3"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

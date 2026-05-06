@@ -2,17 +2,35 @@
 title: 'Production-Ready NXP i.MX 93 EVK Deployment'
 sidebar_position: 0
 description: 'Deploy NXP i.MX 93 EVK devices in production with Avocado OS. Dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and EdgeLock security for edge AI and industrial applications.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# NXP i.MX 93 EVK
-
-Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock secure enclave, and modular connectivity for edge AI applications
-
-![NXP i.MX 93 EVK](/img/hardware/nxp/imx-93-evk.png)
-
-**1.7GHz** Dual Cortex-A55 | **0.5 TOPS** Ethos U-65 NPU | **2GB** LPDDR4X
+<HardwareHero
+  vendor="NXP"
+  vendorUrl="https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/i-mx-applications-processors/i-mx-9-processors/i-mx-93-applications-processor-family-arm-cortex-a55-ml-acceleration-power-efficient-mpu:i.MX93"
+  model="NXP i.MX 93 EVK"
+  tagline="Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock secure enclave, and modular connectivity for edge AI applications."
+  image="/img/hardware/nxp/imx-93-evk.png"
+  imageAlt="NXP i.MX 93 EVK"
+  stats={[
+    { value: '1.7 GHz', label: 'Dual Cortex-A55' },
+    { value: '0.5 TOPS', label: 'Ethos U-65 NPU' },
+    { value: '2GB', label: 'LPDDR4X Memory' },
+    { value: 'Cortex-M33', label: '200 MHz Real-Time Core' },
+    { value: 'Wi-Fi 6 + BT 5.2', label: 'Tri-Radio Connectivity' },
+    { value: 'EdgeLock', label: 'Secure Enclave' },
+  ]}
+  target="imx93-evk"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

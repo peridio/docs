@@ -1,0 +1,400 @@
+/* HardwareHero — top-of-page hero for hardware docs.
+   Renders inside the docs body, so it stays bounded to the markdown column
+   instead of going full-bleed. */
+
+.hero {
+  margin: 0 0 4rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.topRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.topRow[data-has-image="false"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.heading .tagline {
+  margin-top: 0.25rem;
+}
+
+.vendorRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.625rem;
+  min-width: 0;
+  padding-top: 0;
+}
+
+.vendorLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-link);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.vendorLink:hover,
+.vendorLink:focus-visible {
+  color: var(--color-accent-button-hover);
+  text-decoration: none;
+}
+
+.vendorLink .externalIcon {
+  opacity: 0.7;
+}
+
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  margin: 0;
+  font-family: "Spline Sans", sans-serif;
+  line-height: 1;
+}
+
+.vendor {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.model {
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+}
+
+/* Stats grid — supports exactly 3 or 6 entries.
+   3 → single row of 3. 6 → two rows of 3. Other counts fall back to
+   auto-fit (graceful but unsupported per the component contract).
+   Column dividers are drawn as absolute-positioned pseudo-elements on
+   the container (not per-cell borders) so they form a single continuous
+   line spanning all rows, exactly centered between columns. */
+.stats {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.875rem 0;
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.stats[data-count="3"],
+.stats[data-count="6"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Vertical column dividers — one continuous line per gap, drawn
+   absolutely on the container so they don't break across row gaps. */
+.stats[data-count="3"]::before,
+.stats[data-count="3"]::after,
+.stats[data-count="6"]::before,
+.stats[data-count="6"]::after {
+  content: "";
+  position: absolute;
+  top: 1rem;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-border-default);
+  pointer-events: none;
+}
+
+.stats[data-count="3"]::before,
+.stats[data-count="6"]::before {
+  left: calc(100% / 3);
+}
+
+.stats[data-count="3"]::after,
+.stats[data-count="6"]::after {
+  left: calc(200% / 3);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  padding: 0 1rem;
+}
+
+/* No left padding on the first cell of each row, so the first column
+   aligns flush with the heading content above. */
+.stats[data-count="3"] .stat:nth-child(3n + 1),
+.stats[data-count="6"] .stat:nth-child(3n + 1) {
+  padding-left: 0;
+}
+
+/* Drop right padding on the last cell of each row so the last column
+   aligns flush with the right edge of the markdown column. */
+.stats[data-count="3"] .stat:nth-child(3n),
+.stats[data-count="6"] .stat:nth-child(3n) {
+  padding-right: 0;
+}
+
+.statValue {
+  font-family: "Spline Sans", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  line-height: 1.3;
+}
+
+/* CTA row */
+.ctas {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Target group — last row inside the heading column, below the tagline. */
+.targetGroup {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  margin-top: 0.25rem;
+}
+
+.chipIcon {
+  flex-shrink: 0;
+  color: var(--color-text-tertiary);
+  opacity: 0.85;
+}
+
+.targetLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+}
+
+.target {
+  font-size: 0.875rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.125rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 6px;
+  text-decoration: none;
+  line-height: 1.2;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.ctaPrimary {
+  background: var(--color-accent-button);
+  color: var(--color-text-on-brand);
+  border: 1px solid var(--color-accent-button);
+}
+
+.ctaPrimary:hover,
+.ctaPrimary:focus-visible {
+  background: var(--color-accent-button-hover);
+  border-color: var(--color-accent-button-hover);
+  color: var(--color-text-on-brand);
+  text-decoration: none;
+}
+
+.ctaSecondary {
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-strong);
+}
+
+.ctaSecondary:hover,
+.ctaSecondary:focus-visible {
+  background: var(--color-bg-hover);
+  border-color: var(--color-accent-primary);
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.externalIcon {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* Product image — fixed-height container so hero height is predictable
+   across vendors with different image aspect ratios. */
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Mobile */
+@media (max-width: 996px) {
+  .topRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+
+  .topRow .image {
+    order: -1;
+    height: 180px;
+  }
+
+  .model {
+    font-size: 1.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .model {
+    font-size: 1.625rem;
+  }
+
+  /* 3-count stacks to a single column; values like "Jetson Orin NX"
+     would otherwise overflow narrow 3-col cells on small phones.
+     Hide both dividers since there's only one column. */
+  .stats[data-count="3"] {
+    grid-template-columns: 1fr;
+  }
+  .stats[data-count="3"] .stat {
+    padding: 0;
+  }
+  .stats[data-count="3"]::before,
+  .stats[data-count="3"]::after {
+    display: none;
+  }
+
+  /* 6-count keeps the 2x3 layout from the tablet breakpoint. The 2n
+     suppression rules from the tablet block already apply here. */
+  .stats[data-count="6"] {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Single divider at 50% for the 2-col layout (mirror of the tablet
+     rule, since that media query does not cascade below 481px). */
+  .stats[data-count="6"]::before {
+    left: 50%;
+  }
+  .stats[data-count="6"]::after {
+    display: none;
+  }
+
+  .ctaRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    justify-content: center;
+  }
+}
+
+/* Tablet: 6-count drops to 2 columns; 3-count stays as 3 columns
+   (each cell stays roomy enough at this width). */
+@media (min-width: 481px) and (max-width: 768px) {
+  .stats[data-count="6"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Recompute padding for 2-column layout: every 2nd cell is row-end
+     (no right padding), every 2n+1 cell is row-start (no left padding). */
+  .stats[data-count="6"] .stat:nth-child(3n) {
+    padding-right: 1rem;
+  }
+  .stats[data-count="6"] .stat:nth-child(3n + 1) {
+    padding-left: 1rem;
+  }
+  .stats[data-count="6"] .stat:nth-child(2n) {
+    padding-right: 0;
+  }
+  .stats[data-count="6"] .stat:nth-child(2n + 1) {
+    padding-left: 0;
+  }
+
+  /* Single divider at 50% for the 2-col layout; hide the second one. */
+  .stats[data-count="6"]::before {
+    left: 50%;
+  }
+  .stats[data-count="6"]::after {
+    display: none;
+  }
+}

@@ -2,17 +2,35 @@
 title: 'Unlock Industrial Vision & Edge AI with NXP i.MX 8M Plus'
 sidebar_position: 0
 description: 'Deploy NXP i.MX 8M Plus for industrial vision and edge AI. 2.3 TOPS NPU, dual cameras, real-time processing. Production-ready with Avocado Connect + Avocado OS.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# Industrial Vision & Edge AI
-
-Production-ready industrial IoT and vision systems with 2.3 TOPS NPU, dual cameras, and real-time processing
-
-![NXP i.MX 8M Plus development board](/img/nxp_iMX8M_Plus.png)
-
-**2.3** TOPS NPU Performance | **Dual** MIPI CSI Cameras | **-40°C** Industrial Temperature
+<HardwareHero
+  vendor="NXP"
+  vendorUrl="https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/i-mx-applications-processors/i-mx-8-applications-processors/i-mx-8m-plus-arm-cortex-a53-machine-learning-vision-multimedia-and-industrial-iot:IMX8MPLUS"
+  model="Industrial Vision & Edge AI"
+  tagline="Production-ready industrial IoT and vision systems with 2.3 TOPS NPU, dual cameras, and real-time processing."
+  image="/img/nxp_iMX8M_Plus.png"
+  imageAlt="NXP i.MX 8M Plus development board"
+  stats={[
+    { value: '2.3 TOPS', label: 'NPU Performance' },
+    { value: 'Dual MIPI CSI', label: 'Camera Inputs' },
+    { value: '-40 to 85°C', label: 'Industrial Temperature' },
+    { value: 'Quad Cortex-A53', label: '2.0 GHz Application CPUs' },
+    { value: 'Cortex-M7', label: '800 MHz Real-Time Core' },
+    { value: 'Dual GbE + TSN', label: 'Industrial Networking' },
+  ]}
+  target="imx8mp-evk"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

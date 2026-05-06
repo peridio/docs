@@ -734,7 +734,7 @@ html[data-theme="dark"] .getting-started-card__logo {
 @media (min-width: 997px) {
   .docMainContainer_TBSr,
   [class*="docMainContainer"] {
-    padding-left: 6rem !important;
+    padding-left: 2rem !important;
   }
 }
 

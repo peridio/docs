@@ -2,17 +2,35 @@
 title: 'Production-Ready Raspberry Pi 4 Model B Deployment'
 sidebar_position: 0
 description: 'Deploy Raspberry Pi 4 Model B devices in production with Avocado Connect + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# Raspberry Pi 4 Model B
-
-Transform your Raspberry Pi 4 Model B prototype into a secure, manageable fleet with Peridio + Avocado OS
-
-![Raspberry Pi 4 Model B development board](/img/hardware/raspberry-pi/raspberrypi4.png)
-
-**5x** Faster to Production | **80%** Lower TCO | **$55** Starting Cost
+<HardwareHero
+  vendor="Raspberry Pi"
+  vendorUrl="https://www.raspberrypi.com/products/raspberry-pi-4-model-b/"
+  model="Raspberry Pi 4 Model B"
+  tagline="Transform your Raspberry Pi 4 Model B prototype into a secure, manageable fleet with Peridio + Avocado OS."
+  image="/img/hardware/raspberry-pi/raspberrypi4.png"
+  imageAlt="Raspberry Pi 4 Model B development board"
+  stats={[
+    { value: '5x Faster', label: 'Time to Production' },
+    { value: '80%', label: 'Lower TCO' },
+    { value: '$55', label: 'Starting Cost' },
+    { value: '1.8 GHz', label: 'Quad-core Cortex-A72' },
+    { value: 'Up to 8GB', label: 'LPDDR4 Memory' },
+    { value: 'Dual 4K HDMI', label: 'Display Output' },
+  ]}
+  target="raspberrypi4"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/raspberry-pi',
+    },
+  }}
+/>
 
 ## Overview
 

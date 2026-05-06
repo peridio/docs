@@ -2,15 +2,33 @@
 title: 'Premium Edge AI Performance with Qualcomm IQ9'
 sidebar_position: 0
 description: 'Deploy Qualcomm IQ9 (QCS8550) flagship edge AI platform with 45 TOPS performance. Production-ready with Avocado Connect + Avocado OS for automotive and premium applications.'
+hide_title: true
 ---
 
-# Premium Edge AI
+import HardwareHero from '@site/src/components/HardwareHero'
 
-Flagship-grade edge AI with 45 TOPS compute power, production-ready with Avocado Connect + Avocado OS
-
-![Qualcomm IQ9 QCS8550 development platform](/img/Qualcomm-IQ9.png)
-
-**45** TOPS AI Performance | **4nm** Premium Process | **Wi-Fi 7** Next-Gen Connectivity
+<HardwareHero
+  vendor="Qualcomm"
+  vendorUrl="https://www.qualcomm.com/products/internet-of-things/industrial/building-enterprise/qcs8550"
+  model="Premium Edge AI"
+  tagline="Flagship-grade edge AI with 45 TOPS compute power, production-ready with Avocado Connect + Avocado OS."
+  image="/img/Qualcomm-IQ9.png"
+  imageAlt="Qualcomm IQ9 QCS8550 development platform"
+  stats={[
+    { value: '45 TOPS', label: 'AI Performance (INT8)' },
+    { value: '4nm', label: 'Premium Process' },
+    { value: 'Wi-Fi 7', label: 'Next-Gen Connectivity' },
+    { value: '8-core Kryo', label: 'Up to 3.2 GHz CPU' },
+    { value: 'Adreno 740', label: 'Console-Class GPU' },
+    { value: 'Up to 16GB', label: 'LPDDR5X Memory' },
+  ]}
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
 
 ## Overview
 

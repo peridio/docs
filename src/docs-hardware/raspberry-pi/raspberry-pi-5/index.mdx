@@ -2,17 +2,35 @@
 title: 'Production-Ready Raspberry Pi 5 Deployment'
 sidebar_position: 0
 description: 'Deploy Raspberry Pi 5 devices in production with Avocado Connect + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.'
+hide_title: true
 ---
 
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-# Raspberry Pi 5
-
-Transform your Raspberry Pi 5 prototype into a secure, manageable fleet with Peridio + Avocado OS
-
-![Raspberry Pi 5 development board](/img/hardware/raspberry-pi/Raspberrypi5.png)
-
-**5x** Faster to Production | **80%** Lower TCO | **$60** Starting Cost
+<HardwareHero
+  vendor="Raspberry Pi"
+  vendorUrl="https://www.raspberrypi.com/products/raspberry-pi-5/"
+  model="Raspberry Pi 5"
+  tagline="Transform your Raspberry Pi 5 prototype into a secure, manageable fleet with Peridio + Avocado OS."
+  image="/img/hardware/raspberry-pi/Raspberrypi5.png"
+  imageAlt="Raspberry Pi 5 development board"
+  stats={[
+    { value: '5x Faster', label: 'Time to Production' },
+    { value: '80%', label: 'Lower TCO' },
+    { value: '$60', label: 'Starting Cost' },
+    { value: '2.4 GHz', label: 'Quad-core Cortex-A76' },
+    { value: 'Up to 8GB', label: 'LPDDR4X Memory' },
+    { value: 'PCIe 2.0', label: 'NVMe Expansion' },
+  ]}
+  target="raspberrypi5"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/raspberry-pi',
+    },
+  }}
+/>
 
 ## Overview
 
