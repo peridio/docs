@@ -22,8 +22,7 @@ const PAGE_SLUGS = {
   'AXON-IMX8M-PLUS': 'axon-imx8m-plus',
   'FRDM-i.MX 95': 'frdm-imx-95',
   'Ara240 16GB M.2 Module': 'ara240',
-  'SolidRun IIoT-200 RZ/G2L Gateway': 'iiot-200',
-  'RZ/V2H': 'rz-v2h',
+  'RZ/V2H Robot RDK': 'rz-v2h',
 }
 
 const columns = [

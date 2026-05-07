@@ -1,20 +1,36 @@
 ---
-title: 'HummingBoard RZ/V2N AIOT'
+title: 'Production-Ready SolidRun HummingBoard RZ/V2N AIOT Deployment'
 sidebar_position: 0
 description: 'Deploy the SolidRun HummingBoard RZ/V2N AIOT for Physical AI and edge vision. DRP-AI3 with 15 Sparse / 4 Dense TOPS, quad Cortex-A55 + Cortex-M33, dual GbE, industrial I/O. Production-ready with Avocado OS + Peridio Core.'
+hide_title: true
 ---
 
-# HummingBoard RZ/V2N AIOT
+import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HardwareHero from '@site/src/components/HardwareHero'
 
-Industrial-grade Physical AI platform with 15 Sparse / 4 Dense TOPS DRP-AI3, real-time Cortex-M33, and ruggedized industrial connectivity.
-
-<img
-  src="/img/solidrun-hummingboard-rz-v2n.png"
-  alt="SolidRun HummingBoard RZ/V2N AIOT industrial SBC"
-  style={{ display: 'block', margin: '0 auto' }}
+<HardwareHero
+  vendor="SolidRun"
+  vendorUrl="https://dev.solid-run.com/renesas/rz-v2n/sbc-platform/hummingboard-iiot-rz-v2n-som-quick-start-guide"
+  model="HummingBoard RZ/V2N AIOT"
+  tagline="Industrial-grade Physical AI platform with 15 Sparse / 4 Dense TOPS DRP-AI3, real-time Cortex-M33, and ruggedized industrial connectivity."
+  image="/img/hardware/solidrun/HummingBoard-RZ_V2N-IIOT-SBC.png"
+  imageAlt="SolidRun HummingBoard RZ/V2N AIOT industrial SBC"
+  stats={[
+    { value: '15S / 4D TOPS', label: 'DRP-AI3 NPU' },
+    { value: 'Quad A55 + M33', label: 'Multi-Core Processing' },
+    { value: '8 GB LPDDR4', label: 'Memory' },
+    { value: '2x GbE + Wi-Fi', label: 'Industrial Networking' },
+    { value: '-40°C to +85°C', label: 'Industrial Temperature' },
+    { value: '4K Encode / Decode', label: 'Video Pipeline' },
+  ]}
+  target="rzv2n-sr-som"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
 />
-
-**15S / 4D** TOPS DRP-AI3 NPU | **Quad A55 + M33** Multi-Core Processing | **-40°C** Industrial Temperature
 
 ## Overview
 
@@ -103,18 +119,7 @@ Follow the [Any Supported Target](/developer-reference/getting-started/any-targe
 
 Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
 
-:::warning Linux Auto-mounting
-
-Some Linux operating systems, like Ubuntu, will attempt to auto-mount mass storage devices. This can interfere with Avocado's ability to finalize provisioning a device.
-
-Before provisioning, disable auto-mounting. The following example is for Ubuntu (GNOME desktop); the same commands apply to other GNOME-based distributions such as Fedora Workstation.
-
-```bash title="Ubuntu (GNOME desktop)"
-gsettings set org.gnome.desktop.media-handling automount false
-gsettings set org.gnome.desktop.media-handling automount-open false
-```
-
-:::
+<LinuxAutoMountWarning />
 
 ```bash title="Host machine"
 avocado build
