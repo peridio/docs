@@ -320,7 +320,20 @@
 
 @media (max-width: 480px) {
   .model {
-    font-size: 1.625rem;
+    font-size: 1.5rem;
+  }
+
+  .tagline {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  .statValue {
+    font-size: 1rem;
+  }
+
+  .statLabel {
+    font-size: 0.75rem;
   }
 
   /* 3-count stacks to a single column; values like "Jetson Orin NX"
@@ -337,10 +350,25 @@
     display: none;
   }
 
-  /* 6-count keeps the 2x3 layout from the tablet breakpoint. The 2n
-     suppression rules from the tablet block already apply here. */
+  /* 6-count keeps a 2-column layout on small phones as well; mobile
+     spacing/divider rules are defined explicitly in the blocks below. */
   .stats[data-count="6"] {
     grid-template-columns: 1fr 1fr;
+  }
+
+  /* Recompute padding for the 2-column mobile layout. Reset the base
+     3-column row-edge behavior, then apply 2-column row-edge rules. */
+  .stats[data-count="6"] .stat:nth-child(3n) {
+    padding-right: 1rem;
+  }
+  .stats[data-count="6"] .stat:nth-child(3n + 1) {
+    padding-left: 1rem;
+  }
+  .stats[data-count="6"] .stat:nth-child(2n) {
+    padding-right: 0;
+  }
+  .stats[data-count="6"] .stat:nth-child(2n + 1) {
+    padding-left: 0;
   }
 
   /* Single divider at 50% for the 2-col layout (mirror of the tablet
