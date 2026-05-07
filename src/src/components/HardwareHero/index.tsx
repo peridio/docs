@@ -81,12 +81,18 @@ function ChipIcon({ size = 14 }: { size?: number }) {
 function CTAButton({ cta, variant }: { cta: CTA; variant: 'primary' | 'secondary' }) {
   const className = variant === 'primary' ? styles.ctaPrimary : styles.ctaSecondary
 
-  const externalProps = cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : undefined
+  if (cta.external) {
+    return (
+      <Link href={cta.to} className={className} target="_blank" rel="noopener noreferrer">
+        <span>{cta.label}</span>
+        <ExternalIcon size={14} />
+      </Link>
+    )
+  }
 
   return (
-    <Link to={cta.to} className={className} {...externalProps}>
+    <Link to={cta.to} className={className}>
       <span>{cta.label}</span>
-      {cta.external && <ExternalIcon size={14} />}
     </Link>
   )
 }
@@ -112,7 +118,7 @@ export default function HardwareHero({
             <div className={styles.vendorRow}>
               {vendorUrl ? (
                 <Link
-                  to={vendorUrl}
+                  href={vendorUrl}
                   className={styles.vendorLink}
                   target="_blank"
                   rel="noopener noreferrer"

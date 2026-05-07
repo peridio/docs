@@ -4,11 +4,13 @@ sidebar_position: 2
 description: 'Install Avocado CLI for Avocado Linux development - download, extract, and verify installation with upgrade instructions.'
 ---
 
+On macOS or Linux:
+
 ```bash
 curl -fsSL https://connect.peridio.com/install.sh | sh
 ```
 
-Or install via the GitHub releases:
+On Windows, or to install manually, use the GitHub releases:
 
 1. Download an Avocado CLI tarball from the [releases page](https://github.com/avocado-linux/avocado-cli/releases).
 2. Extract the tarball using the following command:
