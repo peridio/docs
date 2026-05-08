@@ -28,7 +28,13 @@ const sidebars = {
       label: 'Development',
       collapsible: false,
       collapsed: false,
-      items: ['provisioning', 'hardware-in-the-loop', 'sideloading', 'package-feeds'],
+      items: [
+        'provisioning',
+        'hardware-in-the-loop',
+        'sideloading',
+        'package-feeds',
+        'feed-search',
+      ],
     },
     {
       type: 'category',
