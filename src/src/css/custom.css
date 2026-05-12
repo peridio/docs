@@ -185,9 +185,13 @@ html[data-theme="dark"] .navbar {
   overflow: scroll;
 }
 
-/* Two-row navbar: logo on top, nav tabs below */
+/* Two-row navbar: logo on top, nav tabs below.
+   Drop the navbar's bottom padding so the links row sits flush
+   with the bottom edge of the navbar (active underline becomes
+   the navbar's bottom boundary). */
 .navbar {
   height: auto !important;
+  padding-bottom: 0 !important;
 }
 
 .navbar__inner {
@@ -343,6 +347,34 @@ html[data-theme="dark"] .navbar {
 @media (max-width: 996px) {
   .navbar__row--links {
     display: none;
+  }
+
+  /* Put logo (left) and hamburger toggle (right) on the same row */
+  .theme-layout-navbar-left {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100%;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Don't force the logo to claim a full row on mobile */
+  .navbar__brand {
+    flex: 0 0 auto !important;
+    order: 1;
+    padding: 0.35rem 0 !important;
+  }
+
+  /* Push the hamburger to the right */
+  .navbar__toggle {
+    order: 2;
+    margin-left: auto;
+  }
+
+  /* Hide the logo inside the mobile slide-out sidebar menu */
+  .navbar-sidebar__brand .navbar__brand {
+    display: none !important;
   }
 }
 

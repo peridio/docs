@@ -1,7 +1,6 @@
 ---
 description: 'Complete reference of all Avocado CLI commands on a single page.'
-sidebar_label: 'commands'
-sidebar_class_name: 'sidebar-monospace'
+sidebar_label: 'Commands'
 sidebar_position: 5
 copy_markdown: true
 ---
