@@ -174,6 +174,12 @@ function targetList(manifest: TargetManifest): TargetEntry[] {
 
 // Pick the most-specific cpu arch from a target's manifest paths, used for the
 // arch chip in the status bar. Filters out target-specific repos and noarch.
+//
+// OE tune names lengthen as they become more specific (e.g.
+// armv8a < armv8a_tegra < armv8a_tegra234, cortexa55 < cortexa55_mx91), so we
+// pick by longest path. This is independent of the order the publisher emits
+// entries in `targets.json` — if upstream ever alphabetises the list, the
+// displayed chip won't change.
 function archChipFromPaths(target: string, paths: readonly string[]): string | null {
   const targetPath = `target/${target}`
   const extPath = `${targetPath}-ext`
@@ -181,7 +187,9 @@ function archChipFromPaths(target: string, paths: readonly string[]): string | n
     (p) => p.startsWith('target/') && p !== targetPath && p !== extPath && p !== 'target/noarch'
   )
   if (cpuArchPaths.length === 0) return null
-  return cpuArchPaths[cpuArchPaths.length - 1].slice('target/'.length)
+  // Tie-break alphabetically for determinism (no ties observed in practice).
+  const best = [...cpuArchPaths].sort((a, b) => b.length - a.length || a.localeCompare(b))[0]
+  return best.slice('target/'.length)
 }
 
 function FeedSearchInner({ release, channel }: { release: string; channel: string }) {
