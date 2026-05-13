@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import BrowserOnly from '@docusaurus/BrowserOnly'
 import targetsData from '../../data/hardware/targets.json'
-import { archForTarget } from './targetArchMap'
 import {
+  fetchTargetManifest,
   fetchTargetPackages,
   searchPackages,
   type FeedPackage,
   type SearchResult,
+  type TargetManifest,
 } from './feedClient'
 import styles from './styles.module.css'
 
@@ -147,6 +148,11 @@ function CopyIcon({ status, variant }: { status: CopyStatus; variant: 'name' | '
   )
 }
 
+type ManifestState =
+  | { kind: 'loading' }
+  | { kind: 'ready'; manifest: TargetManifest }
+  | { kind: 'error'; message: string }
+
 type LoadState =
   | { kind: 'idle' }
   | { kind: 'loading'; target: string }
@@ -158,25 +164,61 @@ interface TargetEntry {
   name: string
 }
 
-function targetList(): TargetEntry[] {
+function targetList(manifest: TargetManifest): TargetEntry[] {
   const entries = Object.values(targetsData as Record<string, { name: string; target: string }>)
   return entries
-    .filter((t) => t && t.target)
+    .filter((t) => t && t.target && Object.prototype.hasOwnProperty.call(manifest, t.target))
     .map((t) => ({ target: t.target, name: t.name }))
     .sort((a, b) => a.name.localeCompare(b.name))
 }
 
+// Pick the most-specific cpu arch from a target's manifest paths, used for the
+// arch chip in the status bar. Filters out target-specific repos and noarch.
+function archChipFromPaths(target: string, paths: readonly string[]): string | null {
+  const targetPath = `target/${target}`
+  const extPath = `${targetPath}-ext`
+  const cpuArchPaths = paths.filter(
+    (p) => p.startsWith('target/') && p !== targetPath && p !== extPath && p !== 'target/noarch'
+  )
+  if (cpuArchPaths.length === 0) return null
+  return cpuArchPaths[cpuArchPaths.length - 1].slice('target/'.length)
+}
+
 function FeedSearchInner() {
-  const targets = useMemo(targetList, [])
+  const [manifestState, setManifestState] = useState<ManifestState>({ kind: 'loading' })
   const [target, setTarget] = useState<string>('')
   const [query, setQuery] = useState<string>('')
   const [state, setState] = useState<LoadState>({ kind: 'idle' })
-  // Lagged copy of `state` used to render the body. Loading transitions
-  // are deferred so brief/cached fetches don't flash the loader.
-  const [displayState, setDisplayState] = useState<LoadState>({ kind: 'idle' })
   const cache = useRef<Map<string, FeedPackage[]>>(new Map())
   const requestIdRef = useRef(0)
+  const abortRef = useRef<AbortController | null>(null)
   const stickyHeaderRef = useRef<HTMLDivElement>(null)
+
+  // Fetch the per-target repo manifest once on mount.
+  useEffect(() => {
+    const controller = new AbortController()
+    fetchTargetManifest(RELEASE, CHANNEL, controller.signal)
+      .then((manifest) => setManifestState({ kind: 'ready', manifest }))
+      .catch((err) => {
+        if (controller.signal.aborted) return
+        setManifestState({
+          kind: 'error',
+          message: err?.message ?? 'Failed to load target manifest',
+        })
+      })
+    return () => controller.abort()
+  }, [])
+
+  const targets = useMemo<TargetEntry[]>(
+    () => (manifestState.kind === 'ready' ? targetList(manifestState.manifest) : []),
+    [manifestState]
+  )
+
+  const archChip = useMemo<string | null>(() => {
+    if (manifestState.kind !== 'ready' || !target) return null
+    const paths = manifestState.manifest[target]
+    return paths ? archChipFromPaths(target, paths) : null
+  }, [manifestState, target])
 
   // Pin the sticky header just below the Docusaurus navbar.
   // The navbar has `height: auto` (two-row layout) so its rendered height
@@ -214,10 +256,27 @@ function FeedSearchInner() {
     }
   }, [])
 
-  // Fetch packages whenever target changes (cached after first load)
+  // Fetch packages whenever target changes (cached after first load).
+  // Each target maps to a list of repo paths from the manifest; we fan out
+  // requests in parallel via fetchTargetPackages and cancel them if the
+  // user picks a different target before they complete.
   useEffect(() => {
+    if (abortRef.current) {
+      abortRef.current.abort()
+      abortRef.current = null
+    }
     if (!target) {
       setState({ kind: 'idle' })
+      return
+    }
+    if (manifestState.kind !== 'ready') return
+    const paths = manifestState.manifest[target]
+    if (!paths || paths.length === 0) {
+      setState({
+        kind: 'error',
+        target,
+        message: 'No repos published for this target yet',
+      })
       return
     }
     const cached = cache.current.get(target)
@@ -226,8 +285,10 @@ function FeedSearchInner() {
       return
     }
     const id = ++requestIdRef.current
+    const controller = new AbortController()
+    abortRef.current = controller
     setState({ kind: 'loading', target })
-    fetchTargetPackages(RELEASE, CHANNEL, target, archForTarget(target))
+    fetchTargetPackages(RELEASE, CHANNEL, paths, controller.signal)
       .then(({ packages, errors }) => {
         if (id !== requestIdRef.current) return
         cache.current.set(target, packages)
@@ -235,30 +296,23 @@ function FeedSearchInner() {
       })
       .catch((err) => {
         if (id !== requestIdRef.current) return
+        if (controller.signal.aborted) return
         setState({ kind: 'error', target, message: err?.message ?? 'Failed to load feed' })
       })
-  }, [target])
-
-  // Defer committing a "loading" state to the rendered UI. If the fetch
-  // finishes within the grace period (cached / fast network), we never
-  // show the loader at all and the previous ready view stays put.
-  useEffect(() => {
-    if (state.kind === 'loading') {
-      const t = window.setTimeout(() => setDisplayState(state), 220)
-      return () => window.clearTimeout(t)
+    return () => {
+      controller.abort()
     }
-    setDisplayState(state)
-  }, [state])
+  }, [target, manifestState])
 
   const results: SearchResult[] = useMemo(() => {
-    if (displayState.kind !== 'ready' || !query.trim()) return []
-    return searchPackages(displayState.packages, query).slice(0, MAX_RESULTS)
-  }, [displayState, query])
+    if (state.kind !== 'ready' || !query.trim()) return []
+    return searchPackages(state.packages, query).slice(0, MAX_RESULTS)
+  }, [state, query])
 
   const totalHitsCount = useMemo(() => {
-    if (displayState.kind !== 'ready' || !query.trim()) return 0
-    return searchPackages(displayState.packages, query).length
-  }, [displayState, query])
+    if (state.kind !== 'ready' || !query.trim()) return 0
+    return searchPackages(state.packages, query).length
+  }, [state, query])
 
   const canReset = query !== ''
   const handleReset = useCallback(() => {
@@ -273,10 +327,7 @@ function FeedSearchInner() {
 
   const trimmedQuery = query.trim()
   const showResultsHeader =
-    displayState.kind === 'ready' && trimmedQuery.length > 0 && results.length > 0
-  // True while a fetch is in flight but we're still showing the previous
-  // ready view. Used to softly dim the stale content.
-  const isPending = state.kind === 'loading' && displayState.kind !== 'loading'
+    state.kind === 'ready' && trimmedQuery.length > 0 && results.length > 0
 
   return (
     <div className={styles.wrapper}>
@@ -296,8 +347,15 @@ function FeedSearchInner() {
               className={styles.select}
               value={target}
               onChange={(e) => setTarget(e.target.value)}
+              disabled={manifestState.kind !== 'ready' || targets.length === 0}
             >
-              <option value="">Select a target…</option>
+              <option value="">
+                {manifestState.kind === 'loading'
+                  ? 'Loading targets…'
+                  : manifestState.kind === 'error'
+                    ? 'Manifest unavailable'
+                    : 'Select a target…'}
+              </option>
               {targets.map((t) => (
                 <option key={t.target} value={t.target}>
                   {t.name}
@@ -340,7 +398,7 @@ function FeedSearchInner() {
           </div>
         </div>
 
-        <StatusBar state={state} />
+        <StatusBar state={state} archChip={archChip} />
 
         <div
           className={`${styles.resultsHeaderCollapse} ${
@@ -365,8 +423,8 @@ function FeedSearchInner() {
         </div>
       </div>
 
-      <div className={`${styles.body} ${isPending ? styles.bodyPending : ''}`.trim()}>
-        {displayState.kind === 'idle' && (
+      <div className={styles.body}>
+        {state.kind === 'idle' && (
           <div className={styles.empty}>
             <div className={styles.emptyTitle}>Pick a target to start searching</div>
             <p>
@@ -394,28 +452,27 @@ function FeedSearchInner() {
           </div>
         )}
 
-        {displayState.kind === 'loading' && (
+        {state.kind === 'loading' && (
           <div className={styles.loaderOverlay}>
             <div className={styles.spinner} />
-            <div>Loading packages for {displayState.target}…</div>
+            <div>Loading packages for {state.target}…</div>
           </div>
         )}
 
-        {displayState.kind === 'error' && (
+        {state.kind === 'error' && (
           <div className={styles.error}>
-            Failed to load packages for <strong>{displayState.target}</strong>:{' '}
-            {displayState.message}
+            Failed to load packages for <strong>{state.target}</strong>: {state.message}
           </div>
         )}
 
-        {displayState.kind === 'ready' && (
+        {state.kind === 'ready' && (
           <ReadyView
-            target={displayState.target}
+            target={state.target}
             query={query}
             results={results}
             totalHits={totalHitsCount}
-            packages={displayState.packages}
-            errors={displayState.errors}
+            packages={state.packages}
+            errors={state.errors}
             onSuggest={setQuery}
           />
         )}
@@ -424,7 +481,7 @@ function FeedSearchInner() {
   )
 }
 
-function StatusBar({ state }: { state: LoadState }) {
+function StatusBar({ state, archChip }: { state: LoadState; archChip: string | null }) {
   if (state.kind === 'idle') {
     return <div className={styles.statusBar} aria-hidden="true" />
   }
@@ -457,7 +514,6 @@ function StatusBar({ state }: { state: LoadState }) {
     )
   }
 
-  const arch = archForTarget(state.target)
   return (
     <div className={`${styles.statusBar} ${styles.statusBarReady}`} role="status">
       <span className={styles.statusPrimary}>
@@ -467,7 +523,7 @@ function StatusBar({ state }: { state: LoadState }) {
       </span>
       <span className={styles.statusMeta}>
         <span className={styles.statusTarget}>{state.target}</span>
-        {arch && <span className={styles.statusArch}>{arch}</span>}
+        {archChip && <span className={styles.statusArch}>{archChip}</span>}
         <span className={styles.statusChannel} title="Release line and stability channel">
           {`${RELEASE}/${CHANNEL}`}
         </span>
@@ -517,12 +573,6 @@ function ReadyView({
             </button>
           ))}
         </div>
-        {!archForTarget(target) && (
-          <div className={styles.unmappedNote}>
-            Note: this target has no CPU-arch mapping yet, so only target-specific avocado packages
-            are searchable. General Linux packages live in the CPU-arch repo.
-          </div>
-        )}
         {errors.length > 0 && (
           <div className={styles.unmappedNote}>Some repos failed to load: {errors.join(', ')}</div>
         )}
@@ -534,10 +584,7 @@ function ReadyView({
     return (
       <div className={styles.empty}>
         <div className={styles.emptyTitle}>No packages match &quot;{trimmed}&quot;</div>
-        <p>
-          Searched {packages.length.toLocaleString()} entries from {target}
-          {archForTarget(target) ? ` and ${archForTarget(target)}` : ''}.
-        </p>
+        <p>Searched {packages.length.toLocaleString()} entries from {target}.</p>
       </div>
     )
   }
@@ -545,7 +592,7 @@ function ReadyView({
   return (
     <div className={styles.results}>
       {results.map((r) => (
-        <PackageCard key={`${r.repo}/${r.name}-${r.version}-${r.release}`} pkg={r} />
+        <PackageCard key={`${r.repo}|${r.name}.${r.arch}-${r.version}-${r.release}`} pkg={r} />
       ))}
       {totalHits > results.length && (
         <div className={styles.resultsFooter}>
