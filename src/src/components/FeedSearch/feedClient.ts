@@ -116,11 +116,27 @@ async function fetchBounded(
   return new TextDecoder('utf-8').decode(bytes)
 }
 
+/**
+ * True when the browser supports `DecompressionStream('gzip')`. Available in
+ * Chrome 80+, Firefox 113+, Safari 16.4+. Older browsers (notably iOS Safari
+ * before 16.4) will see a clear "browser unsupported" error rather than a
+ * silent ReferenceError when the search first runs.
+ */
+export function hasGzipDecompressionSupport(): boolean {
+  return typeof DecompressionStream !== 'undefined'
+}
+
 async function gunzipBoundedText(
   body: ReadableStream<Uint8Array>,
   maxBytes: number,
   label: string
 ): Promise<string> {
+  if (!hasGzipDecompressionSupport()) {
+    throw new Error(
+      'This browser does not support gzip DecompressionStream. ' +
+        'Please use a recent Chrome, Firefox, or Safari 16.4+.'
+    )
+  }
   // DOM's DecompressionStream typing uses BufferSource while pipeThrough expects
   // Uint8Array. The runtime contract is identical; cast to bridge the typings.
   const ds = new DecompressionStream('gzip') as unknown as ReadableWritablePair<
@@ -167,14 +183,43 @@ export async function fetchTargetManifest(
 }
 
 function unescapeXml(s: string): string {
+  // &amp; must be replaced LAST so that doubly-escaped inputs like
+  // "&amp;quot;" (the literal text "&quot;") aren't collapsed to '"'.
   return s
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, '&')
 }
 
+/**
+ * Strip a CDATA wrapper if present. createrepo can emit summaries/descriptions
+ * either as plain XML text or wrapped in CDATA when the upstream RPM contains
+ * markup-looking characters.
+ */
+function stripCdata(s: string): string {
+  const m = s.match(/^\s*<!\[CDATA\[([\s\S]*?)\]\]>\s*$/)
+  return m ? m[1] : s
+}
+
+/**
+ * Extract package entries from a createrepo `primary.xml`.
+ *
+ * Regex (not a DOM parser) for memory reasons — a Jetson target's
+ * decompressed primary.xml can exceed 50 MB and a full DOM tree would
+ * cost several hundred MB of heap. The trade-off is that we assume the
+ * createrepo output shape:
+ *   - <package type="rpm"> is the top-level container; nothing else nests it.
+ *   - <name>, <arch>, <version>, <summary>, and <location> appear at most
+ *     once each, directly under <package>.
+ *   - <location href="…"> is the single href-bearing element under
+ *     <package>; <rpm:requires>/<rpm:provides> entries use <rpm:entry name=…>
+ *     and do not emit href attributes.
+ *   - <summary> may be plain text OR a single CDATA section.
+ * If createrepo's output ever drifts from these assumptions, parsing here
+ * will need to be revisited.
+ */
 function parsePrimaryXml(xml: string, repo: string): FeedPackage[] {
   const out: FeedPackage[] = []
   const pkgRe = /<package\s+type="rpm">([\s\S]*?)<\/package>/g
@@ -184,7 +229,8 @@ function parsePrimaryXml(xml: string, repo: string): FeedPackage[] {
     const name = inner.match(/<name>([^<]+)<\/name>/)?.[1]
     if (!name) continue
     const arch = inner.match(/<arch>([^<]+)<\/arch>/)?.[1] ?? ''
-    const summary = unescapeXml(inner.match(/<summary>([^<]*)<\/summary>/)?.[1] ?? '')
+    const summaryRaw = inner.match(/<summary>([\s\S]*?)<\/summary>/)?.[1] ?? ''
+    const summary = unescapeXml(stripCdata(summaryRaw))
     const versionMatch = inner.match(/<version[^/]*ver="([^"]+)"[^/]*rel="([^"]+)"/)
     const version = versionMatch?.[1] ?? ''
     const release = versionMatch?.[2] ?? ''

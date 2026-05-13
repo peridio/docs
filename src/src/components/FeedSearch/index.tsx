@@ -11,8 +11,8 @@ import {
 } from './feedClient'
 import styles from './styles.module.css'
 
-const RELEASE = '2024'
-const CHANNEL = 'edge'
+const DEFAULT_RELEASE = '2024'
+const DEFAULT_CHANNEL = 'edge'
 const MAX_RESULTS = 100
 const SUGGESTIONS = ['openssh', 'curl', 'python3', 'gstreamer', 'nginx', 'sqlite']
 const COPY_FLASH_MS = 1800
@@ -184,20 +184,18 @@ function archChipFromPaths(target: string, paths: readonly string[]): string | n
   return cpuArchPaths[cpuArchPaths.length - 1].slice('target/'.length)
 }
 
-function FeedSearchInner() {
+function FeedSearchInner({ release, channel }: { release: string; channel: string }) {
   const [manifestState, setManifestState] = useState<ManifestState>({ kind: 'loading' })
   const [target, setTarget] = useState<string>('')
   const [query, setQuery] = useState<string>('')
   const [state, setState] = useState<LoadState>({ kind: 'idle' })
   const cache = useRef<Map<string, FeedPackage[]>>(new Map())
-  const requestIdRef = useRef(0)
-  const abortRef = useRef<AbortController | null>(null)
   const stickyHeaderRef = useRef<HTMLDivElement>(null)
 
   // Fetch the per-target repo manifest once on mount.
   useEffect(() => {
     const controller = new AbortController()
-    fetchTargetManifest(RELEASE, CHANNEL, controller.signal)
+    fetchTargetManifest(release, channel, controller.signal)
       .then((manifest) => setManifestState({ kind: 'ready', manifest }))
       .catch((err) => {
         if (controller.signal.aborted) return
@@ -207,7 +205,7 @@ function FeedSearchInner() {
         })
       })
     return () => controller.abort()
-  }, [])
+  }, [release, channel])
 
   const targets = useMemo<TargetEntry[]>(
     () => (manifestState.kind === 'ready' ? targetList(manifestState.manifest) : []),
@@ -258,13 +256,11 @@ function FeedSearchInner() {
 
   // Fetch packages whenever target changes (cached after first load).
   // Each target maps to a list of repo paths from the manifest; we fan out
-  // requests in parallel via fetchTargetPackages and cancel them if the
-  // user picks a different target before they complete.
+  // requests in parallel via fetchTargetPackages. React runs this effect's
+  // cleanup before the next effect body, so aborting the controller in
+  // cleanup is the only cancellation mechanism we need — stale .then/.catch
+  // handlers check `controller.signal.aborted` and bail out.
   useEffect(() => {
-    if (abortRef.current) {
-      abortRef.current.abort()
-      abortRef.current = null
-    }
     if (!target) {
       setState({ kind: 'idle' })
       return
@@ -284,34 +280,30 @@ function FeedSearchInner() {
       setState({ kind: 'ready', target, packages: cached, errors: [] })
       return
     }
-    const id = ++requestIdRef.current
     const controller = new AbortController()
-    abortRef.current = controller
     setState({ kind: 'loading', target })
-    fetchTargetPackages(RELEASE, CHANNEL, paths, controller.signal)
+    fetchTargetPackages(release, channel, paths, controller.signal)
       .then(({ packages, errors }) => {
-        if (id !== requestIdRef.current) return
+        if (controller.signal.aborted) return
         cache.current.set(target, packages)
         setState({ kind: 'ready', target, packages, errors })
       })
       .catch((err) => {
-        if (id !== requestIdRef.current) return
         if (controller.signal.aborted) return
         setState({ kind: 'error', target, message: err?.message ?? 'Failed to load feed' })
       })
     return () => {
       controller.abort()
     }
-  }, [target, manifestState])
+  }, [target, manifestState, release, channel])
 
-  const results: SearchResult[] = useMemo(() => {
-    if (state.kind !== 'ready' || !query.trim()) return []
-    return searchPackages(state.packages, query).slice(0, MAX_RESULTS)
-  }, [state, query])
-
-  const totalHitsCount = useMemo(() => {
-    if (state.kind !== 'ready' || !query.trim()) return 0
-    return searchPackages(state.packages, query).length
+  const { results, totalHitsCount } = useMemo<{
+    results: SearchResult[]
+    totalHitsCount: number
+  }>(() => {
+    if (state.kind !== 'ready' || !query.trim()) return { results: [], totalHitsCount: 0 }
+    const all = searchPackages(state.packages, query)
+    return { results: all.slice(0, MAX_RESULTS), totalHitsCount: all.length }
   }, [state, query])
 
   const canReset = query !== ''
@@ -333,6 +325,9 @@ function FeedSearchInner() {
     <div className={styles.wrapper}>
       <div
         ref={stickyHeaderRef}
+        // `stickyHeaderWithBorder` is only styled inside the >=997px breakpoint
+        // (same as the sticky behaviour itself). On narrow viewports the class
+        // is applied but matches no rules — that's intentional.
         className={`${styles.stickyHeader} ${
           showResultsHeader ? styles.stickyHeaderWithBorder : ''
         }`.trim()}
@@ -398,7 +393,7 @@ function FeedSearchInner() {
           </div>
         </div>
 
-        <StatusBar state={state} archChip={archChip} />
+        <StatusBar state={state} archChip={archChip} release={release} channel={channel} />
 
         <div
           className={`${styles.resultsHeaderCollapse} ${
@@ -481,7 +476,17 @@ function FeedSearchInner() {
   )
 }
 
-function StatusBar({ state, archChip }: { state: LoadState; archChip: string | null }) {
+function StatusBar({
+  state,
+  archChip,
+  release,
+  channel,
+}: {
+  state: LoadState
+  archChip: string | null
+  release: string
+  channel: string
+}) {
   if (state.kind === 'idle') {
     return <div className={styles.statusBar} aria-hidden="true" />
   }
@@ -525,7 +530,7 @@ function StatusBar({ state, archChip }: { state: LoadState; archChip: string | n
         <span className={styles.statusTarget}>{state.target}</span>
         {archChip && <span className={styles.statusArch}>{archChip}</span>}
         <span className={styles.statusChannel} title="Release line and stability channel">
-          {`${RELEASE}/${CHANNEL}`}
+          {`${release}/${channel}`}
         </span>
       </span>
     </div>
@@ -720,10 +725,16 @@ function CopyButton({
   )
 }
 
-export default function FeedSearch() {
+export default function FeedSearch({
+  release = DEFAULT_RELEASE,
+  channel = DEFAULT_CHANNEL,
+}: {
+  release?: string
+  channel?: string
+} = {}) {
   return (
     <BrowserOnly fallback={<div className={styles.empty}>Loading search…</div>}>
-      {() => <FeedSearchInner />}
+      {() => <FeedSearchInner release={release} channel={channel} />}
     </BrowserOnly>
   )
 }
