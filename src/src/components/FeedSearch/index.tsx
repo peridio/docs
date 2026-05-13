@@ -318,8 +318,7 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
   }, [])
 
   const trimmedQuery = query.trim()
-  const showResultsHeader =
-    state.kind === 'ready' && trimmedQuery.length > 0 && results.length > 0
+  const showResultsHeader = state.kind === 'ready' && trimmedQuery.length > 0 && results.length > 0
 
   return (
     <div className={styles.wrapper}>
@@ -589,7 +588,9 @@ function ReadyView({
     return (
       <div className={styles.empty}>
         <div className={styles.emptyTitle}>No packages match &quot;{trimmed}&quot;</div>
-        <p>Searched {packages.length.toLocaleString()} entries from {target}.</p>
+        <p>
+          Searched {packages.length.toLocaleString()} entries from {target}.
+        </p>
       </div>
     )
   }

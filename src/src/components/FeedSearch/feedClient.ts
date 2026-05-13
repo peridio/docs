@@ -56,7 +56,9 @@ const MAX_SEGMENT_LEN = 64
 const MAX_PATH_LEN = 128
 
 function isSafeSegment(s: unknown): s is string {
-  return typeof s === 'string' && s.length > 0 && s.length <= MAX_SEGMENT_LEN && SAFE_SEGMENT_RE.test(s)
+  return (
+    typeof s === 'string' && s.length > 0 && s.length <= MAX_SEGMENT_LEN && SAFE_SEGMENT_RE.test(s)
+  )
 }
 
 function isSafePath(p: unknown): p is string {

@@ -21,10 +21,7 @@ import DocSidebarItems from '@theme/DocSidebarItems'
 import DocSidebarItemLink from '@theme/DocSidebarItem/Link'
 import { HiOutlineChevronRight } from 'react-icons/hi2'
 import type { Props } from '@theme/DocSidebarItem/Category'
-import type {
-  PropSidebarItemCategory,
-  PropSidebarItemLink,
-} from '@docusaurus/plugin-content-docs'
+import type { PropSidebarItemCategory, PropSidebarItemLink } from '@docusaurus/plugin-content-docs'
 import styles from './styles.module.css'
 
 function useAutoExpandActiveCategory({
@@ -42,8 +39,7 @@ function useAutoExpandActiveCategory({
   const previousActivePath = usePrevious(activePath)
   useEffect(() => {
     const justBecameActive = isActive && !wasActive
-    const stillActiveButPathChanged =
-      isActive && wasActive && activePath !== previousActivePath
+    const stillActiveButPathChanged = isActive && wasActive && activePath !== previousActivePath
     if ((justBecameActive || stillActiveButPathChanged) && collapsed) {
       updateCollapsed(false)
     }
@@ -82,7 +78,7 @@ function CollapseButton({
                 message: "Expand sidebar category '{label}'",
                 description: 'The ARIA label to expand the sidebar category',
               },
-              { label: categoryLabel },
+              { label: categoryLabel }
             )
           : translate(
               {
@@ -90,7 +86,7 @@ function CollapseButton({
                 message: "Collapse sidebar category '{label}'",
                 description: 'The ARIA label to collapse the sidebar category',
               },
-              { label: categoryLabel },
+              { label: categoryLabel }
             )
       }
       aria-expanded={!collapsed}
@@ -125,7 +121,7 @@ export default function DocSidebarItemCategory(props: Props): ReactNode {
 }
 
 function isCategoryWithHref(
-  category: PropSidebarItemCategory,
+  category: PropSidebarItemCategory
 ): category is PropSidebarItemCategory & { href: string } {
   return typeof category.href === 'string'
 }
@@ -177,12 +173,7 @@ function DocSidebarItemCategoryCollapsible({
   }
   useAutoExpandActiveCategory({ isActive, collapsed, updateCollapsed, activePath })
   useEffect(() => {
-    if (
-      collapsible &&
-      expandedItem != null &&
-      expandedItem !== index &&
-      autoCollapseCategories
-    ) {
+    if (collapsible && expandedItem != null && expandedItem !== index && autoCollapseCategories) {
       setCollapsed(true)
     }
   }, [collapsible, expandedItem, index, setCollapsed, autoCollapseCategories])
@@ -215,7 +206,7 @@ function DocSidebarItemCategoryCollapsible({
         {
           'menu__list-item--collapsed': collapsed,
         },
-        className,
+        className
       )}
     >
       <div
