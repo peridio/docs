@@ -1,3 +1,20 @@
+/**
+ * Swizzled fork of Docusaurus's `@theme/DocSidebarItem/Category`.
+ *
+ * Forked from: Docusaurus 3.10.0
+ *   https://github.com/facebook/docusaurus/blob/v3.10.0/packages/docusaurus-theme-classic/src/theme/DocSidebarItem/Category/index.tsx
+ *
+ * Local changes vs. upstream:
+ *   - Replace the upstream caret pseudo-element with a react-icons
+ *     `HiOutlineChevronRight` so the chevron matches the rest of the site UI.
+ *   - Auto-expand the active sidebar category on navigation (see
+ *     `useAutoExpandActiveCategory`) instead of only expanding on click.
+ *
+ * Upgrade path: when bumping `@docusaurus/core`, diff the upstream file for
+ * this component against 3.10.0 and re-apply the two changes above. If a
+ * lighter CSS-only approach (overriding the caret pseudo + a thin wrapper
+ * for auto-expand) becomes feasible, prefer that over carrying this fork.
+ */
 import React, { type ComponentProps, type ReactNode, useEffect, useMemo } from 'react'
 import clsx from 'clsx'
 import {

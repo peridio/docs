@@ -34,7 +34,6 @@ export interface FeedPackage {
   arch: string
   /** Full repo sub-path under {host}/{release}/{channel}/, e.g. "target/armv8a_tegra" */
   repo: string
-  href: string
 }
 
 export type TargetManifest = Record<string, string[]>
@@ -213,11 +212,8 @@ function stripCdata(s: string): string {
  * cost several hundred MB of heap. The trade-off is that we assume the
  * createrepo output shape:
  *   - <package type="rpm"> is the top-level container; nothing else nests it.
- *   - <name>, <arch>, <version>, <summary>, and <location> appear at most
- *     once each, directly under <package>.
- *   - <location href="…"> is the single href-bearing element under
- *     <package>; <rpm:requires>/<rpm:provides> entries use <rpm:entry name=…>
- *     and do not emit href attributes.
+ *   - <name>, <arch>, <version>, and <summary> appear at most once each,
+ *     directly under <package>.
  *   - <summary> may be plain text OR a single CDATA section.
  * If createrepo's output ever drifts from these assumptions, parsing here
  * will need to be revisited.
@@ -236,8 +232,7 @@ function parsePrimaryXml(xml: string, repo: string): FeedPackage[] {
     const versionMatch = inner.match(/<version[^/]*ver="([^"]+)"[^/]*rel="([^"]+)"/)
     const version = versionMatch?.[1] ?? ''
     const release = versionMatch?.[2] ?? ''
-    const href = inner.match(/<location\s+href="([^"]+)"/)?.[1] ?? ''
-    out.push({ name, summary, version, release, arch, repo, href })
+    out.push({ name, summary, version, release, arch, repo })
   }
   return out
 }

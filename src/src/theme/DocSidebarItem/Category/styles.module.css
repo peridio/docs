@@ -35,6 +35,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--ifm-global-radius);
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.categoryCaretButton:hover {
+  background-color: var(--ifm-menu-color-background-hover);
+}
+
+.categoryCaretButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ifm-color-primary);
 }
 
 .categoryCaretButton::before {

@@ -172,14 +172,19 @@ function targetList(manifest: TargetManifest): TargetEntry[] {
     .sort((a, b) => a.name.localeCompare(b.name))
 }
 
-// Pick the most-specific cpu arch from a target's manifest paths, used for the
-// arch chip in the status bar. Filters out target-specific repos and noarch.
+// Derive the displayed arch chip from a target's repo paths. Filters out the
+// machine-specific repo (`target/<target>`, `target/<target>-ext`) and
+// `target/noarch`, leaving the cpu-tune buckets.
 //
-// OE tune names lengthen as they become more specific (e.g.
-// armv8a < armv8a_tegra < armv8a_tegra234, cortexa55 < cortexa55_mx91), so we
-// pick by longest path. This is independent of the order the publisher emits
-// entries in `targets.json` — if upstream ever alphabetises the list, the
-// displayed chip won't change.
+// The OE convention is that more-specific tunes have longer path names, so we
+// pick the longest `target/*` path. Example: for a Jetson feed containing
+//   target/armv8a, target/armv8a_tegra, target/armv8a_tegra234
+// we show "armv8a_tegra234" (the most-specific tune).
+//
+// Alphabetic tie-break keeps output deterministic if two paths share length.
+// Result is independent of the order the publisher emits entries in
+// `targets.json` — if upstream ever alphabetises the list, the displayed chip
+// won't change.
 function archChipFromPaths(target: string, paths: readonly string[]): string | null {
   const targetPath = `target/${target}`
   const extPath = `${targetPath}-ext`
@@ -204,7 +209,10 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
   useEffect(() => {
     const controller = new AbortController()
     fetchTargetManifest(release, channel, controller.signal)
-      .then((manifest) => setManifestState({ kind: 'ready', manifest }))
+      .then((manifest) => {
+        if (controller.signal.aborted) return
+        setManifestState({ kind: 'ready', manifest })
+      })
       .catch((err) => {
         if (controller.signal.aborted) return
         setManifestState({
@@ -283,7 +291,11 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
       })
       return
     }
-    const cached = cache.current.get(target)
+    // Cache key includes release+channel: different feeds produce different
+    // package lists for the same target, and these can change at runtime via
+    // the <FeedSearch /> props.
+    const cacheKey = `${release}/${channel}/${target}`
+    const cached = cache.current.get(cacheKey)
     if (cached) {
       setState({ kind: 'ready', target, packages: cached, errors: [] })
       return
@@ -293,7 +305,7 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
     fetchTargetPackages(release, channel, paths, controller.signal)
       .then(({ packages, errors }) => {
         if (controller.signal.aborted) return
-        cache.current.set(target, packages)
+        cache.current.set(cacheKey, packages)
         setState({ kind: 'ready', target, packages, errors })
       })
       .catch((err) => {
@@ -527,7 +539,7 @@ function StatusBar({
   }
 
   return (
-    <div className={`${styles.statusBar} ${styles.statusBarReady}`} role="status">
+    <div className={styles.statusBar} role="status">
       <span className={styles.statusPrimary}>
         <span className={`${styles.statusDot} ${styles.statusDotReady}`} />
         <span className={styles.statusCount}>{state.packages.length.toLocaleString()}</span>
