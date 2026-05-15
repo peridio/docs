@@ -41,7 +41,13 @@ const sidebars = {
       label: 'Advanced',
       collapsible: false,
       collapsed: false,
-      items: ['cross-compilation', 'custom-kernel', 'seeding-var', 'customizing-rootfs-initramfs'],
+      items: [
+        'cross-compilation',
+        'custom-kernel',
+        'seeding-var',
+        'customizing-rootfs-initramfs',
+        'lockfiles-and-build-stamps',
+      ],
     },
     {
       type: 'category',
