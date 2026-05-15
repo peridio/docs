@@ -1,7 +1,10 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
+// -- May 2026 --
+import V0_38_0 from '../../../docs-changelog/may-2026/0.38.0.md'
+import V0_37_1 from '../../../docs-changelog/may-2026/0.37.1.md'
 // -- April 2026 --
-import V0_36_0 from '../../../docs-changelog/april-2026/0.36.0.md'
+import V0_36_2 from '../../../docs-changelog/april-2026/0.36.2.md'
 import V0_35_0 from '../../../docs-changelog/april-2026/0.35.0.md'
 import V0_34_0 from '../../../docs-changelog/april-2026/0.34.0.md'
 // -- March 2026 --
@@ -44,11 +47,26 @@ import V0_8_0 from '../../../docs-changelog/september-2025/0.8.0.md'
  */
 export const entries = [
   {
-    version: '0.36.0',
+    version: '0.38.0',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/0.38.0',
+    Component: V0_38_0,
+  },
+  {
+    version: '0.37.1',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/0.37.1',
+    Component: V0_37_1,
+  },
+
+  {
+    version: '0.36.2',
     monthSlug: 'april-2026',
     monthLabel: 'April 2026',
-    permalink: '/changelog/april-2026/0.36.0',
-    Component: V0_36_0,
+    permalink: '/changelog/april-2026/0.36.2',
+    Component: V0_36_2,
   },
 
   {
