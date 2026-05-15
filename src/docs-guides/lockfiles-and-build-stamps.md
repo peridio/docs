@@ -7,8 +7,8 @@ description: 'How Avocado pins package versions across builds with a lockfile, a
 
 Avocado has two internal subsystems that determine what gets built and when:
 
-- A **lockfile** that pins package versions on first install so subsequent builds are reproducible. This is your *input* state.
-- A **stamp** cache that tracks which build steps have already succeeded so they don't re-run unnecessarily. This is your *output* state.
+- A **lockfile** that pins package versions on first install so subsequent builds are reproducible. This is your _input_ state.
+- A **stamp** cache that tracks which build steps have already succeeded so they don't re-run unnecessarily. This is your _output_ state.
 
 You generally don't think about either of these — they just make builds reproducible and fast. But when something goes wrong (an apparently stale build, a package that won't update, a partial failure that "stuck"), knowing how they work is what gets you unstuck. This page covers both, plus the commands for invalidating them.
 
@@ -69,7 +69,7 @@ You almost never need to delete `lock.json` by hand. Always prefer `avocado unlo
 
 Stamps are the CLI's way of remembering which build steps have already succeeded. When `avocado install`, `avocado build`, `avocado image`, `avocado sign`, and `avocado provision` complete successfully, the CLI writes a small JSON stamp file capturing what inputs went into that step. The next time you run the same command, the CLI hashes the current inputs and compares — if they match the recorded stamp, the step is skipped.
 
-The design is loosely modeled on Cargo's fingerprint files and Nix derivations: a stamp records *just enough* to know whether the work needs to be redone.
+The design is loosely modeled on Cargo's fingerprint files and Nix derivations: a stamp records _just enough_ to know whether the work needs to be redone.
 
 ### Where stamps live
 
@@ -132,12 +132,12 @@ This removes the entire `.stamps` directory inside the SDK container volume. The
 
 ### Picking the right tool
 
-| Symptom | Likely cause | Action |
-| ------- | ------------ | ------ |
-| Build skipping a step you expected to re-run | Inputs unchanged, stamp still valid | `avocado --no-stamps <cmd>` for a one-off, or `avocado clean --stamps` to reset |
-| Build reusing an old package version after a feed update | Lockfile pinning the old version | `avocado unlock --<scope>` then `avocado install` |
-| Build seems to ignore an `avocado.yaml` edit | Section hash unchanged or unrelated to the edit | Check the section you edited matches the component's stamp scope; if it should invalidate, `--no-stamps` to confirm |
-| Want a fully clean re-build | Both layers stale or you want to start from scratch | `avocado clean --stamps --unlock` (clears both), then re-install / re-build |
+| Symptom                                                  | Likely cause                                        | Action                                                                                                              |
+| -------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Build skipping a step you expected to re-run             | Inputs unchanged, stamp still valid                 | `avocado --no-stamps <cmd>` for a one-off, or `avocado clean --stamps` to reset                                     |
+| Build reusing an old package version after a feed update | Lockfile pinning the old version                    | `avocado unlock --<scope>` then `avocado install`                                                                   |
+| Build seems to ignore an `avocado.yaml` edit             | Section hash unchanged or unrelated to the edit     | Check the section you edited matches the component's stamp scope; if it should invalidate, `--no-stamps` to confirm |
+| Want a fully clean re-build                              | Both layers stale or you want to start from scratch | `avocado clean --stamps --unlock` (clears both), then re-install / re-build                                         |
 
 `avocado clean --stamps --unlock` is the heaviest reset short of `avocado clean` removing the container volume entirely — it nukes both subsystems' state for the target but leaves your sources and the SDK image alone.
 
