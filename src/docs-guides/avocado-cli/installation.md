@@ -8,14 +8,14 @@ description: 'Install Avocado CLI for Avocado Linux development - download, extr
 
 Avocado CLI ships prebuilt binaries for the following OS / architecture combinations on every release:
 
-| Operating system | Architecture     | Target triple                  |
-| ---------------- | ---------------- | ------------------------------ |
-| macOS            | Apple Silicon    | `aarch64-apple-darwin`         |
-| macOS            | Intel            | `x86_64-apple-darwin`          |
-| Linux            | aarch64 (static) | `aarch64-unknown-linux-musl`   |
-| Linux            | x86_64 (glibc)   | `x86_64-unknown-linux-gnu`     |
-| Linux            | x86_64 (static)  | `x86_64-unknown-linux-musl`    |
-| Windows          | x86_64           | `x86_64-pc-windows-msvc`       |
+| Operating system | Architecture     | Target triple                |
+| ---------------- | ---------------- | ---------------------------- |
+| macOS            | Apple Silicon    | `aarch64-apple-darwin`       |
+| macOS            | Intel            | `x86_64-apple-darwin`        |
+| Linux            | aarch64 (static) | `aarch64-unknown-linux-musl` |
+| Linux            | x86_64 (glibc)   | `x86_64-unknown-linux-gnu`   |
+| Linux            | x86_64 (static)  | `x86_64-unknown-linux-musl`  |
+| Windows          | x86_64           | `x86_64-pc-windows-msvc`     |
 
 The Linux `*-musl` builds are statically linked, so they do not depend on the host glibc version, but they still require a compatible Linux kernel and matching architecture. The `*-gnu` build is dynamically linked against glibc and is suitable for mainstream Linux distributions with glibc 2.31 or newer (Debian 11+, Ubuntu 20.04+, Fedora 33+, RHEL 9+).
 
