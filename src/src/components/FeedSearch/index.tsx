@@ -202,8 +202,17 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
   const [target, setTarget] = useState<string>('')
   const [query, setQuery] = useState<string>('')
   const [state, setState] = useState<LoadState>({ kind: 'idle' })
+  // Bumped by the Retry button to force the per-target fetch effect to re-run
+  // after the cache entry has been cleared.
+  const [retryNonce, setRetryNonce] = useState(0)
   const cache = useRef<Map<string, FeedPackage[]>>(new Map())
   const stickyHeaderRef = useRef<HTMLDivElement>(null)
+
+  const handleRetry = useCallback(() => {
+    if (!target) return
+    cache.current.delete(`${release}/${channel}/${target}`)
+    setRetryNonce((n) => n + 1)
+  }, [release, channel, target])
 
   // Fetch the per-target repo manifest once on mount.
   useEffect(() => {
@@ -315,7 +324,7 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
     return () => {
       controller.abort()
     }
-  }, [target, manifestState, release, channel])
+  }, [target, manifestState, release, channel, retryNonce])
 
   const { results, totalHitsCount } = useMemo<{
     results: SearchResult[]
@@ -488,6 +497,7 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
             packages={state.packages}
             errors={state.errors}
             onSuggest={setQuery}
+            onRetry={handleRetry}
           />
         )}
       </div>
@@ -564,6 +574,7 @@ function ReadyView({
   packages,
   errors,
   onSuggest,
+  onRetry,
 }: {
   target: string
   query: string
@@ -572,8 +583,29 @@ function ReadyView({
   packages: FeedPackage[]
   errors: string[]
   onSuggest: (q: string) => void
+  onRetry: () => void
 }) {
   const trimmed = query.trim()
+
+  // All repo fetches failed: nothing to search. Surface a recoverable error
+  // with a Retry button instead of the misleading "0 packages indexed".
+  if (packages.length === 0 && errors.length > 0) {
+    return (
+      <div className={styles.empty}>
+        <div className={styles.emptyTitle}>Couldn&rsquo;t load the package feed</div>
+        <p>
+          All repository fetches for <strong>{target}</strong> failed. The most common cause is a
+          browser extension (ad/content blocker, privacy extension) blocking requests to{' '}
+          <code>repo.avocadolinux.org</code>. Try disabling extensions for this page, or check your
+          VPN / DNS filter.
+        </p>
+        <button type="button" className={styles.emptyButton} onClick={onRetry}>
+          Retry
+        </button>
+        <div className={styles.unmappedNote}>{errors.join(', ')}</div>
+      </div>
+    )
+  }
 
   if (!trimmed) {
     return (
@@ -598,7 +630,12 @@ function ReadyView({
           ))}
         </div>
         {errors.length > 0 && (
-          <div className={styles.unmappedNote}>Some repos failed to load: {errors.join(', ')}</div>
+          <div className={styles.unmappedNote}>
+            Some repos failed to load: {errors.join(', ')}.{' '}
+            <button type="button" className={styles.retryInline} onClick={onRetry}>
+              Retry
+            </button>
+          </div>
         )}
       </div>
     )

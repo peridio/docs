@@ -110,7 +110,11 @@ async function fetchBounded(
   label: string,
   signal?: AbortSignal
 ): Promise<string> {
-  const res = await fetch(url, { cache: 'force-cache', signal, credentials: 'omit' })
+  // Default cache mode (not `force-cache`): the browser respects HTTP cache
+  // headers and revalidates with the server on stale entries. `force-cache`
+  // would override hard-refresh and serve any cached response forever,
+  // including ones cached from a transient CloudFront error.
+  const res = await fetch(url, { cache: 'default', signal, credentials: 'omit' })
   if (!res.ok) throw new Error(`${url} returned ${res.status}`)
   if (!res.body) throw new Error(`${url} returned no body`)
   const bytes = await readBounded(res.body, maxBytes, label)
@@ -262,6 +266,10 @@ export async function fetchRepoPackages(
 ): Promise<FeedPackage[]> {
   const primaryHref = await fetchPrimaryHref(release, channel, path, signal)
   const url = `${repoUrl(release, channel, path)}/${primaryHref}`
+  // `force-cache` is safe here: the href is a content-addressed
+  // `repodata/<sha256>-primary.xml.gz`, so an immutable URL never serves
+  // different content. Use force-cache to avoid re-downloading the ~tens of
+  // MB primary.xml.gz on every page load.
   const res = await fetch(url, { cache: 'force-cache', signal, credentials: 'omit' })
   if (!res.ok) throw new Error(`primary.xml.gz ${res.status} for ${path}`)
   if (!res.body) throw new Error(`primary.xml.gz returned no body for ${path}`)
