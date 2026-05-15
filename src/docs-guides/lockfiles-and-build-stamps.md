@@ -25,7 +25,7 @@ Entries are scoped by **target** and then by **sysroot type**. A single project 
 - `initramfs` — packages installed into the runtime's initramfs.
 - `target-sysroot` — target-side compile dependencies (headers, libraries) installed into the SDK for cross-compilation.
 - `extensions.<name>` — packages installed into each named extension's sysroot.
-- `runtimes.<name>` — packages installed into each named runtime's sysroot.
+- `runtimes.<name>` — packages installed into each named runtime's sysroot. As of schema v6, each runtime entry also tracks per-runtime extension state under `runtimes.<name>.extensions.<ext>` — so an extension installed under different runtimes is recorded against each one independently. The top-level `extensions.<name>` map is still maintained alongside it.
 
 The lockfile is a single JSON file (schema v6) that holds all of these. The CLI migrates older schema versions automatically on first write.
 
@@ -53,7 +53,13 @@ avocado unlock --runtime dev
 
 After unlocking, run `avocado install` to re-resolve and write fresh entries.
 
-`avocado clean --unlock` is the broadest equivalent — it clears every lockfile entry for the target in one step. Use it when you want to reset the project's input state entirely.
+`avocado clean --unlock` is the broadest equivalent — it clears every lockfile entry for the target in one step. The `--unlock` flag requires `-C/--config` and `--target`:
+
+```bash
+avocado clean --unlock -C avocado.yaml --target jetson-orin-nano-devkit
+```
+
+Use it when you want to reset the project's input state entirely.
 
 ### Lockfile workflow
 
@@ -67,7 +73,7 @@ You almost never need to delete `lock.json` by hand. Always prefer `avocado unlo
 
 ## Build stamps
 
-Stamps are the CLI's way of remembering which build steps have already succeeded. When `avocado install`, `avocado build`, `avocado image`, `avocado sign`, and `avocado provision` complete successfully, the CLI writes a small JSON stamp file capturing what inputs went into that step. The next time you run the same command, the CLI hashes the current inputs and compares — if they match the recorded stamp, the step is skipped.
+Stamps are the CLI's way of remembering which build steps have already succeeded. When an install, build, image, sign, or provision step completes successfully — `avocado install`, `avocado build`, `avocado rootfs image`, `avocado ext image`, `avocado sign`, `avocado provision`, and so on — the CLI writes a small JSON stamp file capturing what inputs went into that step. The next time you run the same command, the CLI hashes the current inputs and compares — if they match the recorded stamp, the step is skipped.
 
 The design is loosely modeled on Cargo's fingerprint files and Nix derivations: a stamp records _just enough_ to know whether the work needs to be redone.
 

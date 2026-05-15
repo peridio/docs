@@ -152,4 +152,4 @@ If you remove a package from the `packages` map, the CLI detects the removal on 
 
 ## Lock file
 
-Installed package versions are recorded in `avocado.lock` after each successful install. This ensures reproducible builds — subsequent installs will pin to the same versions unless you run `avocado unlock` to allow updates.
+Installed package versions are recorded in `.avocado/lock.json` after each successful install. This ensures reproducible builds — subsequent installs will pin to the same versions unless you run `avocado unlock` to allow updates. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps) for the full reference.
