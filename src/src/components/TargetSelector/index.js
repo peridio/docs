@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import Link from '@docusaurus/Link'
+import useBrokenLinks from '@docusaurus/useBrokenLinks'
 import Heading from '@theme/Heading'
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
 import styles from './styles.module.css'
@@ -16,6 +17,13 @@ export default function TargetSelector() {
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
+
+  // Register one anchor per target with Docusaurus's broken-link checker so
+  // deep links like /any-target#rzv2n-sr-som validate at build time. The
+  // hash-driven runtime behaviour lives in the useEffect below; collectAnchor
+  // is just bookkeeping for the SSR pass.
+  const brokenLinks = useBrokenLinks()
+  targetList.forEach((target) => brokenLinks.collectAnchor(target.target))
 
   useEffect(() => {
     const hash = window.location.hash.slice(1)
