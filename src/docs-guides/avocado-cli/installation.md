@@ -23,13 +23,23 @@ The install script picks the appropriate binary automatically. For manual instal
 
 ## Install
 
-On macOS or Linux:
+### Homebrew (macOS)
+
+Avocado CLI is published to the [`avocado-linux/homebrew-tap`](https://github.com/avocado-linux/homebrew-tap) tap. Recommended for macOS users — Homebrew handles updates, PATH, and the Apple Silicon vs. Intel binary choice for you.
+
+```bash
+brew install avocado-linux/tap/avocado-cli
+```
+
+### Install script (macOS or Linux)
+
+A one-liner that downloads the right binary for your platform from the [releases page](https://github.com/avocado-linux/avocado-cli/releases) and installs it to `~/.local/bin`:
 
 ```bash
 curl -fsSL https://connect.peridio.com/install.sh | sh
 ```
 
-On Windows, or to install manually, use the GitHub releases:
+### Manual install (Windows, or any platform)
 
 1. Download an Avocado CLI tarball from the [releases page](https://github.com/avocado-linux/avocado-cli/releases).
 2. Extract the tarball using the following command:
@@ -47,6 +57,16 @@ On Windows, or to install manually, use the GitHub releases:
    If successful, you should see the version number displayed.
 
 ## Upgrade
+
+### Homebrew
+
+```bash
+brew upgrade avocado-cli
+```
+
+Do **not** run `avocado upgrade` on a Homebrew-installed binary — `avocado upgrade` will detect the install method and steer you back to `brew upgrade`, but the next `brew upgrade` would otherwise overwrite a self-updated binary with the formula version.
+
+### Install script or manual
 
 To upgrade to the latest version:
 
