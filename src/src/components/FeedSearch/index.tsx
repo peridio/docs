@@ -197,10 +197,16 @@ function archChipFromPaths(target: string, paths: readonly string[]): string | n
   return best.slice('target/'.length)
 }
 
+// Read `?target=…&q=…` from the current URL on first render so the search is
+// linkable. Inside <BrowserOnly>, so `window` is always defined.
+function readUrlParam(name: string): string {
+  return new URLSearchParams(window.location.search).get(name) ?? ''
+}
+
 function FeedSearchInner({ release, channel }: { release: string; channel: string }) {
   const [manifestState, setManifestState] = useState<ManifestState>({ kind: 'loading' })
-  const [target, setTarget] = useState<string>('')
-  const [query, setQuery] = useState<string>('')
+  const [target, setTarget] = useState<string>(() => readUrlParam('target'))
+  const [query, setQuery] = useState<string>(() => readUrlParam('q'))
   const [state, setState] = useState<LoadState>({ kind: 'idle' })
   // Bumped by the Retry button to force the per-target fetch effect to re-run
   // after the cache entry has been cleared.
@@ -213,6 +219,23 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
     cache.current.delete(`${release}/${channel}/${target}`)
     setRetryNonce((n) => n + 1)
   }, [release, channel, target])
+
+  // Mirror target + query into the URL so a given search is linkable.
+  // replaceState (not pushState) keeps the back button useful — typing should
+  // not produce one history entry per keystroke. Empty values are stripped so
+  // the URL stays clean when state is reset.
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    if (target) url.searchParams.set('target', target)
+    else url.searchParams.delete('target')
+    const trimmed = query.trim()
+    if (trimmed) url.searchParams.set('q', trimmed)
+    else url.searchParams.delete('q')
+    const next = url.toString()
+    if (next !== window.location.href) {
+      window.history.replaceState(null, '', next)
+    }
+  }, [target, query])
 
   // Fetch the per-target repo manifest once on mount.
   useEffect(() => {
