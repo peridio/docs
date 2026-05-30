@@ -255,6 +255,18 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
     return () => controller.abort()
   }, [release, channel])
 
+  // Drop a target restored from the URL that the loaded manifest doesn't know
+  // about (stale or hand-edited link). Otherwise the controlled <select> sits
+  // on a value with no matching <option> and the fetch effect surfaces a
+  // misleading "No repos published for this target yet" for what's really an
+  // invalid value. Resetting also lets the URL-sync effect strip the bad
+  // `?target=` from the address bar.
+  useEffect(() => {
+    if (manifestState.kind === 'ready' && target && !manifestState.manifest[target]) {
+      setTarget('')
+    }
+  }, [manifestState, target])
+
   const targets = useMemo<TargetEntry[]>(
     () => (manifestState.kind === 'ready' ? targetList(manifestState.manifest) : []),
     [manifestState]
