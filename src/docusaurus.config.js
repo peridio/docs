@@ -130,7 +130,7 @@ const config = {
             activeBasePath: 'developer-reference',
           },
           {
-            to: '/changelog/may-2026/0.38.0',
+            to: '/changelog/latest',
             label: 'Changelog',
             position: 'left',
             activeBasePath: 'changelog',
