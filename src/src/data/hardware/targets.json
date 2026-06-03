@@ -171,7 +171,7 @@
           "to": "GND",
           "note": "recovery mode"
         },
-        { "color": "#000000", "label": "black", "pin": "GND", "to": "UART GND" },
+        { "color": "#000000", "label": "black", "pin": "GND", "to": "adapter UART GND" },
         { "color": "#00aa00", "label": "green", "pin": "UART TXD", "to": "adapter UART RX" },
         { "color": "#0000cc", "label": "blue", "pin": "UART RXD", "to": "adapter UART TX" }
       ]
