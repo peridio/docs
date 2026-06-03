@@ -28,11 +28,11 @@ Connect your TTY serial console USB adapter to the Jetson's GPIO header pins. Lo
 - Boot into recovery mode:
   - <span style={{display: 'inline-block', width: '14px', height: '14px', backgroundColor: '#cccc00', borderRadius: '2px', verticalAlign: 'middle', marginRight: '6px'}}></span> yellow: short `FC REC` to `GND`
 - Connect your serial console adapter to the target device:
-  - <span style={{display: 'inline-block', width: '14px', height: '14px', backgroundColor: '#00aa00', borderRadius: '2px', verticalAlign: 'middle', marginRight: '6px'}}></span> green: `GND` to adapter UART GND
-  - <span style={{display: 'inline-block', width: '14px', height: '14px', backgroundColor: '#0000cc', borderRadius: '2px', verticalAlign: 'middle', marginRight: '6px'}}></span> blue: `UART TXD` to adapter UART RX
-  - <span style={{display: 'inline-block', width: '14px', height: '14px', backgroundColor: '#cc00cc', borderRadius: '2px', verticalAlign: 'middle', marginRight: '6px'}}></span> violet: `UART RXD` to adapter UART TX
+  - <span style={{display: 'inline-block', width: '14px', height: '14px', backgroundColor: '#000000', borderRadius: '2px', verticalAlign: 'middle', marginRight: '6px'}}></span> black: `GND` to UART GND
+  - <span style={{display: 'inline-block', width: '14px', height: '14px', backgroundColor: '#00aa00', borderRadius: '2px', verticalAlign: 'middle', marginRight: '6px'}}></span> green: `UART TXD` to adapter UART RX
+  - <span style={{display: 'inline-block', width: '14px', height: '14px', backgroundColor: '#0000cc', borderRadius: '2px', verticalAlign: 'middle', marginRight: '6px'}}></span> blue: `UART RXD` to adapter UART TX
 
-![Jetson Orin Nano DevKit Serial Console](/img/jetson-orin-nano-devkit-serial-console.jpg)
+![Jetson Orin Nano DevKit Serial Console](/img/jetson-orin-nano-devkit-serial-console.gif)
 
 Open a serial terminal:
 
@@ -101,22 +101,6 @@ The procedure advances through several steps:
 == Step 3: Sending flash sequence commands ==
 ...
 ```
-
-During step 3, you will be prompted to disconnect and reconnect the USB-C cable:
-
-```text
-The Jetson device is waiting for USB disconnect to proceed.
-Please manually disconnect and reconnect the USB cable now.
-
-Steps:
-  1. Unplug the USB-C cable from the Jetson device
-  2. Wait 2-3 seconds
-  3. Plug the USB-C cable back in
-
-Press Enter after reconnecting the USB cable...
-```
-
-Follow the instructions. The process continues to step 4 (writing partitions) and step 5 (final status). During step 5, perform the same USB disconnect/reconnect procedure again.
 
 When provisioning completes:
 

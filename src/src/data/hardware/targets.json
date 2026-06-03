@@ -133,18 +133,6 @@
           "type": "code",
           "content": "== Step 1: Signing binaries ==\n...\n== Step 2: Boot Jetson via RCM ==\n...\n== Step 3: Sending flash sequence commands ==\n..."
         },
-        {
-          "type": "text",
-          "content": "During step 3, you will be prompted to disconnect and reconnect the USB-C cable:"
-        },
-        {
-          "type": "code",
-          "content": "The Jetson device is waiting for USB disconnect to proceed.\nPlease manually disconnect and reconnect the USB cable now.\n\nSteps:\n  1. Unplug the USB-C cable from the Jetson device\n  2. Wait 2-3 seconds\n  3. Plug the USB-C cable back in\n\nPress Enter after reconnecting the USB cable..."
-        },
-        {
-          "type": "text",
-          "content": "Follow the instructions. The process continues to step 4 (writing partitions) and step 5 (final status). During step 5, perform the same USB disconnect/reconnect procedure again."
-        },
         { "type": "text", "content": "When provisioning completes:" },
         { "type": "code", "content": "[SUCCESS] Successfully provisioned runtime 'dev'" }
       ],
@@ -172,7 +160,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0",
       "image": {
-        "src": "/img/jetson-orin-nano-devkit-serial-console.jpg",
+        "src": "/img/jetson-orin-nano-devkit-serial-console.gif",
         "alt": "Jetson Orin Nano DevKit Serial Console"
       },
       "gpio": [
@@ -183,9 +171,9 @@
           "to": "GND",
           "note": "recovery mode"
         },
-        { "color": "#00aa00", "label": "green", "pin": "GND", "to": "adapter UART GND" },
-        { "color": "#0000cc", "label": "blue", "pin": "UART TXD", "to": "adapter UART RX" },
-        { "color": "#cc00cc", "label": "violet", "pin": "UART RXD", "to": "adapter UART TX" }
+        { "color": "#000000", "label": "black", "pin": "GND", "to": "UART GND" },
+        { "color": "#00aa00", "label": "green", "pin": "UART TXD", "to": "adapter UART RX" },
+        { "color": "#0000cc", "label": "blue", "pin": "UART RXD", "to": "adapter UART TX" }
       ]
     },
     "gettingStartedUrl": "/developer-reference/getting-started/jetson",
@@ -216,18 +204,6 @@
           "type": "code",
           "content": "== Step 1: Signing binaries ==\n...\n== Step 2: Boot Jetson via RCM ==\n...\n== Step 3: Sending flash sequence commands ==\n..."
         },
-        {
-          "type": "text",
-          "content": "During step 3, you will be prompted to disconnect and reconnect the USB-C cable:"
-        },
-        {
-          "type": "code",
-          "content": "The Jetson device is waiting for USB disconnect to proceed.\nPlease manually disconnect and reconnect the USB cable now.\n\nSteps:\n  1. Unplug the USB-C cable from the Jetson device\n  2. Wait 2-3 seconds\n  3. Plug the USB-C cable back in\n\nPress Enter after reconnecting the USB cable..."
-        },
-        {
-          "type": "text",
-          "content": "Follow the instructions. The process continues to step 4 (writing partitions) and step 5 (final status). During step 5, perform the same USB disconnect/reconnect procedure again."
-        },
         { "type": "text", "content": "When provisioning completes:" },
         { "type": "code", "content": "[SUCCESS] Successfully provisioned runtime 'dev'" }
       ],
@@ -254,10 +230,6 @@
       "baud": 115200,
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0",
-      "image": {
-        "src": "/img/jetson-orin-nano-devkit-serial-console.jpg",
-        "alt": "Jetson AGX Orin DevKit Serial Console"
-      },
       "gpio": [
         {
           "color": "#cccc00",
