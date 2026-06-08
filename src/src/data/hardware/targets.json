@@ -193,8 +193,8 @@
         "NVMe SSD (M.2 2280 form factor)",
         "Linux host machine (Ubuntu 22.04+, Fedora 39+)",
         "16 GB available disk space",
-        "USB-C cable for provisioning (host USB to Jetson USB-C)",
-        "TTY serial console USB adapter (3.3V)"
+        "USB-C cable (host to Jetson, for flashing)",
+        "Micro USB cable (host to Jetson, for UART console)"
       ],
       "provisionCommand": "avocado provision -r dev --profile tegraflash",
       "provisionDescription": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
@@ -209,17 +209,51 @@
       ],
       "bootSteps": [
         "Remove power from the Jetson",
-        "Remove the jumper shorting FC REC to GND",
         "Remove the USB-C cable",
-        "Leave the serial console adapter connected",
+        "Leave the Micro USB cable connected for the serial console",
         "Apply power"
       ],
       "bootNote": "The device will boot with the provisioned system. Log in as root with an empty password via the serial console.",
       "recoveryMode": {
+        "reference": {
+          "label": "NVIDIA Jetson AGX Orin Developer Kit hardware layout",
+          "url": "https://docs.nvidia.com/jetson/agx-orin-devkit/user-guide/1.0/hardware-layout.html"
+        },
         "steps": [
-          "With the device powered off, short the FC REC pin to GND using a jumper",
-          "Connect the USB-C cable from the Jetson to your host machine",
-          "Apply power to the Jetson"
+          {
+            "text": "Connect a Micro USB cable from the Jetson's debug port to your host for the UART console. The host will enumerate multiple serial devices — the first one is the UART console.",
+            "images": [
+              {
+                "src": "/img/jetson-agx-orin-devkit/uart-micro-usb.png",
+                "alt": "Micro USB debug port for the UART console"
+              }
+            ]
+          },
+          {
+            "text": "Connect a USB-C cable from the Jetson to your host for flashing.",
+            "images": [
+              {
+                "src": "/img/jetson-agx-orin-devkit/usb-c-flashing.png",
+                "alt": "USB-C port used for flashing the Jetson"
+              }
+            ]
+          },
+          {
+            "text": "Press and hold both the Reset button and the Force Recovery button on the back of the Jetson.",
+            "images": [
+              {
+                "src": "/img/jetson-agx-orin-devkit/reset-button.png",
+                "alt": "Reset button on the back of the Jetson AGX Orin Developer Kit"
+              },
+              {
+                "src": "/img/jetson-agx-orin-devkit/force-recovery-button.png",
+                "alt": "Force Recovery button on the back of the Jetson AGX Orin Developer Kit"
+              }
+            ]
+          },
+          {
+            "text": "Release the Reset button. Wait 2-3 seconds, then release the Force Recovery button."
+          }
         ],
         "verifyCommand": "lsusb",
         "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
@@ -227,21 +261,9 @@
       "warnings": ["linuxAutoMount", "linuxHostOnly"]
     },
     "serial": {
+      "kind": "onboard-micro-usb",
       "baud": 115200,
-      "voltage": "3.3V",
-      "command": "tio -b 115200 /dev/ttyUSB0",
-      "gpio": [
-        {
-          "color": "#cccc00",
-          "label": "yellow",
-          "pin": "FC REC",
-          "to": "GND",
-          "note": "recovery mode"
-        },
-        { "color": "#00aa00", "label": "green", "pin": "GND", "to": "adapter UART GND" },
-        { "color": "#0000cc", "label": "blue", "pin": "UART TXD", "to": "adapter UART RX" },
-        { "color": "#cc00cc", "label": "violet", "pin": "UART RXD", "to": "adapter UART TX" }
-      ]
+      "command": "tio -b 115200 /dev/ttyUSB0"
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/nvidia/jetson-agx-orin"

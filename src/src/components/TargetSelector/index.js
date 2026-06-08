@@ -159,11 +159,19 @@ export default function TargetSelector() {
           {t.serial && (
             <>
               <Heading as="h2">Serial Console</Heading>
-              <p>
-                Connect a TTY serial console USB adapter (
-                <Link href="https://www.amazon.com/dp/B07WX2DSVB">this or similar</Link>) to your
-                target. The adapter must be set to {t.serial.voltage}.
-              </p>
+              {t.serial.kind === 'onboard-micro-usb' ? (
+                <p>
+                  The Jetson exposes its UART console over a debug Micro USB port — no TTL adapter
+                  is required. Once the Micro USB cable is connected to your host, the host
+                  enumerates several serial devices; the UART console is the first one enumerated.
+                </p>
+              ) : (
+                <p>
+                  Connect a TTY serial console USB adapter (
+                  <Link href="https://www.amazon.com/dp/B07WX2DSVB">this or similar</Link>) to your
+                  target. The adapter must be set to {t.serial.voltage}.
+                </p>
+              )}
               {t.serial.gpio && (
                 <>
                   <p>Locate the GPIO pins on your board:</p>
@@ -231,7 +239,10 @@ export default function TargetSelector() {
                 <code>{t.serial.command}</code>
               </pre>
               <p>
-                Replace <code>/dev/ttyUSB0</code> with the appropriate device path for your adapter.
+                Replace <code>/dev/ttyUSB0</code> with the appropriate device path
+                {t.serial.kind === 'onboard-micro-usb'
+                  ? ' enumerated on your host (the first of the Jetson serial devices).'
+                  : ' for your adapter.'}
               </p>
             </>
           )}
@@ -240,10 +251,56 @@ export default function TargetSelector() {
             <>
               <Heading as="h2">Boot into Recovery Mode</Heading>
               <p>To flash the device, it must be in USB recovery mode:</p>
+              {t.provisioning.recoveryMode.reference && (
+                <p>
+                  See{' '}
+                  <Link
+                    href={t.provisioning.recoveryMode.reference.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t.provisioning.recoveryMode.reference.label}
+                  </Link>{' '}
+                  for the full hardware reference.
+                </p>
+              )}
               <ol>
-                {t.provisioning.recoveryMode.steps.map((step, i) => (
-                  <li key={i}>{step}</li>
-                ))}
+                {t.provisioning.recoveryMode.steps.map((step, i) => {
+                  // Each step is either a plain string (legacy Nano-style) or
+                  // an object `{ text, images? }` where `images` is an array
+                  // of `{ src, alt }` rendered inline beneath the step text.
+                  const text = typeof step === 'string' ? step : step.text
+                  const images = typeof step === 'string' ? null : step.images
+                  return (
+                    <li key={i}>
+                      {text}
+                      {images && images.length > 0 && (
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '0.75rem',
+                            margin: '0.5rem 0',
+                          }}
+                        >
+                          {images.map((img, j) => (
+                            <img
+                              key={j}
+                              src={img.src}
+                              alt={img.alt}
+                              style={{
+                                maxWidth: '320px',
+                                width: '100%',
+                                height: 'auto',
+                                borderRadius: '8px',
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </li>
+                  )
+                })}
               </ol>
               <p>Verify the device is detected:</p>
               <pre>

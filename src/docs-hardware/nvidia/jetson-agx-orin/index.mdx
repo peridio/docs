@@ -26,7 +26,7 @@ import HardwareHero from '@site/src/components/HardwareHero'
   ctas={{
     primary: {
       label: 'Get Started',
-      to: '/developer-reference/getting-started/any-target',
+      to: '/developer-reference/getting-started/any-target#jetson-agx-orin-devkit',
     },
   }}
 />
@@ -100,7 +100,7 @@ Seamless integration across NVIDIA ecosystem (Isaac, DeepStream, Triton) and clo
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `jetson-agx-orin-devkit`. The provisioning specifics are below.
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target#jetson-agx-orin-devkit) instructions under Getting Started to begin. This target is `jetson-agx-orin-devkit`. The provisioning specifics are below.
 
 ### Provision
 
@@ -113,6 +113,8 @@ avocado provision -r dev --profile tegraflash
 
 ### Run
 
-After provisioning completes, remove the USB-C cable and any recovery mode jumpers, then apply power to the device.
+Power-cycle the device. It will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
 
-The device will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
+---
+
+Ready to build? Head to the [Jetson AGX Orin DevKit getting started guide](/developer-reference/getting-started/any-target#jetson-agx-orin-devkit).
