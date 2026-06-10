@@ -3,7 +3,14 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   hardware: [
-    'support-matrix',
+    {
+      type: 'category',
+      label: 'Support Matrix',
+      collapsible: false,
+      collapsed: false,
+      link: { type: 'doc', id: 'support-matrix' },
+      items: ['hardware-not-supported'],
+    },
     {
       type: 'category',
       label: 'NVIDIA',

@@ -8,7 +8,7 @@ const sidebars = {
       label: 'About Avocado OS',
       collapsible: false,
       collapsed: false,
-      items: ['resources', 'about', 'features', 'core-concepts'],
+      items: ['resources', 'about', 'features', 'core-concepts', 'community'],
     },
     {
       type: 'category',
