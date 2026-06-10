@@ -52,6 +52,14 @@ html {
   text-decoration-color: #fff;
 }
 
+/* "Request New Hardware Support" page — make in-content links obviously purple.
+   --ifm-color-primary is theme-adjusted (brand-700 light / brand-400 dark). */
+.docs-doc-id-request-new-hardware .theme-doc-markdown a {
+  color: var(--ifm-color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
 h2,
 .schema-container h2 {
   font-family: "Spline Sans", sans-serif;
@@ -479,6 +487,30 @@ button[title="Collapse sidebar"],
   background-color: transparent !important;
   border-left: none !important;
   padding-left: var(--ifm-menu-link-padding-horizontal) !important;
+}
+
+/* …but a top-level category that LINKS to a real page (e.g. Support Matrix) must
+   still show the active accent when you're on that page. `aria-current="page"`
+   appears only on the genuinely-active link — never on linkless section headers
+   that merely contain an active descendant, and never on this header when one of
+   its child pages is active — so it cleanly re-enables the highlight without
+   undoing the suppression above. Header weight/size are inherited from that rule. */
+.theme-doc-sidebar-menu
+  > .menu__list-item
+  > .menu__list-item-collapsible
+  > .menu__link--active[aria-current="page"] {
+  color: var(--ifm-color-primary) !important;
+  background-color: rgba(52, 36, 238, 0.06) !important;
+  border-left: 3px solid var(--ifm-color-primary) !important;
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px) !important;
+}
+
+html[data-theme="dark"]
+  .theme-doc-sidebar-menu
+  > .menu__list-item
+  > .menu__list-item-collapsible
+  > .menu__link--active[aria-current="page"] {
+  background-color: rgba(123, 111, 240, 0.1) !important;
 }
 
 /* Nested (collapsible) category labels — match regular child items */

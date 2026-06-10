@@ -9,7 +9,7 @@ const sidebars = {
       collapsible: false,
       collapsed: false,
       link: { type: 'doc', id: 'support-matrix' },
-      items: ['hardware-not-supported'],
+      items: ['request-new-hardware'],
     },
     {
       type: 'category',
