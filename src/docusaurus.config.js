@@ -115,7 +115,7 @@ const config = {
             to: '/',
             label: 'Product Documentation',
             position: 'left',
-            activeBaseRegex: '^/(about|features|core-concepts|security|faqs|policies)?$',
+            activeBaseRegex: '^/(about|features|core-concepts|community|security|faqs|policies)?$',
           },
           {
             to: '/hardware/support-matrix',
