@@ -60,6 +60,13 @@ html {
   text-decoration: underline;
 }
 
+/* Keep the underline the link color on hover — the global
+   `.theme-doc-markdown a:hover` repaints it white, which would make it
+   disappear on the light background. */
+.docs-doc-id-request-new-hardware .theme-doc-markdown a:hover {
+  text-decoration-color: var(--ifm-color-primary);
+}
+
 h2,
 .schema-container h2 {
   font-family: "Spline Sans", sans-serif;

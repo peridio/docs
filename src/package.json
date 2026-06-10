@@ -78,6 +78,6 @@
   },
   "overrides": {
     "prismjs": "1.29.0",
-    "shell-quote": "^1.8.4"
+    "shell-quote": "1.8.4"
   }
 }
