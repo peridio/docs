@@ -1,0 +1,40 @@
+---
+title: "Pulling the power 200 times mid-OTA on an Orin NX"
+description: "200 scripted power cuts at random points during an A/B OTA update. Zero bricks at steady state — and the two early failures weren't where we expected."
+date: 2026-06-30
+authors: [jschneck]
+tags: [ota, rollback, jetson, orin-nx]
+tested_against: "Avocado 1.0.0, JetPack 7.2, Orin NX 16GB"
+hn_title: "We cut power 200 times mid-update on a Jetson. Here's what bricked."
+poster: jschneck
+lift_for_blog: "Zero bricks across 200 forced failures — the 100-device-wall fear, quantified, for the budget holder."
+promote_to_track: "Tutorial 4 candidate — the 'break it on purpose' step."
+---
+
+import TestedAgainst from '@site/src/components/TestedAgainst';
+
+<TestedAgainst avocado="1.0.0" jetpack="7.2" boards={['Orin NX 16GB']} />
+
+**TL;DR.** We scripted 200 power cuts at random points during an A/B OTA update on an Orin NX. Zero bricks — every device booted the last-known-good slot. Two early runs did fail, and the cause wasn't the bootloader.
+
+{/* truncate */}
+
+## What this is
+
+Peridio builds Avocado OS, an immutable embedded Linux runtime for devices like NVIDIA Jetson. Its updates are A/B and atomic: a failed or interrupted update should always fall back to the previously working slot. We wanted to know how literally true "always" is, so we tried to break it on purpose.
+
+## How we did it
+
+[Relay-controlled PSU, the update payload, the randomized power-cut harness, commands + output.]
+
+## What we learned
+
+[200 forced interruptions, zero bricks at steady state; what the boot logs show on recovery.]
+
+## What didn't work
+
+[Two early failures traced to a data-partition sync gap, not the OS slots; the fix and why it mattered.]
+
+## Reproduce it
+
+[Link to the power-cycle harness repo + step-by-step.]

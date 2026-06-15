@@ -57,6 +57,26 @@ const config = {
         breadcrumbs: true,
       },
     ],
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'field-notes',
+        routeBasePath: 'field-notes',
+        path: 'field-notes',
+        blogTitle: 'Field Notes',
+        blogDescription: 'Dense technical notes from the Peridio engineering team.',
+        showReadingTime: true,
+        postsPerPage: 20,
+        blogSidebarCount: 0,
+        authorsMapPath: 'authors.yml',
+        exclude: ['CONTRIBUTING.md', '_template.mdx'],
+        feedOptions: {
+          type: 'all',
+          title: 'Peridio Field Notes',
+          description: 'Engineering notes from Peridio',
+        },
+      },
+    ],
     ...(process.env.NODE_ENV === 'production'
       ? [
           [
@@ -128,6 +148,12 @@ const config = {
             label: 'Developer Reference',
             position: 'left',
             activeBasePath: 'developer-reference',
+          },
+          {
+            to: '/field-notes',
+            label: 'Field Notes',
+            position: 'left',
+            activeBasePath: 'field-notes',
           },
           {
             to: '/changelog/latest',
@@ -232,6 +258,13 @@ const config = {
       attributes: {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&family=Spline+Sans:wght@300..700&display=swap',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&display=swap',
       },
     },
     {
