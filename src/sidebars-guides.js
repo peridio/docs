@@ -74,6 +74,14 @@ const sidebars = {
       ],
     },
     'meta-avocado',
+    {
+      type: 'category',
+      label: 'MCP',
+      collapsible: false,
+      collapsed: false,
+      link: { type: 'doc', id: 'mcp/installation' },
+      items: ['mcp/installation', 'mcp/usage'],
+    },
   ],
 }
 
