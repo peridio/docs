@@ -19,7 +19,10 @@ const config = {
   organizationName: 'peridio',
   projectName: 'peridio-docs',
   trailingSlash: false,
-  clientModules: ['./src/clientModules/copyInlineCode.js'],
+  clientModules: [
+    './src/clientModules/copyInlineCode.js',
+    './src/clientModules/fieldNotesGate.js',
+  ],
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -77,6 +80,9 @@ const config = {
         },
       },
     ],
+    // Must run after the field-notes blog plugin so its postBuild
+    // sees (and deletes) the rss/atom/json feed files.
+    './plugins/field-notes-preview-gate',
     ...(process.env.NODE_ENV === 'production'
       ? [
           [
@@ -224,6 +230,35 @@ const config = {
         // Options: 'peridio' (purple, default), 'avocado' (green), 'alt' (blue)
         // To switch: change the value below and rebuild
         // document.documentElement.setAttribute('data-site-theme', 'avocado');
+      `,
+    },
+    {
+      // Synchronous /field-notes gate. Runs in <head> before any paint,
+      // so visitors without the preview flag never see field-notes content.
+      // The companion clientModule (fieldNotesGate.js) handles the body
+      // class for the navbar link; this is just the redirect.
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `
+        (function () {
+          if (typeof window === 'undefined') return;
+          var path = window.location.pathname;
+          if (path !== '/field-notes' && path.indexOf('/field-notes/') !== 0) return;
+          try {
+            var params = new URLSearchParams(window.location.search);
+            var flag = params.get('preview');
+            if (flag === '1') {
+              window.sessionStorage.setItem('peridio:fn-preview', '1');
+              return;
+            }
+            if (flag === '0') {
+              window.sessionStorage.removeItem('peridio:fn-preview');
+            } else if (window.sessionStorage.getItem('peridio:fn-preview') === '1') {
+              return;
+            }
+          } catch (e) { /* sessionStorage unavailable — fall through to redirect */ }
+          window.location.replace('/');
+        })();
       `,
     },
     {
