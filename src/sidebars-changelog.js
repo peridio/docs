@@ -5,10 +5,24 @@ const sidebars = {
   changelog: [
     {
       type: 'category',
+      label: 'June 2026',
+      collapsible: false,
+      collapsed: false,
+      items: ['june-2026/0.41.0'],
+    },
+    {
+      type: 'category',
       label: 'May 2026',
       collapsible: false,
       collapsed: false,
-      items: ['may-2026/0.40.0', 'may-2026/0.39.0', 'may-2026/0.38.0', 'may-2026/0.37.1'],
+      items: [
+        'may-2026/0.40.2',
+        'may-2026/0.40.1',
+        'may-2026/0.40.0',
+        'may-2026/0.39.0',
+        'may-2026/0.38.0',
+        'may-2026/0.37.1',
+      ],
     },
     {
       type: 'category',
