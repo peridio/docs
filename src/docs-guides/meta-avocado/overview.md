@@ -1,12 +1,10 @@
 ---
-title: 'Meta Avocado'
-sidebar_position: 9
+title: 'Overview'
+sidebar_position: 1
 description: 'Avocado distro layer for Yocto — immutable Linux distribution built on systemd with BSP layers for NVIDIA, NXP, Raspberry Pi, Qualcomm, and more.'
 ---
 
 <a href="https://github.com/avocado-linux/meta-avocado" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Source_Code-GitHub-7b6ff0?logo=github&logoColor=white&style=for-the-badge" alt="Source Code on GitHub" /></a>
-
-# Meta Avocado
 
 Meta Avocado is the Yocto distro layer that powers Avocado OS. It's the build infrastructure that compiles the package feeds, kernels, BSPs, and SDK toolchains that the Avocado CLI consumes. Most users never interact with it directly — this is the layer Avocado maintains so you don't have to.
 

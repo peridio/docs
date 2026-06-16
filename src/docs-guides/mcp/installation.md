@@ -12,7 +12,7 @@ It's [open source](https://github.com/avocado-linux/avocado-mcp), runs locally o
 
 ## Prerequisites
 
-- **Node.js ≥ 18** — the server runs via `npx`. On first run, `npx` clones the repo, installs dependencies, and builds it (~30s); subsequent runs start instantly from cache.
+- **Node.js ≥ 18** — the server runs via `npx`. On first run, `npx` downloads the package, installs its dependencies, and builds it (~30s); subsequent runs start instantly from cache.
 - An **MCP-capable client** (Claude Code, Claude Desktop, OpenAI Codex, Cursor, etc.).
 - For building, provisioning, and deploying to real hardware, you'll also want the **Avocado CLI and Docker** installed — see [Getting Started](/developer-reference/getting-started). The MCP drives the CLI on your behalf.
 
