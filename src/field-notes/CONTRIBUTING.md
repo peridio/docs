@@ -1,8 +1,24 @@
 # Contributing to Field Notes
 
-Field Notes is a stream of dense, dated, engineer-voice technical entries. It's the source of truth — marketing repurposes strong notes into blog posts downstream, and the best ones get sequenced into a curated learning track later.
+## Purpose
+
+Field Notes is the surface where a skeptical embedded engineer sees real, reproducible proof that Avocado OS does the hard things — and it's the raw source that feeds HN, Reddit, and everything we repurpose downstream.
 
 Field Notes is *true*. The blog is *pretty*. Don't mix them up.
+
+## Goals
+
+- **Build engineer trust and create internal champions** — be where an IC sees the proof and decides to bring us in.
+- **Demonstrate the product doing hard things, reproducibly** — demos and hands-on guides (flashing containers on a Jetson, OTA rollback, JetPack migration) an engineer can run themselves.
+- **Be the primary-source artifact for the engineer channels** — written to go raw to HN/Reddit and to rank for technical long-tail.
+- **Feed the rest of the system** — the source material marketing lifts into blog narratives and that gets promoted into the curated track.
+
+## In scope
+
+- Technical developer content.
+- Raw demos (clips and terminal casts).
+- Reproducible how-tos and standalone guides (e.g. "flashing containers on Jetson").
+- "What we tried, what broke" experiments.
 
 ## How to write a note
 
