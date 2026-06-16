@@ -1189,11 +1189,14 @@ html[data-theme="dark"] {
 }
 
 /* The inner author row uses bootstrap .row too. Stop our outer flex
-   override from leaking down to it. */
+   override from leaking down to it, and zero the row's default -16px
+   margin so the author block aligns flush with the title above. */
 .plugin-id-field-notes article > header .row {
   display: block !important;
   margin-top: 0.25rem !important;
   margin-bottom: 0.75rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   gap: 0 !important;
 }
 
