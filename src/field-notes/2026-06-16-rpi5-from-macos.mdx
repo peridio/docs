@@ -1,23 +1,25 @@
 ---
-title: "Provisioning a Raspberry Pi from macOS natively, no Linux VM and no USB passthrough"
-description: "Flashing embedded boards from a Mac usually means a Linux VM and fragile USB passthrough. The Avocado Desktop preview provisions a Raspberry Pi 5 natively from macOS, so there is no VM to babysit and no passthrough to drop."
+title: 'Provisioning a Raspberry Pi from macOS natively, no Linux VM and no USB passthrough'
+description: 'Flashing embedded boards from a Mac usually means a Linux VM and fragile USB passthrough. The Avocado Desktop preview provisions a Raspberry Pi 5 natively from macOS, so there is no VM to babysit and no passthrough to drop.'
 date: 2026-06-16
 authors: [jschneck]
 tags: [rpi5, provisioning, macos, usb, preview]
-tested_against: "Avocado [ENGINEER: preview version], Raspberry Pi 5, macOS host [ENGINEER: macOS version and chip, Apple Silicon or Intel]"
-hn_title: "Provisioning a Raspberry Pi from macOS natively, no Linux VM (Avocado Desktop preview)"
+tested_against: 'Avocado [ENGINEER: preview version], Raspberry Pi 5, macOS host [ENGINEER: macOS version and chip, Apple Silicon or Intel]'
+hn_title: 'Provisioning a Raspberry Pi from macOS natively, no Linux VM (Avocado Desktop preview)'
 poster: jschneck
-lift_for_blog: "The Linux-VM-and-USB-passthrough dance for flashing boards from a Mac, removed: native provisioning on the laptop the engineer already owns."
-promote_to_track: "Tutorial candidate: native macOS provisioning of a Pi 5 as the first device bring-up on the on-ramp."
+lift_for_blog: 'The Linux-VM-and-USB-passthrough dance for flashing boards from a Mac, removed: native provisioning on the laptop the engineer already owns.'
+promote_to_track: 'Tutorial candidate: native macOS provisioning of a Pi 5 as the first device bring-up on the on-ramp.'
 ---
 
-import TestedAgainst from '@site/src/components/TestedAgainst';
+import TestedAgainst from '@site/src/components/TestedAgainst'
 
 <div style={{ aspectRatio: '16 / 9', marginBottom: '1.5rem' }}>
   <iframe
     style={{ width: '100%', height: '100%', border: 0 }}
     src="https://www.youtube.com/embed/vrIe4CzTavs"
     title="Provisioning a Raspberry Pi 5 from macOS with Avocado Desktop"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     allowFullScreen
   />

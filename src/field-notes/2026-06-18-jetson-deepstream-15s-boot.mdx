@@ -1,19 +1,23 @@
 ---
-title: "Five-model DeepStream pipeline on a Jetson Orin Nano that boots to a live dashboard in 15 seconds"
-description: "Five sequential AI models — PeopleNet, NvDCF tracker, MoveNet pose, YOLOX hand detection, MediaPipe hand landmarks — running natively on a Jetson Orin Nano. The trick to skipping the 12-minute first-boot TensorRT compile: ship the engines inside the OTA payload, not just the ONNX."
+title: 'Five-model DeepStream pipeline on a Jetson Orin Nano that boots to a live dashboard in 15 seconds'
+description: 'Five sequential AI models — PeopleNet, NvDCF tracker, MoveNet pose, YOLOX hand detection, MediaPipe hand landmarks — running natively on a Jetson Orin Nano. The trick to skipping the 12-minute first-boot TensorRT compile: ship the engines inside the OTA payload, not just the ONNX.'
 date: 2026-06-18
 authors: [jschneck]
 tags: [jetson, deepstream, tensorrt, ota, computer-vision]
-tested_against: "Avocado [ENGINEER: version], DeepStream 7.1, JetPack [ENGINEER: version], [ENGINEER: Jetson Orin Nano DevKit and/or AGX Orin DevKit]"
-hn_title: "We ship the TensorRT engines in the OTA so the Jetson DeepStream pipeline boots in 15s, not 12 min"
+tested_against: 'Avocado [ENGINEER: version], DeepStream 7.1, JetPack [ENGINEER: version], [ENGINEER: Jetson Orin Nano DevKit and/or AGX Orin DevKit]'
+hn_title: 'We ship the TensorRT engines in the OTA so the Jetson DeepStream pipeline boots in 15s, not 12 min'
 poster: jschneck
-lift_for_blog: "The 12-minute first-boot compile is the canonical DeepStream-on-Jetson pain. Pre-building engines per target and shipping them in the sysext (with size-compare invalidation across OTAs) is the part nobody else does, and the part that makes the demo a demo and not a wait."
-promote_to_track: "Tutorial candidate after the Pi 5 native-USB and the var-seeding notes: the multi-model Jetson reference, with the engine-shipping trick explained inline rather than left to the reader to discover."
+lift_for_blog: 'The 12-minute first-boot compile is the canonical DeepStream-on-Jetson pain. Pre-building engines per target and shipping them in the sysext (with size-compare invalidation across OTAs) is the part nobody else does, and the part that makes the demo a demo and not a wait.'
+promote_to_track: 'Tutorial candidate after the Pi 5 native-USB and the var-seeding notes: the multi-model Jetson reference, with the engine-shipping trick explained inline rather than left to the reader to discover.'
 ---
 
-import TestedAgainst from '@site/src/components/TestedAgainst';
+import TestedAgainst from '@site/src/components/TestedAgainst'
 
-<TestedAgainst avocado="[ENGINEER: version]" jetpack="[ENGINEER: JetPack version]" boards={['Jetson Orin Nano DevKit', '[ENGINEER: AGX Orin DevKit if also tested]']} />
+<TestedAgainst
+  avocado="[ENGINEER: version]"
+  jetpack="[ENGINEER: JetPack version]"
+  boards={['Jetson Orin Nano DevKit', '[ENGINEER: AGX Orin DevKit if also tested]']}
+/>
 
 **TL;DR.** A multi-model DeepStream pipeline on Jetson normally spends 6–12 minutes on first boot compiling TensorRT engines from ONNX before it can show anything. We build the engines once on the target hardware, commit them per-target into the reference repo, ship them inside the sysext, and have the device serve the live MJPEG dashboard ~10–15 seconds after power-on. [ENGINEER: confirm the boot-to-dashboard time you actually measured, and on which board.]
 
@@ -21,16 +25,16 @@ import TestedAgainst from '@site/src/components/TestedAgainst';
 
 ## Why first boot is the bottleneck
 
-A TensorRT engine is a hardware-specific blob — pinned to the GPU's compute capability, SM count, memory hierarchy, and the exact CUDA + TRT version. The DeepStream-canonical pattern is to ship the ONNX model and let `nvinfer` build the engine on the device the first time the pipeline starts. Which is fine, except the build-time tactic search for a real model is *long*.
+A TensorRT engine is a hardware-specific blob — pinned to the GPU's compute capability, SM count, memory hierarchy, and the exact CUDA + TRT version. The DeepStream-canonical pattern is to ship the ONNX model and let `nvinfer` build the engine on the device the first time the pipeline starts. Which is fine, except the build-time tactic search for a real model is _long_.
 
 For the reference's five-model stack, on an Orin Nano, with no pre-built engines:
 
-| Model | First-boot fallback build |
-| --- | --- |
-| PeopleNet (ResNet34, FP16) | ~30–60 s |
-| MoveNet (single-pose Lightning) | ~2 min |
-| MediaPipe Hand Landmark (sparse 224×224) | ~60 s |
-| YOLOX-Body-Head-Hand (320×320, FP16) | ~6–7 min |
+| Model                                    | First-boot fallback build |
+| ---------------------------------------- | ------------------------- |
+| PeopleNet (ResNet34, FP16)               | ~30–60 s                  |
+| MoveNet (single-pose Lightning)          | ~2 min                    |
+| MediaPipe Hand Landmark (sparse 224×224) | ~60 s                     |
+| YOLOX-Body-Head-Hand (320×320, FP16)     | ~6–7 min                  |
 
 That's 10–12 minutes of a brand-new device sitting there with no display, no logs the customer can read, no port 8080. "Did it boot? Did it brick?" Anyone who has demoed a Jetson model in front of an audience has felt that minute hand.
 

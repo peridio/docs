@@ -4,7 +4,7 @@
 
 Field Notes is the surface where a skeptical embedded engineer sees real, reproducible proof that Avocado OS does the hard things — and it's the raw source that feeds HN, Reddit, and everything we repurpose downstream.
 
-Field Notes is *true*. The blog is *pretty*. Don't mix them up.
+Field Notes is _true_. The blog is _pretty_. Don't mix them up.
 
 ## Goals
 
@@ -32,23 +32,23 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 
 ## Frontmatter fields
 
-| Field | Required | Rendered | Purpose |
-|---|---|---|---|
-| `title` | yes | yes | The note title |
-| `date` | yes | yes | The dated contract — "true as of this date" |
-| `authors` | yes | yes | Real engineer keys from `authors.yml` |
-| `tags` | yes | yes | Target (`orin-nx`, `imx`, `rpi5`…) + topic (`ota`, `yocto`, `security`, `mcp`…) |
-| `tested_against` | when applicable | yes (via `<TestedAgainst>`) | Avocado + JetPack/board versions |
-| `hn_title` | no | **no** | Suggested HN submission title |
-| `poster` | no | **no** | Engineer who submits to HN and is on-call in comments for ~24h |
-| `lift_for_blog` | no | **no** | One-line business-case angle for the blog (champion → approver) |
-| `promote_to_track` | no | **no** | Flag + note if this is curated-track on-ramp material |
+| Field              | Required        | Rendered                    | Purpose                                                                         |
+| ------------------ | --------------- | --------------------------- | ------------------------------------------------------------------------------- |
+| `title`            | yes             | yes                         | The note title                                                                  |
+| `date`             | yes             | yes                         | The dated contract — "true as of this date"                                     |
+| `authors`          | yes             | yes                         | Real engineer keys from `authors.yml`                                           |
+| `tags`             | yes             | yes                         | Target (`orin-nx`, `imx`, `rpi5`…) + topic (`ota`, `yocto`, `security`, `mcp`…) |
+| `tested_against`   | when applicable | yes (via `<TestedAgainst>`) | Avocado + JetPack/board versions                                                |
+| `hn_title`         | no              | **no**                      | Suggested HN submission title                                                   |
+| `poster`           | no              | **no**                      | Engineer who submits to HN and is on-call in comments for ~24h                  |
+| `lift_for_blog`    | no              | **no**                      | One-line business-case angle for the blog (champion → approver)                 |
+| `promote_to_track` | no              | **no**                      | Flag + note if this is curated-track on-ramp material                           |
 
-`hn_title`, `poster`, `lift_for_blog`, and `promote_to_track` are editorial metadata. They never render to readers, but they live in frontmatter so the team can grep them:
+`hn_title`, `poster`, `lift_for_blog`, and `promote_to_track` are editorial metadata. They never render to readers, but they live in frontmatter so the team can grep them. Run from `src/field-notes/`:
 
 ```bash
-grep -l "^hn_title:" field-notes/*.mdx
-grep -l "^promote_to_track: \"[^\"]" field-notes/*.mdx
+grep -l "^hn_title:" *.mdx
+grep -l "^promote_to_track: \"[^\"]" *.mdx
 ```
 
 ## HN-readiness rules
@@ -62,7 +62,7 @@ grep -l "^promote_to_track: \"[^\"]" field-notes/*.mdx
 ## Posting to HN / Reddit / Lobsters
 
 - **Disclose.** When you submit, state plainly in the first comment: "I work on this." Non-negotiable. It prevents the astroturf backlash that buries an otherwise good post.
-- **Be on-call for ~24h.** The `poster` is the engineer who submits *and* answers comments. Don't post and disappear.
+- **Be on-call for ~24h.** The `poster` is the engineer who submits _and_ answers comments. Don't post and disappear.
 - **Select, don't spray.** HN throttles domains that self-submit too often and flags obvious marketing. Post only genuinely strong notes; let the rest live in the feed. A few great ones a quarter beats a steady drip.
 
 ## Light review gate

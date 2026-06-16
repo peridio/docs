@@ -1,19 +1,23 @@
 ---
-title: "Shipping a device that runs its containers on first boot, with no internet"
+title: 'Shipping a device that runs its containers on first boot, with no internet'
 description: "Avocado pre-pulls container images into the device's writable /var at build time, inside a temporary dockerd running inside the SDK container. The device boots offline and starts its stack on first power-on, no registry pull needed."
 date: 2026-06-17
 authors: [jschneck]
 tags: [var, docker, offline-first, build, provisioning]
-tested_against: "Avocado [ENGINEER: version], SDK [ENGINEER: image:tag], [ENGINEER: board(s) verified — e.g. Raspberry Pi 5, Jetson Orin NX]"
+tested_against: 'Avocado [ENGINEER: version], SDK [ENGINEER: image:tag], [ENGINEER: board(s) verified — e.g. Raspberry Pi 5, Jetson Orin NX]'
 hn_title: "We pre-seed an embedded device's /var partition with its Docker cache at build time"
 poster: jschneck
 lift_for_blog: "The 'factory floor with no internet' problem: every Avocado device ships with its container images already in /var, so first power-on starts the stack without a registry pull."
-promote_to_track: "Tutorial candidate after the Pi 5 bring-up: declaring docker_images on an extension and watching the cache come up populated on the device."
+promote_to_track: 'Tutorial candidate after the Pi 5 bring-up: declaring docker_images on an extension and watching the cache come up populated on the device.'
 ---
 
-import TestedAgainst from '@site/src/components/TestedAgainst';
+import TestedAgainst from '@site/src/components/TestedAgainst'
 
-<TestedAgainst avocado="[ENGINEER: version]" jetpack="" boards={['[ENGINEER: board(s) verified]']} />
+<TestedAgainst
+  avocado="[ENGINEER: version]"
+  jetpack=""
+  boards={['[ENGINEER: board(s) verified]']}
+/>
 
 **TL;DR.** A long-standing pain in embedded is that a device booting on a factory floor, behind a customer firewall, or in the field can't reliably reach a container registry — so any stack that relies on `docker pull` to start is dead on arrival. We bake the image cache into the device's writable partition at build time, so on first power-on the containers are already there. [ENGINEER: confirm with a real first-boot log and the install-to-running-stack time on the board you used.]
 
@@ -39,18 +43,18 @@ extensions:
       - image: docker.io/library/nginx
         tag: '1.25'
     var_files:
-      - var/lib/docker/**   # keep this out of the read-only .raw
+      - var/lib/docker/** # keep this out of the read-only .raw
 ```
 
 During `avocado build`, the CLI sees `docker_images` on an extension and:
 
 1. Adds `--privileged` to the SDK container args (required for Docker-in-Docker)
-2. Starts a temporary `dockerd` *inside* the SDK container, with its data-root pointed at the staging area that will become the device's `/var`
+2. Starts a temporary `dockerd` _inside_ the SDK container, with its data-root pointed at the staging area that will become the device's `/var`
 3. Pulls each declared image for the target architecture (`linux/arm64`, `linux/amd64`, …)
 4. Shuts down the temporary `dockerd`
 5. Packs the now-populated Docker data-root into the var partition image
 
-The `var_files: var/lib/docker/**` on the extension is the other half of the trick. Without it, `avocado ext image` would helpfully bake the Docker storage directory into the read-only erofs image, which is exactly what you do *not* want — Docker needs to write to that directory on the device. The exclusion tells `ext image` to leave it out of the read-only `.raw` so the writable copy on `/var` is the one Docker sees.
+The `var_files: var/lib/docker/**` on the extension is the other half of the trick. Without it, `avocado ext image` would helpfully bake the Docker storage directory into the read-only erofs image, which is exactly what you do _not_ want — Docker needs to write to that directory on the device. The exclusion tells `ext image` to leave it out of the read-only `.raw` so the writable copy on `/var` is the one Docker sees.
 
 [ENGINEER: paste the relevant snippet of `avocado build` output that shows the dockerd-in-SDK pull happening, and the line where it finalizes the var partition image.]
 
@@ -66,7 +70,7 @@ The `var_files: var/lib/docker/**` on the extension is the other half of the tri
 
 ## What's also worth knowing
 
-Same `var_files` mechanism on a runtime block lets you seed *any* static file onto `/var` at build time — TLS certs, default app config, seed data for an embedded database, anything the device needs writable on first boot. Docker is just the loudest case because of the multi-gigabyte cache size and the cost of pulling it again.
+Same `var_files` mechanism on a runtime block lets you seed _any_ static file onto `/var` at build time — TLS certs, default app config, seed data for an embedded database, anything the device needs writable on first boot. Docker is just the loudest case because of the multi-gigabyte cache size and the cost of pulling it again.
 
 ```yaml
 runtimes:
@@ -84,11 +88,12 @@ The seeding-var guide in the docs has the full configuration reference: [Seeding
 ## What didn't work
 
 [ENGINEER: required, and the most credible part of this note. Real failure modes I'd ask you to consider:
+
 - A glob in `var_files` that was too narrow and let Docker storage leak into the read-only `.raw`, which surfaces as a confusing erofs-write error at runtime rather than a build failure.
 - Multi-arch pulls picking the wrong platform when the SDK and target architecture don't match, especially on Apple Silicon hosts pulling `linux/arm64` into the SDK.
 - SDK images missing `dockerd` / `containerd` / `runc`, which only shows up the moment the privileged step kicks in.
 - The var partition staging size blowing past a sensible default and the build erroring out late.
-Pick the one you actually hit and write the diagnosis + the fix. If nothing broke, say across how many runs and what you'd still expect to bite someone.]
+  Pick the one you actually hit and write the diagnosis + the fix. If nothing broke, say across how many runs and what you'd still expect to bite someone.]
 
 ## Reproduce it
 

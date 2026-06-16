@@ -21,8 +21,14 @@ const NOINDEX_META = '<meta name="robots" content="noindex,nofollow">'
 
 function injectNoindex(filePath) {
   let html = fs.readFileSync(filePath, 'utf8')
-  if (html.includes('name="robots"')) return
-  html = html.replace('</head>', `${NOINDEX_META}</head>`)
+  // Replace any existing robots meta (e.g. an index,follow one another plugin
+  // might emit) rather than skipping — we want noindex,nofollow to win.
+  const existing = /<meta[^>]+name=["']robots["'][^>]*>/i
+  if (existing.test(html)) {
+    html = html.replace(existing, NOINDEX_META)
+  } else {
+    html = html.replace('</head>', `${NOINDEX_META}</head>`)
+  }
   fs.writeFileSync(filePath, html)
 }
 
@@ -50,7 +56,6 @@ module.exports = function fieldNotesPreviewGatePlugin() {
       if (fs.existsSync(listPage)) {
         injectNoindex(listPage)
       }
-
     },
   }
 }

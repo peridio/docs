@@ -1,4 +1,2 @@
 User-agent: *
 Allow: /
-Disallow: /field-notes
-Disallow: /field-notes/

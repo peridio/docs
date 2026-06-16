@@ -19,10 +19,7 @@ const config = {
   organizationName: 'peridio',
   projectName: 'peridio-docs',
   trailingSlash: false,
-  clientModules: [
-    './src/clientModules/copyInlineCode.js',
-    './src/clientModules/fieldNotesGate.js',
-  ],
+  clientModules: ['./src/clientModules/copyInlineCode.js', './src/clientModules/fieldNotesGate.js'],
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -80,8 +77,9 @@ const config = {
         },
       },
     ],
-    // Must run after the field-notes blog plugin so its postBuild
-    // sees (and deletes) the rss/atom/json feed files.
+    // Injects <meta name="robots" content="noindex,nofollow"> into every
+    // /field-notes HTML page. Feed deletion happens in scripts/build.sh
+    // because postBuild hooks run concurrently across plugins.
     './plugins/field-notes-preview-gate',
     ...(process.env.NODE_ENV === 'production'
       ? [

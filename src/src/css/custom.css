@@ -1117,11 +1117,13 @@ html[data-theme="dark"] .code-copy-tooltip {
    renders on blog routes.
    ============================================================================= */
 
-:root {
+/* Scope the accent variable to .plugin-id-field-notes itself so it
+   doesn't leak into other tabs. */
+.plugin-id-field-notes {
   --field-notes-accent: #4f46e5;
 }
 
-html[data-theme="dark"] {
+html[data-theme="dark"] .plugin-id-field-notes {
   --field-notes-accent: #818cf8;
 }
 

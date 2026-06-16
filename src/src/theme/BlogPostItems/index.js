@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from '@docusaurus/Link'
+import Heading from '@theme/Heading'
 import { BlogPostProvider } from '@docusaurus/plugin-content-blog/client'
 import styles from './styles.module.css'
 
@@ -14,7 +15,7 @@ function formatDate(iso) {
 }
 
 function ReadingTime({ minutes }) {
-  if (!minutes) return null
+  if (minutes == null) return null
   const m = Math.max(1, Math.round(minutes))
   return <span>{m} min read</span>
 }
@@ -27,9 +28,9 @@ function FieldNoteRow({ post }) {
 
   return (
     <article className={styles.row}>
-      <h2 className={styles.title}>
+      <Heading as="h2" className={styles.title}>
         <Link to={permalink}>{title}</Link>
-      </h2>
+      </Heading>
       {dek ? <p className={styles.dek}>{dek}</p> : null}
       <div className={styles.meta}>
         <time dateTime={date}>{formatDate(date)}</time>
@@ -39,7 +40,7 @@ function FieldNoteRow({ post }) {
             <span>{authorNames.join(', ')}</span>
           </>
         )}
-        {readingTime ? (
+        {readingTime != null ? (
           <>
             <span className={styles.sep}>·</span>
             <ReadingTime minutes={readingTime} />
@@ -63,10 +64,7 @@ export default function BlogPostItems({ items }) {
   return (
     <div className={styles.list}>
       {items.map(({ content: BlogPostContent }) => (
-        <BlogPostProvider
-          key={BlogPostContent.metadata.permalink}
-          content={BlogPostContent}
-        >
+        <BlogPostProvider key={BlogPostContent.metadata.permalink} content={BlogPostContent}>
           <FieldNoteRow post={BlogPostContent} />
         </BlogPostProvider>
       ))}

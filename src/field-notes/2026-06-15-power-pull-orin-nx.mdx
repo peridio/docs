@@ -1,17 +1,17 @@
 ---
-title: "Pulling the power 200 times mid-OTA on an Orin NX"
+title: 'Pulling the power 200 times mid-OTA on an Orin NX'
 description: "200 scripted power cuts at random points during an A/B OTA update. Zero bricks at steady state — and the two early failures weren't where we expected."
 date: 2026-06-15
 authors: [jschneck]
 tags: [ota, rollback, jetson, orin-nx]
-tested_against: "Avocado 1.0.0, JetPack 7.2, Orin NX 16GB"
+tested_against: 'Avocado 1.0.0, JetPack 7.2, Orin NX 16GB'
 hn_title: "We cut power 200 times mid-update on a Jetson. Here's what bricked."
 poster: jschneck
-lift_for_blog: "Zero bricks across 200 forced failures — the 100-device-wall fear, quantified, for the budget holder."
+lift_for_blog: 'Zero bricks across 200 forced failures — the 100-device-wall fear, quantified, for the budget holder.'
 promote_to_track: "Tutorial 4 candidate — the 'break it on purpose' step."
 ---
 
-import TestedAgainst from '@site/src/components/TestedAgainst';
+import TestedAgainst from '@site/src/components/TestedAgainst'
 
 <TestedAgainst avocado="1.0.0" jetpack="7.2" boards={['Orin NX 16GB']} />
 
