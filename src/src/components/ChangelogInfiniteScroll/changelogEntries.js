@@ -4,8 +4,6 @@
 import V0_41_0 from '../../../docs-changelog/june-2026/0.41.0.md'
 // -- May 2026 --
 import V0_40_2 from '../../../docs-changelog/may-2026/0.40.2.md'
-import V0_40_1 from '../../../docs-changelog/may-2026/0.40.1.md'
-import V0_40_0 from '../../../docs-changelog/may-2026/0.40.0.md'
 import V0_39_0 from '../../../docs-changelog/may-2026/0.39.0.md'
 import V0_38_0 from '../../../docs-changelog/may-2026/0.38.0.md'
 import V0_37_1 from '../../../docs-changelog/may-2026/0.37.1.md'
@@ -65,20 +63,6 @@ export const entries = [
     monthLabel: 'May 2026',
     permalink: '/changelog/may-2026/0.40.2',
     Component: V0_40_2,
-  },
-  {
-    version: '0.40.1',
-    monthSlug: 'may-2026',
-    monthLabel: 'May 2026',
-    permalink: '/changelog/may-2026/0.40.1',
-    Component: V0_40_1,
-  },
-  {
-    version: '0.40.0',
-    monthSlug: 'may-2026',
-    monthLabel: 'May 2026',
-    permalink: '/changelog/may-2026/0.40.0',
-    Component: V0_40_0,
   },
   {
     version: '0.39.0',
