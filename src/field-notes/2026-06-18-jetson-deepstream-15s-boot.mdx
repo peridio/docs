@@ -1,0 +1,104 @@
+---
+title: "Five-model DeepStream pipeline on a Jetson Orin Nano that boots to a live dashboard in 15 seconds"
+description: "Five sequential AI models — PeopleNet, NvDCF tracker, MoveNet pose, YOLOX hand detection, MediaPipe hand landmarks — running natively on a Jetson Orin Nano. The trick to skipping the 12-minute first-boot TensorRT compile: ship the engines inside the OTA payload, not just the ONNX."
+date: 2026-06-18
+authors: [jschneck]
+tags: [jetson, deepstream, tensorrt, ota, computer-vision]
+tested_against: "Avocado [ENGINEER: version], DeepStream 7.1, JetPack [ENGINEER: version], [ENGINEER: Jetson Orin Nano DevKit and/or AGX Orin DevKit]"
+hn_title: "We ship the TensorRT engines in the OTA so the Jetson DeepStream pipeline boots in 15s, not 12 min"
+poster: jschneck
+lift_for_blog: "The 12-minute first-boot compile is the canonical DeepStream-on-Jetson pain. Pre-building engines per target and shipping them in the sysext (with size-compare invalidation across OTAs) is the part nobody else does, and the part that makes the demo a demo and not a wait."
+promote_to_track: "Tutorial candidate after the Pi 5 native-USB and the var-seeding notes: the multi-model Jetson reference, with the engine-shipping trick explained inline rather than left to the reader to discover."
+---
+
+import TestedAgainst from '@site/src/components/TestedAgainst';
+
+<TestedAgainst avocado="[ENGINEER: version]" jetpack="[ENGINEER: JetPack version]" boards={['Jetson Orin Nano DevKit', '[ENGINEER: AGX Orin DevKit if also tested]']} />
+
+**TL;DR.** A multi-model DeepStream pipeline on Jetson normally spends 6–12 minutes on first boot compiling TensorRT engines from ONNX before it can show anything. We build the engines once on the target hardware, commit them per-target into the reference repo, ship them inside the sysext, and have the device serve the live MJPEG dashboard ~10–15 seconds after power-on. [ENGINEER: confirm the boot-to-dashboard time you actually measured, and on which board.]
+
+{/* truncate */}
+
+## Why first boot is the bottleneck
+
+A TensorRT engine is a hardware-specific blob — pinned to the GPU's compute capability, SM count, memory hierarchy, and the exact CUDA + TRT version. The DeepStream-canonical pattern is to ship the ONNX model and let `nvinfer` build the engine on the device the first time the pipeline starts. Which is fine, except the build-time tactic search for a real model is *long*.
+
+For the reference's five-model stack, on an Orin Nano, with no pre-built engines:
+
+| Model | First-boot fallback build |
+| --- | --- |
+| PeopleNet (ResNet34, FP16) | ~30–60 s |
+| MoveNet (single-pose Lightning) | ~2 min |
+| MediaPipe Hand Landmark (sparse 224×224) | ~60 s |
+| YOLOX-Body-Head-Hand (320×320, FP16) | ~6–7 min |
+
+That's 10–12 minutes of a brand-new device sitting there with no display, no logs the customer can read, no port 8080. "Did it boot? Did it brick?" Anyone who has demoed a Jetson model in front of an audience has felt that minute hand.
+
+Orientation for anyone new to this: Peridio makes Avocado OS, an immutable embedded Linux runtime shipped as a binary distribution. An Avocado image is composed of read-only **sysext** + **confext** extensions plus a writable `/var`. OTA updates atomically swap the read-only extensions; `/var` persists. This note is about putting the engines inside the sysext.
+
+## The shape of the fix
+
+Two-part trick. First, the reference repo carries a per-target directory of pre-built engines:
+
+```
+prebuilt-engines/
+├── jetson-orin-nano-devkit/{peoplenet,movenet,handdet,handlandmark}/*.engine
+└── jetson-agx-orin-devkit/{...}/*.engine
+```
+
+`app-compile.sh` selects the right subdirectory at build time based on the Avocado target and stages those engines into the sysext alongside the ONNX. The device boots, the preflight script copies each engine from the read-only sysext (`/usr/lib/nvidia-deepstream/models/<model>/`) to its writable `/var` neighbour, `nvinfer` mmaps the engine, and the pipeline hits PLAYING.
+
+Second part is OTA-bumping the engines without resetting state. The preflight script size-compares the sysext-shipped engine against the cached `/var` copy on every boot. If they differ — which is what happens after an OTA that includes new engines — the new engine overwrites the cached one and `nvinfer` loads the new engine on this boot. The sysext is authoritative; `/var` is a cache. This is the embedded-specific bit that matters: you can ship a new model via `avocado runtime deploy` without re-flashing and without making the device recompile.
+
+Regenerating engines after a JetPack bump is also straightforward: SSH into a device running the target hardware + matching JetPack/TRT, let the app run once so `nvinfer` builds engines into `/var/lib/nvidia-deepstream/models/<model>/`, `scp` them back to the host, drop them into the right `prebuilt-engines/<target>/<model>/` directory, commit, build, deploy. Next boot the new engines are live.
+
+## What's actually running
+
+The pipeline is denser than DeepStream's stock samples — five GIEs plus the tracker plus analytics, all natively on the device, no container indirection:
+
+```
+v4l2src → MJPEG decode → nvstreammux →
+nvinfer/primary (PeopleNet) → nvtracker (NvDCF) → nvdsanalytics (ROIs) →
+nvinfer/secondary (MoveNet, per-person) →
+nvinfer (YOLOX-Body-Head-Hand, full-frame) →
+nvinfer/tertiary (MediaPipe Hand Landmark, per-hand) →
+nvdsosd → nvjpegenc → appsink → MJPEG / Flask :8080
+```
+
+PeopleNet finds people. NvDCF assigns persistent IDs across frames. `nvdsanalytics` reads the tracker IDs against an ROI polygon and a line-crossing definition and writes operational counters back into the buffer at zero extra inference cost. MoveNet runs as a secondary GIE on each PeopleNet bbox and emits 17-point COCO skeletons via tensor metadata. A separate YOLOX-Body-Head-Hand runs on the full frame to find hands; MediaPipe Hand Landmark runs as a tertiary GIE on each hand crop and emits 21 finger keypoints. The bounding boxes, skeletons, hand keypoints, and zone overlays are all rasterised by `nvdsosd` into the same JPEG the dashboard serves — no client-side rendering.
+
+[ENGINEER: paste the engine load lines from `journalctl -u app -b` on first boot. They are the proof that this works.]
+
+## What this gets you
+
+[ENGINEER: replace the bracketed lines with your measurements, on the board you actually used.]
+
+- **Boot to dashboard in ~10–15 s** with engines in the sysext, vs ~10–12 min if `nvinfer` has to compile from ONNX. [ENGINEER: confirm timing on Orin Nano, and on AGX Orin if you ran both.]
+- **~15–25 fps end-to-end on Orin Nano** at 720p with 1–2 people in frame; AGX Orin pushes past 30. The pose and hand-landmark secondaries are the cost; `ENABLE_POSE=0` / `ENABLE_HANDS=0` via a systemd drop-in lets you measure detect-only vs detect-plus-pose head-to-head.
+- **OTA-able engine cache.** A new model lands as part of the next sysext; the preflight script picks it up on the next boot, no re-flash and no recompile.
+- **All five models running natively on the device, no DeepStream container.** DeepStream 7.1, TensorRT, CUDA, cuDNN, the NVIDIA GStreamer plugins, and Python all come from the Avocado package feed and compose into one root filesystem.
+
+## What didn't work
+
+[ENGINEER: required, and the most credible part of this note. Real failure modes a reader would benefit from hearing:
+
+- The MoveNet NHWC→NCHW rewrite. MoveNet's PINTO ONNX has an NHWC input layer; `nvinfer` in DS 7.1 reads NCHW. The reference does an `onnx.helper.Transpose` insertion in `app-compile.sh` to fix this. If you're swapping in a different pose model and you skip this step, the engine build fails with a shape error that's not obviously about layout.
+- Engine ABI invalidation across JetPack bumps. The cached `/var` engine is silently invalid after a JetPack upgrade unless the sysext also ships a fresh engine. The size-compare in the preflight catches this when sysext engines are refreshed; if you upgrade JetPack on the device without refreshing the engines, `nvinfer` will compile from ONNX on the next boot — which works, but bursts you back to the 6-minute YOLOX wait once.
+- USB cameras that only do YUYV (no MJPG). The default pipeline negotiates MJPEG; cameras that only do raw YUYV require swapping `image/jpeg + jpegdec` for `video/x-raw,format=YUY2 + videoconvert` in `_build_pipeline()`. Hits about half the cheap USB webcams.
+- ROI coordinates pinned to 1280×720. If you override the camera resolution via a systemd drop-in you also need to rescale the Center zone in `analytics_config.txt`, otherwise the ROI rectangle ends up mostly off-screen and the dwell counters stay at zero.
+
+Pick the failure mode you actually hit on your run and write the real diagnosis + the fix. If you didn't hit any of these, say across how many runs and on what hardware.]
+
+## Reproduce it
+
+```bash
+avocado init --reference nvidia-deepstream nvidia-deepstream
+cd nvidia-deepstream
+avocado install -f
+avocado build
+avocado provision -r dev --profile tegraflash
+```
+
+Plug a UVC USB webcam (MJPEG at 1280×720, 30 fps works out of the box — Logitech C920/C270 confirmed), wait for boot, hit `http://<device-ip>:8080` for the live dashboard with bounding boxes, tracker IDs, skeletons, hand keypoints, and ROI dwell counters. Full reference repo: [avocado-linux/references/nvidia-deepstream](https://github.com/avocado-linux/references/tree/main/nvidia-deepstream); full step-by-step in the docs: [NVIDIA DeepStream reference](/developer-reference/references/nvidia-deepstream).
+
+Docs and the rest of the Peridio ecosystem are at [docs.peridio.com](https://docs.peridio.com).
