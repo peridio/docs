@@ -1129,11 +1129,18 @@ html[data-theme="dark"] {
 }
 
 /* Layout: drop the col--offset-1 and let the article fill the area that
-   would normally hold the left nav. TOC stays on the right. */
+   would normally hold the left nav. TOC stays on the right.
+
+   Bootstrap's default .row has margin-left/right: -16px to compensate
+   for col padding; we zero both since we manage col padding explicitly.
+   Without this reset the container's side padding gets canceled out
+   and the article hugs the viewport edge on mobile. */
 .plugin-id-field-notes .container > .row {
   display: flex;
   flex-wrap: wrap;
   gap: 2.5rem;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .plugin-id-field-notes main.col {
@@ -1150,10 +1157,17 @@ html[data-theme="dark"] {
   padding: 0 !important;
 }
 
+/* At the first breakpoint, drop the right-hand TOC entirely (it's a
+   summary nav, not load-bearing on mobile) and let the article use
+   the full container width. The container's own padding provides
+   side margins. */
 @media (max-width: 996px) {
-  .plugin-id-field-notes main.col,
   .plugin-id-field-notes .col--2 {
-    flex: 0 0 100%;
+    display: none;
+  }
+
+  .plugin-id-field-notes main.col {
+    flex: 1 1 100%;
     max-width: 100%;
   }
 }
