@@ -1,0 +1,25 @@
+.testedAgainst {
+  margin: 0 0 1.5rem 0;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-left: 3px solid var(--ifm-color-emphasis-500);
+  border-radius: 4px;
+  background-color: var(--ifm-background-surface-color);
+  color: var(--ifm-color-emphasis-800);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.testedAgainst code {
+  font-size: 0.85em;
+  padding: 0.1rem 0.4rem;
+  margin: 0 0.15rem;
+}
+
+.boards {
+  color: var(--ifm-color-emphasis-700);
+}
+
+.sep {
+  color: var(--ifm-color-emphasis-500);
+}

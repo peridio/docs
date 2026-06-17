@@ -1,0 +1,108 @@
+---
+title: 'Shipping a device that runs its containers on first boot, with no internet'
+description: "Avocado pre-pulls container images into the device's writable /var at build time, inside a temporary dockerd running inside the SDK container. The device boots offline and starts its stack on first power-on, no registry pull needed."
+date: 2026-06-17
+authors: [jschneck]
+tags: [var, docker, offline-first, build, provisioning]
+tested_against: 'Avocado [ENGINEER: version], SDK [ENGINEER: image:tag], [ENGINEER: board(s) verified — e.g. Raspberry Pi 5, Jetson Orin NX]'
+hn_title: "We pre-seed an embedded device's /var partition with its Docker cache at build time"
+poster: jschneck
+lift_for_blog: "The 'factory floor with no internet' problem: every Avocado device ships with its container images already in /var, so first power-on starts the stack without a registry pull."
+promote_to_track: 'Tutorial candidate after the Pi 5 bring-up: declaring docker_images on an extension and watching the cache come up populated on the device.'
+---
+
+import TestedAgainst from '@site/src/components/TestedAgainst'
+
+<TestedAgainst
+  avocado="[ENGINEER: version]"
+  jetpack=""
+  boards={['[ENGINEER: board(s) verified]']}
+/>
+
+**TL;DR.** A long-standing pain in embedded is that a device booting on a factory floor, behind a customer firewall, or in the field can't reliably reach a container registry — so any stack that relies on `docker pull` to start is dead on arrival. We bake the image cache into the device's writable partition at build time, so on first power-on the containers are already there. [ENGINEER: confirm with a real first-boot log and the install-to-running-stack time on the board you used.]
+
+{/* truncate */}
+
+## Why this is hard
+
+If your device runs containers (and most embedded products do now), there's a window between first power-on and the moment your application starts. The conventional path is: device boots, network comes up, `docker pull`, containers start. Each step is a place the bring-up can stall — and "network comes up" is the one outside your control. Customers have firewalls. Factories don't have WiFi. Cellular modems take their time. And nothing makes a field engineer happier than a brand-new device that won't run its app because it can't reach `registry-1.docker.io`.
+
+Orientation for anyone seeing this for the first time: Avocado OS is the immutable embedded Linux runtime we ship at Peridio as a binary distribution, for boards like the Raspberry Pi 5 and NVIDIA Jetson. An Avocado image has two storage areas — a read-only root assembled from extension images, and a writable `/var` partition that survives OTA updates. The trick this note is about is **pre-populating `/var` at build time** so the device ships with everything it needs on first boot, including its container image cache.
+
+## How it works
+
+You declare the images you want on an extension:
+
+```yaml
+extensions:
+  my-app:
+    version: '1.0.0'
+    docker_images:
+      - image: docker.io/library/redis
+        tag: '7-alpine'
+      - image: docker.io/library/nginx
+        tag: '1.25'
+    var_files:
+      - var/lib/docker/** # keep this out of the read-only .raw
+```
+
+During `avocado build`, the CLI sees `docker_images` on an extension and:
+
+1. Adds `--privileged` to the SDK container args (required for Docker-in-Docker)
+2. Starts a temporary `dockerd` _inside_ the SDK container, with its data-root pointed at the staging area that will become the device's `/var`
+3. Pulls each declared image for the target architecture (`linux/arm64`, `linux/amd64`, …)
+4. Shuts down the temporary `dockerd`
+5. Packs the now-populated Docker data-root into the var partition image
+
+The `var_files: var/lib/docker/**` on the extension is the other half of the trick. Without it, `avocado ext image` would helpfully bake the Docker storage directory into the read-only erofs image, which is exactly what you do _not_ want — Docker needs to write to that directory on the device. The exclusion tells `ext image` to leave it out of the read-only `.raw` so the writable copy on `/var` is the one Docker sees.
+
+[ENGINEER: paste the relevant snippet of `avocado build` output that shows the dockerd-in-SDK pull happening, and the line where it finalizes the var partition image.]
+
+## On the device
+
+[ENGINEER: paste the first-boot log on the board you used. The thing that matters: `docker images` listing the pre-pulled images with no registry round-trip, and the application container starting cold. If you have an air-gap repro — pull the network cable, power on, watch it come up — include the timing.]
+
+## What this gets you
+
+- **Containers running on first power-on with no network.** [ENGINEER: confirm on a board you actually booted offline, and note install-to-running-stack time.]
+- **One build artifact, one provision step.** The image cache isn't a second deploy — it's part of the OS image and ships with it. Same `avocado provision` as everything else.
+- **Atomic OTAs that don't touch the cache.** Updates swap the read-only root; `/var` (including the Docker cache) persists across updates, so the cache is also a hedge against a partial OTA leaving you without container layers.
+
+## What's also worth knowing
+
+Same `var_files` mechanism on a runtime block lets you seed _any_ static file onto `/var` at build time — TLS certs, default app config, seed data for an embedded database, anything the device needs writable on first boot. Docker is just the loudest case because of the multi-gigabyte cache size and the cost of pulling it again.
+
+```yaml
+runtimes:
+  dev:
+    extensions: [my-app]
+    var_files:
+      - source: certs/device.pem
+        dest: lib/myapp/certs/device.pem
+      - source: config/app-defaults/
+        dest: lib/myapp/
+```
+
+The seeding-var guide in the docs has the full configuration reference: [Seeding the var partition](/developer-reference/seeding-var).
+
+## What didn't work
+
+[ENGINEER: required, and the most credible part of this note. Real failure modes I'd ask you to consider:
+
+- A glob in `var_files` that was too narrow and let Docker storage leak into the read-only `.raw`, which surfaces as a confusing erofs-write error at runtime rather than a build failure.
+- Multi-arch pulls picking the wrong platform when the SDK and target architecture don't match, especially on Apple Silicon hosts pulling `linux/arm64` into the SDK.
+- SDK images missing `dockerd` / `containerd` / `runc`, which only shows up the moment the privileged step kicks in.
+- The var partition staging size blowing past a sensible default and the build erroring out late.
+  Pick the one you actually hit and write the diagnosis + the fix. If nothing broke, say across how many runs and what you'd still expect to bite someone.]
+
+## Reproduce it
+
+```bash
+avocado install
+avocado build     # var seeding (static + docker) happens here, no extra step
+avocado provision dev
+```
+
+The seeding runs as part of `avocado build` (specifically `avocado runtime build`) — there's no separate `avocado seed-var` command, and there shouldn't be. Full configuration reference: [Seeding the var partition](/developer-reference/seeding-var).
+
+Docs and the rest of the Peridio ecosystem are at [docs.peridio.com](https://docs.peridio.com).

@@ -19,7 +19,7 @@ const config = {
   organizationName: 'peridio',
   projectName: 'peridio-docs',
   trailingSlash: false,
-  clientModules: ['./src/clientModules/copyInlineCode.js'],
+  clientModules: ['./src/clientModules/copyInlineCode.js', './src/clientModules/fieldNotesGate.js'],
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -57,6 +57,30 @@ const config = {
         breadcrumbs: true,
       },
     ],
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'field-notes',
+        routeBasePath: 'field-notes',
+        path: 'field-notes',
+        blogTitle: 'Field Notes',
+        blogDescription: 'Dense technical notes from the Peridio engineering team.',
+        showReadingTime: true,
+        postsPerPage: 20,
+        blogSidebarCount: 0,
+        authorsMapPath: 'authors.yml',
+        exclude: ['CONTRIBUTING.md', '_template.mdx'],
+        feedOptions: {
+          type: 'all',
+          title: 'Peridio Field Notes',
+          description: 'Engineering notes from Peridio',
+        },
+      },
+    ],
+    // Injects <meta name="robots" content="noindex,nofollow"> into every
+    // /field-notes HTML page. Feed deletion happens in scripts/build.sh
+    // because postBuild hooks run concurrently across plugins.
+    './plugins/field-notes-preview-gate',
     ...(process.env.NODE_ENV === 'production'
       ? [
           [
@@ -131,6 +155,12 @@ const config = {
             activeBasePath: 'developer-reference',
           },
           {
+            to: '/field-notes',
+            label: 'Field Notes',
+            position: 'left',
+            activeBasePath: 'field-notes',
+          },
+          {
             to: '/changelog/latest',
             label: 'Changelog',
             position: 'left',
@@ -202,6 +232,35 @@ const config = {
       `,
     },
     {
+      // Synchronous /field-notes gate. Runs in <head> before any paint,
+      // so visitors without the preview flag never see field-notes content.
+      // The companion clientModule (fieldNotesGate.js) handles the body
+      // class for the navbar link; this is just the redirect.
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `
+        (function () {
+          if (typeof window === 'undefined') return;
+          var path = window.location.pathname;
+          if (path !== '/field-notes' && path.indexOf('/field-notes/') !== 0) return;
+          try {
+            var params = new URLSearchParams(window.location.search);
+            var flag = params.get('preview');
+            if (flag === '1') {
+              window.sessionStorage.setItem('peridio:fn-preview', '1');
+              return;
+            }
+            if (flag === '0') {
+              window.sessionStorage.removeItem('peridio:fn-preview');
+            } else if (window.sessionStorage.getItem('peridio:fn-preview') === '1') {
+              return;
+            }
+          } catch (e) { /* sessionStorage unavailable — fall through to redirect */ }
+          window.location.replace('/');
+        })();
+      `,
+    },
+    {
       tagName: 'script',
       attributes: {},
       innerHTML: `
@@ -233,6 +292,13 @@ const config = {
       attributes: {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&family=Spline+Sans:wght@300..700&display=swap',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&display=swap',
       },
     },
     {

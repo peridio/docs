@@ -1,0 +1,68 @@
+---
+title: 'Provisioning a Raspberry Pi from macOS natively, no Linux VM and no USB passthrough'
+description: 'Flashing embedded boards from a Mac usually means a Linux VM and fragile USB passthrough. The Avocado Desktop preview provisions a Raspberry Pi 5 natively from macOS, so there is no VM to babysit and no passthrough to drop.'
+date: 2026-06-16
+authors: [jschneck]
+tags: [rpi5, provisioning, macos, usb, preview]
+tested_against: 'Avocado [ENGINEER: preview version], Raspberry Pi 5, macOS host [ENGINEER: macOS version and chip, Apple Silicon or Intel]'
+hn_title: 'Provisioning a Raspberry Pi from macOS natively, no Linux VM (Avocado Desktop preview)'
+poster: jschneck
+lift_for_blog: 'The Linux-VM-and-USB-passthrough dance for flashing boards from a Mac, removed: native provisioning on the laptop the engineer already owns.'
+promote_to_track: 'Tutorial candidate: native macOS provisioning of a Pi 5 as the first device bring-up on the on-ramp.'
+---
+
+import TestedAgainst from '@site/src/components/TestedAgainst'
+
+<div style={{ aspectRatio: '16 / 9', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/vrIe4CzTavs"
+    title="Provisioning a Raspberry Pi 5 from macOS with Avocado Desktop"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
+
+<TestedAgainst avocado="[ENGINEER: preview version]" jetpack="" boards={['Raspberry Pi 5']} />
+
+**TL;DR.** Provisioning an embedded board from macOS normally means running a Linux VM and passing the board's USB device through to it, which is fragile, more so on Apple Silicon. The Avocado Desktop preview provisions a Raspberry Pi 5 natively from macOS, no VM and no passthrough. [ENGINEER: confirm it is truly native (no VM, no passthrough), on which Mac architecture, and the install-to-boot time.]
+
+{/* truncate */}
+
+## The problem: provisioning a board over USB from a Mac
+
+Most board bring-up happens over USB. The host puts the board into a recovery or device mode and pushes an image over the USB link. The vendor tooling that does this tends to assume Linux, so on a Mac the usual move is to run a Linux VM and pass the board's USB device through to it.
+
+That passthrough is where it falls apart. USB resets and mode switches during flashing drop the device out of the VM, enumeration races leave the tool waiting on a device that is sitting on the host side, and Apple Silicon's virtualization stack makes all of it less predictable. [ENGINEER: keep only the failure modes you actually hit, on the board(s) you actually used. Do not ship a list of problems you did not personally see.]
+
+Orientation for anyone new to this: Peridio makes Avocado OS, an immutable embedded Linux runtime shipped as a binary distribution, for boards like the Raspberry Pi 5 and NVIDIA Jetson. Avocado Desktop is the local tool that builds and provisions it. The developer preview is the macOS build rolling out now, ahead of the Avocado 1.0 release. [ENGINEER: confirm the rollout status and timing you want to state.]
+
+## How Avocado Desktop does it
+
+This is the technical core of the post, and it is the first thing the audience will ask about. [ENGINEER: the real mechanism. How does it drive the board's USB recovery or device mode from macOS without a VM and without passthrough? Native libusb on the Mac, a helper that owns the USB handshake, something else? How does it survive the USB reset or mode switch mid-flash that breaks the passthrough approach? Write the actual explanation here, not a summary. If there is any case where it still falls back to something Linux-side, say so in this section.]
+
+The provisioning flow itself, on the Mac:
+
+[ENGINEER: the provision command and its output, including the USB enumeration and the recovery or device-mode handshake. In the demo it prompts before overwriting the board, you confirm, and it streams the device output back to the host. Note the cable, the port, and any board prep on the Pi 5.]
+
+[ENGINEER: paste the first boot log from the Pi 5, so the provision is a verified result and not a description.]
+
+## What this gets you
+
+[ENGINEER: replace each line with a result from a real run. Nothing here is a claim until it is verified.]
+
+- The board provisioned from macOS with no VM and no USB passthrough. [ENGINEER: confirm, and on which Mac architecture.]
+- The reliability angle is the real claim, not speed. [ENGINEER: if you have a before and after, for example how many passthrough attempts dropped versus how many native runs completed cleanly, put the real counts here. A reliability claim needs repeated runs, not one success.]
+- This was a Raspberry Pi 5. Jetson uses a different and harder USB recovery flow and is supported but was not tested here. [ENGINEER: do not extend the USB win to Jetson unless you actually provisioned one.]
+
+## What didn't work
+
+This is a preview, and a note with no rough edges reads as a press release. [ENGINEER: required. Where did it break, stall, or surprise you? Likely spots: a specific macOS version or chip where it still misbehaves, a board or recovery mode it does not cover yet, permissions prompts on macOS, or a USB quirk it does not fully handle. If it genuinely did not break across your runs, say how many runs that was and what is still out of scope.]
+
+## Reproduce it
+
+Developer preview, macOS, Homebrew. [ENGINEER: the exact brew tap and install command, and whether early access is an open tap or gated by a signup or token. Include prerequisites such as Xcode command line tools and a minimum macOS version, then the step list to provision a Pi 5 from the Mac. Note the Mac architecture you verified on, since USB behavior differs between Apple Silicon and Intel.]
+
+Docs and the rest of the Peridio ecosystem are at [docs.peridio.com](https://docs.peridio.com). [ENGINEER: confirm the preview landing URL.]
