@@ -73,3 +73,21 @@ Before merging a note, one rotating engineering owner confirms:
 2. The versions and tags in `tested_against` are accurate.
 
 This is a correctness check, not editorial polish. Field Notes is true; the blog is pretty.
+
+## Drafts and the `[ENGINEER: ...]` convention
+
+The `/field-notes` section is gated behind a `?preview=1` URL flag (see `src/clientModules/fieldNotesGate.js` and `src/plugins/field-notes-preview-gate/`). Visitors without the flag are synchronously redirected to `/` before any content paints; the section also ships `<meta name="robots" content="noindex,nofollow">` on every page and no RSS/Atom/JSON feeds in production. So a note can live on `main` with unfinished sections and only the reviewers who pass `?preview=1` will see it.
+
+We use this on purpose. A note checked in with `[ENGINEER: paste the boot log here]` placeholders is a structured draft — the framing and the angle are committed, the engineer who runs the demo fills in the verified content. That review is the whole point of the gate:
+
+- The author drafts the framing, TL;DR, mechanism, and the section structure.
+- Placeholders mark every claim that needs a real measurement, command output, or honest "what didn't work" sentence.
+- A reviewer opens `docs.peridio.com/field-notes?preview=1`, reads the draft top-to-bottom, and the placeholders are the conversation: "do we actually have this number?", "is that the failure mode you hit?", etc.
+- The engineer who ran the demo replaces placeholders with the real content and re-pushes.
+- The draft only becomes "ready" when no `[ENGINEER: ...]` placeholders remain. Grep before merging promotion (when we eventually drop the gate):
+
+  ```bash
+  grep -l "\[ENGINEER:" *.mdx
+  ```
+
+We deliberately don't use Docusaurus' `draft: true` frontmatter for these. That flag excludes posts from production builds entirely, which would also exclude them from the gated preview — defeating the whole "share `?preview=1` with the reviewer" flow. The gate is the draft mechanism.
