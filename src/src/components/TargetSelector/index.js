@@ -4,7 +4,7 @@ import useBrokenLinks from '@docusaurus/useBrokenLinks'
 import Heading from '@theme/Heading'
 import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
 import styles from './styles.module.css'
-import targets from '@site/src/data/hardware/targets.json'
+import targets from '@site/src/data/hardware/generated-targets.json'
 
 const WARNING_MESSAGES = {
   linuxHostOnly:
@@ -159,7 +159,9 @@ export default function TargetSelector() {
           {t.serial && (
             <>
               <Heading as="h2">Serial Console</Heading>
-              {t.serial.kind === 'onboard-micro-usb' ? (
+              {t.serial.description ? (
+                <p>{t.serial.description}</p>
+              ) : t.serial.kind === 'onboard-micro-usb' ? (
                 <p>
                   The Jetson exposes its UART console over a debug Micro USB port — no TTL adapter
                   is required. Once the Micro USB cable is connected to your host, the host

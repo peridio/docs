@@ -12,12 +12,6 @@
       "vendor": "Qualcomm",
       "chipset": "IQ-9075",
       "productType": "SOM"
-    },
-    {
-      "name": "Rubik Pi 3",
-      "vendor": "Thundercomm",
-      "chipset": "QCS6490",
-      "productType": "Development Kit"
     }
   ]
 }

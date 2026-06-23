@@ -28,6 +28,20 @@ const config = {
     'docusaurus-plugin-image-zoom',
     './plugins/yaml-loader-plugin',
     [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          // Rubik Pi 3 graduated from Under Evaluation to a supported target.
+          {
+            from: '/hardware/under-evaluation/rubik-pi-3',
+            to: '/hardware/qualcomm/rubik-pi-3',
+          },
+          // The former "Rubik Pi" page now points at the Rubik Pi 3 target.
+          { from: '/hardware/qualcomm/rubik-pi', to: '/hardware/qualcomm/rubik-pi-3' },
+        ],
+      },
+    ],
+    [
       '@docusaurus/plugin-content-docs',
       {
         id: 'hardware',

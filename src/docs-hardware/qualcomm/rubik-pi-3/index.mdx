@@ -1,0 +1,84 @@
+---
+title: 'Thundercomm Rubik Pi 3'
+sidebar_position: 0
+description: 'Affordable Qualcomm QCS6490 developer SBC with 12 TOPS of on-device AI, now a supported Avocado OS target with secure OTA updates and fleet management.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+<HardwareHero
+  vendor="Thundercomm"
+  vendorUrl="https://rubikpi.ai/"
+  model="Rubik Pi 3"
+  tagline="Affordable Qualcomm QCS6490 edge-AI SBC, production-ready with Avocado OS + Avocado Connect."
+  image="/img/rubikpi3.png"
+  imageAlt="Thundercomm Rubik Pi 3 single-board computer"
+  stats={[
+    { value: '12 TOPS', label: 'AI Performance' },
+    { value: 'QCS6490', label: 'Octa-core Kryo 670 (6nm)' },
+    { value: '8GB', label: 'LPDDR4x Memory' },
+    { value: '128GB', label: 'UFS 2.2 Storage' },
+    { value: 'Adreno 643L', label: 'GPU' },
+    { value: '100 x 75 mm', label: 'Pi-style form factor' },
+  ]}
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
+
+## Overview
+
+The Thundercomm Rubik Pi 3 is a compact single-board computer built on the Qualcomm QCS6490 6nm SoC. It features a Raspberry Pi-like form factor with a 40-pin header, dual camera connectors, HDMI + USB-C display output, and Wi-Fi 5/BT 5.2. At approximately 4-8W power consumption, it delivers strong AI inference capability per watt — making it an affordable platform for on-device AI development and edge product prototyping.
+
+With Avocado OS it becomes a production target: an immutable, composable Linux base with secure OTA updates, rollback protection, and fleet management through Avocado Connect.
+
+## Specifications
+
+| Specification   | Value                                          | Notes                                       |
+| --------------- | ---------------------------------------------- | ------------------------------------------- |
+| Processor       | Qualcomm QCS6490, Kryo 670 octa-core           | 6nm process                                 |
+| AI Performance  | 12 TOPS                                        | Hexagon Processor with fused AI-accelerator |
+| GPU             | Adreno 643L                                    |                                             |
+| Memory          | 8GB LPDDR4x                                    |                                             |
+| Storage         | 128GB UFS 2.2                                  |                                             |
+| Display (HDMI)  | 1x HDMI 1.4 (4K@30)                            |                                             |
+| Display (USB-C) | 1x USB-C DP 1.4 (4K@60)                        |                                             |
+| Camera          | 2x 22-pin 4-lane MIPI CSI                      | Raspberry Pi compatible                     |
+| USB             | 1x USB 2.0, 2x USB 3.0, 1x USB 3.1 Gen1 Type-C |                                             |
+| Ethernet        | Gigabit Ethernet                               |                                             |
+| Wireless        | Wi-Fi 5, Bluetooth 5.2                         |                                             |
+| Expansion       | M.2 M-Key, 40-pin GPIO header                  |                                             |
+| Dimensions      | 100 x 75 mm                                    |                                             |
+| Power           | ~4W (CPU) / ~8W (full load)                    | USB-C PD 3.0 (12V/3A) input                 |
+| OS Support      | Avocado OS, Ubuntu, Yocto Linux, Android       |                                             |
+
+## Use Cases
+
+- **Affordable AI development** and education platform for embedded AI applications
+- **Smart display and kiosk prototyping** with dual-camera computer vision
+- **Edge AI product prototyping** with Raspberry Pi ecosystem compatibility
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target#rubikpi3) instructions under Getting Started to begin. This target is `rubikpi3`. The provisioning specifics are below.
+
+### Provision
+
+Provisioning flashes Avocado OS to the board's onboard UFS storage over USB while the device is in EDL mode. You'll need three cables: a USB-C power cable (PD 3.0, 12V/3A — bus power is not enough), a USB-C data cable for flashing, and a Micro-USB cable for the debug UART. Leave the Micro-USB cable disconnected while flashing.
+
+Put the board in EDL mode (hold the EDL button while connecting power), then build and provision the `dev` runtime using the `ufs` profile.
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile ufs
+```
+
+### Run
+
+Once provisioning completes, disconnect the USB-C data cable, leave USB-C power connected, and power-cycle the board — it boots Avocado OS from the onboard UFS storage. Connect the Micro-USB cable for the debug UART console. The `root` user is passwordless in the `dev` runtime used by this guide.

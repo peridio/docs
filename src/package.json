@@ -6,6 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "sync-references": "node scripts/sync-references.js",
+    "sync-targets": "node scripts/sync-targets.js",
     "build": "bash scripts/build.sh",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -20,6 +21,7 @@
   "dependencies": {
     "@algolia/client-search": ">= 4.9.1 < 6",
     "@docusaurus/core": "^3.10.0",
+    "@docusaurus/plugin-client-redirects": "3.10.0",
     "@docusaurus/preset-classic": "^3.10.0",
     "@docusaurus/theme-common": "^3.10.0",
     "@docusaurus/utils": "^3.10.0",

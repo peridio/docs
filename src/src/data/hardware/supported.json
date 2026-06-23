@@ -270,6 +270,21 @@
         "secureBoot": "partial",
         "remoteAccessTunnels": "full"
       }
+    },
+    {
+      "name": "Thundercomm Rubik Pi 3",
+      "target": "rubikpi3",
+      "url": "/hardware/qualcomm/rubik-pi-3",
+      "external": false,
+      "features": {
+        "provisioning": "full",
+        "hitl": "full",
+        "sideLoading": "full",
+        "extensionOta": "full",
+        "osOta": "full",
+        "secureBoot": "partial",
+        "remoteAccessTunnels": "full"
+      }
     }
   ]
 }
