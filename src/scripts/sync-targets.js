@@ -45,6 +45,8 @@ function minimalEntry(slug) {
       profile: null,
       prerequisites: [],
       provisionCommand: `avocado provision -r dev`,
+      bootInstructions:
+        'After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.',
       warnings: [],
     },
     serial: null,

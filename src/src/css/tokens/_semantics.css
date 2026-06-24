@@ -136,7 +136,8 @@ html[data-theme="dark"] {
   /* Accent / interactive */
   --color-accent-primary: var(--color-brand-400);
   --color-accent-primary-hover: var(--color-brand-300);
-  --color-accent-link: var(--color-brand-400);
+  /* brand-300 (#9d93f5) clears WCAG AA 4.5:1 on the dark body bg; brand-400 is 4.44:1 */
+  --color-accent-link: var(--color-brand-300);
   --color-accent-button: var(--color-brand-600);
   --color-accent-button-hover: var(--color-brand-500);
 
