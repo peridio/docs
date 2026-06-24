@@ -135,6 +135,24 @@ export default function TargetSelector() {
           <Heading as="h2">{t.name}</Heading>
           {t.description && <p>{t.description}</p>}
 
+          {t.images &&
+            t.images.length > 0 &&
+            t.images.map((img, i) => (
+              <img
+                key={i}
+                src={img.src}
+                alt={img.alt}
+                style={{
+                  display: 'block',
+                  maxWidth: '720px',
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  margin: '0.5rem 0 1rem',
+                }}
+              />
+            ))}
+
           <Heading as="h2">Prerequisites</Heading>
           <ul>
             {t.provisioning.prerequisites.map((p, i) => (

@@ -136,7 +136,7 @@ html[data-theme="dark"] {
   /* Accent / interactive */
   --color-accent-primary: var(--color-brand-400);
   --color-accent-primary-hover: var(--color-brand-300);
-  --color-accent-link: #fff;
+  --color-accent-link: var(--color-brand-400);
   --color-accent-button: var(--color-brand-600);
   --color-accent-button-hover: var(--color-brand-500);
 

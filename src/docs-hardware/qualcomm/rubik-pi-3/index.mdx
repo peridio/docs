@@ -70,9 +70,9 @@ Follow the [Any Supported Target](/developer-reference/getting-started/any-targe
 
 ### Provision
 
-Provisioning flashes Avocado OS to the board's onboard UFS storage over USB while the device is in EDL mode. You'll need three cables: a USB-C power cable (PD 3.0, 12V/3A — bus power is not enough), a USB-C data cable for flashing, and a Micro-USB cable for the debug UART. Leave the Micro-USB cable disconnected while flashing.
+Provisioning flashes Avocado OS to the board's onboard UFS storage over USB while the device is in EDL mode. You'll need three cables: a USB-C power cable into the power input (port 10) — PD 3.0, 12V/3A; bus power is not enough; a USB-C data cable for flashing on the USB-C port (port 5); and a Micro-USB cable for the debug UART on the Micro-USB port (port 2). Leave the Micro-USB cable disconnected while flashing.
 
-Put the board in EDL mode (hold the EDL button while connecting power), then build and provision the `dev` runtime using the `ufs` profile.
+Put the board in EDL mode (hold the EDL button (port 12) while connecting power), then build and provision the `dev` runtime using the `ufs` profile.
 
 ```bash title="Host machine"
 avocado build

@@ -4,27 +4,37 @@
     "target": "rubikpi3",
     "category": "physical",
     "description": "The Rubik Pi 3 is provisioned by flashing the board's onboard UFS storage over USB while the device is in Qualcomm EDL (Emergency Download) mode.",
+    "images": [
+      {
+        "src": "/img/rubikpi3/ports-top.png",
+        "alt": "Rubik Pi 3 port and button layout (top view): Micro USB debug, USB-C, power adapter, PWR button, and EDL/recovery button"
+      },
+      {
+        "src": "/img/rubikpi3/ports-iso.png",
+        "alt": "Rubik Pi 3 connector layout (isometric view): Micro USB debug, USB-C, and power adapter"
+      }
+    ],
     "provisioning": {
       "profile": "ufs",
       "media": "Onboard UFS storage (flashed over USB)",
       "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "Thundercomm Rubik Pi 3",
-        "USB-C power cable + a PD 3.0 compliant 12V/3A adapter — bus power is not enough. The power LED only lights when PD negotiation succeeds; if it stays off the board will not boot.",
-        "USB-C (or USB-C-to-A) data cable for flashing, connected from the board to your host",
-        "Micro-USB cable for the debug UART console — leave this disconnected during provisioning/flashing; connect it only after provisioning succeeds"
+        "USB-C power cable + a PD 3.0 compliant 12V/3A adapter for the power input (port 10) — bus power is not enough. The power LED only lights when PD negotiation succeeds; if it stays off the board will not boot.",
+        "USB-C (or USB-C-to-A) data cable for flashing, from the board's USB-C port (port 5) to your host",
+        "Micro-USB cable for the debug UART console (Micro-USB port, port 2) — leave this disconnected during provisioning/flashing; connect it only after provisioning succeeds"
       ],
       "provisionCommand": "avocado provision -r dev --profile ufs",
-      "provisionDescription": "Provision the dev runtime to the board's onboard UFS storage. The system image is flashed over the USB-C data connection while the device is in EDL mode.",
+      "provisionDescription": "Provision the dev runtime to the board's onboard UFS storage. The system image is flashed over the USB-C data connection (port 5) while the device is in EDL mode.",
       "recoveryMode": {
         "reference": {
           "url": "https://www.thundercomm.com/rubik-pi-3/en/docs/rubik-pi-3-user-manual/1.0.0-u/set-up-your-device",
           "label": "RUBIK Pi 3 — Set up your device"
         },
         "steps": [
-          "With the board powered off, connect the USB-C data cable from the board to your host.",
-          "Press and hold the EDL button on the board.",
-          "While holding EDL, connect the USB-C power cable to apply power, then release the button. The board enumerates in Qualcomm EDL (download) mode."
+          "With the board powered off, connect the USB-C data cable from the board's USB-C port (port 5) to your host.",
+          "Press and hold the EDL button (port 12) on the board.",
+          "While holding EDL, connect the power cable to the power input (port 10) to apply power, then release the button. The board enumerates in Qualcomm EDL (download) mode."
         ],
         "verifyCommand": "lsusb",
         "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode) — this confirms the board is ready to flash."
@@ -36,14 +46,14 @@
         },
         { "type": "code", "content": "[SUCCESS] Successfully provisioned runtime 'dev'" }
       ],
-      "bootInstructions": "Disconnect the USB-C data cable, leave USB-C power connected, and power-cycle the board. It boots Avocado OS from the onboard UFS storage.",
-      "bootNote": "Now that provisioning has succeeded, connect the Micro-USB cable for the debug UART console (see Serial Console above). The root user is passwordless in the dev runtime.",
+      "bootInstructions": "Disconnect the USB-C data cable (port 5), leave the power input (port 10) connected, and power-cycle the board. It boots Avocado OS from the onboard UFS storage.",
+      "bootNote": "Now that provisioning has succeeded, connect the Micro-USB cable to the debug port (port 2) for the UART console (see Serial Console above). The root user is passwordless in the dev runtime.",
       "warnings": ["linuxAutoMount"]
     },
     "serial": {
       "baud": 115200,
       "command": "screen /dev/ttyUSB0 115200",
-      "description": "The Rubik Pi 3 exposes its debug UART over the onboard Micro-USB port — no TTL adapter is required. Connect the Micro-USB cable to your host only after provisioning completes (leave it disconnected while flashing). The host then enumerates a USB serial device for the console."
+      "description": "The Rubik Pi 3 exposes its debug UART over the onboard Micro-USB port (port 2) — no TTL adapter is required. Connect the Micro-USB cable to your host only after provisioning completes (leave it disconnected while flashing). The host then enumerates a USB serial device for the console."
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/qualcomm/rubik-pi-3"
