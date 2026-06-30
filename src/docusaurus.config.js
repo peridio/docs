@@ -38,6 +38,27 @@ const config = {
           },
           // The former "Rubik Pi" page now points at the Rubik Pi 3 target.
           { from: '/hardware/qualcomm/rubik-pi', to: '/hardware/qualcomm/rubik-pi-3' },
+          // Avocado OS product pages moved under the /avocado-os/ prefix.
+          { from: '/about', to: '/avocado-os/about' },
+          { from: '/features', to: '/avocado-os/features' },
+          { from: '/core-concepts', to: '/avocado-os/core-concepts' },
+          { from: '/open-source', to: '/avocado-os/open-source' },
+          { from: '/community', to: '/avocado-os/community' },
+          // Security pages moved under /avocado-os/security/ (some slugs shortened).
+          { from: '/security/secure-boot', to: '/avocado-os/security/secure-boot' },
+          {
+            from: '/security/filesystem-integrity',
+            to: '/avocado-os/security/filesystem-integrity',
+          },
+          { from: '/security/hardware-backed-encryption', to: '/avocado-os/security/encryption' },
+          {
+            from: '/security/atomic-update-architecture',
+            to: '/avocado-os/security/update-architecture',
+          },
+          {
+            from: '/security/production-ready-features',
+            to: '/avocado-os/security/production-ready',
+          },
         ],
       },
     ],
@@ -150,8 +171,7 @@ const config = {
             to: '/',
             label: 'Product Documentation',
             position: 'left',
-            activeBaseRegex:
-              '^/(about|features|core-concepts|open-source|community|security|faqs|policies)?$',
+            activeBaseRegex: '^/$|^/(avocado-os|avocado-connect|faqs|policies)(/.*)?$',
           },
           {
             to: '/hardware/support-matrix',

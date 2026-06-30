@@ -205,6 +205,6 @@ The var seeding steps (static files and Docker image priming) run automatically 
 
 ## What's next
 
-- [Extensions reference](/core-concepts#extensions) for complete `var_files` and `docker_images` configuration options
+- [Extensions reference](/avocado-os/core-concepts#extensions) for complete `var_files` and `docker_images` configuration options
 - [Cross-compilation guide](./cross-compilation) for building extension binaries that use the var partition
 - [Sideloading](./sideloading) for deploying updates to a running device

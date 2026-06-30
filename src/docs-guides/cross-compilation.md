@@ -506,7 +506,7 @@ This completes the round-trip: cross-compile -> package -> publish -> consume as
 
 ## What's next
 
-- [Extensions reference](/core-concepts#extensions) for complete configuration options
+- [Extensions reference](/avocado-os/core-concepts#extensions) for complete configuration options
 - [Seeding the var partition](./seeding-var) for pre-populating persistent storage at build time
 - [Hardware-in-the-loop development](./hardware-in-the-loop) for testing compiled code on live devices
 - [Sideloading updates](./sideloading) for deploying extensions to devices

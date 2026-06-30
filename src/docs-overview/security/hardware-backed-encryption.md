@@ -1,5 +1,6 @@
 ---
 title: 'Hardware-Backed Encryption'
+slug: /avocado-os/security/encryption
 sidebar_position: 2
 description: 'LUKS full-disk encryption with TPM, TEE, and secure enclave integration in Avocado OS — data at rest protection standard.'
 ---

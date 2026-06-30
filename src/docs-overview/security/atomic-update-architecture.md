@@ -1,5 +1,6 @@
 ---
 title: 'Atomic Update Architecture'
+slug: /avocado-os/security/update-architecture
 sidebar_position: 3
 description: 'A/B partitions, automatic rollback, delta compression, and power-loss resilience in Avocado OS updates.'
 ---
