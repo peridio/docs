@@ -1,49 +1,25 @@
-/* The single-column list view for /field-notes. All styles here only apply
-   inside the swizzled BlogPostItems, which only renders on field-notes
-   index / tag / author / archive pages (the only blog instance on the site). */
+/* The list view for /field-notes: a featured hero followed by image rows.
+   All styles here only apply inside the swizzled BlogPostItems, which only
+   renders on field-notes index / tag / author / archive pages (the only blog
+   instance on the site). Colors come from theme tokens so light + dark both
+   work; --field-notes-accent is defined in custom.css. */
 
 .list {
   width: 100%;
   margin: 0;
   padding: 0;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
 }
 
-.row {
-  padding: 1.5rem 0 1.75rem;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.row:first-child {
-  padding-top: 0.5rem;
-}
-
-.row:last-child {
-  border-bottom: none;
-}
-
-.title {
-  font-size: 1.375rem;
+/* ----- Shared eyebrow + meta ----- */
+.eyebrow {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
   font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  margin: 0 0 0.5rem 0;
-}
-
-.title a {
-  color: var(--ifm-heading-color);
-  text-decoration: none;
-}
-
-.title a:hover {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--field-notes-accent);
-  text-decoration: none;
-}
-
-.dek {
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--ifm-color-emphasis-800);
-  margin: 0 0 0.65rem 0;
+  margin: 0 0 0.85rem 0;
 }
 
 .meta {
@@ -61,19 +37,115 @@
   color: var(--ifm-color-emphasis-400);
 }
 
-.tags {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-left: 0.2rem;
+/* ----- Thumbnails (image or placeholder) ----- */
+.thumb {
+  display: block;
+  width: 100%;
+  overflow: hidden;
 }
 
-.tag {
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.thumbPlaceholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 2px;
+}
+
+/* ----- Featured hero ----- */
+.featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.featuredThumb {
+  aspect-ratio: 16 / 10;
+}
+
+.featuredTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.9rem 0;
+}
+
+.featuredDek {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0 0 1.1rem 0;
+}
+
+/* ----- Standard row ----- */
+.row {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.rowThumb {
+  aspect-ratio: 1 / 1;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.6rem 0;
+}
+
+.dek {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0 0 0.9rem 0;
+}
+
+/* ----- Title links (shared) ----- */
+.title a,
+.featuredTitle a {
+  color: var(--ifm-heading-color);
+  text-decoration: none;
+}
+
+.title a:hover,
+.featuredTitle a:hover {
   color: var(--field-notes-accent);
   text-decoration: none;
 }
 
-.tag:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
+/* ----- Mobile: stack image above text ----- */
+@media (max-width: 768px) {
+  .featured,
+  .row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 1.75rem 0;
+  }
+
+  .featuredThumb,
+  .rowThumb {
+    aspect-ratio: 16 / 9;
+  }
+
+  .featuredTitle {
+    font-size: 1.6rem;
+  }
 }

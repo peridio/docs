@@ -335,19 +335,6 @@ html[data-theme="dark"] .navbar {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5'/%3E%3C/svg%3E");
 }
 
-/* Field Notes navbar link is gated behind ?preview=1.
-   The fieldNotesGate clientModule sets html[data-show-field-notes="1"]
-   when the flag is in the URL or persisted in sessionStorage. We use a
-   data attribute instead of a class because react-helmet-async rewrites
-   the root className on every render and would wipe out a class. */
-.navbar__link[href="/field-notes"] {
-  display: none;
-}
-
-html[data-show-field-notes="1"] .navbar__link[href="/field-notes"] {
-  display: inline-flex;
-}
-
 /* Field Notes — notepad (Heroicons document-text) icon.
    The path occupies y=2.25..20.625 in a 0..24 viewBox (the cut top-right
    corner pulls visual mass upward by ~0.5 SVG units), so without a
