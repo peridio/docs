@@ -1,5 +1,6 @@
 ---
 title: 'Secure Boot'
+slug: /avocado-os/security/secure-boot
 sidebar_position: 0
 description: 'Hardware root of trust and cryptographic boot chain verification in Avocado OS — configured out of the box across NVIDIA, NXP, Raspberry Pi, and more.'
 ---

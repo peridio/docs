@@ -305,5 +305,5 @@ When targeting different hardware, adjust the following based on your board:
 ## What's next
 
 - [Cross-compilation guide](./cross-compilation) for compiling applications and kernel modules with the SDK
-- [Extensions reference](/core-concepts#extensions) for complete configuration options
+- [Extensions reference](/avocado-os/core-concepts#extensions) for complete configuration options
 - [Hardware-in-the-loop development](./hardware-in-the-loop) for testing on live devices

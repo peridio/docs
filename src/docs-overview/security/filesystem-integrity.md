@@ -1,5 +1,6 @@
 ---
 title: 'Filesystem Integrity'
+slug: /avocado-os/security/filesystem-integrity
 sidebar_position: 1
 description: 'dm-verity based block-level integrity verification in Avocado OS — every read verified against a Merkle hash tree.'
 ---

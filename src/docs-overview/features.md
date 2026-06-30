@@ -1,5 +1,6 @@
 ---
 title: 'Features'
+slug: /avocado-os/features
 description: 'Key features of Avocado OS — production-ready embedded Linux built on Yocto with composable extensions, deterministic builds, safe OTA, and a path from prototype to production.'
 ---
 
@@ -197,10 +198,10 @@ This matters economically. Devices on 5G or cellular networks have expensive dat
 
 Security in Avocado OS is not a feature you bolt on later — it's structural. The secure boot chain starts at the hardware root of trust and extends through every layer of the system, including extensions.
 
-- [Secure boot](/security/secure-boot) with a verified boot chain from bootloader through kernel through extensions
-- [dm-verity filesystem integrity](/security/filesystem-integrity) on every read-only image, including extensions
-- [Hardware-backed encryption](/security/hardware-backed-encryption) with LUKS and TPM support
-- [Atomic update architecture](/security/atomic-update-architecture) that eliminates partial-update attack vectors
+- [Secure boot](/avocado-os/security/secure-boot) with a verified boot chain from bootloader through kernel through extensions
+- [dm-verity filesystem integrity](/avocado-os/security/filesystem-integrity) on every read-only image, including extensions
+- [Hardware-backed encryption](/avocado-os/security/encryption) with LUKS and TPM support
+- [Atomic update architecture](/avocado-os/security/update-architecture) that eliminates partial-update attack vectors
 - Immutable root filesystem that cannot be tampered with at runtime
 
 Every extension image carries its own dm-verity hash tree. If a single bit is altered, the system detects it. Combined with secure boot, this means the chain of trust extends from the silicon all the way up to your application code — not just to the kernel, not just to the root filesystem, but through every extension in the runtime.

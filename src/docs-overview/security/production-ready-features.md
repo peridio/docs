@@ -1,5 +1,6 @@
 ---
 title: 'Production-Ready Features'
+slug: /avocado-os/security/production-ready
 sidebar_position: 4
 description: 'Manufacturing support, compliance capabilities, and runtime security features in Avocado OS for production embedded deployments.'
 ---
