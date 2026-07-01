@@ -3,3 +3,9 @@ jschneck:
   title: CTO & creator of Avocado OS
   url: https://github.com/mobileoverlord
   page: true
+
+nsinas:
+  name: Nick Sinas
+  title: Avocado OS, Peridio
+  image_url: /img/field-notes/authors/nsinas.svg
+  page: true

@@ -1,24 +1,50 @@
 ---
 title: ''
-description: '' # one-line dek; shown under the title on the index
+description: '' # one-line dek — used as the index summary and the page meta description
 date: YYYY-MM-DD
-authors: [] # keys from authors.yml
-tags: [] # target + topic
+authors: [] # keys from authors.yml — add yourself there first (see note below)
+tags: [] # target + topic; rendered as pills in the masthead
 category: '' # short label shown above the title on the index; falls back to the first tag
 image: '' # /img/field-notes/<slug>.png — thumbnail on the index (placeholder box if omitted)
-featured: false # set true to pin this note to the large hero slot on the index
-tested_against: '' # free text for greppability; also pass to the component below
-hn_title: '' # suggested HN submission title; concrete, result-first, no hype
+featured: false # true pins this note to the large hero slot on the index
+# --- internal drafting fields (not rendered) ---
+tested_against: '' # free text for greppability
 poster: '' # engineer who posts + answers comments for ~24h
 lift_for_blog: '' # one-line business-case angle (champion → approver)
 promote_to_track: '' # on-ramp candidate? note the target tutorial
 ---
 
-import TestedAgainst from '@site/src/components/TestedAgainst'
+{/*
+  AUTHOR SETUP (one-time): add yourself to authors.yml, e.g.
+    jdoe:
+      name: Jane Doe
+      title: Avocado OS, Peridio
+      image_url: /img/field-notes/authors/jdoe.svg   (a small monogram/photo; optional)
+  Then set authors: [jdoe] above. The byline renders name + title + avatar
+  automatically (link-free — a browser-extension overlay quirk we sidestep).
 
-<TestedAgainst avocado="" jetpack="" boards={[]} />
+  Images: put them in static/img/field-notes/ and reference as /img/field-notes/<name>.
+  Any image in the body is click-to-zoom automatically.
+  Code blocks: always tag a language (bash, ini, text, ...) so they highlight.
+*/}
 
-**TL;DR.** Two sentences: what you did, what happened.
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+{/* Test-status card: what you actually verified this against. */}
+
+<TestStatus
+  targets={['jetson-orin-nano-devkit']}
+  cli="0.40.0"
+  reference={{
+    label: '<reference-name>',
+    href: 'https://github.com/avocado-linux/references/tree/main/<reference-name>',
+  }}
+/>
+
+**TL;DR** — Two sentences: what you did and what happened.
+
+{/* truncate */}
 
 ## What this is
 
@@ -26,15 +52,20 @@ Assume the reader has never heard of Peridio or Avocado. Orient a stranger in 2�
 
 ## How it works / what we did
 
-The meat: commands, config, output.
+The meat: commands, config, and output. Keep paragraphs short — engineers scan.
 
-## What we learned
+```bash
+avocado build
+```
 
-The payoff. The result that matters.
+{/* A pull quote for a standout number or line — set it off from the body: */}
 
-## What didn't work
+<PullQuote>A punchy result or headline number worth pulling out.</PullQuote>
 
-Required when there were dead ends. Honesty here is the single biggest credibility signal on HN.
+## Issues Encountered
+
+The honest "what broke / what we'd do differently." This is the single biggest
+credibility signal. Lead each item with a **bold takeaway.**
 
 ## Reproduce it
 

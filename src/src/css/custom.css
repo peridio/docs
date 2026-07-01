@@ -1218,49 +1218,53 @@ html[data-theme="dark"] .plugin-id-field-notes {
 }
 
 /* ----- DETAIL PAGE ----- */
+/* Editorial header: eyebrow, large title, meta + author, then a divider that
+   separates the masthead from the article body. */
+.plugin-id-field-notes article > header {
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
 /* "FIELD NOTES" eyebrow above the post title */
 .plugin-id-field-notes article > header > h1::before {
   content: "FIELD NOTES";
   display: block;
   font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   color: var(--field-notes-accent);
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.9rem;
 }
 
 .plugin-id-field-notes article > header > h1 {
-  font-size: 1.875rem;
+  font-size: 2.5rem;
   font-weight: 600;
-  line-height: 1.25;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.01em;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0;
+  color: var(--ifm-heading-color);
+}
+
+/* date line — sits below the title (BlogPostItemHeaderInfo). The author byline
+   is now a custom, link-free block rendered in the swizzled header and styled
+   in BlogPostItem/Header/styles.module.css. */
+.plugin-id-field-notes article > header > div:first-of-type {
+  margin: 1.5rem 0 0 0 !important;
 }
 
 .plugin-id-field-notes article > header time {
-  font-size: 0.875rem;
-  color: var(--ifm-color-emphasis-700);
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: var(--ifm-color-emphasis-600);
 }
 
-.plugin-id-field-notes article > header > div:first-of-type {
-  margin: 0.25rem 0 0.75rem 0 !important;
-}
-
-/* The inner author row uses bootstrap .row too. Stop our outer flex
-   override from leaking down to it, and zero the row's default -16px
-   margin so the author block aligns flush with the title above. */
-.plugin-id-field-notes article > header .row {
-  display: block !important;
-  margin-top: 0.25rem !important;
-  margin-bottom: 0.75rem !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  gap: 0 !important;
-}
-
-.plugin-id-field-notes article > header [class*="authorCol"] {
-  padding: 0;
+/* tags now live in the masthead (swizzled header) — hide the default
+   footer copy so they aren't shown twice. */
+.plugin-id-field-notes .theme-blog-footer-edit-meta-row {
+  display: none;
 }
 
 /* Section headings inside the article */

@@ -15,12 +15,6 @@ function formatDate(iso) {
   })
 }
 
-function ReadingTime({ minutes }) {
-  if (minutes == null) return null
-  const m = Math.max(1, Math.round(minutes))
-  return <span>{m} min read</span>
-}
-
 // The eyebrow label above each title. The top (newest) item is treated as the
 // featured hero and always reads "Featured"; every other item shows its
 // `category` front matter, falling back to its first tag.
@@ -50,7 +44,7 @@ function Thumb({ post, className }) {
 }
 
 function Meta({ metadata }) {
-  const { date, readingTime, authors = [] } = metadata
+  const { date, authors = [] } = metadata
   const authorNames = authors.map((a) => a.name).filter(Boolean)
   return (
     <div className={styles.meta}>
@@ -59,12 +53,6 @@ function Meta({ metadata }) {
         <>
           <span className={styles.sep}>·</span>
           <span>{authorNames.join(', ')}</span>
-        </>
-      )}
-      {readingTime != null && (
-        <>
-          <span className={styles.sep}>·</span>
-          <ReadingTime minutes={readingTime} />
         </>
       )}
     </div>

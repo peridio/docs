@@ -1,0 +1,43 @@
+/* Magazine-style pull quote. Uses the field-notes accent when rendered inside
+   the blog, falling back to the site brand color elsewhere; all colors are
+   theme tokens so light + dark both work. */
+
+.pullquote {
+  --pq-accent: var(--field-notes-accent, var(--ifm-color-primary));
+  max-width: 42rem;
+  margin: 2.75rem auto;
+  padding: 1.75rem 1.5rem;
+  border-top: 2px solid var(--pq-accent);
+  border-bottom: 2px solid var(--pq-accent);
+  text-align: center;
+}
+
+.text {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: var(--ifm-heading-color);
+  text-wrap: balance;
+}
+
+.cite {
+  display: block;
+  margin-top: 1rem;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
+@media (max-width: 768px) {
+  .text {
+    font-size: 1.3rem;
+  }
+}

@@ -79,8 +79,8 @@ const config = {
         path: 'field-notes',
         blogTitle: 'Field Notes',
         blogDescription:
-          'Short, technical write-ups from the Peridio team — what we shipped to robots in the field, what broke, and what we learned. No press releases. Just the work.',
-        showReadingTime: true,
+          'Technical write-ups from the Peridio team — what we are working on, decisions we made, and stories from the field.  Engineering content only.',
+        showReadingTime: false,
         postsPerPage: 20,
         blogSidebarCount: 0,
         authorsMapPath: 'authors.yml',
@@ -183,7 +183,7 @@ const config = {
       prism: {
         theme: themes.oneLight,
         darkTheme: themes.oneDark,
-        additionalLanguages: ['bash', 'toml'],
+        additionalLanguages: ['bash', 'toml', 'ini'],
         magicComments: [
           {
             className: 'docusaurus-highlight-code-line',
@@ -223,7 +223,7 @@ const config = {
         ],
       },
       zoom: {
-        selector: '.markdown > img',
+        selector: '.markdown img',
         background: {
           light: 'rgb(255, 255, 255)',
           dark: 'rgb(50, 50, 50)',

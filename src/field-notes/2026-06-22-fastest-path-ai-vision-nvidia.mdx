@@ -1,0 +1,269 @@
+---
+title: 'The Fastest Path to AI Vision on NVIDIA Hardware'
+description: 'From avocado init to a live four-model DeepStream 7.1 vision pipeline on a Jetson Orin Nano in about ten minutes of build plus a three-and-a-half-minute flash — the entire NVIDIA accelerated stack ships precompiled from the Avocado package feed.'
+date: 2026-06-22
+authors: [nsinas]
+tags: [nvidia, jetson, deepstream, tensorrt, computer-vision]
+category: 'NVIDIA'
+featured: true
+image: /img/field-notes/deepstream-demo.gif
+---
+
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus
+  targets={['jetson-orin-nano-devkit']}
+  cli="0.40.0"
+  reference={{
+    label: 'nvidia-deepstream',
+    href: 'https://github.com/avocado-linux/references/tree/main/nvidia-deepstream',
+  }}
+/>
+
+**TL;DR** — We made a demo with some fancy people tracking! It runs on NVIDIA hardware, uses the GPU, runs at 30fps, it tracks people, draws fun lines, and it takes minutes to to go from nothing to a custom, production ready OS running this demo.
+
+{/* truncate */}
+
+## The fast path to a complex pipeline
+
+This is a moderately complex vision pipeline: four TensorRT engines — PeopleNet (detect people), MoveNet (17-point skeleton per person), YOLOX-Body-Head-Hand (find hands), and MediaPipe Hand Landmark (21 keypoints per hand) — linked by an NvDCF tracker, with `nvdsanalytics` ROI dwell timers on top and every overlay burned into a live MJPEG stream. The usual ways to stand that up — an `nvcr.io` pull onto a workstation, a multi-hour Yocto build, or compiling engines on first boot — don't fit something that has to ship and update in the field.
+
+The whole stack, DeepStream 7.1, TensorRT, CUDA, cuDNN, the NVIDIA GStreamer plugins, `pyds`, Python, and Flask — is already precompiled in the Avocado package feed. `avocado install` pulls the prebuilt packages; `avocado build` assembles them into sysext extensions. No Docker daemon, no Yocto build from source, nothing compiled on target.
+
+<PullQuote>
+  Roughly nine minutes to download every package. One minute, fifteen seconds to build the image.
+</PullQuote>
+
+## How to get started
+
+Here is all that is needed, all commands run on your machine
+
+```bash
+avocado init --reference nvidia-deepstream nvidia-deepstream
+cd nvidia-deepstream
+avocado install -f      # pull the SDK + prebuilt runtime packages from the feed
+avocado build           # download models/engines, assemble the five extensions
+avocado provision -r dev --profile tegraflash   # flash the Orin Nano over USB
+```
+
+Measured on a Jetson Orin Nano DevKit:
+
+| Step        | What happens                                                                                                                             | Observed time         |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `init`      | clone the reference + assets                                                                                                             | seconds               |
+| `install`   | pull every package: DeepStream 7.1, CUDA/cuDNN, TensorRT, GStreamer NV plugins, Python, Flask, plus the four models and prebuilt engines | ~9 min, network-bound |
+| `build`     | compose the five extensions into the image filesystem                                                                                    | 1 min 15 s            |
+| `provision` | tegraflash the board over USB recovery mode                                                                                              | ~3.5 min              |
+
+The ~9-minute download is the only variable — it scales with your internet connection, because DeepStream and CUDA are genuinely big. None of it is compilation; `install` is bytes on the wire, not CPU. The 1:15 assemble is the actual build, and it's short precisely because there's no source to compile.
+
+After the flash, the board reboots straight into the pipeline — open `http://<device-ip>:8080` and you're looking at the live feed. Toggle the Center zone to count people walking into it; flip on the skeleton, pose, and hand overlays to watch keypoints track across the room, all on the GPU. ([Testing the reference](#testing-the-reference) has the health checks.)
+
+![A person moves across the frame while the DeepStream pipeline holds a stable tracker ID and overlays the body skeleton and per-finger hand keypoints in real time, with the zone counter incrementing as they enter the Center ROI.](/img/field-notes/deepstream-demo.gif)
+
+_The live dashboard on a Jetson Orin Nano: pose and hand tracking on, tracker IDs stable across the frame, and the zone counter incrementing — all rendered on the GPU._
+
+## Implementation
+
+### Stack
+
+| Layer                        | Choice                                                                                         | Notes                                                                                                                                                                                                              |
+| ---------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Inference SDK                | NVIDIA DeepStream 7.1                                                                          | The target framework, precompiled in the Avocado feed. Its `nvinfer` / `nvtracker` / `nvdsanalytics` GStreamer elements are the whole pipeline. Runs native - no container.                                        |
+| Inference backend            | TensorRT (FP16 engines)                                                                        | FP16 over INT8: faster engine build, near-identical accuracy on this workload, stays real-time at 720p. INT8 (with calibration) is a regenerate-and-commit task per target if a deployment is throughput-bound.    |
+| GPU runtime                  | CUDA cudart + libraries, cuDNN                                                                 | Prebuilt packages from the feed, not a CUDA container and not a from-source build. Lives in the runtime layer; only moves on a JetPack bump.                                                                       |
+| Media framework              | GStreamer 1.0 + NVIDIA plugins (`nvvideoconvert`, `nvv4l2camerasrc`, `nvjpegenc`, `nvvidconv`) | The pipeline graph. Hardware JPEG encode (`nvjpegenc`) is fed straight from NVMM NV12, which keeps OpenCV and numpy off the dependency list entirely.                                                              |
+| Camera                       | `v4l2src` + `kernel-module-uvcvideo`                                                           | USB UVC webcam, MJPEG path. CSI (`nvarguscamerasrc`) and RTSP (`rtspsrc`) are documented one-line swaps; everything downstream of `nvstreammux` is source-agnostic.                                                |
+| Detector (primary)           | PeopleNet ResNet34, 3 classes (Person/Bag/Face)                                                | NVIDIA TAO model from NGC. Drop-in swap to TrafficCamNet / DashCamNet via a config edit.                                                                                                                           |
+| Tracker                      | NvDCF (perf profile)                                                                           | Correlation filter + visual features. Biased toward speed; accuracy and IOU-only profiles ship with DeepStream samples for the swap.                                                                               |
+| Pose (secondary GIE)         | MoveNet single-pose Lightning                                                                  | Runs only on PeopleNet's Person crops. ONNX rewritten NHWC to NCHW at build time so DS 7.1 `nvinfer` reads it cleanly.                                                                                             |
+| Hand detect (primary GIE)    | YOLOX-Body-Head-Hand 320x320                                                                   | One cheap 320x320 pass on the full frame finds hands directly, with no dependence on the person bbox being right first. Raw head output (grid + log-space + sigmoid) is decoded and NMS'd in the Python pad probe. |
+| Hand landmark (tertiary GIE) | MediaPipe Hand Landmark sparse 224x224                                                         | The sparse 224x224 variant keeps the per-hand crop inference small enough to run on every detected hand without dragging the pipeline below real-time; emits 21 keypoints + handedness + presence.                 |
+| App runtime                  | Python 3 + PyGObject + Flask                                                                   | Prebuilt packages from the feed (`python3-flask`, `python3-pygobject`), not pip. Lives in the runtime layer so a logic change does not re-ship the interpreter.                                                    |
+| Dashboard transport          | Flask MJPEG                                                                                    | "Open it in a browser" simplicity. RTSP out (`nvv4l2h264enc` + `rtspclientsink`) is a documented swap for the DeepStream-idiomatic path.                                                                           |
+
+### App / source layout
+
+```text
+nvidia-deepstream/
+├── avocado.yaml                      # five-extension dev runtime, SDK compile hooks
+├── models-compile.sh                 # download + rewrite the four ONNX (SDK)
+├── models-install.sh                 # stage ONNX into vision-models sysroot
+├── engines-compile.sh                # stage prebuilt engines for $AVOCADO_TARGET
+├── engines-install.sh                # stage engines into vision-engines sysroot
+├── prebuilt-engines/
+│   └── jetson-orin-nano-devkit/      # committed FP16 engines, one dir per model
+│       ├── peoplenet/    *.engine
+│       ├── movenet/      *.engine
+│       ├── handdet/      *.engine
+│       └── handlandmark/ *.engine
+├── vision-models/overlay/usr/lib/nvidia-deepstream/models/
+│   └── peoplenet/labels.txt          # committed; ONNX fetched at build
+├── vision-config/overlay/etc/nvidia-deepstream/
+│   ├── config_infer_peoplenet.txt    # primary GIE
+│   ├── config_infer_movenet.txt      # secondary GIE (pose)
+│   ├── config_infer_handdet.txt      # primary GIE (hands)
+│   ├── config_infer_handlandmark.txt # tertiary GIE
+│   ├── tracker_NvDCF.yml             # NvDCF perf profile
+│   └── analytics_config.txt          # ROI + line-crossing definitions
+└── vision-app/overlay/usr/
+    ├── local/bin/app.py              # ~2,000 lines: the pipeline + Flask dashboard
+    ├── lib/systemd/system/vision-app.service
+    └── libexec/avocado-deepstream-preflight.sh
+```
+
+### The pipeline
+
+![The DeepStream GStreamer pipeline: v4l2src → nvvideoconvert → nvstreammux → PeopleNet (primary) → NvDCF tracker → nvdsanalytics → MoveNet (secondary) → YOLOX-Hand (primary) → MediaPipe Hand Landmark (tertiary) → nvdsosd → nvjpegenc → MJPEG/Flask.](/img/field-notes/deepstream-pipeline.jpg)
+
+Detection metadata travels as `NvDsBatchMeta` attached to each buffer; `app.py` reads it through the `pyds` bindings. Frame pixels travel separately and land in the appsink already JPEG-encoded by `nvjpegenc`, so the MJPEG relay copies bytes rather than re-encoding in Python.
+
+The pose and hand stages each deliver their model output as `NvDsInferTensorMeta` (`output-tensor-meta=1`, `network-type=100` to disable nvinfer's built-in post-processing). The pad probe reads the raw tensor via `tensor_meta.out_buf_ptrs_host` - the canonical `pyds` path, a `void**` `PyCapsule` walked with `ctypes` - projects keypoints back into image-pixel coordinates, and attaches an `NvDsDisplayMeta` of joint circles and bone lines. `nvdsosd` rasterises that into the same frame it paints the box onto. The overlay arrives in the MJPEG stream at full pipeline frame rate with no client-side rendering.
+
+### Endpoints
+
+| Method | Path                    | Purpose                                                                                                                                                       |
+| ------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/`                     | HTML dashboard: live video, FPS/detection/track stats, overlay toggle buttons                                                                                 |
+| GET    | `/stream`               | Raw `multipart/x-mixed-replace` MJPEG stream with overlays burned in                                                                                          |
+| GET    | `/api/stats`            | JSON: FPS, detections, `unique_tracks`, pose state, and the `analytics` block (per-ROI `current_count`, `total_entries`, `avg_dwell_seconds`, line crossings) |
+| POST   | `/api/toggle/skeletons` | Flip the server-side skeleton overlay flag (default off)                                                                                                      |
+| POST   | `/api/toggle/hands`     | Flip the hand-keypoint overlay flag (default off)                                                                                                             |
+| POST   | `/api/toggle/zones`     | Flip the ROI/line overlay flag (default off)                                                                                                                  |
+
+The toggles flip a flag the pad probe reads each frame, so the change takes effect on the next frame with no service restart. The current state is reported back under `pose.overlay_enabled` in `/api/stats`.
+
+### The build flow
+
+`avocado build` runs the compile hooks inside the SDK container and assembles all five extensions. The hooks fetch and prep the four models:
+
+1. **PeopleNet** ONNX + labels from NGC - the primary detector.
+2. **MoveNet** single-pose Lightning from PINTO's ONNX zoo. Its input layer is rewritten from NHWC to NCHW with a small `onnx.helper` Transpose insertion so DS 7.1 `nvinfer` reads it cleanly. This rewrite is why the extension declares an SDK dependency on `nativesdk-uv` - the only SDK prerequisite in the reference, and one to flag for anyone porting it.
+3. **YOLOX-Body-Head-Hand** (320x320, non-post variant) from PINTO - the hand detector.
+4. **MediaPipe Hand Landmark** sparse (224x224) from PINTO - the hand-landmark regressor.
+
+`engines-compile.sh` (the `vision-engines` hook) reads `$AVOCADO_TARGET` and stages only `prebuilt-engines/$AVOCADO_TARGET/`. Because every Avocado build is custom to the target, the resulting extension always contains exactly the right engines for the image. The script fails the build if any of the four models lacks an engine for the target rather than producing an image that cannot start:
+
+```bash
+TARGET="${AVOCADO_TARGET:-jetson-orin-nano-devkit}"
+ENGINE_SRC_BASE="prebuilt-engines/${TARGET}"
+for model in peoplenet movenet handdet handlandmark; do
+  src_dir="$ENGINE_SRC_BASE/$model"
+  if [ -d "$src_dir" ] && ls "$src_dir"/*.engine >/dev/null 2>&1; then
+    cp -v "$src_dir"/*.engine "$ENGINE_DST_BASE/$model/"
+  else
+    echo "ERROR: no engine for '${model}' under ${src_dir}/." >&2
+    exit 1
+  fi
+done
+```
+
+### Packaging: five extensions, one reason to change each
+
+The pipeline is split across five extensions, each with a single reason to change. systemd-sysext merges the sysext layers into one `/usr` and the confext layers into `/etc` at boot, so the split is invisible to the running app. There is no inter-extension dependency mechanism in systemd; the `dev` runtime's extension list in `avocado.yaml` is the contract that all five are composed together.
+
+{/* SUGGESTED CODE: a short avocado.yaml excerpt showing the dev runtime's five-extension list — this "contract" is referenced but never shown. */}
+{/* SUGGESTED IMAGE: a simple layer diagram of the five extensions merging into /usr + /etc at boot. */}
+
+| Extension        | Type             | Holds (sysext = `/usr`, confext = `/etc`)                                                                                                                                                         | Re-ships when                                   | Rough size |
+| ---------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ---------- |
+| `vision-runtime` | sysext + confext | DeepStream, `pyds`, TensorRT, CUDA/cuDNN, NVIDIA GStreamer plugins, `uvcvideo`, Python + Flask (the **dependencies**). The confext half carries the packages' `/etc/ld.so.conf.d/*.conf` entries. | JetPack / DeepStream / CUDA bump (rare)         | GB-scale   |
+| `vision-models`  | sysext           | the four ONNX files under `/usr/lib/nvidia-deepstream/models/`                                                                                                                                    | a model is retrained or swapped                 | ~31 MB     |
+| `vision-engines` | sysext           | prebuilt TensorRT engines for the build target under `/usr/lib/nvidia-deepstream/engines/`                                                                                                        | models change, or a TRT/JetPack bump            | ~19 MB     |
+| `vision-config`  | confext          | nvinfer / tracker / analytics configs under `/etc/nvidia-deepstream/`                                                                                                                             | retuning thresholds, ROI zones, tracker profile | KB         |
+| `vision-app`     | sysext           | `app.py`, its systemd unit, the preflight script (the **code**)                                                                                                                                   | business-logic iteration (frequent)             | KB         |
+
+The same precompiled-feed property that makes the first build fast makes every subsequent update small. Because the gigabytes of CUDA and DeepStream live in their own `vision-runtime` layer and are never compiled locally, they only move on a JetPack bump - and the OTA for a day-to-day change carries only the layer you touched: a kilobyte confext for a retuned threshold, a kilobyte sysext for an `app.py` edit, tens of megabytes for a retrained model.
+
+`vision-runtime` is both a sysext and a confext — the non-obvious call. CUDA, TensorRT, and DeepStream ship their libraries under `/usr` and `/opt` (sysext), but they also drop `/etc/ld.so.conf.d/*.conf` entries (confext) that tell `ldconfig` where those libraries live. Ship it sysext-only and the loader never finds them — one of two ways we hit `no element "nvvideoconvert"` (see [Issues Encountered](#issues-encountered)). So the runtime layer carries both halves.
+
+Writable state: none in `/var`. Models and engines are read directly from their read-only extensions, so an A/B extension swap fully replaces them with nothing to reconcile. The only runtime-writable state is the curated GStreamer plugin directory under `/run` (tmpfs), rebuilt on every start (see the unit shape below).
+
+The three lower layers (`vision-models`, `vision-engines`, `vision-config`) carry an `on_merge: systemctl try-restart vision-app.service` hook, so an OTA of just those layers restarts the app to pick up the new artifacts without a reboot. `vision-app` owns the service: it enables it, restarts on merge, and stops it on unmerge.
+
+### systemd unit shape
+
+The interesting part of `vision-app.service` is the `ExecStartPre` workaround and the immutability discipline around it. The pipeline needs the GPU and the camera, so it runs with the device access it requires.
+
+```ini
+[Service]
+Type=simple
+ExecStartPre=/usr/libexec/avocado-deepstream-preflight.sh
+Environment=GST_PLUGIN_SYSTEM_PATH_1_0=/run/avocado-gst-plugins
+ExecStart=/usr/bin/python3 /usr/local/bin/app.py
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=180
+Environment=GST_DEBUG=2,nvinfer:4
+```
+
+The `ExecStartPre` preflight exists to dodge a GStreamer plugin-scanner crash — the second half of the `no element "nvvideoconvert"` saga in [Issues Encountered](#issues-encountered). It builds a directory under `/run` with symlinks to every real plugin except the offending `libcustom2d_preprocess.so`, and the unit points `GST_PLUGIN_SYSTEM_PATH_1_0` at it. Defining the system path overrides rather than augments the built-in default, so `/usr/lib/gstreamer-1.0` is never scanned directly. The script writes only to `/run` (tmpfs, rebuilt each start) and never overlays or bind-mounts `/usr`, `/etc`, or `/opt` - any in-place modification of those would break `avocado runtime deploy`, because systemd-sysext's unmerge bails with "Read-only file system" if anything is mounted onto a path it needs to walk.
+
+`TimeoutStartSec=180` is headroom: the four FP16 engines are memory-mapped on load, so the pipeline normally reaches PLAYING in ~10-15 s, but a slow SD card mmapping four engines gets the slack it needs. `GST_DEBUG=2,nvinfer:4` keeps `nvinfer` chatty in the journal during load so startup shows progress rather than silence. Camera device, resolution, framerate, port, and the per-stage `ENABLE_POSE` / `ENABLE_HANDS` switches are all commented-out `Environment=` lines, overridable with `systemctl edit vision-app` and no rebuild.
+
+## Testing the reference
+
+### Verify
+
+SSH in (the development `config` extension sets an empty root password):
+
+```bash
+ssh root@<device-ip>
+```
+
+Runtime and service are up:
+
+```bash
+avocado control runtime list   # the dev runtime is running
+systemctl status vision-app    # Active: active (running)
+```
+
+Pipeline reached PLAYING and produced frames:
+
+```bash
+journalctl -u vision-app -b --no-pager | tail -30
+# ...setting pipeline to PLAYING
+# dashboard:        http://0.0.0.0:8080
+```
+
+Dashboard and live stream, from any machine on the same network:
+
+- Browser: `http://<device-ip>:8080` - live video with boxes, per-object tracker IDs, and a stats panel.
+- Raw stream: `http://<device-ip>:8080/stream`
+- JSON: `curl http://<device-ip>:8080/api/stats | jq`
+
+Expected on an Orin Nano at 720p: ~30 fps end-to-end with a couple of people in frame.
+
+Tracker IDs persist across frames - walk in and out of frame and watch a stable `id` stay attached to each person while `unique_tracks` increases each time someone new enters:
+
+```bash
+curl -s http://<device-ip>:8080/api/stats | jq '.unique_tracks, .analytics.rois.Center'
+# 3
+# {
+#   "current": [{"tracker_id": 17, "elapsed_seconds": 8.2}],
+#   "current_count": 1,
+#   "total_entries": 27,
+#   "avg_dwell_seconds": 7.4
+# }
+```
+
+Flask does not bind port 8080 until all four GIEs' engines are loaded. If the dashboard is unreachable on first boot, `journalctl -u vision-app -f` shows which engine `nvinfer` is on.
+
+### Try it yourself
+
+- **Toggle overlays live.** With the dashboard open, click _Show skeletons_, _Show hands_, _Show zones_. Each is a `POST /api/toggle/...` that flips a flag the pad probe reads next frame - no restart, visible immediately.
+- **Benchmark the stages.** `systemctl edit vision-app`, set `Environment=ENABLE_HANDS=0`, restart, and read the FPS delta in `/api/stats`. Add `ENABLE_POSE=0` to see the detector + tracker pipeline alone.
+- **Reconfigure the camera with no rebuild.** Set `CAMERA_DEVICE` / `CAMERA_WIDTH` / `CAMERA_HEIGHT` in a drop-in, restart, and watch the pipeline rebuild its caps from the new values.
+
+## Issues Encountered
+
+**TensorRT engines have to be built on the target first.** Engines are specific to the GPU and TensorRT version — there's no cross-building them on a workstation. So the real workflow is: build the four FP16 engines once on the Orin Nano (under 10 minutes), copy them back off the device, and commit them under `prebuilt-engines/<target>/` to embed in the `vision-engines` extension. Every build and OTA after that ships those prebuilt engines — no device ever compiles on boot.
+
+**The first cut was one big extension.** It worked, but every OTA was enormous: a one-line `app.py` change re-shipped CUDA and DeepStream. Splitting into five extensions along lines of change — runtime / models / engines / config / app — drops a code-only update from gigabytes to kilobytes. Separation of concerns here is an OTA-size decision, not a stylistic one.
+
+**`no element "nvvideoconvert"` — the same error twice, from two unrelated causes.** The first time, `ldconfig` couldn't find the CUDA and DeepStream libraries: those packages drop `/etc/ld.so.conf.d/*.conf` entries that point the loader at their install dirs, and shipping `vision-runtime` as a sysext _without_ its confext half silently dropped them — so the GStreamer plugins couldn't `dlopen` their dependencies. (That's why the runtime layer carries both halves.) The second time — libraries found, still no `nvvideoconvert` — the culprit was the plugin scanner itself: `deepstream-7.1` ships `/usr/lib/gstreamer-1.0/deepstream/libcustom2d_preprocess.so`, which isn't a plugin at all (it belongs to the unused `nvdspreprocess`). Its constructor throws `pthread_setspecific: Invalid argument` inside glib, the scanner aborts, and on the way down it blacklists the _next_ file alphabetically — `libgstnvvideoconvert.so`. Same three words on screen; a loader-path bug and an alphabetical-blacklist bug behind them. The fix for the second is the `ExecStartPre` preflight in the [systemd unit](#systemd-unit-shape).
+
+## Compose with other references
+
+This is the heavy end of the repo's NVIDIA vision line. `nvidia-gstreamer-yolo` is the lighter companion: the same GStreamer-on-NVIDIA shape with a single YOLO detector and no DeepStream SDK, useful when the multi-model DeepStream stack is more than the product needs. `python-yolo` is the non-accelerated baseline for comparison. The five-extension packaging pattern here - dependencies / weights / target-pinned artifacts / config / code - transfers to any model-serving reference, NVIDIA or not.
