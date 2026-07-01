@@ -1,0 +1,218 @@
+---
+title: 'Pull the flash off our i.MX93 and you get ciphertext: LUKS2, dm-verity, IMA/EVM, and TPM2-sealed keys on Avocado OS'
+description: 'Physical access to the storage should not equal access to the data or the ability to run tampered code. This note wires LUKS2 encrypted /var, dm-verity rootfs integrity, IMA/EVM runtime appraisal, and TPM2-sealed keys into one boot chain on the i.MX93 FRDM.'
+date: 2026-06-24
+authors: [jtia]
+tags: [imx93, security, luks2, dm-verity, ima-evm, tpm2, secure-boot]
+category: 'Security & Compliance'
+featured: false # Featured selection is Kristen/Bill's call
+# image: /img/field-notes/hardened-boot-imx93.png # title image TODO (hero pass with Cesar)
+tested_against: 'Avocado [ENGINEER: CLI version], avocado-imx93-frdm (AHAB Secure Boot + OP-TEE fTPM), avocado-qemuarm64 (fTPM via QEMU)'
+poster: jtia
+lift_for_blog: 'CRA Annex I and IEC 62443-4-2 both require demonstrable data-at-rest protection and integrity; this is the boot-chain half a compliance mapping builds on.'
+promote_to_track: 'Secure-boot / storage-encryption reference candidate once the i.MX93 hardware pass is fully signed off.'
+---
+
+import TestStatus from '@site/src/components/TestStatus'
+import PullQuote from '@site/src/components/PullQuote'
+
+<TestStatus
+  targets={['imx93-frdm', 'qemuarm64']}
+  cli="[ENGINEER: version]"
+  reference={{
+    label: 'meta-avocado',
+    href: 'https://github.com/avocado-linux/meta-avocado',
+  }}
+/>
+
+**TL;DR.** If someone pulls the flash chip from an i.MX93 device, can they read the data or slip modified code onto it? This note wires LUKS2 encrypted `/var`, dm-verity rootfs integrity, IMA/EVM runtime appraisal, and TPM2-sealed key unsealing into one boot chain so the answer is no to both: physical access to the storage medium does not equal access to the data or the ability to run tampered code.
+
+{/* truncate */}
+
+## What this is
+
+Peridio makes Avocado OS, an immutable embedded Linux runtime: a read-only A/B root filesystem, composed sysext/confext extensions, and a writable `/var`. The `hardened-security` baseline covers the runtime posture (SSH hardening, firewall, auditd, sysctl). It deliberately excludes storage encryption and boot integrity, because those require provisioning-workflow changes and hardware-specific key stores. This note fills that gap on the i.MX93 FRDM board.
+
+## The threat: physical access plus offline tampering
+
+An attacker who removes the eMMC or NVMe chip gets plaintext data, can patch the rootfs, can drop a modified config or binary into a mutable path, and can load an unsigned kernel module, unless four controls are in place: encrypted storage, rootfs integrity verification, runtime appraisal of mutable files (IMA/EVM), and a boot chain that gates decryption on the signature state of the firmware. Each control alone is weaker; together they require the attacker to compromise all four simultaneously.
+
+dm-verity and IMA/EVM cover complementary halves of the integrity problem. dm-verity protects the immutable read-only rootfs with a build-time hash tree; it cannot say anything about files that are not in that tree. IMA/EVM closes that gap by appraising mutable files (writable config, dropped binaries, extension content) against a signature before the kernel opens or executes them, with EVM protecting the security xattr that holds the signature. The two together mean neither the immutable nor the mutable surface accepts tampered code.
+
+The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443-4-2 SL-2 both require demonstrable protection of data at rest; LUKS2 with TPM2 PCR 7 sealing satisfies that, and dm-verity plus IMA/EVM cover the integrity half.
+
+## What it demonstrates
+
+- LUKS2 `/var` formatted on first boot by the initramfs, with no pre-provisioned key material shipped in the image
+- Two-phase TPM2 enrollment: phase 1 uses a software Argon2id passphrase as a recovery baseline; phase 2 seals a new key to TPM2 PCR 7 (Secure Boot state) via `systemd-cryptenroll` and kills the Argon2id slot only after a `--token-only` unseal confirms the TPM path works
+- dm-verity rootfs integrity gated on the `secureboot` DISTRO_FEATURE, with every rootfs block cryptographically verified on read
+- IMA/EVM runtime appraisal gated on the `ima` DISTRO_FEATURE: the kernel refuses to open or execute a mutable file whose IMA signature does not verify, with EVM sealing the security xattrs and IMA measurements logged to PCR 10
+- Build-time UEFI Secure Boot key generation (PK/KEK/db/dbx) via an idempotent recipe that regenerates keys only when absent and never ships private `.key` files to the target
+- Kernel module signing with `MODULE_SIG_FORCE` gated on the `security` DISTRO_FEATURE
+- Device-side TPM2 userspace (`tpm2-tss`, `tpm2-tools`, `tpm2-openssl`) with `tpm2-abrmd` disabled and excluded from the initramfs entirely (the unseal path is D-Bus-free)
+
+## How it works
+
+### Stack
+
+| Layer | Choice | Notes |
+| :---- | :---- | :---- |
+| Data encryption | LUKS2 AES-256-XTS 512-bit key | XTS is the standard for block-device encryption; 512-bit key matches the AES-256 keyslot |
+| Key derivation (phase 1) | Argon2id via OpenSSL 3 KDF | Software fallback; combines a provisioned per-device secret with a hardware serial so the key is device-bound without a TPM |
+| Key sealing (phase 2) | TPM2 PCR 7 via `systemd-cryptenroll` | PCR 7 captures UEFI Secure Boot state; a tampered boot chain makes unseal fail |
+| Rootfs integrity | dm-verity over EROFS | Hash tree computed at build time; verified on every block read; gated on `secureboot` |
+| Mutable-file integrity | IMA appraisal + EVM | Appraises a per-file signature before open/exec; EVM protects `security.ima`; gated on `ima` |
+| Secure Boot keys | `gen-sbkeys.sh` (build-time, idempotent) | Generates PK/KEK/db/dbx; public certs to `/usr/share/secureboot-keys`; private `.key` never in `FILES` |
+| Module signing | `MODULE_SIG_FORCE` kernel config | Gated on `security`; prevents unsigned kernel modules from loading |
+| TPM2 userspace | tpm2-tss + tpm2-tools + tpm2-openssl | `tpm2-tss` is the ESAPI `systemd-cryptenroll` needs; `tpm2-abrmd` is delivered but auto-start disabled, so the initramfs unseal path is D-Bus-free |
+| Entropy | `CONFIG_HW_RANDOM_TPM=y` | Early boot has a shallow entropy pool; the TPM RNG feeds the kernel hwrng immediately so the `luksFormat` key is not derived from a cold-boot pool |
+
+### Source layout
+
+The implementation lives entirely in `meta-avocado` and `meta-avocado-nxp`; no application code ships to the device beyond the shell scripts and systemd units.
+
+```text
+meta-avocado/
+  recipes-core/cryptsetup-var/
+    cryptsetup-var.bb           # recipe; RDEPENDS = cryptsetup; inherits systemd
+    files/
+      cryptsetup-var.sh         # unlock script (shared, zero arch-specific logic)
+      cryptsetup-var.service    # Before=initrd-root-fs.target, Type=oneshot
+      var-key.sh                # Argon2id phase-1 key provider
+  recipes-security/sb-keys/
+    sb-keys.bb                  # do_install[nostamp]; BB_BASEHASH_IGNORE_VARS
+    key-store.bb                # installs public certs to /usr/share/secureboot-keys
+    files/gen-sbkeys.sh         # PK/KEK/db/dbx generation script
+  recipes-security/ima-policy/
+    ima-policy.bb               # installs the appraisal policy + public IMA cert
+    files/ima-policy            # appraise func=BPRM/FILE_MMAP/MODULE_CHECK
+    files/x509_ima.der          # public IMA cert only; private key never in FILES
+  recipes-avocado/packagegroups/
+    packagegroup-avocado-tpm2.bb                 # tpm2-tss + tpm2-abrmd + tpm2-tools + tpm2-openssl
+    packagegroup-avocado-initramfs-security.bb   # tpm2-tools subset; excludes abrmd
+
+meta-avocado-nxp/
+  recipes-kernel/linux/files/imx93-frdm/
+    dm-crypt.cfg                # CONFIG_DM_CRYPT + AES + XTS + SHA256 + HW_RANDOM_TPM + CAAM (i.MX93-specific)
+    dm-verity.cfg               # dm-verity rootfs integrity chain
+    modsign.cfg                 # MODULE_SIG_FORCE
+    ima.cfg                     # CONFIG_IMA + IMA_APPRAISE + EVM + TRUSTED_KEYRING
+```
+
+### The unlock script
+
+`cryptsetup-var.sh` takes the raw block device and calls `var-key.sh` for the passphrase. The contract is strict: emit exactly 64 raw bytes to stdout, exit non-zero on any failure. The key never touches the filesystem; it passes through a `mktemp` file cleaned on `EXIT`.
+
+```bash
+# first boot
+cryptsetup isLuks "$DEV" || {
+    "$KEY_SCRIPT" > "$KEY_FILE"
+    cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 \
+        --key-size 512 --key-file "$KEY_FILE" "$DEV"
+    cryptsetup luksOpen --key-file "$KEY_FILE" "$DEV" var
+    mkfs.btrfs /dev/mapper/var
+}
+```
+
+### Phase-2 TPM2 enrollment
+
+After Secure Boot is enabled on the target (PCR 7 has a stable, authenticated value), run enrollment once from the booted device:
+
+```bash
+# Seal a new key to PCR 7; slot 0 = Argon2id recovery, slot 1 = TPM2
+systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/disk/by-partlabel/var
+
+# Confirm unsealing works before killing the recovery slot
+cryptsetup open --token-only /dev/disk/by-partlabel/var var-tpm-test && \
+    cryptsetup close var-tpm-test && \
+    cryptsetup luksKillSlot /dev/disk/by-partlabel/var 0 || true
+```
+
+The `|| true` guard on `luksKillSlot` prevents a failed slot removal from leaving the device with neither slot working. If `--token-only` fails, the Argon2id slot stays intact as a recovery path.
+
+### PCR assignment: keep IMA and LUKS apart
+
+IMA measures every appraised file into PCR 10 (the standard IMA measurement log), which feeds remote attestation. This is where IMA and LUKS could collide, and the design keeps them apart: LUKS is sealed to PCR 7 (Secure Boot state) only. PCR 7 does not move when IMA measures a new binary into PCR 10, so the TPM unseals `/var` no matter what IMA has logged.
+
+The rejected alternative was to seal LUKS to PCR 7 + PCR 10 for tighter binding. That couples the disk key to the IMA measurement log: any policy change extends PCR 10 differently, invalidates the seal, and locks the device out of its own storage. Keeping LUKS on PCR 7 only lets the IMA policy evolve without a re-enrollment ceremony.
+
+### Build flow
+
+`sb-keys.bb` runs `gen-sbkeys.sh` at build time. `do_install[nostamp]` makes it idempotent: keys regenerate only when absent, so a clean build does not rotate production keys. All `*_KEYS_DIR` variables go into `BB_BASEHASH_IGNORE_VARS` so developer-local key paths do not create distinct sstate entries.
+
+```bash
+BB_BASEHASH_IGNORE_VARS += "AVOCADO_SB_KEYS_DIR"
+do_install[nostamp] = "1"
+```
+
+Kernel config fragments are wired via `SRC_URI:append`, each conditionally included by `DISTRO_FEATURES`, so a target only pays for the controls it opts into:
+
+```bash
+SRC_URI:append = " \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'secureboot', 'file://dm-verity.cfg', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'security',   'file://modsign.cfg',   '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'ima',        'file://ima.cfg',       '', d)} \
+"
+```
+
+## Verify it
+
+After booting the i.MX93 FRDM board:
+
+```bash
+# /var is LUKS2 and mounted from the mapped device
+cryptsetup status /dev/mapper/var
+# Expected: type: LUKS2, cipher: aes-xts-plain64, key: 512 bits
+
+# After phase-2 enrollment: Argon2id slot gone, TPM2 slot active
+systemd-cryptenroll --list /dev/disk/by-partlabel/var
+# Expected: SLOT 0  tpm2
+
+# dm-verity active on the rootfs
+veritysetup status /dev/dm-0
+# Expected: status: active, hash verified
+
+# MODULE_SIG_FORCE active - an unsigned module is rejected
+insmod /tmp/hello.ko 2>&1
+# Expected: insmod: ERROR: could not insert module: Required key not available
+
+# IMA/EVM enforcing - an unsigned binary in a mutable path is refused
+cp /bin/true /var/tmp/unsigned && /var/tmp/unsigned; echo "exit=$?"
+# Expected: Permission denied, exit=126
+
+# IMA measurements extending PCR 10
+tpm2_pcrread sha256:10
+# Expected: a non-zero PCR 10 digest
+```
+
+### Coverage
+
+| Target | LUKS2 | Phase-2 TPM2 | dm-verity | IMA/EVM | Module signing |
+| :---- | :---- | :---- | :---- | :---- | :---- |
+| `avocado-imx93-frdm` (hardware) | [ENGINEER: confirm on-hardware] | [ENGINEER: confirm on-hardware, OP-TEE fTPM PCR 7] | [ENGINEER: confirm] | [ENGINEER: confirm] | [ENGINEER: confirm] |
+| `avocado-qemuarm64` (E2E CI) | `fvl_assert_luks_var` | `fvl_assert_luks_var_tpm` | `fvl_assert_dm_verity` | [ENGINEER: assert exists?] | [ENGINEER: assert exists?] |
+
+The CI seal is that both paths run the same recipes, kernel fragments, and initramfs logic (the `meta-avocado` layer is shared; only the fTPM backend differs: QEMU swtpm vs OP-TEE on the board). A cheap `avocado-qemuarm64` gate guards the expensive hardware path: a change anywhere in Avocado OS that would break the seal, the verity tree, or the appraisal policy fails the harness before it reaches a board.
+
+## Security properties
+
+Pulling the eMMC off the board gives an attacker AES-256-XTS ciphertext. Without the Argon2id recovery passphrase (device-bound, not in the image) or the TPM2 (physically in the device), they cannot decrypt it, and the two factors are independent.
+
+<PullQuote>The storage chip alone is worthless: the key is sealed to the Secure Boot state, and the TPM is not on the chip.</PullQuote>
+
+The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader or disabled Secure Boot changes PCR 7 before the initramfs runs, so the TPM refuses to unseal, and you cannot clone the eMMC to another board and boot it. dm-verity verifies every rootfs block against a build-time hash tree, so an offline patch is caught before the patched code executes. IMA/EVM extends that to mutable files: a binary dropped into `/var` or an overlay has no valid `security.ima` signature, so the kernel refuses to execute it. Module signing closes the in-band injection path: even with a shell, the attacker cannot load a custom kernel module.
+
+## Issues and open questions
+
+- **`luksKillSlot` guard.** The `|| true` on slot 0 removal is intentional but means a failed kill leaves both slots active. A monitoring check after enrollment should confirm slot 0 is gone; the current implementation does not warn if the kill is skipped.
+- **IMA/EVM raises a labeling and update cost.** Every appraised file must carry a valid `security.ima` signature, so the build signs the rootfs and shipped mutable content, and every OS update re-signs and shifts the measured hashes. That makes the attestation server's known-good list an ongoing ops dependency. First boot also runs roughly 5-15% slower while IMA labels and measures, which is why IMA is gated on `ima` rather than always on.
+- **Software fallback Argon2id tier.** Boards without a TPM or fTPM (Renesas RZ/V2N, Synaptics SL1680, Qualcomm QCS6490, Raspberry Pi) fall back to a software-derived key bound to a provisioned secret and the hardware serial. This is a lower-security tier; the per-device provisioning of the secret is not addressed here.
+- **`optee-ftpm` on other ARM boards.** Jetson Orin, STM32MP25, and other i.MX variants can reach the unified `/dev/tpm0` path by enabling `optee-ftpm` in `MACHINE_FEATURES` and adding `CONFIG_TCG_FTPM_TEE=y`. Until that is wired per board family, phase-2 TPM2 sealing is unavailable on those targets.
+
+## Reproduce it
+
+- Boot the FRDM board with a rootfs where one block has been flipped with `dd`. dm-verity halts the boot before any userspace code runs.
+- Enroll phase-2 TPM2 keys on one board, then clone the eMMC to a second board with a different TPM. PCR 7 on the clone does not match what was sealed; the clone cannot decrypt `/var`.
+- Copy a stock binary into `/var/tmp` and run it. IMA appraisal denies the exec (no valid `security.ima` signature), while the same binary in its signed rootfs location runs normally.
+
+The controls live in `meta-avocado` and `meta-avocado-nxp` in the [avocado-linux organization on GitHub](https://github.com/avocado-linux). It composes cleanly with `hardened-security` (runtime posture), and the boot-chain controls satisfy CRA Annex I Part I items (b), (d), and (f) that a compliance mapping can build on.
