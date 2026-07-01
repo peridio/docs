@@ -1301,3 +1301,37 @@ html[data-theme="dark"] .plugin-id-field-notes {
 .plugin-id-field-notes .table-of-contents__link--active {
   color: var(--field-notes-accent);
 }
+
+/* ----- Image zoom (medium-zoom) ----- */
+/* Lift the overlay + zoomed image above the fixed navbar (z-index 200) so the
+   zoom pops over the top menu bar instead of opening behind it. */
+.medium-zoom-overlay,
+.medium-zoom-image--opened {
+  z-index: 9999 !important;
+}
+
+/* The overlay covers the full viewport; the zoomed image sits centered with an
+   80px margin (set in docusaurus.config.js). Draw an "×" in the top-right of
+   the margin area. Clicking anywhere on the overlay — including the ×  —
+   closes the zoom, so this is a visible affordance for that behavior. */
+.medium-zoom-overlay::after {
+  content: "×";
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  cursor: pointer;
+}
