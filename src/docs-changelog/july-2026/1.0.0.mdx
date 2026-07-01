@@ -1,0 +1,54 @@
+---
+title: '1.0.0'
+description: 'Avocado CLI 1.0 — the first stable release.'
+---
+
+import FeaturedImage from '@site/src/components/FeaturedImage'
+
+<FeaturedImage
+  src="/img/avocado-1-launch.png"
+  alt="A robotic arm holding the Avocado logo — Avocado 1.0 launch banner"
+  imagePosition="right center"
+  eyebrow="Milestone release"
+  title="Avocado 1.0"
+  subtitle="The first stable release of the Avocado CLI — a versioned config format, semver-backed stability guarantees, and the reproducible build workflow, now committed to."
+/>
+
+Avocado is **1.0**. This is the moment the CLI stops moving out from under you: the configuration format, command surface, and build outputs that landed across the `0.x` line are now covered by stability guarantees you can build a production program on.
+
+If you have been tracking `0.41.x`, 1.0 is not a rewrite — it is a line in the sand. The workflow is the same; what changes is the contract.
+
+## What 1.0 means
+
+- **Semantic versioning.** From here forward, breaking changes to the config schema, command-line interface, or lock-file format only ship in a new major version. Additive changes are minor; fixes are patch. The `cli_requirement` stamp written by `avocado init` lets a project declare the minimum CLI it expects.
+- **A stable `avocado.yaml`.** The top-level schema — `permissions:`, `rootfs:` / `initramfs:`, `runtimes:`, `distro.repo.*`, and the `source:` resolvers — is frozen for the 1.x line. Configs that build today keep building.
+- **Reproducible by default.** Channel snapshot pinning (lock file v7) is on for every target: a clean rebuild reproduces the same image even after the live channel head advances. 1.0 makes reproducibility the baseline, not an opt-in.
+
+---
+
+## Highlights carried into 1.0
+
+The foundation shipped over the last several releases and is now stabilized:
+
+- **VM hibernation.** `avocado vm` hibernates an idle guest instead of burning host CPU and wakes transparently on the next SSH or docker connection.
+- **Top-level `permissions:` block.** Users and groups are declared once at the image layer and referenced by name from rootfs and initramfs, instead of being buried in a single extension.
+- **Connect on macOS.** `avocado deploy` works end-to-end on macOS, including Connect-signed deploys and runtime listing tuned for desktop integration.
+- **Per-step build caching.** Build stamps hash exactly the inputs each step consumes, so editing a build-only field no longer cascades into unnecessary rebuilds.
+
+---
+
+## Upgrading
+
+1.x reads existing `0.4x` projects without changes — v6 lock files continue to resolve as "track head," and the first `avocado update` moves a project onto snapshot pinning.
+
+```bash
+avocado update
+```
+
+> **Deprecations still honored.** Paths marked deprecated during the `0.x` line — such as `users:` / `groups:` declared inside an extension — continue to work in 1.0 with a warning, and are scheduled for removal in 2.0. Move identity definitions to a top-level `permissions:` block when you can.
+
+---
+
+## Thank you
+
+1.0 is the sum of every issue, reproduction, and board bring-up the community filed along the way. Thank you for building on Avocado while it was still `0.x` — this release is yours as much as ours.
