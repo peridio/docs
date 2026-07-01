@@ -9,3 +9,8 @@ nsinas:
   title: Avocado OS, Peridio
   image_url: /img/field-notes/authors/nsinas.svg
   page: true
+
+jtia:
+  name: Javier Tia
+  title: Principal Embedded Linux Engineer, Peridio
+  page: true

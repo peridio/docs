@@ -1,0 +1,139 @@
+---
+title: 'Two boots to trust an update: how Avocado OS makes a bad release survivable'
+description: 'A bad OTA can brick a whole fleet. Avocado OS pairs an immutable A/B rootfs with a two-boot rollback and a full on-device TUF trust chain, so a broken release reverts automatically and a tampered one never installs.'
+date: 2026-06-20
+authors: [jtia]
+tags: [ota, tuf, ab-rollback, security, updates]
+category: 'Security & Compliance'
+featured: false # Featured selection is Kristen/Bill's call
+# image: /img/field-notes/two-boots-trust-update.png # title image TODO (hero pass with Cesar)
+tested_against: 'Avocado [ENGINEER: CLI version], qemux86-64 under QEMU'
+poster: jtia
+lift_for_blog: 'A bad OTA is a truck roll or an RMA. "Rotate the signing key across the fleet without touching a device" reframes a key compromise from a recall to a routine rotation - the champion-to-approver line.'
+promote_to_track: 'Secure-update tutorial candidate: write/verify/flip + two-boot rollback + TUF trust chain, walked end to end against readable source.'
+---
+
+import TestStatus from '@site/src/components/TestStatus'
+import PullQuote from '@site/src/components/PullQuote'
+
+<TestStatus
+  targets={['qemux86-64']}
+  cli="[ENGINEER: version]"
+  reference={{
+    label: 'avocado-linux',
+    href: 'https://github.com/avocado-linux',
+  }}
+/>
+
+**TL;DR.** A failed update pushed to thousands of fielded devices is one of the most expensive failure modes in embedded systems: every unrecoverable unit is a truck roll or an RMA. Avocado OS makes a bad release survivable with an immutable A/B root filesystem, a two-boot rollback that reverts on evidence rather than hope, and a full on-device update-framework (TUF) trust chain that refuses tampered updates before they install, and it rotates signing keys over the air without re-flashing a single device.
+
+{/* truncate */}
+
+## What this is
+
+Peridio makes Avocado OS, an immutable embedded Linux runtime shipped as a binary distribution: a read-only A/B root filesystem, composed sysext/confext extensions, and a writable `/var`. This note walks the secure-update path (the layout, the update flow, the trust chain, and rollback) and compares each design decision to how the rest of the field handles it. The scope is deliberately limited to the mechanics that are verifiable against readable source today: immutable A/B plus two-boot rollback, and signed over-the-air (OTA) updates. Where a guarantee ends, we say so.
+
+## The cost of a bad update
+
+In a data center, a bad deploy is a rollback button and a bad afternoon. In the field, it is a truck. A firmware update that bricks a fleet of remote devices converts directly into field-service dispatches, RMAs, and downtime against a service-level agreement, and the per-unit cost of physically touching a device dwarfs the cost of the update that broke it. So the question that actually matters is not "can it install an update." It is "what happens when the update is bad," and "what stops a bad actor from shipping the update in the first place." Most stacks sell the same checklist (atomic A/B, automatic rollback, signed images) and then wave their hands at exactly those two questions. Here is how we answer them.
+
+There is a second-order cost that rarely makes the slide. When shipping an update is risky, teams stop shipping them, and a fleet left on known-vulnerable software because nobody dares push the fix is the most expensive failure of all. Avocado attacks that directly. A bad release self-heals instead of bricking (the rest of this note is how), and routine changes ship as a signed extension that merges live, without a re-image or a reboot, so a fix lands the day it is ready.
+
+## Read-only A/B: shrink the blast radius
+
+An Avocado device boots from an immutable, read-only root filesystem laid out as two slots, A and B. Only `/var` is writable. One slot is active; the other is the update target. The point is blast radius: the thing you booted cannot be mutated in place, and the thing you replace is never the thing you are running. A failed write damages an idle partition, not the live system.
+
+The same model rides across the boot mechanisms real hardware uses (U-Boot environment, GUID Partition Table, Master Boot Record, systemd-boot, and Tegra boot-control), so the update logic travels from a Raspberry Pi to an i.MX board to a Jetson without changing. That portability is a cost lever: one update path to test, certify, and support across a mixed fleet, instead of one per board.
+
+This is table stakes, and we treat it as such. [Mender](https://docs.mender.io/overview/security), [RAUC](https://rauc.readthedocs.io/en/latest/advanced.html), and [SWUpdate](https://sbabic.github.io/swupdate/signed_images.html) all offer A/B or redundant-slot layouts; container-based platforms like [balenaOS](https://docs.balena.io/learn/introduction/security) do the equivalent for the host. The interesting decisions are above this line.
+
+## Write the other slot, verify, then flip
+
+An update writes the inactive slot, never the running one. After the write, the agent verifies the slot by SHA-256 against the bundle manifest, and only then runs an `activate` step that flips the boot pointer: `fw_setenv` on U-Boot, `nvbootctrl` on Tegra, `efibootmgr` on UEFI, an MBR rewrite otherwise. The agent flips the pointer in userspace; the bootloader's only job is to honor it. Keeping the slot logic in one readable place, instead of smeared across board firmware, is what makes the behavior the same everywhere and auditable in one spot.
+
+```text
+   ACTIVE slot A  --(running, read-only)-->  [ untouched ]
+        |
+   update arrives
+        v
+   write INACTIVE slot B  -->  verify SHA-256 vs manifest
+        |                              |
+        |                         pass |  fail
+        v                              v
+   activate: flip boot pointer     abort, A still active
+   (fw_setenv / nvbootctrl /
+    efibootmgr / MBR rewrite)
+```
+
+_Figure 1: the write/verify/flip update flow. A broken or unverifiable image never becomes bootable; slot A keeps running until slot B verifies._
+
+**Demo - apply and revert** (recorded on qemux86-64 under QEMU): a signed update is pulled over the air and activated, then reverted to the previous version with a single command, no re-flash, no reboot. This is the live runtime layer; the automatic two-boot OS rollback described later is a separate, firmware-backed path.
+
+{/* TODO(video): hosting pending Kristen - YouTube vs embedded mp4 vs Drive link. Keeping the Drive link for now. */}
+**Watch the recording:** [apply and revert](https://drive.google.com/file/d/1qC4DMgGTepIZ0aX_Sz9S_TeFetkQmgtf/view)
+
+## Trust before the payload, and why one signature is not enough
+
+Every serious update system signs its payloads. The dividing line is not "signed versus unsigned," it is how much the signature actually proves.
+
+A single detached signature proves authenticity: this image came from someone holding the key. It does not prove freshness, it does not survive a key compromise gracefully, and it gives you no clean way to rotate or revoke a key across a deployed fleet. That single-signature model is what the most-cited open-source A/B tools ship: [Mender authenticates an update with one signing key](https://docs.mender.io/artifact-creation/sign-and-verify); [SWUpdate signs a single manifest](https://sbabic.github.io/swupdate/signed_images.html); [RAUC goes further with an X.509 certificate chain and revocation lists](https://rauc.readthedocs.io/en/latest/advanced.html), which is stronger but still classic public-key infrastructure, not a freshness-aware metadata model.
+
+Avocado verifies a full update-framework trust chain (the model standardized as The Update Framework, TUF) against a trust anchor pinned on the device. Before we trust an update, the agent walks the role chain: a timestamp role (proving the metadata is current, not a replayed old-but-valid release), then snapshot, then targets and its delegations, each checked against its own signature threshold. No trust anchor, no update. The anchor lands at first boot, when the device claims itself and stores the signed root metadata it receives: trust-on-first-use (TOFU), the model you already know from SSH. It is ed25519 throughout. Once the metadata clears, each artifact is SHA-256 verified against the bundle, with a lightweight boot-time spot-check on top.
+
+<PullQuote>Rotate the signing key across the fleet without touching a device: the difference between a key compromise being a routine rotation and being a recall.</PullQuote>
+
+What that buys over a single signature is concrete and operational. Freshness metadata blocks a replayed stale update. Threshold signing means one stolen key is not game over. And the root role lets us rotate and revoke signing keys over the air, no re-flash, no field visit.
+
+**Demo - the trust gate** (recorded on qemux86-64 under QEMU): the device prints its pinned root authority, then refuses a tampered update because its metadata signature does not verify against that anchor; the same update, properly signed, is accepted.
+
+{/* TODO(video): hosting pending Kristen - YouTube vs embedded mp4 vs Drive link. */}
+**Watch the recording:** [the trust gate](https://drive.google.com/file/d/1f7Z9YcykuZQjfTIOo2ZOdM8NsBXz9idZ/view)
+
+We are not alone in this. [foundries.io runs full TUF as well](https://docs.foundries.io/latest/reference-manual/ota/aktualizr-lite.html), and [Toradex Torizon runs Uptane](https://developer.toradex.com/torizon/torizon-platform/torizon-updates/torizon-updates-technical-overview/), a TUF superset built for automotive multi-controller fleets that adds a second online "director" repository to target updates per device. We deliberately run plain TUF without the director: we keep the freshness, threshold, and rotation guarantees while carrying fewer online keys to defend. For a fleet that does not need per-controller campaign targeting baked into the trust layer, that is a smaller attack surface for the same cryptographic strength.
+
+## Rollback is a two-boot protocol, not a promise
+
+When we activate an update, we write a small pending-update marker recording the previous slot and what to check. The update is not trusted yet. On the next boot, before merging system extensions, the agent reads that marker and confirms the system actually came up. If it did, it promotes the new slot and clears the marker. If it did not, it rolls back to the previous slot and clears the marker. Either way the marker is cleared, so a device can never loop, re-deciding the same update forever.
+
+```text
+   activate --> write pending-update marker (prev slot + checks)
+        |
+   REBOOT into new slot
+        v
+   read marker, did system come up?
+        |-- yes -> promote new slot, clear marker
+        \-- no  -> roll back to prev slot, clear marker
+   (marker always cleared -> no decision loop)
+```
+
+_Figure 2: the two-boot rollback decision. The new slot is promoted only after the device proves it boots; otherwise it reverts. The marker is always cleared, so a device never loops on the same update._
+
+The design choice that matters here is _evidence_. Rollback is a decision made on the second boot, after the device has had a chance to prove it works, not a hope pinned on the first boot completing. Mender, RAUC, and SWUpdate all implement a version of this with bootloader boot counters, and that is the right mechanism. The honesty about where it stops is where stacks diverge.
+
+## The honest seam
+
+Software rollback only fires if the device boots far enough to run the agent. If the kernel never reaches userspace, nothing in userspace is left to recover you; that case belongs to a firmware boot-counter underneath the operating system. This is not an Avocado limitation, it is physics, and every serious vendor relies on a bootloader or firmware counter for exactly this case, whether or not they say so.
+
+What we do differently is say so, in the board profile. A profile declares explicitly whether its recovery story lives in software or in firmware: userspace owns the recoverable case, firmware owns the dead-kernel case, and the profile tells you which is which for that board. That candor is the point. An update system you can reason about beats one that markets a guarantee it cannot keep, and a security reviewer who finds the seam documented trusts the rest of the claims more, not less.
+
+## Where this leaves us against the field
+
+The mechanics above are deliberately verifiable: open the source and every claim checks out. The table below is the short version of how the trust and recovery model compares. It is not a benchmark, it is an architecture comparison, drawn from each project's own documentation.
+
+| Platform | Update payload trust | Rollback decision lives in | Key rotation / revocation without re-flash |
+| :---- | :---- | :---- | :---- |
+| **Avocado OS** | Full on-device TUF (timestamp/snapshot/targets + delegations, threshold sigs, ed25519) | Userspace two-boot, firmware counter underneath for dead-kernel | Yes (TUF root role) |
+| [Mender](https://docs.mender.io/artifact-creation/sign-and-verify) | Single signing key over a manifest | Bootloader counter + userspace commit | Limited |
+| [RAUC](https://rauc.readthedocs.io/en/latest/advanced.html) | X.509 certificate chain via Cryptographic Message Syntax | Bootloader boot-attempts counter | Yes (certificate revocation) |
+| [SWUpdate](https://sbabic.github.io/swupdate/signed_images.html) | Single signed manifest | Bootloader counter | No documented workflow |
+| [foundries.io](https://docs.foundries.io/latest/reference-manual/ota/aktualizr-lite.html) | Full TUF (no director) | Userspace + bootloader/ROM counter | Yes |
+| [Toradex Torizon](https://developer.toradex.com/torizon/torizon-platform/torizon-updates/torizon-updates-technical-overview/) | Uptane (TUF + director) | Bootloader counter | Yes |
+| [balenaOS](https://docs.balena.io/learn/introduction/security) | Transport Layer Security + content digests | Bootloader + userspace health | Not applicable (no signed metadata keys) |
+
+_Table: how embedded update platforms handle payload trust and recovery, linked to each project's published documentation. This compares architecture, not measured performance._
+
+The pattern is clear. Authenticity is solved everywhere. Freshness, graceful key compromise, and over-the-air key rotation are solved by the few systems that run a real update-framework trust chain, and among those, we trade the director's per-device targeting for a smaller key-management surface. Recovery is honest where the seam between software and firmware is stated, not hidden.
+
+## Reproduce it
+
+The update path described here is open. Read the secure-update and architecture documentation at [docs.peridio.com/security/atomic-update-architecture](https://docs.peridio.com/security/atomic-update-architecture), and read the agent and board-profile source in the [avocado-linux organization on GitHub](https://github.com/avocado-linux). If you are evaluating an update stack for a fleet, the test is simple: open the source, find where each guarantee is enforced, and find where it stops. We wrote this so you can.
