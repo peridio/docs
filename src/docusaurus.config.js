@@ -246,12 +246,16 @@ const config = {
         ],
       },
       zoom: {
-        selector: '.markdown > img',
+        // Exclude images wrapped in links (e.g. shield badges) so clicking
+        // them follows the link instead of triggering zoom.
+        selector: '.markdown img:not(a img)',
         background: {
           light: 'rgb(255, 255, 255)',
           dark: 'rgb(50, 50, 50)',
         },
-        config: {},
+        config: {
+          margin: 80,
+        },
       },
     }),
   headTags: [
