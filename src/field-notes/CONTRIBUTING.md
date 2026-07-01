@@ -71,12 +71,15 @@ The masthead — the "FIELD NOTES" eyebrow, title, date, **tag pills**, and the 
   />
   ```
 
-- **`<PullQuote>`** — a magazine-style standout for a headline number or line.
+- **`<PullQuote>`** — a result callout for a headline number or line: an
+  accent-tinted panel with a left accent rail and a mono kicker. Wrap the key
+  figures in `**bold**` to pull them out in the accent color. `label` sets the
+  kicker (defaults to `Result`; pass `label={null}` to hide it).
 
   ```mdx
   import PullQuote from '@site/src/components/PullQuote'
 
-  <PullQuote>A punchy result worth pulling out.</PullQuote>
+  <PullQuote>A punchy result with the **headline number** pulled out.</PullQuote>
   ```
 
 - **Author byline** — add yourself to `authors.yml` (`name`, `title`, and an optional `image_url` monogram/photo under `static/img/field-notes/authors/`), then list your key in `authors`. The byline renders link-free (a deliberate choice — author-page links tripped a password-manager overlay).

@@ -1247,19 +1247,9 @@ html[data-theme="dark"] .plugin-id-field-notes {
   color: var(--ifm-heading-color);
 }
 
-/* date line — sits below the title (BlogPostItemHeaderInfo). The author byline
-   is now a custom, link-free block rendered in the swizzled header and styled
-   in BlogPostItem/Header/styles.module.css. */
-.plugin-id-field-notes article > header > div:first-of-type {
-  margin: 1.5rem 0 0 0 !important;
-}
-
-.plugin-id-field-notes article > header time {
-  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  color: var(--ifm-color-emphasis-600);
-}
+/* Date, tags, and the link-free author byline now live in a single compact
+   meta band rendered in the swizzled header and styled in
+   BlogPostItem/Header/styles.module.css. */
 
 /* tags now live in the masthead (swizzled header) — hide the default
    footer copy so they aren't shown twice. */
