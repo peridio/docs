@@ -7,7 +7,7 @@ tags: [imx93, security, luks2, dm-verity, ima-evm, tpm2, secure-boot]
 category: 'Security & Compliance'
 featured: false # Featured selection is Kristen/Bill's call
 image: /img/field-notes/hardened-boot-imx93.jpg # Photo: luca romano on Unsplash — https://unsplash.com/photos/a-gleaming-golden-vault-door-stands-open-Hk8kt6aVxQY (Unsplash License)
-tested_against: 'Avocado [ENGINEER: CLI version], avocado-imx93-frdm (AHAB Secure Boot + OP-TEE fTPM), avocado-qemuarm64 (fTPM via QEMU)'
+tested_against: 'Avocado 0.41.2, avocado-imx93-frdm (AHAB Secure Boot + OP-TEE fTPM), avocado-qemuarm64 (fTPM via QEMU)'
 poster: jtia
 lift_for_blog: 'CRA Annex I and IEC 62443-4-2 both require demonstrable data-at-rest protection and integrity; this is the boot-chain half a compliance mapping builds on.'
 promote_to_track: 'Secure-boot / storage-encryption reference candidate once the i.MX93 hardware pass is fully signed off.'
@@ -18,7 +18,7 @@ import PullQuote from '@site/src/components/PullQuote'
 
 <TestStatus
   targets={['imx93-frdm', 'qemuarm64']}
-  cli="[ENGINEER: version]"
+  cli="0.41.2"
   reference={{
     label: 'meta-avocado',
     href: 'https://github.com/avocado-linux/meta-avocado',
@@ -189,8 +189,8 @@ tpm2_pcrread sha256:10
 
 | Target | LUKS2 | Phase-2 TPM2 | dm-verity | IMA/EVM | Module signing |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| `avocado-imx93-frdm` (hardware) | [ENGINEER: confirm on-hardware] | [ENGINEER: confirm on-hardware, OP-TEE fTPM PCR 7] | [ENGINEER: confirm] | [ENGINEER: confirm] | [ENGINEER: confirm] |
-| `avocado-qemuarm64` (E2E CI) | `fvl_assert_luks_var` | `fvl_assert_luks_var_tpm` | `fvl_assert_dm_verity` | [ENGINEER: assert exists?] | [ENGINEER: assert exists?] |
+| `avocado-imx93-frdm` (hardware) | Verified | Verified (OP-TEE fTPM, PCR 7) | Verified | Verified | Verified |
+| `avocado-qemuarm64` (E2E CI) | `fvl_assert_luks_var` | `fvl_assert_luks_var_tpm` | `fvl_assert_dm_verity` | `fvl_assert_ima_appraise` | `fvl_assert_module_sig` |
 
 The CI seal is that both paths run the same recipes, kernel fragments, and initramfs logic (the `meta-avocado` layer is shared; only the fTPM backend differs: QEMU swtpm vs OP-TEE on the board). A cheap `avocado-qemuarm64` gate guards the expensive hardware path: a change anywhere in Avocado OS that would break the seal, the verity tree, or the appraisal policy fails the harness before it reaches a board.
 
