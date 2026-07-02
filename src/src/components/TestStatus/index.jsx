@@ -15,38 +15,40 @@ function GitHubIcon() {
 
 export default function TestStatus({ targets = [], cli, reference }) {
   return (
-    <div className={styles.strip}>
-      <span className={styles.label}>Test status</span>
+    <div className={styles.wrap}>
+      <div className={styles.strip}>
+        <span className={styles.label}>Test status</span>
 
-      {targets.length > 0 && (
-        <div className={styles.field}>
-          <span className={styles.key}>Targets</span>
-          <span className={styles.val}>
-            {targets.map((t) => (
-              <code key={t} className={styles.pill}>
-                {t}
-              </code>
-            ))}
-          </span>
-        </div>
-      )}
+        {targets.length > 0 && (
+          <div className={styles.field}>
+            <span className={styles.key}>Targets</span>
+            <span className={styles.val}>
+              {targets.map((t) => (
+                <code key={t} className={styles.pill}>
+                  {t}
+                </code>
+              ))}
+            </span>
+          </div>
+        )}
 
-      {cli && (
-        <div className={styles.field}>
-          <span className={styles.key}>Avocado CLI</span>
-          <code className={styles.chip}>{cli}</code>
-        </div>
-      )}
+        {cli && (
+          <div className={styles.field}>
+            <span className={styles.key}>Avocado CLI</span>
+            <code className={styles.chip}>{cli}</code>
+          </div>
+        )}
 
-      {reference && (
-        <div className={styles.field}>
-          <span className={styles.key}>Reference</span>
-          <Link to={reference.href} className={styles.repo}>
-            <GitHubIcon />
-            {reference.label}
-          </Link>
-        </div>
-      )}
+        {reference && (
+          <div className={styles.field}>
+            <span className={styles.key}>Reference</span>
+            <Link to={reference.href} className={styles.repo}>
+              <GitHubIcon />
+              {reference.label}
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
