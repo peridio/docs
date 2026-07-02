@@ -84,6 +84,25 @@
   gap: 0.75rem;
 }
 
+/* On narrow screens the two-column band collapses to a stack, so the
+   right-aligned date + tags float awkwardly on their own row. Left-align them
+   under the author instead. */
+@media (max-width: 768px) {
+  .meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .metaAside {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .tags {
+    justify-content: flex-start;
+  }
+}
+
 .avatar {
   width: 44px;
   height: 44px;

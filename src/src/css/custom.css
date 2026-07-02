@@ -1221,9 +1221,17 @@ html[data-theme="dark"] .plugin-id-field-notes {
 /* Editorial header: eyebrow, large title, meta + author, then a divider that
    separates the masthead from the article body. */
 .plugin-id-field-notes article > header {
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* The leading content (the TestStatus/TestedAgainst meta strip) carries its own
+   top margin, which stacked on the header's margin-bottom above and left a
+   floaty gap under the divider. Let the header margin be the sole spacer so the
+   strip hugs the divider. */
+.plugin-id-field-notes .markdown > :first-child {
+  margin-top: 0;
 }
 
 /* "FIELD NOTES" eyebrow above the post title */
