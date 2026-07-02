@@ -23,6 +23,24 @@
   padding-top: 1.5rem !important;
 }
 
+/* Field Notes list page: align content edges + width with the navbar.
+   Default (unswizzled) BlogLayout wraps content in a `.container` narrower than
+   our 1400px navbar and puts <main> in `col--9 col--offset-1` (75% wide, pushed
+   right). Widen the container to 1400px with the same 1rem gutter as
+   .navbar__inner, and make main span the full column so its edges line up with
+   the logo/tabs above. */
+html.blog-list-page .container {
+  max-width: 1400px;
+  padding: 0 1rem;
+}
+
+html.blog-list-page .container > .row > main.col {
+  --ifm-col-width: 100%;
+  max-width: 100%;
+  flex-basis: 100%;
+  margin-left: 0;
+}
+
 /* Ensure main content is not hidden behind fixed navbar and promo bar */
 main {
   margin-top: 0 !important;
@@ -1147,10 +1165,14 @@ html[data-theme="dark"] .code-copy-tooltip {
    doesn't leak into other tabs. */
 .plugin-id-field-notes {
   --field-notes-accent: #4f46e5;
+  /* Lighter accent, used only for the category eyebrow labels so they read
+     softer than the full-strength accent on dividers/links/thumbnails. */
+  --field-notes-eyebrow: #7c73ed;
 }
 
 html[data-theme="dark"] .plugin-id-field-notes {
   --field-notes-accent: #818cf8;
+  --field-notes-eyebrow: #a5b4fc;
 }
 
 /* Geist for body type, Geist Mono for meta + code */

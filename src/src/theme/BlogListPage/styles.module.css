@@ -12,7 +12,7 @@
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--field-notes-accent);
+  color: var(--field-notes-eyebrow, var(--field-notes-accent));
   margin: 0 0 1rem 0;
 }
 
