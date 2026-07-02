@@ -69,8 +69,17 @@ _Figure 1: the write/verify/flip update flow. A broken or unverifiable image nev
 
 **Demo - apply and revert** (recorded on qemux86-64 under QEMU): a signed update is pulled over the air and activated, then reverted to the previous version with a single command, no re-flash, no reboot. This is the live runtime layer; the automatic two-boot OS rollback described later is a separate, firmware-backed path.
 
-{/* TODO(video): hosting pending Kristen - YouTube vs embedded mp4 vs Drive link. Keeping the Drive link for now. */}
-**Watch the recording:** [apply and revert](https://drive.google.com/file/d/1qC4DMgGTepIZ0aX_Sz9S_TeFetkQmgtf/view)
+<div style={{ aspectRatio: '16 / 9', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/Lc3KQqZxQtY"
+    title="Apply and revert an OTA update on Avocado OS"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
 
 ## Trust before the payload, and why one signature is not enough
 
@@ -86,8 +95,17 @@ What that buys over a single signature is concrete and operational. Freshness me
 
 **Demo - the trust gate** (recorded on qemux86-64 under QEMU): the device prints its pinned root authority, then refuses a tampered update because its metadata signature does not verify against that anchor; the same update, properly signed, is accepted.
 
-{/* TODO(video): hosting pending Kristen - YouTube vs embedded mp4 vs Drive link. */}
-**Watch the recording:** [the trust gate](https://drive.google.com/file/d/1f7Z9YcykuZQjfTIOo2ZOdM8NsBXz9idZ/view)
+<div style={{ aspectRatio: '16 / 9', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/XrlTYnhxnr4"
+    title="The TUF trust gate rejecting a tampered update on Avocado OS"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
 
 We are not alone in this. [foundries.io runs full TUF as well](https://docs.foundries.io/latest/reference-manual/ota/aktualizr-lite.html), and [Toradex Torizon runs Uptane](https://developer.toradex.com/torizon/torizon-platform/torizon-updates/torizon-updates-technical-overview/), a TUF superset built for automotive multi-controller fleets that adds a second online "director" repository to target updates per device. We deliberately run plain TUF without the director: we keep the freshness, threshold, and rotation guarantees while carrying fewer online keys to defend. For a fleet that does not need per-controller campaign targeting baked into the trust layer, that is a smaller attack surface for the same cryptographic strength.
 
