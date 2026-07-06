@@ -26,7 +26,7 @@ Download the latest release directly:
 Or install it with [Homebrew](https://brew.sh):
 
 ```bash
-brew install --cask avocado-desktop
+brew install --cask avocado-linux/tap/avocado-desktop
 ```
 
 Once installed, the app updates itself in place, so you do not need to re-download it for new releases.
