@@ -47,15 +47,6 @@ function Byline() {
     <div className={styles.byline}>
       {authors.map((author, i) => (
         <div className={styles.author} key={author.key ?? author.name ?? i}>
-          {author.imageURL ? (
-            <img
-              className={styles.avatar}
-              src={author.imageURL}
-              alt={author.name || ''}
-              width={44}
-              height={44}
-            />
-          ) : null}
           <div className={styles.authorText}>
             {author.name ? <span className={styles.authorName}>{author.name}</span> : null}
             {author.title ? <span className={styles.authorTitle}>{author.title}</span> : null}

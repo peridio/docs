@@ -103,16 +103,6 @@
   }
 }
 
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  flex: none;
-  display: block;
-  box-shadow: 0 0 0 2px
-    color-mix(in srgb, var(--field-notes-accent, var(--ifm-color-primary)) 35%, transparent);
-}
-
 .authorText {
   display: flex;
   flex-direction: column;
