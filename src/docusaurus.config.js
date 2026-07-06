@@ -19,13 +19,15 @@ const config = {
   organizationName: 'peridio',
   projectName: 'peridio-docs',
   trailingSlash: false,
-  clientModules: ['./src/clientModules/copyInlineCode.js'],
+  clientModules: [
+    './src/clientModules/copyInlineCode.js',
+    './src/clientModules/imageLightbox.js',
+  ],
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
   },
   plugins: [
-    'docusaurus-plugin-image-zoom',
     './plugins/yaml-loader-plugin',
     [
       '@docusaurus/plugin-client-redirects',
@@ -241,14 +243,6 @@ const config = {
             block: { start: 'highlight-orange-start', end: 'highlight-orange-end' },
           },
         ],
-      },
-      zoom: {
-        selector: '.markdown img',
-        background: {
-          light: 'rgb(255, 255, 255)',
-          dark: 'rgb(50, 50, 50)',
-        },
-        config: {},
       },
     }),
   headTags: [
