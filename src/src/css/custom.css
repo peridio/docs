@@ -60,6 +60,13 @@ main {
 
 html {
   font-family: "Inter", sans-serif;
+  /* Always reserve the vertical scrollbar's gutter so the viewport width never
+     changes when content grows/shrinks (e.g. Field Notes cards + images loading
+     in). Without this, the centered `.navbar__inner` shifts sideways every time
+     the scrollbar toggles — the horizontal "flicker" seen on the nav row.
+     No-op for overlay-scrollbar setups; only reserves space where scrollbars
+     are classic (macOS with a mouse, most desktop OSes). */
+  scrollbar-gutter: stable;
 }
 
 /* Dark-mode colors are owned by the token system
@@ -251,36 +258,6 @@ html[data-theme="dark"] .navbar {
   display: flex;
 }
 
-/* Nav link styles — underline active indicators */
-.navbar__items--nav > a {
-  padding: 0.35rem 0;
-  margin-right: 2rem;
-  margin-bottom: 0;
-  position: relative;
-  bottom: -1px;
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--ifm-color-emphasis-600);
-  border-bottom: 3px solid transparent;
-  transition:
-    color 0.15s,
-    border-color 0.15s;
-}
-
-.navbar__items--nav > a:hover {
-  background: none;
-  color: var(--ifm-color-primary);
-  border-bottom-color: transparent;
-}
-
-.navbar__items--nav > a.navbar__link--active {
-  font-weight: 500;
-  color: var(--ifm-font-color-base);
-  border-bottom: 3px solid var(--ifm-color-primary);
-}
-
-/* Duplicate icon definitions and icon-hiding rule removed — icons are defined below at lines 350+ */
-
 /* Left items container — wrap so logo is row 1, links are row 2 */
 .navbar__items:not(.navbar__items--right) {
   flex-wrap: wrap !important;
@@ -292,24 +269,36 @@ html[data-theme="dark"] .navbar {
   padding: 0.6rem 0;
 }
 
-/* Nav link items sit below logo */
+/* Nav link items sit below logo.
+   Single authoritative definition for the nav tabs — every sizing property
+   (weight, font-size, padding, margin, border-width) is identical across the
+   default, hover, and active states, so the tab's box never changes size and
+   neighboring tabs never shift. Only color and border *color* change between
+   states, and both are transitioned. Keep it this way: reintroducing a second
+   rule set that also matches these links resurrects the width-shift flicker. */
 .navbar__items:not(.navbar__items--right) > .navbar__link {
+  position: relative;
+  bottom: -1px;
   padding: 0.6rem 0;
   margin-right: 1.5rem;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-600);
   border-bottom: 2px solid transparent;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .navbar__items:not(.navbar__items--right) > .navbar__link:hover {
   background: none;
+  color: var(--ifm-color-primary);
   border-bottom-color: var(--ifm-color-primary);
 }
 
 .navbar__items:not(.navbar__items--right) > .navbar__link--active {
-  font-weight: 700;
-  border-bottom: 2px solid var(--ifm-color-primary);
   color: var(--ifm-color-primary);
+  border-bottom-color: var(--ifm-color-primary);
 }
 
 /* Nav icons — using mask so color follows text color */
@@ -327,7 +316,9 @@ html[data-theme="dark"] .navbar {
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-position: center;
-  opacity: 0.7;
+  /* Full opacity in every state so the icon looks identical whether the tab is
+     default, hovered, or active — no brightness shift, no perceived movement */
+  opacity: 1;
 }
 
 .navbar__items:not(.navbar__items--right) > .navbar__link:hover::before,
@@ -1193,6 +1184,16 @@ html[data-theme="dark"] .plugin-id-field-notes {
 .plugin-id-field-notes kbd,
 .plugin-id-field-notes pre {
   font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* The page-level Geist font above is set on the body (.plugin-id-field-notes),
+   so global chrome inherits it — making the navbar (and its Field Notes tab)
+   render in a different font on this page than on every other page. Keep the
+   navbar in the site's base font everywhere so the tabs look identical whether
+   or not Field Notes is the active route. */
+.plugin-id-field-notes .navbar,
+.plugin-id-field-notes .navbar__link {
+  font-family: var(--ifm-font-family-base);
 }
 
 /* Layout: drop the col--offset-1 and let the article fill the area that
