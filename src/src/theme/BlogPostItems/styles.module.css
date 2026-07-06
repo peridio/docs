@@ -22,6 +22,74 @@
   margin: 0 0 0.85rem 0;
 }
 
+/* Internal-only "Draft" badge shown beside the eyebrow for unpublished notes
+   (front matter `draft: true` or a `draft` tag). Amber so it reads as a status
+   marker distinct from the purple category accent; it vanishes when the draft
+   flag/tag is removed. */
+.draftBadge {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.6em;
+  padding: 0.1em 0.5em;
+  border: 1px solid var(--ifm-color-warning-dark, #b9820c);
+  border-radius: 3px;
+  color: var(--ifm-color-warning-dark, #b9820c);
+  background: color-mix(in srgb, var(--ifm-color-warning, #f5a623) 14%, transparent);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  vertical-align: 0.08em;
+  cursor: help;
+}
+
+/* Custom hover tooltip for the Draft badge. Native `title` is unreliable inside
+   the card link, so we render the reminder ourselves via a data attribute. */
+.draftBadge::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  z-index: 10;
+  width: max-content;
+  max-width: 240px;
+  padding: 0.7em 0.9em;
+  border-radius: 6px;
+  background: var(--ifm-color-warning, #f5a623);
+  color: #1c1e21;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.45;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* Small arrow pointing down to the badge. */
+.draftBadge::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  z-index: 10;
+  border: 5px solid transparent;
+  border-top-color: var(--ifm-color-warning, #f5a623);
+  transform: translateX(-50%) translateY(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.draftBadge:hover::after,
+.draftBadge:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .meta {
   font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.8rem;

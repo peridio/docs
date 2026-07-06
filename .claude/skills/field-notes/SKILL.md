@@ -60,7 +60,9 @@ fabricate a number, version, or command output to fill a gap.
 ## Step 5: Produce the note
 
 Write `src/field-notes/YYYY-MM-DD-<slug>.mdx`. The filename date prefix must
-match the frontmatter `date`. Follow the template exactly: frontmatter, the
+match the frontmatter `date`. Always set `draft: true` in the frontmatter — new
+notes default to draft and stay out of the production build until verified and
+ready to ship. Follow the template exactly: frontmatter, the
 `<TestStatus>` card, a two-sentence `**TL;DR**`, the `{/* truncate */}` marker,
 the cold-reader intro, the dense body with language-tagged code blocks, a
 `<PullQuote>` for a standout number, an honest "what broke" section, and a
@@ -80,8 +82,9 @@ index, and feeds the moment it hits `main`. So:
 
 - A note with `[ENGINEER: ...]` placeholders is a reviewed-on-PR draft, not a
   merge. Keep it on the branch until the engineer who ran the demo fills them in.
-- To keep a half-finished note out of the production build while it lives on a
-  branch, set `draft: true` in the frontmatter.
+- New notes carry `draft: true` by default, which keeps them out of the
+  production build. Only flip it to `draft: false` once the note is verified,
+  has no `[ENGINEER: ...]` placeholders left, and has passed the review gate.
 - The light review gate: one engineer confirms the reproducible core actually
   reproduces on a fresh setup and the `tested_against` versions are accurate.
 

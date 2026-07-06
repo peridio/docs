@@ -25,6 +25,34 @@ function categoryLabel(post, isFeatured) {
   return metadata.tags?.[0]?.label ?? 'Field Note'
 }
 
+// Internal-only marker. A note counts as a draft when its front matter carries
+// `draft: true` (hidden from the published feed, visible in local dev) or when
+// it's tagged `draft`. When either is true we surface a small badge next to the
+// eyebrow so editors can spot unfinished notes at a glance; it disappears the
+// moment the draft flag/tag is removed.
+function isDraft(post) {
+  const { frontMatter, metadata } = post
+  if (frontMatter.draft) return true
+  return (metadata.tags ?? []).some((t) => (t.label ?? '').toLowerCase() === 'draft')
+}
+
+// The eyebrow line: category label plus, for drafts, the internal Draft badge.
+function Eyebrow({ post, isFeatured }) {
+  return (
+    <p className={styles.eyebrow}>
+      {categoryLabel(post, isFeatured)}
+      {isDraft(post) && (
+        <span
+          className={styles.draftBadge}
+          data-tooltip="Only visible in local dev. Remove the draft flag to publish this note to the live feed."
+        >
+          Draft
+        </span>
+      )}
+    </p>
+  )
+}
+
 function Thumb({ post, className }) {
   const { image, image_alt: imageAlt } = post.frontMatter
   return (
@@ -65,7 +93,7 @@ function FeaturedItem({ post }) {
     <article className={styles.featured}>
       <Thumb post={post} className={styles.featuredThumb} />
       <div>
-        <p className={styles.eyebrow}>{categoryLabel(post, true)}</p>
+        <Eyebrow post={post} isFeatured />
         <Heading as="h2" className={styles.featuredTitle}>
           <Link to={metadata.permalink}>{metadata.title}</Link>
         </Heading>
@@ -83,7 +111,7 @@ function Row({ post }) {
     <article className={styles.row}>
       <Thumb post={post} className={styles.rowThumb} />
       <div>
-        <p className={styles.eyebrow}>{categoryLabel(post, false)}</p>
+        <Eyebrow post={post} isFeatured={false} />
         <Heading as="h2" className={styles.title}>
           <Link to={metadata.permalink}>{metadata.title}</Link>
         </Heading>
