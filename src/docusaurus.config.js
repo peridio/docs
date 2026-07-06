@@ -19,10 +19,7 @@ const config = {
   organizationName: 'peridio',
   projectName: 'peridio-docs',
   trailingSlash: false,
-  clientModules: [
-    './src/clientModules/copyInlineCode.js',
-    './src/clientModules/imageLightbox.js',
-  ],
+  clientModules: ['./src/clientModules/copyInlineCode.js', './src/clientModules/imageLightbox.js'],
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
