@@ -23,6 +23,24 @@
   padding-top: 1.5rem !important;
 }
 
+/* Field Notes list page: align content edges + width with the navbar.
+   Default (unswizzled) BlogLayout wraps content in a `.container` narrower than
+   our 1400px navbar and puts <main> in `col--9 col--offset-1` (75% wide, pushed
+   right). Widen the container to 1400px with the same 1rem gutter as
+   .navbar__inner, and make main span the full column so its edges line up with
+   the logo/tabs above. */
+html.blog-list-page .container {
+  max-width: 1400px;
+  padding: 0 1rem;
+}
+
+html.blog-list-page .container > .row > main.col {
+  --ifm-col-width: 100%;
+  max-width: 100%;
+  flex-basis: 100%;
+  margin-left: 0;
+}
+
 /* Ensure main content is not hidden behind fixed navbar and promo bar */
 main {
   margin-top: 0 !important;
@@ -333,19 +351,6 @@ html[data-theme="dark"] .navbar {
 .navbar__link[href="/developer-reference/getting-started"]::before {
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5'/%3E%3C/svg%3E");
-}
-
-/* Field Notes navbar link is gated behind ?preview=1.
-   The fieldNotesGate clientModule sets html[data-show-field-notes="1"]
-   when the flag is in the URL or persisted in sessionStorage. We use a
-   data attribute instead of a class because react-helmet-async rewrites
-   the root className on every render and would wipe out a class. */
-.navbar__link[href="/field-notes"] {
-  display: none;
-}
-
-html[data-show-field-notes="1"] .navbar__link[href="/field-notes"] {
-  display: inline-flex;
 }
 
 /* Field Notes — notepad (Heroicons document-text) icon.
@@ -1160,10 +1165,14 @@ html[data-theme="dark"] .code-copy-tooltip {
    doesn't leak into other tabs. */
 .plugin-id-field-notes {
   --field-notes-accent: #4f46e5;
+  /* Lighter accent, used only for the category eyebrow labels so they read
+     softer than the full-strength accent on dividers/links/thumbnails. */
+  --field-notes-eyebrow: #7c73ed;
 }
 
 html[data-theme="dark"] .plugin-id-field-notes {
   --field-notes-accent: #818cf8;
+  --field-notes-eyebrow: #a5b4fc;
 }
 
 /* Geist for body type, Geist Mono for meta + code */
@@ -1231,49 +1240,51 @@ html[data-theme="dark"] .plugin-id-field-notes {
 }
 
 /* ----- DETAIL PAGE ----- */
+/* Editorial header: eyebrow, large title, meta + author, then a divider that
+   separates the masthead from the article body. */
+.plugin-id-field-notes article > header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* The leading content (the TestStatus/TestedAgainst meta strip) carries its own
+   top margin, which stacked on the header's margin-bottom above and left a
+   floaty gap under the divider. Let the header margin be the sole spacer so the
+   strip hugs the divider. */
+.plugin-id-field-notes .markdown > :first-child {
+  margin-top: 0;
+}
+
 /* "FIELD NOTES" eyebrow above the post title */
 .plugin-id-field-notes article > header > h1::before {
   content: "FIELD NOTES";
   display: block;
   font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   color: var(--field-notes-accent);
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.9rem;
 }
 
 .plugin-id-field-notes article > header > h1 {
-  font-size: 1.875rem;
+  font-size: 2.5rem;
   font-weight: 600;
-  line-height: 1.25;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.01em;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0;
+  color: var(--ifm-heading-color);
 }
 
-.plugin-id-field-notes article > header time {
-  font-size: 0.875rem;
-  color: var(--ifm-color-emphasis-700);
-}
+/* Date, tags, and the link-free author byline now live in a single compact
+   meta band rendered in the swizzled header and styled in
+   BlogPostItem/Header/styles.module.css. */
 
-.plugin-id-field-notes article > header > div:first-of-type {
-  margin: 0.25rem 0 0.75rem 0 !important;
-}
-
-/* The inner author row uses bootstrap .row too. Stop our outer flex
-   override from leaking down to it, and zero the row's default -16px
-   margin so the author block aligns flush with the title above. */
-.plugin-id-field-notes article > header .row {
-  display: block !important;
-  margin-top: 0.25rem !important;
-  margin-bottom: 0.75rem !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  gap: 0 !important;
-}
-
-.plugin-id-field-notes article > header [class*="authorCol"] {
-  padding: 0;
+/* tags now live in the masthead (swizzled header) — hide the default
+   footer copy so they aren't shown twice. */
+.plugin-id-field-notes .theme-blog-footer-edit-meta-row {
+  display: none;
 }
 
 /* Section headings inside the article */

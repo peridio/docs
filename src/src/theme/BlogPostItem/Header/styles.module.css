@@ -1,0 +1,133 @@
+/* Masthead tags — monospace, gray "#tag" labels, no pill wrapper.
+   Gray comes from theme emphasis tokens so light + dark both keep contrast. */
+
+/* Compact two-column meta band: author on the left, date + tags stacked on the
+   right so the previously-wasted horizontal space carries the metadata. */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.metaAside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  text-align: right;
+}
+
+.date {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--ifm-color-emphasis-700);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.28rem 0.5rem;
+  border-radius: 6px;
+  background: var(--ifm-color-emphasis-100);
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.tag::before {
+  content: "#";
+  opacity: 0.55;
+  margin-right: 0.1rem;
+}
+
+.tag:hover {
+  color: var(--ifm-color-emphasis-900);
+  background: var(--ifm-color-emphasis-200);
+  text-decoration: none;
+}
+
+.tag:hover::before {
+  opacity: 0.8;
+}
+
+/* Custom link-free byline (rendered in index.js). */
+.byline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* On narrow screens the two-column band collapses to a stack, so the
+   right-aligned date + tags float awkwardly on their own row. Left-align them
+   under the author instead. */
+@media (max-width: 768px) {
+  .meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .metaAside {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .tags {
+    justify-content: flex-start;
+  }
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex: none;
+  display: block;
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--field-notes-accent, var(--ifm-color-primary)) 35%, transparent);
+}
+
+.authorText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  line-height: 1.25;
+}
+
+.authorName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ifm-heading-color);
+}
+
+.authorTitle {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  color: var(--ifm-color-emphasis-600);
+}

@@ -1,0 +1,37 @@
+/* Field Notes index header: eyebrow + large title + subtitle.
+   Colors come from theme tokens so light + dark both work;
+   --field-notes-accent is defined in custom.css. */
+
+.header {
+  margin: 0 0 0.5rem 0;
+}
+
+.eyebrow {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--field-notes-eyebrow, var(--field-notes-accent));
+  margin: 0 0 1rem 0;
+}
+
+.title {
+  /* Match the standard page title (Support Matrix, Getting Started). Those
+     render as a bare <h1> that is the first child of .markdown, which Infima
+     sizes to 3rem (`.markdown h1:first-child`) — not the 2rem base h1 size.
+     Our title is a classed h1 outside .markdown, so we set 3rem explicitly. */
+  font-size: 3rem;
+  font-weight: var(--ifm-heading-font-weight);
+  line-height: var(--ifm-heading-line-height);
+  color: var(--ifm-heading-color);
+  margin: 0 0 1.1rem 0;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+  max-width: 38rem;
+  margin: 0 0 2.5rem 0;
+}

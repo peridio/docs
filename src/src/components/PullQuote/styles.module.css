@@ -1,0 +1,88 @@
+/* Result callout: a subtly accent-tinted panel with a left accent rail and a
+   mono kicker. Left-aligned to sit in the article column (a centered paragraph
+   reads as a template). Uses the field-notes accent inside the blog, falling
+   back to the site brand color elsewhere; all colors are theme tokens so light
+   + dark both work. */
+
+.pullquote {
+  --pq-accent: var(--field-notes-accent, var(--ifm-color-primary));
+  /* Accent text (kicker + pulled-out figures). On dark backgrounds the raw
+     accent is too dim, so lighten it toward white for legibility; light theme
+     keeps the darker accent, which is where it has the contrast. */
+  --pq-accent-text: var(--pq-accent);
+  position: relative;
+  margin: 2.75rem 0;
+  padding: 1.5rem 1.75rem;
+  /* accent tint at the rail, fading out to transparent across the width */
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--pq-accent) 7%, transparent),
+    transparent
+  );
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+:global(html[data-theme="dark"]) .pullquote {
+  --pq-accent-text: color-mix(in srgb, var(--pq-accent) 66%, white);
+}
+
+/* the accent rail down the left edge */
+.pullquote::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--pq-accent);
+}
+
+.kicker {
+  display: block;
+  margin-bottom: 0.9rem;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pq-accent-text);
+}
+
+.text {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--ifm-heading-color);
+  text-wrap: balance;
+}
+
+/* key figures wrapped in **bold** get pulled out in the accent color */
+.text :is(strong, b) {
+  font-weight: 600;
+  color: var(--pq-accent-text);
+}
+
+.cite {
+  display: block;
+  margin-top: 1rem;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
+@media (max-width: 768px) {
+  .pullquote {
+    padding: 1.25rem 1.35rem;
+  }
+
+  .text {
+    font-size: 1.3rem;
+  }
+}

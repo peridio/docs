@@ -11,6 +11,7 @@ const CLONE_DIR = path.resolve(__dirname, '..', '.cache-references')
 const OUTPUT_DIR = path.resolve(__dirname, '..', 'docs-guides', 'references')
 const ICONS_DIR = path.resolve(__dirname, '..', 'static', 'generated', 'references')
 const GITHUB_BASE = 'https://github.com/avocado-linux/references/tree/main'
+const GITHUB_BLOB_BASE = 'https://github.com/avocado-linux/references/blob/main'
 
 // ── Clone or pull the references repo ────────────────────────────────────────
 function syncRepo() {
@@ -68,13 +69,54 @@ function extractDescription(content) {
   return ''
 }
 
+// ── Rewrite repo-relative links to absolute GitHub URLs ───────────────────────
+// getting_started.md is authored to be read in the references repo, so its
+// links are relative to the reference folder (e.g. `README.md#extension-layout`,
+// `overlay/foo`). Those targets don't exist on the docs site and would fail the
+// strict broken-link check, so we point them at the file on GitHub (which also
+// works when reading the source on GitHub). Anchors (`#x`), site-absolute (`/x`),
+// and full-scheme links (`https:`, `mailto:`, `pathname:`) are left untouched,
+// and image links (`![..](..)`) are skipped.
+const LINK_RE = /(!?)\[([^\]]*)\]\(([^)\s]+)((?:\s+"[^"]*")?)\)/g
+
+function isExternalOrAbsolute(url) {
+  return url.startsWith('#') || url.startsWith('/') || /^[a-z][a-z0-9+.-]*:/i.test(url)
+}
+
+function rewriteRelativeLinks(body, name) {
+  let count = 0
+  // Split out fenced code blocks (odd indices) so we never rewrite links that
+  // appear inside code examples.
+  const segments = body.split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g)
+  const out = segments
+    .map((seg, i) => {
+      if (i % 2 === 1) return seg
+      return seg.replace(LINK_RE, (match, bang, text, url, title) => {
+        if (bang === '!' || isExternalOrAbsolute(url)) return match
+        const splitAt = url.search(/[#?]/)
+        const pathPart = splitAt === -1 ? url : url.slice(0, splitAt)
+        const suffix = splitAt === -1 ? '' : url.slice(splitAt)
+        const resolved = path.posix.normalize(`${name}/${pathPart}`)
+        count++
+        return `${bang}[${text}](${GITHUB_BLOB_BASE}/${resolved}${suffix}${title})`
+      })
+    })
+    .join('')
+  return { body: out, count }
+}
+
 // ── Strip H1 and img tags from getting_started body ───────────────────────────
-function processGettingStarted(content) {
+function processGettingStarted(content, name) {
   // Remove inline <img> tags
   let body = content.replace(/<img[^>]*\/?\s*>/g, '')
   // Remove the H1 line (we use frontmatter title instead)
   body = body.replace(/^#\s+.+$/m, '').trimStart()
-  return body
+  // Make repo-relative links resolve on the docs site
+  const { body: rewritten, count } = rewriteRelativeLinks(body, name)
+  if (count > 0) {
+    console.log(`  ${name}: rewrote ${count} relative link(s) → GitHub`)
+  }
+  return rewritten
 }
 
 // ── Parse a reference folder ──────────────────────────────────────────────────
@@ -135,7 +177,7 @@ function parseReference(name, dirPath) {
   const hasGettingStarted = fs.existsSync(gsPath)
   let gettingStartedBody = null
   if (hasGettingStarted) {
-    gettingStartedBody = processGettingStarted(fs.readFileSync(gsPath, 'utf-8'))
+    gettingStartedBody = processGettingStarted(fs.readFileSync(gsPath, 'utf-8'), name)
   }
 
   const experimental = name.includes('experimental')
