@@ -99,7 +99,7 @@ const config = {
         path: 'field-notes',
         blogTitle: 'Field Notes',
         blogDescription:
-          'Technical write-ups from the Peridio team — what we are working on, decisions we made, and stories from the field.  Engineering content only.',
+          'Technical write-ups from the Peridio team — what we are working on, decisions we made, and stories from the field. Engineering content only.',
         showReadingTime: false,
         postsPerPage: 20,
         blogSidebarCount: 0,

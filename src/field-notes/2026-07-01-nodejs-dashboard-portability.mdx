@@ -2,13 +2,12 @@
 title: 'From QEMU to Raspberry Pi to Jetson - one codebase, ultimate portability'
 description: 'Moving an app across boards usually means standing up a new build per board. On Avocado OS the same Node.js dashboard runs on a QEMU VM, a Raspberry Pi 5, and a Jetson Orin Nano by changing one line: the target.'
 date: 2026-07-01
-draft: true # excluded from the published build until the [ENGINEER:] placeholder is filled
 authors: [nsinas]
 tags: [portability, multi-target, rpi5, jetson-orin-nano, nodejs]
 category: 'Portability'
 image: /img/field-notes/nodejs-dashboard-portability.png # hero thumbnail on the index
 featured: false
-tested_against: 'Avocado CLI 0.41.1, nodejs-dashboard reference; targets qemux86-64, raspberrypi5, jetson-orin-nano-devkit [ENGINEER: board revisions + host OS/chip]'
+tested_against: 'Avocado CLI 0.41.1, nodejs-dashboard reference; targets qemux86-64, raspberrypi5, jetson-orin-nano-devkit'
 poster: nsinas
 lift_for_blog: 'The per-board rebuild that comes with moving an app across hardware, removed: one source tree ships to three targets by changing the target line.'
 promote_to_track: 'Tutorial candidate: same-app-across-targets as the portability chapter of the on-ramp.'
