@@ -31,8 +31,7 @@ function Thumb({ post, className }) {
     <Link
       to={post.metadata.permalink}
       className={clsx(styles.thumb, className)}
-      tabIndex={-1}
-      aria-hidden="true"
+      aria-label={post.metadata.title}
     >
       {image ? (
         <img src={image} alt={imageAlt || ''} loading="lazy" />
@@ -65,7 +64,7 @@ function FeaturedItem({ post }) {
   return (
     <article className={styles.featured}>
       <Thumb post={post} className={styles.featuredThumb} />
-      <div className={styles.featuredBody}>
+      <div>
         <p className={styles.eyebrow}>{categoryLabel(post, true)}</p>
         <Heading as="h2" className={styles.featuredTitle}>
           <Link to={metadata.permalink}>{metadata.title}</Link>
@@ -83,7 +82,7 @@ function Row({ post }) {
   return (
     <article className={styles.row}>
       <Thumb post={post} className={styles.rowThumb} />
-      <div className={styles.rowBody}>
+      <div>
         <p className={styles.eyebrow}>{categoryLabel(post, false)}</p>
         <Heading as="h2" className={styles.title}>
           <Link to={metadata.permalink}>{metadata.title}</Link>

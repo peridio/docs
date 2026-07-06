@@ -81,19 +81,19 @@
   "overrides": {
     "prismjs": "1.30.0",
     "shell-quote": "1.8.4",
-    "undici": "^6.27.0",
-    "postcss": "^8.5.10",
-    "serialize-javascript": "^7.0.7",
-    "dompurify": "^3.4.11",
-    "form-data": "^4.0.6",
-    "qs": "^6.15.2",
-    "fast-uri": "^3.1.2",
-    "protobufjs": "^7.6.3",
-    "joi": "^17.13.4",
-    "http-proxy-middleware": "^2.0.10",
-    "launch-editor": "^2.14.1",
-    "@opentelemetry/core": "^2.8.0",
-    "@babel/core": "^7.29.4",
-    "@babel/plugin-transform-modules-systemjs": "^7.29.4"
+    "undici": "6.27.0",
+    "postcss": "8.5.16",
+    "serialize-javascript": "7.0.7",
+    "dompurify": "3.4.11",
+    "form-data": "4.0.6",
+    "qs": "6.15.3",
+    "fast-uri": "3.1.3",
+    "protobufjs": "7.6.4",
+    "joi": "17.13.4",
+    "http-proxy-middleware": "2.0.10",
+    "launch-editor": "2.14.1",
+    "@opentelemetry/core": "2.8.0",
+    "@babel/core": "7.29.7",
+    "@babel/plugin-transform-modules-systemjs": "7.29.7"
   }
 }
