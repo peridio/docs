@@ -42,7 +42,7 @@ export default function TestStatus({ targets = [], cli, reference }) {
         {reference && (
           <div className={styles.field}>
             <span className={styles.key}>Reference</span>
-            <Link to={reference.href} className={styles.repo}>
+            <Link href={reference.href} className={styles.repo}>
               <GitHubIcon />
               {reference.label}
             </Link>
