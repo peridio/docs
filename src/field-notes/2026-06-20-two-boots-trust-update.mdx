@@ -7,7 +7,7 @@ tags: [ota, tuf, ab-rollback, security, updates]
 category: 'Security & Compliance'
 featured: false # Featured selection is Kristen/Bill's call
 image: /img/field-notes/two-boots-trust-update.jpg # Photo: Jens Lelie / Unsplash (unsplash.com/photos/u0vgcIOQG08)
-tested_against: 'Avocado [ENGINEER: CLI version], qemux86-64 under QEMU'
+tested_against: 'Avocado 0.41.2, qemux86-64 under QEMU'
 poster: jtia
 lift_for_blog: 'A bad OTA is a truck roll or an RMA. "Rotate the signing key across the fleet without touching a device" reframes a key compromise from a recall to a routine rotation - the champion-to-approver line.'
 promote_to_track: 'Secure-update tutorial candidate: write/verify/flip + two-boot rollback + TUF trust chain, walked end to end against readable source.'
@@ -18,7 +18,7 @@ import PullQuote from '@site/src/components/PullQuote'
 
 <TestStatus
   targets={['qemux86-64']}
-  cli="[ENGINEER: version]"
+  cli="0.41.2"
   reference={{
     label: 'avocado-linux',
     href: 'https://github.com/avocado-linux',
