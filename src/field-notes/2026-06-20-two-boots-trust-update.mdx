@@ -89,7 +89,10 @@ A single detached signature proves authenticity: this image came from someone ho
 
 Avocado verifies a full update-framework trust chain (the model standardized as The Update Framework, TUF) against a trust anchor pinned on the device. Before we trust an update, the agent walks the role chain: a timestamp role (proving the metadata is current, not a replayed old-but-valid release), then snapshot, then targets and its delegations, each checked against its own signature threshold. No trust anchor, no update. The anchor lands at first boot, when the device claims itself and stores the signed root metadata it receives: trust-on-first-use (TOFU), the model you already know from SSH. It is ed25519 throughout. Once the metadata clears, each artifact is SHA-256 verified against the bundle, with a lightweight boot-time spot-check on top.
 
-<PullQuote>Rotate the signing key across the fleet without touching a device: the difference between a key compromise being a routine rotation and being a recall.</PullQuote>
+<PullQuote>
+  Rotate the signing key across the fleet without touching a device: the difference between a key
+  compromise being a routine rotation and being a recall.
+</PullQuote>
 
 What that buys over a single signature is concrete and operational. Freshness metadata blocks a replayed stale update. Threshold signing means one stolen key is not game over. And the root role lets us rotate and revoke signing keys over the air, no re-flash, no field visit.
 
@@ -138,15 +141,15 @@ What we do differently is say so, in the board profile. A profile declares expli
 
 The mechanics above are deliberately verifiable: open the source and every claim checks out. The table below is the short version of how the trust and recovery model compares. It is not a benchmark, it is an architecture comparison, drawn from each project's own documentation.
 
-| Platform | Update payload trust | Rollback decision lives in | Key rotation / revocation without re-flash |
-| :---- | :---- | :---- | :---- |
-| **Avocado OS** | Full on-device TUF (timestamp/snapshot/targets + delegations, threshold sigs, ed25519) | Userspace two-boot, firmware counter underneath for dead-kernel | Yes (TUF root role) |
-| [Mender](https://docs.mender.io/artifact-creation/sign-and-verify) | Single signing key over a manifest | Bootloader counter + userspace commit | Limited |
-| [RAUC](https://rauc.readthedocs.io/en/latest/advanced.html) | X.509 certificate chain via Cryptographic Message Syntax | Bootloader boot-attempts counter | Yes (certificate revocation) |
-| [SWUpdate](https://sbabic.github.io/swupdate/signed_images.html) | Single signed manifest | Bootloader counter | No documented workflow |
-| [foundries.io](https://docs.foundries.io/latest/reference-manual/ota/aktualizr-lite.html) | Full TUF (no director) | Userspace + bootloader/ROM counter | Yes |
-| [Toradex Torizon](https://developer.toradex.com/torizon/torizon-platform/torizon-updates/torizon-updates-technical-overview/) | Uptane (TUF + director) | Bootloader counter | Yes |
-| [balenaOS](https://docs.balena.io/learn/introduction/security) | Transport Layer Security + content digests | Bootloader + userspace health | Not applicable (no signed metadata keys) |
+| Platform                                                                                                                      | Update payload trust                                                                   | Rollback decision lives in                                      | Key rotation / revocation without re-flash |
+| :---------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :----------------------------------------- |
+| **Avocado OS**                                                                                                                | Full on-device TUF (timestamp/snapshot/targets + delegations, threshold sigs, ed25519) | Userspace two-boot, firmware counter underneath for dead-kernel | Yes (TUF root role)                        |
+| [Mender](https://docs.mender.io/artifact-creation/sign-and-verify)                                                            | Single signing key over a manifest                                                     | Bootloader counter + userspace commit                           | Limited                                    |
+| [RAUC](https://rauc.readthedocs.io/en/latest/advanced.html)                                                                   | X.509 certificate chain via Cryptographic Message Syntax                               | Bootloader boot-attempts counter                                | Yes (certificate revocation)               |
+| [SWUpdate](https://sbabic.github.io/swupdate/signed_images.html)                                                              | Single signed manifest                                                                 | Bootloader counter                                              | No documented workflow                     |
+| [foundries.io](https://docs.foundries.io/latest/reference-manual/ota/aktualizr-lite.html)                                     | Full TUF (no director)                                                                 | Userspace + bootloader/ROM counter                              | Yes                                        |
+| [Toradex Torizon](https://developer.toradex.com/torizon/torizon-platform/torizon-updates/torizon-updates-technical-overview/) | Uptane (TUF + director)                                                                | Bootloader counter                                              | Yes                                        |
+| [balenaOS](https://docs.balena.io/learn/introduction/security)                                                                | Transport Layer Security + content digests                                             | Bootloader + userspace health                                   | Not applicable (no signed metadata keys)   |
 
 _Table: how embedded update platforms handle payload trust and recovery, linked to each project's published documentation. This compares architecture, not measured performance._
 

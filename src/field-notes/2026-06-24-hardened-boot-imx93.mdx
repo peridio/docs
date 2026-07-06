@@ -55,17 +55,17 @@ The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443
 
 ### Stack
 
-| Layer | Choice | Notes |
-| :---- | :---- | :---- |
-| Data encryption | LUKS2 AES-256-XTS 512-bit key | XTS is the standard for block-device encryption; 512-bit key matches the AES-256 keyslot |
-| Key derivation (phase 1) | Argon2id via OpenSSL 3 KDF | Software fallback; combines a provisioned per-device secret with a hardware serial so the key is device-bound without a TPM |
-| Key sealing (phase 2) | TPM2 PCR 7 via `systemd-cryptenroll` | PCR 7 captures UEFI Secure Boot state; a tampered boot chain makes unseal fail |
-| Rootfs integrity | dm-verity over EROFS | Hash tree computed at build time; verified on every block read; gated on `secureboot` |
-| Mutable-file integrity | IMA appraisal + EVM | Appraises a per-file signature before open/exec; EVM protects `security.ima`; gated on `ima` |
-| Secure Boot keys | `gen-sbkeys.sh` (build-time, idempotent) | Generates PK/KEK/db/dbx; public certs to `/usr/share/secureboot-keys`; private `.key` never in `FILES` |
-| Module signing | `MODULE_SIG_FORCE` kernel config | Gated on `security`; prevents unsigned kernel modules from loading |
-| TPM2 userspace | tpm2-tss + tpm2-tools + tpm2-openssl | `tpm2-tss` is the ESAPI `systemd-cryptenroll` needs; `tpm2-abrmd` is delivered but auto-start disabled, so the initramfs unseal path is D-Bus-free |
-| Entropy | `CONFIG_HW_RANDOM_TPM=y` | Early boot has a shallow entropy pool; the TPM RNG feeds the kernel hwrng immediately so the `luksFormat` key is not derived from a cold-boot pool |
+| Layer                    | Choice                                   | Notes                                                                                                                                              |
+| :----------------------- | :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data encryption          | LUKS2 AES-256-XTS 512-bit key            | XTS is the standard for block-device encryption; 512-bit key matches the AES-256 keyslot                                                           |
+| Key derivation (phase 1) | Argon2id via OpenSSL 3 KDF               | Software fallback; combines a provisioned per-device secret with a hardware serial so the key is device-bound without a TPM                        |
+| Key sealing (phase 2)    | TPM2 PCR 7 via `systemd-cryptenroll`     | PCR 7 captures UEFI Secure Boot state; a tampered boot chain makes unseal fail                                                                     |
+| Rootfs integrity         | dm-verity over EROFS                     | Hash tree computed at build time; verified on every block read; gated on `secureboot`                                                              |
+| Mutable-file integrity   | IMA appraisal + EVM                      | Appraises a per-file signature before open/exec; EVM protects `security.ima`; gated on `ima`                                                       |
+| Secure Boot keys         | `gen-sbkeys.sh` (build-time, idempotent) | Generates PK/KEK/db/dbx; public certs to `/usr/share/secureboot-keys`; private `.key` never in `FILES`                                             |
+| Module signing           | `MODULE_SIG_FORCE` kernel config         | Gated on `security`; prevents unsigned kernel modules from loading                                                                                 |
+| TPM2 userspace           | tpm2-tss + tpm2-tools + tpm2-openssl     | `tpm2-tss` is the ESAPI `systemd-cryptenroll` needs; `tpm2-abrmd` is delivered but auto-start disabled, so the initramfs unseal path is D-Bus-free |
+| Entropy                  | `CONFIG_HW_RANDOM_TPM=y`                 | Early boot has a shallow entropy pool; the TPM RNG feeds the kernel hwrng immediately so the `luksFormat` key is not derived from a cold-boot pool |
 
 ### Source layout
 
@@ -187,10 +187,10 @@ tpm2_pcrread sha256:10
 
 ### Coverage
 
-| Target | LUKS2 | Phase-2 TPM2 | dm-verity | IMA/EVM | Module signing |
-| :---- | :---- | :---- | :---- | :---- | :---- |
-| `avocado-imx93-frdm` (hardware) | Verified | Verified (OP-TEE fTPM, PCR 7) | Verified | Verified | Verified |
-| `avocado-qemuarm64` (E2E CI) | `fvl_assert_luks_var` | `fvl_assert_luks_var_tpm` | `fvl_assert_dm_verity` | `fvl_assert_ima_appraise` | `fvl_assert_module_sig` |
+| Target                          | LUKS2                 | Phase-2 TPM2                  | dm-verity              | IMA/EVM                   | Module signing          |
+| :------------------------------ | :-------------------- | :---------------------------- | :--------------------- | :------------------------ | :---------------------- |
+| `avocado-imx93-frdm` (hardware) | Verified              | Verified (OP-TEE fTPM, PCR 7) | Verified               | Verified                  | Verified                |
+| `avocado-qemuarm64` (E2E CI)    | `fvl_assert_luks_var` | `fvl_assert_luks_var_tpm`     | `fvl_assert_dm_verity` | `fvl_assert_ima_appraise` | `fvl_assert_module_sig` |
 
 The CI seal is that both paths run the same recipes, kernel fragments, and initramfs logic (the `meta-avocado` layer is shared; only the fTPM backend differs: QEMU swtpm vs OP-TEE on the board). A cheap `avocado-qemuarm64` gate guards the expensive hardware path: a change anywhere in Avocado OS that would break the seal, the verity tree, or the appraisal policy fails the harness before it reaches a board.
 
@@ -198,7 +198,10 @@ The CI seal is that both paths run the same recipes, kernel fragments, and initr
 
 Pulling the eMMC off the board gives an attacker AES-256-XTS ciphertext. Without the Argon2id recovery passphrase (device-bound, not in the image) or the TPM2 (physically in the device), they cannot decrypt it, and the two factors are independent.
 
-<PullQuote>The storage chip alone is worthless: the key is sealed to the Secure Boot state, and the TPM is not on the chip.</PullQuote>
+<PullQuote>
+  The storage chip alone is worthless: the key is sealed to the Secure Boot state, and the TPM is
+  not on the chip.
+</PullQuote>
 
 The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader or disabled Secure Boot changes PCR 7 before the initramfs runs, so the TPM refuses to unseal, and you cannot clone the eMMC to another board and boot it. dm-verity verifies every rootfs block against a build-time hash tree, so an offline patch is caught before the patched code executes. IMA/EVM extends that to mutable files: a binary dropped into `/var` or an overlay has no valid `security.ima` signature, so the kernel refuses to execute it. Module signing closes the in-band injection path: even with a shell, the attacker cannot load a custom kernel module.
 

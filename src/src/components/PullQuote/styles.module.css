@@ -23,7 +23,7 @@
   overflow: hidden;
 }
 
-:global(html[data-theme='dark']) .pullquote {
+:global(html[data-theme="dark"]) .pullquote {
   --pq-accent-text: color-mix(in srgb, var(--pq-accent) 66%, white);
 }
 

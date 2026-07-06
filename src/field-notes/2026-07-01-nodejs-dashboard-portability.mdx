@@ -37,7 +37,7 @@ import TestStatus from '@site/src/components/TestStatus'
 The hardware target is specified in `avocado.yaml`.
 
 ```yaml
-default_target: "qemux86-64"
+default_target: 'qemux86-64'
 ```
 
 and the board support package is templated on the active target:
@@ -53,7 +53,7 @@ extensions:
 To change from the QEMU VM to a Raspberry Pi 5, I changed one line:
 
 ```yaml
-default_target: "raspberrypi5"
+default_target: 'raspberrypi5'
 ```
 
 On the next build, that template resolves the Pi's board support package and the feed serves `cortexa76` binaries plus Pi firmware. Nothing in the application source is touched. If you would rather not edit the file at all, `supported_targets: '*'` lets you pass `--target` on the command line instead.
@@ -108,9 +108,15 @@ Follow the USB disconnect/reconnect prompts for the Tegra flash. `armv8a_tegra23
 
 ![The nodejs-dashboard running unchanged on qemux86-64, a Jetson Orin Nano, and a Raspberry Pi 5 at the same time.](/img/field-notes/nodejs-dashboard-portability.png)
 
-<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>One source tree, three targets, live at once: QEMU (x86-64), Jetson Orin Nano (Tegra Arm64), and Raspberry Pi 5 (Broadcom Arm64). Same <code>app/</code> source, three architectures serving it simultaneously.</p>
+<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+  One source tree, three targets, live at once: QEMU (x86-64), Jetson Orin Nano (Tegra Arm64), and
+  Raspberry Pi 5 (Broadcom Arm64). Same <code>app/</code> source, three architectures serving it
+  simultaneously.
+</p>
 
-<PullQuote label="code change between targets">Only **one line** code change between the QEMU run and the Jetson run</PullQuote>
+<PullQuote label="code change between targets">
+  Only **one line** code change between the QEMU run and the Jetson run
+</PullQuote>
 
 ## Why it works
 

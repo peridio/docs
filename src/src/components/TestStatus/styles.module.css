@@ -28,7 +28,7 @@
   --ts-accent-text: color-mix(in srgb, var(--ts-accent) 58%, var(--ifm-font-color-base));
   --ts-radius: 6px;
   --ts-divider: var(--ifm-color-emphasis-300);
-  --ts-gap-x: clamp(0.4rem, 1.0cqi, 2rem);
+  --ts-gap-x: clamp(0.4rem, 1cqi, 2rem);
   --ts-pill-pad-x: clamp(0.25rem, 0.7cqi, 0.5rem);
   --ts-val-gap: clamp(0.2rem, 0.5cqi, 0.375rem);
   --ts-field-gap: clamp(0.3rem, 0.75cqi, 0.5rem);
@@ -108,7 +108,9 @@
 }
 
 .repo {
-  transition: background-color 150ms ease, border-color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
 }
 
 .repo:hover {
