@@ -44,7 +44,7 @@ function Eyebrow({ post, isFeatured }) {
       {isDraft(post) && (
         <span
           className={styles.draftBadge}
-          data-tooltip="Only visible in local dev. Remove the draft flag to publish this note to the live feed."
+          data-tooltip="Draft marker — this note carries a draft flag or tag. Clear it to publish the note to the live feed."
         >
           Draft
         </span>

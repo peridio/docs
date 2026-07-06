@@ -44,7 +44,7 @@
 
 /* Custom hover tooltip for the Draft badge. Native `title` is unreliable inside
    the card link, so we render the reminder ourselves via a data attribute. */
-.draftBadge::after {
+.draftBadge[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: calc(100% + 8px);
@@ -72,7 +72,7 @@
 }
 
 /* Small arrow pointing down to the badge. */
-.draftBadge::before {
+.draftBadge[data-tooltip]::before {
   content: "";
   position: absolute;
   bottom: calc(100% + 3px);
@@ -88,8 +88,8 @@
     transform 0.15s ease;
 }
 
-.draftBadge:hover::after,
-.draftBadge:hover::before {
+.draftBadge[data-tooltip]:hover::after,
+.draftBadge[data-tooltip]:hover::before {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }

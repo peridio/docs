@@ -13,6 +13,8 @@ if (ExecutionEnvironment.canUseDOM) {
   let scale = 1
   let tx = 0
   let ty = 0
+  // Element focused before the lightbox opened, so focus can be restored on close.
+  let lastFocused = null
 
   // Pointer / drag state.
   let dragging = false
@@ -58,6 +60,8 @@ if (ExecutionEnvironment.canUseDOM) {
     overlay.setAttribute('role', 'dialog')
     overlay.setAttribute('aria-modal', 'true')
     overlay.setAttribute('aria-label', 'Image viewer')
+    // Focusable so we can move focus into the modal on open (aria-modal semantics).
+    overlay.tabIndex = -1
 
     imgEl = document.createElement('img')
     imgEl.className = 'img-lightbox__img'
@@ -81,6 +85,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
   function open(src, alt) {
     if (!overlay) build()
+    lastFocused = document.activeElement
     imgEl.src = src
     imgEl.alt = alt || ''
     reset()
@@ -88,6 +93,8 @@ if (ExecutionEnvironment.canUseDOM) {
     void overlay.offsetWidth
     overlay.classList.add('img-lightbox--open')
     document.body.classList.add('img-lightbox-lock')
+    // Move focus into the dialog for keyboard/screen-reader users.
+    overlay.focus()
   }
 
   function close() {
@@ -96,6 +103,11 @@ if (ExecutionEnvironment.canUseDOM) {
     document.body.classList.remove('img-lightbox-lock')
     pointers.clear()
     dragging = false
+    // Restore focus to the element that opened the lightbox.
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus()
+    }
+    lastFocused = null
   }
 
   function isOpen() {

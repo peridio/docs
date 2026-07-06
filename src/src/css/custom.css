@@ -1320,6 +1320,12 @@ html[data-theme="dark"] .plugin-id-field-notes {
   cursor: zoom-in;
 }
 
+/* Linked images navigate (the lightbox skips them), so show the link
+   affordance instead of the misleading zoom-in cursor. */
+.markdown a img {
+  cursor: pointer;
+}
+
 .img-lightbox {
   position: fixed;
   inset: 0;

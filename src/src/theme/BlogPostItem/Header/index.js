@@ -37,7 +37,7 @@ function HeaderDate() {
 
 // Custom, link-free byline. The theme default links each author to their author
 // page (<a href>), and a password-manager browser extension latched onto those
-// links to draw a stray overlay box. Rendering the author as plain text + image
+// links to draw a stray overlay box. Rendering the author as plain text
 // removes the link entirely and gives us full design control.
 function Byline() {
   const { metadata } = useBlogPost()

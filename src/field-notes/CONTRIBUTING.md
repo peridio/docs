@@ -127,4 +127,4 @@ A note checked in with `[ENGINEER: paste the boot log here]` placeholders is a s
   grep -l "\[ENGINEER:" *.mdx
   ```
 
-Every new note starts with `draft: true` in its front matter — the template ships it that way. Docusaurus' `draft: true` excludes the post from production builds entirely, so a note stays out of the public build until it's true, complete, and reviewed. Flip it to `draft: false` (or remove it) only once no `[ENGINEER: ...]` placeholders remain and the note has passed the review gate.
+Every new note starts with `draft: true` in its front matter — the template ships it that way. Docusaurus' `draft: true` excludes the post from production builds entirely, so a note stays out of the public build until it's accurate, complete, and reviewed. Flip it to `draft: false` (or remove it) only once no `[ENGINEER: ...]` placeholders remain and the note has passed the review gate.
