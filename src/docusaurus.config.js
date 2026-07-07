@@ -92,6 +92,9 @@ const config = {
         routeBasePath: 'changelog',
         sidebarPath: require.resolve('./sidebars-changelog.js'),
         breadcrumbs: true,
+        // Weekly entries are named YYYY-wNN; without this the number-prefix
+        // parser strips the leading year and collapses the doc id to wNN.
+        numberPrefixParser: false,
       },
     ],
     [

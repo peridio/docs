@@ -154,7 +154,7 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
     }
     const activeEntry = entries.find((e) => e.permalink === activePermalink)
     if (activeEntry) {
-      document.title = `${activeEntry.version} | Changelog`
+      document.title = `${activeEntry.weekLabel || activeEntry.version} | Changelog`
     }
 
     const sidebar = document.querySelector('[class*="docSidebarContainer"]')
@@ -253,7 +253,7 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
               >
                 {isNewMonth && <div className={styles.monthLabel}>{entry.monthLabel}</div>}
                 <Heading as="h2" className={styles.versionHeading}>
-                  {entry.version}
+                  {entry.weekLabel || entry.version}
                 </Heading>
                 <div className="theme-doc-markdown markdown">
                   <entry.Component />
