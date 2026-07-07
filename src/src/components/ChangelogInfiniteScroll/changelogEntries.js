@@ -3,50 +3,43 @@
 // -- July 2026 --
 import W2026_28 from '../../../docs-changelog/2026-w28.md'
 // -- June 2026 --
-import V0_41_1 from '../../../docs-changelog/june-2026/0.41.1.md'
-import V0_41_0 from '../../../docs-changelog/june-2026/0.41.0.md'
+import W2026_26 from '../../../docs-changelog/2026-w26.md'
+import W2026_24 from '../../../docs-changelog/2026-w24.md'
 // -- May 2026 --
-import V0_40_2 from '../../../docs-changelog/may-2026/0.40.2.md'
-import V0_39_0 from '../../../docs-changelog/may-2026/0.39.0.md'
-import V0_38_0 from '../../../docs-changelog/may-2026/0.38.0.md'
-import V0_37_1 from '../../../docs-changelog/may-2026/0.37.1.md'
+import W2026_22 from '../../../docs-changelog/2026-w22.md'
+import W2026_21 from '../../../docs-changelog/2026-w21.md'
+import W2026_20 from '../../../docs-changelog/2026-w20.md'
+import W2026_19 from '../../../docs-changelog/2026-w19.md'
 // -- April 2026 --
-import V0_36_2 from '../../../docs-changelog/april-2026/0.36.2.md'
-import V0_35_0 from '../../../docs-changelog/april-2026/0.35.0.md'
-import V0_34_0 from '../../../docs-changelog/april-2026/0.34.0.md'
+import W2026_18 from '../../../docs-changelog/2026-w18.md'
+import W2026_17 from '../../../docs-changelog/2026-w17.md'
+import W2026_14 from '../../../docs-changelog/2026-w14.md'
 // -- March 2026 --
-import V0_33_0 from '../../../docs-changelog/march-2026/0.33.0.md'
-import V0_32_1 from '../../../docs-changelog/march-2026/0.32.1.md'
-import V0_31_0 from '../../../docs-changelog/march-2026/0.31.0.md'
-import V0_30_0 from '../../../docs-changelog/march-2026/0.30.0.md'
-import V0_29_0 from '../../../docs-changelog/march-2026/0.29.0.md'
-import V0_28_1 from '../../../docs-changelog/march-2026/0.28.1.md'
-import V0_27_0 from '../../../docs-changelog/march-2026/0.27.0.md'
-import V0_26_0 from '../../../docs-changelog/march-2026/0.26.0.md'
+import W2026_13 from '../../../docs-changelog/2026-w13.md'
+import W2026_12 from '../../../docs-changelog/2026-w12.md'
+import W2026_11 from '../../../docs-changelog/2026-w11.md'
+import W2026_10 from '../../../docs-changelog/2026-w10.md'
 // -- February 2026 --
-import V0_25_1 from '../../../docs-changelog/february-2026/0.25.1.md'
-import V0_24_0 from '../../../docs-changelog/february-2026/0.24.0.md'
+import W2026_7 from '../../../docs-changelog/2026-w07.md'
+import W2026_6 from '../../../docs-changelog/2026-w06.md'
 // -- January 2026 --
-import V0_23_1 from '../../../docs-changelog/january-2026/0.23.1.md'
-import V0_22_1 from '../../../docs-changelog/january-2026/0.22.1.md'
-import V0_21_0 from '../../../docs-changelog/january-2026/0.21.0.md'
+import W2026_5 from '../../../docs-changelog/2026-w05.md'
+import W2026_2 from '../../../docs-changelog/2026-w02.md'
+import W2026_1 from '../../../docs-changelog/2026-w01.md'
 // -- December 2025 --
-import V0_20_0 from '../../../docs-changelog/december-2025/0.20.0.md'
-import V0_19_1 from '../../../docs-changelog/december-2025/0.19.1.md'
-import V0_18_0 from '../../../docs-changelog/december-2025/0.18.0.md'
-import V0_17_2 from '../../../docs-changelog/december-2025/0.17.2.md'
-import V0_16_0 from '../../../docs-changelog/december-2025/0.16.0.md'
+import W2025_52 from '../../../docs-changelog/2025-w52.md'
+import W2025_51 from '../../../docs-changelog/2025-w51.md'
+import W2025_49 from '../../../docs-changelog/2025-w49.md'
 // -- November 2025 --
-import V0_15_0 from '../../../docs-changelog/november-2025/0.15.0.md'
-import V0_14_0 from '../../../docs-changelog/november-2025/0.14.0.md'
-import V0_13_0 from '../../../docs-changelog/november-2025/0.13.0.md'
+import W2025_48 from '../../../docs-changelog/2025-w48.md'
+import W2025_46 from '../../../docs-changelog/2025-w46.md'
 // -- October 2025 --
-import V0_12_1 from '../../../docs-changelog/october-2025/0.12.1.md'
+import W2025_44 from '../../../docs-changelog/2025-w44.md'
+import W2025_42 from '../../../docs-changelog/2025-w42.md'
+import W2025_41 from '../../../docs-changelog/2025-w41.md'
 // -- September 2025 --
-import V0_11_0 from '../../../docs-changelog/september-2025/0.11.0.md'
-import V0_10_2 from '../../../docs-changelog/september-2025/0.10.2.md'
-import V0_9_0 from '../../../docs-changelog/september-2025/0.9.0.md'
-import V0_8_0 from '../../../docs-changelog/september-2025/0.8.0.md'
+import W2025_37 from '../../../docs-changelog/2025-w37.md'
+import W2025_36 from '../../../docs-changelog/2025-w36.md'
 
 /**
  * Flat ordered array of all changelog entries, newest first.
@@ -62,258 +55,227 @@ export const entries = [
     Component: W2026_28,
   },
   {
-    version: '0.41.1',
+    version: '2026-w26',
+    weekLabel: 'Jun 22-28, 2026',
     monthSlug: 'june-2026',
     monthLabel: 'June 2026',
-    permalink: '/changelog/june-2026/0.41.1',
-    Component: V0_41_1,
+    permalink: '/changelog/2026-w26',
+    Component: W2026_26,
   },
   {
-    version: '0.41.0',
+    version: '2026-w24',
+    weekLabel: 'Jun 8-14, 2026',
     monthSlug: 'june-2026',
     monthLabel: 'June 2026',
-    permalink: '/changelog/june-2026/0.41.0',
-    Component: V0_41_0,
+    permalink: '/changelog/2026-w24',
+    Component: W2026_24,
   },
   {
-    version: '0.40.2',
+    version: '2026-w22',
+    weekLabel: 'May 25-31, 2026',
     monthSlug: 'may-2026',
     monthLabel: 'May 2026',
-    permalink: '/changelog/may-2026/0.40.2',
-    Component: V0_40_2,
+    permalink: '/changelog/2026-w22',
+    Component: W2026_22,
   },
   {
-    version: '0.39.0',
+    version: '2026-w21',
+    weekLabel: 'May 18-24, 2026',
     monthSlug: 'may-2026',
     monthLabel: 'May 2026',
-    permalink: '/changelog/may-2026/0.39.0',
-    Component: V0_39_0,
+    permalink: '/changelog/2026-w21',
+    Component: W2026_21,
   },
   {
-    version: '0.38.0',
+    version: '2026-w20',
+    weekLabel: 'May 11-17, 2026',
     monthSlug: 'may-2026',
     monthLabel: 'May 2026',
-    permalink: '/changelog/may-2026/0.38.0',
-    Component: V0_38_0,
+    permalink: '/changelog/2026-w20',
+    Component: W2026_20,
   },
   {
-    version: '0.37.1',
+    version: '2026-w19',
+    weekLabel: 'May 4-10, 2026',
     monthSlug: 'may-2026',
     monthLabel: 'May 2026',
-    permalink: '/changelog/may-2026/0.37.1',
-    Component: V0_37_1,
+    permalink: '/changelog/2026-w19',
+    Component: W2026_19,
   },
-
   {
-    version: '0.36.2',
+    version: '2026-w18',
+    weekLabel: 'Apr 27 - May 3, 2026',
     monthSlug: 'april-2026',
     monthLabel: 'April 2026',
-    permalink: '/changelog/april-2026/0.36.2',
-    Component: V0_36_2,
+    permalink: '/changelog/2026-w18',
+    Component: W2026_18,
   },
-
   {
-    version: '0.35.0',
+    version: '2026-w17',
+    weekLabel: 'Apr 20-26, 2026',
     monthSlug: 'april-2026',
     monthLabel: 'April 2026',
-    permalink: '/changelog/april-2026/0.35.0',
-    Component: V0_35_0,
+    permalink: '/changelog/2026-w17',
+    Component: W2026_17,
   },
-
   {
-    version: '0.34.0',
+    version: '2026-w14',
+    weekLabel: 'Mar 30 - Apr 5, 2026',
     monthSlug: 'april-2026',
     monthLabel: 'April 2026',
-    permalink: '/changelog/april-2026/0.34.0',
-    Component: V0_34_0,
+    permalink: '/changelog/2026-w14',
+    Component: W2026_14,
   },
-
   {
-    version: '0.33.0',
+    version: '2026-w13',
+    weekLabel: 'Mar 23-29, 2026',
     monthSlug: 'march-2026',
     monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.33.0',
-    Component: V0_33_0,
+    permalink: '/changelog/2026-w13',
+    Component: W2026_13,
   },
   {
-    version: '0.32.1',
+    version: '2026-w12',
+    weekLabel: 'Mar 16-22, 2026',
     monthSlug: 'march-2026',
     monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.32.1',
-    Component: V0_32_1,
+    permalink: '/changelog/2026-w12',
+    Component: W2026_12,
   },
   {
-    version: '0.31.0',
+    version: '2026-w11',
+    weekLabel: 'Mar 9-15, 2026',
     monthSlug: 'march-2026',
     monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.31.0',
-    Component: V0_31_0,
+    permalink: '/changelog/2026-w11',
+    Component: W2026_11,
   },
   {
-    version: '0.30.0',
+    version: '2026-w10',
+    weekLabel: 'Mar 2-8, 2026',
     monthSlug: 'march-2026',
     monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.30.0',
-    Component: V0_30_0,
+    permalink: '/changelog/2026-w10',
+    Component: W2026_10,
   },
   {
-    version: '0.29.0',
-    monthSlug: 'march-2026',
-    monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.29.0',
-    Component: V0_29_0,
-  },
-  {
-    version: '0.28.1',
-    monthSlug: 'march-2026',
-    monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.28.1',
-    Component: V0_28_1,
-  },
-  {
-    version: '0.27.0',
-    monthSlug: 'march-2026',
-    monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.27.0',
-    Component: V0_27_0,
-  },
-  {
-    version: '0.26.0',
-    monthSlug: 'march-2026',
-    monthLabel: 'March 2026',
-    permalink: '/changelog/march-2026/0.26.0',
-    Component: V0_26_0,
-  },
-
-  {
-    version: '0.25.1',
+    version: '2026-w07',
+    weekLabel: 'Feb 9-15, 2026',
     monthSlug: 'february-2026',
     monthLabel: 'February 2026',
-    permalink: '/changelog/february-2026/0.25.1',
-    Component: V0_25_1,
+    permalink: '/changelog/2026-w07',
+    Component: W2026_7,
   },
   {
-    version: '0.24.0',
+    version: '2026-w06',
+    weekLabel: 'Feb 2-8, 2026',
     monthSlug: 'february-2026',
     monthLabel: 'February 2026',
-    permalink: '/changelog/february-2026/0.24.0',
-    Component: V0_24_0,
+    permalink: '/changelog/2026-w06',
+    Component: W2026_6,
   },
-
   {
-    version: '0.23.1',
+    version: '2026-w05',
+    weekLabel: 'Jan 26 - Feb 1, 2026',
     monthSlug: 'january-2026',
     monthLabel: 'January 2026',
-    permalink: '/changelog/january-2026/0.23.1',
-    Component: V0_23_1,
+    permalink: '/changelog/2026-w05',
+    Component: W2026_5,
   },
   {
-    version: '0.22.1',
+    version: '2026-w02',
+    weekLabel: 'Jan 5-11, 2026',
     monthSlug: 'january-2026',
     monthLabel: 'January 2026',
-    permalink: '/changelog/january-2026/0.22.1',
-    Component: V0_22_1,
+    permalink: '/changelog/2026-w02',
+    Component: W2026_2,
   },
   {
-    version: '0.21.0',
+    version: '2026-w01',
+    weekLabel: 'Dec 29, 2025 - Jan 4, 2026',
     monthSlug: 'january-2026',
     monthLabel: 'January 2026',
-    permalink: '/changelog/january-2026/0.21.0',
-    Component: V0_21_0,
+    permalink: '/changelog/2026-w01',
+    Component: W2026_1,
   },
-
   {
-    version: '0.20.0',
+    version: '2025-w52',
+    weekLabel: 'Dec 22-28, 2025',
     monthSlug: 'december-2025',
     monthLabel: 'December 2025',
-    permalink: '/changelog/december-2025/0.20.0',
-    Component: V0_20_0,
+    permalink: '/changelog/2025-w52',
+    Component: W2025_52,
   },
   {
-    version: '0.19.1',
+    version: '2025-w51',
+    weekLabel: 'Dec 15-21, 2025',
     monthSlug: 'december-2025',
     monthLabel: 'December 2025',
-    permalink: '/changelog/december-2025/0.19.1',
-    Component: V0_19_1,
+    permalink: '/changelog/2025-w51',
+    Component: W2025_51,
   },
   {
-    version: '0.18.0',
+    version: '2025-w49',
+    weekLabel: 'Dec 1-7, 2025',
     monthSlug: 'december-2025',
     monthLabel: 'December 2025',
-    permalink: '/changelog/december-2025/0.18.0',
-    Component: V0_18_0,
+    permalink: '/changelog/2025-w49',
+    Component: W2025_49,
   },
   {
-    version: '0.17.2',
-    monthSlug: 'december-2025',
-    monthLabel: 'December 2025',
-    permalink: '/changelog/december-2025/0.17.2',
-    Component: V0_17_2,
-  },
-  {
-    version: '0.16.0',
-    monthSlug: 'december-2025',
-    monthLabel: 'December 2025',
-    permalink: '/changelog/december-2025/0.16.0',
-    Component: V0_16_0,
-  },
-
-  {
-    version: '0.15.0',
+    version: '2025-w48',
+    weekLabel: 'Nov 24-30, 2025',
     monthSlug: 'november-2025',
     monthLabel: 'November 2025',
-    permalink: '/changelog/november-2025/0.15.0',
-    Component: V0_15_0,
+    permalink: '/changelog/2025-w48',
+    Component: W2025_48,
   },
   {
-    version: '0.14.0',
+    version: '2025-w46',
+    weekLabel: 'Nov 10-16, 2025',
     monthSlug: 'november-2025',
     monthLabel: 'November 2025',
-    permalink: '/changelog/november-2025/0.14.0',
-    Component: V0_14_0,
+    permalink: '/changelog/2025-w46',
+    Component: W2025_46,
   },
   {
-    version: '0.13.0',
-    monthSlug: 'november-2025',
-    monthLabel: 'November 2025',
-    permalink: '/changelog/november-2025/0.13.0',
-    Component: V0_13_0,
-  },
-
-  {
-    version: '0.12.1',
+    version: '2025-w44',
+    weekLabel: 'Oct 27 - Nov 2, 2025',
     monthSlug: 'october-2025',
     monthLabel: 'October 2025',
-    permalink: '/changelog/october-2025/0.12.1',
-    Component: V0_12_1,
-  },
-
-  {
-    version: '0.11.0',
-    monthSlug: 'september-2025',
-    monthLabel: 'September 2025',
-    permalink: '/changelog/september-2025/0.11.0',
-    Component: V0_11_0,
+    permalink: '/changelog/2025-w44',
+    Component: W2025_44,
   },
   {
-    version: '0.10.2',
-    monthSlug: 'september-2025',
-    monthLabel: 'September 2025',
-    permalink: '/changelog/september-2025/0.10.2',
-    Component: V0_10_2,
+    version: '2025-w42',
+    weekLabel: 'Oct 13-19, 2025',
+    monthSlug: 'october-2025',
+    monthLabel: 'October 2025',
+    permalink: '/changelog/2025-w42',
+    Component: W2025_42,
   },
   {
-    version: '0.9.0',
-    monthSlug: 'september-2025',
-    monthLabel: 'September 2025',
-    permalink: '/changelog/september-2025/0.9.0',
-    Component: V0_9_0,
+    version: '2025-w41',
+    weekLabel: 'Oct 6-12, 2025',
+    monthSlug: 'october-2025',
+    monthLabel: 'October 2025',
+    permalink: '/changelog/2025-w41',
+    Component: W2025_41,
   },
   {
-    version: '0.8.0',
+    version: '2025-w37',
+    weekLabel: 'Sep 8-14, 2025',
     monthSlug: 'september-2025',
     monthLabel: 'September 2025',
-    permalink: '/changelog/september-2025/0.8.0',
-    Component: V0_8_0,
+    permalink: '/changelog/2025-w37',
+    Component: W2025_37,
+  },
+  {
+    version: '2025-w36',
+    weekLabel: 'Sep 1-7, 2025',
+    monthSlug: 'september-2025',
+    monthLabel: 'September 2025',
+    permalink: '/changelog/2025-w36',
+    Component: W2025_36,
   },
 ]
