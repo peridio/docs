@@ -1,5 +1,7 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
+// -- July 2026 --
+import V1_0_0_RC_1 from '../../../docs-changelog/july-2026/1.0.0-rc.1.md'
 // -- June 2026 --
 import V0_41_1 from '../../../docs-changelog/june-2026/0.41.1.md'
 import V0_41_0 from '../../../docs-changelog/june-2026/0.41.0.md'
@@ -51,6 +53,13 @@ import V0_8_0 from '../../../docs-changelog/september-2025/0.8.0.md'
  * Order matches sidebars-changelog.js exactly.
  */
 export const entries = [
+  {
+    version: '1.0.0-rc.1',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/1.0.0-rc.1',
+    Component: V1_0_0_RC_1,
+  },
   {
     version: '0.41.1',
     monthSlug: 'june-2026',
