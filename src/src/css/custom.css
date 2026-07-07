@@ -1326,6 +1326,23 @@ html[data-theme="dark"] .plugin-id-field-notes {
   cursor: pointer;
 }
 
+/* Black frame around screenshots (Avocado Connect overview). Wrapper hugs
+   the image so the 4px border reads as a tight frame, not a full-width bar. */
+.framed-shot {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 4px;
+  background: #000;
+  border-radius: 6px;
+}
+
+.framed-shot img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+
 .img-lightbox {
   position: fixed;
   inset: 0;
