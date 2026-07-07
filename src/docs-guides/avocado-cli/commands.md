@@ -97,6 +97,7 @@ Options:
   -d, --device <DEVICE>                 Device to deploy to as [user@]host[:port] (e.g. root@192.168.1.100:2222)
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --connect-sign                    Sign TUF metadata via Avocado Connect instead of locally (use for a device that has taken a Connect OTA). Requires a local signing key configured for the runtime (Level 2: signing.key + `avocado connect trust promote-root`); without one no root.json is baked and the deploy fails during Phase 1 hash collection.
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
@@ -1467,6 +1468,7 @@ Options:
   -d, --device <DEVICE>                 Device to deploy to as [user@]host[:port] (e.g. root@192.168.1.100:2222)
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --connect-sign                    Sign TUF metadata via Avocado Connect instead of locally (use for a device that has taken a Connect OTA). Requires a local signing key configured for the runtime (Level 2: signing.key + `avocado connect trust promote-root`); without one no root.json is baked and the deploy fails during Phase 1 hash collection.
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
