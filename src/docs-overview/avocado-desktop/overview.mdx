@@ -1,0 +1,108 @@
+---
+title: 'Overview'
+---
+
+import CalloutButton from '@site/src/components/CalloutButton'
+
+# Avocado Desktop
+
+Build and provision Avocado OS from your own machine. Describe what you want in plain English and a built-in AI agent drives the whole toolchain — editing config, cross-compiling, building the image, and writing it to hardware — so you ship a real device without memorizing a single config key.
+
+Avocado Desktop is the native app for building Avocado OS, Peridio's immutable embedded Linux runtime. It bundles the build VM, cross-compilation toolchain, hardware provisioning, and a developer-preview AI agent wired to the Avocado MCP into one workspace that runs locally on your machine.
+
+<CalloutButton
+  label="Get Avocado Desktop"
+  cta="Download →"
+  href="/developer-reference/getting-started/download"
+  fullWidth
+/>
+
+![Avocado Desktop, with the build VM and live metrics in the main pane and the agent chat on the right.](/img/field-notes/agentic-mcp-pi-exporter-desktop.png)
+
+<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+  Avocado Desktop. The build VM and live device metrics fill the main pane; the{' '}
+  <strong>agent panel</strong> sits on the right.
+</p>
+
+---
+
+## Getting Started
+
+Avocado Desktop is available for macOS today, and it self-updates in place once installed — you don't re-download it for new releases. Windows and Linux builds are on the way.
+
+1. **Install the app** — download the [macOS release](/developer-reference/getting-started/download) directly, or install it with Homebrew: `brew install --cask avocado-linux/tap/avocado-desktop`. Avocado Desktop requires macOS 13.0 (Ventura) or later.
+2. **Open a project** — point Desktop at a new or existing Avocado project. The build VM and toolchain are bundled, so there's nothing else to set up.
+3. **Build and provision** — describe what you want to the agent, or run the build and provisioning steps yourself, then flash your first device to verify the loop end to end.
+
+---
+
+## The AI Agent
+
+Describe what you want and it does the work — no file scaffolding, no config written by hand.
+
+Avocado Desktop ships a built-in AI agent (developer preview): an agentic chat that turns a plain-English request into a real Avocado extension. Ask for "a Rust service that reports device health as Prometheus metrics and starts on boot," and the agent finds a suitable reference on its own, generates the project, cross-compiles it, and provisions the board — calling the toolchain for you at every step.
+
+- **Plain-English input** — write the request the way someone new to Avocado would; no Avocado-specific detail required
+- **Reference-aware** — the agent discovers and mirrors existing [Avocado references](https://github.com/avocado-linux/references) so generated projects follow proven patterns
+- **End-to-end** — one message can carry you from prompt to a cross-compiled binary running under systemd on real hardware
+
+![The agent panel: a plain-English prompt, then the agent listing projects, cloning the references repo, and finding a Rust example on its own.](/img/field-notes/agentic-mcp-pi-exporter-chat.png)
+
+<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+  From one prompt, the agent lists projects, clones the Avocado references repo, and finds a Rust
+  example itself — then calls the Avocado MCP to run the toolchain.
+</p>
+
+---
+
+## Avocado MCP
+
+The agent doesn't guess — it drives the same toolchain you would, through a documented interface.
+
+Under the hood, the agent is wired to the **Avocado MCP**, a [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the whole toolchain — edit config, cross-compile, build the image, provision hardware — as callable tools. When you type in the chat, the agent calls the MCP to run real commands, so every action maps to something you could run yourself.
+
+- **The full toolchain, as tools** — configuration, compilation, packaging, and provisioning are all reachable through the MCP
+- **Transparent** — the agent runs the same `avocado install`, `avocado build`, and `avocado provision` steps you'd run by hand
+- **Open protocol** — built on the Model Context Protocol, not a closed integration
+
+---
+
+## Build & Cross-compile
+
+Avocado Desktop cross-compiles your application to the target architecture and assembles a complete image — the parts that are easy to get wrong by hand are handled for you.
+
+- **Bundled build VM** — the build environment ships with the app; no separate SDK install or container setup
+- **Cross-compilation** — produces real target binaries, such as `aarch64-avocado-linux-gnu` ELF executables, not prebuilt drop-ins
+- **Config handled for you** — the SDK toolchain, sysroot-aware compile steps, and `avocado.yaml` are generated and maintained by the agent
+
+![The agent's summary of the extension it created and built, following a reference structure.](/img/field-notes/agentic-mcp-pi-exporter-result.png)
+
+<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+  The agent's summary of what it produced: the <code>avocado.yaml</code>, the application, the
+  cross-compile scripts, and the systemd service — all generated from a single prompt.
+</p>
+
+---
+
+## Provision Hardware
+
+Take the image you just built straight to the board.
+
+Avocado Desktop provisions real hardware from the same workspace — writing a bootable SD card, monitoring the serial console, and reporting live device metrics as the board comes up.
+
+- **One-click provisioning** — write a bootable SD card with USB passthrough, no separate flashing tool
+- **Serial monitor** — watch the device boot and confirm your services start
+- **Live metrics** — see device health reported back into Desktop once the board is running
+
+![Avocado Desktop's Provision step writing the bootable SD card.](/img/field-notes/agentic-mcp-pi-exporter-provision.png)
+
+<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+  The Provision step writing a bootable SD card. USB passthrough lets Avocado Desktop write the card
+  directly.
+</p>
+
+![The booted board in Avocado Desktop's serial monitor, with its service running.](/img/field-notes/agentic-mcp-pi-exporter-boot.png)
+
+<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+  The booted board in Desktop's serial monitor, with the generated service already running.
+</p>

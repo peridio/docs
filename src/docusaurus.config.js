@@ -173,7 +173,8 @@ const config = {
             to: '/',
             label: 'Product Documentation',
             position: 'left',
-            activeBaseRegex: '^/$|^/(avocado-os|avocado-connect|faqs|policies)(/.*)?$',
+            activeBaseRegex:
+              '^/$|^/(avocado-os|avocado-connect|avocado-desktop|faqs|policies)(/.*)?$',
           },
           {
             to: '/hardware/support-matrix',

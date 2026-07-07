@@ -26,6 +26,13 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Avocado Desktop',
+      collapsible: false,
+      collapsed: false,
+      items: ['avocado-desktop/overview'],
+    },
+    {
+      type: 'category',
       label: 'Security',
       collapsible: false,
       collapsed: false,
