@@ -8,8 +8,6 @@ interface CalloutButtonProps {
   cta: string
   /** Button link target. */
   href: string
-  /** Stretch the pill to fill its container, pushing the button to the right edge. */
-  fullWidth?: boolean
 }
 
 /**
@@ -17,14 +15,13 @@ interface CalloutButtonProps {
  * Originally inlined on the Avocado Connect overview; extracted so the same
  * exact button can be reused (e.g. the Community page Discord CTA).
  */
-export default function CalloutButton({ label, cta, href, fullWidth = false }: CalloutButtonProps) {
+export default function CalloutButton({ label, cta, href }: CalloutButtonProps) {
   return (
     <div
       style={{
         display: 'flex',
-        width: fullWidth ? '100%' : 'fit-content',
+        width: 'fit-content',
         maxWidth: '100%',
-        justifyContent: fullWidth ? 'space-between' : undefined,
         margin: '1.5rem 0',
         alignItems: 'center',
         gap: '1rem',
