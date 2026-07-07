@@ -22,6 +22,13 @@ Avocado Connect works with any Avocado OS device. The connection is established 
 2. **Access the console** — Avocado Connect provides a web console for fleet visibility, update management, and remote access.
 3. **Deploy your first update** — Push an extension update to a single device to verify the pipeline end-to-end before rolling out to the fleet.
 
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/dashboard.png"
+    alt="The Avocado Connect dashboard — device, tunnel, and user usage at a glance, with fleet activity over time and recommended next actions."
+  />
+</div>
+
 ---
 
 ## Launchpad
@@ -31,6 +38,13 @@ Launchpad is the developer-facing entry point for Avocado Connect. It provides q
 - **Project overview** — See all your Avocado OS projects, their target hardware, and active device counts
 - **Recent activity** — Deployments, device enrollments, update completions, and any alerts
 - **Quick actions** — Jump to a specific device, start a tunnel, or create a new deployment
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/launchpad.png"
+    alt="Launchpad — pick a starting point, choose your hardware, and follow a guided mission sequence from your first OTA to a remote app."
+  />
+</div>
 
 ---
 
@@ -45,6 +59,13 @@ Fleet management in Avocado Connect gives you visibility and control across ever
 - **Remote diagnostics** — View device logs, system state, and extension status without physical access. Identify issues before they become outages.
 - **Health monitoring** — Track boot success rates, update completion rates, and connectivity patterns. Spot trends across the fleet — not just individual device failures.
 
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/fleet.png"
+    alt="The Fleet view — online/offline counts, an activity timeline by event type, and a device inventory with identifier, cohorts, runtime, and last-seen."
+  />
+</div>
+
 ---
 
 ## Tunnels
@@ -57,6 +78,13 @@ Tunnels create encrypted, authenticated connections between your development mac
 - **Encrypted end-to-end** — All tunnel traffic is encrypted using the device's identity certificate
 - **No network configuration** — Devices initiate outbound connections to Avocado Connect. No static IPs, port forwarding, or VPN infrastructure required.
 - **Audit logged** — Every tunnel session is recorded: who connected, when, and for how long
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/tunnels.png"
+    alt="A device detail view with an active SSH tunnel — connection command, port options, and quick actions."
+  />
+</div>
 
 ---
 
@@ -71,3 +99,10 @@ Avocado Connect orchestrates over-the-air updates across your fleet, building on
 - **Delta updates** — For extension and model updates, only the changed bytes are transmitted. Critical for devices on metered cellular or satellite connections where bandwidth has a direct cost.
 - **Bandwidth controls** — Rate-limit update downloads to avoid saturating constrained network links. Schedule updates for off-peak hours.
 - **Complete audit trail** — Every deployment is recorded: who initiated it, what was deployed, when, to which devices, and the outcome. Answer the security questionnaire before it arrives.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/deployment.png"
+    alt="A deployment in progress — TUF repository generation, cohort and runtime targeting, and full deployment details."
+  />
+</div>
