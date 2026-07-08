@@ -44,7 +44,7 @@ avocado build
 
 ### Troubleshooting a stale build volume
 
-If `avocado build` fails during `runtime build dev` with a missing `/etc/passwd` (or `/etc/shadow` / `/etc/group`) under `rootfs-work`, the build volume is stale or half-populated. This happens when a previous install was interrupted, or when a project directory was deleted by hand instead of with `avocado clean`. The per-project Docker volume outlives the folder.
+If `avocado build` fails during `runtime build dev` with a missing `/etc/passwd` (or `/etc/shadow` / `/etc/group`) under `rootfs-work`, the build volume is stale or half-populated. This happens when a previous install was interrupted, or when a project directory was deleted manually without first running `avocado clean`. The per-project Docker volume outlives the folder.
 
 Reset the build state and rebuild:
 
