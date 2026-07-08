@@ -35,10 +35,10 @@ Avocado Desktop is the local tool that builds and provisions Avocado OS, Peridio
 
 ![Avocado Desktop, with the build VM and live metrics in the main pane and the agent chat on the right.](/img/field-notes/agentic-mcp-pi-exporter-desktop.png)
 
-<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+<div style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   Avocado Desktop. The build VM and live metrics fill the main pane; the{' '}
   <strong>agent panel</strong> on the right is where the whole note happens.
-</p>
+</div>
 
 This note is one run of that loop end to end. I described what I wanted in a single message and the agent produced a real Avocado extension that cross-compiled to aarch64 and booted on the board with the service already running. The point is not the exporter; it is that config, cross-compilation, packaging, and a first-boot systemd service all came out of the chat, and I never had to know an Avocado config key.
 
@@ -57,11 +57,11 @@ examples for Avocado, use them as a guide.
 
 ![The agent panel: the prompt, then the agent listing projects, cloning the references repo, and finding rust-vitals on its own.](/img/field-notes/agentic-mcp-pi-exporter-chat.png)
 
-<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+<div style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   From that one prompt: the agent lists projects, clones the Avocado references repo, greps for
   Rust, and finds <code>rust-vitals</code> itself, then starts mirroring it. You type in the chat;
   it calls the Avocado MCP to run the toolchain.
-</p>
+</div>
 
 ## What the agent produced
 
@@ -121,11 +121,11 @@ dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux
 
 ![The agent's summary of the extension it created and built.](/img/field-notes/agentic-mcp-pi-exporter-result.png)
 
-<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+<div style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   The agent's own summary: the <code>avocado.yaml</code>, the Rust app, the cross-compile scripts,
   and the systemd service, all generated from the prompt. It notes the project "follows the
   rust-vitals reference structure."
-</p>
+</div>
 
 <PullQuote>
   From one plain-English prompt to a **cross-compiled aarch64 extension** that systemd auto-started
@@ -144,21 +144,21 @@ avocado provision -r dev --profile sd
 
 ![Avocado Desktop's Provision step writing the bootable SD card.](/img/field-notes/agentic-mcp-pi-exporter-provision.png)
 
-<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+<div style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   The Provision step: the <code>raspberrypi4</code> target and the <code>sd</code> profile writing
   the bootable card. "USB passthrough ready" lets Avocado Desktop write the SD directly.
-</p>
+</div>
 
 The `sd` profile produced a bootable image and wrote it to the SD card. I moved the card to the Pi 4, attached a USB-UART cable at 115200 baud, and powered on. It booted through U-Boot into Avocado OS, and the extension's `pi-metrics.service` was already running.
 
 ![The booted Pi in Avocado Desktop's serial monitor, with pi-metrics.service running.](/img/field-notes/agentic-mcp-pi-exporter-boot.png)
 
-<p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
+<div style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   The freshly booted Pi over Avocado Desktop's built-in serial monitor:{' '}
   <code>pi-metrics.service</code> is active and listening on <code>0.0.0.0:9100</code>, and{' '}
   <code>eth0</code> reports <code>192.168.1.88</code> - the same address I curl from my laptop
   below.
-</p>
+</div>
 
 From my laptop, against the Pi's DHCP address:
 
