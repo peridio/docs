@@ -1330,12 +1330,14 @@ html[data-theme="dark"] .plugin-id-field-notes {
    box-shadow ring on the image itself, not padding, so the whole image stays
    clickable for the lightbox — no dead border area. */
 .framed-shot {
-  display: inline-flex;
+  display: flex;
   max-width: 100%;
+  margin: 1.75rem 0;
 }
 
 .framed-shot img {
   display: block;
+  width: 100%;
   max-width: 100%;
   height: auto;
   border-radius: 3px;

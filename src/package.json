@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
+    "prestart": "npm run sync-references && npm run sync-targets",
     "start": "docusaurus start",
     "sync-references": "node scripts/sync-references.js",
     "sync-targets": "node scripts/sync-targets.js",

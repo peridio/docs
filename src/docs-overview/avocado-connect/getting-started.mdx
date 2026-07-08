@@ -1,0 +1,54 @@
+---
+title: 'Getting Started'
+---
+
+# Getting Started
+
+Avocado Connect works with any Avocado OS device. The connection is established during provisioning: when you run `avocado provision`, the device is enrolled with a unique identity certificate and starts reporting to Avocado Connect automatically. Enrollment authenticates against a claim token (created in the console or with `avocado connect init`), so the device joins the right organization the moment it comes online.
+
+---
+
+## Provision and enroll
+
+1. **Provision your device**: Create a claim token in the console or run `avocado connect init`, then run `avocado provision`. Provisioning flashes the image, provisions keys, and enrolls the device against your claim token in one pass.
+2. **Access the console**: Open the web console for fleet visibility, update management, and remote access to every enrolled device.
+3. **Deploy your first update**: Push an extension update to a single device to verify the pipeline end to end before you roll out to the fleet.
+
+---
+
+## Launchpad
+
+Launchpad is your guided onboarding: a mission sequence that walks you from zero to a working fleet workflow. Pick a starting point and follow the missions in order (**First OTA**, **Remote App**, and **Choose Hardware**), each one a hands-on step that proves out a core capability.
+
+Launchpad is for getting started, not for day-to-day monitoring. Your organization overview and recent activity live on the **Dashboard**, which becomes your home base once you're up and running.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/launchpad.png"
+    alt="Launchpad: pick a starting point, choose your hardware, and follow a guided mission sequence from your first OTA to a remote app."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+Beyond the mission sequence, the **Workflows** tab collects end-to-end recipes, from exploring core concepts to cross-compiling a React or Rust app and pushing an over-the-air update, with more (data egress, hardware-in-the-loop) on the way.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/launchpad-workflows.png"
+    alt="Launchpad Workflows: a gallery of guided recipes covering core concepts, cross-compilation, and OTA updates, with more workflows coming soon."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+Claim tokens authorize new devices to enroll into a project. Create them under **Provisioning**, scope each to a cohort, and cap how many devices a token can claim, then use it with `avocado connect init` or `avocado provision`.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/provisioning-claim-tokens.png"
+    alt="The Provisioning view: a list of claim tokens with their cohort, use counts, and status (active, expired, exhausted)."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
