@@ -19,6 +19,7 @@ const sidebars = {
         'avocado-connect/overview',
         'avocado-connect/getting-started',
         'avocado-connect/fleet',
+        'avocado-connect/projects',
         'avocado-connect/deployments',
         'avocado-connect/tunnels',
       ],

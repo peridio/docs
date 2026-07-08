@@ -8,37 +8,39 @@ Ship a new software version to the right devices, watch it roll out, and know it
 
 Connect builds on the [atomic update architecture](/avocado-os/security/update-architecture) in Avocado OS: updates apply to A/B partitions and roll back automatically if a boot fails, so a bad update can't brick a device.
 
+Every runtime is cryptographically signed, and each device verifies that signature before it installs anything, so a device only ever applies software your organization actually published. Connect builds this on The Update Framework (TUF), the industry standard for securing software distribution, and it works out of the box: signing is set up when your organization is created, with no key ceremony to run yourself.
+
 A **Runtime** is the versioned artifact you deploy. Publish runtimes to your project, assign them to cohorts, and deploy or deprecate them from one place.
 
 <div className="framed-shot">
   <img
     src="/img/avocado-connect/runtimes.png"
-    alt="The Runtimes tab — published software versions with their status, target cohorts, and deploy or deprecate actions."
+    alt="The Runtimes tab: published software versions with their status, target cohorts, and deploy or deprecate actions."
     loading="lazy"
     decoding="async"
   />
 </div>
 
-Creating a deployment is a short form: name it, pick the runtime and cohort, and — under advanced options — optionally target specific devices or filter by tag.
+Creating a deployment is a short form: name it, pick the runtime and cohort, and optionally target specific devices or filter by tag under advanced options.
 
 <div className="framed-shot">
   <img
     src="/img/avocado-connect/deployment-new.png"
-    alt="The New Deployment form — name, runtime, and cohort selection with advanced options to target specific devices or filter by tag."
+    alt="The New Deployment form: name, runtime, and cohort selection with advanced options to target specific devices or filter by tag."
     loading="lazy"
     decoding="async"
   />
 </div>
 
-- **Staged rollouts** — Promote a release through cohorts, for example canary before production, and optionally target specific devices or devices by tag. Convergence tracking reports on-target percentage, pending devices, and stale device counts so you can see exactly how far a rollout has progressed before promoting it further.
-- **Cohort and tag targeting** — Push updates to specific device groups: update a factory pilot line without touching production, or roll out to one region first. Tag and specific-device targeting let you reach exactly the devices you mean.
-- **Delta updates** — Avocado OS and its update agent transmit only the changed bytes rather than a full image, which Connect builds on. This is critical over metered cellular or satellite links. See [atomic updates](/avocado-os/security/update-architecture) for how the underlying mechanism works.
-- **Audit trail** — Every deployment records what was deployed, when, to which devices, and the outcome, giving you a complete history of how your fleet reached its current state.
+- **Staged rollouts**: Promote a release through cohorts, for example canary before production, and optionally target specific devices or devices by tag. Convergence tracking reports on-target percentage, pending devices, and stale device counts so you can see exactly how far a rollout has progressed before promoting it further.
+- **Cohort and tag targeting**: Push updates to specific device groups: update a factory pilot line without touching production, or roll out to one region first. Tag and specific-device targeting let you reach exactly the devices you mean.
+- **Delta updates**: Avocado OS and its update agent transmit only the changed bytes rather than a full image, which Connect builds on. This is critical over metered cellular or satellite links. See [atomic updates](/avocado-os/security/update-architecture) for how the underlying mechanism works.
+- **Audit trail**: Every deployment records what was deployed, when, to which devices, and the outcome, giving you a complete history of how your fleet reached its current state.
 
 <div className="framed-shot">
   <img
     src="/img/avocado-connect/deployment.png"
-    alt="A deployment rollout in progress — convergence tracking with on-target, pending, and stale counts, plus per-device update status."
+    alt="A deployment rollout in progress: convergence tracking with on-target, pending, and stale counts, plus per-device update status."
     loading="lazy"
     decoding="async"
   />
