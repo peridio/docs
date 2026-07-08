@@ -1,0 +1,23 @@
+---
+title: 'Remote Access'
+---
+
+# Tunnels
+
+Secure remote access to deployed devices without exposing ports or managing VPNs.
+
+Tunnels create encrypted, authenticated connections between your development machine and a deployed device through Avocado Connect's relay infrastructure. This means you can SSH into a device behind a NAT, firewall, or cellular connection without any inbound port configuration on the device.
+
+- **On-demand access** — Open a tunnel to any connected device from the console or CLI
+- **Encrypted end-to-end** — All tunnel traffic is encrypted using the device's identity certificate
+- **No network configuration** — Devices initiate outbound connections to Avocado Connect. No static IPs, port forwarding, or VPN infrastructure required.
+- **Audit logged** — Every tunnel session is recorded: who connected, when, and for how long
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/tunnels.png"
+    alt="A device detail view with an active SSH tunnel — connection command, port options, and quick actions."
+    loading="lazy"
+    decoding="async"
+  />
+</div>

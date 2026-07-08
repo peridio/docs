@@ -19,7 +19,10 @@ export default function CalloutButton({ label, cta, href }: CalloutButtonProps) 
   return (
     <div
       style={{
-        display: 'inline-flex',
+        display: 'flex',
+        width: 'fit-content',
+        maxWidth: '100%',
+        margin: '1.5rem 0',
         alignItems: 'center',
         gap: '1rem',
         background: 'linear-gradient(135deg, rgba(123, 111, 240, 0.15), rgba(123, 111, 240, 0.05))',

@@ -1,0 +1,23 @@
+---
+title: 'Deployments'
+---
+
+# Deployments
+
+Ship a new software version to the right devices, watch it roll out, and know it landed. Deployments in Avocado Connect orchestrate OTA updates across your fleet, targeting a versioned software artifact (a Runtime) published to your project.
+
+Connect builds on the [atomic update architecture](/avocado-os/security/update-architecture) in Avocado OS: updates apply to A/B partitions and roll back automatically if a boot fails, so a bad update can't brick a device.
+
+- **Staged rollouts** — Promote a release through cohorts, for example canary before production, and optionally target specific devices or devices by tag. Convergence tracking reports on-target percentage, pending devices, and stale device counts so you can see exactly how far a rollout has progressed before promoting it further.
+- **Cohort and tag targeting** — Push updates to specific device groups: update a factory pilot line without touching production, or roll out to one region first. Tag and specific-device targeting let you reach exactly the devices you mean.
+- **Delta updates** — Avocado OS and its update agent transmit only the changed bytes rather than a full image, which Connect builds on. This is critical over metered cellular or satellite links. See [atomic updates](/avocado-os/security/update-architecture) for how the underlying mechanism works.
+- **Audit trail** — Every deployment records what was deployed, when, to which devices, and the outcome, giving you a complete history of how your fleet reached its current state.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/deployment.png"
+    alt="A deployment in progress — TUF repository generation, cohort and runtime targeting, and full deployment details."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
