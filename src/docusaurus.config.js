@@ -30,6 +30,8 @@ const config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
+          // The preset's default (empty) blog was disabled; Field Notes is the blog.
+          { from: '/blog', to: '/field-notes' },
           // Rubik Pi 3 graduated from Under Evaluation to a supported target.
           {
             from: '/hardware/under-evaluation/rubik-pi-3',
@@ -112,6 +114,36 @@ const config = {
         },
       },
     ],
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        siteTitle: 'Peridio Documentation',
+        siteDescription:
+          'Documentation for Avocado OS — a build system for embedded Linux with immutable, atomically-updatable images — and Avocado Connect, the fleet management and OTA platform. Covers supported hardware targets (NVIDIA Jetson, NXP i.MX, Raspberry Pi, Qualcomm), the Avocado CLI, reference projects, and engineering field notes.',
+        depth: 1,
+        includeOrder: [
+          '/avocado-os/**',
+          '/avocado-connect/**',
+          '/hardware/**',
+          '/developer-reference/**',
+          '/field-notes/**',
+          '/changelog/**',
+        ],
+        content: {
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: true,
+          includeBlog: true,
+          includePages: true,
+          relativePaths: false,
+          excludeRoutes: [
+            '/field-notes/tags/**',
+            '/field-notes/archive',
+            '/field-notes/authors/**',
+            '/search',
+          ],
+        },
+      },
+    ],
     ...(process.env.NODE_ENV === 'production'
       ? [
           [
@@ -135,8 +167,14 @@ const config = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars-overview.js'),
         },
+        blog: false,
         theme: {
           customCss: [require.resolve('./src/css/custom.css')],
+        },
+        sitemap: {
+          lastmod: 'date',
+          changefreq: null,
+          priority: null,
         },
       },
     ],
@@ -144,6 +182,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      image: 'img/og-image.jpg',
       colorMode: {
         defaultMode: 'light',
         disableSwitch: false,
