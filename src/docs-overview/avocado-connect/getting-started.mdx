@@ -30,3 +30,25 @@ Launchpad is for getting started, not for day-to-day monitoring. Your organizati
     decoding="async"
   />
 </div>
+
+Beyond the mission sequence, the **Workflows** tab collects end-to-end recipes — from exploring core concepts to cross-compiling a React or Rust app and pushing an over-the-air update — with more (remote access tunnels, data egress, hardware-in-the-loop) on the way.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/launchpad-workflows.png"
+    alt="Launchpad Workflows — a gallery of guided recipes covering core concepts, cross-compilation, and OTA updates, with more workflows coming soon."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+Claim tokens authorize new devices to enroll into a project. Create them under **Provisioning**, scope each to a cohort, and cap how many devices a token can claim — then use it with `avocado connect init` or `avocado provision`.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/provisioning-claim-tokens.png"
+    alt="The Provisioning view — a list of claim tokens with their cohort, use counts, and status (active, expired, exhausted)."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
