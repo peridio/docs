@@ -1361,7 +1361,13 @@ html[data-theme="dark"] .plugin-id-field-notes {
   touch-action: none;
 }
 
-.img-lightbox--open {
+/* Compound selector (not a plain `.img-lightbox--open`) so this rule outranks
+   the base `.img-lightbox` by specificity. cssnano merges rules with identical
+   declarations and can hoist a single-class `--open` rule above the base rule,
+   inverting the equal-specificity cascade and leaving the overlay hidden in the
+   production build (works in dev, where CSS is unminified). Higher specificity
+   makes the reveal win regardless of source order. */
+.img-lightbox.img-lightbox--open {
   opacity: 1;
   visibility: visible;
 }
