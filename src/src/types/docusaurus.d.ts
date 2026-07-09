@@ -53,21 +53,22 @@ declare module '@theme/CodeBlock' {
 }
 
 declare module '@theme/Layout' {
-  interface LayoutProps {
-    children?: React.ReactNode
-    title?: string
-    description?: string
-    keywords?: string | string[]
-    image?: string
-    wrapperClassName?: string
-    pageClassName?: string
-    searchMetadata?: {
-      version?: string
-      tag?: string
+  // `@docusaurus/module-type-aliases` ships a stub for this module whose
+  // `Props` only types `children`. Rather than re-declare the module (which
+  // would collide with that stub's `default` export and lose these fields in
+  // the merge), we augment `Props` with the extra props this site passes.
+  export interface Props {
+    readonly title?: string
+    readonly description?: string
+    readonly keywords?: string | string[]
+    readonly image?: string
+    readonly wrapperClassName?: string
+    readonly pageClassName?: string
+    readonly searchMetadata?: {
+      readonly version?: string
+      readonly tag?: string
     }
   }
-  const Layout: React.ComponentType<LayoutProps>
-  export default Layout
 }
 
 declare module '@theme/NavbarItem' {
@@ -116,9 +117,50 @@ declare module '@theme/Navbar/Search' {
 
 declare module '@theme/DocSidebarItem' {
   import type { ComponentType } from 'react'
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const DocSidebarItem: ComponentType<any>
+  import type { PropSidebarItem } from '@docusaurus/plugin-content-docs'
+  export interface Props {
+    readonly activePath: string
+    readonly onItemClick?: (item: PropSidebarItem) => void
+    readonly level: number
+    readonly tabIndex?: number
+    readonly item: PropSidebarItem
+    readonly index: number
+  }
+  const DocSidebarItem: ComponentType<Props>
   export default DocSidebarItem
+}
+
+declare module '@theme/DocSidebarItems' {
+  import type { ComponentType } from 'react'
+  import type { Props as DocSidebarItemProps } from '@theme/DocSidebarItem'
+  import type { PropSidebarItem } from '@docusaurus/plugin-content-docs'
+  export interface Props extends Omit<DocSidebarItemProps, 'item' | 'index'> {
+    readonly items: readonly PropSidebarItem[]
+  }
+  const DocSidebarItems: ComponentType<Props>
+  export default DocSidebarItems
+}
+
+declare module '@theme/DocSidebarItem/Link' {
+  import type { ComponentType } from 'react'
+  import type { Props as DocSidebarItemProps } from '@theme/DocSidebarItem'
+  import type { PropSidebarItemLink } from '@docusaurus/plugin-content-docs'
+  export interface Props extends DocSidebarItemProps {
+    readonly item: PropSidebarItemLink
+  }
+  const DocSidebarItemLink: ComponentType<Props>
+  export default DocSidebarItemLink
+}
+
+declare module '@theme/DocSidebarItem/Category' {
+  import type { ComponentType } from 'react'
+  import type { Props as DocSidebarItemProps } from '@theme/DocSidebarItem'
+  import type { PropSidebarItemCategory } from '@docusaurus/plugin-content-docs'
+  export interface Props extends DocSidebarItemProps {
+    readonly item: PropSidebarItemCategory
+  }
+  const DocSidebarItemCategory: ComponentType<Props>
+  export default DocSidebarItemCategory
 }
 
 declare module '@theme-original/DocSidebarItem' {
