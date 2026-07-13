@@ -3,7 +3,7 @@ import Link from '@docusaurus/Link'
 
 interface CalloutButtonProps {
   /** Text shown to the left of the button (the callout label). */
-  label: string
+  label: React.ReactNode
   /** Button text. */
   cta: string
   /** Button link target. */
@@ -44,6 +44,7 @@ export default function CalloutButton({ label, cta, href }: CalloutButtonProps) 
           textDecoration: 'none',
           fontSize: '0.8rem',
           fontWeight: 600,
+          whiteSpace: 'nowrap',
           boxShadow: '0 0 16px rgba(123, 111, 240, 0.25)',
         }}
       >
