@@ -18,7 +18,13 @@ Avocado Desktop is the native app for building Avocado OS, Peridio's immutable e
   />
 </div>
 
-![Avocado Desktop, with the build VM and live metrics in the main pane and the agent chat on the right.](/img/field-notes/agentic-mcp-pi-exporter-desktop.png)
+<div className="framed-shot">
+  <img
+    src="/img/field-notes/agentic-mcp-pi-exporter-desktop.png"
+    alt="Avocado Desktop, with the build VM and live metrics in the main pane and the agent chat on the right."
+    loading="lazy"
+  />
+</div>
 
 <p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   Avocado Desktop. The build VM and live device metrics fill the main pane; the{' '}
@@ -47,7 +53,13 @@ Avocado Desktop ships a built-in AI agent (developer preview): an agentic chat t
 - **Reference-aware** — the agent discovers and mirrors existing [Avocado references](https://github.com/avocado-linux/references) so generated projects follow proven patterns
 - **End-to-end** — one message can carry you from prompt to a cross-compiled binary running under systemd on real hardware
 
-![The agent panel: a plain-English prompt, then the agent listing projects, cloning the references repo, and finding a Rust example on its own.](/img/field-notes/agentic-mcp-pi-exporter-chat.png)
+<div className="framed-shot">
+  <img
+    src="/img/field-notes/agentic-mcp-pi-exporter-chat.png"
+    alt="The agent panel: a plain-English prompt, then the agent listing projects, cloning the references repo, and finding a Rust example on its own."
+    loading="lazy"
+  />
+</div>
 
 <p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   From one prompt, the agent lists projects, clones the Avocado references repo, and finds a Rust
@@ -76,7 +88,13 @@ Avocado Desktop cross-compiles your application to the target architecture and a
 - **Cross-compilation** — produces real target binaries, such as `aarch64-avocado-linux-gnu` ELF executables, not prebuilt drop-ins
 - **Config handled for you** — the SDK toolchain, sysroot-aware compile steps, and `avocado.yaml` are generated and maintained by the agent
 
-![The agent's summary of the extension it created and built, following a reference structure.](/img/field-notes/agentic-mcp-pi-exporter-result.png)
+<div className="framed-shot">
+  <img
+    src="/img/field-notes/agentic-mcp-pi-exporter-result.png"
+    alt="The agent's summary of the extension it created and built, following a reference structure."
+    loading="lazy"
+  />
+</div>
 
 <p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   The agent's summary of what it produced: the <code>avocado.yaml</code>, the application, the
@@ -95,14 +113,26 @@ Avocado Desktop provisions real hardware from the same workspace — writing a b
 - **Serial monitor** — watch the device boot and confirm your services start
 - **Live metrics** — see device health reported back into Desktop once the board is running
 
-![Avocado Desktop's Provision step writing the bootable SD card.](/img/field-notes/agentic-mcp-pi-exporter-provision.png)
+<div className="framed-shot">
+  <img
+    src="/img/field-notes/agentic-mcp-pi-exporter-provision.png"
+    alt="Avocado Desktop's Provision step writing the bootable SD card."
+    loading="lazy"
+  />
+</div>
 
 <p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   The Provision step writing a bootable SD card. USB passthrough lets Avocado Desktop write the card
   directly.
 </p>
 
-![The booted board in Avocado Desktop's serial monitor, with its service running.](/img/field-notes/agentic-mcp-pi-exporter-boot.png)
+<div className="framed-shot">
+  <img
+    src="/img/field-notes/agentic-mcp-pi-exporter-boot.png"
+    alt="The booted board in Avocado Desktop's serial monitor, with its service running."
+    loading="lazy"
+  />
+</div>
 
 <p style={{ textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
   The booted board in Desktop's serial monitor, with the generated service already running.
