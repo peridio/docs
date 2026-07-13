@@ -1326,9 +1326,9 @@ html[data-theme="dark"] .plugin-id-field-notes {
   cursor: pointer;
 }
 
-/* Black frame around screenshots (Avocado Connect overview). The frame is a
-   box-shadow ring on the image itself, not padding, so the whole image stays
-   clickable for the lightbox — no dead border area. */
+/* Screenshot wrapper (product overview pages). Frameless — just layout
+   spacing and rounded corners on the image; the whole image stays clickable
+   for the lightbox. */
 .framed-shot {
   display: flex;
   max-width: 100%;
