@@ -8,7 +8,7 @@ const sidebars = {
       label: 'July 2026',
       collapsible: false,
       collapsed: false,
-      items: ['july-2026/1.0.0', 'july-2026/1.0.0-rc.1'],
+      items: ['july-2026/1.0.0-rc.1'],
     },
     {
       type: 'category',
