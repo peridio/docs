@@ -147,6 +147,26 @@ const config = {
       },
     ],
   ],
+  themes: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      /** @type {import('@easyops-cn/docusaurus-search-local').PluginOptions} */
+      ({
+        hashed: true,
+        indexDocs: true,
+        indexBlog: true,
+        indexPages: true,
+        // Index every docs instance (overview, hardware, developer reference,
+        // and the changelog) plus the field-notes blog, so a specific release or
+        // entry stays findable even though the changelog now groups by week.
+        docsRouteBasePath: ['/', 'hardware', 'developer-reference', 'changelog'],
+        docsDir: ['docs-overview', 'docs-hardware', 'docs-guides', 'docs-changelog'],
+        blogRouteBasePath: ['field-notes'],
+        blogDir: ['field-notes'],
+        language: ['en'],
+      }),
+    ],
+  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
