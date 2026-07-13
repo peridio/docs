@@ -1,4 +1,244 @@
 {
+  "armv8_2a": {
+    "name": "Armv8 2a",
+    "target": "armv8_2a",
+    "category": "physical",
+    "description": "Armv8 2a is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "armv8a": {
+    "name": "Armv8a",
+    "target": "armv8a",
+    "category": "physical",
+    "description": "Armv8a is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "armv8a_tegra": {
+    "name": "Armv8a Tegra",
+    "target": "armv8a_tegra",
+    "category": "physical",
+    "description": "Armv8a Tegra is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "armv8a_tegra234": {
+    "name": "Armv8a Tegra234",
+    "target": "armv8a_tegra234",
+    "category": "physical",
+    "description": "Armv8a Tegra234 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "core2_64": {
+    "name": "Core2 64",
+    "target": "core2_64",
+    "category": "physical",
+    "description": "Core2 64 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa53": {
+    "name": "Cortexa53",
+    "target": "cortexa53",
+    "category": "physical",
+    "description": "Cortexa53 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa53_crypto": {
+    "name": "Cortexa53 Crypto",
+    "target": "cortexa53_crypto",
+    "category": "physical",
+    "description": "Cortexa53 Crypto is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa53_crypto_mx8mp": {
+    "name": "Cortexa53 Crypto Mx8mp",
+    "target": "cortexa53_crypto_mx8mp",
+    "category": "physical",
+    "description": "Cortexa53 Crypto Mx8mp is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa55": {
+    "name": "Cortexa55",
+    "target": "cortexa55",
+    "category": "physical",
+    "description": "Cortexa55 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa55_mx91": {
+    "name": "Cortexa55 Mx91",
+    "target": "cortexa55_mx91",
+    "category": "physical",
+    "description": "Cortexa55 Mx91 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa55_mx93": {
+    "name": "Cortexa55 Mx93",
+    "target": "cortexa55_mx93",
+    "category": "physical",
+    "description": "Cortexa55 Mx93 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa57": {
+    "name": "Cortexa57",
+    "target": "cortexa57",
+    "category": "physical",
+    "description": "Cortexa57 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa72": {
+    "name": "Cortexa72",
+    "target": "cortexa72",
+    "category": "physical",
+    "description": "Cortexa72 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa73": {
+    "name": "Cortexa73",
+    "target": "cortexa73",
+    "category": "physical",
+    "description": "Cortexa73 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "cortexa76": {
+    "name": "Cortexa76",
+    "target": "cortexa76",
+    "category": "physical",
+    "description": "Cortexa76 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
   "fr201": {
     "name": "OnLogic FR201",
     "target": "fr201",
@@ -25,6 +265,22 @@
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/onlogic/fr201"
+  },
+  "fr202": {
+    "name": "Fr202",
+    "target": "fr202",
+    "category": "physical",
+    "description": "Fr202 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
   },
   "grinn-astra-1680-sbc": {
     "name": "Grinn AstraSOM-1680",
@@ -203,6 +459,22 @@
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/nxp/frdm-imx-93"
+  },
+  "imx95-frdm": {
+    "name": "Imx95 Frdm",
+    "target": "imx95-frdm",
+    "category": "physical",
+    "description": "Imx95 Frdm is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
   },
   "intel-x86-64-v2": {
     "name": "Intel x86-64-v2",
@@ -458,6 +730,38 @@
     "target": "jetson-orin-nx",
     "category": "physical",
     "description": "Jetson Orin Nx is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "noarch": {
+    "name": "Noarch",
+    "target": "noarch",
+    "category": "physical",
+    "description": "Noarch is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "qcm6490": {
+    "name": "Qcm6490",
+    "target": "qcm6490",
+    "category": "physical",
+    "description": "Qcm6490 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
     "provisioning": {
       "profile": null,
       "prerequisites": [],
@@ -782,5 +1086,53 @@
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/stmicroelectronics/stm32mp257f-dk"
+  },
+  "ucm-imx8m-plus": {
+    "name": "Ucm Imx8m Plus",
+    "target": "ucm-imx8m-plus",
+    "category": "physical",
+    "description": "Ucm Imx8m Plus is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "x86_64_v2": {
+    "name": "X86 64 V2",
+    "target": "x86_64_v2",
+    "category": "physical",
+    "description": "X86 64 V2 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "x86_64_v3": {
+    "name": "X86 64 V3",
+    "target": "x86_64_v3",
+    "category": "physical",
+    "description": "X86 64 V3 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
   }
 }
