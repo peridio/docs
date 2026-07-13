@@ -46,7 +46,7 @@ That's a skeleton drawn on a live camera feed — shoulders, elbows, wrists, tra
 
 Here's the thing, though. "AI runs on the 8MP" was never the interesting claim — the 8MP is one of the modern classics, of course it runs. The claim worth writing down is that this exact project — same application, same config file — picks up and moves to the other NPUs across the i.MX line without me touching my app. That portability is one of the big value drivers we care about, and it's the whole reason this note exists.
 
-This Field Note is the deep dive demo we did during NXP's "Engineer's Guide to Simplifying Embedded Linux Development" webinar, and it's one of our reference projects — [`imx8mp-npu-pose`](https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose) — so you can pull it apart and run it yourself. 
+This Field Note is the deep dive demo we did during NXP's "Engineer's Guide to Simplifying Embedded Linux Development" webinar, and it's one of our reference projects — [`imx8mp-npu-pose`](https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose) — so you can pull it apart and run it yourself.
 
 ![The full demo: VS Code driving the reference on the left, the live NPU pose feed in the center, the i.MX 8M Plus running it on the right.](/img/field-notes/imx8mp-npu-pose/02-demo-layout.jpg)
 
@@ -58,11 +58,11 @@ None of the pipeline is exotic, and that's the point. GStreamer pulls frames off
 
 If you've shipped a model to an edge NPU, you already know where the time actually goes. Your training team hands you something in floating point, and it is not ready to just lay down onto an i.MX NPU — it has to go through a quantization step first. And here's the catch: that step is different for every part. NXP alone ships the 8M Plus with one NPU, the i.MX 93 with another, the 95 with another again, and each one wants the model prepared its own way.
 
-| Part | NPU | Peak throughput (INT8) | How a model gets loaded |
-| --- | --- | --- | --- |
-| i.MX 8M Plus | VeriSilicon Vivante VIP8000 | ~2.3 TOPS | per-tensor INT8 `.tflite`, run through the TFLite VX delegate |
-| i.MX 93 | Arm Ethos-U65 microNPU | ~0.5 TOPS | INT8 `.tflite` recompiled with Arm's Vela into an Ethos-U command stream |
-| i.MX 95 | NXP eIQ Neutron (N3) | ~2.0 TOPS | INT8 `.tflite` converted with NXP's eIQ Neutron tooling, run via the Neutron delegate |
+| Part         | NPU                         | Peak throughput (INT8) | How a model gets loaded                                                               |
+| ------------ | --------------------------- | ---------------------- | ------------------------------------------------------------------------------------- |
+| i.MX 8M Plus | VeriSilicon Vivante VIP8000 | ~2.3 TOPS              | per-tensor INT8 `.tflite`, run through the TFLite VX delegate                         |
+| i.MX 93      | Arm Ethos-U65 microNPU      | ~0.5 TOPS              | INT8 `.tflite` recompiled with Arm's Vela into an Ethos-U command stream              |
+| i.MX 95      | NXP eIQ Neutron (N3)        | ~2.0 TOPS              | INT8 `.tflite` converted with NXP's eIQ Neutron tooling, run via the Neutron delegate |
 
 These don't sit on a single performance ladder. The i.MX 93 is a lower-power part than the 8M Plus, not a bigger one; and the i.MX 95's NPU lands near the 8M Plus on paper TOPS but runs inference several times faster in practice — TOPS alone won't rank them for you. What shifts per part isn't just speed. It's the quantization, the operator coverage, and the exact output format the accelerator will actually load.
 
@@ -146,16 +146,16 @@ Two things worth stopping on. Kernel support like UVC video is a package line, n
 Here's the part that matters. In this reference the `app` extension carries the MoveNet model already quantized for the target NPU:
 
 ```yaml
-  app:
-    types:
-      - sysext
-      - confext
-    version: '0.1.0'
-    summary: 'MoveNet INT8 single-person pose'
-    overlay: app/overlay
-    packages:
-      # MoveNet is quantized to per-tensor INT8 for the NPU
-      # the .tflite is copied into the extension overlay
+app:
+  types:
+    - sysext
+    - confext
+  version: '0.1.0'
+  summary: 'MoveNet INT8 single-person pose'
+  overlay: app/overlay
+  packages:
+    # MoveNet is quantized to per-tensor INT8 for the NPU
+    # the .tflite is copied into the extension overlay
 ```
 
 We do that step in the open so you can see exactly what happens: `fetch-model.sh` pulls the model down, and `quantize-model.py` runs it through `app-compile.sh` to produce the per-tensor INT8 `.tflite` the 8MP's NPU will load. It's a small script, and you can drop your own model into that same slot and send it through the same pipeline.
