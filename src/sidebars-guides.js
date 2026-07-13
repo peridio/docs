@@ -21,7 +21,7 @@ const sidebars = {
       label: 'References',
       collapsible: false,
       collapsed: false,
-      items: ['contributing'],
+      items: ['references/explore', 'contributing'],
     },
     {
       type: 'category',
