@@ -33,6 +33,11 @@ function humanize(slug) {
   return slug.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
+// The feed lists package-architecture buckets (noarch, cortexa53, x86_64_v2, …)
+// alongside board slugs, with no structural way to tell them apart. These are
+// not provisionable hardware, so they must never reach the TargetSelector.
+const ARCH_BUCKETS = /^(noarch$|armv\d|cortexa\d|core2_64$|x86_64_v\d+$)/
+
 // Minimal entry shape the TargetSelector can render for a feed target that has
 // no curated metadata yet (keeps `.map`/`.includes` calls safe).
 function minimalEntry(slug) {
@@ -76,7 +81,14 @@ async function main() {
   const local = JSON.parse(fs.readFileSync(LOCAL_PATH, 'utf-8'))
   const localSlugs = new Set(Object.keys(local))
 
-  const feedSlugs = await fetchFeedSlugs()
+  const rawFeedSlugs = await fetchFeedSlugs()
+  const archBuckets = rawFeedSlugs?.filter((s) => ARCH_BUCKETS.test(s)) ?? []
+  const feedSlugs = rawFeedSlugs?.filter((s) => !ARCH_BUCKETS.test(s)) ?? null
+  if (archBuckets.length) {
+    console.warn(
+      `  ${archBuckets.length} feed entries are architecture buckets, not hardware (skipped): ${archBuckets.join(', ')}`
+    )
+  }
 
   // Without the feed (offline), keep the local list verbatim.
   const slugs = feedSlugs ? new Set([...feedSlugs, ...localSlugs]) : localSlugs
