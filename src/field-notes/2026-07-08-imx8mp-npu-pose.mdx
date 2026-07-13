@@ -1,8 +1,8 @@
 ---
 title: 'One NPU today, a different NPU tomorrow: MoveNet pose detection on the i.MX 8M Plus, retargeted across the i.MX line'
-description: 'Every i.MX part ships a different NPU, and each needs its own quantization to load a model. This field note runs MoveNet pose detection on the i.MX 8M Plus NPU, live from a USB camera, built in three commands — then shows why moving the same app to a different i.MX NPU is a config change, not a rewrite.'
+description: 'Across the i.MX line, each part that carries an NPU carries a different one, and each needs its own quantization to load a model. This field note runs MoveNet pose detection on the i.MX 8M Plus NPU, live from a USB camera, built in four commands — then shows why moving the same app to a different i.MX NPU is a config change, not a rewrite.'
 date: 2026-07-08
-draft: true
+draft: false
 authors: [jschneck]
 tags: [imx8mp, npu, portability, edge-ai, pose-detection, tflite, gstreamer]
 category: 'Portability'
@@ -28,41 +28,55 @@ import TestStatus from '@site/src/components/TestStatus'
     'imx93-var-dart',
   ]}
   cli="0.41.0"
+  reference={{
+    label: 'imx8mp-npu-pose',
+    href: 'https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose',
+  }}
 />
 
-**TL;DR** — Every i.MX part ships a different NPU, and each needs its own quantization to load a model. This note runs MoveNet pose detection on the i.MX 8M Plus NPU, live from a USB camera, built in three commands — then shows why moving the same app to a different i.MX NPU is a one-line config change, not a rewrite.
+**TL;DR** — Across the i.MX line, each part that carries an NPU carries a different one, and each one wants the model prepared its own way. This note runs MoveNet pose detection on the i.MX 8M Plus NPU, live off a USB camera, built in four commands — and then shows why moving the same app to a different i.MX NPU is a one-line config change, not a rewrite.
 
 {/* truncate */}
 
-## What this is
+## Start at the finish line
 
-Peridio makes Avocado OS, an immutable embedded Linux runtime shipped as a binary distribution: a read-only A/B root filesystem, composed sysext/confext extensions, and a writable `/var`. Everything about a build lives in one declarative file, `avocado.yaml` — the target, the runtimes, the extensions and packages that compose the image.
+![MoveNet pose detection running live on the i.MX 8M Plus NPU — keypoints tracked off a plain USB webcam.](/img/field-notes/imx8mp-npu-pose/01-pose-detection-hero.jpg)
 
-This note is the pose-detection demo from the NXP "Engineer's Guide to Simplifying Embedded Linux Development" webinar, written down so you can reason about it and reproduce it. It runs [MoveNet](https://www.kaggle.com/models/google/movenet) pose estimation on the i.MX 8M Plus, doing inference on the board's integrated NPU, with frames coming off a plain USB webcam. It is one of our reference examples — `imx8mp-npu-pose` — and the interesting claim is not "AI runs on the 8MP." It is that the exact same project retargets to the other NPUs in the i.MX line without touching your application.
+That's a skeleton drawn on a live camera feed — shoulders, elbows, wrists, tracked in real time. It's [MoveNet](https://www.kaggle.com/models/google/movenet) doing pose estimation, and every frame of that inference is running on the NPU baked into the i.MX 8M Plus, not the CPU. The camera is a plain USB webcam I plugged straight into the dev kit; the board serves the annotated feed back over HTTP, which is why I'm watching it in a browser pointed at the device.
 
-## The problem: every NPU speaks a different dialect
+Here's the thing, though. "AI runs on the 8MP" was never the interesting claim — the 8MP is one of the modern classics, of course it runs. The claim worth writing down is that this exact project — same application, same config file — picks up and moves to the other NPUs across the i.MX line without me touching my app. That portability is one of the big value drivers we care about, and it's the whole reason this note exists.
 
-Edge AI silicon has gone wide. NXP alone ships the 8M Plus with one NPU, the i.MX 93 with another, the 95 with a larger one, and discrete accelerators above that. They scale in performance — and they also vary in the exact incantation you need to get a model to run on them. Quantization, operator support, the output format the accelerator will actually load: all of it shifts per part.
-
-What that does to a team is predictable. You end up with a loose bag of scripts that carries a model from your training team's output into something each specific NPU will accept, and that bag is different for every board. The moment you want to evaluate a cheaper part, scale up because the model got heavier, or move because a part went short in the supply chain, you are re-deriving that pipeline by hand. The hardware swap is easy. The software underneath it turned a part change into a project.
-
-That is the friction this demo is built to remove.
-
-## The finale first: pose detection on the 8MP NPU
-
-On screen is a live camera feed with a skeleton overlaid on it — shoulders, elbows, wrists tracked in real time. That is MoveNet doing pose estimation, and every frame of inference is running on the NPU on the i.MX 8M Plus, not the CPU. The camera is a USB webcam plugged straight into the dev kit; the board serves the annotated feed over HTTP, which is why you are seeing it in a browser pointed at the device.
+This Field Note is the deep dive demo we did during NXP's "Engineer's Guide to Simplifying Embedded Linux Development" webinar, and it's one of our reference projects — [`imx8mp-npu-pose`](https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose) — so you can pull it apart and run it yourself. 
 
 ![The full demo: VS Code driving the reference on the left, the live NPU pose feed in the center, the i.MX 8M Plus running it on the right.](/img/field-notes/imx8mp-npu-pose/02-demo-layout.jpg)
 
-The pipeline is ordinary embedded plumbing, which is the point: GStreamer pulls frames from the UVC camera, hands them to a small Python app that runs the quantized model on the NPU and draws the keypoints, and Weston renders the output. All of it is declared in the config, not hand-installed on the device.
+None of the pipeline is exotic, and that's the point. GStreamer pulls frames off the UVC camera, hands them to a small Python app that runs the quantized model on the NPU and draws the keypoints, and Weston puts it on screen. All of it is declared in the config — nothing hand-installed on the device after the fact.
 
-![The NXP i.MX 8M Plus (8MPLUS-BB) doing the inference — a USB webcam in, the NPU running MoveNet, the annotated feed out.](/img/field-notes/imx8mp-npu-pose/03-imx8mp-board.jpg)
+![The NXP i.MX 8M Plus doing the inference — a USB webcam in, the NPU running MoveNet, the annotated feed out.](/img/field-notes/imx8mp-npu-pose/03-imx8mp-board.jpg)
 
-## Anatomy of the config
+## The part nobody demos
 
-The whole project is one `avocado.yaml`. From the top it names the targets it supports and the default to build, then composes a runtime out of extensions. An extension is a reusable fragment of an image — you develop it once and share it across projects. Some are inline (your app, your config); some are shared, pulled from Avocado, from Peridio, or from your own team.
+If you've shipped a model to an edge NPU, you already know where the time actually goes. Your training team hands you something in floating point, and it is not ready to just lay down onto an i.MX NPU — it has to go through a quantization step first. And here's the catch: that step is different for every part. NXP alone ships the 8M Plus with one NPU, the i.MX 93 with another, the 95 with another again, and each one wants the model prepared its own way.
 
-The board support package is templated on the active target, which is the hinge the whole portability story turns on:
+| Part | NPU | Peak throughput (INT8) | How a model gets loaded |
+| --- | --- | --- | --- |
+| i.MX 8M Plus | VeriSilicon Vivante VIP8000 | ~2.3 TOPS | per-tensor INT8 `.tflite`, run through the TFLite VX delegate |
+| i.MX 93 | Arm Ethos-U65 microNPU | ~0.5 TOPS | INT8 `.tflite` recompiled with Arm's Vela into an Ethos-U command stream |
+| i.MX 95 | NXP eIQ Neutron (N3) | ~2.0 TOPS | INT8 `.tflite` converted with NXP's eIQ Neutron tooling, run via the Neutron delegate |
+
+These don't sit on a single performance ladder. The i.MX 93 is a lower-power part than the 8M Plus, not a bigger one; and the i.MX 95's NPU lands near the 8M Plus on paper TOPS but runs inference several times faster in practice — TOPS alone won't rank them for you. What shifts per part isn't just speed. It's the quantization, the operator coverage, and the exact output format the accelerator will actually load.
+
+A quick primer if NPUs are new to you: a trained model comes out in 32-bit floating point, but an NPU wants small integers. **Quantization** converts the model's weights and activations down to 8-bit integers (INT8) so the accelerator can run them — you trade a little accuracy for a big win in speed and power. Every NPU wants that done its own way. The 8M Plus loads a per-tensor INT8 `.tflite` directly; the i.MX 93's Ethos-U65 needs that same INT8 model compiled a second time, through Arm's Vela, into a command stream it can execute. Same idea, different output — and it doesn't always go clean. There are two ways it bites you: some models just lose too much fidelity when you drop them to INT8, and some lean on activation functions or ops the NPU won't accelerate at all. The tooling catches a lot of that, but not all of it, so you validate per part.
+
+What that does to a team is the familiar mess. You end up with a loose bag of scripts that drags a model from your training output into something one specific NPU will accept — and that bag is different for every board. The day you want to evaluate a cheaper part, or scale up because the model got heavier, or move because a part went short in the supply chain, you're re-deriving that pipeline by hand. Swapping the hardware is the easy part. It's the software underneath that quietly turns a part change into a project.
+
+That's the friction this demo is built to remove.
+
+## It's all one file, and the target line is the hinge
+
+The whole project is a single `avocado.yaml`. Up top it names the targets it supports and which one to build by default, then it composes a runtime out of extensions. An extension is just a reusable fragment of an image — you build it once and share it across projects. Some are inline (your app, your config); some are shared, pulled from Avocado, from Peridio, or from your own team.
+
+The one line that carries the whole portability story is the board support package, templated on the active target:
 
 ```yaml
 cli_requirement: '>=0.41.0'
@@ -94,7 +108,7 @@ runtimes:
 
 ![The config names the target once. `supported_targets` spans the 8MP and i.MX 93 families, and the BSP line templates on `{{ avocado.target.board }}`.](/img/field-notes/imx8mp-npu-pose/04-config-supported-targets.jpg)
 
-The application extension installs exactly what this demo needs and nothing else — that is the whole security-footprint argument for an immutable OS. You are adding lines, not images:
+The application extension pulls in exactly what this demo needs and nothing more — which is the entire security-footprint argument for an immutable OS in one sentence. You're adding lines, not baking images:
 
 ```yaml
 extensions:
@@ -125,11 +139,11 @@ extensions:
 
 ![The `app` extension: GStreamer, a little Python, the UVC kernel module for the webcam, and Weston — declared as package lines, not a hand-built image.](/img/field-notes/imx8mp-npu-pose/05-config-app-packages.jpg)
 
-Two things worth calling out. Kernel support like UVC video is a package line, not a kernel rebuild — Avocado builds only what is required to boot into the kernel itself and ships the rest as modules you pull in. And the SDK is opt-in per language: this reference pulls in `nativesdk-uv` so `uv` can drive the in-SDK pip install of TensorFlow used for INT8 quantization — and, importantly, TensorFlow is build-time-only; it is not installed on the target. The same environment cross-compiles C, C++, Rust, Elixir, Java. You are not downloading hundreds of gigabytes of toolchain to build one app; you pick exactly what you need.
+Two things worth stopping on. Kernel support like UVC video is a package line, not a kernel rebuild — Avocado builds only what's needed to boot into the kernel itself and ships the rest as modules you pull in when you want them. And the SDK is opt-in per language. This reference pulls in `nativesdk-uv` so `uv` can drive an in-SDK pip install of TensorFlow for the INT8 quantization step — and to be clear, that TensorFlow is build-time only; it never lands on the target. The same toolchain cross-compiles C, C++, Rust, Elixir, Java. (If you've ever fought Python's story for cross-compilation, you know it's abysmal — `uv` being written in Rust is a good chunk of why this works at all.) You're not pulling down hundreds of gigabytes of toolchain to build one app; you take exactly what you need.
 
 ## Enabling the NPU is a shared extension, not a bag of scripts
 
-Here is the part that matters. The `app` extension declares itself as a MoveNet model that has been quantized for the target NPU:
+Here's the part that matters. In this reference the `app` extension carries the MoveNet model already quantized for the target NPU:
 
 ```yaml
   app:
@@ -144,38 +158,39 @@ Here is the part that matters. The `app` extension declares itself as a MoveNet 
       # the .tflite is copied into the extension overlay
 ```
 
-The reference does this work in the open — `fetch-model.sh` pulls the model and `quantize-model.py` runs it through `app-compile.sh` to produce a per-tensor INT8 `.tflite` the 8MP's NPU will load — so you can see exactly what happens.
+We do that step in the open so you can see exactly what happens: `fetch-model.sh` pulls the model down, and `quantize-model.py` runs it through `app-compile.sh` to produce the per-tensor INT8 `.tflite` the 8MP's NPU will load. It's a small script, and you can drop your own model into that same slot and send it through the same pipeline.
 
 ![The `app` extension is a `MoveNet INT8 single-person pose` model, quantized for the NPU and dropped into the overlay.](/img/field-notes/imx8mp-npu-pose/06-config-movenet-extension.jpg)
 
-But in practice you don't own that step. There is a shared Avocado extension that knows how to quantize a model input _for a given i.MX NPU_. Point it at the 8MP and it produces an 8MP-shaped model. Point it at the 93 — because that NPU differs — and it produces the model that accelerator expects instead. The "magic words" per NPU live in an extension we maintain, not in your repo.
+But in practice, that per-NPU step isn't something you should have to own. There's a shared Avocado extension whose whole job is to know how to quantize a model for a given i.MX NPU. Point it at the 8MP and it emits an 8MP-shaped model. Point it at the 93 — different NPU, different rules — and it emits what that accelerator expects instead. It knows what board you're on and what it takes to get a model onto it. The magic words per NPU live in an extension we maintain, not in your repo.
 
-That is why enabling the NPU and staying portable across NPUs are the same feature. The thing that gets your model onto the 8MP is the same mechanism that re-targets it to a different NPU.
+And that's the whole trick: enabling the NPU and staying portable across NPUs are the same feature. The thing that gets your model onto the 8MP is the exact same mechanism that retargets it to the 93 — or, as we bring them on, a 95, or a part from another vendor entirely.
 
 ## The target swap
 
-To move this application to a different i.MX NPU, you change the target. The BSP template resolves to the new board's support package, the feed serves that architecture's pre-built binaries, and the quantization extension re-emits the model for the new NPU. Your application source does not move:
+To move this application to a different i.MX NPU, you change the target. That's it. The BSP template resolves to the new board's support package, the feed serves that architecture's pre-built binaries, and the quantization extension re-emits the model in the form the new NPU expects — re-quantized, and recompiled where the part needs it, like the i.MX 93's Vela step. Your application source doesn't move:
 
 ```yaml
 default_target: 'imx93-evk'
 ```
 
-or, without editing the file, pass it on the command line:
+or, without touching the file, pass it on the command line:
 
 ```bash
 avocado build --target imx93-frdm
 ```
 
-This reference is configured for the 8MP and i.MX 93 families today (including the Variscite `var-dart` SOMs and the `ucm-imx8m-plus` module); the same mechanism extends up the line as you add targets. It is not a rebuild-the-world event either. We build the world of packages ahead of time, per architecture — tens of thousands of them — so a target change pulls the right pre-built packages down at install time and `avocado build` cross-compiles your pieces into the image. The work is already done on the other side of the swap.
+The reference is wired for the 8MP and i.MX 93 families today — including the Variscite `var-dart` SOMs and the `ucm-imx8m-plus` module — and the same mechanism extends up the line as we add targets. It's not a rebuild-the-world event, either. We build the whole world of packages ahead of time, per architecture — tens of thousands of them — so a target change just pulls the right pre-built packages at install time, and `avocado build` cross-compiles your pieces into the image. The heavy lifting is already done on the other side of the swap.
 
-## Three commands, then it's on the board
+## Four commands, then it's on the board
 
-From the config to a running device is the same three commands on every target:
+From an empty directory to a running device is the same four commands on every target:
 
 ```bash
-avocado install # pull the pre-built packages for this target
-avocado build     # compose the runtime, cross-compile the app + model
-avocado provision # stream it onto the board
+avocado init --reference imx8mp-npu-pose imx8mp-npu-pose  # scaffold the project
+avocado install    # pull the pre-built packages for this target
+avocado build      # compose the runtime, cross-compile the app + model
+avocado provision  # stream it onto the board
 ```
 
 <PullQuote>
@@ -185,40 +200,37 @@ avocado provision # stream it onto the board
 
 ![`avocado build` composing the full runtime from pre-built packages in 1m 10s.](/img/field-notes/imx8mp-npu-pose/07-avocado-build.jpg)
 
-Provisioning is handled by profiles that know each board's flash path. The 8MP has an on-board eMMC (what we used) and an SD cage; the `uuu-emmc` profile puts the part into serial-programming mode per the boot-switch chart and streams the image down, the `sd` profile burns a card instead. You can blend profiles or write your own.
+Provisioning runs off profiles that already know each board's flash path. The 8MP has on-board eMMC (what I used) and an SD cage, and there's a sneaky little detail worth knowing: those boards have a boot dip switch, so you flip it, boot without a card inserted, and the part comes up in serial-programming mode. The `uuu-emmc` profile then streams the image straight to eMMC over the USB-C cable; the `sd` profile burns a card instead. You can blend profiles or write your own.
 
 ## Iterating without a re-flash
 
-Once the device is up, you don't re-burn it to change something. `avocado control` on the device shows status and which extensions are loaded — here the BSP, config, and app extensions are all merged and active:
+Once the device is up, you don't re-burn it every time you change something. `avocadoctl` on the device shows status and which extensions are loaded — here the BSP, config, and app extensions are all merged and active:
 
-![`avocado control` on the device: the BSP, config, and app extensions loaded and merged.](/img/field-notes/imx8mp-npu-pose/08-avocado-control.jpg)
+![`avocadoctl` on the device: the BSP, config, and app extensions loaded and merged.](/img/field-notes/imx8mp-npu-pose/08-avocado-control.jpg)
 
-Add a package or tweak the app and `avocado deploy` streams just the change down and merges it in place, no re-flash and no reboot. Under the hood the boot chain is A/B and minimal — Avocado only builds what is needed to boot into the root filesystem, initramfs, and kernel, so the A/B partitions stay small and rarely change size, while the rest of the disk is a Btrfs `/var` holding the extensions. That is what makes an in-place update cheap instead of a full re-image.
+Tweak the app or swap the model, and `avocado deploy` streams just the delta down and merges it in place — no re-flash, no full reboot. You watch it happen: it brings the service down, unloads the NPU, lays in the new model (plus any modules that came with it), and the service comes right back up running the change. If you'd actually changed the OS it'd ship the whole thing, but when it's just the model riding in an extension, that's all that moves. Under the hood the boot chain is A/B and deliberately minimal — Avocado only builds what's needed to boot the root filesystem, initramfs, and kernel, so the A/B partitions stay small and rarely change size, while the rest of the disk is a Btrfs `/var` holding the extensions. That's what makes an in-place update cheap instead of a full re-image — the always-reproducible, always-read-only, always-deterministic model earning its keep.
 
 ## A note on the agentic path
 
-One of the honest pains of this work is not knowing the package you need for a given peripheral. Our tools ship an MCP server that can query the package feeds, make the choice, and update your `avocado.yaml` in line — usable from Claude Code or Codex, or our own integrated tooling. It is a convenience layer over the same config, not a separate magic system; the file it edits is the file above.
+One of the honest pains of this work is simply not knowing which package you need for a given peripheral. Our tooling ships an MCP server that can query the package feeds, make the call, and edit your `avocado.yaml` in line — from Claude Code or Codex, or our own integrated tooling. It's a convenience layer over the same config, not a separate magic system: the file it writes is the same file we've been reading this whole time.
 
 ![The Avocado MCP editing `avocado.yaml` in place — query the feeds, pick the package, write the config.](/img/field-notes/imx8mp-npu-pose/09-avocado-mcp.jpg)
 
 ## And then it ships
 
-When the project is done, the same runtime moves into the field through Peridio Connect: observability, remote-access tunnels, and OTA updates across the fleet. A minimal image is the payoff here too — a lean OS means a smaller attack surface and a smaller, faster OTA every time you push.
+When the project's done, the same runtime goes to the field through Peridio Connect: observability, remote-access tunnels, and OTA updates across the fleet. The minimal image pays off here too — a lean OS is a smaller attack surface and a smaller, faster OTA every time you push.
 
 ![The runtime out in the field: a device fleet in Peridio Connect, online and reporting.](/img/field-notes/imx8mp-npu-pose/10-peridio-connect-fleet.jpg)
 
 ## Issues Encountered
 
-- **Different NPUs, different results — validate per part.** The config retargets and the quantization extension re-emits the model, but a heavier NPU is not just "the same, faster." Operator coverage and quantization behavior differ, so accuracy and frame rate should be re-measured on each target rather than assumed to carry over. Portability gets you a running model on the new NPU; it does not excuse you from validating it.
-- **Model in, model out is still your loop.** The shared extension handles the NPU-specific quantization, but choosing the source model and confirming keypoint quality is on you. The value is that the per-board plumbing stops being your problem, not that model selection does.
-- **Deploy is live plumbing, and live plumbing hiccups.** In the webinar the in-place `avocado deploy` hit a transient slot-detection error on the first attempt — the honest reality of a live demo. The build and the running device are the load-bearing claims here; the streaming update is a convenience on top.
-- **[ENGINEER: Confirm the `imx8mp-npu-pose` reference name and GitHub link before publishing — the reference is being prepared for the `avocado-linux/references` repo.]**
+- **Different NPUs, different results — validate per part.** The config retargets and the quantization extension re-emits the model, but a different NPU isn't just "the same thing, faster." Operator coverage and quantization behavior vary, so re-measure accuracy and frame rate on each target instead of assuming they carry over. Portability gets you a running model on the new NPU; it doesn't get you out of validating it.
+- **Quantization has two ways to bite.** Some models lose too much fidelity when you drop them to INT8. Others lean on activation functions or ops the NPU won't accelerate, so they convert fine and then do nothing useful on the device. The tooling catches a lot of it — not all of it — so plan for a round of training-and-preparing for the target, not a one-shot export.
+- **Model in, model out is still your loop.** The shared extension owns the NPU-specific quantization; picking the source model and confirming keypoint quality is still on you. The win is that the per-board plumbing stops being your problem — not that model selection does.
 
 ## Reproduce it
 
-[ENGINEER: Once the reference is public, add the `reference` prop to `<TestStatus>` and confirm the init command below.]
-
-Initialize the project, build the 8MP pass end to end, and watch pose detection come up off a USB camera:
+The full reference lives at [`avocado-linux/references/imx8mp-npu-pose`](https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose). Initialize the project, build the 8MP pass end to end, and watch pose detection come up off a USB camera:
 
 ```bash
 avocado init --reference imx8mp-npu-pose imx8mp-npu-pose
@@ -228,6 +240,6 @@ avocado build
 avocado provision -r dev # uuu-emmc on the 8MP
 ```
 
-Then change `default_target` to `imx93-evk` (or pass `--target imx93-frdm`), rerun `install` / `build` / `provision`, and diff `avocado.yaml` to confirm one line moved. The application source is untouched; the NPU underneath it is not.
+Then change `default_target` to `imx93-evk` (or pass `--target imx93-frdm`), rerun `install` / `build` / `provision`, and diff `avocado.yaml` to confirm a single line moved. The application source is untouched; the NPU underneath it is not.
 
-Read more at [docs.peridio.com](https://docs.peridio.com/), and see the reference source in the [avocado-linux organization on GitHub](https://github.com/avocado-linux).
+Read more at [docs.peridio.com](https://docs.peridio.com/), and see the full source for this reference at [`avocado-linux/references/imx8mp-npu-pose`](https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose).
