@@ -4,32 +4,34 @@ description: Getting started with Avocado OS on Raspberry Pi 5.
 sidebar_position: 2
 ---
 
-import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
+import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
 
 # Raspberry Pi 5
 
-This guide walks you through building and deploying Avocado OS to a Raspberry Pi 5 using an SD card.
+This guide walks you through building and deploying Avocado OS to a Raspberry Pi 5. You can provision to an SD card with a reader, or flash the Pi's storage in place over USB.
 
 ## Prerequisites
 
 - Raspberry Pi 5
-- microSD card (8 GB+)
-- SD card reader connected to your host machine
+- microSD card (8 GB+), or an NVMe SSD installed in the Pi
+- An SD card reader (for SD card provisioning) **or** a USB-C data cable (for USB provisioning)
 - macOS 10.12+ or Linux (Ubuntu 22.04+, Fedora 39+)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
-- The latest version of the [Avocado CLI](/developer-reference/avocado-cli/overview)
 - 8 GB available disk space
-- A TTY serial console USB adapter ([this or similar](https://www.amazon.com/dp/B07WX2DSVB)) — must be set to 3.3V
 
-If you have a serial console adapter connected, use a terminal program like `tio`:
+<HostPrerequisites />
+
+## Serial console (optional)
+
+<SerialConsoleOptional />
+
+A serial console adapter (for example, [this 3.3V USB adapter](https://www.amazon.com/dp/B07WX2DSVB)) lets you watch the device boot. If you have one connected, use a terminal program like `tio`:
 
 ```bash
 tio -b 115200 /dev/ttyUSB0
 ```
 
 Replace `/dev/ttyUSB0` with the appropriate device path for your adapter.
-
-<LinuxAutoMountWarning />
 
 ## Initialize
 
@@ -58,20 +60,42 @@ avocado build
 
 ## Provision
 
-Insert your SD card and provision the `dev` runtime. The `sd` profile writes the image directly to the SD card.
+Provision the `dev` runtime to the Pi's storage. Choose whichever option fits your setup — writing an SD card with a reader, or flashing the Pi's storage in place over USB.
+
+:::note Provisioning on a Linux host
+If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+:::
+
+### Option A — SD card
+
+Insert your SD card into a reader on your host, then run the `sd` profile, which writes the image directly to the SD card:
 
 ```bash
 avocado provision -r dev --profile sd
 ```
 
-The CLI will detect available block devices and prompt you to select the SD card. Verify you select the correct device — this operation will overwrite the target disk.
+### Option B — USB (no card reader)
+
+You can flash the Pi's storage in place over USB, without removing the SD card or using a reader. The Pi 5's bootloader can start in **USB device mode**, in which it presents its storage to your host as a USB mass storage device. This works for the SD card left in the Pi, or an NVMe SSD installed in the Pi.
+
+1. With the Pi powered off, leave the target storage in place (SD card inserted, or NVMe installed).
+2. Press and hold the Pi's power button.
+3. While still holding the button, connect a USB-C data cable from the Pi's USB-C port to your host — this applies power. Release the button once it's connected.
+4. The Pi boots into USB device mode and your host detects it as a USB mass storage device. Provision with the `usb` profile:
+
+```bash
+avocado provision -r dev --profile usb
+```
+
+In either case, the CLI detects the available block devices and prompts you to select the target. Verify you select the correct device — this operation overwrites the target disk.
 
 ## Run
 
-1. Insert the SD card into the Raspberry Pi 5
-2. Apply power to the device
+1. If you provisioned over USB, disconnect the USB-C data cable.
+2. Make sure the provisioned storage is in place — the SD card inserted, or the NVMe SSD installed.
+3. Apply power to the Raspberry Pi 5.
 
-The device will boot from the SD card with the provisioned system. Log in as `root` with an empty password.
+The device will boot from its storage with the provisioned system. Log in as `root` with an empty password.
 
 ### SSH access
 

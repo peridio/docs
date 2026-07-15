@@ -4,16 +4,18 @@ description: Getting started with Avocado OS using QEMU virtual machine.
 sidebar_position: 1
 ---
 
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
+
 # QEMU
 
-QEMU is the fastest way to try Avocado OS. No hardware required — the virtual machine runs inside Docker on your development machine.
+QEMU is the fastest way to try Avocado OS. No hardware required — the virtual machine runs on your development machine.
 
 ## Prerequisites
 
 - macOS 10.12+ or Linux (Ubuntu 22.04+, Fedora 39+)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
-- The latest version of the [Avocado CLI](/developer-reference/avocado-cli/overview)
 - 8 GB available disk space
+
+<HostPrerequisites />
 
 ## Initialize
 

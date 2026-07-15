@@ -34,6 +34,7 @@ const sidebars = {
         'sideloading',
         'package-feeds',
         'feed-search',
+        'linux-auto-mounting',
       ],
     },
     {

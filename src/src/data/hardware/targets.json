@@ -66,7 +66,7 @@
       "profile": null,
       "media": null,
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["Docker Desktop installed and running", "8GB available disk space"],
+      "prerequisites": ["8GB available disk space"],
       "provisionCommand": "avocado provision -r dev",
       "bootInstructions": "Launch the VM with avocado sdk run -iE vm dev",
       "warnings": []
@@ -83,7 +83,7 @@
       "profile": null,
       "media": null,
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["Docker Desktop installed and running", "8GB available disk space"],
+      "prerequisites": ["8GB available disk space"],
       "provisionCommand": "avocado provision -r dev",
       "bootInstructions": "Launch the VM with avocado sdk run -iE vm dev",
       "warnings": []
@@ -100,11 +100,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -125,11 +121,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -150,11 +142,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -175,14 +163,12 @@
     "provisioning": {
       "profile": "tegraflash",
       "media": "NVMe SSD (M.2 2280)",
-      "hostOs": ["Linux"],
+      "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "NVIDIA Jetson Orin Nano Developer Kit",
         "NVMe SSD (M.2 2280 form factor)",
-        "Linux host machine (Ubuntu 22.04+, Fedora 39+)",
         "16 GB available disk space",
-        "USB-C cable for provisioning (host USB to Jetson USB-C)",
-        "TTY serial console USB adapter (3.3V)"
+        "USB-C cable for provisioning (host USB to Jetson USB-C)"
       ],
       "provisionCommand": "avocado provision -r dev --profile tegraflash",
       "provisionDescription": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
@@ -212,7 +198,7 @@
         "verifyCommand": "lsusb",
         "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
       },
-      "warnings": ["linuxAutoMount", "linuxHostOnly"]
+      "warnings": ["linuxAutoMount"]
     },
     "serial": {
       "baud": 115200,
@@ -246,14 +232,12 @@
     "provisioning": {
       "profile": "tegraflash",
       "media": "NVMe SSD (M.2 2280)",
-      "hostOs": ["Linux"],
+      "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "NVIDIA Jetson AGX Orin Developer Kit",
         "NVMe SSD (M.2 2280 form factor)",
-        "Linux host machine (Ubuntu 22.04+, Fedora 39+)",
         "16 GB available disk space",
-        "USB-C cable (host to Jetson, for flashing)",
-        "Micro USB cable (host to Jetson, for UART console)"
+        "USB-C cable (host to Jetson, for flashing)"
       ],
       "provisionCommand": "avocado provision -r dev --profile tegraflash",
       "provisionDescription": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
@@ -317,7 +301,7 @@
         "verifyCommand": "lsusb",
         "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
       },
-      "warnings": ["linuxAutoMount", "linuxHostOnly"]
+      "warnings": ["linuxAutoMount"]
     },
     "serial": {
       "kind": "onboard-micro-usb",
@@ -335,11 +319,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -360,11 +340,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -385,11 +361,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -410,11 +382,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -435,7 +403,7 @@
       "profile": "usb",
       "media": "USB drive",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["USB drive", "TTY serial console USB adapter (3.3V)"],
+      "prerequisites": ["USB drive"],
       "provisionCommand": "avocado provision -r dev --profile usb",
       "bootInstructions": "Insert the USB drive into the device and apply power.",
       "warnings": []
@@ -490,11 +458,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -515,7 +479,7 @@
       "profile": null,
       "media": null,
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["Advantech ICAM-540", "TTY serial console USB adapter (3.3V)"],
+      "prerequisites": ["Advantech ICAM-540"],
       "provisionCommand": "avocado provision -r dev",
       "bootInstructions": "Apply power to the device.",
       "warnings": []
@@ -570,12 +534,7 @@
       "profile": "sd",
       "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "Grinn AstraSOM-1680",
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
+      "prerequisites": ["Grinn AstraSOM-1680", "microSD card (8GB+)", "SD card reader"],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
       "warnings": ["linuxAutoMount"]
@@ -599,8 +558,7 @@
       "prerequisites": [
         "SolidRun HummingBoard RZ/V2N AIOT",
         "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
+        "SD card reader"
       ],
       "provisionCommand": "avocado provision -r dev --profile sd",
       "bootInstructions": "Insert the SD card into the device and apply power.",
