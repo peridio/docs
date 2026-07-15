@@ -406,7 +406,7 @@
       "prerequisites": ["USB drive"],
       "provisionCommand": "avocado provision -r dev --profile usb",
       "bootInstructions": "Insert the USB drive into the device and apply power.",
-      "warnings": []
+      "warnings": ["linuxAutoMount"]
     },
     "serial": {
       "baud": 115200,
@@ -503,7 +503,7 @@
       "prerequisites": ["USB drive", "UEFI boot support (Legacy BIOS not supported)"],
       "provisionCommand": "avocado provision -r dev --profile usb",
       "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI.",
-      "warnings": []
+      "warnings": ["linuxAutoMount"]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
@@ -520,7 +520,7 @@
       "prerequisites": ["USB drive", "UEFI boot support (Legacy BIOS not supported)"],
       "provisionCommand": "avocado provision -r dev --profile usb",
       "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI.",
-      "warnings": []
+      "warnings": ["linuxAutoMount"]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
