@@ -334,7 +334,7 @@ export default function TargetSelector() {
           </pre>
 
           <Heading as="h2">Provision</Heading>
-          {t.category !== 'virtual' && (
+          {t.provisioning.warnings.includes('linuxAutoMount') && (
             <p>
               On a Linux host that auto-mounts removable media, disable it first — see{' '}
               <Link to="/developer-reference/linux-auto-mounting">Linux Auto-Mounting</Link>.

@@ -88,10 +88,6 @@ avocado build
 
 Provision the `dev` runtime using the `tegraflash` profile. This builds the system image and flashes it to the Jetson over USB.
 
-:::note Provisioning on a Linux host
-If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
-:::
-
 ```bash
 avocado provision -r dev --profile tegraflash
 ```
