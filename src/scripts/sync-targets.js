@@ -47,12 +47,20 @@ function minimalEntry(slug) {
     category: 'physical',
     description: `${humanize(slug)} is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.`,
     provisioning: {
-      profile: null,
+      hostOs: ['macOS', 'Linux'],
       prerequisites: [],
-      provisionCommand: `avocado provision -r dev`,
-      bootInstructions:
-        'After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.',
-      warnings: [],
+      options: [
+        {
+          id: 'default',
+          label: 'Default',
+          profile: null,
+          media: null,
+          autoMount: false,
+          command: 'avocado provision -r dev',
+          bootInstructions:
+            'After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.',
+        },
+      ],
     },
     serial: null,
     gettingStartedUrl: '/developer-reference/getting-started/any-target',

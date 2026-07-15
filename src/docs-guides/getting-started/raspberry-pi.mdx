@@ -78,6 +78,16 @@ avocado provision -r dev --profile sd
 
 You can flash the Pi's storage in place over USB, without removing the SD card or using a reader. The Pi 5's bootloader can start in **USB device mode**, in which it presents its storage to your host as a USB mass storage device. This works for the SD card left in the Pi, or an NVMe SSD installed in the Pi.
 
+The Pi is powered over the **same USB-C cable** used for provisioning, so your host port and cable have to meet the Pi 5's power needs.
+
+:::warning Power the Pi over USB-C
+The Raspberry Pi 5 is designed for a **5 V/5 A (27 W) USB-C PD** supply. When it doesn't detect a 5 A PD source it falls back to 5 V/3 A and caps total USB peripheral current at ~600 mA. A typical host USB-C port supplies well below this (often 5 V/0.9–3 A), so a marginal port or a thin/charge-only cable can cause under-voltage or a failed flash — especially with an NVMe SSD installed, which adds to the draw.
+
+Use a **data-capable** USB-C cable and a host port that can source adequate current. If USB provisioning is unreliable, use the SD-card method above instead (the reader draws power from the host, not the Pi).
+
+**Check the LED.** The Pi 5 has a single bi-color status LED: it shows **red** in standby, then turns **steady green** once it's powered and running with enough current (it flashes green during storage activity). If the LED won't turn green, stays red, or flickers/drops out, the supply is too weak — use a stronger host port and cable, or fall back to the SD-card method.
+:::
+
 1. With the Pi powered off, leave the target storage in place (SD card inserted, or NVMe installed).
 2. Press and hold the Pi's power button.
 3. While still holding the button, connect a USB-C data cable from the Pi's USB-C port to your host — this applies power. Release the button once it's connected.
