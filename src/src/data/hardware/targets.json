@@ -60,6 +60,7 @@
       ]
     },
     "serial": {
+      "onboard": true,
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0",
       "description": "The Rubik Pi 3 exposes its debug UART over the onboard Micro-USB port (port 2) — no TTL adapter is required. Connect the Micro-USB cable to your host only after provisioning completes (leave it disconnected while flashing). The host then enumerates a USB serial device for the console."
@@ -353,15 +354,6 @@
             },
             "steps": [
               {
-                "text": "Connect a Micro USB cable from the Jetson's debug port to your host for the UART console. The host will enumerate multiple serial devices — the first one is the UART console.",
-                "images": [
-                  {
-                    "src": "/img/jetson-agx-orin-devkit/uart-micro-usb.png",
-                    "alt": "Micro USB debug port for the UART console"
-                  }
-                ]
-              },
-              {
                 "text": "Connect a USB-C cable from the Jetson to your host for flashing.",
                 "images": [
                   {
@@ -401,6 +393,7 @@
       ]
     },
     "serial": {
+      "onboard": true,
       "kind": "onboard-micro-usb",
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0"

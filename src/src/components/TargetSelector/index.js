@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import Link from '@docusaurus/Link'
 import useBrokenLinks from '@docusaurus/useBrokenLinks'
 import Heading from '@theme/Heading'
+import Admonition from '@theme/Admonition'
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
 import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
@@ -289,7 +290,20 @@ export default function TargetSelector() {
           {t.serial && (
             <>
               <Heading as="h2">Serial Console (optional)</Heading>
-              <SerialConsoleOptional />
+              {/* Boards with an onboard UART bridge (serial.onboard) need only a
+                  cable, not a separate USB adapter, so the shared adapter callout
+                  would be misleading — show a cable-oriented optional note instead. */}
+              {t.serial.onboard ? (
+                <Admonition type="note" title="Optional: serial console">
+                  <p>
+                    The serial console is optional. Connect the Micro USB cable only if you want
+                    console access to the target — otherwise skip it and SSH into the device once
+                    it&apos;s on the network (see the SSH section below).
+                  </p>
+                </Admonition>
+              ) : (
+                <SerialConsoleOptional />
+              )}
               {t.serial.description ? (
                 <p>{t.serial.description}</p>
               ) : t.serial.kind === 'onboard-micro-usb' ? (
