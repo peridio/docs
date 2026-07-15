@@ -48,7 +48,7 @@
       ],
       "bootInstructions": "Disconnect the USB-C data cable (port 5), leave the power input (port 10) connected, and power-cycle the board. It boots Avocado OS from the onboard UFS storage.",
       "bootNote": "Now that provisioning has succeeded, connect the Micro-USB cable to the debug port (port 2) for the UART console (see Serial Console above). The root user is passwordless in the dev runtime.",
-      "warnings": ["linuxAutoMount"]
+      "warnings": []
     },
     "serial": {
       "baud": 115200,
@@ -198,7 +198,7 @@
         "verifyCommand": "lsusb",
         "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
       },
-      "warnings": ["linuxAutoMount"]
+      "warnings": []
     },
     "serial": {
       "baud": 115200,
@@ -301,7 +301,7 @@
         "verifyCommand": "lsusb",
         "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
       },
-      "warnings": ["linuxAutoMount"]
+      "warnings": []
     },
     "serial": {
       "kind": "onboard-micro-usb",
