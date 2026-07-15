@@ -15,7 +15,9 @@
       ],
       "provisionCommand": "avocado provision -r dev --profile usb",
       "bootInstructions": "Insert the USB drive into the device and apply power.",
-      "warnings": []
+      "warnings": [
+        "linuxAutoMount"
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -246,7 +248,9 @@
       ],
       "provisionCommand": "avocado provision -r dev --profile usb",
       "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI.",
-      "warnings": []
+      "warnings": [
+        "linuxAutoMount"
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
@@ -269,7 +273,9 @@
       ],
       "provisionCommand": "avocado provision -r dev --profile usb",
       "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI.",
-      "warnings": []
+      "warnings": [
+        "linuxAutoMount"
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
