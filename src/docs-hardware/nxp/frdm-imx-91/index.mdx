@@ -5,7 +5,6 @@ description: 'Deploy NXP FRDM i.MX 91 devices in production with Avocado OS. Low
 hide_title: true
 ---
 
-import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
 import HardwareHero from '@site/src/components/HardwareHero'
 
 <HardwareHero
@@ -109,7 +108,9 @@ Follow the [Any Supported Target](/developer-reference/getting-started/any-targe
 
 Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
 
-<LinuxAutoMountWarning />
+:::note Provisioning on a Linux host
+If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+:::
 
 ```bash title="Host machine"
 avocado build

@@ -2,14 +2,10 @@ import React, { useState, useMemo, useEffect } from 'react'
 import Link from '@docusaurus/Link'
 import useBrokenLinks from '@docusaurus/useBrokenLinks'
 import Heading from '@theme/Heading'
-import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
+import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
 import styles from './styles.module.css'
 import targets from '@site/src/data/hardware/generated-targets.json'
-
-const WARNING_MESSAGES = {
-  linuxHostOnly:
-    'This target requires a Linux host machine for provisioning. macOS and Windows are not supported.',
-}
 
 const targetList = Object.values(targets).sort((a, b) => a.name.localeCompare(b.name))
 
@@ -158,25 +154,14 @@ export default function TargetSelector() {
             {t.provisioning.prerequisites.map((p, i) => (
               <li key={i}>{p}</li>
             ))}
-            <li>
-              <Link href="https://www.docker.com/products/docker-desktop/">Docker Desktop</Link>{' '}
-              installed and running
-            </li>
-            <li>
-              The latest version of the{' '}
-              <Link to="/developer-reference/avocado-cli/overview">Avocado CLI</Link>
-            </li>
           </ul>
 
-          {t.provisioning.warnings.includes('linuxHostOnly') && (
-            <div className={styles.warningBox}>⚠ {WARNING_MESSAGES.linuxHostOnly}</div>
-          )}
-
-          {t.provisioning.warnings.includes('linuxAutoMount') && <LinuxAutoMountWarning />}
+          <HostPrerequisites />
 
           {t.serial && (
             <>
-              <Heading as="h2">Serial Console</Heading>
+              <Heading as="h2">Serial Console (optional)</Heading>
+              <SerialConsoleOptional />
               {t.serial.description ? (
                 <p>{t.serial.description}</p>
               ) : t.serial.kind === 'onboard-micro-usb' ? (
@@ -349,6 +334,12 @@ export default function TargetSelector() {
           </pre>
 
           <Heading as="h2">Provision</Heading>
+          {t.category !== 'virtual' && (
+            <p>
+              On a Linux host that auto-mounts removable media, disable it first — see{' '}
+              <Link to="/developer-reference/linux-auto-mounting">Linux Auto-Mounting</Link>.
+            </p>
+          )}
           {t.provisioning.provisionDescription ? (
             <p>{t.provisioning.provisionDescription}</p>
           ) : t.provisioning.profile ? (

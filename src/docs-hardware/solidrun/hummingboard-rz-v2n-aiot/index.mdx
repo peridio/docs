@@ -5,7 +5,6 @@ description: 'Deploy the SolidRun HummingBoard RZ/V2N AIOT for Physical AI and e
 hide_title: true
 ---
 
-import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
 import HardwareHero from '@site/src/components/HardwareHero'
 
 <HardwareHero
@@ -124,7 +123,9 @@ Follow the [Any Supported Target](/developer-reference/getting-started/any-targe
 
 Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
 
-<LinuxAutoMountWarning />
+:::note Provisioning on a Linux host
+If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+:::
 
 ```bash title="Host machine"
 avocado build
