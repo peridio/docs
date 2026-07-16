@@ -27,17 +27,13 @@ These diverse provisioning requirements create challenges on macOS and Windows d
 
 ### Auto-mounting considerations
 
-Some Linux desktop environments, such as GNOME on Ubuntu or Fedora Workstation, will attempt to auto-mount mass storage devices. This can interfere with Avocado&apos;s ability to finalize provisioning a device, as the auto-mount process may lock or access storage devices that Avocado needs to write to during provisioning.
-
-On Ubuntu and other GNOME-based distributions (for example, Fedora Workstation), disable auto-mounting before provisioning:
-
-```bash
-gsettings set org.gnome.desktop.media-handling automount false
-gsettings set org.gnome.desktop.media-handling automount-open false
-```
+On a Linux host, some desktop environments auto-mount mass storage devices, which can interfere with provisioning. Disable auto-mounting first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
 
 ### Recommended approach
 
-Use a native Linux environment for hardware provisioning operations. This means running Linux directly on hardware, not within a virtual machine on macOS or Windows, which would reintroduce the same virtualization frictions described above. Native Linux provides consistent hardware device support and reliable enumeration without hypervisor-based virtualization layers. Linux containers can reliably access hardware interfaces, and specialized kernel drivers and programming tools function consistently.
+There are two reliable paths to provisioning hardware:
 
-For teams where primary development occurs on other platforms, maintaining a dedicated native Linux machine specifically for hardware provisioning tasks ensures reliable hardware access when needed.
+- **macOS — Avocado Desktop.** [Avocado Desktop](/avocado-desktop/overview) bundles a build VM with USB passthrough, so it provisions real hardware directly on macOS without a native Linux machine. This is the recommended path on macOS and avoids the VM-in-VM frictions described above.
+- **Linux — Avocado CLI.** On a native Linux host, the [Avocado CLI](/developer-reference/avocado-cli/overview) provisions hardware directly. Native Linux provides consistent device enumeration and reliable access for containers, kernel drivers, and manufacturer programming tools — running Linux directly on hardware rather than inside a VM on macOS or Windows.
+
+Using the Avocado CLI with Docker Desktop on macOS or Windows is possible, but the virtualization layers make hardware enumeration and manufacturer programming interfaces less reliable for provisioning; prefer Avocado Desktop on macOS, or a native Linux host.

@@ -2,14 +2,13 @@ import React, { useState, useMemo, useEffect } from 'react'
 import Link from '@docusaurus/Link'
 import useBrokenLinks from '@docusaurus/useBrokenLinks'
 import Heading from '@theme/Heading'
-import LinuxAutoMountWarning from '@site/src/components/shared/LinuxAutoMountWarning'
+import Admonition from '@theme/Admonition'
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
+import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
 import styles from './styles.module.css'
 import targets from '@site/src/data/hardware/generated-targets.json'
-
-const WARNING_MESSAGES = {
-  linuxHostOnly:
-    'This target requires a Linux host machine for provisioning. macOS and Windows are not supported.',
-}
 
 const targetList = Object.values(targets).sort((a, b) => a.name.localeCompare(b.name))
 
@@ -48,6 +47,132 @@ export default function TargetSelector() {
   }
 
   const t = selected
+  const options = t ? t.provisioning.options : []
+  const multiOption = options.length > 1
+
+  // Shown inside a provisioning option that writes host-mounted removable
+  // media (autoMount === true), so it appears only where auto-mount can
+  // actually interfere.
+  const autoMountNote = (
+    <p>
+      On a Linux host that auto-mounts removable media, disable it first — see{' '}
+      <Link to="/developer-reference/linux-auto-mounting">Linux Auto-Mounting</Link>.
+    </p>
+  )
+
+  const renderRecovery = (rm) => (
+    <>
+      <p>To flash the device, it must be in USB recovery mode:</p>
+      {rm.reference && (
+        <p>
+          See{' '}
+          <Link href={rm.reference.url} target="_blank" rel="noopener noreferrer">
+            {rm.reference.label}
+          </Link>{' '}
+          for the full hardware reference.
+        </p>
+      )}
+      <ol>
+        {rm.steps.map((step, i) => {
+          // Each step is either a plain string (legacy Nano-style) or an
+          // object `{ text, images? }` where `images` renders inline beneath.
+          const text = typeof step === 'string' ? step : step.text
+          const images = typeof step === 'string' ? null : step.images
+          return (
+            <li key={i}>
+              {text}
+              {images && images.length > 0 && (
+                <div
+                  style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', margin: '0.5rem 0' }}
+                >
+                  {images.map((img, j) => (
+                    <img
+                      key={j}
+                      src={img.src}
+                      alt={img.alt}
+                      style={{
+                        maxWidth: '320px',
+                        width: '100%',
+                        height: 'auto',
+                        borderRadius: '8px',
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+      <p>Verify the device is detected:</p>
+      <pre>
+        <code>{rm.verifyCommand}</code>
+      </pre>
+      <p>{rm.verifyExpect}</p>
+    </>
+  )
+
+  const renderProvisionBody = (o) => (
+    <>
+      {o.description ? (
+        <p>{o.description}</p>
+      ) : o.profile ? (
+        <p>
+          Provision the <code>dev</code> runtime using the <code>{o.profile}</code> profile:
+        </p>
+      ) : (
+        <p>
+          Provision the <code>dev</code> runtime:
+        </p>
+      )}
+      <pre>
+        <code>{o.command}</code>
+      </pre>
+      {o.steps &&
+        o.steps.map((step, i) =>
+          step.type === 'code' ? (
+            <pre key={i}>
+              <code>{step.content}</code>
+            </pre>
+          ) : (
+            <p key={i}>{step.content}</p>
+          )
+        )}
+    </>
+  )
+
+  const renderRunBody = (o) => {
+    if (t.category === 'virtual') {
+      return (
+        <>
+          <p>Launch the virtual machine:</p>
+          <pre>
+            <code>avocado sdk run -iE vm dev</code>
+          </pre>
+        </>
+      )
+    }
+    return (
+      <>
+        {o.bootSteps ? (
+          <ol>
+            {o.bootSteps.map((step, i) => (
+              <li key={i}>{step}</li>
+            ))}
+          </ol>
+        ) : (
+          <p>{o.bootInstructions}</p>
+        )}
+        {o.bootNote ? (
+          <p>{o.bootNote}</p>
+        ) : (
+          <p>
+            The <code>root</code> user is passwordless in the <code>dev</code> runtime.
+          </p>
+        )}
+      </>
+    )
+  }
 
   return (
     <div>
@@ -158,25 +283,27 @@ export default function TargetSelector() {
             {t.provisioning.prerequisites.map((p, i) => (
               <li key={i}>{p}</li>
             ))}
-            <li>
-              <Link href="https://www.docker.com/products/docker-desktop/">Docker Desktop</Link>{' '}
-              installed and running
-            </li>
-            <li>
-              The latest version of the{' '}
-              <Link to="/developer-reference/avocado-cli/overview">Avocado CLI</Link>
-            </li>
           </ul>
 
-          {t.provisioning.warnings.includes('linuxHostOnly') && (
-            <div className={styles.warningBox}>⚠ {WARNING_MESSAGES.linuxHostOnly}</div>
-          )}
-
-          {t.provisioning.warnings.includes('linuxAutoMount') && <LinuxAutoMountWarning />}
+          <HostPrerequisites />
 
           {t.serial && (
             <>
-              <Heading as="h2">Serial Console</Heading>
+              <Heading as="h2">Serial Console (optional)</Heading>
+              {/* Boards with an onboard UART bridge (serial.onboard) need only a
+                  cable, not a separate USB adapter, so the shared adapter callout
+                  would be misleading — show a cable-oriented optional note instead. */}
+              {t.serial.onboard ? (
+                <Admonition type="note" title="Optional: serial console">
+                  <p>
+                    The serial console is optional. Connect the Micro USB cable only if you want
+                    console access to the target — otherwise skip it and SSH into the device once
+                    it&apos;s on the network (see the SSH section below).
+                  </p>
+                </Admonition>
+              ) : (
+                <SerialConsoleOptional />
+              )}
               {t.serial.description ? (
                 <p>{t.serial.description}</p>
               ) : t.serial.kind === 'onboard-micro-usb' ? (
@@ -260,73 +387,17 @@ export default function TargetSelector() {
               </pre>
               <p>
                 Replace <code>/dev/ttyUSB0</code> with the appropriate device path
-                {t.serial.kind === 'onboard-micro-usb'
-                  ? ' enumerated on your host (the first of the Jetson serial devices).'
+                {t.serial.onboard
+                  ? ' enumerated on your host once the cable is connected.'
                   : ' for your adapter.'}
               </p>
             </>
           )}
 
-          {t.provisioning.recoveryMode && (
+          {!multiOption && options[0].recoveryMode && (
             <>
               <Heading as="h2">Boot into Recovery Mode</Heading>
-              <p>To flash the device, it must be in USB recovery mode:</p>
-              {t.provisioning.recoveryMode.reference && (
-                <p>
-                  See{' '}
-                  <Link
-                    href={t.provisioning.recoveryMode.reference.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {t.provisioning.recoveryMode.reference.label}
-                  </Link>{' '}
-                  for the full hardware reference.
-                </p>
-              )}
-              <ol>
-                {t.provisioning.recoveryMode.steps.map((step, i) => {
-                  // Each step is either a plain string (legacy Nano-style) or
-                  // an object `{ text, images? }` where `images` is an array
-                  // of `{ src, alt }` rendered inline beneath the step text.
-                  const text = typeof step === 'string' ? step : step.text
-                  const images = typeof step === 'string' ? null : step.images
-                  return (
-                    <li key={i}>
-                      {text}
-                      {images && images.length > 0 && (
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            gap: '0.75rem',
-                            margin: '0.5rem 0',
-                          }}
-                        >
-                          {images.map((img, j) => (
-                            <img
-                              key={j}
-                              src={img.src}
-                              alt={img.alt}
-                              style={{
-                                maxWidth: '320px',
-                                width: '100%',
-                                height: 'auto',
-                                borderRadius: '8px',
-                              }}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </li>
-                  )
-                })}
-              </ol>
-              <p>Verify the device is detected:</p>
-              <pre>
-                <code>{t.provisioning.recoveryMode.verifyCommand}</code>
-              </pre>
-              <p>{t.provisioning.recoveryMode.verifyExpect}</p>
+              {renderRecovery(options[0].recoveryMode)}
             </>
           )}
 
@@ -349,55 +420,37 @@ export default function TargetSelector() {
           </pre>
 
           <Heading as="h2">Provision</Heading>
-          {t.provisioning.provisionDescription ? (
-            <p>{t.provisioning.provisionDescription}</p>
-          ) : t.provisioning.profile ? (
-            <p>
-              Provision the <code>dev</code> runtime using the <code>{t.provisioning.profile}</code>{' '}
-              profile:
-            </p>
+          {multiOption ? (
+            <Tabs groupId="provision-method">
+              {options.map((o) => (
+                <TabItem key={o.id} value={o.id} label={o.label}>
+                  {o.prerequisites && o.prerequisites.length > 0 && (
+                    <p>For this option you&apos;ll also need: {o.prerequisites.join(', ')}.</p>
+                  )}
+                  {o.autoMount && autoMountNote}
+                  {o.recoveryMode && renderRecovery(o.recoveryMode)}
+                  {renderProvisionBody(o)}
+                </TabItem>
+              ))}
+            </Tabs>
           ) : (
-            <p>
-              Provision the <code>dev</code> runtime:
-            </p>
+            <>
+              {options[0].autoMount && autoMountNote}
+              {renderProvisionBody(options[0])}
+            </>
           )}
-          <pre>
-            <code>{t.provisioning.provisionCommand}</code>
-          </pre>
-          {t.provisioning.provisionSteps &&
-            t.provisioning.provisionSteps.map((step, i) =>
-              step.type === 'code' ? (
-                <pre key={i}>
-                  <code>{step.content}</code>
-                </pre>
-              ) : (
-                <p key={i}>{step.content}</p>
-              )
-            )}
 
           <Heading as="h2">Run</Heading>
-          {t.category === 'virtual' ? (
-            <>
-              <p>Launch the virtual machine:</p>
-              <pre>
-                <code>avocado sdk run -iE vm dev</code>
-              </pre>
-            </>
-          ) : t.provisioning.bootSteps ? (
-            <ol>
-              {t.provisioning.bootSteps.map((step, i) => (
-                <li key={i}>{step}</li>
+          {multiOption && t.category !== 'virtual' ? (
+            <Tabs groupId="provision-method">
+              {options.map((o) => (
+                <TabItem key={o.id} value={o.id} label={o.label}>
+                  {renderRunBody(o)}
+                </TabItem>
               ))}
-            </ol>
+            </Tabs>
           ) : (
-            <p>{t.provisioning.bootInstructions}</p>
-          )}
-          {t.provisioning.bootNote ? (
-            <p>{t.provisioning.bootNote}</p>
-          ) : (
-            <p>
-              The <code>root</code> user is passwordless in the <code>dev</code> runtime.
-            </p>
+            renderRunBody(options[0])
           )}
 
           <Heading as="h2">SSH Access</Heading>

@@ -15,8 +15,6 @@
       }
     ],
     "provisioning": {
-      "profile": "ufs",
-      "media": "Onboard UFS storage (flashed over USB)",
       "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "Thundercomm Rubik Pi 3",
@@ -24,33 +22,45 @@
         "USB-C (or USB-C-to-A) data cable for flashing, from the board's USB-C port (port 5) to your host",
         "Micro-USB cable for the debug UART console (Micro-USB port, port 2) — leave this disconnected during provisioning/flashing; connect it only after provisioning succeeds"
       ],
-      "provisionCommand": "avocado provision -r dev --profile ufs",
-      "provisionDescription": "Provision the dev runtime to the board's onboard UFS storage. The system image is flashed over the USB-C data connection (port 5) while the device is in EDL mode.",
-      "recoveryMode": {
-        "reference": {
-          "url": "https://www.thundercomm.com/rubik-pi-3/en/docs/rubik-pi-3-user-manual/1.0.0-u/set-up-your-device",
-          "label": "RUBIK Pi 3 — Set up your device"
-        },
-        "steps": [
-          "With the board powered off, connect the USB-C data cable from the board's USB-C port (port 5) to your host.",
-          "Press and hold the EDL button (port 12) on the board.",
-          "While holding EDL, connect the power cable to the power input (port 10) to apply power, then release the button. The board enumerates in Qualcomm EDL (download) mode."
-        ],
-        "verifyCommand": "lsusb",
-        "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode) — this confirms the board is ready to flash."
-      },
-      "provisionSteps": [
+      "options": [
         {
-          "type": "text",
-          "content": "Provisioning flashes the runtime to UFS over USB. When it completes you'll see:"
-        },
-        { "type": "code", "content": "[SUCCESS] Successfully provisioned runtime 'dev'" }
-      ],
-      "bootInstructions": "Disconnect the USB-C data cable (port 5), leave the power input (port 10) connected, and power-cycle the board. It boots Avocado OS from the onboard UFS storage.",
-      "bootNote": "Now that provisioning has succeeded, connect the Micro-USB cable to the debug port (port 2) for the UART console (see Serial Console above). The root user is passwordless in the dev runtime.",
-      "warnings": ["linuxAutoMount"]
+          "id": "ufs",
+          "label": "UFS (EDL)",
+          "profile": "ufs",
+          "media": "Onboard UFS storage (flashed over USB)",
+          "autoMount": false,
+          "command": "avocado provision -r dev --profile ufs",
+          "description": "Provision the dev runtime to the board's onboard UFS storage. The system image is flashed over the USB-C data connection (port 5) while the device is in EDL mode.",
+          "steps": [
+            {
+              "type": "text",
+              "content": "Provisioning flashes the runtime to UFS over USB. When it completes you'll see:"
+            },
+            {
+              "type": "code",
+              "content": "[SUCCESS] Successfully provisioned runtime 'dev'"
+            }
+          ],
+          "recoveryMode": {
+            "reference": {
+              "url": "https://www.thundercomm.com/rubik-pi-3/en/docs/rubik-pi-3-user-manual/1.0.0-u/set-up-your-device",
+              "label": "RUBIK Pi 3 — Set up your device"
+            },
+            "steps": [
+              "With the board powered off, connect the USB-C data cable from the board's USB-C port (port 5) to your host.",
+              "Press and hold the EDL button (port 12) on the board.",
+              "While holding EDL, connect the power cable to the power input (port 10) to apply power, then release the button. The board enumerates in Qualcomm EDL (download) mode."
+            ],
+            "verifyCommand": "lsusb",
+            "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode) — this confirms the board is ready to flash."
+          },
+          "bootInstructions": "Disconnect the USB-C data cable (port 5), leave the power input (port 10) connected, and power-cycle the board. It boots Avocado OS from the onboard UFS storage.",
+          "bootNote": "Now that provisioning has succeeded, connect the Micro-USB cable to the debug port (port 2) for the UART console (see Serial Console above). The root user is passwordless in the dev runtime."
+        }
+      ]
     },
     "serial": {
+      "onboard": true,
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0",
       "description": "The Rubik Pi 3 exposes its debug UART over the onboard Micro-USB port (port 2) — no TTL adapter is required. Connect the Micro-USB cable to your host only after provisioning completes (leave it disconnected while flashing). The host then enumerates a USB serial device for the console."
@@ -63,13 +73,19 @@
     "target": "qemuarm64",
     "category": "virtual",
     "provisioning": {
-      "profile": null,
-      "media": null,
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["Docker Desktop installed and running", "8GB available disk space"],
-      "provisionCommand": "avocado provision -r dev",
-      "bootInstructions": "Launch the VM with avocado sdk run -iE vm dev",
-      "warnings": []
+      "prerequisites": ["8GB available disk space"],
+      "options": [
+        {
+          "id": "vm",
+          "label": "Virtual machine",
+          "profile": null,
+          "media": null,
+          "autoMount": false,
+          "command": "avocado provision -r dev",
+          "bootInstructions": "Launch the VM with avocado sdk run -iE vm dev"
+        }
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/qemu",
@@ -80,13 +96,19 @@
     "target": "qemux86-64",
     "category": "virtual",
     "provisioning": {
-      "profile": null,
-      "media": null,
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["Docker Desktop installed and running", "8GB available disk space"],
-      "provisionCommand": "avocado provision -r dev",
-      "bootInstructions": "Launch the VM with avocado sdk run -iE vm dev",
-      "warnings": []
+      "prerequisites": ["8GB available disk space"],
+      "options": [
+        {
+          "id": "vm",
+          "label": "Virtual machine",
+          "profile": null,
+          "media": null,
+          "autoMount": false,
+          "command": "avocado provision -r dev",
+          "bootInstructions": "Launch the VM with avocado sdk run -iE vm dev"
+        }
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/qemu",
@@ -97,17 +119,32 @@
     "target": "raspberrypi5",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8 GB+), or an NVMe SSD installed in the Pi"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "prerequisites": ["SD card reader"],
+          "description": "Insert your SD card into a reader on your host, then run the sd profile, which writes the image directly to the SD card:",
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "With the SD card inserted, apply power to the Raspberry Pi 5 — it boots from the card."
+        },
+        {
+          "id": "usb",
+          "label": "USB (device mode)",
+          "profile": "usb",
+          "media": "SD card or NVMe SSD in the Pi (flashed in place over USB)",
+          "autoMount": true,
+          "prerequisites": ["USB-C data cable (Pi to host)"],
+          "description": "Flash the Pi's storage in place over USB, with no card reader — this also works for an NVMe SSD installed in the Pi. With the Pi powered off and the target storage in place, press and hold the power button, then connect a USB-C data cable from the Pi to your host to apply power, releasing the button once it's connected. The Pi boots into USB device mode and your host detects it as a USB mass storage device. Note that the Pi is powered over this same USB-C cable: the Pi 5 targets a 5 V/5 A (27 W) supply and most host ports deliver less, so use a data-capable USB-C cable and a host port that can source enough current (an NVMe SSD adds to the draw); if provisioning is unreliable, use the SD-card method instead. The Pi 5's status LED confirms power: it shows red in standby and turns steady green once powered with enough current — if it won't turn green, stays red, or flickers, the supply is too weak. Then provision with the usb profile:",
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Disconnect the USB-C data cable, then apply power to the Raspberry Pi 5 — it boots from its storage."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -122,17 +159,19 @@
     "target": "raspberrypi4",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -147,17 +186,19 @@
     "target": "raspberrypi0-2w",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -173,46 +214,59 @@
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
     "provisioning": {
-      "profile": "tegraflash",
-      "media": "NVMe SSD (M.2 2280)",
-      "hostOs": ["Linux"],
+      "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "NVIDIA Jetson Orin Nano Developer Kit",
         "NVMe SSD (M.2 2280 form factor)",
-        "Linux host machine (Ubuntu 22.04+, Fedora 39+)",
         "16 GB available disk space",
-        "USB-C cable for provisioning (host USB to Jetson USB-C)",
-        "TTY serial console USB adapter (3.3V)"
+        "USB-C cable for provisioning (host USB to Jetson USB-C)"
       ],
-      "provisionCommand": "avocado provision -r dev --profile tegraflash",
-      "provisionDescription": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
-      "provisionSteps": [
-        { "type": "text", "content": "The procedure advances through several steps:" },
+      "options": [
         {
-          "type": "code",
-          "content": "== Step 1: Signing binaries ==\n...\n== Step 2: Boot Jetson via RCM ==\n...\n== Step 3: Sending flash sequence commands ==\n..."
-        },
-        { "type": "text", "content": "When provisioning completes:" },
-        { "type": "code", "content": "[SUCCESS] Successfully provisioned runtime 'dev'" }
-      ],
-      "bootSteps": [
-        "Remove power from the Jetson",
-        "Remove the jumper shorting FC REC to GND",
-        "Remove the USB-C cable",
-        "Leave the serial console adapter connected",
-        "Apply power"
-      ],
-      "bootNote": "The device will boot with the provisioned system. Log in as root with an empty password via the serial console.",
-      "recoveryMode": {
-        "steps": [
-          "With the device powered off, short the FC REC pin to GND using a jumper",
-          "Connect the USB-C cable from the Jetson to your host machine",
-          "Apply power to the Jetson"
-        ],
-        "verifyCommand": "lsusb",
-        "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
-      },
-      "warnings": ["linuxAutoMount", "linuxHostOnly"]
+          "id": "tegraflash",
+          "label": "USB recovery (tegraflash)",
+          "profile": "tegraflash",
+          "media": "NVMe SSD (M.2 2280)",
+          "autoMount": false,
+          "command": "avocado provision -r dev --profile tegraflash",
+          "description": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
+          "steps": [
+            {
+              "type": "text",
+              "content": "The procedure advances through several steps:"
+            },
+            {
+              "type": "code",
+              "content": "== Step 1: Signing binaries ==\n...\n== Step 2: Boot Jetson via RCM ==\n...\n== Step 3: Sending flash sequence commands ==\n..."
+            },
+            {
+              "type": "text",
+              "content": "When provisioning completes:"
+            },
+            {
+              "type": "code",
+              "content": "[SUCCESS] Successfully provisioned runtime 'dev'"
+            }
+          ],
+          "recoveryMode": {
+            "steps": [
+              "With the device powered off, short the FC REC pin to GND using a jumper",
+              "Connect the USB-C cable from the Jetson to your host machine",
+              "Apply power to the Jetson"
+            ],
+            "verifyCommand": "lsusb",
+            "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
+          },
+          "bootSteps": [
+            "Remove power from the Jetson",
+            "Remove the jumper shorting FC REC to GND",
+            "Remove the USB-C cable",
+            "If you attached a serial console adapter, leave it connected",
+            "Apply power"
+          ],
+          "bootNote": "The device will boot with the provisioned system. The root user has an empty password — log in over the serial console (if connected) or via SSH once the device is on the network."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -230,9 +284,24 @@
           "to": "GND",
           "note": "recovery mode"
         },
-        { "color": "#000000", "label": "black", "pin": "GND", "to": "adapter UART GND" },
-        { "color": "#00aa00", "label": "green", "pin": "UART TXD", "to": "adapter UART RX" },
-        { "color": "#0000cc", "label": "blue", "pin": "UART RXD", "to": "adapter UART TX" }
+        {
+          "color": "#000000",
+          "label": "black",
+          "pin": "GND",
+          "to": "adapter UART GND"
+        },
+        {
+          "color": "#00aa00",
+          "label": "green",
+          "pin": "UART TXD",
+          "to": "adapter UART RX"
+        },
+        {
+          "color": "#0000cc",
+          "label": "blue",
+          "pin": "UART RXD",
+          "to": "adapter UART TX"
+        }
       ]
     },
     "gettingStartedUrl": "/developer-reference/getting-started/jetson",
@@ -244,82 +313,87 @@
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
     "provisioning": {
-      "profile": "tegraflash",
-      "media": "NVMe SSD (M.2 2280)",
-      "hostOs": ["Linux"],
+      "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "NVIDIA Jetson AGX Orin Developer Kit",
         "NVMe SSD (M.2 2280 form factor)",
-        "Linux host machine (Ubuntu 22.04+, Fedora 39+)",
         "16 GB available disk space",
-        "USB-C cable (host to Jetson, for flashing)",
-        "Micro USB cable (host to Jetson, for UART console)"
+        "USB-C cable (host to Jetson, for flashing)"
       ],
-      "provisionCommand": "avocado provision -r dev --profile tegraflash",
-      "provisionDescription": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
-      "provisionSteps": [
-        { "type": "text", "content": "The procedure advances through several steps:" },
+      "options": [
         {
-          "type": "code",
-          "content": "== Step 1: Signing binaries ==\n...\n== Step 2: Boot Jetson via RCM ==\n...\n== Step 3: Sending flash sequence commands ==\n..."
-        },
-        { "type": "text", "content": "When provisioning completes:" },
-        { "type": "code", "content": "[SUCCESS] Successfully provisioned runtime 'dev'" }
-      ],
-      "bootSteps": [
-        "Remove power from the Jetson",
-        "Remove the USB-C cable",
-        "Leave the Micro USB cable connected for the serial console",
-        "Apply power"
-      ],
-      "bootNote": "The device will boot with the provisioned system. Log in as root with an empty password via the serial console.",
-      "recoveryMode": {
-        "reference": {
-          "label": "NVIDIA Jetson AGX Orin Developer Kit hardware layout",
-          "url": "https://docs.nvidia.com/jetson/agx-orin-devkit/user-guide/1.0/hardware-layout.html"
-        },
-        "steps": [
-          {
-            "text": "Connect a Micro USB cable from the Jetson's debug port to your host for the UART console. The host will enumerate multiple serial devices — the first one is the UART console.",
-            "images": [
+          "id": "tegraflash",
+          "label": "USB recovery (tegraflash)",
+          "profile": "tegraflash",
+          "media": "NVMe SSD (M.2 2280)",
+          "autoMount": false,
+          "command": "avocado provision -r dev --profile tegraflash",
+          "description": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
+          "steps": [
+            {
+              "type": "text",
+              "content": "The procedure advances through several steps:"
+            },
+            {
+              "type": "code",
+              "content": "== Step 1: Signing binaries ==\n...\n== Step 2: Boot Jetson via RCM ==\n...\n== Step 3: Sending flash sequence commands ==\n..."
+            },
+            {
+              "type": "text",
+              "content": "When provisioning completes:"
+            },
+            {
+              "type": "code",
+              "content": "[SUCCESS] Successfully provisioned runtime 'dev'"
+            }
+          ],
+          "recoveryMode": {
+            "reference": {
+              "label": "NVIDIA Jetson AGX Orin Developer Kit hardware layout",
+              "url": "https://docs.nvidia.com/jetson/agx-orin-devkit/user-guide/1.0/hardware-layout.html"
+            },
+            "steps": [
               {
-                "src": "/img/jetson-agx-orin-devkit/uart-micro-usb.png",
-                "alt": "Micro USB debug port for the UART console"
-              }
-            ]
-          },
-          {
-            "text": "Connect a USB-C cable from the Jetson to your host for flashing.",
-            "images": [
-              {
-                "src": "/img/jetson-agx-orin-devkit/usb-c-flashing.png",
-                "alt": "USB-C port used for flashing the Jetson"
-              }
-            ]
-          },
-          {
-            "text": "Press and hold both the Reset button and the Force Recovery button on the back of the Jetson.",
-            "images": [
-              {
-                "src": "/img/jetson-agx-orin-devkit/reset-button.png",
-                "alt": "Reset button on the back of the Jetson AGX Orin Developer Kit"
+                "text": "Connect a USB-C cable from the Jetson to your host for flashing.",
+                "images": [
+                  {
+                    "src": "/img/jetson-agx-orin-devkit/usb-c-flashing.png",
+                    "alt": "USB-C port used for flashing the Jetson"
+                  }
+                ]
               },
               {
-                "src": "/img/jetson-agx-orin-devkit/force-recovery-button.png",
-                "alt": "Force Recovery button on the back of the Jetson AGX Orin Developer Kit"
+                "text": "Press and hold both the Reset button and the Force Recovery button on the back of the Jetson.",
+                "images": [
+                  {
+                    "src": "/img/jetson-agx-orin-devkit/reset-button.png",
+                    "alt": "Reset button on the back of the Jetson AGX Orin Developer Kit"
+                  },
+                  {
+                    "src": "/img/jetson-agx-orin-devkit/force-recovery-button.png",
+                    "alt": "Force Recovery button on the back of the Jetson AGX Orin Developer Kit"
+                  }
+                ]
+              },
+              {
+                "text": "Release the Reset button. Wait 2-3 seconds, then release the Force Recovery button."
               }
-            ]
+            ],
+            "verifyCommand": "lsusb",
+            "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
           },
-          {
-            "text": "Release the Reset button. Wait 2-3 seconds, then release the Force Recovery button."
-          }
-        ],
-        "verifyCommand": "lsusb",
-        "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
-      },
-      "warnings": ["linuxAutoMount", "linuxHostOnly"]
+          "bootSteps": [
+            "Remove power from the Jetson",
+            "Remove the USB-C cable",
+            "If you want a serial console, leave the Micro USB cable connected",
+            "Apply power"
+          ],
+          "bootNote": "The device will boot with the provisioned system. The root user has an empty password — log in over the serial console (if connected) or via SSH once the device is on the network."
+        }
+      ]
     },
     "serial": {
+      "onboard": true,
       "kind": "onboard-micro-usb",
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0"
@@ -332,17 +406,19 @@
     "target": "imx8mp-evk",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -357,17 +433,19 @@
     "target": "imx93-evk",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -382,17 +460,19 @@
     "target": "imx93-frdm",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -407,17 +487,19 @@
     "target": "imx91-frdm",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -432,13 +514,19 @@
     "target": "fr201",
     "category": "usb",
     "provisioning": {
-      "profile": "usb",
-      "media": "USB drive",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["USB drive", "TTY serial console USB adapter (3.3V)"],
-      "provisionCommand": "avocado provision -r dev --profile usb",
-      "bootInstructions": "Insert the USB drive into the device and apply power.",
-      "warnings": []
+      "prerequisites": ["USB drive"],
+      "options": [
+        {
+          "id": "usb",
+          "label": "USB drive",
+          "profile": "usb",
+          "media": "USB drive",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Insert the USB drive into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -453,13 +541,19 @@
     "target": "reterminal",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
       "prerequisites": ["microSD card (8GB+)", "SD card reader"],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
@@ -470,13 +564,19 @@
     "target": "reterminal-dm",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
       "prerequisites": ["microSD card (8GB+)", "SD card reader"],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
@@ -487,17 +587,19 @@
     "target": "stm32mp257f-dk",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -512,13 +614,19 @@
     "target": "icam-540",
     "category": "other",
     "provisioning": {
-      "profile": null,
-      "media": null,
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["Advantech ICAM-540", "TTY serial console USB adapter (3.3V)"],
-      "provisionCommand": "avocado provision -r dev",
-      "bootInstructions": "Apply power to the device.",
-      "warnings": []
+      "prerequisites": ["Advantech ICAM-540"],
+      "options": [
+        {
+          "id": "default",
+          "label": "Default",
+          "profile": null,
+          "media": null,
+          "autoMount": false,
+          "command": "avocado provision -r dev",
+          "bootInstructions": "Apply power to the device."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -533,13 +641,19 @@
     "target": "intel-x86-64-v3",
     "category": "usb",
     "provisioning": {
-      "profile": "usb",
-      "media": "USB drive",
       "hostOs": ["macOS", "Linux"],
       "prerequisites": ["USB drive", "UEFI boot support (Legacy BIOS not supported)"],
-      "provisionCommand": "avocado provision -r dev --profile usb",
-      "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI.",
-      "warnings": []
+      "options": [
+        {
+          "id": "usb",
+          "label": "USB drive",
+          "profile": "usb",
+          "media": "USB drive",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI."
+        }
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
@@ -550,13 +664,19 @@
     "target": "intel-x86-64-v2",
     "category": "usb",
     "provisioning": {
-      "profile": "usb",
-      "media": "USB drive",
       "hostOs": ["macOS", "Linux"],
       "prerequisites": ["USB drive", "UEFI boot support (Legacy BIOS not supported)"],
-      "provisionCommand": "avocado provision -r dev --profile usb",
-      "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI.",
-      "warnings": []
+      "options": [
+        {
+          "id": "usb",
+          "label": "USB drive",
+          "profile": "usb",
+          "media": "USB drive",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI."
+        }
+      ]
     },
     "serial": null,
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
@@ -567,18 +687,19 @@
     "target": "grinn-astra-1680-sbc",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "Grinn AstraSOM-1680",
-        "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
-      ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "prerequisites": ["Grinn AstraSOM-1680", "microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
@@ -593,18 +714,23 @@
     "target": "rzv2n-sr-som",
     "category": "sd",
     "provisioning": {
-      "profile": "sd",
-      "media": "microSD card (8GB+)",
       "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "SolidRun HummingBoard RZ/V2N AIOT",
         "microSD card (8GB+)",
-        "SD card reader",
-        "TTY serial console USB adapter (3.3V)"
+        "SD card reader"
       ],
-      "provisionCommand": "avocado provision -r dev --profile sd",
-      "bootInstructions": "Insert the SD card into the device and apply power.",
-      "warnings": ["linuxAutoMount"]
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
     },
     "serial": {
       "baud": 115200,
