@@ -57,12 +57,34 @@ Log in as `root` (empty password). The three apps form a data pipeline over NATS
 
 ```bash
 journalctl -u app314 -o cat | grep -m1 startup
+```
+
+```json
+{
+  "event": "startup",
+  "app": "app314",
+  "role": "aggregator",
+  "python": "3.14.2",
+  "executable": "/usr/lib/app314/python/bin/python3.14",
+  "deps": { "numpy": "2.5.1", "scipy": "1.18.0", "nats-py": "2.15.0" }
+}
+```
+
+```bash
 journalctl -u app314 -o cat | grep -m1 pipeline_complete
 ```
 
 ```json
-{"event": "startup", "app": "app314", "role": "aggregator", "python": "3.14.2", "executable": "/usr/lib/app314/python/bin/python3.14", "deps": {"numpy": "2.5.1", "scipy": "1.18.0", "nats-py": "2.15.0"}}
-{"event": "pipeline_complete", "seq": 11, "chain": {"producer": {"app": "app311", "python": "3.11.14"}, "processor": {"app": "app312", "python": "3.12.13"}, "aggregator": {"app": "app314", "python": "3.14.2"}}, "result": {"window": 3, "rms_mean": 0.763675, "rms_trend_slope": -0.007031, "peak_hz": 5.0}}
+{
+  "event": "pipeline_complete",
+  "seq": 11,
+  "chain": {
+    "producer": { "app": "app311", "python": "3.11.14" },
+    "processor": { "app": "app312", "python": "3.12.13" },
+    "aggregator": { "app": "app314", "python": "3.14.2" }
+  },
+  "result": { "window": 3, "rms_mean": 0.763675, "rms_trend_slope": -0.007031, "peak_hz": 5.0 }
+}
 ```
 
 <PullQuote>
@@ -76,7 +98,7 @@ Avocado Desktop runs the same fleet check from inside the app: build the referen
 
 ## What broke, what's deferred
 
-- **The QEMU boot needs a current SDK.** This reference's image is ~1.1 GiB. An older `2024/edge` SDK's `vm` helper pads the disk to a fixed 1 GiB, so `avocado sdk run -iE vm dev` aborts at `qemu-img resize` ("Use the --shrink option"). A current `2024/edge` SDK, whose helper pads to the next power of two, fixes it. This affects only the local QEMU boot, not the build or a hardware deploy.
+- **The QEMU boot needs an SDK whose `vm` helper pads to a power of two.** This reference's image is ~1.1 GiB. The `2024/edge` SDK's `vm` helper historically resized the disk to a fixed 1 GiB, so `avocado sdk run -iE vm dev` aborted at `qemu-img resize` ("Use the --shrink option") on any image over 1 GiB. The current helper pads to the next power of two instead, which fixes it; if your boot hits that abort, update the SDK (`avocado sdk install`). This affects only the local QEMU boot, not the build or a hardware deploy.
 - **aarch64 is designed, not boot-verified here.** The build is arch-aware (uv pulls aarch64 interpreters and wheels; the broker step fetches the arm64 `nats-server`), and the reference declares `raspberrypi5` and `raspberrypi4`, but a Pi boot to `pipeline_complete` is a hardware-in-the-loop slot not run for this note.
 - **No systemd hardening.** The apps run as root off read-only extension content; `DynamicUser` and `ProtectSystem=strict` are deferred, since a bundled interpreter and wheels under `/usr/lib/app3NN` need a profile that still exposes those paths.
 - **Footprint is the trade-off.** Shipping two standalone CPython trees plus wheels is not free on image size; the system-Python app (3.12) is the cheaper model when the base image's version fits. The reference ships both models to show the contrast, not to recommend bundling by default.
