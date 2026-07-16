@@ -26,6 +26,22 @@
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/onlogic/fr201"
   },
+  "fr202": {
+    "name": "Fr202",
+    "target": "fr202",
+    "category": "physical",
+    "description": "Fr202 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
   "grinn-astra-1680-sbc": {
     "name": "Grinn AstraSOM-1680",
     "target": "grinn-astra-1680-sbc",
@@ -203,6 +219,22 @@
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/nxp/frdm-imx-93"
+  },
+  "imx95-frdm": {
+    "name": "Imx95 Frdm",
+    "target": "imx95-frdm",
+    "category": "physical",
+    "description": "Imx95 Frdm is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
   },
   "intel-x86-64-v2": {
     "name": "Intel x86-64-v2",
@@ -458,6 +490,22 @@
     "target": "jetson-orin-nx",
     "category": "physical",
     "description": "Jetson Orin Nx is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
+  "qcm6490": {
+    "name": "Qcm6490",
+    "target": "qcm6490",
+    "category": "physical",
+    "description": "Qcm6490 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
     "provisioning": {
       "profile": null,
       "prerequisites": [],
@@ -782,5 +830,21 @@
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/stmicroelectronics/stm32mp257f-dk"
+  },
+  "ucm-imx8m-plus": {
+    "name": "Ucm Imx8m Plus",
+    "target": "ucm-imx8m-plus",
+    "category": "physical",
+    "description": "Ucm Imx8m Plus is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "profile": null,
+      "prerequisites": [],
+      "provisionCommand": "avocado provision -r dev",
+      "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime.",
+      "warnings": []
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
   }
 }

@@ -15,7 +15,21 @@ const sidebars = {
       label: 'Avocado Connect',
       collapsible: false,
       collapsed: false,
-      items: ['avocado-connect/overview'],
+      items: [
+        'avocado-connect/overview',
+        'avocado-connect/getting-started',
+        'avocado-connect/fleet',
+        'avocado-connect/projects',
+        'avocado-connect/deployments',
+        'avocado-connect/tunnels',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Avocado Desktop',
+      collapsible: false,
+      collapsed: false,
+      items: ['avocado-desktop/overview'],
     },
     {
       type: 'category',

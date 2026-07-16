@@ -10,7 +10,6 @@ const sidebars = {
       collapsed: false,
       items: [
         'getting-started/index',
-        'getting-started/download',
         'getting-started/qemu',
         'getting-started/raspberry-pi',
         'getting-started/jetson',

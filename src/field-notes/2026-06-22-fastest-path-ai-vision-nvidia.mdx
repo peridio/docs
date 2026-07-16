@@ -1,6 +1,6 @@
 ---
-title: 'The Fastest Path to AI Vision on NVIDIA Hardware'
-description: 'From avocado init to a live four-model DeepStream 7.1 vision pipeline on a Jetson Orin Nano in about ten minutes of build plus a three-and-a-half-minute flash — the entire NVIDIA accelerated stack ships precompiled from the Avocado package feed.'
+title: 'Avocado OS: A Four-Model DeepStream Vision Pipeline on Jetson Orin Nano in ~14 Minutes'
+description: 'From avocado init to a live four-model DeepStream 7.1 vision pipeline on a Jetson Orin Nano in about fourteen minutes — the entire NVIDIA accelerated stack ships precompiled from the Avocado package feed, so none of it compiles on the device.'
 date: 2026-06-22
 authors: [nsinas]
 tags: [nvidia, jetson, deepstream, tensorrt, computer-vision]
@@ -21,7 +21,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR** — We made a demo with some fancy people tracking! It runs on NVIDIA hardware, uses the GPU, runs at 30fps, it tracks people, draws fun lines, and it takes minutes to go from nothing to a custom, production-ready OS running this demo.
+**TL;DR** — We made a demo with some fancy people tracking! Runs on the GPU at 30fps, tracks people, poses, and hands, draws fun lines. Fresh Jetson Orin Nano to fully flashed and running: about 14 minutes, and none of it compiles on the device.
 
 {/* truncate */}
 
@@ -216,7 +216,7 @@ ssh root@<device-ip>
 Runtime and service are up:
 
 ```bash
-avocado control runtime list   # the dev runtime is running
+avocadoctl runtime list        # the dev runtime is running
 systemctl status vision-app    # Active: active (running)
 ```
 

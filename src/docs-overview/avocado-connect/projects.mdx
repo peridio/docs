@@ -1,0 +1,30 @@
+---
+title: 'Projects'
+---
+
+# Projects
+
+A project is the container for everything you deploy. Runtimes, cohorts, deployments, and provisioning all live inside a project, giving you a clean boundary between separate products, hardware lines, or customers. One organization can run many projects side by side without their work ever crossing over.
+
+Organize projects however your fleet is structured: one per product, per hardware platform, or per customer. Each keeps its own runtimes, device cohorts, deployment history, and claim tokens.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/project-overview.png"
+    alt="A project's Overview tab: Runtimes, Deployments, Provisioning, and Settings tabs across the top, with the project's cohorts and runtime and deployment counts below."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+Everything you deploy hangs off a project:
+
+- **Runtimes**: The versioned software artifacts you publish and deploy. See [Deployments](/avocado-connect/deployments).
+- **Cohorts**: Named groups of devices you target updates to, for example canary before production. Promoting a release through cohorts is how you stage a rollout.
+- **Deployments**: The record of what shipped to which cohort, with live convergence tracking and a full audit trail. See [Deployments](/avocado-connect/deployments).
+- **Provisioning**: Claim tokens that authorize new devices to enroll into the project, scoped to a cohort and capped by use. See [Getting Started](/avocado-connect/getting-started).
+- **Settings**: Project name, description, and access.
+
+## Access control
+
+Projects are shared with your whole organization by default. When you need to wall off a product line or a customer deployment, restrict a project to specific members or groups. Access applies to everything inside the project, so the right people see the right fleets and nothing more.

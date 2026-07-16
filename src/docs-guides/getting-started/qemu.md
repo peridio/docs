@@ -42,6 +42,21 @@ Build the system image — this compiles extensions and assembles the runtime.
 avocado build
 ```
 
+### Troubleshooting a stale build volume
+
+If `avocado build` fails during `runtime build dev` with a missing `/etc/passwd` (or `/etc/shadow` / `/etc/group`) under `rootfs-work`, the build volume is stale or half-populated. This happens when a previous install was interrupted, or when a project directory was deleted manually without first running `avocado clean`. The per-project Docker volume outlives the folder.
+
+Reset the build state and rebuild:
+
+```bash
+avocado clean
+avocado prune
+avocado install -f
+avocado build
+```
+
+`avocado clean` drops the current project's volume; `avocado prune` clears abandoned volumes left behind by deleted projects. Run both, since `clean` alone may not clear an abandoned volume that is shadowing the build.
+
 ## Provision
 
 Provision creates the bootable disk image for the `dev` runtime. Because QEMU is virtual, the provisioning artifacts are written to disk on your development machine rather than flashed to hardware.

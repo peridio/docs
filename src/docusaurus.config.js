@@ -60,6 +60,14 @@ const config = {
             from: '/security/production-ready-features',
             to: '/avocado-os/security/production-ready',
           },
+          // Avocado Connect is the successor to Peridio Core; keep old bookmarks alive.
+          { from: '/peridio-core/overview', to: '/avocado-connect/overview' },
+          { from: '/peridio-core', to: '/avocado-connect/overview' },
+          // The Download & Install page was retired in favor of the Desktop overview.
+          {
+            from: '/developer-reference/getting-started/download',
+            to: '/avocado-desktop/overview',
+          },
         ],
       },
     ],
@@ -209,7 +217,8 @@ const config = {
             to: '/',
             label: 'Product Documentation',
             position: 'left',
-            activeBaseRegex: '^/$|^/(avocado-os|avocado-connect|faqs|policies)(/.*)?$',
+            activeBaseRegex:
+              '^/$|^/(avocado-os|avocado-connect|avocado-desktop|faqs|policies)(/.*)?$',
           },
           {
             to: '/hardware/support-matrix',
