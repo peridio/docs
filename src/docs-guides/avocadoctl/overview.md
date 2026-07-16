@@ -4,7 +4,7 @@ sidebar_position: 1
 description: 'avocadoctl is a CLI tool and Varlink IPC daemon for managing Avocado Linux system extensions, runtimes, OS bundles, and hardware-in-the-loop testing on device.'
 ---
 
-<a href="https://github.com/avocado-linux/avocado-control" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Source_Code-GitHub-7b6ff0?logo=github&logoColor=white&style=for-the-badge" alt="Source Code on GitHub" /></a>
+<a href="https://github.com/avocado-linux/avocadoctl" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Source_Code-GitHub-7b6ff0?logo=github&logoColor=white&style=for-the-badge" alt="Source Code on GitHub" /></a>
 
 avocadoctl is the on-device management tool for Avocado Linux. It provides both a command-line interface and a Varlink IPC daemon for programmatic access. avocadoctl is pre-installed on all Avocado runtimes.
 

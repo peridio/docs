@@ -1,0 +1,134 @@
+---
+title: 'Three pinned Pythons on one device: per-app CPython isolation with uv'
+description: 'Three apps each pin a different Python (3.11, 3.12, 3.14) with their own native wheels and collaborate over NATS in a producer to processor to aggregator pipeline, built onto one Avocado OS image with no per-package recipe.'
+date: 2026-07-15
+draft: true
+authors: [jtia]
+tags: [qemux86-64, python, uv, multi-version, nats]
+category: 'Python'
+featured: false
+tested_against: 'Avocado CLI 1.0.0-rc.1; python-multiversion-uv reference; target qemux86-64 (QEMU)'
+poster: jtia
+lift_for_blog: 'Mixed-Python fleets usually force one interpreter or a container per app; this ships three pinned interpreters and their native wheels on one immutable image and has them collaborate on one result.'
+promote_to_track: 'Tutorial candidate: multi-interpreter packaging as the polyglot-Python chapter of the on-ramp.'
+---
+
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus
+  targets={['qemux86-64']}
+  cli="1.0.0-rc.1"
+  reference={{
+    label: 'python-multiversion-uv',
+    href: 'https://github.com/avocado-linux/references/tree/main/python-multiversion-uv',
+  }}
+/>
+
+**TL;DR** - I ran three Python apps on one Avocado OS device, each on its own CPython (3.11.14 / 3.12.13 / 3.14.2) with its own native wheels, wired into a producer to processor to aggregator pipeline over a local NATS broker. A sample window generated on 3.11 is processed on 3.12 and aggregated on 3.14, and `numpy` resolves to different versions per app (2.4.6 vs 2.5.1) on the same image, so the isolation is real, not conventional.
+
+{/* truncate */}
+
+## The problem: a mixed-Python fleet
+
+Avocado OS builds an immutable Linux image for embedded devices, and a "reference" is a worked example you clone to start from. `python-multiversion-uv` answers a messy real-world case: a fleet where independent Python apps each pin a different interpreter from their own dependency set and collaborate over a message bus, so you cannot standardize on one interpreter without rewriting someone's lockfile. Three app extensions each resolve independently with uv (Astral's Python package and interpreter manager); two ship a standalone CPython (python-build-standalone) inside the extension, and one rides the device's system Python.
+
+## Three interpreters, one image
+
+Each app is packaged as a system extension (interpreter plus wheels) and a configuration extension (its systemd unit). The build is two commands:
+
+```bash
+avocado install -f
+avocado build
+```
+
+`app311` and `app314` run `uv python install 3.11` / `3.14` inside the SDK. uv detects the target architecture, downloads the matching python-build-standalone interpreter, and installs each app's wheels against it, so the interpreter and every wheel match the device. `app312` skips the interpreter and resolves against the SDK's own Python 3.12, which is byte-for-byte the `/usr/bin/python3` the device ships. Because each app resolves independently, versions diverge on purpose: `numpy` is 2.4.6 on 3.11 and 2.5.1 on 3.12 and 3.14, and `scipy` 1.18.0 resolves only for the 3.14 aggregator. No Yocto recipe per package, adding a dependency is a line in a compile script.
+
+## The pipeline comes up
+
+Boot it under QEMU:
+
+```bash
+avocado provision dev
+avocado sdk run -iE vm dev
+```
+
+Log in as `root` (empty password). The three apps form a data pipeline over NATS, each stage on its own interpreter: **app311 (producer, 3.11)** generates a sample window with numpy and publishes it; **app312 (processor, 3.12)** reduces each window to numpy statistics plus the FFT peak and republishes; **app314 (aggregator, 3.14)** fits a scipy trend across a rolling window. Every app logs one startup line reporting the interpreter it runs on and the native wheels it loaded, and app314 logs a `pipeline_complete` whose `chain` names all three interpreters that touched the data:
+
+```bash
+journalctl -u app314 -o cat | grep -m1 startup
+```
+
+```json
+{
+  "event": "startup",
+  "app": "app314",
+  "role": "aggregator",
+  "python": "3.14.2",
+  "executable": "/usr/lib/app314/python/bin/python3.14",
+  "deps": { "numpy": "2.5.1", "scipy": "1.18.0", "nats-py": "2.15.0" }
+}
+```
+
+```bash
+journalctl -u app314 -o cat | grep -m1 pipeline_complete
+```
+
+```json
+{
+  "event": "pipeline_complete",
+  "seq": 11,
+  "chain": {
+    "producer": { "app": "app311", "python": "3.11.14" },
+    "processor": { "app": "app312", "python": "3.12.13" },
+    "aggregator": { "app": "app314", "python": "3.14.2" }
+  },
+  "result": { "window": 3, "rms_mean": 0.763675, "rms_trend_slope": -0.007031, "peak_hz": 5.0 }
+}
+```
+
+<PullQuote>
+  One `pipeline_complete` line proves three independently pinned interpreters - **3.11 to 3.12 to
+  3.14** - collaborated on a single result over a local NATS bus.
+</PullQuote>
+
+Watch the full CLI walkthrough, from `avocado init` to `pipeline_complete`: [ENGINEER: YouTube link - CLI demo].
+
+Avocado Desktop runs the same fleet check from inside the app: build the reference, then open the embedded VM shell and watch the pipeline over the in-app terminal, no external terminal needed: [ENGINEER: YouTube link - Avocado Desktop demo].
+
+## What broke, what's deferred
+
+- **The QEMU boot needs an SDK whose `vm` helper pads to a power of two.** This reference's image is ~1.1 GiB. The `2024/edge` SDK's `vm` helper historically resized the disk to a fixed 1 GiB, so `avocado sdk run -iE vm dev` aborted at `qemu-img resize` ("Use the --shrink option") on any image over 1 GiB. The current helper pads to the next power of two instead, which fixes it; if your boot hits that abort, update the SDK (`avocado sdk install`). This affects only the local QEMU boot, not the build or a hardware deploy.
+- **aarch64 is designed, not boot-verified here.** The build is arch-aware (uv pulls aarch64 interpreters and wheels; the broker step fetches the arm64 `nats-server`), and the reference declares `raspberrypi5` and `raspberrypi4`, but a Pi boot to `pipeline_complete` is a hardware-in-the-loop slot not run for this note.
+- **No systemd hardening.** The apps run as root off read-only extension content; `DynamicUser` and `ProtectSystem=strict` are deferred, since a bundled interpreter and wheels under `/usr/lib/app3NN` need a profile that still exposes those paths.
+- **Footprint is the trade-off.** Shipping two standalone CPython trees plus wheels is not free on image size; the system-Python app (3.12) is the cheaper model when the base image's version fits. The reference ships both models to show the contrast, not to recommend bundling by default.
+- **Not production posture.** The generated `config` extension sets an empty root password (NOT FOR PRODUCTION), and the broker binds `127.0.0.1:4222` with no TLS or auth, which is correct for a single-device local bus but not for off-box coordination.
+
+## Reproduce it
+
+```bash
+avocado init --reference python-multiversion-uv python-multiversion-uv
+cd python-multiversion-uv
+avocado install -f
+avocado build
+avocado provision dev
+avocado sdk run -iE vm dev
+```
+
+Log in as `root` with an empty password. Read each app's startup line for three different `python` versions, then watch the data flow through the pipeline:
+
+```bash
+journalctl -u app311 -o cat | grep -m1 startup   # producer  3.11
+journalctl -u app312 -o cat | grep -m1 startup   # processor 3.12
+journalctl -u app314 -o cat | grep -m1 startup   # aggregator 3.14
+journalctl -u app311 -o cat | grep -m1 produced
+journalctl -u app312 -o cat | grep -m1 processed
+```
+
+Then grep the aggregator for the whole-system signal:
+
+```bash
+journalctl -u app314 -o cat | grep pipeline_complete
+```
+
+Reference: [`python-multiversion-uv`](https://github.com/avocado-linux/references/tree/main/python-multiversion-uv).
