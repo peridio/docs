@@ -65,7 +65,10 @@ journalctl -u app314 -o cat | grep -m1 pipeline_complete
 {"event": "pipeline_complete", "seq": 11, "chain": {"producer": {"app": "app311", "python": "3.11.14"}, "processor": {"app": "app312", "python": "3.12.13"}, "aggregator": {"app": "app314", "python": "3.14.2"}}, "result": {"window": 3, "rms_mean": 0.763675, "rms_trend_slope": -0.007031, "peak_hz": 5.0}}
 ```
 
-<PullQuote>One `pipeline_complete` line proves three independently pinned interpreters - **3.11 to 3.12 to 3.14** - collaborated on a single result over a local NATS bus.</PullQuote>
+<PullQuote>
+  One `pipeline_complete` line proves three independently pinned interpreters - **3.11 to 3.12 to
+  3.14** - collaborated on a single result over a local NATS bus.
+</PullQuote>
 
 Watch the full CLI walkthrough, from `avocado init` to `pipeline_complete`: [ENGINEER: YouTube link - CLI demo].
 
