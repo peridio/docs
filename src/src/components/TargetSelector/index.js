@@ -387,8 +387,8 @@ export default function TargetSelector() {
               </pre>
               <p>
                 Replace <code>/dev/ttyUSB0</code> with the appropriate device path
-                {t.serial.kind === 'onboard-micro-usb'
-                  ? ' enumerated on your host (the first of the Jetson serial devices).'
+                {t.serial.onboard
+                  ? ' enumerated on your host once the cable is connected.'
                   : ' for your adapter.'}
               </p>
             </>
