@@ -7,6 +7,7 @@ authors: [jtia]
 tags: [qemux86-64, python, uv, multi-version, nats]
 category: 'Python'
 featured: false
+image: /img/field-notes/python-multiversion-uv.png # the pipeline_complete payoff (CLI demo frame)
 tested_against: 'Avocado CLI 1.0.0-rc.1; python-multiversion-uv reference; target qemux86-64 (QEMU)'
 poster: jtia
 lift_for_blog: 'Mixed-Python fleets usually force one interpreter or a container per app; this ships three pinned interpreters and their native wheels on one immutable image and has them collaborate on one result.'
@@ -92,9 +93,33 @@ journalctl -u app314 -o cat | grep -m1 pipeline_complete
   3.14** - collaborated on a single result over a local NATS bus.
 </PullQuote>
 
-Watch the full CLI walkthrough, from `avocado init` to `pipeline_complete`: [watch it on YouTube](https://youtu.be/HPNN8JvsjCQ).
+The full CLI walkthrough, from `avocado init` to `pipeline_complete`:
 
-Avocado Desktop runs the same fleet check from inside the app: build the reference, then open the embedded VM shell and watch the pipeline over the in-app terminal, no external terminal needed: [watch it on YouTube](https://youtu.be/Xt5aIkAEYjE).
+<div style={{ aspectRatio: '16 / 9', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/HPNN8JvsjCQ"
+    title="python-multiversion-uv: the CLI walkthrough to pipeline_complete"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
+
+The same fleet check from inside Avocado Desktop: build the reference, then open the embedded VM shell and watch the pipeline over the in-app terminal, no external terminal needed:
+
+<div style={{ aspectRatio: '16 / 9', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/Xt5aIkAEYjE"
+    title="python-multiversion-uv: the same fleet check inside Avocado Desktop's VM shell"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
 
 ## What broke, what's deferred
 
