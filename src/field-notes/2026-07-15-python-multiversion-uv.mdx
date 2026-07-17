@@ -2,7 +2,7 @@
 title: 'Three pinned Pythons on one device: per-app CPython isolation with uv'
 description: 'Three apps each pin a different Python (3.11, 3.12, 3.14) with their own native wheels and collaborate over NATS in a producer to processor to aggregator pipeline, built onto one Avocado OS image with no per-package recipe.'
 date: 2026-07-15
-draft: true
+draft: false
 authors: [jtia]
 tags: [qemux86-64, python, uv, multi-version, nats]
 category: 'Python'
@@ -92,9 +92,9 @@ journalctl -u app314 -o cat | grep -m1 pipeline_complete
   3.14** - collaborated on a single result over a local NATS bus.
 </PullQuote>
 
-Watch the full CLI walkthrough, from `avocado init` to `pipeline_complete`: [ENGINEER: YouTube link - CLI demo].
+Watch the full CLI walkthrough, from `avocado init` to `pipeline_complete`: [watch it on YouTube](https://youtu.be/HPNN8JvsjCQ).
 
-Avocado Desktop runs the same fleet check from inside the app: build the reference, then open the embedded VM shell and watch the pipeline over the in-app terminal, no external terminal needed: [ENGINEER: YouTube link - Avocado Desktop demo].
+Avocado Desktop runs the same fleet check from inside the app: build the reference, then open the embedded VM shell and watch the pipeline over the in-app terminal, no external terminal needed: [watch it on YouTube](https://youtu.be/Xt5aIkAEYjE).
 
 ## What broke, what's deferred
 
