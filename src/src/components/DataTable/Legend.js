@@ -4,6 +4,7 @@ import styles from './styles.module.css'
 const items = [
   { key: 'supported', label: 'Supported', dotClass: styles.legendDotSupported },
   { key: 'in-progress', label: 'In Progress', dotClass: styles.legendDotInProgress },
+  { key: 'none', label: 'Not available', dotClass: styles.legendDotNone },
 ]
 
 export function Legend() {
