@@ -9,8 +9,8 @@ slug: terms
 
 These Terms of Use ("Terms") govern your access to and use of the Avocado OS
 documentation website at docs.peridio.com (the "Site"), operated by
-Peridio, Inc. ("Peridio", "we", "us"). Avocado OS and the Avocado Linux project
-are owned and operated by Peridio. By accessing or using the Site, you agree to
+Peridio, Inc., a Delaware corporation ("Peridio", "we", "us"). Avocado OS and the
+Avocado Linux project are owned and operated by Peridio. By accessing or using the Site, you agree to
 these Terms. If you do not agree, do not use the Site.
 
 ## The Site is documentation
@@ -76,6 +76,11 @@ collected and how it is used.
 
 We may update these Terms from time to time. Changes take effect when posted on
 this page, and your continued use of the Site means you accept the updated Terms.
+
+## Governing law
+
+These Terms are governed by the laws of the State of Delaware, United States,
+without regard to its conflict-of-laws principles.
 
 ## Contact us
 
