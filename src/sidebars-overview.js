@@ -48,7 +48,7 @@ const sidebars = {
       label: 'Policies',
       collapsible: false,
       collapsed: false,
-      items: ['policies/coc', 'policies/privacy'],
+      items: ['policies/coc', 'policies/privacy', 'policies/disclaimer'],
     },
   ],
 }

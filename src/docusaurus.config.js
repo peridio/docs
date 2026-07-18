@@ -207,7 +207,36 @@ const config = {
           },
         ],
       },
-      footer: undefined,
+      footer: {
+        style: 'dark',
+        links: [
+          {
+            title: 'Documentation',
+            items: [
+              { label: 'Product Documentation', to: '/' },
+              { label: 'Hardware', to: '/hardware/support-matrix' },
+              {
+                label: 'Developer Reference',
+                to: '/developer-reference/getting-started',
+              },
+              { label: 'Field Notes', to: '/field-notes' },
+            ],
+          },
+          {
+            title: 'Legal',
+            items: [
+              {
+                label: 'Terms & Conditions',
+                href: 'https://console.peridio.com/policy/tos',
+              },
+              { label: 'Privacy Statement', to: '/privacy' },
+              { label: 'Disclaimer', to: '/disclaimer' },
+              { label: 'Code of Conduct', to: '/coc' },
+            ],
+          },
+        ],
+        copyright: `Copyright © ${new Date().getFullYear()} Peridio, Inc.`,
+      },
       prism: {
         theme: themes.oneLight,
         darkTheme: themes.oneDark,
