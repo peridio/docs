@@ -181,6 +181,30 @@
   white-space: nowrap;
 }
 
+/* Supported */
+.statusSupported .statusDot {
+  background: var(--color-status-success);
+}
+.statusSupported .statusLabel {
+  color: var(--color-status-success);
+}
+
+/* In Progress */
+.statusInProgress .statusDot {
+  background: var(--color-accent-primary);
+}
+.statusInProgress .statusLabel {
+  color: var(--color-accent-primary);
+}
+
+/* Under evaluation */
+.statusEvaluation .statusDot {
+  background: var(--color-status-warning);
+}
+.statusEvaluation .statusLabel {
+  color: var(--color-status-warning);
+}
+
 /* Full */
 .statusFull .statusDot {
   background: var(--color-status-success);
@@ -244,6 +268,21 @@
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+.legendDotSupported {
+  composes: legendDot;
+  background: var(--color-status-success);
+}
+
+.legendDotInProgress {
+  composes: legendDot;
+  background: var(--color-accent-primary);
+}
+
+.legendDotEvaluation {
+  composes: legendDot;
+  background: var(--color-status-warning);
 }
 
 .legendDotFull {

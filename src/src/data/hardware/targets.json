@@ -428,6 +428,87 @@
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/nxp/imx8mp"
   },
+  "imx8mp-var-dart": {
+    "name": "Variscite DART-MX8M-PLUS",
+    "target": "imx8mp-var-dart",
+    "board": "variscite-sonata",
+    "category": "sd",
+    "description": "The Variscite DART-MX8M-PLUS is an industrial i.MX 8M Plus SoM. It provisions to an SD card or to onboard eMMC over USB (UUU), selected with the carrier's SW7 boot switch.",
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": ["Variscite DART-MX8M-PLUS SoM on a Variscite carrier board"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+          "description": "Set the carrier's SW7 switch to external (boot from external media) and insert the SD card, then provision the dev runtime with the sd profile:",
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "With SW7 set to external and the SD card inserted, power on the board — it boots Avocado OS from the SD card."
+        },
+        {
+          "id": "uuu-emmc",
+          "label": "eMMC (UUU)",
+          "profile": "uuu-emmc",
+          "media": "Onboard eMMC (flashed over USB)",
+          "autoMount": false,
+          "prerequisites": ["USB-C cable (board to host)", "Micro USB cable for the debug port"],
+          "description": "Flash the onboard eMMC over USB with the uuu-emmc profile. First put the board into serial download mode: connect the USB-C cable and the micro USB debug port to your host, set SW7 to external, and power on the board with no SD card in the slot — it comes up in serial download (UUU) mode. Then provision:",
+          "command": "avocado provision -r dev --profile uuu-emmc",
+          "steps": [
+            {
+              "type": "text",
+              "content": "After programming completes, set SW7 back to internal so the board boots from the onboard eMMC."
+            }
+          ],
+          "bootInstructions": "With SW7 set to internal, power-cycle the board — it boots Avocado OS from the onboard eMMC."
+        }
+      ]
+    },
+    "serial": {
+      "onboard": true,
+      "baud": 115200,
+      "command": "tio -b 115200 /dev/ttyUSB0",
+      "description": "The Variscite carrier exposes a debug UART console over its onboard micro USB port — no separate TTL adapter is required. Connect the micro USB debug port to your host and open the serial device it enumerates."
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/variscite/dart-mx8m-plus"
+  },
+  "ucm-imx8m-plus": {
+    "name": "CompuLab UCM-i.MX8M-Plus",
+    "target": "ucm-imx8m-plus",
+    "category": "sd",
+    "description": "The CompuLab UCM-i.MX8M-Plus is an ultra-compact (28 x 38 mm) i.MX 8M Plus Computer-on-Module for space- and power-constrained edge-AI designs.",
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": [
+        "CompuLab UCM-i.MX8M-Plus on a compatible carrier board",
+        "microSD card (8GB+)",
+        "SD card reader"
+      ],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the carrier and apply power."
+        }
+      ]
+    },
+    "serial": {
+      "baud": 115200,
+      "voltage": "3.3V",
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/compulab/ucm-imx8m-plus"
+  },
   "imx93-evk": {
     "name": "NXP i.MX 93 EVK",
     "target": "imx93-evk",

@@ -1,0 +1,11 @@
+{
+  "category": "GRINN",
+  "devices": [
+    {
+      "name": "Synaptics Coral Dev Board",
+      "vendor": "Grinn",
+      "chipset": "Synaptics Astra SL2619",
+      "productType": "Development Kit"
+    }
+  ]
+}

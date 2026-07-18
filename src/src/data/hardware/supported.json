@@ -4,286 +4,276 @@
     {
       "name": "Advantech ICAM-540",
       "target": "icam-540",
+      "board": "",
       "url": "/hardware/advantech/icam-540",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
+      "name": "Advantech MIC-712-OX",
+      "target": "jetson-orin-nx",
+      "board": "mic-712-ox-16gb",
+      "url": "/hardware/nvidia/jetson-orin-nx",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
+      "name": "Advantech MIC-733-AO5A1",
+      "target": "jetson-agx-orin",
+      "board": "mic-733-ao5a1",
+      "url": "/hardware/advantech/mic-733-ao",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
+      "name": "Advantech MIC-733-AO6A1",
+      "target": "jetson-agx-orin",
+      "board": "mic-733-ao6a1",
+      "url": "/hardware/advantech/mic-733-ao",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
+      "name": "CompuLab UCM-i.MX8M-Plus",
+      "target": "ucm-imx8m-plus",
+      "board": "",
+      "url": "/hardware/compulab/ucm-imx8m-plus",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Grinn AstraSOM-1680",
       "target": "grinn-astra-1680-sbc",
+      "board": "",
       "url": "/hardware/grinn/astrasom-1680",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Intel x86-64-v2",
       "target": "intel-x86-64-v2",
+      "board": "",
       "url": "/hardware/intel/x86-64-v2",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "partial",
-        "sideLoading": "full",
-        "extensionOta": "partial",
-        "osOta": "partial",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Intel x86-64-v3",
       "target": "intel-x86-64-v3",
+      "board": "",
       "url": "/hardware/intel/x86-64-v3",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "partial",
-        "sideLoading": "full",
-        "extensionOta": "partial",
-        "osOta": "partial",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "NVIDIA Jetson AGX Orin Developer Kit",
       "target": "jetson-agx-orin-devkit",
+      "board": "",
       "url": "/hardware/nvidia/jetson-agx-orin",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
+      "name": "NVIDIA Jetson Orin NX",
+      "target": "jetson-orin-nx",
+      "board": "",
+      "url": "/hardware/nvidia/jetson-orin-nx",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "NVIDIA Jetson Orin Nano Developer Kit",
       "target": "jetson-orin-nano-devkit",
+      "board": "",
       "url": "/hardware/nvidia/jetson-orin-nano-developer-kit",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "NXP FRDM i.MX 91",
       "target": "imx91-frdm",
+      "board": "",
       "url": "/hardware/nxp/frdm-imx-91",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "NXP i.MX 8MP EVK",
       "target": "imx8mp-evk",
+      "board": "",
       "url": "/hardware/nxp/imx8mp",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "NXP i.MX 93 EVK",
       "target": "imx93-evk",
+      "board": "",
       "url": "/hardware/nxp/imx93-evk",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "NXP i.MX 93 FRDM SBC",
       "target": "imx93-frdm",
+      "board": "",
       "url": "/hardware/nxp/frdm-imx-93",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "OnLogic FR201",
       "target": "fr201",
+      "board": "",
       "url": "/hardware/onlogic/fr201",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Raspberry Pi 4 Model B",
       "target": "raspberrypi4",
+      "board": "",
       "url": "/hardware/raspberry-pi/raspberry-pi-4-model-b",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Raspberry Pi 5",
       "target": "raspberrypi5",
+      "board": "",
       "url": "/hardware/raspberry-pi/raspberry-pi-5",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Raspberry Pi Zero 2 W",
       "target": "raspberrypi0-2w",
+      "board": "",
       "url": "/hardware/raspberry-pi/raspberry-pi-zero-2-w",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Seeed reTerminal",
       "target": "reterminal",
+      "board": "",
       "url": "/hardware/seeed/reterminal",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Seeed reTerminal DM",
       "target": "reterminal-dm",
+      "board": "",
       "url": "/hardware/seeed/reterminal-dm",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "partial",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "SolidRun HummingBoard RZ/V2N AIOT",
       "target": "rzv2n-sr-som",
+      "board": "",
       "url": "/hardware/solidrun/hummingboard-rz-v2n-aiot",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "full",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "STMicroelectronics STM32MP257F-DK",
       "target": "stm32mp257f-dk",
+      "board": "",
       "url": "/hardware/stmicroelectronics/stm32mp257f-dk",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "partial",
-        "sideLoading": "full",
-        "extensionOta": "partial",
-        "osOta": "partial",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     },
     {
       "name": "Thundercomm Rubik Pi 3",
       "target": "rubikpi3",
+      "board": "",
       "url": "/hardware/qualcomm/rubik-pi-3",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "partial",
-        "remoteAccessTunnels": "full"
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
+      "name": "Variscite DART-MX8M-PLUS",
+      "target": "imx8mp-var-dart",
+      "board": "variscite-sonata",
+      "url": "/hardware/variscite/dart-mx8m-plus",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
       }
     }
   ]

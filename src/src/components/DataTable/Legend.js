@@ -2,9 +2,8 @@ import React from 'react'
 import styles from './styles.module.css'
 
 const items = [
-  { key: 'full', label: 'Fully supported', dotClass: styles.legendDotFull },
-  { key: 'partial', label: 'In development', dotClass: styles.legendDotPartial },
-  { key: 'none', label: 'Not supported', dotClass: styles.legendDotNone },
+  { key: 'supported', label: 'Supported', dotClass: styles.legendDotSupported },
+  { key: 'in-progress', label: 'In Progress', dotClass: styles.legendDotInProgress },
 ]
 
 export function Legend() {

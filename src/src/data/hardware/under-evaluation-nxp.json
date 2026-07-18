@@ -2,12 +2,6 @@
   "category": "NXP i.MX ECOSYSTEM",
   "devices": [
     {
-      "name": "AXON-IMX8M-PLUS",
-      "vendor": "TechNexion",
-      "chipset": "i.MX 8M Plus",
-      "productType": "Production Ready"
-    },
-    {
       "name": "FRDM-i.MX 95",
       "vendor": "NXP",
       "chipset": "i.MX 95",

@@ -4,32 +4,18 @@
     {
       "name": "QEMU ARM",
       "target": "qemuarm64",
+      "board": "",
       "url": "/developer-reference/getting-started/qemu",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "none",
-        "remoteAccessTunnels": "full"
-      }
+      "lts": { "2024": "supported", "2026": "supported" }
     },
     {
       "name": "QEMU x86-64",
       "target": "qemux86-64",
+      "board": "",
       "url": "/developer-reference/getting-started/qemu",
       "external": false,
-      "features": {
-        "provisioning": "full",
-        "hitl": "full",
-        "sideLoading": "full",
-        "extensionOta": "full",
-        "osOta": "full",
-        "secureBoot": "none",
-        "remoteAccessTunnels": "full"
-      }
+      "lts": { "2024": "supported", "2026": "supported" }
     }
   ]
 }

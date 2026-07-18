@@ -1,0 +1,11 @@
+{
+  "category": "LANNER",
+  "devices": [
+    {
+      "name": "Lanner EAI-I132",
+      "vendor": "Lanner",
+      "chipset": "NVIDIA Jetson Orin NX / Nano",
+      "productType": "Production Ready"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "category": "ASUS IOT",
+  "devices": [
+    {
+      "name": "ASUS IoT Rugged Edge (PE1100N, PE100N)",
+      "vendor": "ASUS IoT",
+      "chipset": "Orin NX, Orin Nano",
+      "productType": "Production Ready"
+    }
+  ]
+}

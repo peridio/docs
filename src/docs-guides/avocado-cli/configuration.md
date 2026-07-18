@@ -29,6 +29,7 @@ Environment variables take precedence over configuration file values. When set, 
 | Environment variable     | Config equivalent        | Description                                                                                  |
 | ------------------------ | ------------------------ | -------------------------------------------------------------------------------------------- |
 | `AVOCADO_TARGET`         | `default_target`         | Target architecture for builds and deployments.                                              |
+| `AVOCADO_TARGET_BOARD`   | `default_target_board`   | Board variant within the target, feeding `{{ avocado.target.board }}` interpolation.         |
 | `AVOCADO_RUNTIME`        | `default_runtime`        | Default runtime for commands that scope by runtime. Overrides `default_runtime` from config. |
 | `AVOCADO_REPO_URL`       | `distro.repo.url`        | Package repository URL.                                                                      |
 | `AVOCADO_RELEASEVER`     | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).                                                 |
@@ -64,6 +65,49 @@ runtimes:
 ```
 
 When `default_runtime` is set, the CLI validates at startup that it references a runtime defined in `runtimes:`.
+
+## Default target and board
+
+Set `default_target` to avoid passing `--target` (`-t`) on every invocation. `avocado init --target <target>` writes it for you:
+
+```yaml
+default_target: qemux86-64
+```
+
+Some targets are a System-on-Module (SoM) that ships on more than one carrier board. For those, the target alone is not enough — you must also set a board so the build knows which board's device tree and provisioning to use. The board feeds the `{{ avocado.target.board }}` interpolation and resolves from highest to lowest precedence:
+
+1. `--target-board` CLI flag
+2. `AVOCADO_TARGET_BOARD` environment variable
+3. The resolved runtime's `target_board` (when set on that runtime)
+4. Top-level `default_target_board`
+5. Falls back to the resolved target when none of the above are set
+
+The `--target-board` flag is available on the same subcommands as `--target` (`build`, `provision`, `runtime provision`, `install`, and the `rootfs` / `initramfs` / `sdk` / `ext` build steps).
+
+Set both keys at the top of your `avocado.yaml`:
+
+```yaml
+default_target: 'imx8mp-var-dart'
+default_target_board: 'variscite-sonata'
+```
+
+Or scope the board to a single runtime, which wins over the top-level default when that runtime is selected:
+
+```yaml
+default_target: 'imx8mp-var-dart'
+
+runtimes:
+  dev:
+    target_board: 'variscite-sonata'
+```
+
+To override per command without editing config:
+
+```bash
+avocado build --target imx8mp-var-dart --target-board variscite-sonata
+```
+
+The per-target [Getting Started](/developer-reference/getting-started/any-target) page and the target's [hardware page](/hardware/support-matrix) call out when a board is required and which value to use.
 
 ## Connect configuration
 

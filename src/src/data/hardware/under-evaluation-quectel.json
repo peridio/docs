@@ -1,0 +1,11 @@
+{
+  "category": "QUECTEL",
+  "devices": [
+    {
+      "name": "PI-SG565D Smart MOB Development Board",
+      "vendor": "Quectel",
+      "chipset": "QCS6490",
+      "productType": "Development Kit"
+    }
+  ]
+}

@@ -11,6 +11,12 @@
       "description": "The default target platform for the project. This target is used when building the project if no target is specified.",
       "examples": ["jetson-orin-nano-devkit"]
     },
+    "default_target_board": {
+      "title": "Default target board",
+      "type": "string",
+      "description": "Default board variant within the target, for System-on-Modules that ship on more than one carrier board. Feeds the '{{ avocado.target.board }}' interpolation. Precedence, highest to lowest: the --target-board CLI flag, the AVOCADO_TARGET_BOARD environment variable, the resolved runtime's target_board, then this value.",
+      "examples": ["variscite-sonata"]
+    },
     "supported_targets": {
       "title": "Supported targets",
       "oneOf": [
@@ -345,6 +351,10 @@
         "target": {
           "type": "string",
           "description": "Target platform for this runtime (overrides default_target)."
+        },
+        "target_board": {
+          "type": "string",
+          "description": "Board variant within this runtime's target, feeding '{{ avocado.target.board }}'. Overrides the top-level default_target_board when this runtime is the resolved one."
         },
         "extensions": {
           "title": "Extensions",

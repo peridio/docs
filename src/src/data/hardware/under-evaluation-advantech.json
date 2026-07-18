@@ -18,12 +18,6 @@
       "vendor": "Advantech",
       "chipset": "QCS6490",
       "productType": "Production Ready"
-    },
-    {
-      "name": "Advantech MIC-733-AO",
-      "vendor": "Advantech",
-      "chipset": "NVIDIA Orin",
-      "productType": "Production Ready"
     }
   ]
 }

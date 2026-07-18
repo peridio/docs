@@ -8,14 +8,6 @@ import styles from '../DataTable/styles.module.css'
 import supportedData from '../../data/hardware/supported.json'
 import virtualEnvironmentData from '../../data/hardware/virtual-environment.json'
 
-function getCombinedOtaStatus(features) {
-  const extensionOta = features.extensionOta || 'none'
-  const osOta = features.osOta || 'none'
-  if (extensionOta === 'full' || osOta === 'full') return 'full'
-  if (extensionOta === 'partial' || osOta === 'partial') return 'partial'
-  return 'none'
-}
-
 function DeviceLink({ device }) {
   if (!device.url) {
     return <strong>{device.name}</strong>
@@ -40,41 +32,33 @@ const columns = [
   {
     key: 'name',
     header: 'Hardware',
-    width: '28%',
+    width: '34%',
     align: 'left',
     render: (device) => <DeviceLink device={device} />,
   },
   {
     key: 'target',
     header: 'Target',
-    width: '30%',
+    width: '19%',
     align: 'left',
     render: (device) => (device.target ? <code>{device.target}</code> : '—'),
   },
   {
-    key: 'provisioning',
-    header: 'Provisioning',
-    render: (d) => <StatusIndicator status={d.features.provisioning} />,
+    key: 'board',
+    header: 'Board',
+    width: '19%',
+    align: 'left',
+    render: (device) => (device.board ? <code>{device.board}</code> : '—'),
   },
   {
-    key: 'hitl',
-    header: 'HITL',
-    render: (d) => <StatusIndicator status={d.features.hitl} />,
+    key: 'lts2024',
+    header: '2024 (scarthgap)',
+    render: (d) => <StatusIndicator status={(d.lts && d.lts['2024']) || 'none'} showLabel={false} />,
   },
   {
-    key: 'sideLoading',
-    header: 'Sideload',
-    render: (d) => <StatusIndicator status={d.features.sideLoading} />,
-  },
-  {
-    key: 'ota',
-    header: 'OTA',
-    render: (d) => <StatusIndicator status={getCombinedOtaStatus(d.features)} />,
-  },
-  {
-    key: 'remoteAccessTunnels',
-    header: 'Tunnels',
-    render: (d) => <StatusIndicator status={d.features.remoteAccessTunnels} />,
+    key: 'lts2026',
+    header: '2026 (wrynose)',
+    render: (d) => <StatusIndicator status={(d.lts && d.lts['2026']) || 'none'} showLabel={false} />,
   },
 ]
 

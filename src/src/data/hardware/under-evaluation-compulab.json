@@ -1,0 +1,11 @@
+{
+  "category": "COMPULAB",
+  "devices": [
+    {
+      "name": "CompuLab EdgeAI-ORN",
+      "vendor": "CompuLab",
+      "chipset": "Orin Nano, Orin NX",
+      "productType": "Production Ready"
+    }
+  ]
+}

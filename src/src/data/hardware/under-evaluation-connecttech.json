@@ -1,0 +1,17 @@
+{
+  "category": "CONNECT TECH",
+  "devices": [
+    {
+      "name": "Connect Tech Rogue Carrier",
+      "vendor": "Connect Tech",
+      "chipset": "Jetson AGX Orin",
+      "productType": "Production Ready"
+    },
+    {
+      "name": "Connect Tech Rudi Embedded System",
+      "vendor": "Connect Tech",
+      "chipset": "Jetson NX, Jetson AGX",
+      "productType": "Production Ready"
+    }
+  ]
+}

@@ -2,12 +2,6 @@
   "category": "QUALCOMM DRAGONWING ECOSYSTEM",
   "devices": [
     {
-      "name": "PI-SG565D Smart MOB Development Board",
-      "vendor": "Quectel",
-      "chipset": "QCS6490",
-      "productType": "Development Kit"
-    },
-    {
       "name": "IQ-9075",
       "vendor": "Qualcomm",
       "chipset": "IQ-9075",

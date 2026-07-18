@@ -1,0 +1,11 @@
+{
+  "category": "TECHNEXION",
+  "devices": [
+    {
+      "name": "AXON-IMX8M-PLUS",
+      "vendor": "TechNexion",
+      "chipset": "i.MX 8M Plus",
+      "productType": "Production Ready"
+    }
+  ]
+}

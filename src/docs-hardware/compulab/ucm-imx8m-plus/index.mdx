@@ -1,0 +1,143 @@
+---
+title: 'Production-Ready CompuLab UCM-i.MX8M-Plus Deployment'
+sidebar_position: 0
+description: 'Deploy the CompuLab UCM-i.MX8M-Plus Computer-on-Module for compact edge vision and AI. NXP i.MX 8M Plus with quad Cortex-A53, Cortex-M7, 2.3 TOPS NPU, dual camera, -40°C to 85°C, in a 28 × 38 mm footprint. Production-ready with Avocado OS + Avocado Connect.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+{/* TODO: no vendor image yet — add src/static/img/hardware/compulab/ucm-imx8m-plus.png and set image / imageAlt on HardwareHero once available. */}
+
+<HardwareHero
+  vendor="CompuLab"
+  vendorUrl="https://www.compulab.com/products/computer-on-modules/ucm-imx8m-plus-nxp-i-mx-8m-plus-som-system-on-module-computer/"
+  model="CompuLab UCM-i.MX8M-Plus"
+  tagline="Ultra-compact 28 × 38 mm i.MX 8M Plus Computer-on-Module for wearable, handheld, and space-constrained edge-AI designs."
+  stats={[
+    { value: '2.3 TOPS', label: 'i.MX 8M Plus NPU' },
+    { value: 'Quad A53 + M7', label: 'Multi-Core Processing' },
+    { value: 'Up to 8 GB', label: 'LPDDR4 Memory' },
+    { value: '28 × 38 mm', label: 'Ultra-Compact SoM' },
+    { value: '-40 to 85°C', label: 'Industrial Temperature' },
+    { value: 'PCIe Gen 3.0', label: 'High-Speed Expansion' },
+  ]}
+  target="ucm-imx8m-plus"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+    secondary: {
+      label: 'Visit CompuLab Product Page',
+      to: 'https://www.compulab.com/products/computer-on-modules/ucm-imx8m-plus-nxp-i-mx-8m-plus-som-system-on-module-computer/',
+      external: true,
+    },
+  }}
+/>
+
+## Overview
+
+The CompuLab UCM-i.MX8M-Plus, powered by Avocado OS and Avocado Connect, brings production-grade edge vision and AI to space- and power-constrained designs. Built on the NXP i.MX 8M Plus — quad Arm Cortex-A53 cores up to 1.8 GHz, an 800 MHz Cortex-M7 real-time core, a HiFi4 DSP, and an on-chip NPU up to 2.3 TOPS with dual MIPI-CSI camera inputs — the module fits all of that into a 28 × 38 × 5 mm, 7-gram footprint over dual 100-pin board-to-board connectors. A battery-friendly 3.45–4.4 V supply range and a -40°C to +85°C industrial temperature rating make it well suited to wearable, handheld, and portable instrumentation designs. Combined with Avocado OS — atomic OTA updates, secure boot, verified boot, and fleet-wide CVE tracking — and Avocado Connect's centralized fleet management, the module replaces months of BSP and infrastructure work with a validated, production-ready stack.
+
+## Specifications
+
+| Specification  | Value                                                                          | Notes                                                 |
+| -------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| SoM / SoC      | CompuLab UCM-i.MX8M-Plus on NXP i.MX 8M Plus                                   | Offered in "Quad" and "QuadLite" configurations       |
+| CPU            | Quad Cortex-A53 @ up to 1.8 GHz                                                | Application processors for Linux workloads            |
+| Real-Time Core | Cortex-M7 @ 800 MHz                                                            | Dedicated real-time control processing                |
+| DSP            | Tensilica HiFi4 DSP                                                            | Full (QuadM) configuration                            |
+| AI Accelerator | On-chip NPU, up to 2.3 TOPS                                                    | Full (QuadM) configuration                            |
+| Memory         | 1 – 8 GB LPDDR4                                                                | High-bandwidth memory for vision pipelines            |
+| Storage        | 4 – 64 GB eMMC; microSD via carrier                                            | On-module eMMC plus removable media on the carrier    |
+| Camera         | 2× MIPI-CSI (4 lanes each)                                                     | Dual camera input for vision systems                  |
+| Video          | Decode 1080p60 HEVC/H.264/VP9/VP8; encode 1080p60 HEVC/H.264                   | Full (QuadM) configuration                            |
+| Graphics       | Vivante GC7000UL — OpenGL ES 3.1/3.0, Vulkan, OpenCL 1.2, OpenVG 1.1           | Hardware-accelerated graphics                         |
+| Display        | HDMI 2.0a up to 1080p60, MIPI-DSI 4-lane 1080p60, LVDS 4-lane up to 1366×768   | Capacitive touch via SPI/I2C                          |
+| Networking     | 1× Gigabit Ethernet (up to 2× RGMII)                                           | Wi-Fi 6 / Bluetooth are provided on the carrier board |
+| Industrial I/O | Up to 2× CAN, 4× UART, 5× I2C, 2× SPI, up to 75× GPIO, 4× PWM, I2S/SAI, S/PDIF | Multifunction shared signals                          |
+| USB            | 2× USB 3.0 dual-role                                                           | Peripheral and accessory expansion                    |
+| Expansion      | PCIe x1 Gen 3.0                                                                | High-speed peripheral expansion                       |
+| Power          | 3.45 – 4.4 V (main); 3.3 V digital I/O                                         | Single-cell battery-friendly supply range             |
+| Operating Temp | 0–70°C (commercial), -20–70°C (extended), -40–85°C (industrial)                | Storage -40°C to +85°C                                |
+| Dimensions     | 28 × 38 × 5 mm; 7 g                                                            | Dual 100-pin, 0.4 mm-pitch board-to-board connectors  |
+| Reliability    | MTTF > 200,000 hours                                                           | Rated shock (50G) and vibration (20G) tolerance       |
+
+:::note Configuration and carrier notes
+
+- The NPU, video (VPU), and HiFi4 DSP are present in the full **QuadM** (`C1800QM`) configuration; cost-reduced **QuadLite** variants omit some of these blocks.
+- Wi-Fi and Bluetooth are **not on the module** — they are provided by the carrier board (CompuLab's evaluation kit uses an Intel AX210, 802.11ax + BT 5.3).
+- Ethernet TSN, dual on-chip ISP, and long-term availability commitments are supported by the i.MX 8M Plus SoC family but are not explicitly stated in the module datasheet; confirm with CompuLab for your configuration.
+
+:::
+
+## Use Cases
+
+### Wearable & Portable Healthcare
+
+Wearable monitors, medical devices, and portable diagnostics where size, weight, and power dominate the design. The 28 × 38 mm footprint and battery-friendly supply range fit a device you can wear or carry, without giving up on-device AI.
+
+### Handheld Instrumentation
+
+Handheld test, measurement, and inspection equipment that runs vision or ML models locally. The 2.3 TOPS NPU and dual MIPI-CSI inputs support on-device inference in the field, with fleet-wide model updates delivered over the air.
+
+### Compact Industrial & Edge HMI
+
+Space-constrained industrial endpoints and machine-vision nodes leveraging HDMI/MIPI-DSI/LVDS display output plus Gigabit Ethernet and PCIe expansion, in a ruggedized -40°C to +85°C package.
+
+## Challenges and Solutions
+
+| Challenge                                           | Solution                                                 |
+| --------------------------------------------------- | -------------------------------------------------------- |
+| Months of custom BSP integration                    | Pre-integrated Avocado OS BSP for the i.MX 8M Plus       |
+| Building OTA and fleet infrastructure from scratch  | Avocado Connect: OTA, observability, fleet management    |
+| Deploying and updating vision models in the field   | Fleet-wide model updates over the air                    |
+| Coordinating Linux + real-time workloads (A53 + M7) | Pre-integrated multi-core support                        |
+| Fitting AI into a wearable/handheld footprint       | 28 × 38 mm module with a 2.3 TOPS NPU on-board           |
+| Securing devices across distributed deployments     | Secure boot, verified boot, FDE, fleet-wide CVE tracking |
+
+## Key Features
+
+### Industrial-Grade OS
+
+Avocado OS provides a production-hardened, Yocto-based embedded Linux runtime with deterministic builds, secure boot, verified boot, and full-disk encryption out of the box.
+
+### NPU-Accelerated Vision
+
+Up to 2.3 TOPS of on-device AI acceleration on the NXP i.MX 8M Plus, with dual MIPI-CSI cameras and native support for TensorFlow Lite and ONNX — edge inference in a wearable-sized module.
+
+### Real-Time Processing
+
+A dedicated 800 MHz Cortex-M7 real-time core handles latency-sensitive tasks — sensor polling, deterministic I/O — while the quad Cortex-A53 cores up to 1.8 GHz run the Linux application stack.
+
+### Fleet Management
+
+Avocado Connect delivers atomic OTA updates with delta compression, A/B rollback, staged rollouts, fleet dashboard, health monitoring, remote debugging, and secure tunnel access.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `ucm-imx8m-plus`.
+
+### Provision
+
+Build the project and execute the provisioning procedure — this builds the system image and writes it to the SD card. On a Linux host, disable auto-mounting first if applicable — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+
+```bash
+avocado build
+avocado provision -r dev --profile sd
+```
+
+:::note
+
+Provisioning specifics (boot-mode switch positions and whether eMMC-over-USB is used) depend on the CompuLab carrier board. Confirm the boot-mode selection for your carrier in CompuLab's documentation before provisioning.
+
+:::
+
+### Run
+
+Insert the SD card into the carrier, set the boot mode to the SD/external media per your carrier, and power it on. The `root` user is passwordless in the `dev` runtime used by this guide; a serial console is available over the carrier's debug UART, or you can SSH into the device once it is on the network.
+
+For board-level setup — power, console, and boot-mode selection — see the [CompuLab UCM-i.MX8M-Plus product page](https://www.compulab.com/products/computer-on-modules/ucm-imx8m-plus-nxp-i-mx-8m-plus-som-system-on-module-computer/) and CompuLab's evaluation-kit documentation.

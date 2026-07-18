@@ -1,0 +1,163 @@
+---
+title: 'Production-Ready Variscite DART-MX8M-PLUS Deployment'
+sidebar_position: 0
+description: 'Deploy the Variscite DART-MX8M-PLUS SoM for edge vision and industrial AI. NXP i.MX 8M Plus with quad Cortex-A53, Cortex-M7 real-time core, 2.3 TOPS NPU, dual GbE, dual camera, -40°C to 85°C. Production-ready with Avocado OS + Avocado Connect.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+{/* TODO: add the hero image at src/static/img/hardware/variscite/dart-mx8m-plus.png, then set image / imageAlt on HardwareHero below. */}
+
+<HardwareHero
+  vendor="Variscite"
+  vendorUrl="https://variscite.com/system-on-module-som/i-mx-8/i-mx-8m-plus/dart-mx8m-plus/"
+  model="Variscite DART-MX8M-PLUS"
+  tagline="Compact industrial i.MX 8M Plus SoM for edge vision and AI, with a real-time Cortex-M7 core, 2.3 TOPS NPU, and 15-year longevity."
+  stats={[
+    { value: '2.3 TOPS', label: 'i.MX 8M Plus NPU' },
+    { value: 'Quad A53 + M7', label: 'Multi-Core Processing' },
+    { value: 'Up to 8 GB', label: 'LPDDR4 Memory' },
+    { value: '2x GbE + Wi-Fi 6', label: 'Industrial Networking' },
+    { value: '-40 to 85°C', label: 'Industrial Temperature' },
+    { value: '1080p60', label: 'Encode / Decode' },
+  ]}
+  target="imx8mp-var-dart"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+    secondary: {
+      label: 'Visit Variscite Product Page',
+      to: 'https://variscite.com/system-on-module-som/i-mx-8/i-mx-8m-plus/dart-mx8m-plus/',
+      external: true,
+    },
+  }}
+/>
+
+## Overview
+
+The Variscite DART-MX8M-PLUS, powered by Avocado OS and Avocado Connect, delivers a production-ready platform for edge vision and industrial AI applications that demand on-device inference, real-time control, and long-lived deployment. Built on the NXP i.MX 8M Plus with quad Arm Cortex-A53 cores up to 1.8 GHz, an 800 MHz Cortex-M7 real-time co-processor, a HiFi4 DSP, and a 2.3 TOPS Neural Processing Unit paired with an integrated Image Signal Processor and dual MIPI-CSI camera inputs, this compact 55 × 30 mm SoM enables computer vision, multi-sensor fusion, HMI, and industrial control workloads at the edge — without cloud dependency. Dual Gigabit Ethernet (one with TSN), Wi-Fi 6, Bluetooth 5.4, PCIe Gen 3.0, dual USB 3.0, dual CAN-FD, and HDMI/LVDS/MIPI-DSI display support make it a true industrial building block, while a -40°C to +85°C industrial temperature range and Variscite's DART Pin2Pin scalability handle demanding designs. Combined with Avocado OS — atomic OTA updates, secure boot, verified boot, and fleet-wide CVE tracking — and Avocado Connect's centralized fleet management, the platform replaces months of BSP and infrastructure work with a complete, validated stack ready for production, backed by guaranteed hardware availability through 2036.
+
+## Specifications
+
+| Specification  | Value                                                          | Notes                                           |
+| -------------- | -------------------------------------------------------------- | ----------------------------------------------- |
+| SoM            | NXP i.MX 8M Plus                                               | Vision-AI optimized industrial SoC              |
+| CPU            | Quad Cortex-A53 @ up to 1.8 GHz                                | Application processors for Linux workloads      |
+| Real-Time Core | Cortex-M7 @ 800 MHz                                            | Dedicated real-time control processing          |
+| DSP            | HiFi4 DSP                                                      | Audio and voice processing                      |
+| AI Accelerator | Integrated NPU, 2.3 TOPS                                       | On-device vision AI without cloud dependency    |
+| ISP            | Integrated Image Signal Processor                              | Intelligent vision pipeline                     |
+| Memory         | 1 – 8 GB LPDDR4                                                | High-bandwidth memory for vision pipelines      |
+| Storage        | 8 – 128 GB eMMC + microSD                                      | On-board storage with removable media support   |
+| Camera         | 2× MIPI-CSI2                                                   | Dual camera input for vision systems            |
+| Video          | 1080p60 H.265/H.264 encode; 1080p60 H.265/H.264/VP9/VP8 decode | Hardware-accelerated video pipeline             |
+| Graphics       | 2D/3D GPU (GC7000UL / GC520L)                                  | Hardware-accelerated graphics                   |
+| Display        | HDMI 2.0a up to 4Kp30, MIPI-DSI 1080p, dual LVDS 1080p         | Industrial HMI display support                  |
+| Networking     | 2× Gigabit Ethernet (1× with TSN), Wi-Fi 6, Bluetooth 5.4      | Dual wired + dual-band wireless connectivity    |
+| Industrial I/O | 2× CAN-FD, 4× UART, 5× I2C, 3× SPI                             | Drop-in factory floor integration               |
+| USB            | 2× USB 3.0/2.0 OTG                                             | Peripheral and accessory expansion              |
+| Expansion      | PCIe Gen 3.0, QSPI, SD/MMC                                     | High-speed peripheral expansion                 |
+| Power          | 3.4 V – 5 V supply                                             | Module supply input                             |
+| Operating Temp | -40°C to +85°C (industrial); 0–70°C / -25–85°C options         | Industrial and harsh environments               |
+| Dimensions     | 55 × 30 mm                                                     | Compact DART-form-factor SoM                    |
+| Longevity      | Guaranteed availability through 2036                           | 15-year longevity, Arm SystemReady IR certified |
+
+## Use Cases
+
+### Smart Camera & Computer Vision
+
+On-device inference for defect detection, classification, and quality control. The integrated 2.3 TOPS NPU and ISP run production vision models natively via TensorFlow Lite and ONNX across dual camera inputs, with fleet-wide model updates delivered over the air across thousands of deployed devices.
+
+### Industrial Automation & HMI
+
+Machine vision, process control, and operator interfaces on the factory floor. Dual CAN-FD, TSN-capable Ethernet, and rich serial I/O provide drop-in integration into existing industrial environments, while HDMI, LVDS, and MIPI-DSI display support enable responsive HMI workflows alongside real-time control on the Cortex-M7.
+
+### Connected & Long-Life Products
+
+Medical devices, smart infrastructure, and IoT gateways that must ship and stay supported for a decade or more. The DART Pin2Pin form factor enables scaling across the i.MX family without carrier redesign, and guaranteed availability through 2036 underpins long product lifecycles.
+
+## Challenges and Solutions
+
+| Challenge                                           | Solution                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------- |
+| Months of custom BSP integration                    | Pre-integrated Avocado OS BSP for the i.MX 8M Plus SoM        |
+| Building OTA and fleet infrastructure from scratch  | Avocado Connect: OTA, observability, fleet management         |
+| Deploying and updating vision models in the field   | Fleet-wide model updates over the air                         |
+| Coordinating Linux + real-time workloads (A53 + M7) | Pre-integrated multi-core support                             |
+| Industrial-grade reliability requirements           | -40°C to +85°C operation with industrial I/O                  |
+| Securing devices across distributed deployments     | Secure boot, verified boot, FDE, fleet-wide CVE tracking      |
+| Long-lived production fleets                        | LTS aligned with CIP plus Variscite availability through 2036 |
+
+## Key Features
+
+### Industrial-Grade OS
+
+Avocado OS provides a production-hardened, Yocto-based embedded Linux runtime with deterministic builds, secure boot, verified boot, and full-disk encryption out of the box.
+
+### NPU-Accelerated Vision
+
+2.3 TOPS of on-device AI acceleration on the NXP i.MX 8M Plus, paired with an integrated ISP and dual MIPI-CSI cameras, with native support for TensorFlow Lite and ONNX — designed for vision-heavy edge workloads without cloud dependency.
+
+### Real-Time Processing
+
+A dedicated 800 MHz Cortex-M7 real-time core handles latency-sensitive tasks — motor control, sensor polling, and deterministic I/O — while the quad Cortex-A53 cores up to 1.8 GHz run the Linux application stack.
+
+### Industrial Connectivity
+
+Dual Gigabit Ethernet with TSN, Wi-Fi 6, Bluetooth 5.4, PCIe Gen 3.0, dual USB 3.0, dual CAN-FD, and HDMI/LVDS/MIPI-DSI HMI display — drop-in connectivity for factories, edge gateways, and connected products.
+
+### Fleet Management
+
+Avocado Connect delivers atomic OTA updates with delta compression, A/B rollback, staged rollouts, fleet dashboard, health monitoring, remote debugging, and secure tunnel access.
+
+### Long-Term Support
+
+LTS commitments aligned with the Civil Infrastructure Platform (CIP), combined with Variscite's guaranteed hardware availability through 2036, ensure your fleet stays patched, supported, and shippable for the long haul.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `imx8mp-var-dart`.
+
+This target requires **both a target and a board**. After `avocado init`, make sure both keys are set at the top of your `avocado.yaml`:
+
+```yaml
+default_target: 'imx8mp-var-dart'
+default_target_board: 'variscite-sonata'
+```
+
+### Provision
+
+The DART-MX8M-PLUS can be provisioned to an SD card or to its onboard eMMC over USB. The carrier's **SW7** switch selects between external media (SD / serial download) and internal storage (eMMC). Disable Linux host auto-mounting first if applicable — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+
+#### Option A — SD card
+
+Set **SW7 to external**, insert the SD card, then build and provision with the `sd` profile:
+
+```bash
+avocado build
+avocado provision -r dev --profile sd
+```
+
+With SW7 still set to external and the SD card inserted, power on the board — it boots Avocado OS from the SD card.
+
+#### Option B — eMMC over USB (UUU)
+
+Flash the onboard eMMC directly over USB. Connect the **USB-C cable** and the **micro USB debug port** to your host, set **SW7 to external**, and power on the board **with no SD card in the slot** — it comes up in serial download (UUU) mode. Then build and provision with the `uuu-emmc` profile:
+
+```bash
+avocado build
+avocado provision -r dev --profile uuu-emmc
+```
+
+After programming completes, set **SW7 to internal** and power-cycle the board — it boots Avocado OS from the onboard eMMC.
+
+### Run
+
+The `root` user is passwordless in the `dev` runtime used by this guide. A debug UART console is available over the carrier's onboard micro USB port (no separate TTL adapter required); you can also SSH into the device once it is on the network.
+
+For board-level setup details — power, console, boot mode selection, and peripheral wiring — see Variscite's [DART-MX8M-PLUS Quick Start Guide](https://variscite.com/wp-content/uploads/2020/10/DART-MX8M-PLUS-quick-start-guide.pdf) and the [Variscite Developer Center](https://dev.variscite.com/dart-mx8m-plus/).

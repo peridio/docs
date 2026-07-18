@@ -406,6 +406,17 @@ export default function TargetSelector() {
           <pre>
             <code>{`avocado init --target ${t.target} ${t.target}\ncd ${t.target}`}</code>
           </pre>
+          {t.board && (
+            <>
+              <p>
+                This target also requires a <strong>board</strong>. Set both keys at the top of your{' '}
+                <code>avocado.yaml</code> so the build knows which target and board to use:
+              </p>
+              <pre>
+                <code>{`default_target: "${t.target}"\ndefault_target_board: "${t.board}"`}</code>
+              </pre>
+            </>
+          )}
 
           <Heading as="h2">Install</Heading>
           <p>Install the SDK toolchain, extension dependencies, and runtime packages.</p>

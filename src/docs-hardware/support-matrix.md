@@ -12,17 +12,14 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 
 <SupportMatrix />
 
-## Feature descriptions
+- **Supported** = in the published feed. **In Progress** = being brought up, not yet published.
+- **2024 (scarthgap)** and **2026 (wrynose)** are the Yocto LTS bases each feed is built on.
+- **Target** is the SoC/platform; **Board** is a specific carrier or variant on that target. One target can back several boards. Select them per command with the CLI's `target` and `target_board` arguments, or set defaults in your `avocado.yaml`:
 
-**[Provisioning](/developer-reference/getting-started/qemu)** - Secure device onboarding and authentication setup for connecting devices to Peridio.
-
-**[Hardware in the Loop (HITL)](/developer-reference/hardware-in-the-loop)** - Real-time device testing and development support for continuous integration workflows.
-
-**[Sideloading](/developer-reference/sideloading)** - Direct firmware deployment for development and debugging without network connectivity.
-
-**OTA** - Complete operating system updates with rollback protection and atomic operations.
-
-**Remote Access Tunnels** - Secure SSH tunneling for remote device management and troubleshooting.
+  ```yaml title="avocado.yaml"
+  default_target: "imx8mp-var-dart"
+  default_target_board: "variscite-sonata"
+  ```
 
 ## Additional Hardware Under Evaluation
 

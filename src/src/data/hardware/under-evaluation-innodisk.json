@@ -1,0 +1,11 @@
+{
+  "category": "INNODISK",
+  "devices": [
+    {
+      "name": "Innodisk EXEC-Q911",
+      "vendor": "Innodisk",
+      "chipset": "Qualcomm Dragonwing IQ-9075",
+      "productType": "Development Kit"
+    }
+  ]
+}
