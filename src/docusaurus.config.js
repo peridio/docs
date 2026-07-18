@@ -225,10 +225,7 @@ const config = {
           {
             title: 'Legal',
             items: [
-              {
-                label: 'Terms & Conditions',
-                href: 'https://console.peridio.com/policy/tos',
-              },
+              { label: 'Terms of Use', to: '/terms' },
               { label: 'Privacy Statement', to: '/privacy' },
               { label: 'Disclaimer', to: '/disclaimer' },
               { label: 'Code of Conduct', to: '/coc' },

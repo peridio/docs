@@ -1,6 +1,6 @@
 ---
 title: Disclaimer
-sidebar_position: 3
+sidebar_position: 4
 description: Disclaimer for the Avocado OS documentation
 slug: disclaimer
 ---
@@ -52,5 +52,5 @@ about, and accept no responsibility for, third-party products or content.
 You are responsible for how you use this documentation and for the outcomes of
 any procedure you choose to perform. Your use of this documentation is also
 governed by our
-[Terms &amp; Conditions](https://console.peridio.com/policy/tos) and
+[Terms of Use](/terms) and
 [Privacy Statement](/privacy).

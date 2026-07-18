@@ -1,13 +1,16 @@
 ---
 title: Privacy Statement
-sidebar_position: 2
-description: Privacy Statement for Avocado Linux
+sidebar_position: 3
+description: Privacy Statement for the Avocado OS documentation site
 slug: privacy
 ---
 
 ## Our Commitment to Privacy
 
-Avocado Linux is committed to protecting your privacy. This Privacy Statement explains our data practices regarding the information we collect.
+Peridio, Inc. ("Peridio", "we", "us") operates the Avocado OS documentation site
+and is committed to protecting your privacy. Avocado OS and the Avocado Linux
+project are owned and operated by Peridio. This Privacy Statement explains our
+data practices regarding the information we collect.
 
 ## Information we collect
 
@@ -39,7 +42,8 @@ manage or block cookies through your browser settings.
 ## Third-Party Services
 
 Our documentation is hosted on GitHub, which may maintain standard server logs
-for security and maintenance purposes.
+for security and maintenance purposes. These logs are not accessed or used by
+Peridio.
 
 ## Changes to this privacy statement
 
