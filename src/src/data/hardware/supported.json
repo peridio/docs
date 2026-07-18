@@ -25,7 +25,7 @@
     },
     {
       "name": "Advantech MIC-733-AO5A1",
-      "target": "jetson-agx-orin",
+      "target": "jetson-agx-orin-devkit",
       "board": "mic-733-ao5a1",
       "url": "/hardware/advantech/mic-733-ao",
       "external": false,
@@ -36,7 +36,7 @@
     },
     {
       "name": "Advantech MIC-733-AO6A1",
-      "target": "jetson-agx-orin",
+      "target": "jetson-agx-orin-devkit",
       "board": "mic-733-ao6a1",
       "url": "/hardware/advantech/mic-733-ao",
       "external": false,

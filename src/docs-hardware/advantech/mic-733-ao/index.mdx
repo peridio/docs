@@ -22,7 +22,7 @@ import HardwareHero from '@site/src/components/HardwareHero'
     { value: '4x GbE', label: 'Optional PoE' },
     { value: 'Fanless', label: 'Rugged Chassis' },
   ]}
-  target="jetson-agx-orin"
+  target="jetson-agx-orin-devkit"
   ctas={{
     primary: {
       label: 'Get Started',
@@ -70,17 +70,17 @@ The Advantech MIC-733-AO is a high-performance AI inference system built on the 
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. The MIC-733-AO uses the `jetson-agx-orin` target, with a board selected per SKU:
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. The MIC-733-AO uses the `jetson-agx-orin-devkit` target, with a board selected per SKU:
 
-| SKU           | `AVOCADO_TARGET`  | `AVOCADO_TARGET_BOARD` |
-| ------------- | ----------------- | ---------------------- |
-| MIC-733-AO5A1 | `jetson-agx-orin` | `mic-733-ao5a1`        |
-| MIC-733-AO6A1 | `jetson-agx-orin` | `mic-733-ao6a1`        |
+| SKU           | `AVOCADO_TARGET`         | `AVOCADO_TARGET_BOARD` |
+| ------------- | ------------------------ | ---------------------- |
+| MIC-733-AO5A1 | `jetson-agx-orin-devkit` | `mic-733-ao5a1`        |
+| MIC-733-AO6A1 | `jetson-agx-orin-devkit` | `mic-733-ao6a1`        |
 
 Set these in your `avocado.yaml`, for example:
 
 ```yaml title="avocado.yaml"
-default_target: 'jetson-agx-orin'
+default_target: 'jetson-agx-orin-devkit'
 default_target_board: 'mic-733-ao5a1'
 ```
 
