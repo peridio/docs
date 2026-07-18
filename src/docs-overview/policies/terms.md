@@ -77,11 +77,6 @@ collected and how it is used.
 We may update these Terms from time to time. Changes take effect when posted on
 this page, and your continued use of the Site means you accept the updated Terms.
 
-## Governing law
-
-These Terms are governed by the laws of the State of [STATE], United States,
-without regard to its conflict-of-laws principles.
-
 ## Contact us
 
 If you have questions about these Terms, contact us at
