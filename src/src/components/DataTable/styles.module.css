@@ -168,9 +168,10 @@
 }
 
 .statusDot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
+  box-sizing: border-box;
   flex-shrink: 0;
 }
 
@@ -189,9 +190,10 @@
   color: var(--color-status-success);
 }
 
-/* In Progress */
+/* In Progress — hollow ring so it's distinguishable from Supported without relying on color */
 .statusInProgress .statusDot {
-  background: var(--color-accent-primary);
+  background: transparent;
+  border: 2px solid var(--color-accent-primary);
 }
 .statusInProgress .statusLabel {
   color: var(--color-accent-primary);
@@ -264,9 +266,10 @@
 }
 
 .legendDot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
+  box-sizing: border-box;
   flex-shrink: 0;
 }
 
@@ -277,7 +280,8 @@
 
 .legendDotInProgress {
   composes: legendDot;
-  background: var(--color-accent-primary);
+  background: transparent;
+  border: 2px solid var(--color-accent-primary);
 }
 
 .legendDotEvaluation {
