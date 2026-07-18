@@ -14,7 +14,7 @@
     "default_target_board": {
       "title": "Default target board",
       "type": "string",
-      "description": "Default board variant within the target, for System-on-Modules that ship on more than one carrier board. Feeds the '{{ avocado.target.board }}' interpolation. Precedence, highest to lowest: the --target-board CLI flag, the AVOCADO_TARGET_BOARD environment variable, the resolved runtime's target_board, then this value.",
+      "description": "Default board variant within the target, for System-on-Modules that ship on more than one carrier board. Feeds the '{{ avocado.target.board }}' interpolation. Precedence, highest to lowest: the --target-board CLI flag, the AVOCADO_TARGET_BOARD environment variable, the resolved runtime's target_board, then this value; when none is set, the board falls back to the resolved target.",
       "examples": ["variscite-sonata"]
     },
     "supported_targets": {
