@@ -53,12 +53,16 @@ const columns = [
   {
     key: 'lts2024',
     header: '2024 (scarthgap)',
-    render: (d) => <StatusIndicator status={(d.lts && d.lts['2024']) || 'none'} showLabel={false} />,
+    render: (d) => (
+      <StatusIndicator status={(d.lts && d.lts['2024']) || 'none'} showLabel={false} />
+    ),
   },
   {
     key: 'lts2026',
     header: '2026 (wrynose)',
-    render: (d) => <StatusIndicator status={(d.lts && d.lts['2026']) || 'none'} showLabel={false} />,
+    render: (d) => (
+      <StatusIndicator status={(d.lts && d.lts['2026']) || 'none'} showLabel={false} />
+    ),
   },
 ]
 

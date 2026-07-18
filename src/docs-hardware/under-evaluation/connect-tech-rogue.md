@@ -18,21 +18,21 @@ The Connect Tech Rogue Carrier (AGX202) is a compact 92 x 107 mm carrier board f
 
 ## Specifications
 
-| Specification    | Value                                                     | Notes                              |
-| ---------------- | --------------------------------------------------------- | ---------------------------------- |
-| Supported Module | NVIDIA Jetson AGX Orin / AGX Orin Industrial              | Industrial on Rev D or later       |
-| AI Performance   | Up to 275 TOPS                                             | With Jetson AGX Orin               |
-| Ethernet         | 2x 10GBASE-T (10GbE)                                       |                                    |
-| USB              | 2x USB 3.2 Type-C, 1x USB 3.2 Type-C (OTG)                |                                    |
-| Storage / Expansion | 2x NVMe M.2 Key M, 1x M.2 Key E (Wi-Fi/BT)             |                                    |
-| Display          | 1x HDMI 2.0 Type-A                                         | 4K UHD @ 60Hz                      |
-| Camera           | 6x 2-lane or 4x 4-lane MIPI CSI-2                          | Optional GMSL / FPD-Link III / HDMI SerDes |
-| CAN              | 2x CAN FD                                                  | Non-isolated                       |
-| Serial           | 2x UART (3.3V), Micro-USB debug UART                      |                                    |
-| GPIO             | 4-bit 3.3V level-shifted                                   |                                    |
-| Power Input      | +12V DC via locking Molex Mini-Fit Jr.                    |                                    |
-| Operating Temp   | -40°C to +85°C                                             |                                    |
-| Dimensions       | 92 x 107 mm                                                | Compact carrier board              |
+| Specification       | Value                                        | Notes                                      |
+| ------------------- | -------------------------------------------- | ------------------------------------------ |
+| Supported Module    | NVIDIA Jetson AGX Orin / AGX Orin Industrial | Industrial on Rev D or later               |
+| AI Performance      | Up to 275 TOPS                               | With Jetson AGX Orin                       |
+| Ethernet            | 2x 10GBASE-T (10GbE)                         |                                            |
+| USB                 | 2x USB 3.2 Type-C, 1x USB 3.2 Type-C (OTG)   |                                            |
+| Storage / Expansion | 2x NVMe M.2 Key M, 1x M.2 Key E (Wi-Fi/BT)   |                                            |
+| Display             | 1x HDMI 2.0 Type-A                           | 4K UHD @ 60Hz                              |
+| Camera              | 6x 2-lane or 4x 4-lane MIPI CSI-2            | Optional GMSL / FPD-Link III / HDMI SerDes |
+| CAN                 | 2x CAN FD                                    | Non-isolated                               |
+| Serial              | 2x UART (3.3V), Micro-USB debug UART         |                                            |
+| GPIO                | 4-bit 3.3V level-shifted                     |                                            |
+| Power Input         | +12V DC via locking Molex Mini-Fit Jr.       |                                            |
+| Operating Temp      | -40°C to +85°C                               |                                            |
+| Dimensions          | 92 x 107 mm                                  | Compact carrier board                      |
 
 ## Use Cases
 

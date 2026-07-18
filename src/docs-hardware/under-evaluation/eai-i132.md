@@ -18,23 +18,23 @@ The Lanner EAI-I132 is a fanless, industrial-grade edge AI appliance built on th
 
 ## Specifications
 
-| Specification  | Value                                                       | Notes                                       |
-| -------------- | ----------------------------------------------------------- | ------------------------------------------- |
-| AI Module      | NVIDIA Jetson Orin NX or Orin Nano                          | Module-dependent performance                |
-| AI Performance | Up to 100 TOPS                                              | With Jetson Orin NX                          |
-| GPU            | Up to 1024-core NVIDIA Ampere with 32 Tensor Cores          |                                             |
-| CPU            | 6–8 core Arm Cortex-A78AE                                   | Module-dependent                            |
-| Memory         | LPDDR5 (on-module)                                          | Capacity set by the chosen Jetson module    |
-| Storage        | M.2 (NVMe) + on-module eMMC                                 | Capacity set by the chosen Jetson module    |
-| Networking     | 1x GbE RJ45, 2x GbE RJ45 w/ PoE+ (up to 60W)                |                                             |
-| USB            | 2x USB 3.0                                                  |                                             |
-| Serial         | 2x COM                                                      |                                             |
-| Digital I/O    | 4x DI, 2x DO                                                |                                             |
-| Wireless       | M.2 2230 E-Key (Wi-Fi), M.2 3042/3052 B-Key (5G Sub-6/LTE) | Optional GPS and G-sensor                   |
-| Power Input    | 12V–24V DC                                                  |                                             |
-| Operating Temp | -40°C to 70°C                                               |                                             |
-| Cooling        | Fanless                                                     | Industrial-grade rugged chassis             |
-| Software       | NVIDIA JetPack SDK 6.0                                      | Jetson Linux, CUDA-X, AI development tools   |
+| Specification  | Value                                                      | Notes                                      |
+| -------------- | ---------------------------------------------------------- | ------------------------------------------ |
+| AI Module      | NVIDIA Jetson Orin NX or Orin Nano                         | Module-dependent performance               |
+| AI Performance | Up to 100 TOPS                                             | With Jetson Orin NX                        |
+| GPU            | Up to 1024-core NVIDIA Ampere with 32 Tensor Cores         |                                            |
+| CPU            | 6–8 core Arm Cortex-A78AE                                  | Module-dependent                           |
+| Memory         | LPDDR5 (on-module)                                         | Capacity set by the chosen Jetson module   |
+| Storage        | M.2 (NVMe) + on-module eMMC                                | Capacity set by the chosen Jetson module   |
+| Networking     | 1x GbE RJ45, 2x GbE RJ45 w/ PoE+ (up to 60W)               |                                            |
+| USB            | 2x USB 3.0                                                 |                                            |
+| Serial         | 2x COM                                                     |                                            |
+| Digital I/O    | 4x DI, 2x DO                                               |                                            |
+| Wireless       | M.2 2230 E-Key (Wi-Fi), M.2 3042/3052 B-Key (5G Sub-6/LTE) | Optional GPS and G-sensor                  |
+| Power Input    | 12V–24V DC                                                 |                                            |
+| Operating Temp | -40°C to 70°C                                              |                                            |
+| Cooling        | Fanless                                                    | Industrial-grade rugged chassis            |
+| Software       | NVIDIA JetPack SDK 6.0                                     | Jetson Linux, CUDA-X, AI development tools |
 
 ## Use Cases
 

@@ -18,20 +18,20 @@ The Synaptics Coral Dev Board is a compact edge AI development platform built by
 
 ## Specifications
 
-| Specification    | Value                                          | Notes                        |
-| ---------------- | ---------------------------------------------- | ---------------------------- |
-| SoC              | Synaptics Astra SL2619                         | On Grinn AstraSOM-261x module |
-| CPU              | 2x Arm Cortex-A55 @ 2GHz + Cortex-M52 @ 200MHz |                              |
-| AI Performance   | 1 TOPS NPU                                     |                              |
-| GPU              | Arm Mali-G31                                   |                              |
-| Memory           | 2GB DDR4                                        | Module supports up to 2GB    |
-| Storage          | microSD; up to 64GB eMMC on module             |                              |
-| Camera           | MIPI CSI                                        |                              |
-| Display          | MIPI DSI                                        |                              |
-| Audio            | I2S digital audio I/O                           |                              |
-| Wireless         | M.2 slot for Wi-Fi / Bluetooth                  |                              |
-| Expansion        | mikroBUS header, Qwiic Connect System           |                              |
-| Software         | Synaptics Torq Edge AI                          | Google Coral NPU, Gemma models |
+| Specification  | Value                                          | Notes                          |
+| -------------- | ---------------------------------------------- | ------------------------------ |
+| SoC            | Synaptics Astra SL2619                         | On Grinn AstraSOM-261x module  |
+| CPU            | 2x Arm Cortex-A55 @ 2GHz + Cortex-M52 @ 200MHz |                                |
+| AI Performance | 1 TOPS NPU                                     |                                |
+| GPU            | Arm Mali-G31                                   |                                |
+| Memory         | 2GB DDR4                                       | Module supports up to 2GB      |
+| Storage        | microSD; up to 64GB eMMC on module             |                                |
+| Camera         | MIPI CSI                                       |                                |
+| Display        | MIPI DSI                                       |                                |
+| Audio          | I2S digital audio I/O                          |                                |
+| Wireless       | M.2 slot for Wi-Fi / Bluetooth                 |                                |
+| Expansion      | mikroBUS header, Qwiic Connect System          |                                |
+| Software       | Synaptics Torq Edge AI                         | Google Coral NPU, Gemma models |
 
 ## Use Cases
 

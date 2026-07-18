@@ -18,23 +18,23 @@ The Innodisk EXEC-Q911 is a ready-to-use edge AI starter kit built on the Qualco
 
 ## Specifications
 
-| Specification    | Value                                                       | Notes                       |
-| ---------------- | ----------------------------------------------------------- | --------------------------- |
-| SoC              | Qualcomm Dragonwing IQ-9075                                 |                             |
-| CPU              | Octa-core Kryo Gen 6 (8x Kryo Gold Prime @ 2.36GHz)         |                             |
-| AI Performance   | 100 TOPS (dense) / 200 TOPS (sparse)                        | Dual Hexagon Tensor Processors |
-| GPU              | Adreno 663                                                  |                             |
-| Memory           | 36GB LPDDR5X                                                |                             |
-| Storage          | 128GB UFS 3.1                                               |                             |
-| Networking       | 2x 2.5GbE (RJ45)                                            |                             |
-| USB              | 3x USB 3.2 Gen 2, 1x USB 3.2 Gen 2 Type-C (OTG), 2x USB 2.0 |                             |
-| Camera           | 2x 4-lane MIPI CSI-2                                        |                             |
-| Display          | 1x DisplayPort 1.2, eDP                                     |                             |
-| Power Input      | 9–36V DC (~30W typical)                                     |                             |
-| Operating Temp   | -40°C to +85°C                                              |                             |
-| Security         | TPM 2.0                                                     |                             |
-| Dimensions       | 146 x 102 x 56.99 mm                                        | COM-HPC Mini form factor    |
-| Software         | Yocto Linux, Ubuntu 24.04                                   |                             |
+| Specification  | Value                                                       | Notes                          |
+| -------------- | ----------------------------------------------------------- | ------------------------------ |
+| SoC            | Qualcomm Dragonwing IQ-9075                                 |                                |
+| CPU            | Octa-core Kryo Gen 6 (8x Kryo Gold Prime @ 2.36GHz)         |                                |
+| AI Performance | 100 TOPS (dense) / 200 TOPS (sparse)                        | Dual Hexagon Tensor Processors |
+| GPU            | Adreno 663                                                  |                                |
+| Memory         | 36GB LPDDR5X                                                |                                |
+| Storage        | 128GB UFS 3.1                                               |                                |
+| Networking     | 2x 2.5GbE (RJ45)                                            |                                |
+| USB            | 3x USB 3.2 Gen 2, 1x USB 3.2 Gen 2 Type-C (OTG), 2x USB 2.0 |                                |
+| Camera         | 2x 4-lane MIPI CSI-2                                        |                                |
+| Display        | 1x DisplayPort 1.2, eDP                                     |                                |
+| Power Input    | 9–36V DC (~30W typical)                                     |                                |
+| Operating Temp | -40°C to +85°C                                              |                                |
+| Security       | TPM 2.0                                                     |                                |
+| Dimensions     | 146 x 102 x 56.99 mm                                        | COM-HPC Mini form factor       |
+| Software       | Yocto Linux, Ubuntu 24.04                                   |                                |
 
 ## Use Cases
 

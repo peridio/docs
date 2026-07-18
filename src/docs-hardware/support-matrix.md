@@ -17,8 +17,8 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 - **Target** is the SoC/platform; **Board** is a specific carrier or variant on that target. One target can back several boards. Select them per command with the CLI's `target` and `target_board` arguments, or set defaults in your `avocado.yaml`:
 
   ```yaml title="avocado.yaml"
-  default_target: "imx8mp-var-dart"
-  default_target_board: "variscite-sonata"
+  default_target: 'imx8mp-var-dart'
+  default_target_board: 'variscite-sonata'
   ```
 
 ## Additional Hardware Under Evaluation
