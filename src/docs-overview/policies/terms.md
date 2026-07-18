@@ -5,14 +5,6 @@ description: Terms of Use for the Avocado OS documentation site
 slug: terms
 ---
 
-<!--
-  REVIEW BEFORE MERGE:
-  - Governing-law jurisdiction is a placeholder ([STATE]) — confirm with counsel.
-  - Code-sample reuse stance (see "Intellectual property") — confirm the intended
-    license for code samples.
-  - Confirm the legal entity ("Peridio, Inc.") and contact address.
--->
-
 ## Acceptance of these terms
 
 These Terms of Use ("Terms") govern your access to and use of the Avocado OS
@@ -35,11 +27,12 @@ and is protected by intellectual-property laws. "Peridio" and "Avocado OS", and
 associated logos, are trademarks of Peridio; nothing here grants you a right to
 use them.
 
-You may view and print pages of the Site for your own reference. Unless a page or
-file states otherwise, **code samples in the documentation may be used in your
-own projects.** You may not otherwise copy, republish, or redistribute the
-Site's content, or remove any copyright or proprietary notices, without our
-permission.
+You may view and print pages of the Site for your own personal, internal
+reference. Any other use — including copying, republishing, redistributing, or
+creating derivative works from the Site's content — requires our prior written
+permission, except where a page, file, or repository license expressly permits
+it, or as permitted by applicable law. Do not remove any copyright or
+proprietary notices.
 
 ## Acceptable use
 
