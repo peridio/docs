@@ -16,7 +16,7 @@
       "name": "Advantech MIC-712-OX",
       "target": "jetson-orin-nx",
       "board": "mic-712-ox-16gb",
-      "url": "/hardware/nvidia/jetson-orin-nx",
+      "url": "/hardware/advantech/mic-712-ox",
       "external": false,
       "lts": {
         "2024": "supported",

@@ -1,0 +1,10 @@
+{
+  "label": "MIC-712-OX",
+  "position": 2,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "index"
+  }
+}

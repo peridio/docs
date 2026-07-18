@@ -1,0 +1,89 @@
+---
+title: 'Ultra-Slim Jetson Orin NX AI Inference for Production'
+sidebar_position: 0
+description: 'Deploy the Advantech MIC-712-OX ultra-slim fanless AI system on NVIDIA Jetson Orin NX with up to 157 TOPS (Super Mode). Production-ready with Avocado OS + Avocado Connect.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+{/* TODO: no vendor image yet — add src/static/img/hardware/advantech/mic-712-ox.png and set image / imageAlt on HardwareHero once available. */}
+
+<HardwareHero
+  vendor="Advantech"
+  vendorUrl="https://www.advantech.com/en-us/products/965e4edb-fb98-429e-89ed-9a0a8435a7be/mic-712-ox/mod_82b36000-4d14-4596-9c87-db0ab48a0a0d"
+  model="MIC-712-OX"
+  tagline="Ultra-slim fanless AI inference on NVIDIA Jetson Orin NX — up to 157 TOPS in Super Mode with GMSL, PoE, and rich I/O for safety and security applications."
+  stats={[
+    { value: 'Up to 157 TOPS', label: 'Super Mode' },
+    { value: 'Jetson Orin NX', label: 'NVIDIA AI Module' },
+    { value: '8 / 16 GB', label: 'LPDDR5 Memory' },
+    { value: '2x GbE', label: 'Networking' },
+    { value: '4x USB 3.2', label: 'Gen 2' },
+    { value: 'Fanless', label: 'Ultra-Slim Chassis' },
+  ]}
+  target="jetson-orin-nx"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+    secondary: {
+      label: 'View on Advantech.com',
+      to: 'https://www.advantech.com/en-us/products/965e4edb-fb98-429e-89ed-9a0a8435a7be/mic-712-ox/mod_82b36000-4d14-4596-9c87-db0ab48a0a0d',
+      external: true,
+    },
+  }}
+/>
+
+## Overview
+
+The Advantech MIC-712-OX is an ultra-slim, fanless AI inference system built on the NVIDIA Jetson Orin NX (with Orin Nano options), delivering up to 157 TOPS in NVIDIA Super Mode. Its compact chassis pairs GMSL camera expansion, PoE, and diverse I/O — making it well suited to mobile equipment and safety and security applications. Combined with Avocado OS — atomic OTA updates, secure boot, verified boot, and fleet-wide CVE tracking — and Avocado Connect's centralized fleet management, the MIC-712-OX ships production-grade edge AI without the months of BSP and infrastructure work.
+
+## Specifications
+
+| Specification  | Value                                        | Notes                        |
+| -------------- | -------------------------------------------- | ---------------------------- |
+| AI Module      | NVIDIA Jetson Orin NX / Orin Nano            | Module-dependent performance |
+| AI Performance | Up to 157 TOPS                               | NVIDIA Super Mode            |
+| Memory         | 8GB or 16GB LPDDR5                           | Selectable                   |
+| Storage        | M.2 NVMe (128GB–4TB), microSD                | Industrial-grade SSD options |
+| Ethernet       | 2x GbE (10/100/1000 Mbps)                    | PoE options                  |
+| USB            | 4x USB 3.2 Gen 2, 2x Micro-USB (debug / OTG) |                              |
+| Display        | 1x HDMI (3840x2160 @ 60Hz)                   |                              |
+| Camera         | Optional MIPI connector for GMSL cameras     |                              |
+| Serial / Bus   | Optional RS-232/422/485, CANBus              |                              |
+| Expansion      | M.2 E-Key and B-Key, Nano SIM                |                              |
+| Power Input    | 19–36V DC                                    |                              |
+| Operating Temp | -20°C to 70°C                                | With 0.7 m/s airflow         |
+| Dimensions     | 160 x 160 x 60 mm                            | Compact fanless design       |
+
+## Use Cases
+
+- **Mobile safety & security** systems in an ultra-slim fanless enclosure
+- **Machine vision** with GMSL camera expansion at the edge
+- **Autonomous systems** and on-device inference in wide-temperature deployments
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. The MIC-712-OX uses the `jetson-orin-nx` target with the `mic-712-ox-16gb` board:
+
+```yaml title="avocado.yaml"
+default_target: 'jetson-orin-nx'
+default_target_board: 'mic-712-ox-16gb'
+```
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev
+```
+
+### Run
+
+After provisioning completes, power cycle the device. It will boot with the provisioned system; the `root` user is passwordless in the `dev` runtime used by this guide.
