@@ -225,10 +225,10 @@ const config = {
           {
             title: 'Legal',
             items: [
-              { label: 'Terms of Use', to: '/terms' },
-              { label: 'Privacy Statement', to: '/privacy' },
-              { label: 'Disclaimer', to: '/disclaimer' },
-              { label: 'Code of Conduct', to: '/coc' },
+              { label: 'Terms of Use', to: '/policies/terms' },
+              { label: 'Privacy Statement', to: '/policies/privacy' },
+              { label: 'Disclaimer', to: '/policies/disclaimer' },
+              { label: 'Code of Conduct', to: '/policies/coc' },
             ],
           },
         ],

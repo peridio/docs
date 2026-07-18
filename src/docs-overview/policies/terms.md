@@ -56,7 +56,7 @@ You agree not to:
 
 The Site and its content are provided on an "as is" and "as available" basis,
 without warranties or conditions of any kind, express or implied. See our
-[Disclaimer](/disclaimer) for details, including the risks of following
+[Disclaimer](/policies/disclaimer) for details, including the risks of following
 procedures that can modify or damage devices and data.
 
 ## Limitation of liability
@@ -75,8 +75,9 @@ content and do not endorse it by linking to it.
 
 ## Privacy
 
-Your use of the Site is also subject to our [Privacy Statement](/privacy), which
-explains what information is collected and how it is used.
+Your use of the Site is also subject to our
+[Privacy Statement](/policies/privacy), which explains what information is
+collected and how it is used.
 
 ## Changes to these terms
 

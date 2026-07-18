@@ -157,6 +157,33 @@
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/nxp/imx8mp"
   },
+  "imx8mp-var-dart": {
+    "name": "Imx8mp Var Dart",
+    "target": "imx8mp-var-dart",
+    "category": "physical",
+    "description": "Imx8mp Var Dart is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
+    "provisioning": {
+      "hostOs": [
+        "macOS",
+        "Linux"
+      ],
+      "prerequisites": [],
+      "options": [
+        {
+          "id": "default",
+          "label": "Default",
+          "profile": null,
+          "media": null,
+          "autoMount": false,
+          "command": "avocado provision -r dev",
+          "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime."
+        }
+      ]
+    },
+    "serial": null,
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": null
+  },
   "imx91-frdm": {
     "name": "NXP FRDM i.MX 91",
     "target": "imx91-frdm",

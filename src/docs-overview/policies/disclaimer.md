@@ -52,5 +52,5 @@ about, and accept no responsibility for, third-party products or content.
 You are responsible for how you use this documentation and for the outcomes of
 any procedure you choose to perform. Your use of this documentation is also
 governed by our
-[Terms of Use](/terms) and
-[Privacy Statement](/privacy).
+[Terms of Use](/policies/terms) and
+[Privacy Statement](/policies/privacy).
