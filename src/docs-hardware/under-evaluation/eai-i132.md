@@ -8,7 +8,7 @@ description: 'Fanless industrial-grade edge AI appliance based on NVIDIA Jetson 
 
 Fanless industrial-grade edge AI computer powered by NVIDIA Jetson Orin NX/Nano
 
-**Up to 100 TOPS** | **Jetson Orin NX / Nano** | **PoE+ up to 60W** | **-40 to 70C** | **Fanless**
+**Up to 100 TOPS** | **Jetson Orin NX / Nano** | **PoE+ up to 60W** | **-40 to 70°C** | **Fanless**
 
 <a href="https://www.lannerinc.com/products/edge-ai-appliance/edge-inference-appliances/eai-i132" target="_blank" rel="noopener noreferrer">View on Lanner Electronics</a>
 

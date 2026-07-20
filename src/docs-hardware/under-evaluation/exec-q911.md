@@ -8,7 +8,7 @@ description: 'Compact COM-HPC Mini edge AI starter kit on the Qualcomm Dragonwin
 
 Compact COM-HPC Mini edge AI starter kit on the Qualcomm Dragonwing IQ-9075
 
-**Qualcomm Dragonwing IQ-9075** | **Up to 200 TOPS** | **36GB LPDDR5X** | **128GB UFS 3.1** | **-40 to 85C**
+**Qualcomm Dragonwing IQ-9075** | **Up to 200 TOPS** | **36GB LPDDR5X** | **128GB UFS 3.1** | **-40 to 85°C**
 
 <a href="https://www.innodisk.com/en/products/computing/qualcomm-solution/exec-q911" target="_blank" rel="noopener noreferrer">View on Innodisk.com</a>
 

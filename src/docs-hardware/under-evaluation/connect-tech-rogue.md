@@ -8,7 +8,7 @@ description: 'Compact commercially-deployable carrier for NVIDIA Jetson AGX Orin
 
 Compact commercially-deployable carrier for NVIDIA Jetson AGX Orin
 
-**Jetson AGX Orin** | **Up to 275 TOPS** | **Dual 10GbE** | **-40 to 85C** | **12V DC**
+**Jetson AGX Orin** | **Up to 275 TOPS** | **Dual 10GbE** | **-40 to 85°C** | **12V DC**
 
 <a href="https://connecttech.com/product/rogue-carrier-for-nvidia-jetson-agx-orin/" target="_blank" rel="noopener noreferrer">View on ConnectTech.com</a>
 
