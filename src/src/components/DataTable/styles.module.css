@@ -199,30 +199,6 @@
   color: var(--color-accent-primary);
 }
 
-/* Under evaluation */
-.statusEvaluation .statusDot {
-  background: var(--color-status-warning);
-}
-.statusEvaluation .statusLabel {
-  color: var(--color-status-warning);
-}
-
-/* Full */
-.statusFull .statusDot {
-  background: var(--color-status-success);
-}
-.statusFull .statusLabel {
-  color: var(--color-status-success);
-}
-
-/* Partial */
-.statusPartial .statusDot {
-  background: var(--color-status-warning);
-}
-.statusPartial .statusLabel {
-  color: var(--color-status-warning);
-}
-
 /* None */
 .statusNone .statusDot {
   background: var(--color-status-neutral);
@@ -282,21 +258,6 @@
   composes: legendDot;
   background: transparent;
   border: 2px solid var(--color-accent-primary);
-}
-
-.legendDotEvaluation {
-  composes: legendDot;
-  background: var(--color-status-warning);
-}
-
-.legendDotFull {
-  composes: legendDot;
-  background: var(--color-status-success);
-}
-
-.legendDotPartial {
-  composes: legendDot;
-  background: var(--color-status-warning);
 }
 
 .legendDotNone {

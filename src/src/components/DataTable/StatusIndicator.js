@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import styles from './styles.module.css'
 
 const statusConfig = {
-  // Feed-year / LTS support states
   supported: {
     className: styles.statusSupported,
     label: 'Supported',
@@ -13,22 +12,6 @@ const statusConfig = {
     className: styles.statusInProgress,
     label: 'In Progress',
     short: 'In Progress',
-  },
-  evaluation: {
-    className: styles.statusEvaluation,
-    label: 'Under evaluation',
-    short: 'Eval',
-  },
-  // Legacy feature states (retained for other tables)
-  full: {
-    className: styles.statusFull,
-    label: 'Fully supported',
-    short: 'Full',
-  },
-  partial: {
-    className: styles.statusPartial,
-    label: 'In development',
-    short: 'Partial',
   },
   none: {
     className: styles.statusNone,

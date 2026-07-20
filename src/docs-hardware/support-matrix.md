@@ -14,12 +14,7 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 
 - **Supported** = in the published feed. **In Progress** = being brought up, not yet published.
 - **2024 (scarthgap)** and **2026 (wrynose)** are the Yocto LTS bases each feed is built on.
-- **Target** is the SoC/platform; **Board** is a specific carrier or variant on that target. One target can back several boards. Select them per command with the `--target` and `--target-board` CLI flags, or set defaults in your `avocado.yaml`:
-
-  ```yaml title="avocado.yaml"
-  default_target: 'imx8mp-var-dart'
-  default_target_board: 'variscite-sonata'
-  ```
+- **Target** is the SoC/platform; **Board** is a specific carrier or variant on that target. One target can back several boards — see [CLI configuration](/developer-reference/avocado-cli/configuration#default-target-and-board) for how to set them.
 
 ## Additional Hardware Under Evaluation
 
