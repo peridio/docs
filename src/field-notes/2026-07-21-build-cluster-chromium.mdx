@@ -1,0 +1,86 @@
+---
+title: 'We put a second machine on our heaviest Yocto package. Chromium got [ENGINEER: X] faster; a full image barely moved.'
+description: 'Peridio builds the Avocado OS package feed across 30 hardware platforms. We measured whether distributing the compile across a two-machine compiler-cache cluster speeds up a from-scratch build — large on compile-bound Chromium, marginal on a full image, and here is why.'
+date: 2026-07-21
+draft: true # excluded from the published build until the [ENGINEER:] placeholders are filled and the demo is recorded
+authors: [jtia]
+tags: [yocto, build, sccache, package-feed, performance]
+category: 'Build'
+# image: /img/field-notes/build-cluster-chromium.png # [ENGINEER: add this hero image file (index thumbnail), then uncomment this line]
+featured: false
+# --- internal drafting fields (not rendered) ---
+tested_against: 'Avocado OS scarthgap package-feed build; sccache-dist cluster (PC1 AMD Ryzen 9 9950X + PC2 AMD Ryzen 9 7950X, direct 2.5GbE); chromium-ozone-wayland [ENGINEER: version, e.g. 147.0.7727.116]; [ENGINEER: build-tooling version]'
+poster: jtia
+lift_for_blog: 'Peridio builds its own 30-platform package feed faster with an internal compiler-cache cluster — proof that the team that ships your embedded Linux also does the unglamorous build-time engineering.'
+promote_to_track: ''
+---
+
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+{/* Build note, not a device note: TestStatus points at the build target + the public tool, since the OE integration itself is internal. */}
+
+<TestStatus
+  targets={['[ENGINEER: build target machine — e.g. qemuarm64, or the platform the Chromium image was built for]']}
+  cli="[ENGINEER: build-tooling version]"
+  reference={{
+    label: 'sccache-dist for Yocto/OE (RFC #2775)',
+    href: 'https://github.com/mozilla/sccache/issues/2775',
+  }}
+/>
+
+**TL;DR** — Rebuilding the Avocado OS package feed from source means compiling [ENGINEER: the feed's total package count — the "1M+ packages" figure; source it from feed-search or the feed build stats] packages across 30 hardware platforms, and Chromium is the single heaviest package in that set. We put its from-scratch compile on a two-machine compiler-cache cluster and clocked it against one machine — [ENGINEER: Chromium wall-clock, one machine vs two] — while the same cluster took only ~11% off a full image build, because a Yocto build spends most of its time waiting on configure, not compiling.
+
+{/* truncate */}
+
+## What this is
+
+Peridio ships Avocado OS, an immutable embedded Linux distribution delivered as a binary package feed. That feed covers **30 hardware platforms** — Raspberry Pi, NVIDIA Jetson, NXP i.MX, Qualcomm, Intel x86-64, and more ([support matrix](/hardware/support-matrix)) — so rebuilding it from source is a large, recurring compile workload where build time is a real operational cost. Chromium is the heaviest single package we build.
+
+[sccache](https://github.com/mozilla/sccache) is an open-source compiler cache that can also distribute compilation across machines. We wired it into our Yocto build and pointed it at a small two-machine cluster to answer one question: **how much does a from-scratch build actually speed up when you add a second machine?** The honest answer depends entirely on what you are building.
+
+## How it works / what we did
+
+The cluster is two AMD Ryzen workstations on a direct 2.5GbE link:
+
+- **PC1** — the build host, plus the sccache scheduler and one build server (Ryzen 9 9950X, 16C/32T).
+- **PC2** — a second sccache build server only; it does not run the build itself (Ryzen 9 7950X, 16C/32T).
+
+Both machines share the same Yocto `sstate` cache and a co-located hash-equivalence server, so the only variable between the two runs is the number of compile servers. Every compiler invocation in the build is wrapped by sccache; on a **cold** build (empty cache, no hits) sccache farms the individual compile units out across both machines' cores instead of running them all locally.
+
+The test is a single package built from scratch — Chromium — once on one machine, once across two:
+
+```bash
+# cold: empty sccache cache, built from source, only the node count changes
+bitbake chromium-ozone-wayland
+```
+
+[ENGINEER: embed the two demo recordings here. Both were captured with `devtool demo` (fast-forwarded, on-screen timer). demo 1 = one machine, demo 2 = the two-machine cluster. Paste the two wall-clock numbers the timers land on. Workspace: `~/repos/work/peridio-scarthgap-build`.]
+
+<PullQuote>Chromium, from scratch: **[ENGINEER: Xh Ym] on one machine → [ENGINEER: Xh Ym] on two** — [ENGINEER: N]× on the package that dominates our compile budget.</PullQuote>
+
+## Issues Encountered
+
+This is the part worth reading, because the result is not "cluster go faster."
+
+- **This ran on a desktop, not a dedicated build machine.** The two nodes are consumer Ryzen workstations doing double duty, not tuned build servers, so background load and consumer defaults move the numbers. Read the result as the shape of the effect on compile-bound work, not a datacenter benchmark.
+- **A full image barely moved — 1.12×, not 2×.** On a full `qemuarm64` image (~12,000 tasks, cold), one machine took **3h28m** and two machines took **3h06m** — an 11% wall-clock reduction for double the remote compile cores. Doubling from 32 to 64 remote cores did not come close to doubling throughput.
+- **A Yocto cold build is latency-bound, not compute-bound.** In that run the tasks sat ~84% idle. `do_configure` alone was ~45% of total task-time at **2.8% CPU utilization** — it fires thousands of millisecond-scale probe compiles, and wrapping each one in a compiler cache adds a client→server round-trip that dwarfs the actual work. A second machine cannot help a build that is waiting, not computing: its 32 cores sit as idle as the first machine's.
+- **Don't read the Chromium number as a whole-build number.** A compile cluster speeds up *compiling*. A single compile-bound package like Chromium is almost all compile, so it wins big; a full image is mostly configure, install, and packaging, so the same cluster gives ~11%. The two results measure different things — one package versus a whole image — and conflating them is the easiest way to oversell this.
+- **Making the *whole* build considerably faster is a different lever — and its own Field Note.** What speeds up an entire Yocto build is cache *reuse*: a proper shared NFS `SSTATE_DIR` / `DL_DIR` / `ccache` (plus hash-equivalence) so the next build — or the next of the 30 platforms — restores from cache instead of recompiling. That is the documented Yocto lever ([Speeding Up a Build](https://docs.yoctoproject.org/dev/dev-manual/speeding-up-build.html)) and what keeps the 30-platform feed tractable. It is the subject of a separate Field Note; this one is narrower on purpose — one compile-bound package, from scratch, across a compile cluster.
+- **Chromium is the exception that makes distribution worth showing.** Unlike a full image, Chromium is dominated by `do_compile`, not configure — a massive C++ compile with comparatively few probes. That is exactly the shape where farming compiles out to a second machine pays off, which is why the demo is Chromium and not a whole image. [ENGINEER: note anything that bit you in the Chromium run specifically — cold-cache store overhead, any distribution errors that fell back to local, the split of remote vs local compiles.]
+
+## What we're upstreaming
+
+Getting sccache-dist to hold up on a real Yocto/OE distributed build surfaced a run of upstream bugs and scheduler-reliability gaps — most of them the same distributed-compile-correctness and high-concurrency coordination issues the cold-build storm above exposes. We are contributing the fixes back to [mozilla/sccache](https://github.com/mozilla/sccache) as small, focused PRs, anchored by [RFC #2775](https://github.com/mozilla/sccache/issues/2775). The first two are open:
+
+- [#2776](https://github.com/mozilla/sccache/pull/2776) — the dist server no longer panics when a finished compile reports neither an exit code nor a signal.
+- [#2777](https://github.com/mozilla/sccache/pull/2777) — a distributed compile that fails or drops its output falls back to a local compile instead of failing the whole build.
+
+Later waves cover toolchain-packaging correctness for relocated and split-sysroot cross toolchains, gcc/rust distributed-compile correctness (force-local for configure probes and PCH; shipping the rust std, target spec, and rlibs), and scheduler routing and liveness under load. [ENGINEER: refresh the PR list as the later waves open — RFC #2775 tracks current status.]
+
+## Reproduce it
+
+This runs on Peridio's internal build infrastructure. The compiler-cache side is public and getting more so: [sccache](https://github.com/mozilla/sccache) is the wrapper, its scheduler/server distributes compiles across the two hosts, and the Yocto/OE-specific fixes are landing upstream now ([RFC #2775](https://github.com/mozilla/sccache/issues/2775)). The OpenEmbedded wiring that plugs it into our build is internal, so this is not a drop-in you can `bitbake` yourself today — it is how we build the feed we ship. The Avocado OS feed and its 30-platform matrix are at the [support matrix](/hardware/support-matrix) and [package feed search](/developer-reference/feed-search).
+
+Docs and the rest of the Peridio ecosystem are at [docs.peridio.com](https://docs.peridio.com).
