@@ -1,0 +1,119 @@
+---
+title: 'Device-tree overlays in Avocado OS'
+description: 'Declare a device-tree overlay in an extension and let avocado build compile and deliver it into the OS bundle.'
+date: 2026-07-21
+draft: true # PREVIEW: clean-SDK image toolchain still needs manual sdk.packages (KOS-68). raspberrypi5 finalizes end-to-end; keep draft until provisioning auto-lands, then finalize via the field-notes skill.
+authors: [] # TODO: add your key from authors.yml before flipping draft:false
+tags: [raspberrypi5, qemuarm64, device-tree]
+category: 'Device tree'
+featured: false
+# --- internal drafting fields (not rendered) ---
+tested_against: 'raspberrypi5 clean-room (CLI avocado 1.0.0-rc.1): avocado build compiled hello-overlay.dtbo, the delivery hook placed it in rootdisk/boot, and stone finalized os-bundle.aos with a FAT boot.img. Verified with avocado save (archive holds device-tree-overlays/hello-overlay.dtbo and os-bundle.aos). qemuarm64: compile + deliver succeed, but the .aos does not finalize (no FAT boot medium; KOS-68).'
+poster: ''
+lift_for_blog: 'Ship a board customization (a device-tree overlay) as a declarative part of your OS image, no manual dtc/boot surgery.'
+promote_to_track: ''
+---
+
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus
+  targets={['raspberrypi5', 'qemuarm64']}
+  cli="1.0.0-rc.1"
+/>
+
+**TL;DR** — Declare a device-tree overlay in an extension and `avocado build`
+compiles it in the SDK and delivers the `.dtbo` into the OS bundle under
+`overlays/`. On raspberrypi5 the bundle finalizes end-to-end. No manual `dtc`
+or boot-partition surgery.
+
+{/* truncate */}
+
+## What this is
+
+Avocado OS builds a complete, updatable OS image for your board. A device-tree
+overlay is a small patch to the board's hardware description: enable a SPI
+device, wire up a GPIO, add a sensor. This note shows how to make an overlay a
+declarative part of your image instead of a manual boot-time step.
+
+## How it works / what we did
+
+Add `device_tree_overlays` to the extension that ships them:
+
+```yaml
+extensions:
+  my-board:
+    types:
+      - sysext
+    device_tree_overlays:
+      - name: hello-overlay
+        src: overlays/hello-overlay.dtso
+```
+
+`name` is authoritative: it is the output basename (`overlays/<name>.dtbo`) and
+the boot-selection argument, so it must be a safe basename. `src` is your overlay
+source. The source is a real overlay: it declares `/plugin/;` and targets a path
+or phandle.
+
+```dts
+/dts-v1/;
+/plugin/;
+/ {
+    fragment@0 {
+        target-path = "/";
+        __overlay__ {
+            my-node {
+                compatible = "acme,widget";
+                status = "okay";
+            };
+        };
+    };
+};
+```
+
+Then:
+
+```bash
+avocado install
+avocado build --target raspberrypi5
+```
+
+Under the hood `avocado build` compiles each `.dtso` the way the kernel does
+(`cpp` against the kernel's `dt-bindings` when the source `#include`s them,
+`dtc -@` for overlay symbols), a per-board delivery step records where the blob
+belongs on the boot medium, and the bundler places it at `overlays/<name>.dtbo`
+in the OS bundle. The feature is inert unless an overlay is declared.
+
+<PullQuote>A board customization ships as **declared config**, not a manual dtc + boot-partition step.</PullQuote>
+
+## Which targets finalize
+
+The overlay compiles and is delivered on every target. Whether the OS bundle
+finalizes end-to-end depends on the boot medium. raspberrypi5 boots from a FAT
+partition (the `config.txt` path), so `avocado build` writes the overlay into
+`boot.img` and finalizes `os-bundle.aos` in a single pass. On `qemuarm64` the
+same compile and delivery run, but the `.aos` does not finalize yet, because
+there is no FAT boot medium to stage the kernel image into. That gap is tracked
+in KOS-68 and does not affect FAT-booting hardware like the Pi.
+
+## Issues Encountered
+
+- **Clean SDK under-provisions the image toolchain (preview).** On a brand-new
+  SDK you currently must add a few image-build packages to `sdk.packages`
+  (erofs, btrfs, zstd, stone tooling) before a runtime image builds.
+  Auto-provisioning them is in progress (KOS-68).
+- **qemuarm64 does not finalize the bundle yet (preview).** See "Which targets
+  finalize" above. FAT-booting targets (raspberrypi5) complete the flow; a
+  QEMU-only walkthrough waits on KOS-68.
+
+## Reproduce it
+
+On raspberrypi5 the flow above runs to a finalized bundle. Declare one overlay
+in an extension, then run `avocado install` and `avocado build --target
+raspberrypi5`. The build logs the three pipeline steps in order: the compile
+(`avocado-dtc-overlay: built ... hello-overlay.dtbo`), the delivery
+(`device-tree-overlay-deliver: delivered 1 overlay(s) to rootdisk/boot`), and
+the finalized bundle (`OS bundle created: ... os-bundle.aos`). To inspect the
+result, `avocado save` exports the build state; the archive holds both the
+compiled `device-tree-overlays/hello-overlay.dtbo` and the finalized
+`os-bundle.aos`.
