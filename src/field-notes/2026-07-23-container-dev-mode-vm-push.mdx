@@ -1,0 +1,91 @@
+---
+title: 'One line changed, one layer shipped: validating a container hot-reload path in a throwaway QEMU lab'
+description: 'Proving Container Dev Mode’s authenticated VM→device push path with a disposable QEMU docker+ssh lab — and the two bugs the lab caught before any hardware.'
+date: 2026-07-23
+draft: true # PRE-RELEASE feature — keep on the branch until Container Dev Mode ships
+authors: [jtia]
+tags: [qemux86-64, containers, testing]
+category: 'Containers'
+image: ''
+featured: false
+# --- internal drafting fields (not rendered) ---
+tested_against: 'avocado-cli 1.0.0-rc.1 (pre-release dev build); qemux86-64; Debian 12 cloud image engine VM'
+poster: 'jtia'
+lift_for_blog: 'The inner dev loop for containers on immutable Avocado OS: change one line, only the changed layer moves to the device.'
+promote_to_track: ''
+---
+
+{/*
+  PRE-RELEASE NOTE (not for readers): Container Dev Mode is not shipped yet. This
+  note is a structured draft — the framing and the measured results are real, but
+  the CLI and the device extension are pre-release, so a reader cannot reproduce it
+  today. It stays draft:true on this branch until the feature ships and the
+  [ENGINEER: ...] gaps are filled and re-verified on a released build.
+*/}
+
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus
+  targets={['qemux86-64']}
+  cli="1.0.0-rc.1"
+  reference={{
+    label: '[ENGINEER: reference link once the code is public]',
+    href: 'https://github.com/avocado-linux/references',
+  }}
+/>
+
+**TL;DR** — I stood up a disposable QEMU "engine VM" (plain Debian + docker + ssh) to exercise Container Dev Mode’s authenticated push path end-to-end before touching hardware. A one-line change to a watched image synced **only the changed layer** to the device — and the lab caught two real bugs first: the write registry was serving plain HTTP where the guest expected HTTPS, and a 2 MiB body limit was rejecting every real image layer.
+
+{/* truncate */}
+
+## What this is
+
+Peridio ships and manages fleets of embedded Linux devices; Avocado OS is its Yocto-based distro with an immutable root filesystem. Container Dev Mode is the inner dev loop for a containerized app on such a device: you edit code on your laptop, and the changed container image is hot-reloaded onto the running device — no reflash, no full image re-ship. The host CLI runs a small embedded OCI registry; a device-side agent pulls over a pinned-CA TLS channel and restarts the container.
+
+The hard part is the write path when the container engine runs *inside* a VM (the macOS fast path): the guest pushes to the host over a routable, authenticated HTTPS registry whose per-project CA is delivered at session start, never baked into the image. I wanted that path proven on Linux, in software, before a board was in the loop.
+
+## How it works / what we did
+
+The trick is that QEMU user-mode (SLIRP) networking gives a guest a fixed route to the host at `10.0.2.2`. That is exactly the alias the real macOS avocado-vm uses, so a plain Debian VM under QEMU is a faithful stand-in for the engine VM. A one-shot `cloud-init` seed installs `docker.io` and drops in an SSH key; the guest’s dockerd is then forwarded to the socket the CLI looks for:
+
+```bash
+ssh -f -N -L "$HOME/.avocado/vm/docker.sock:/var/run/docker.sock" avocado-vm-lab
+export DOCKER_HOST="unix://$HOME/.avocado/vm/docker.sock"
+```
+
+With `DOCKER_HOST` pointed at the guest, `avocado container dev up` mints a per-project CA, binds the write + bulk + control listeners, and delivers the CA into the guest’s docker trust store over SSH — into `/etc/docker/certs.d/10.0.2.2:<port>/ca.crt`, per connection, never a build-time overlay file.
+
+A verify script then asserts the four properties that matter and prints PASS/FAIL for each:
+
+```text
+== 1/4. CA delivered into the VM engine trust store at run time ==
+  PASS: delivered CA present + valid at /etc/docker/certs.d/10.0.2.2:5601/ca.crt
+== 3. Write path is authenticated - an unauthenticated write is refused ==
+  PASS: unauthenticated write refused with 401 (Basic write token required)
+== 2. Guest push over authenticated HTTPS SUCCEEDS ==
+  PASS: guest push landed: manifest tag 'dev' present in the registry store
+== 4. No static CA baked into the avocado-vm overlay ==
+  PASS: the overlay provisions the trust-store location only
+  passed: 8   failed: 0
+```
+
+The delta-pull property — the whole point of the inner loop — is that a one-line change ships only the changed layer. With a 512 KiB shared base layer and a small top layer, the first pull moves the whole image; after a one-line change to the top layer, the device pulls only that layer, because the shared config and base blobs are byte-identical by digest and already local.
+
+<PullQuote>A one-line change transferred **only the changed layer** — the shared 512 KiB base layer was never re-sent.</PullQuote>
+
+## Issues Encountered
+
+- **The write listener spoke HTTP where the guest required HTTPS.** On native Linux, docker’s built-in `127.0.0.0/8` insecure exemption makes a loopback HTTP registry work with zero cert config. But a QEMU guest reaches the host as `10.0.2.2`, which is *not* in that exemption — so the guest, configured via the delivered `certs.d` CA, expects TLS. The listener was serving plain HTTP; the fix was to terminate the same per-project leaf TLS the bulk and control listeners already used, but only on the VM path. The lab caught this immediately; on a real board it would have looked like a mysterious push failure.
+- **A 2 MiB body limit rejected every real image layer.** Once TLS was fixed, the guest push reached the registry and then died mid-stream with `HTTP 413 "Failed to buffer the request body: length limit exceeded"`. The embedded registry buffered upload bodies under a framework default of 2 MiB; real layers are larger. Lifting that cap on the write path (blobs stream to the on-disk store) fixed it. A trivial busybox image had slipped under 2 MiB and hidden the bug — only a 5 MiB layer surfaced it.
+- **The remote-build shortcut hit a wall.** Trying to offload the device-extension cross-build to a second machine over the tool’s NFS-based remote mode failed because dnf’s history database is SQLite, and SQLite cannot take its locks over NFS. [ENGINEER: confirm the final build ran locally under a PTY — the SDK container needs a TTY that a non-interactive shell doesn’t provide.]
+- **A false-green almost slipped through.** The `sync` command only *signals* the running session; the push happens asynchronously. An early version of the check asserted the command’s exit code and passed even when no bytes moved. The real assertion waits for the manifest to actually land in the registry store.
+
+## Reproduce it
+
+[ENGINEER: Container Dev Mode is pre-release — fill this in once the CLI and the
+`avocado-ext-container-agent-dev` extension ship. The lab harness itself is a
+`setup-lab.sh` (QEMU + cloud-init docker/ssh VM, SLIRP `10.0.2.2`, docker.sock
+forward) plus a `verify-vm-write-path.sh` that drives `up`/`sync` and asserts the
+four properties above. Link the runnable location and pin the released CLI
+version before flipping `draft: false`.]
