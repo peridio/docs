@@ -1,12 +1,24 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
 // -- July 2026 --
+import HW_2026_29 from '../../../docs-changelog/july-2026/hardware-feeds-2026.29.md'
+import DESKTOP_1_1_0 from '../../../docs-changelog/july-2026/desktop-1.1.0.md'
+import MCP_0_3_0 from '../../../docs-changelog/july-2026/mcp-0.3.0.md'
+import CONNECT_25_7_2 from '../../../docs-changelog/july-2026/connect-25.7.2.md'
+import CLI_1_0_0_RC_2 from '../../../docs-changelog/july-2026/cli-1.0.0-rc.2.md'
+import DESKTOP_1_0_1 from '../../../docs-changelog/july-2026/desktop-1.0.1.md'
 import V1_0_0_RC_1 from '../../../docs-changelog/july-2026/1.0.0-rc.1.mdx'
 // -- June 2026 --
+import MCP_0_2_0 from '../../../docs-changelog/june-2026/mcp-0.2.0.md'
+import HW_2026_24 from '../../../docs-changelog/june-2026/hardware-feeds-2026.24.md'
 import V0_41_1 from '../../../docs-changelog/june-2026/0.41.1.md'
+import DESKTOP_0_9_0 from '../../../docs-changelog/june-2026/desktop-0.9.0.md'
 import V0_41_0 from '../../../docs-changelog/june-2026/0.41.0.md'
+import CONNECT_25_6_1 from '../../../docs-changelog/june-2026/connect-25.6.1.md'
 // -- May 2026 --
+import DESKTOP_0_8_0 from '../../../docs-changelog/may-2026/desktop-0.8.0.md'
 import V0_40_2 from '../../../docs-changelog/may-2026/0.40.2.md'
+import MCP_0_1_0 from '../../../docs-changelog/may-2026/mcp-0.1.0.md'
 import V0_39_0 from '../../../docs-changelog/may-2026/0.39.0.md'
 import V0_38_0 from '../../../docs-changelog/may-2026/0.38.0.md'
 import V0_37_1 from '../../../docs-changelog/may-2026/0.37.1.md'
@@ -48,17 +60,92 @@ import V0_10_2 from '../../../docs-changelog/september-2025/0.10.2.md'
 import V0_9_0 from '../../../docs-changelog/september-2025/0.9.0.md'
 import V0_8_0 from '../../../docs-changelog/september-2025/0.8.0.md'
 
+/** Product tabs shown above the feed. 'all' renders the master changelog. */
+export const PRODUCTS = [
+  { id: 'all', label: 'All' },
+  { id: 'cli', label: 'CLI' },
+  { id: 'desktop', label: 'Desktop' },
+  { id: 'mcp', label: 'MCP' },
+  { id: 'connect', label: 'Connect' },
+  { id: 'hardware', label: 'Hardware Feeds' },
+]
+
 /**
  * Flat ordered array of all changelog entries, newest first.
  * Order matches sidebars-changelog.js exactly.
+ * Entries without an explicit `product` are CLI releases.
  */
-export const entries = [
+const rawEntries = [
+  {
+    product: 'hardware',
+    version: 'Hardware Feeds 2026.29',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/hardware-feeds-2026.29',
+    Component: HW_2026_29,
+  },
+  {
+    product: 'desktop',
+    version: 'Desktop 1.1.0',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/desktop-1.1.0',
+    Component: DESKTOP_1_1_0,
+  },
+  {
+    product: 'mcp',
+    version: 'MCP 0.3.0',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/mcp-0.3.0',
+    Component: MCP_0_3_0,
+  },
+  {
+    product: 'connect',
+    version: 'Connect 25.7.2',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/connect-25.7.2',
+    Component: CONNECT_25_7_2,
+  },
+  {
+    product: 'cli',
+    version: 'CLI 1.0.0-rc.2',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/cli-1.0.0-rc.2',
+    Component: CLI_1_0_0_RC_2,
+  },
+  {
+    product: 'desktop',
+    version: 'Desktop 1.0.1',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/desktop-1.0.1',
+    Component: DESKTOP_1_0_1,
+  },
   {
     version: '1.0.0-rc.1',
     monthSlug: 'july-2026',
     monthLabel: 'July 2026',
     permalink: '/changelog/july-2026/1.0.0-rc.1',
     Component: V1_0_0_RC_1,
+  },
+  {
+    product: 'mcp',
+    version: 'MCP 0.2.0',
+    monthSlug: 'june-2026',
+    monthLabel: 'June 2026',
+    permalink: '/changelog/june-2026/mcp-0.2.0',
+    Component: MCP_0_2_0,
+  },
+  {
+    product: 'hardware',
+    version: 'Hardware Feeds 2026.24',
+    monthSlug: 'june-2026',
+    monthLabel: 'June 2026',
+    permalink: '/changelog/june-2026/hardware-feeds-2026.24',
+    Component: HW_2026_24,
   },
   {
     version: '0.41.1',
@@ -68,6 +155,14 @@ export const entries = [
     Component: V0_41_1,
   },
   {
+    product: 'desktop',
+    version: 'Desktop 0.9.0',
+    monthSlug: 'june-2026',
+    monthLabel: 'June 2026',
+    permalink: '/changelog/june-2026/desktop-0.9.0',
+    Component: DESKTOP_0_9_0,
+  },
+  {
     version: '0.41.0',
     monthSlug: 'june-2026',
     monthLabel: 'June 2026',
@@ -75,11 +170,36 @@ export const entries = [
     Component: V0_41_0,
   },
   {
+    product: 'connect',
+    version: 'Connect 25.6.1',
+    monthSlug: 'june-2026',
+    monthLabel: 'June 2026',
+    permalink: '/changelog/june-2026/connect-25.6.1',
+    Component: CONNECT_25_6_1,
+  },
+
+  {
+    product: 'desktop',
+    version: 'Desktop 0.8.0',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/desktop-0.8.0',
+    Component: DESKTOP_0_8_0,
+  },
+  {
     version: '0.40.2',
     monthSlug: 'may-2026',
     monthLabel: 'May 2026',
     permalink: '/changelog/may-2026/0.40.2',
     Component: V0_40_2,
+  },
+  {
+    product: 'mcp',
+    version: 'MCP 0.1.0',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/mcp-0.1.0',
+    Component: MCP_0_1_0,
   },
   {
     version: '0.39.0',
@@ -316,3 +436,5 @@ export const entries = [
     Component: V0_8_0,
   },
 ]
+
+export const entries = rawEntries.map((e) => ({ product: 'cli', ...e }))
