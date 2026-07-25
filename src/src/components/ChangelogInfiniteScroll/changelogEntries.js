@@ -1,20 +1,32 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
 // -- July 2026 --
+import REF_2026_07 from '../../../docs-changelog/july-2026/reference-2026.07.md'
+import DESKTOP_1_0_0_RC_6 from '../../../docs-changelog/july-2026/desktop-1.0.0-rc.6.md'
+import CONNECT_2026_07 from '../../../docs-changelog/july-2026/connect-2026.07.md'
 import V1_0_0_RC_1 from '../../../docs-changelog/july-2026/1.0.0-rc.1.mdx'
 // -- June 2026 --
+import MCP_5_1_0 from '../../../docs-changelog/june-2026/mcp-5.1.0.md'
+import REF_2026_06 from '../../../docs-changelog/june-2026/reference-2026.06.md'
 import V0_41_1 from '../../../docs-changelog/june-2026/0.41.1.md'
 import V0_41_0 from '../../../docs-changelog/june-2026/0.41.0.md'
+import CONNECT_2026_06 from '../../../docs-changelog/june-2026/connect-2026.06.md'
 // -- May 2026 --
+import DESKTOP_0_4_0 from '../../../docs-changelog/may-2026/desktop-0.4.0.md'
 import V0_40_2 from '../../../docs-changelog/may-2026/0.40.2.md'
+import MCP_5_0_0 from '../../../docs-changelog/may-2026/mcp-5.0.0.md'
+import REF_2026_05 from '../../../docs-changelog/may-2026/reference-2026.05.md'
+import CONNECT_2026_05 from '../../../docs-changelog/may-2026/connect-2026.05.md'
 import V0_39_0 from '../../../docs-changelog/may-2026/0.39.0.md'
 import V0_38_0 from '../../../docs-changelog/may-2026/0.38.0.md'
 import V0_37_1 from '../../../docs-changelog/may-2026/0.37.1.md'
 // -- April 2026 --
+import CONNECT_2026_04 from '../../../docs-changelog/april-2026/connect-2026.04.md'
 import V0_36_2 from '../../../docs-changelog/april-2026/0.36.2.md'
 import V0_35_0 from '../../../docs-changelog/april-2026/0.35.0.md'
 import V0_34_0 from '../../../docs-changelog/april-2026/0.34.0.md'
 // -- March 2026 --
+import CONNECT_2026_03 from '../../../docs-changelog/march-2026/connect-2026.03.md'
 import V0_33_0 from '../../../docs-changelog/march-2026/0.33.0.md'
 import V0_32_1 from '../../../docs-changelog/march-2026/0.32.1.md'
 import V0_31_0 from '../../../docs-changelog/march-2026/0.31.0.md'
@@ -48,17 +60,68 @@ import V0_10_2 from '../../../docs-changelog/september-2025/0.10.2.md'
 import V0_9_0 from '../../../docs-changelog/september-2025/0.9.0.md'
 import V0_8_0 from '../../../docs-changelog/september-2025/0.8.0.md'
 
+/** Product tabs shown above the feed. 'all' renders the master changelog. */
+export const PRODUCTS = [
+  { id: 'all', label: 'All' },
+  { id: 'cli', label: 'CLI' },
+  { id: 'desktop', label: 'Desktop' },
+  { id: 'mcp', label: 'MCP' },
+  { id: 'connect', label: 'Connect' },
+  { id: 'reference', label: 'References' },
+]
+
 /**
  * Flat ordered array of all changelog entries, newest first.
  * Order matches sidebars-changelog.js exactly.
+ * Entries without an explicit `product` are CLI releases.
  */
-export const entries = [
+const rawEntries = [
+  {
+    product: 'reference',
+    version: '2026.07',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/reference-2026.07',
+    Component: REF_2026_07,
+  },
+  {
+    product: 'desktop',
+    version: '1.0.0-rc.6',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/desktop-1.0.0-rc.6',
+    Component: DESKTOP_1_0_0_RC_6,
+  },
+  {
+    product: 'connect',
+    version: '2026.07',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/connect-2026.07',
+    Component: CONNECT_2026_07,
+  },
   {
     version: '1.0.0-rc.1',
     monthSlug: 'july-2026',
     monthLabel: 'July 2026',
     permalink: '/changelog/july-2026/1.0.0-rc.1',
     Component: V1_0_0_RC_1,
+  },
+  {
+    product: 'mcp',
+    version: '5.1.0',
+    monthSlug: 'june-2026',
+    monthLabel: 'June 2026',
+    permalink: '/changelog/june-2026/mcp-5.1.0',
+    Component: MCP_5_1_0,
+  },
+  {
+    product: 'reference',
+    version: '2026.06',
+    monthSlug: 'june-2026',
+    monthLabel: 'June 2026',
+    permalink: '/changelog/june-2026/reference-2026.06',
+    Component: REF_2026_06,
   },
   {
     version: '0.41.1',
@@ -75,11 +138,52 @@ export const entries = [
     Component: V0_41_0,
   },
   {
+    product: 'connect',
+    version: '2026.06',
+    monthSlug: 'june-2026',
+    monthLabel: 'June 2026',
+    permalink: '/changelog/june-2026/connect-2026.06',
+    Component: CONNECT_2026_06,
+  },
+
+  {
+    product: 'desktop',
+    version: '0.4.0',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/desktop-0.4.0',
+    Component: DESKTOP_0_4_0,
+  },
+  {
     version: '0.40.2',
     monthSlug: 'may-2026',
     monthLabel: 'May 2026',
     permalink: '/changelog/may-2026/0.40.2',
     Component: V0_40_2,
+  },
+  {
+    product: 'mcp',
+    version: '5.0.0',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/mcp-5.0.0',
+    Component: MCP_5_0_0,
+  },
+  {
+    product: 'reference',
+    version: '2026.05',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/reference-2026.05',
+    Component: REF_2026_05,
+  },
+  {
+    product: 'connect',
+    version: '2026.05',
+    monthSlug: 'may-2026',
+    monthLabel: 'May 2026',
+    permalink: '/changelog/may-2026/connect-2026.05',
+    Component: CONNECT_2026_05,
   },
   {
     version: '0.39.0',
@@ -104,6 +208,14 @@ export const entries = [
   },
 
   {
+    product: 'connect',
+    version: '2026.04',
+    monthSlug: 'april-2026',
+    monthLabel: 'April 2026',
+    permalink: '/changelog/april-2026/connect-2026.04',
+    Component: CONNECT_2026_04,
+  },
+  {
     version: '0.36.2',
     monthSlug: 'april-2026',
     monthLabel: 'April 2026',
@@ -127,6 +239,14 @@ export const entries = [
     Component: V0_34_0,
   },
 
+  {
+    product: 'connect',
+    version: '2026.03',
+    monthSlug: 'march-2026',
+    monthLabel: 'March 2026',
+    permalink: '/changelog/march-2026/connect-2026.03',
+    Component: CONNECT_2026_03,
+  },
   {
     version: '0.33.0',
     monthSlug: 'march-2026',
@@ -316,3 +436,5 @@ export const entries = [
     Component: V0_8_0,
   },
 ]
+
+export const entries = rawEntries.map((e) => ({ product: 'cli', ...e }))

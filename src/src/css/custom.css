@@ -1082,8 +1082,8 @@ html[data-theme="dark"] .dropdown__menu--link:hover {
   align-items: center;
   gap: 0.4rem;
   font-size: 0.85rem;
-  color: var(--ifm-color-emphasis-600);
-  text-decoration: none;
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
   margin-bottom: 1.5rem;
 }
 
@@ -1103,8 +1103,8 @@ html[data-theme="dark"] .dropdown__menu--link:hover {
 }
 
 .reference-github-link:hover {
-  color: var(--ifm-color-primary);
-  text-decoration: none;
+  color: var(--ifm-color-primary-dark);
+  text-decoration: underline;
 }
 
 /* Hide generated reference pages from sidebar */

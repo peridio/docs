@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Heading from '@theme/Heading'
-import { entries } from './changelogEntries'
+import { entries, PRODUCTS } from './changelogEntries'
 import styles from './styles.module.css'
 
 /** Map monthSlug → monthLabel for finding sidebar categories by text */
 const monthSlugToLabel = Object.fromEntries(entries.map((e) => [e.monthSlug, e.monthLabel]))
+
+const productLabel = Object.fromEntries(PRODUCTS.map((p) => [p.id, p.label]))
+
+function entriesForProduct(product) {
+  return product === 'all' ? entries : entries.filter((e) => e.product === product)
+}
 
 /**
  * Find a sidebar category <li> by its label text.
@@ -40,6 +46,31 @@ function clickToggleAndWait(catLi) {
 }
 
 /**
+ * Hide sidebar entries (and whole months) that don't belong to the active
+ * product tab. Idempotent — safe to re-apply after any sidebar re-render.
+ */
+function applySidebarProductFilter(sidebar, product) {
+  const visible = entriesForProduct(product)
+  const visiblePermalinks = new Set(visible.map((e) => e.permalink))
+  const visibleMonthLabels = new Set(visible.map((e) => e.monthLabel))
+  const allMonthLabels = new Set(Object.values(monthSlugToLabel))
+
+  sidebar.querySelectorAll('.menu__link:not(.menu__link--sublist)').forEach((link) => {
+    const href = link.getAttribute('href')
+    if (!href || !href.startsWith('/changelog/')) return
+    const li = link.closest('.menu__list-item')
+    if (li) li.style.display = visiblePermalinks.has(href) ? '' : 'none'
+  })
+
+  for (const link of sidebar.querySelectorAll('.menu__link--sublist')) {
+    const label = link.textContent.trim()
+    if (!allMonthLabels.has(label)) continue
+    const li = link.closest('.menu__list-item')
+    if (li) li.style.display = visibleMonthLabels.has(label) ? '' : 'none'
+  }
+}
+
+/**
  * Highlight the active sidebar link (no toggling of categories).
  * If the link isn't in the DOM (category is collapsed), highlights
  * the category header instead.
@@ -71,11 +102,20 @@ function highlightActiveLink(sidebar, permalink) {
 
 export default function ChangelogInfiniteScroll({ initialContent }) {
   const startPermalink = initialContent.metadata.permalink
-  const startIndex = entries.findIndex((e) => e.permalink === startPermalink)
-  const startIdx = startIndex >= 0 ? startIndex : 0
-  const startEntry = entries[startIdx]
 
-  const subsequentEntries = entries.slice(startIdx)
+  // 'all' during SSR; the real tab is hydrated from ?product= after mount
+  const [product, setProduct] = useState('all')
+
+  const filteredEntries = useMemo(() => entriesForProduct(product), [product])
+
+  // On the master tab the feed starts at the landing entry; product tabs
+  // always start from that product's newest entry.
+  const startIndex =
+    product === 'all' ? filteredEntries.findIndex((e) => e.permalink === startPermalink) : 0
+  const startIdx = startIndex >= 0 ? startIndex : 0
+  const startEntry = filteredEntries[startIdx]
+
+  const subsequentEntries = filteredEntries.slice(startIdx)
 
   const [visibleCount, setVisibleCount] = useState(1)
   const [activePermalink, setActivePermalink] = useState(startPermalink)
@@ -83,6 +123,30 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
   const prevMonthRef = useRef(activeMonthSlug)
   const sectionsRef = useRef({})
   const sentinelRef = useRef(null)
+
+  // Hydrate the active tab from the URL (?product=desktop)
+  useEffect(() => {
+    const fromUrl = new URLSearchParams(window.location.search).get('product')
+    if (fromUrl && fromUrl !== 'all' && PRODUCTS.some((p) => p.id === fromUrl)) {
+      selectProduct(fromUrl)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function selectProduct(next) {
+    if (next === product) return
+    const nextEntries = entriesForProduct(next)
+    const first = nextEntries[0]
+    if (!first) return
+
+    setProduct(next)
+    setVisibleCount(1)
+    setActivePermalink(first.permalink)
+    window.scrollTo({ top: 0, behavior: 'auto' })
+
+    const query = next === 'all' ? '' : `?product=${next}`
+    window.history.replaceState(null, '', first.permalink + query)
+  }
 
   // Smooth scroll behavior
   useEffect(() => {
@@ -149,17 +213,21 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
 
   // Sync URL, document title, and active link on every entry change
   useEffect(() => {
-    if (activePermalink !== window.location.pathname) {
-      window.history.replaceState(null, '', activePermalink)
+    const query = product === 'all' ? '' : `?product=${product}`
+    if (activePermalink + query !== window.location.pathname + window.location.search) {
+      window.history.replaceState(null, '', activePermalink + query)
     }
     const activeEntry = entries.find((e) => e.permalink === activePermalink)
     if (activeEntry) {
-      document.title = `${activeEntry.version} | Changelog`
+      document.title = `${productLabel[activeEntry.product]}: ${activeEntry.version} | Changelog`
     }
 
     const sidebar = document.querySelector('[class*="docSidebarContainer"]')
-    if (sidebar) highlightActiveLink(sidebar, activePermalink)
-  }, [activePermalink])
+    if (sidebar) {
+      applySidebarProductFilter(sidebar, product)
+      highlightActiveLink(sidebar, activePermalink)
+    }
+  }, [activePermalink, product])
 
   // Toggle sidebar categories only on MONTH changes.
   // Sequential: collapse old month → wait for React → expand new month → re-highlight.
@@ -195,12 +263,16 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
       // 3. After React re-renders with new month expanded, re-highlight the link
       requestAnimationFrame(() => {
         const freshSidebar = document.querySelector('[class*="docSidebarContainer"]')
-        if (freshSidebar) highlightActiveLink(freshSidebar, activePermalink)
+        if (freshSidebar) {
+          applySidebarProductFilter(freshSidebar, product)
+          highlightActiveLink(freshSidebar, activePermalink)
+        }
       })
     })()
-  }, [activeMonthSlug, activePermalink])
+  }, [activeMonthSlug, activePermalink, product])
 
-  // MutationObserver: re-apply active-link highlight when React re-renders the sidebar
+  // MutationObserver: re-apply product filter + active-link highlight when
+  // React re-renders the sidebar
   useEffect(() => {
     const sidebar = document.querySelector('[class*="docSidebarContainer"]')
     if (!sidebar) return
@@ -213,6 +285,7 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
         selfTriggered = true
+        applySidebarProductFilter(sidebar, product)
         highlightActiveLink(sidebar, activePermalink)
         requestAnimationFrame(() => {
           selfTriggered = false
@@ -230,13 +303,27 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
       observer.disconnect()
       clearTimeout(timeout)
     }
-  }, [activePermalink])
+  }, [activePermalink, product])
 
   const displayed = subsequentEntries.slice(0, visibleCount)
 
   return (
     <div className="row">
       <div className="col">
+        <div className={styles.productTabs} role="tablist" aria-label="Product">
+          {PRODUCTS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              role="tab"
+              aria-selected={product === p.id}
+              className={`${styles.productTab} ${product === p.id ? styles.productTabActive : ''}`}
+              onClick={() => selectProduct(p.id)}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
         <div className={styles.feed}>
           {displayed.map((entry, i) => {
             const isNewMonth = i === 0 || entry.monthSlug !== displayed[i - 1].monthSlug
@@ -252,9 +339,14 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
                 className={styles.section}
               >
                 {isNewMonth && <div className={styles.monthLabel}>{entry.monthLabel}</div>}
-                <Heading as="h2" className={styles.versionHeading}>
-                  {entry.version}
-                </Heading>
+                <div className={styles.entryHeader}>
+                  <Heading as="h2" className={styles.versionHeading}>
+                    {entry.version}
+                  </Heading>
+                  <span className={styles.productBadge} data-product={entry.product}>
+                    {productLabel[entry.product] || entry.product}
+                  </span>
+                </div>
                 <div className="theme-doc-markdown markdown">
                   <entry.Component />
                 </div>
