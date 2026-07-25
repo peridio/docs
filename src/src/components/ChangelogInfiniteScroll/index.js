@@ -310,13 +310,12 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
   return (
     <div className="row">
       <div className="col">
-        <div className={styles.productTabs} role="tablist" aria-label="Product">
+        <div className={styles.productTabs} role="group" aria-label="Filter by product">
           {PRODUCTS.map((p) => (
             <button
               key={p.id}
               type="button"
-              role="tab"
-              aria-selected={product === p.id}
+              aria-pressed={product === p.id}
               className={`${styles.productTab} ${product === p.id ? styles.productTabActive : ''}`}
               onClick={() => selectProduct(p.id)}
             >
