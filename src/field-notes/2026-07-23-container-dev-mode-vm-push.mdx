@@ -1,6 +1,6 @@
 ---
-title: 'One line changed, one layer shipped: validating a container hot-reload path in a throwaway QEMU lab'
-description: 'Proving Container Dev Mode’s authenticated VM→device push path with a disposable QEMU docker+ssh lab - and the two bugs the lab caught before any hardware.'
+title: 'Change one line in a 7 GB container, ship only the changed layer to a running device'
+description: 'The container inner dev loop on Avocado OS: keep running docker build, and only the changed layer moves to the device. Plus the two bugs a throwaway QEMU lab caught before any hardware.'
 date: 2026-07-23
 draft: true # PRE-RELEASE feature - keep on the branch until Container Dev Mode ships
 authors: [jtia]
@@ -34,51 +34,79 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR** - I stood up a disposable QEMU "engine VM" (plain Debian + docker + ssh) to exercise Container Dev Mode’s authenticated push path end-to-end before touching hardware. A one-line change to a watched image synced **only the changed layer** to the device - and the lab caught two real bugs first: the write registry was serving plain HTTP where the guest expected HTTPS, and a 2 MiB body limit was rejecting every real image layer.
+**TL;DR** - If you ship a containerized app to an embedded device, your inner loop is probably "rebuild the image, move gigabytes, restart, find out". Container Dev Mode makes it "run `docker build`, and only the changed layer moves". I proved the whole path in a disposable QEMU lab before touching hardware: a one-line change synced **only the changed layer**, and the lab caught two real bugs first - the write registry was serving plain HTTP where the guest required HTTPS, and a 2 MiB body limit was rejecting every real image layer.
 
 {/* truncate */}
 
-## What this is
+## The loop this replaces
 
-Peridio ships and manages fleets of embedded Linux devices; Avocado OS is its Yocto-based distro with an immutable root filesystem. Container Dev Mode is the inner dev loop for a containerized app on such a device: you edit code on your laptop, and the changed container image is hot-reloaded onto the running device - no reflash, no full image re-ship. The host CLI runs a small embedded OCI registry; a device-side agent pulls over a pinned-CA TLS channel and restarts the container.
+Picture a setup we see constantly on computer-vision devices. The application is a container: an inference runtime, a pile of Python dependencies, model weights. The image is multi-gigabyte - 7 GB uncompressed is not unusual, roughly half that on the wire. It runs on a Jetson-class box sitting in a plant, a yard, or a vehicle, on an immutable OS nobody wants to reflash to try a code change.
 
-The hard part is the write path when the container engine runs *inside* a VM (the macOS fast path): the guest pushes to the host over a routable, authenticated HTTPS registry whose per-project CA is delivered at session start, never baked into the image. I wanted that path proven on Linux, in software, before a board was in the loop.
+So the loop goes: change forty lines of Python, rebuild the image, push the whole thing to a registry, pull the whole thing onto the device, restart, discover the fix was wrong, repeat.
 
-## How it works / what we did
+Nothing there is broken, exactly. It is that the cost of one iteration is set by the size of your image instead of the size of your change, and that ratio gets worse every time the model grows. Teams end up batching changes they would rather test one at a time, which is the real tax: not the minutes, the loss of "try it and see."
 
-The trick is that QEMU user-mode (SLIRP) networking gives a guest a fixed route to the host at `10.0.2.2`. That is exactly the alias the real macOS avocado-vm uses, so a plain Debian VM under QEMU is a faithful stand-in for the engine VM. A one-shot `cloud-init` seed installs `docker.io` and drops in an SSH key; the guest’s dockerd is then forwarded to the socket the CLI looks for:
+Avocado OS already had an answer for the other half of this problem. [Hardware in the loop](/developer-reference/hardware-in-the-loop) NFS-mounts an extension into a running device so a change shows up in seconds. Container Dev Mode is that same bargain for the container half.
 
-```bash
-ssh -f -N -L "$HOME/.avocado/vm/docker.sock:/var/run/docker.sock" avocado-vm-lab
-export DOCKER_HOST="unix://$HOME/.avocado/vm/docker.sock"
+## What the loop looks like now
+
+Name the image you build and the service that consumes it:
+
+```yaml title="avocado.yaml"
+runtimes:
+  dev:
+    container_dev:
+      images:
+        - ref: my-app:dev
+          service: app
 ```
 
-With `DOCKER_HOST` pointed at the guest, `avocado container dev up` mints a per-project CA, binds the write + bulk + control listeners, and delivers the CA into the guest’s docker trust store over SSH - into `/etc/docker/certs.d/10.0.2.2:<port>/ca.crt`, per connection, never a build-time overlay file.
+Point the CLI at the device and start a session:
 
-A verify script then asserts the four properties that matter and prints PASS/FAIL for each:
+```bash title="On Host"
+export AVOCADO_CONTAINER_DEV_DEVICE=root@192.168.1.50
+avocado container dev up
+```
+
+Then keep building exactly the way you already do:
+
+```bash title="On Host"
+docker build -t my-app:dev .
+```
+
+That is the loop. There is no wrapper command and no separate push step. The CLI watches your engine for the tag event, pushes the changed layers into an embedded registry on your host, and notifies the device over a control WebSocket; the device pulls and restarts the service. Setup, the full command set, and the trust model are in the [Container dev mode guide](/developer-reference/container-dev-mode).
+
+## What actually moves
+
+Delta-pull is the entire point, so it is the thing worth measuring rather than asserting. With a 512 KiB shared base layer and a small top layer, the first sync moves the whole image. After a one-line change to the top layer, the device pulls only that layer: the config and base blobs are byte-identical by digest and already local.
+
+<PullQuote>A one-line change transferred **only the changed layer** - the shared 512 KiB base layer was never re-sent.</PullQuote>
+
+Scale that to a real inference image and it is the difference between moving gigabytes and moving a few hundred kilobytes for the same edit.
+
+## Proving it before any hardware
+
+The hardest path here is not the one most people hit first. On native Linux the host engine pushes to a loopback registry and Docker's built-in `127.0.0.0/8` exemption means zero certificate config. But when the engine runs inside a VM - the macOS setup - the push has to cross from guest to host over a routable, authenticated HTTPS endpoint whose per-project CA is delivered at session start and never baked into an image. I wanted that proven in software before a board was in the loop.
+
+QEMU user-mode networking hands a guest a fixed route to the host at `10.0.2.2`, the same alias the real helper VM uses, so a plain Debian VM with docker and ssh is a faithful stand-in. A verify script drives `up` and `sync` and asserts the properties that matter:
 
 ```text
-== 1/4. CA delivered into the VM engine trust store at run time ==
+== CA delivered into the VM engine trust store at run time ==
   PASS: delivered CA present + valid at /etc/docker/certs.d/10.0.2.2:5601/ca.crt
-== 3. Write path is authenticated - an unauthenticated write is refused ==
+== Write path is authenticated - an unauthenticated write is refused ==
   PASS: unauthenticated write refused with 401 (Basic write token required)
-== 2. Guest push over authenticated HTTPS SUCCEEDS ==
+== Guest push over authenticated HTTPS SUCCEEDS ==
   PASS: guest push landed: manifest tag 'dev' present in the registry store
-== 4. No static CA baked into the avocado-vm overlay ==
+== No static CA baked into the avocado-vm overlay ==
   PASS: the overlay provisions the trust-store location only
   passed: 8   failed: 0
 ```
 
-The delta-pull property - the whole point of the inner loop - is that a one-line change ships only the changed layer. With a 512 KiB shared base layer and a small top layer, the first pull moves the whole image; after a one-line change to the top layer, the device pulls only that layer, because the shared config and base blobs are byte-identical by digest and already local.
+## What broke
 
-<PullQuote>A one-line change transferred **only the changed layer** - the shared 512 KiB base layer was never re-sent.</PullQuote>
-
-## Issues Encountered
-
-- **The write listener spoke HTTP where the guest required HTTPS.** On native Linux, docker’s built-in `127.0.0.0/8` insecure exemption makes a loopback HTTP registry work with zero cert config. But a QEMU guest reaches the host as `10.0.2.2`, which is *not* in that exemption - so the guest, configured via the delivered `certs.d` CA, expects TLS. The listener was serving plain HTTP; the fix was to terminate the same per-project leaf TLS the bulk and control listeners already used, but only on the VM path. The lab caught this immediately; on a real board it would have looked like a mysterious push failure.
-- **A 2 MiB body limit rejected every real image layer.** Once TLS was fixed, the guest push reached the registry and then died mid-stream with `HTTP 413 "Failed to buffer the request body: length limit exceeded"`. The embedded registry buffered upload bodies under a framework default of 2 MiB; real layers are larger. Lifting that cap on the write path (blobs stream to the on-disk store) fixed it. A trivial busybox image had slipped under 2 MiB and hidden the bug - only a 5 MiB layer surfaced it.
-- **The remote-build shortcut hit a wall.** Trying to offload the device-extension cross-build to a second machine over the tool’s NFS-based remote mode failed because dnf’s history database is SQLite, and SQLite cannot take its locks over NFS. [ENGINEER: confirm the final build ran locally under a PTY - the SDK container needs a TTY that a non-interactive shell doesn’t provide.]
-- **A false-green almost slipped through.** The `sync` command only *signals* the running session; the push happens asynchronously. An early version of the check asserted the command’s exit code and passed even when no bytes moved. The real assertion waits for the manifest to actually land in the registry store.
+- **The write listener spoke HTTP where the guest required HTTPS.** A QEMU guest reaches the host as `10.0.2.2`, which is not inside docker's loopback insecure exemption, so the guest - configured via the delivered `certs.d` CA - expects TLS. The listener was serving plain HTTP. The fix was to terminate the same per-project leaf TLS the other listeners already used, on the VM path only. On a real board this would have surfaced as a mysterious push failure.
+- **A 2 MiB body limit rejected every real image layer.** With TLS fixed, the push reached the registry and died mid-stream with `HTTP 413 "Failed to buffer the request body: length limit exceeded"`. The embedded registry was buffering upload bodies under a framework default of 2 MiB; real layers are bigger. Lifting that cap on the write path (blobs stream to the on-disk store) fixed it. A trivial busybox image had slipped under the limit and hidden the bug - only a 5 MiB layer surfaced it.
+- **A false-green almost slipped through.** `sync` only signals the running session; the push happens asynchronously. An early version of the check asserted the command's exit code and passed even when no bytes moved. The real assertion waits for the manifest to actually land in the registry store.
 
 ## Reproduce it
 
