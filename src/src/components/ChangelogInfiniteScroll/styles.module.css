@@ -78,7 +78,9 @@
 }
 
 .section {
-  scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
+  /* Navbar height + the sticky product-tab strip (~3.5rem) + breathing room, so
+     jumping to an entry doesn't land its heading hidden under the sticky tabs. */
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 5rem);
 }
 
 .versionHeading {
