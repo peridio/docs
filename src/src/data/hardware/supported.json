@@ -3,8 +3,8 @@
   "devices": [
     {
       "name": "Advantech ICAM-540",
-      "target": "icam-540",
-      "board": "",
+      "target": "jetson-orin-nx",
+      "board": "icam-540",
       "url": "/hardware/advantech/icam-540",
       "external": false,
       "lts": {
@@ -25,7 +25,7 @@
     },
     {
       "name": "Advantech MIC-733-AO5A1",
-      "target": "jetson-agx-orin-devkit",
+      "target": "jetson-agx-orin",
       "board": "mic-733-ao5a1",
       "url": "/hardware/advantech/mic-733-ao",
       "external": false,
@@ -36,7 +36,7 @@
     },
     {
       "name": "Advantech MIC-733-AO6A1",
-      "target": "jetson-agx-orin-devkit",
+      "target": "jetson-agx-orin",
       "board": "mic-733-ao6a1",
       "url": "/hardware/advantech/mic-733-ao",
       "external": false,
@@ -91,13 +91,24 @@
     },
     {
       "name": "NVIDIA Jetson AGX Orin Developer Kit",
-      "target": "jetson-agx-orin-devkit",
+      "target": "jetson-agx-orin",
       "board": "",
       "url": "/hardware/nvidia/jetson-agx-orin",
       "external": false,
       "lts": {
         "2024": "supported",
         "2026": "in-progress"
+      }
+    },
+    {
+      "name": "NVIDIA Jetson AGX Thor",
+      "target": "jetson-agx-thor",
+      "board": "",
+      "url": "/hardware/nvidia/jetson-agx-thor",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "supported"
       }
     },
     {
@@ -113,20 +124,9 @@
     },
     {
       "name": "NVIDIA Jetson Orin Nano Developer Kit",
-      "target": "jetson-orin-nano-devkit",
+      "target": "jetson-orin-nano",
       "board": "",
       "url": "/hardware/nvidia/jetson-orin-nano-developer-kit",
-      "external": false,
-      "lts": {
-        "2024": "supported",
-        "2026": "in-progress"
-      }
-    },
-    {
-      "name": "NXP FRDM i.MX 91",
-      "target": "imx91-frdm",
-      "board": "",
-      "url": "/hardware/nxp/frdm-imx-91",
       "external": false,
       "lts": {
         "2024": "supported",
@@ -145,6 +145,17 @@
       }
     },
     {
+      "name": "NXP FRDM i.MX 91",
+      "target": "imx91-frdm",
+      "board": "",
+      "url": "/hardware/nxp/frdm-imx-91",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
       "name": "NXP i.MX 93 EVK",
       "target": "imx93-evk",
       "board": "",
@@ -156,7 +167,7 @@
       }
     },
     {
-      "name": "NXP i.MX 93 FRDM SBC",
+      "name": "NXP FRDM i.MX 93",
       "target": "imx93-frdm",
       "board": "",
       "url": "/hardware/nxp/frdm-imx-93",
@@ -164,6 +175,17 @@
       "lts": {
         "2024": "supported",
         "2026": "in-progress"
+      }
+    },
+    {
+      "name": "NXP FRDM i.MX 95",
+      "target": "imx95-frdm",
+      "board": "",
+      "url": "/hardware/nxp/frdm-imx-95",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "supported"
       }
     },
     {

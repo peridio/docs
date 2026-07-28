@@ -1,0 +1,101 @@
+---
+title: 'Fast-Track Your AGX Thor Production Deployment'
+sidebar_position: 0
+description: 'Production-ready NVIDIA Jetson AGX Thor deployment with Avocado Connect + Avocado OS. Enterprise Linux, secure OTA, and fleet management for the Blackwell-powered robotics supercomputer.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+<HardwareHero
+  vendor="NVIDIA"
+  vendorUrl="https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/"
+  model="Jetson AGX Thor"
+  tagline="Production-grade software for NVIDIA's flagship robotics supercomputer. Deploy Jetson AGX Thor fleets with deterministic Linux, secure OTA, and fleet management — built for physical AI."
+  image="/img/hardware/nvidia/agx-thor.png"
+  imageAlt="NVIDIA Jetson AGX Thor module"
+  stats={[
+    { value: '2070 TFLOPS', label: 'FP4 AI Performance' },
+    { value: 'Blackwell', label: '2560-core GPU' },
+    { value: '14-core', label: 'Arm Neoverse-V3AE CPU' },
+    { value: '128GB', label: 'LPDDR5X Memory' },
+    { value: 'PCIe Gen5', label: 'High-Speed I/O' },
+    { value: '40-130W', label: 'Configurable Power' },
+  ]}
+  target="jetson-agx-thor"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
+
+## Overview
+
+The NVIDIA Jetson AGX Thor is the flagship Jetson module, delivering 2070 FP4
+TFLOPS — 7.5x the AI performance of AGX Orin at 3.5x better efficiency. Built on
+the Blackwell GPU architecture with a 14-core Arm Neoverse-V3AE CPU, it includes
+128GB LPDDR5X memory, PCIe Gen5, 16x CSI-2 camera lanes, and 4x25GbE networking.
+It is the definitive platform for humanoid robotics, autonomous systems, and
+next-generation physical AI. Paired with Avocado OS and Avocado Connect, Thor
+gains the production-ready software foundation — enterprise Linux, atomic OTA
+updates, and fleet management — required for mission-critical deployments at
+scale.
+
+Avocado OS supports the Jetson AGX Thor on the **2026** release.
+
+## Specifications
+
+| Specification  | Value                                | Notes                           |
+| -------------- | ------------------------------------ | ------------------------------- |
+| CPU            | 14-core Arm Neoverse-V3AE            |                                 |
+| GPU            | 2560-core Blackwell, 96 Tensor Cores |                                 |
+| AI Performance | 2070 FP4 TFLOPS / 1035 FP8 TFLOPS    | Sparse; 1035 / 517 TFLOPS dense |
+| Memory         | 128GB LPDDR5X (273 GB/s)             |                                 |
+| Storage        | PCIe Gen5 NVMe                       | 1TB in dev kit                  |
+| Video Decode   | Up to 10x 4Kp60 or 4x 8Kp30          | H.265, H.264, AV1, VP9          |
+| Video Encode   | Up to 6x 4Kp60                       | H.265, H.264                    |
+| Camera         | 16x CSI-2 lanes, 20+ cameras         |                                 |
+| Networking     | QSFP 4x25GbE + RJ45 Multi-GbE        |                                 |
+| Power          | 40-130W configurable                 |                                 |
+
+## Use Cases
+
+### Humanoid Robotics
+
+Real-time reasoning for general-purpose robotic platforms, with the headroom to
+run large vision-language-action models on-device.
+
+### Autonomous Machines
+
+Multi-sensor fusion for autonomous vehicles and mobile machines, with
+deterministic Linux and secure OTA for the field.
+
+### Edge AI Servers
+
+Large-model inference (LLMs, VLMs) in industrial and medical settings, managed
+across a fleet with Avocado Connect.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target)
+instructions under Getting Started to begin. This target is `jetson-agx-thor`,
+available on the **2026** release feed. The provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the
+system image and flash it to your target hardware.
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile tegraflash
+```
+
+### Run
+
+Power-cycle the device. It will boot with the provisioned system. The `root` user
+is passwordless in the `dev` runtime used by this guide.
