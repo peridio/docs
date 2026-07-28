@@ -1,6 +1,6 @@
 ---
 title: 'We put a second machine on our heaviest Yocto package. Chromium got [ENGINEER: X] faster; a full image barely moved.'
-description: 'Peridio builds the Avocado OS package feed across 30 hardware platforms. We measured whether distributing the compile across a two-machine compiler-cache cluster speeds up a from-scratch build — large on compile-bound Chromium, marginal on a full image, and here is why.'
+description: 'Peridio builds the Avocado OS package feed across 30 hardware platforms. We measured whether distributing the compile across a two-machine compiler-cache cluster speeds up a from-scratch build. The gain is large on compile-bound Chromium and marginal on a full image, and here is why.'
 date: 2026-07-21
 draft: true # excluded from the published build until the [ENGINEER:] placeholders are filled and the demo is recorded
 authors: [jtia]
@@ -18,11 +18,10 @@ promote_to_track: ''
 import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
 
-{/* Build note, not a device note: TestStatus points at the build target + the public tool, since the OE integration itself is internal. */}
+{/* Build note, not a device note: TestStatus points at the build target + the public tool, since the OE integration itself is internal. `cli` is deliberately omitted - TestStatus renders it under a hard-coded "Avocado CLI" label, and this note has no Avocado CLI version to report. The build-tooling version lives in `tested_against` and the prose. */}
 
 <TestStatus
   targets={['[ENGINEER: build target machine — e.g. qemuarm64, or the platform the Chromium image was built for]']}
-  cli="[ENGINEER: build-tooling version]"
   reference={{
     label: 'sccache-dist for Yocto/OE (RFC #2775)',
     href: 'https://github.com/mozilla/sccache/issues/2775',
