@@ -21,7 +21,9 @@ import TestStatus from '@site/src/components/TestStatus'
 {/* Build note, not a device note: TestStatus points at the build target + the public tool, since the OE integration itself is internal. `cli` is deliberately omitted - TestStatus renders it under a hard-coded "Avocado CLI" label, and this note has no Avocado CLI version to report. The build-tooling version lives in `tested_against` and the prose. */}
 
 <TestStatus
-  targets={['[ENGINEER: build target machine — e.g. qemuarm64, or the platform the Chromium image was built for]']}
+  targets={[
+    '[ENGINEER: build target machine — e.g. qemuarm64, or the platform the Chromium image was built for]',
+  ]}
   reference={{
     label: 'sccache-dist for Yocto/OE (RFC #2775)',
     href: 'https://github.com/mozilla/sccache/issues/2775',
@@ -56,7 +58,10 @@ bitbake chromium-ozone-wayland
 
 [ENGINEER: embed the two demo recordings here. Both were captured as fast-forwarded terminal recordings with an on-screen timer. demo 1 = one machine, demo 2 = the two-machine cluster. Paste the two wall-clock numbers the timers land on.]
 
-<PullQuote>Chromium, from scratch: **[ENGINEER: Xh Ym] on one machine → [ENGINEER: Xh Ym] on two** — [ENGINEER: N]× on the package that dominates our compile budget.</PullQuote>
+<PullQuote>
+  Chromium, from scratch: **[ENGINEER: Xh Ym] on one machine → [ENGINEER: Xh Ym] on two** —
+  [ENGINEER: N]× on the package that dominates our compile budget.
+</PullQuote>
 
 ## Issues Encountered
 
@@ -65,8 +70,8 @@ This is the part worth reading, because the result is not "cluster go faster."
 - **This ran on a desktop, not a dedicated build machine.** The two nodes are consumer Ryzen workstations doing double duty, not tuned build servers, so background load and consumer defaults move the numbers. Read the result as the shape of the effect on compile-bound work, not a datacenter benchmark.
 - **A full image barely moved — 1.12×, not 2×.** On a full `qemuarm64` image (~12,000 tasks, cold), one machine took **3h28m** and two machines took **3h06m** — an 11% wall-clock reduction for double the remote compile cores. Doubling from 32 to 64 remote cores did not come close to doubling throughput.
 - **A Yocto cold build is latency-bound, not compute-bound.** In that run the tasks sat ~84% idle. `do_configure` alone was ~45% of total task-time at **2.8% CPU utilization** — it fires thousands of millisecond-scale probe compiles, and wrapping each one in a compiler cache adds a client→server round-trip that dwarfs the actual work. A second machine cannot help a build that is waiting, not computing: its 32 cores sit as idle as the first machine's.
-- **Don't read the Chromium number as a whole-build number.** A compile cluster speeds up *compiling*. A single compile-bound package like Chromium is almost all compile, so it wins big; a full image is mostly configure, install, and packaging, so the same cluster gives ~11%. The two results measure different things — one package versus a whole image — and conflating them is the easiest way to oversell this.
-- **Making the *whole* build considerably faster is a different lever — and its own Field Note.** What speeds up an entire Yocto build is cache *reuse*: a proper shared NFS `SSTATE_DIR` / `DL_DIR` / `ccache` (plus hash-equivalence) so the next build — or the next of the 30 platforms — restores from cache instead of recompiling. That is the documented Yocto lever ([Speeding Up a Build](https://docs.yoctoproject.org/dev/dev-manual/speeding-up-build.html)) and what keeps the 30-platform feed tractable. It is the subject of a separate Field Note; this one is narrower on purpose — one compile-bound package, from scratch, across a compile cluster.
+- **Don't read the Chromium number as a whole-build number.** A compile cluster speeds up _compiling_. A single compile-bound package like Chromium is almost all compile, so it wins big; a full image is mostly configure, install, and packaging, so the same cluster gives ~11%. The two results measure different things — one package versus a whole image — and conflating them is the easiest way to oversell this.
+- **Making the _whole_ build considerably faster is a different lever — and its own Field Note.** What speeds up an entire Yocto build is cache _reuse_: a proper shared NFS `SSTATE_DIR` / `DL_DIR` / `ccache` (plus hash-equivalence) so the next build — or the next of the 30 platforms — restores from cache instead of recompiling. That is the documented Yocto lever ([Speeding Up a Build](https://docs.yoctoproject.org/dev/dev-manual/speeding-up-build.html)) and what keeps the 30-platform feed tractable. It is the subject of a separate Field Note; this one is narrower on purpose — one compile-bound package, from scratch, across a compile cluster.
 - **Chromium is the exception that makes distribution worth showing.** Unlike a full image, Chromium is dominated by `do_compile`, not configure — a massive C++ compile with comparatively few probes. That is exactly the shape where farming compiles out to a second machine pays off, which is why the demo is Chromium and not a whole image. [ENGINEER: note anything that bit you in the Chromium run specifically — cold-cache store overhead, any distribution errors that fell back to local, the split of remote vs local compiles.]
 
 ## What we're upstreaming
