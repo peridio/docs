@@ -4,6 +4,7 @@
 import REF_2026_07 from '../../../docs-changelog/july-2026/reference-2026.07.md'
 import DESKTOP_1_0_0_RC_6 from '../../../docs-changelog/july-2026/desktop-1.0.0-rc.6.md'
 import CONNECT_2026_07 from '../../../docs-changelog/july-2026/connect-2026.07.md'
+import MCP_5_2_0 from '../../../docs-changelog/july-2026/mcp-5.2.0.md'
 import V1_0_0_RC_1 from '../../../docs-changelog/july-2026/1.0.0-rc.1.mdx'
 // -- June 2026 --
 import MCP_5_1_0 from '../../../docs-changelog/june-2026/mcp-5.1.0.md'
@@ -12,7 +13,7 @@ import V0_41_1 from '../../../docs-changelog/june-2026/0.41.1.md'
 import V0_41_0 from '../../../docs-changelog/june-2026/0.41.0.md'
 import CONNECT_2026_06 from '../../../docs-changelog/june-2026/connect-2026.06.md'
 // -- May 2026 --
-import DESKTOP_0_4_0 from '../../../docs-changelog/may-2026/desktop-0.4.0.md'
+import DESKTOP_0_4_4 from '../../../docs-changelog/may-2026/desktop-0.4.4.md'
 import V0_40_2 from '../../../docs-changelog/may-2026/0.40.2.md'
 import MCP_5_0_0 from '../../../docs-changelog/may-2026/mcp-5.0.0.md'
 import REF_2026_05 from '../../../docs-changelog/may-2026/reference-2026.05.md'
@@ -101,6 +102,14 @@ const rawEntries = [
     Component: CONNECT_2026_07,
   },
   {
+    product: 'mcp',
+    version: '5.2.0',
+    monthSlug: 'july-2026',
+    monthLabel: 'July 2026',
+    permalink: '/changelog/july-2026/mcp-5.2.0',
+    Component: MCP_5_2_0,
+  },
+  {
     version: '1.0.0-rc.1',
     monthSlug: 'july-2026',
     monthLabel: 'July 2026',
@@ -148,11 +157,11 @@ const rawEntries = [
 
   {
     product: 'desktop',
-    version: '0.4.0',
+    version: '0.4.4',
     monthSlug: 'may-2026',
     monthLabel: 'May 2026',
-    permalink: '/changelog/may-2026/desktop-0.4.0',
-    Component: DESKTOP_0_4_0,
+    permalink: '/changelog/may-2026/desktop-0.4.4',
+    Component: DESKTOP_0_4_4,
   },
   {
     version: '0.40.2',

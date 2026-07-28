@@ -1,5 +1,5 @@
 ---
-title: 'Desktop: 0.4.0'
+title: 'Desktop: 0.4.4'
 description: 'Avocado Desktop 0.x — from the first macOS host through the Tauri rebuild.'
 ---
 

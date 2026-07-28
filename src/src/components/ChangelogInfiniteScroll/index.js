@@ -56,10 +56,15 @@ function applySidebarProductFilter(sidebar, product) {
   const allMonthLabels = new Set(Object.values(monthSlugToLabel))
 
   sidebar.querySelectorAll('.menu__link:not(.menu__link--sublist)').forEach((link) => {
-    const href = link.getAttribute('href')
-    if (!href || !href.startsWith('/changelog/')) return
+    const raw = link.getAttribute('href')
+    if (!raw || !raw.startsWith('/changelog/')) return
+    const permalink = raw.split('?')[0]
     const li = link.closest('.menu__list-item')
-    if (li) li.style.display = visiblePermalinks.has(href) ? '' : 'none'
+    if (li) li.style.display = visiblePermalinks.has(permalink) ? '' : 'none'
+    // Carry the active product filter through sidebar navigation, so a
+    // doc-to-doc click doesn't remount the feed with the filter reset to "all".
+    const desired = product === 'all' ? permalink : `${permalink}?product=${product}`
+    if (raw !== desired) link.setAttribute('href', desired)
   })
 
   for (const link of sidebar.querySelectorAll('.menu__link--sublist')) {
@@ -108,10 +113,10 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
 
   const filteredEntries = useMemo(() => entriesForProduct(product), [product])
 
-  // On the master tab the feed starts at the landing entry; product tabs
-  // always start from that product's newest entry.
-  const startIndex =
-    product === 'all' ? filteredEntries.findIndex((e) => e.permalink === startPermalink) : 0
+  // Start at the landing entry within the active product's filtered set, so a
+  // deep link like /changelog/.../desktop-0.4.4?product=desktop opens on that
+  // entry. Fall back to the newest entry only if it isn't in the filtered set.
+  const startIndex = filteredEntries.findIndex((e) => e.permalink === startPermalink)
   const startIdx = startIndex >= 0 ? startIndex : 0
   const startEntry = filteredEntries[startIdx]
 

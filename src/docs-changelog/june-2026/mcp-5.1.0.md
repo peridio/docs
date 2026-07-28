@@ -31,9 +31,3 @@ Invoking the `avocado` CLI moved behind a dedicated CLI channel, which cleans up
 how tools shell out and makes command invocation consistent across the Connect
 and discovery tools. A guard bug that could break adding the MCP server to Claude
 is fixed.
-
-## Security and dependencies
-
-- npm audit vulnerabilities resolved — `shell-quote` pinned to `^1.8.4`, `hono`
-  and `qs` bumped.
-- `SECURITY.md` endpoints corrected and the license/lockfile mismatch resolved.

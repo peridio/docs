@@ -12,6 +12,7 @@ const sidebars = {
         'july-2026/reference-2026.07',
         'july-2026/desktop-1.0.0-rc.6',
         'july-2026/connect-2026.07',
+        'july-2026/mcp-5.2.0',
         'july-2026/1.0.0-rc.1',
       ],
     },
@@ -34,7 +35,7 @@ const sidebars = {
       collapsible: false,
       collapsed: false,
       items: [
-        'may-2026/desktop-0.4.0',
+        'may-2026/desktop-0.4.4',
         'may-2026/0.40.2',
         'may-2026/mcp-5.0.0',
         'may-2026/reference-2026.05',
