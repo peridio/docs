@@ -12,7 +12,7 @@ It's [open source](https://github.com/avocado-linux/avocado-mcp), runs locally o
 
 ## Prerequisites
 
-- **Node.js ≥ 18** — the server runs via `npx`. On first run, `npx` downloads the package, installs its dependencies, and builds it (~30s); subsequent runs start instantly from cache. (Reaching the optional Avocado Desktop server from Claude Desktop bridges through [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), which needs Node **20.18.1+** — see [The Avocado Desktop MCP server](#the-avocado-desktop-mcp-server).)
+- **Node.js ≥ 20** — the server runs via `npx`. On first run, `npx` downloads the package, installs its dependencies, and builds it (~30s); subsequent runs start instantly from cache. (Reaching the optional Avocado Desktop server from Claude Desktop bridges through [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), which needs Node **20.18.1+** — see [The Avocado Desktop MCP server](#the-avocado-desktop-mcp-server).)
 - An **MCP-capable client** (Claude Code, Claude Desktop, OpenAI Codex, Cursor, etc.).
 - For building, provisioning, and deploying to real hardware, you'll also want the **Avocado CLI and Docker** installed — see [Getting Started](/developer-reference/getting-started). The MCP drives the CLI on your behalf.
 
@@ -144,7 +144,7 @@ claude mcp add --transport http avocado-desktop http://127.0.0.1:11551/mcp
 }
 ```
 
-Quit and reopen Claude Desktop after saving. Note that `mcp-remote` requires Node.js 20.18.1 or newer (a floor set by its dependencies), higher than the Node 18 minimum for the `avocado-os` server alone.
+Quit and reopen Claude Desktop after saving. Note that `mcp-remote` requires Node.js 20.18.1 or newer (a floor set by its dependencies), higher than the Node 20 minimum for the `avocado-os` server alone.
 
 ### Clients with native HTTP support
 
