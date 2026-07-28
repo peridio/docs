@@ -330,7 +330,7 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
             return (
               <section
                 key={entry.permalink}
-                id={entry.version}
+                id={entry.permalink.split('/').pop()}
                 data-permalink={entry.permalink}
                 ref={(el) => {
                   sectionsRef.current[entry.permalink] = el
