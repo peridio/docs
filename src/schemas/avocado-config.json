@@ -1,1081 +1,717 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://avocado.com/schemas/avocado-config/1.2.0.json",
-  "title": "Avocado Configuration",
-  "description": "Configuration schema for Avocado CLI avocado.yaml files. Defines project settings, build configurations, packages, and provisioning profiles for Avocado OS projects.",
+  "$id": "https://avocado.com/schemas/avocado-yaml/0.2.0.json",
+  "title": "Avocado OS project configuration (avocado.yaml)",
   "type": "object",
+  "additionalProperties": true,
+  "required": ["distro", "runtimes"],
   "properties": {
+    "cli_requirement": {
+      "type": "string",
+      "description": "Minimum avocado CLI version (semver range, e.g. '>=0.26.0')."
+    },
+    "source_date_epoch": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "description": "SOURCE_DATE_EPOCH timestamp for reproducible builds (Unix seconds)."
+    },
+    "src_dir": {
+      "type": "string",
+      "description": "Source directory the project root resolves against (relative or absolute)."
+    },
     "default_target": {
-      "title": "Default target",
-      "$ref": "#/definitions/target",
-      "description": "The default target platform for the project. This target is used when building the project if no target is specified.",
-      "examples": ["jetson-orin-nano-devkit"]
+      "type": "string",
+      "description": "Default target name used when `avocado build` / `provision` is called without `--target`."
     },
     "default_target_board": {
-      "title": "Default target board",
       "type": "string",
-      "description": "Default board variant within the target, for System-on-Modules that ship on more than one carrier board. Feeds the '{{ avocado.target.board }}' interpolation. Precedence, highest to lowest: the --target-board CLI flag, the AVOCADO_TARGET_BOARD environment variable, the resolved runtime's target_board, then this value; when none is set, the board falls back to the resolved target.",
-      "examples": ["variscite-sonata"]
+      "description": "Default board variant within the target. Lowest-priority resolution for `{{ avocado.target.board }}`; overridden by `AVOCADO_TARGET_BOARD`."
+    },
+    "default_runtime": {
+      "type": "string",
+      "description": "Default runtime name for commands that scope by runtime. Used when no `-r/--runtime` flag and no `AVOCADO_RUNTIME` env var are set. Must reference a key under `runtimes:`."
     },
     "supported_targets": {
-      "title": "Supported targets",
+      "description": "Targets this project supports. '*' means all targets known to the package feed.",
       "oneOf": [
         {
           "type": "string",
-          "enum": ["*"],
-          "description": "Support all available targets."
+          "enum": ["*"]
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/target"
+            "type": "string"
           },
-          "description": "List of specific supported target architectures."
+          "minItems": 1
         }
-      ],
-      "description": "Defines which targets are supported by this project. Use '*' to support all targets, or provide an array of specific target names to limit support.",
-      "examples": ["*", ["raspberrypi4", "qemuarm64"]]
-    },
-    "src_dir": {
-      "title": "Source directory",
-      "type": "string",
-      "description": "Path to the source directory relative to the configuration file. If not specified, defaults to the directory containing the configuration file. This is where your project source code is located.",
-      "default": ".",
-      "examples": ["."]
+      ]
     },
     "distro": {
-      "title": "Distribution configuration",
-      "$ref": "#/definitions/distroConfig",
-      "description": "Distribution-specific configuration for the Avocado OS project."
-    },
-    "runtimes": {
-      "title": "Runtimes",
       "type": "object",
-      "description": "Runtime configurations for different deployment scenarios. Each runtime can specify extensions, packages, and target-specific settings.",
-      "patternProperties": {
-        "^[a-zA-Z0-9_-]+$": {
-          "$ref": "#/definitions/runtimeConfig"
-        }
-      },
-      "additionalProperties": false,
-      "examples": [
-        {
-          "dev": {
-            "extensions": ["avocado-ext-dev", "avocado-ext-sshd-dev"],
-            "packages": {
-              "avocado-runtime": "*"
-            }
-          }
-        }
-      ]
-    },
-    "sdk": {
-      "title": "SDK Configuration",
-      "$ref": "#/definitions/sdkConfig",
-      "description": "Configure the default Avocado SDK."
-    },
-    "provision_profiles": {
-      "title": "Provisioning profiles",
-      "type": "object",
-      "description": "Provisioning profiles for deploying Avocado OS images to devices. Each profile can define different settings for development, production, or custom deployment scenarios.",
-      "patternProperties": {
-        "^[a-zA-Z0-9_-]+$": {
-          "$ref": "#/definitions/provisionProfileConfig"
-        }
-      },
-      "additionalProperties": false,
-      "examples": [
-        {
-          "development": {
-            "container_args": ["--device", "/dev/ttyUSB0"]
-          }
-        }
-      ]
-    },
-    "extensions": {
-      "title": "Extensions",
-      "type": "object",
-      "description": "Extension configurations for both local extensions (defined in this file) and remote extensions (fetched from package repositories, git, or local paths).",
-      "patternProperties": {
-        "^[a-zA-Z0-9_{}. -]+$": {
-          "$ref": "#/definitions/extensionConfig"
-        }
-      },
-      "additionalProperties": false,
-      "examples": [
-        {
-          "example-rust": {
-            "types": ["sysext", "confext"],
-            "packages": {
-              "example-rust-app": {
-                "compile": "example-rust-app",
-                "install": "example-rust-install.sh"
-              }
-            },
-            "sdk": {
-              "packages": {
-                "nativesdk-rust": "*",
-                "rust-cross-canadian-aarch64": "*",
-                "nativesdk-cargo": "*"
-              }
-            }
-          }
-        }
-      ]
-    },
-    "cli_requirement": {
-      "title": "CLI version requirement",
-      "$ref": "#/definitions/versionRequirement",
-      "description": "Minimum Avocado CLI version required to use this configuration. If the running CLI version does not satisfy this requirement, an error is raised with an upgrade prompt. Uses semver requirement syntax.",
-      "examples": [">=0.27.0", "^0.27"]
-    },
-    "source_date_epoch": {
-      "title": "Source date epoch",
-      "type": "integer",
-      "description": "Fixed Unix timestamp used for reproducible extension image builds. When set, this value is passed to mksquashfs and mkfs.erofs as the source timestamp, ensuring identical byte output for the same inputs regardless of build time. Defaults to 0 when not specified.",
-      "examples": [1700000000, 0]
-    },
-    "signing_keys": {
-      "title": "Signing keys",
-      "type": "array",
-      "description": "Mapping of friendly names to signing key IDs. Acts as a local bridge between the config and the global signing keys registry.",
-      "items": {
-        "type": "object",
-        "patternProperties": {
-          "^[a-zA-Z0-9_-]+$": {
-            "type": "string",
-            "description": "Signing key ID (e.g., sha256-abc123)"
-          }
-        },
-        "additionalProperties": false
-      },
-      "examples": [[{ "my-key": "sha256-abc123" }, { "other-key": "sha256-def456" }]]
-    }
-  },
-  "additionalProperties": true,
-  "definitions": {
-    "version": {
-      "title": "Version",
-      "type": "string",
-      "description": "A version string. Use '*' for any version, or a specific semantic version.",
-      "examples": ["*", "1.0.0", "0.23.0"]
-    },
-    "versionRequirement": {
-      "title": "Version requirement",
-      "type": "string",
-      "description": "Semantic version requirement string. Supports exact versions (e.g., '2.1.3'), minimum versions (e.g., '>=1.0.0'), ranges, and other semver patterns.",
-      "examples": ["1.0.0", ">=1.0.0", "~1.2.0", "^2.0.0", "2.1.3"]
-    },
-    "target": {
-      "title": "Target",
-      "type": "string",
-      "enum": [
-        "imx8mp-evk",
-        "imx91-frdm",
-        "imx93-frdm",
-        "imx93-evk",
-        "qemuarm64",
-        "qemux86-64",
-        "reterminal",
-        "reterminal-dm",
-        "jetson-orin-nano-devkit",
-        "jetson-agx-orin-devkit",
-        "raspberrypi4",
-        "raspberrypi5",
-        "raspberrypi0-2w",
-        "grinn-astra-1680-sbc",
-        "icam-540",
-        "intel-x86-64-v2",
-        "intel-x86-64-v3",
-        "fr201",
-        "stm32mp257f-dk",
-        "rzv2n-sr-som"
-      ],
-      "description": "An identifier for the platform for Avocado OS builds and deployments.",
-      "additionalProperties": false
-    },
-    "distroConfig": {
-      "title": "Distribution configuration",
-      "type": "object",
-      "description": "Distribution-specific settings including feed year, stability channel, and repository configuration.",
+      "description": "Avocado distribution stream the project pulls from.",
       "properties": {
-        "channel": {
-          "title": "Channel",
-          "type": "string",
-          "description": "Distribution stability channel (e.g., 'edge', 'stable'). Can be overridden with the AVOCADO_DISTRO_CHANNEL environment variable.",
-          "examples": ["edge", "stable"]
-        },
         "release": {
-          "title": "Release",
-          "oneOf": [{ "type": "string" }, { "type": "integer" }],
-          "description": "Distribution feed year (e.g., '2024' or 2024). Accepts both strings and integers. Can be overridden with the AVOCADO_DISTRO_RELEASE environment variable. Previously named 'version' which is still accepted as an alias.",
-          "examples": ["2024", 2024]
+          "description": "Release year (e.g. 2024) — string or number accepted.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "channel": {
+          "type": "string",
+          "description": "Release channel (e.g. 'edge'). Verified at install time against the package feed."
         },
         "repo": {
-          "title": "Repository configuration",
-          "$ref": "#/definitions/distroRepoConfig",
-          "description": "Repository configuration for package downloads. Replaces the deprecated sdk.repo_url and sdk.repo_release fields."
+          "type": "object",
+          "description": "Optional override for the upstream package repo.",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "releasever": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
         }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
-    "distroRepoConfig": {
-      "title": "Distribution repository configuration",
+    "runtimes": {
       "type": "object",
-      "description": "Repository URL and release version configuration. When releasever is not set, it is derived from '{release}/{channel}' (e.g., '2024/edge').",
-      "properties": {
-        "url": {
-          "title": "Repository URL",
-          "type": "string",
-          "description": "URL of the package repository. Defaults to https://repo.avocadolinux.org. Can be overridden with the AVOCADO_REPO_URL environment variable (or legacy AVOCADO_SDK_REPO_URL).",
-          "default": "https://repo.avocadolinux.org",
-          "examples": ["https://repo.avocadolinux.org"]
-        },
-        "releasever": {
-          "title": "Release version",
-          "type": "string",
-          "description": "Explicit releasever override for DNF --releasever. When not set, derived from distro.release and distro.channel as '{release}/{channel}'. Can be overridden with the AVOCADO_RELEASEVER environment variable (or legacy AVOCADO_SDK_REPO_RELEASE).",
-          "examples": ["2024/edge", "2024/stable"]
-        }
-      },
-      "additionalProperties": false
+      "description": "Named compositions of extensions. Each key is a runtime name (e.g. 'dev', 'prod'). The CLI accepts `-r <name>` against any key declared here.",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/runtime"
+      }
     },
-    "extensionSource": {
-      "title": "Extension source",
+    "extensions": {
       "type": "object",
-      "description": "Source configuration for fetching a remote extension. Supports package repositories, git repositories, and local filesystem paths.",
+      "description": "Named extensions referenced by runtimes. Two shapes: package-sourced (with `source: {type: package, version: ...}`) or app-style (no source; built in-tree from `app/` + hook scripts).",
+      "additionalProperties": {
+        "$ref": "#/$defs/extension"
+      }
+    },
+    "sdk": {
+      "$ref": "#/$defs/sdk"
+    },
+    "rootfs": {
+      "description": "Top-level rootfs image config. Accepts either a singleton object (synthesized as the implicit `default` entry) or a `name → config` map.",
       "oneOf": [
         {
-          "type": "object",
-          "title": "Package source",
-          "description": "Extension from the Avocado package repository.",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["package"],
-              "description": "Source type: package repository."
-            },
-            "version": {
-              "type": "string",
-              "description": "Version to fetch (e.g., '0.1.0' or '*').",
-              "examples": ["*", "1.0.0"]
-            },
-            "package": {
-              "type": "string",
-              "description": "Optional RPM package name (defaults to extension name if not specified).",
-              "examples": ["avocado-bsp-raspberrypi4"]
-            },
-            "repo_name": {
-              "type": "string",
-              "description": "Optional custom repository name.",
-              "examples": ["avocado-extras"]
-            },
-            "include": {
-              "type": "array",
-              "items": { "type": "string" },
-              "description": "Optional list of config sections to include from the remote extension. Supports dot-separated paths (e.g., 'provision_profiles.tegraflash') and wildcards (e.g., 'provision_profiles.*'). The extension's own section is always included.",
-              "examples": [["provision_profiles.*", "sdk.compile.tegraflash"]]
-            }
-          },
-          "required": ["type", "version"],
-          "additionalProperties": false
+          "$ref": "#/$defs/imageConfig"
         },
         {
           "type": "object",
-          "title": "Git source",
-          "description": "Extension from a git repository.",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["git"],
-              "description": "Source type: git repository."
-            },
-            "url": {
-              "type": "string",
-              "description": "Git repository URL.",
-              "examples": ["https://github.com/avocado-linux/extensions.git"]
-            },
-            "ref": {
-              "type": "string",
-              "description": "Git ref (branch, tag, or commit hash).",
-              "examples": ["main", "v1.0.0", "abc123"]
-            },
-            "sparse_checkout": {
-              "type": "array",
-              "items": { "type": "string" },
-              "description": "Optional sparse checkout paths.",
-              "examples": [["extensions/my-ext"]]
-            },
-            "include": {
-              "type": "array",
-              "items": { "type": "string" },
-              "description": "Optional list of config sections to include from the remote extension.",
-              "examples": [["provision_profiles.*"]]
-            }
-          },
-          "required": ["type", "url"],
-          "additionalProperties": false
-        },
-        {
-          "type": "object",
-          "title": "Path source",
-          "description": "Extension from a local filesystem path.",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["path"],
-              "description": "Source type: local filesystem path."
-            },
-            "path": {
-              "type": "string",
-              "description": "Path to the extension directory (relative to config or absolute).",
-              "examples": ["../extensions/my-ext", "/opt/extensions/my-ext"]
-            },
-            "include": {
-              "type": "array",
-              "items": { "type": "string" },
-              "description": "Optional list of config sections to include from the extension.",
-              "examples": [["sdk.compile.*"]]
-            }
-          },
-          "required": ["type", "path"],
-          "additionalProperties": false
+          "additionalProperties": {
+            "$ref": "#/$defs/imageConfig"
+          }
         }
       ]
     },
-    "runtimeConfig": {
-      "title": "Runtime configuration",
+    "initramfs": {
+      "description": "Top-level initramfs image config. Same singleton-or-map shape as rootfs.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/imageConfig"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/imageConfig"
+          }
+        }
+      ]
+    },
+    "kernel": {
+      "description": "Top-level kernel definition. Singleton-or-map. A config with only `version:` set acts as a version constraint applied across runtimes that don't pin their own.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/kernelConfig"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/kernelConfig"
+          }
+        }
+      ]
+    },
+    "permissions": {
+      "description": "Top-level permissions definitions. Singleton-or-map. Each entry is a `{users, groups}` block referenced by name from `rootfs.<name>.permissions` / `initramfs.<name>.permissions`. Lets the same users/groups be reused across multiple images.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/permissionsConfig"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/permissionsConfig"
+          }
+        }
+      ]
+    },
+    "provision_profiles": {
       "type": "object",
-      "description": "Configuration for a runtime deployment scenario.",
+      "description": "Named provisioning profiles. Each profile passes extra container args / state-file overrides to `avocado provision -P <name>`.",
+      "additionalProperties": {
+        "$ref": "#/$defs/provisionProfile"
+      }
+    },
+    "signing_keys": {
+      "type": "object",
+      "description": "Friendly-name → key-ID mapping for the global signing-key registry. Lets runtime / extension configs reference keys by short alias.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "connect": {
+      "type": "object",
+      "description": "Peridio Connect fleet integration (org / project / server-key references).",
+      "properties": {
+        "org": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "server_key": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "runtime": {
+      "type": "object",
+      "description": "A runtime definition. Conventional fields plus optional per-target override blocks keyed by target name.",
       "properties": {
         "target": {
-          "type": "string",
-          "description": "Target platform for this runtime (overrides default_target)."
+          "type": "string"
         },
         "target_board": {
-          "type": "string",
-          "description": "Board variant within this runtime's target, feeding '{{ avocado.target.board }}'. Overrides the top-level default_target_board when this runtime is the resolved one."
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
         },
         "extensions": {
-          "title": "Extensions",
           "type": "array",
-          "items": { "type": "string" },
-          "description": "List of extension names to include in this runtime. Extensions must be defined in the 'extensions' section.",
-          "examples": [["avocado-ext-dev", "avocado-ext-sshd-dev"]]
+          "items": {
+            "type": "string"
+          },
+          "description": "Ordered list of extension names included in this runtime. Names must match keys under top-level `extensions:`."
         },
         "packages": {
-          "title": "Packages",
-          "$ref": "#/definitions/packages",
-          "description": "Package dependencies for this runtime."
+          "type": "object",
+          "description": "Runtime-level packages (typically just `avocado-runtime: '*'`).",
+          "additionalProperties": true
         },
-        "stone_include_paths": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Additional stone include paths for this runtime."
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": true
         },
         "stone_manifest": {
           "type": "string",
-          "description": "Path to a custom stone manifest file."
+          "description": "Path (relative to project root) to a project-local stone manifest that overrides the BSP-shipped default. Used to override partition layouts (e.g. var partition size) and provisioning profile lists. Templating like `stone/{{ avocado.target }}/stone-{{ avocado.target }}.json` is supported."
+        },
+        "stone_include_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Directories to pass to `stone create -i ...` so the build can resolve project-local artifacts (e.g. bootfiles overrides) without copying them."
         },
         "signing": {
-          "$ref": "#/definitions/signingConfig",
-          "description": "Signing configuration for this runtime."
-        },
-        "var_files": {
-          "title": "Var files",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/varFileMapping"
-          },
-          "description": "Static files to copy from the source directory onto the var partition at build time. Each entry maps a source path (relative to src_dir) to a destination path on the var partition. Directories are copied recursively. The dest for a directory should end with /.",
-          "examples": [
-            [
-              { "source": "config/app-defaults/", "dest": "lib/myapp/" },
-              { "source": "certs/device.pem", "dest": "lib/myapp/certs/device.pem" }
-            ]
-          ]
+          "type": "object",
+          "additionalProperties": true
         },
         "kernel": {
-          "title": "Kernel configuration",
-          "type": "object",
-          "description": "Kernel configuration for this runtime. Use 'package' to install a pre-built kernel RPM, or 'compile'+'install' to cross-compile and install a custom kernel.",
-          "properties": {
-            "package": {
-              "type": "string",
-              "description": "Pre-built kernel RPM package name to install.",
-              "examples": ["avocado-kernel-jetson"]
+          "oneOf": [
+            {
+              "type": "string"
             },
-            "version": {
-              "type": "string",
-              "description": "Version constraint for the kernel package.",
-              "examples": ["*", "6.1.0"]
-            },
-            "compile": {
-              "type": "string",
-              "description": "References an sdk.compile section to use for kernel compilation.",
-              "examples": ["my-kernel"]
-            },
-            "install": {
-              "type": "string",
-              "description": "Path to install script relative to src_dir, run after kernel compilation with $AVOCADO_RUNTIME_BUILD_DIR set.",
-              "examples": ["kernel-install.sh"]
+            {
+              "type": "object"
             }
-          },
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": true
-    },
-    "varFileMapping": {
-      "title": "Var file mapping",
-      "type": "object",
-      "description": "A source-to-destination mapping for seeding static files onto the var partition at build time.",
-      "properties": {
-        "source": {
-          "type": "string",
-          "description": "Source path relative to src_dir. Can be a file or directory. Directories are copied recursively.",
-          "examples": ["config/app-defaults/", "certs/device.pem"]
+          ],
+          "description": "Either a string reference to a top-level `kernel:` entry, or an inline kernel config."
         },
-        "dest": {
-          "type": "string",
-          "description": "Destination path relative to the var partition root (e.g., 'lib/myapp/' maps to '/var/lib/myapp/' on the device). End with / for directories.",
-          "examples": ["lib/myapp/", "lib/myapp/certs/device.pem"]
-        }
-      },
-      "required": ["source", "dest"],
-      "additionalProperties": false
-    },
-    "signingConfig": {
-      "title": "Signing configuration",
-      "type": "object",
-      "description": "Configuration for image signing.",
-      "properties": {
-        "key": {
-          "type": "string",
-          "description": "Name of the signing key to use (references a key from signing_keys section).",
-          "examples": ["my-key"]
-        },
-        "checksum_algorithm": {
-          "type": "string",
-          "enum": ["sha256", "blake3"],
-          "default": "sha256",
-          "description": "Checksum algorithm to use for signing."
-        }
-      },
-      "required": ["key"],
-      "additionalProperties": false
-    },
-    "sdkConfig": {
-      "type": "object",
-      "description": "SDK configuration for building Avocado OS projects. Supports target-specific overrides using target names as keys.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/targetSdkConfig"
-        },
-        {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
-              "$ref": "#/definitions/targetSdkConfig"
+        "rootfs": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
             }
+          ]
+        },
+        "initramfs": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "var": {
+          "$ref": "#/$defs/varConfig"
+        },
+        "var_files": {
+          "type": "array",
+          "description": "Files copied from the project tree into the var partition image at build time. Each entry is `{source, dest}` (paths relative to project root and var-partition root respectively).",
+          "items": {
+            "type": "object",
+            "required": ["source", "dest"],
+            "properties": {
+              "source": {
+                "type": "string"
+              },
+              "dest": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
         }
-      ]
-    },
-    "targetSdkConfig": {
-      "type": "object",
-      "description": "SDK configuration for building Avocado OS projects.",
-      "properties": {
-        "image": {
-          "title": "Docker image",
-          "type": "string",
-          "description": "Docker image to use for the SDK build environment. This provides the toolchain and build tools necessary for compilation.",
-          "examples": ["avocado/sdk:2.0"]
-        },
-        "packages": {
-          "title": "Packages",
-          "$ref": "#/definitions/packages",
-          "description": "SDK-level packages required for building the project. These are installed in the build environment.",
-          "examples": [
-            {
-              "cmake": "*",
-              "make": ">=4.0"
-            }
-          ]
-        },
-        "compile": {
-          "title": "Compile configurations",
-          "type": "object",
-          "description": "Compile configurations for specific extensions or components. Each entry defines how to build a particular extension.",
-          "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
-              "$ref": "#/definitions/compileConfig"
-            }
-          },
-          "additionalProperties": false,
-          "examples": [
-            {
-              "wifi": {
-                "compile": "make",
-                "packages": {
-                  "libnl": "3.5.0"
-                }
-              }
-            }
-          ]
-        },
-        "repo_url": {
-          "title": "Repository URL (deprecated)",
-          "type": "string",
-          "description": "Deprecated: use distro.repo.url instead. URL of the package repository. Can be overridden with the AVOCADO_REPO_URL environment variable (or legacy AVOCADO_SDK_REPO_URL).",
-          "examples": ["https://repo.avocadolinux.org"],
-          "deprecated": true
-        },
-        "repo_release": {
-          "title": "Repository release (deprecated)",
-          "type": "string",
-          "description": "Deprecated: use distro.repo.releasever instead. Explicit releasever for DNF --releasever. Can be overridden with the AVOCADO_RELEASEVER environment variable (or legacy AVOCADO_SDK_REPO_RELEASE).",
-          "examples": ["2024/edge"],
-          "deprecated": true
-        },
-        "container_args": {
-          "title": "Container arguments",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Additional arguments to pass to the Docker container. Supports environment variable expansion using ${VAR_NAME} syntax.",
-          "examples": [["--network", "host"]]
-        },
-        "disable_weak_dependencies": {
-          "title": "Disable weak dependencies",
-          "type": "boolean",
-          "description": "Disable installation of weak dependencies when installing packages.",
-          "default": false
-        },
-        "host_uid": {
-          "title": "Host UID",
-          "type": "integer",
-          "description": "Host UID for bindfs permission translation (overrides libc::getuid())."
-        },
-        "host_gid": {
-          "title": "Host GID",
-          "type": "integer",
-          "description": "Host GID for bindfs permission translation (overrides libc::getgid())."
-        }
-      },
-      "additionalProperties": false
-    },
-    "compileConfig": {
-      "title": "Compile configuration",
-      "type": "object",
-      "description": "Compilation configuration for a specific extension or component.",
-      "properties": {
-        "compile": {
-          "title": "Compile command",
-          "type": "string",
-          "description": "Compile command or script to execute for building this component.",
-          "examples": ["make", "./build.sh"]
-        },
-        "clean": {
-          "title": "Clean command",
-          "type": "string",
-          "description": "Path to clean script relative to src_dir, executed during 'ext clean' command.",
-          "examples": ["./clean.sh", "make clean"]
-        },
-        "packages": {
-          "title": "Packages",
-          "$ref": "#/definitions/packages",
-          "description": "Build-time packages required for compiling this component.",
-          "examples": [
-            {
-              "libnl": "3.5.0",
-              "gcc": ">=9.0"
-            }
-          ]
-        },
-        "package": {
-          "title": "Package configuration",
-          "$ref": "#/definitions/packageConfig",
-          "description": "RPM packaging metadata. When present, 'avocado sdk package <section>' can produce one or more architecture-specific RPMs from this compile section's output."
-        }
-      },
-      "additionalProperties": false
-    },
-    "packageConfig": {
-      "title": "Package configuration",
-      "type": "object",
-      "description": "RPM packaging metadata for a compiled SDK section. Enables 'avocado sdk package' to produce an installable RPM.",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "RPM package name. Defaults to the compile section name if not specified.",
-          "examples": ["my-lib", "avocado-wifi-driver"]
-        },
-        "version": {
-          "type": "string",
-          "description": "Package version in semver format. Required.",
-          "examples": ["1.2.3", "0.1.0"]
-        },
-        "release": {
-          "type": "string",
-          "description": "RPM release field. Defaults to '1'.",
-          "default": "1",
-          "examples": ["1", "2"]
-        },
-        "install": {
-          "type": "string",
-          "description": "Path to install script relative to src_dir. The script is called with $DESTDIR set to a staging directory; files staged there are packaged into the RPM. Required.",
-          "examples": ["pkg-install.sh", "scripts/install.sh"]
-        },
-        "summary": {
-          "type": "string",
-          "description": "One-line summary of the package.",
-          "examples": ["My shared library"]
-        },
-        "description": {
-          "type": "string",
-          "description": "Full description of the package.",
-          "examples": ["A cross-compiled shared library for the target."]
-        },
-        "license": {
-          "type": "string",
-          "description": "SPDX license identifier.",
-          "examples": ["MIT", "Apache-2.0", "GPL-2.0-only"]
-        },
-        "arch": {
-          "type": "string",
-          "description": "Override the target architecture in the RPM spec. Defaults to the build target architecture.",
-          "examples": ["aarch64", "x86_64", "noarch"]
-        },
-        "vendor": {
-          "type": "string",
-          "description": "Vendor name for the package.",
-          "examples": ["Acme Corp"]
-        },
-        "url": {
-          "type": "string",
-          "description": "URL for the package homepage or source repository.",
-          "examples": ["https://example.com/my-lib"]
-        },
-        "requires": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "RPM Requires dependencies for the package.",
-          "examples": [["openssl >= 3.0", "glibc"]]
-        },
-        "files": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Glob patterns for files to include in the main package (relative to $DESTDIR). Defaults to all files if not specified.",
-          "examples": [["usr/bin/**", "usr/lib/*.so*"]]
-        },
-        "split": {
-          "type": "object",
-          "description": "Optional sub-package splitting (Yocto-style). Each key is a sub-package name; each value is a splitPackageConfig.",
-          "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
-              "$ref": "#/definitions/splitPackageConfig"
-            }
-          },
-          "additionalProperties": false,
-          "examples": [
-            {
-              "my-lib-dev": {
-                "summary": "Development headers for my-lib",
-                "files": ["usr/include/**", "usr/lib/*.a"]
-              }
-            }
-          ]
-        }
-      },
-      "required": ["version", "install"],
-      "additionalProperties": false
-    },
-    "splitPackageConfig": {
-      "title": "Split package configuration",
-      "type": "object",
-      "description": "Configuration for a sub-package produced by splitting a compiled SDK section.",
-      "properties": {
-        "summary": {
-          "type": "string",
-          "description": "One-line summary for the sub-package.",
-          "examples": ["Development headers for my-lib"]
-        },
-        "description": {
-          "type": "string",
-          "description": "Full description for the sub-package."
-        },
-        "license": {
-          "type": "string",
-          "description": "SPDX license identifier for the sub-package."
-        },
-        "requires": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "RPM Requires for the sub-package."
-        },
-        "files": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Glob patterns for files to include in this sub-package (relative to $DESTDIR). Files claimed by a sub-package are excluded from the main package.",
-          "examples": [["usr/include/**", "usr/lib/*.a"]]
-        }
-      },
-      "additionalProperties": false
-    },
-    "provisionProfileConfig": {
-      "title": "Provision profile configuration",
-      "type": "object",
-      "description": "Configuration for a provisioning profile used to deploy Avocado OS images to devices.",
-      "properties": {
-        "container_args": {
-          "title": "Container arguments",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Additional arguments to pass to the provisioning container. Supports environment variable expansion using ${VAR_NAME} syntax.",
-          "examples": [
-            ["--device", "/dev/ttyUSB0"],
-            ["--privileged", "--network=host"]
-          ]
-        },
-        "state_file": {
-          "title": "State file",
-          "type": "string",
-          "description": "Path to state file relative to src_dir for persisting state between provision runs. Defaults to '.avocado/provision-{profile}.state' when not specified.",
-          "examples": [".avocado/provision-dev.state"]
-        }
       },
       "additionalProperties": true
     },
-    "extensionConfig": {
-      "title": "Extension configuration",
+    "extension": {
       "type": "object",
-      "description": "Configuration for an Avocado OS extension (system extension or configuration extension). Extensions can be local (defined in this file) or remote (fetched from a source).",
+      "description": "An extension definition. All fields optional — different reference styles use different subsets.",
       "properties": {
         "source": {
-          "$ref": "#/definitions/extensionSource",
-          "description": "Source configuration for remote extensions. If not specified, the extension is considered local and must be fully defined in this config."
-        },
-        "version": {
-          "$ref": "#/definitions/version"
+          "description": "Source configuration for a remote extension: a package repository, a git repository, or a local filesystem path. Local extensions omit source and are defined in this file.",
+          "oneOf": [
+            {
+              "type": "object",
+              "title": "Package source",
+              "description": "Extension from the Avocado package repository.",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["package"],
+                  "description": "Source type: package repository."
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Version to fetch (e.g., '0.1.0' or '*').",
+                  "examples": ["*", "1.0.0"]
+                },
+                "package": {
+                  "type": "string",
+                  "description": "Optional RPM package name (defaults to extension name if not specified).",
+                  "examples": ["avocado-bsp-raspberrypi4"]
+                },
+                "repo_name": {
+                  "type": "string",
+                  "description": "Optional custom repository name.",
+                  "examples": ["avocado-extras"]
+                },
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional list of config sections to include from the remote extension. Supports dot-separated paths (e.g., 'provision_profiles.tegraflash') and wildcards (e.g., 'provision_profiles.*'). The extension's own section is always included.",
+                  "examples": [["provision_profiles.*", "sdk.compile.tegraflash"]]
+                }
+              },
+              "required": ["type", "version"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "title": "Git source",
+              "description": "Extension from a git repository.",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["git"],
+                  "description": "Source type: git repository."
+                },
+                "url": {
+                  "type": "string",
+                  "description": "Git repository URL.",
+                  "examples": ["https://github.com/avocado-linux/extensions.git"]
+                },
+                "ref": {
+                  "type": "string",
+                  "description": "Git ref (branch, tag, or commit hash).",
+                  "examples": ["main", "v1.0.0", "abc123"]
+                },
+                "sparse_checkout": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional sparse checkout paths.",
+                  "examples": [["extensions/my-ext"]]
+                },
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional list of config sections to include from the remote extension.",
+                  "examples": [["provision_profiles.*"]]
+                }
+              },
+              "required": ["type", "url"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "title": "Path source",
+              "description": "Extension from a local filesystem path.",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["path"],
+                  "description": "Source type: local filesystem path."
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path to the extension directory (relative to config or absolute).",
+                  "examples": ["../extensions/my-ext", "/opt/extensions/my-ext"]
+                },
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional list of config sections to include from the extension.",
+                  "examples": [["sdk.compile.*"]]
+                }
+              },
+              "required": ["type", "path"],
+              "additionalProperties": false
+            }
+          ]
         },
         "types": {
-          "title": "Extension types",
           "type": "array",
           "items": {
             "type": "string",
             "enum": ["sysext", "confext"]
           },
-          "description": "Extension types. 'sysext' for system extensions that provide system-level functionality, 'confext' for configuration extensions that provide configuration files.",
-          "examples": [["sysext"], ["sysext", "confext"]]
+          "minItems": 1,
+          "description": "Extension types. `sysext` extends /usr; `confext` extends /etc. App extensions are often both."
         },
-        "scopes": {
-          "title": "Scopes",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Extension scopes that define where the extension applies. Used to control which parts of the system the extension affects.",
-          "examples": [["system"]]
+        "version": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "description": "Extension version. Required for app-style extensions."
+        },
+        "summary": {
+          "type": "string"
         },
         "overlay": {
-          "title": "Overlay directory",
           "type": "string",
-          "description": "Path to the overlay directory containing files to be included in the extension. The value should be relative to the src_dir. These files will be overlaid onto the root filesystem.",
-          "examples": ["./overlay"]
-        },
-        "enable_services": {
-          "title": "Enable services",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of systemd services to enable when the extension is active. Services must be available in the extension or base system.",
-          "examples": [["sshd.socket", "my-service.service"]]
-        },
-        "modprobe": {
-          "title": "Kernel modules",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Kernel modules to load when the extension is active. Modules must be available in the kernel or provided by the extension.",
-          "examples": [["overlay", "br_netfilter"]]
+          "description": "Path (relative to the extension dir) to a directory whose tree gets layered into the extension at the corresponding device paths."
         },
         "packages": {
-          "$ref": "#/definitions/packages",
-          "description": "Package dependencies required by the extension. These will be installed when the extension is built or deployed."
-        },
-        "sdk": {
           "type": "object",
-          "description": "SDK-specific configuration for building this extension.",
-          "properties": {
-            "packages": {
-              "$ref": "#/definitions/packages",
-              "description": "Build-time packages specific to this extension.",
-              "examples": [
-                {
-                  "nativesdk-rust": "*",
-                  "rust-cross-canadian-aarch64": "*",
-                  "nativesdk-cargo": "*"
-                }
-              ]
-            }
+          "description": "Packages to install into this extension. Values are either a version string ('*', '>=1.0') OR an object describing an in-tree compile artifact ({compile, install}).",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "compile": {
+                    "type": "string"
+                  },
+                  "install": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            ]
+          }
+        },
+        "enable_services": {
+          "type": "array",
+          "items": {
+            "type": "string"
           },
-          "additionalProperties": true
+          "description": "systemd unit names to enable on boot."
+        },
+        "modprobe": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Kernel modules to modprobe on boot via /etc/modules-load.d."
+        },
+        "on_merge": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Shell commands run on the device when this extension is merged into the live image (first boot, sysext refresh, or `avocado deploy`)."
+        },
+        "on_unmerge": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Shell commands run when the extension is unmerged."
+        },
+        "docker_images": {
+          "type": "array",
+          "description": "Container images to pre-pull at `avocado build` time and seed into /var/lib/docker. Images are pulled for the target architecture by an ephemeral dockerd inside the SDK container.",
+          "items": {
+            "type": "object",
+            "required": ["image", "tag"],
+            "properties": {
+              "image": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "var_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Glob patterns excluded from the read-only sysext image (so runtime-mutable paths like `var/lib/docker/**` aren't baked into the immutable extension)."
         },
         "users": {
           "type": "object",
-          "description": "User accounts to create or configure when the extension is active.",
-          "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
-              "$ref": "#/definitions/userConfig"
-            }
-          },
-          "additionalProperties": false,
-          "examples": [
-            {
-              "root": {
-                "password": ""
-              }
-            }
-          ]
+          "description": "[DEPRECATED] User accounts on extensions are deprecated and will be removed in a future release. Declare users in a top-level `permissions:` block and reference it from `rootfs.<name>.permissions` / `initramfs.<name>.permissions` instead. Each key is a username; the value is an attribute object.",
+          "additionalProperties": {
+            "type": "object"
+          }
         },
         "groups": {
           "type": "object",
-          "description": "Groups to create or configure when the extension is active.",
-          "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
-              "$ref": "#/definitions/groupConfig"
+          "description": "[DEPRECATED] Groups on extensions are deprecated and will be removed in a future release. Declare groups in a top-level `permissions:` block instead. Each key is a group name; the value is an attribute object.",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "sdk": {
+          "type": "object",
+          "description": "Extension-scoped SDK dependencies — packages needed only to BUILD this extension, not to run it on the device.",
+          "properties": {
+            "packages": {
+              "type": "object",
+              "additionalProperties": true
             }
           },
-          "additionalProperties": false,
-          "examples": [
-            {
-              "docker": {
-                "gid": 999
-              }
-            }
-          ]
-        },
-        "filesystem": {
-          "title": "Filesystem format",
-          "type": "string",
-          "enum": ["squashfs", "erofs"],
-          "default": "erofs",
-          "description": "Filesystem format for the extension's .raw image. 'erofs' (default) offers better random-access read performance and smaller images for some workloads. 'squashfs' is also supported and widely available.",
-          "examples": ["squashfs", "erofs"]
-        },
-        "var_files": {
-          "title": "Var files",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Glob patterns for files within the extension sysroot that belong on the var partition rather than the read-only .raw image. Files matching these patterns are excluded from the image during 'avocado ext image'. Paths are relative to the sysroot root.",
-          "examples": [["var/lib/docker/**", "var/lib/containerd/**"], ["var/lib/pgsql/**"]]
-        },
-        "docker_images": {
-          "title": "Docker images",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/dockerImageRef"
-          },
-          "description": "Docker images to pull and pre-cache onto the var partition at build time. When declared, the CLI automatically adds --privileged to the SDK container args and runs a temporary dockerd to pull images for the target architecture. Requires var_files to exclude var/lib/docker/** from the .raw image.",
-          "examples": [
-            [
-              { "image": "docker.io/library/redis", "tag": "7-alpine" },
-              { "image": "docker.io/library/nginx", "tag": "1.25" }
-            ]
-          ]
+          "additionalProperties": true
         }
       },
       "additionalProperties": true
     },
-    "dockerImageRef": {
-      "title": "Docker image reference",
+    "sdk": {
       "type": "object",
-      "description": "A Docker image reference for var partition priming.",
+      "description": "SDK container configuration: which image to run, what args to pass docker, what host-side toolchain packages to install.",
       "properties": {
         "image": {
           "type": "string",
-          "description": "Full image reference including registry and repository (e.g., docker.io/library/redis).",
-          "examples": ["docker.io/library/redis", "ghcr.io/myorg/myapp"]
+          "description": "Docker image reference (e.g. 'docker.io/avocadolinux/sdk:2024-edge'). Templating placeholders allowed."
         },
-        "tag": {
-          "type": "string",
-          "description": "Image tag.",
-          "examples": ["7-alpine", "latest", "1.25"]
-        }
-      },
-      "required": ["image", "tag"],
-      "additionalProperties": false
-    },
-    "userConfig": {
-      "type": "object",
-      "description": "Configuration for a user account.",
-      "properties": {
-        "password": {
-          "type": "string",
-          "description": "User password. Use empty string for no password (passwordless). For security, consider using password hashes instead of plain text.",
-          "examples": [""]
-        },
-        "shell": {
-          "type": "string",
-          "description": "User's login shell. Must be a valid shell available in the system.",
-          "examples": ["/bin/bash"]
-        },
-        "home": {
-          "type": "string",
-          "description": "User's home directory path. Will be created if it doesn't exist.",
-          "examples": ["/home/developer"]
-        },
-        "groups": {
+        "container_args": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "List of groups the user belongs to. Groups must exist or be defined in the extension.",
-          "examples": [["wheel", "docker"]]
-        }
-      },
-      "additionalProperties": false
-    },
-    "groupConfig": {
-      "type": "object",
-      "description": "Configuration for a system group.",
-      "properties": {
-        "gid": {
-          "type": "integer",
-          "description": "Group ID (GID). Should be unique across the system. Consider using IDs above 1000 for user groups.",
-          "minimum": 0,
-          "maximum": 65535,
-          "examples": [999]
-        }
-      },
-      "additionalProperties": false
-    },
-    "packages": {
-      "title": "Packages",
-      "type": "object",
-      "description": "Object defining package dependencies with version constraints.",
-      "patternProperties": {
-        "^[a-zA-Z0-9_.-]+$": {
-          "description": "Package name with version constraint. Can be a simple version string or an object with additional configuration.",
-          "oneOf": [
-            {
-              "$ref": "#/definitions/version"
-            },
-            {
-              "type": "object",
-              "description": "Advanced package configuration.",
-              "properties": {
-                "compile": {
-                  "type": "string",
-                  "description": "Reference to a compile configuration section in sdk.compile.",
-                  "examples": ["my-app"]
-                },
-                "install": {
-                  "type": "string",
-                  "description": "Path to an install script for this package.",
-                  "examples": ["install.sh"]
-                }
-              },
-              "additionalProperties": true
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "examples": [
-        {
-          "avocado-runtime": "*"
+          "description": "Args forwarded to `docker run` (e.g. ['--privileged', '-v /dev:/dev'])."
         },
-        {
-          "avocado-img-bootfiles": "*",
-          "avocado-img-rootfs": "*",
-          "avocado-img-initramfs": "*"
-        }
-      ]
-    }
-  },
-  "examples": [
-    {
-      "cli_requirement": ">=0.26.0",
-      "default_target": "jetson-orin-nano-devkit",
-      "supported_targets": ["raspberrypi4", "qemuarm64"],
-      "src_dir": "src",
-      "distro": {
-        "release": "2024",
-        "channel": "edge"
-      },
-      "sdk": {
-        "image": "docker.io/avocadolinux/sdk:2024-edge",
         "packages": {
-          "avocado-sdk-toolchain": "*"
+          "type": "object",
+          "description": "Packages to install into the SDK container.",
+          "additionalProperties": true
         },
         "compile": {
-          "wifi": {
-            "compile": "make",
-            "clean": "./clean.sh",
-            "packages": {
-              "libnl": "*"
+          "type": "object",
+          "description": "Named SDK-side compile units. Each key is a unit name (often matching an extension package); value is the hook-script bundle.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "compile": {
+                "type": "string"
+              },
+              "clean": {
+                "type": "string"
+              },
+              "install": {
+                "type": "string"
+              },
+              "packages": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "package": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "repo_url": {
+          "type": "string"
+        },
+        "repo_release": {
+          "type": "string"
+        },
+        "disable_weak_dependencies": {
+          "type": "boolean"
+        },
+        "host_uid": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "host_gid": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "imageConfig": {
+      "type": "object",
+      "description": "Image (rootfs / initramfs) configuration. Drives the packages installed into a filesystem image plus the filesystem format.",
+      "properties": {
+        "packages": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "filesystem": {
+          "type": "string",
+          "description": "Output filesystem (e.g. 'erofs-lz4' for rootfs, 'cpio.zst' for initramfs)."
+        },
+        "overlay": {
+          "description": "Overlay tree merged into the image. String path or structured value."
+        },
+        "image": {
+          "description": "Image-builder backend args. Format depends on filesystem."
+        },
+        "post_install": {
+          "type": "string",
+          "description": "Project-relative path to a post-install hook script run after package install + overlay and before mkfs."
+        },
+        "permissions": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/permissionsConfig"
             }
+          ],
+          "description": "Either a string reference to a top-level `permissions.<name>` entry, or an inline permissions block. When set, users/groups are baked into this image's /etc/passwd, /etc/shadow, /etc/group at build time. Omit to leave the base packages' generic identity files untouched."
+        }
+      },
+      "additionalProperties": true
+    },
+    "permissionsConfig": {
+      "type": "object",
+      "description": "Users and groups to provision into a rootfs or initramfs image at build time. Referenced by name from `rootfs.<name>.permissions` / `initramfs.<name>.permissions`, or defined inline at the same location.",
+      "properties": {
+        "users": {
+          "type": "object",
+          "description": "User accounts. Each key is a username; each value is an object accepting `password`, `uid`, `gid`, `gecos`, `home`, `shell`, `groups`, `system`, `disabled`, and shadow-aging attributes (`last_change`, `min_days`, `max_days`, `warn_days`, `inactive_days`, `expire_date`).",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "groups": {
+          "type": "object",
+          "description": "Group definitions. Each key is a group name; each value is an object accepting `gid`, `password`, `members`, `admins`, `system`.",
+          "additionalProperties": {
+            "type": "object"
           }
         }
       },
-      "runtimes": {
-        "dev": {
-          "extensions": ["avocado-ext-dev", "wifi"],
-          "packages": {
-            "avocado-runtime": "*"
-          }
+      "additionalProperties": false
+    },
+    "kernelConfig": {
+      "type": "object",
+      "description": "Kernel definition. Pick one of: `package:` (pull a prebuilt kernel package), `version:` (constrain the version), or `compile:` + `install:` (build from source).",
+      "properties": {
+        "package": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "compile": {
+          "type": "string"
+        },
+        "install": {
+          "type": "string"
+        },
+        "image": {
+          "description": "Image-builder args for the kernel image."
         }
       },
-      "provision_profiles": {
-        "development": {
-          "container_args": ["--device", "/dev/ttyUSB0"]
+      "additionalProperties": true
+    },
+    "provisionProfile": {
+      "type": "object",
+      "description": "Named provisioning profile. Tweaks the container args / state-file path used when `avocado provision -P <name>` runs.",
+      "properties": {
+        "container_args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "state_file": {
+          "type": "string"
         }
       },
-      "extensions": {
-        "avocado-ext-dev": {
-          "source": {
-            "type": "package",
-            "version": "*"
-          }
+      "additionalProperties": true
+    },
+    "varConfig": {
+      "type": "object",
+      "description": "Var-partition tuning: btrfs compression policy and named subvolumes.",
+      "properties": {
+        "compression": {
+          "type": "string"
         },
-        "avocado-bsp-{{ avocado.target }}": {
-          "source": {
-            "type": "package",
-            "version": "*",
-            "include": ["provision_profiles.*"]
-          }
-        },
-        "wifi": {
-          "types": ["sysext"],
-          "overlay": "./extensions/wifi/overlay",
-          "packages": {
-            "wifi-driver": {
-              "compile": "wifi",
-              "install": "install-wifi.sh"
-            }
-          },
-          "sdk": {
-            "packages": {
-              "nativesdk-gcc": "*"
-            }
-          }
-        },
-        "my-local-ext": {
-          "source": {
-            "type": "path",
-            "path": "../extensions/my-ext"
-          }
+        "subvolumes": {
+          "type": "object",
+          "description": "Named btrfs subvolumes carved out of /var (e.g. `lib/docker` to enable docker storage isolation).",
+          "additionalProperties": true
         }
-      }
+      },
+      "additionalProperties": true
     }
-  ]
+  }
 }

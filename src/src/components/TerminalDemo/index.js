@@ -3,19 +3,19 @@ import styles from './styles.module.css'
 
 const STEPS = [
   {
-    prompt: '$ avocado init --target jetson-orin-nano-devkit my-project && cd my-project',
+    prompt: '$ avocado init --target jetson-orin-nano my-project && cd my-project',
     output: `[SUCCESS] Project initialized at my-project/`,
     outputDelay: 400,
   },
   {
     prompt: '$ cat avocado.yaml',
-    output: `target: jetson-orin-nano-devkit
+    output: `target: jetson-orin-nano
 
 runtimes:
   dev:
     extensions:
       - app
-      - avocado-bsp-jetson-orin-nano-devkit
+      - avocado-bsp-jetson-orin-nano
       - avocado-ext-dev
       - avocado-ext-jtop
       - avocado-ext-sshd-dev
@@ -25,7 +25,7 @@ runtimes:
   },
   {
     prompt: '$ avocado install -f',
-    output: `[INFO] Using target: jetson-orin-nano-devkit (from config file (default_target))
+    output: `[INFO] Using target: jetson-orin-nano (from config file (default_target))
 [INFO] Installing packages and dependencies for 'dev' runtime
   ✓ sdk bootstrap
   ✓ sdk packages
@@ -33,7 +33,7 @@ runtimes:
   ✓ initramfs install
   ✓ target-dev install
   ✓ ext install app
-  ✓ ext install avocado-bsp-jetson-orin-nano-devkit
+  ✓ ext install avocado-bsp-jetson-orin-nano
   ✓ ext install avocado-ext-dev
   ✓ ext install avocado-ext-jtop
   ✓ ext install avocado-ext-sshd-dev
@@ -44,16 +44,16 @@ runtimes:
   },
   {
     prompt: '$ avocado build',
-    output: `[INFO] Using target: jetson-orin-nano-devkit (from config file (default_target))
+    output: `[INFO] Using target: jetson-orin-nano (from config file (default_target))
 [INFO] Building 'dev' runtime
   ✓ ext build app
-  ✓ ext build avocado-bsp-jetson-orin-nano-devkit
+  ✓ ext build avocado-bsp-jetson-orin-nano
   ✓ ext build avocado-ext-dev
   ✓ ext build avocado-ext-jtop
   ✓ ext build avocado-ext-sshd-dev
   ✓ ext build config
   ✓ ext image app
-  ✓ ext image avocado-bsp-jetson-orin-nano-devkit
+  ✓ ext image avocado-bsp-jetson-orin-nano
   ✓ ext image avocado-ext-dev
   ✓ ext image avocado-ext-jtop
   ✓ ext image avocado-ext-sshd-dev
@@ -97,7 +97,7 @@ Commands written to device:
 == Step 5: Waiting for final status from device == 
 [SUCCESS] Provision script 'stone-provision-tegraflash.sh' completed successfully.
 [SUCCESS] Provision completed.
-[SUCCESS] Successfully ran SDK lifecycle hook 'avocado-provision' for target 'jetson-orin-nano-devkit'.
+[SUCCESS] Successfully ran SDK lifecycle hook 'avocado-provision' for target 'jetson-orin-nano'.
 [SUCCESS] Successfully provisioned runtime 'dev'`,
     outputDelay: 600,
   },

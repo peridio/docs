@@ -22,7 +22,7 @@ import HardwareHero from '@site/src/components/HardwareHero'
     { value: '-20° to 60°C', label: 'Industrial Operating Range' },
     { value: 'Jetson Orin NX', label: 'NVIDIA AI Module' },
   ]}
-  target="icam-540"
+  target="jetson-orin-nx"
   ctas={{
     primary: {
       label: 'Get Started',
@@ -105,7 +105,14 @@ Hardware acceleration for GStreamer pipelines and TensorRT inference. Automatic 
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `icam-540`. The provisioning specifics are below.
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. The ICAM-540 uses the `jetson-orin-nx` target with the `icam-540` board:
+
+```yaml title="avocado.yaml"
+default_target: 'jetson-orin-nx'
+default_target_board: 'icam-540'
+```
+
+The provisioning specifics are below.
 
 ### Provision
 
