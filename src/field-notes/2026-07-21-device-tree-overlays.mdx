@@ -8,7 +8,8 @@ tags: [raspberrypi5, qemuarm64, device-tree]
 category: 'Device tree'
 featured: false
 # --- internal drafting fields (not rendered) ---
-tested_against: 'raspberrypi5 clean-room (CLI avocado 1.0.0-rc.1): avocado build compiled hello-overlay.dtbo, the delivery hook placed it in rootdisk/boot, and stone finalized os-bundle.aos with a FAT boot.img. Verified with avocado save (archive holds device-tree-overlays/hello-overlay.dtbo and os-bundle.aos). qemuarm64: compile + deliver succeed, but the .aos does not finalize (no FAT boot medium; KOS-68).'
+tested_against: 'raspberrypi5 clean-room (from-source eng-2134 CLI: reports 1.0.0-rc.1 but carries the unreleased DTO commits - the released 1.0.0-rc.1 does NOT have DTO): avocado build compiled hello-overlay.dtbo, the delivery hook placed it in rootdisk/boot, and stone finalized os-bundle.aos with a FAT boot.img. Verified with avocado save (archive holds device-tree-overlays/hello-overlay.dtbo and os-bundle.aos). qemuarm64: compile + deliver succeed, but the .aos does not finalize (no FAT boot medium; KOS-68).'
+repro_blockers: 'Reader reproduction is gated on released artifacts, not this local proof. Before draft:false - (1) merge stone#28, re-pin meta-avocado stone_2.2.0.bb SRCREV off the feature branch, merge meta-avocado#245, merge avocado-cli#183; (2) publish the SDK image (avocadolinux/sdk:2024-edge, must carry nativesdk-avocado-dtc-overlay + files_append nativesdk-stone) and the 2024/edge feed (must carry avocado-dtc-overlay-deliver); (3) cut an avocado-cli release and re-pin the cli= tag below to it (1.0.0-rc.1 lacks DTO); (4) resolve KOS-68 auto-provisioning or keep the sdk.packages block in Reproduce it; (5) record the on-device-apply MP4 (today the proof is bundle-level B only). Full chain in the ENG-2134 reproduce-from-scratch comment.'
 poster: ''
 lift_for_blog: 'Ship a board customization (a device-tree overlay) as a declarative part of your OS image, no manual dtc/boot surgery.'
 promote_to_track: ''
@@ -110,7 +111,22 @@ in KOS-68 and does not affect FAT-booting hardware like the Pi.
 
 On raspberrypi5 the flow above runs to a finalized bundle. Declare one overlay
 in an extension, then run `avocado install` and `avocado build --target
-raspberrypi5`. The build logs the three pipeline steps in order: the compile
+raspberrypi5`.
+
+On a brand-new SDK, add the image-build packages to `sdk.packages` so the
+runtime image finalizes (until KOS-68 provisions them automatically):
+
+```yaml
+sdk:
+  packages:
+    nativesdk-erofs-utils: "*"
+    nativesdk-btrfs-tools: "*"
+    nativesdk-zstd: "*"
+    nativesdk-stone: "*"
+    avocado-sdk-target: "*"
+```
+
+The build logs the three pipeline steps in order: the compile
 (`avocado-dtc-overlay: built ... hello-overlay.dtbo`), the delivery
 (`device-tree-overlay-deliver: delivered 1 overlay(s) to rootdisk/boot`), and
 the finalized bundle (`OS bundle created: ... os-bundle.aos`). To inspect the
