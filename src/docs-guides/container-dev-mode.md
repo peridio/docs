@@ -21,6 +21,43 @@ Container dev mode is a development feature. The device-side agent ships as its 
 
 ## How it works
 
+The loop keeps a real device in it. You edit and build on your machine, the changed layer crosses to the device, and the service restarts there, so what you are looking at is your code running on the target rather than an emulator of it. A QEMU target and a physical board are the same thing to this loop: both are just an SSH-reachable device.
+
+```text
+// highlight-orange-start
+                      edit your app                     <-- you
+                            │
+                            ▼
+              docker build -t my-app:dev .              <-- your normal build
+                            │
+                            ▼
+// highlight-orange-end
+// highlight-green-start
+                  avocado container dev                 <-- started by dev up
+               ┌─────────────────────────┐
+               │ watcher   sees the tag  │
+               │ registry  keeps layers  │
+               │ control   notifies      │
+               └─────────────────────────┘
+                            │
+                            │   only the changed layer
+                            ▼
+// highlight-green-end
+// highlight-blue-start
+              the device (QEMU or a board)              <-- hardware in the loop
+               ┌─────────────────────────┐
+               │ container-agent-dev     │  pulls over the pinned CA
+               │ engine  my-app:dev      │  changed layer applied
+               │ systemd restart app     │  service back up
+               └─────────────────────────┘
+                            │
+                            ▼
+              watch it run on real hardware
+// highlight-blue-end
+                            │
+                            └────▶ edit again, seconds, no reflash
+```
+
 When you run `avocado container dev up`, the CLI:
 
 1. Mints a per-project certificate authority and two separate session tokens (one for reading and control, one for writing).

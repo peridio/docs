@@ -74,6 +74,43 @@ Then keep building exactly the way you already do:
 docker build -t my-app:dev .
 ```
 
+The device stays in the loop the whole time, so what you are watching is your code on the target, not an approximation of it. A QEMU target and a board on your desk are the same thing here: both are just an SSH-reachable device.
+
+```text
+// highlight-orange-start
+                      edit your app                     <-- you
+                            │
+                            ▼
+              docker build -t my-app:dev .              <-- your normal build
+                            │
+                            ▼
+// highlight-orange-end
+// highlight-green-start
+                  avocado container dev                 <-- started by dev up
+               ┌─────────────────────────┐
+               │ watcher   sees the tag  │
+               │ registry  keeps layers  │
+               │ control   notifies      │
+               └─────────────────────────┘
+                            │
+                            │   only the changed layer
+                            ▼
+// highlight-green-end
+// highlight-blue-start
+              the device (QEMU or a board)              <-- hardware in the loop
+               ┌─────────────────────────┐
+               │ container-agent-dev     │  pulls over the pinned CA
+               │ engine  my-app:dev      │  changed layer applied
+               │ systemd restart app     │  service back up
+               └─────────────────────────┘
+                            │
+                            ▼
+              watch it run on real hardware
+// highlight-blue-end
+                            │
+                            └────▶ edit again, seconds, no reflash
+```
+
 That is the loop. There is no wrapper command and no separate push step. The CLI watches your engine for the tag event, pushes the changed layers into an embedded registry on your host, and notifies the device over a control WebSocket; the device pulls and restarts the service. Setup, the full command set, and the trust model are in the [Container dev mode guide](/developer-reference/container-dev-mode).
 
 ## What actually moves
