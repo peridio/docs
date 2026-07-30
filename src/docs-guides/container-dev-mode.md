@@ -9,7 +9,7 @@ Container dev mode is the inner development loop for a containerized application
 
 This matters because Avocado OS has an immutable root filesystem. Without a dev loop, every application change means either re-shipping the whole container image to the device or rebuilding and reprovisioning the system, which is slow enough to break concentration when the image is measured in gigabytes. Container dev mode reuses the container engine's own pull protocol so only the layers that actually changed move across the wire.
 
-If you have used [hardware in the loop](./hardware-in-the-loop.md) to iterate on extensions, this is the same idea applied to containers: a host-side server, a live device, and a feedback loop measured in seconds.
+If you have used [hardware in the loop](./hardware-in-the-loop) to iterate on extensions, this is the same idea applied to containers: a host-side server, a live device, and a feedback loop measured in seconds.
 
 :::info
 Run all commands in this guide from the root of your Avocado project on your host machine, the directory that contains your Avocado config.
@@ -177,12 +177,12 @@ This is scoped to the container dev mode store and is distinct from the top-leve
 
 ## Configuration reference
 
-| Key                              | Required | Description                                                           |
-| -------------------------------- | -------- | --------------------------------------------------------------------- |
-| `runtimes.<name>.container_dev`  | yes      | Presence of the block enables the feature for that runtime.           |
-| `container_dev.images[].ref`     | yes      | Image reference (`repository[:tag]`) watched on the host engine.      |
-| `container_dev.images[].service` | yes      | Device service that consumes the image and is restarted after a pull. |
-| `container_dev.registry.port`    | no       | Port for the bulk read listener. Defaults to `5599`.                  |
+| Key                                              | Required | Description                                                           |
+| ------------------------------------------------ | -------- | --------------------------------------------------------------------- |
+| `runtimes.<name>.container_dev`                  | yes      | Presence of the block enables the feature for that runtime.           |
+| `runtimes.<name>.container_dev.images[].ref`     | yes      | Image reference (`repository[:tag]`) watched on the host engine.      |
+| `runtimes.<name>.container_dev.images[].service` | yes      | Device service that consumes the image and is restarted after a pull. |
+| `runtimes.<name>.container_dev.registry.port`    | no       | Port for the bulk read listener. Defaults to `5599`.                  |
 
 ## Environment variables
 
