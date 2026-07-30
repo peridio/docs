@@ -167,41 +167,41 @@ This is scoped to the container dev mode store and is distinct from the top-leve
 
 ## Command reference
 
-| Command | Purpose |
-| --- | --- |
-| `avocado container dev up` | Start the dev registry and watcher, and bootstrap the device. |
-| `avocado container dev sync` | One-shot re-push of the current watched image, then notify the device. |
-| `avocado container dev status` | Report registry, watcher, and last-sync state. |
-| `avocado container dev down` | Stop the registry and watcher, and tear down the listeners. |
-| `avocado container dev prune` | Garbage-collect this project's container dev mode registry store. |
+| Command                        | Purpose                                                                |
+| ------------------------------ | ---------------------------------------------------------------------- |
+| `avocado container dev up`     | Start the dev registry and watcher, and bootstrap the device.          |
+| `avocado container dev sync`   | One-shot re-push of the current watched image, then notify the device. |
+| `avocado container dev status` | Report registry, watcher, and last-sync state.                         |
+| `avocado container dev down`   | Stop the registry and watcher, and tear down the listeners.            |
+| `avocado container dev prune`  | Garbage-collect this project's container dev mode registry store.      |
 
 ## Configuration reference
 
-| Key | Required | Description |
-| --- | --- | --- |
-| `runtimes.<name>.container_dev` | yes | Presence of the block enables the feature for that runtime. |
-| `container_dev.images[].ref` | yes | Image reference (`repository[:tag]`) watched on the host engine. |
-| `container_dev.images[].service` | yes | Device service that consumes the image and is restarted after a pull. |
-| `container_dev.registry.port` | no | Port for the bulk read listener. Defaults to `5599`. |
+| Key                              | Required | Description                                                           |
+| -------------------------------- | -------- | --------------------------------------------------------------------- |
+| `runtimes.<name>.container_dev`  | yes      | Presence of the block enables the feature for that runtime.           |
+| `container_dev.images[].ref`     | yes      | Image reference (`repository[:tag]`) watched on the host engine.      |
+| `container_dev.images[].service` | yes      | Device service that consumes the image and is restarted after a pull. |
+| `container_dev.registry.port`    | no       | Port for the bulk read listener. Defaults to `5599`.                  |
 
 ## Environment variables
 
-| Variable | Purpose |
-| --- | --- |
-| `AVOCADO_CONTAINER_DEV_DEVICE` | Device SSH target (`user@host`). Required by `up`. |
-| `AVOCADO_CONTAINER_DEV_VM` | Engine guest SSH target. Only used when pushing through a helper VM engine. |
-| `AVOCADO_CONTAINER_DEV_HOST` | Override host address auto-detection. |
-| `AVOCADO_CONTAINER_DEV_PORT` | Override the bulk read listener port. |
-| `AVOCADO_CONTAINER_DEV_WS_PORT` | Override the control WebSocket port. |
-| `AVOCADO_CONTAINER_DEV_WRITE_PORT` | Override the write listener port. |
+| Variable                           | Purpose                                                                     |
+| ---------------------------------- | --------------------------------------------------------------------------- |
+| `AVOCADO_CONTAINER_DEV_DEVICE`     | Device SSH target (`user@host`). Required by `up`.                          |
+| `AVOCADO_CONTAINER_DEV_VM`         | Engine guest SSH target. Only used when pushing through a helper VM engine. |
+| `AVOCADO_CONTAINER_DEV_HOST`       | Override host address auto-detection.                                       |
+| `AVOCADO_CONTAINER_DEV_PORT`       | Override the bulk read listener port.                                       |
+| `AVOCADO_CONTAINER_DEV_WS_PORT`    | Override the control WebSocket port.                                        |
+| `AVOCADO_CONTAINER_DEV_WRITE_PORT` | Override the write listener port.                                           |
 
 ## Default ports
 
-| Port | Listener |
-| --- | --- |
+| Port   | Listener                                             |
+| ------ | ---------------------------------------------------- |
 | `5599` | Bulk read (the device pulls image layers from here). |
-| `5600` | Control WebSocket. |
-| `5601` | Write (the host engine pushes here). |
+| `5600` | Control WebSocket.                                   |
+| `5601` | Write (the host engine pushes here).                 |
 
 Port `5000` is deliberately avoided because it collides with the AirPlay receiver on macOS.
 

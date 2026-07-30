@@ -7,20 +7,18 @@ authors: [jtia]
 tags: [qemux86-64, containers, testing]
 category: 'Containers'
 featured: false
+# PRE-RELEASE NOTE (not for readers): Container Dev Mode is not shipped yet.
+# The framing and the measured results are real, but the CLI and the device
+# extension are pre-release, so a reader cannot reproduce this today. It stays
+# draft:true on this branch until the feature ships and the [ENGINEER: ...]
+# gaps are filled and re-verified on a released build.
+#
 # --- internal drafting fields (not rendered) ---
 tested_against: 'avocado-cli 1.0.0-rc.1 (pre-release dev build); qemux86-64; Debian 12 cloud image engine VM'
 poster: 'jtia'
 lift_for_blog: 'The inner dev loop for containers on immutable Avocado OS: change one line, only the changed layer moves to the device.'
 promote_to_track: ''
 ---
-
-{/*
-  PRE-RELEASE NOTE (not for readers): Container Dev Mode is not shipped yet. This
-  note is a structured draft - the framing and the measured results are real, but
-  the CLI and the device extension are pre-release, so a reader cannot reproduce it
-  today. It stays draft:true on this branch until the feature ships and the
-  [ENGINEER: ...] gaps are filled and re-verified on a released build.
-*/}
 
 import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
@@ -117,7 +115,10 @@ That is the loop. There is no wrapper command and no separate push step. The CLI
 
 Delta-pull is the entire point, so it is the thing worth measuring rather than asserting. With a 512 KiB shared base layer and a small top layer, the first sync moves the whole image. After a one-line change to the top layer, the device pulls only that layer: the config and base blobs are byte-identical by digest and already local.
 
-<PullQuote>A one-line change transferred **only the changed layer** - the shared 512 KiB base layer was never re-sent.</PullQuote>
+<PullQuote>
+  A one-line change transferred **only the changed layer** - the shared 512 KiB base layer was never
+  re-sent.
+</PullQuote>
 
 Scale that to a real inference image and it is the difference between moving gigabytes and moving a few hundred kilobytes for the same edit.
 
