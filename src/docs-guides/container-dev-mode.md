@@ -174,24 +174,32 @@ docker build -t my-app:dev .
 
 The watcher observes the tag event, pushes the changed layers, and notifies the device, which pulls them and restarts the `app` service. Layers that did not change are already present on the device by digest and are not re-sent.
 
-:::caution BuildKit builds emit no tag event
+:::caution Older Docker daemons do not report BuildKit builds
 
-The watcher reads tag events from the engine's event stream, and BuildKit does not emit one when it tags a build result. If `docker build` uses BuildKit, which is the default on current Docker, the watcher never sees the rebuild and nothing is pushed.
+The watcher reads tag events from the engine's event stream. Docker only began emitting an image event for BuildKit builds in later releases, so on an older daemon a `docker build` is invisible to the watcher and nothing is pushed.
 
-Either disable BuildKit for the build so the classic builder emits the event:
+Measured: docker 29.6.2 emits `image tag` for a BuildKit build and the loop runs unattended; docker 20.10.24 emits nothing at all. The exact release that changed is not pinned here, so treat anything before Docker 23 as affected.
+
+Check the daemon that runs your builds:
+
+```bash title="On Host"
+docker version --format '{{.Server.Version}}'
+```
+
+On an affected daemon, either build with the classic builder so it emits the event:
 
 ```bash title="On Host"
 DOCKER_BUILDKIT=0 docker build -t my-app:dev .
 ```
 
-or keep BuildKit and trigger the sync explicitly:
+or keep BuildKit and trigger the sync yourself:
 
 ```bash title="On Host"
 docker build -t my-app:dev .
 avocado container dev sync
 ```
 
-The explicit trigger is the more durable of the two: it does not depend on the event stream at all, and Docker has already marked the classic builder deprecated. Podman is unaffected.
+The explicit trigger is the more durable of the two, since it does not consult the event stream at all and Docker has deprecated the classic builder. Podman is unaffected.
 
 :::
 
