@@ -68,11 +68,52 @@ When you run `avocado container dev up`, the CLI:
 
 After that, steady state runs over the control WebSocket with no further SSH. When a build retags a watched image, the watcher notices, pushes the changed layers into the embedded registry, and notifies the device. The device-side agent pulls over the pinned CA and restarts the mapped service. Whether your build emits the event the watcher needs depends on the builder, so read [Iterate](#iterate) before relying on it firing on its own.
 
+## Two machines: your host and the HIL target
+
+Every command below runs on one of two machines, and mixing them up is the most common way this loop appears broken while reporting no error at all.
+
+**Your host** is where you edit, where `docker build` runs, and where `avocado container dev` runs. The embedded registry and the watcher live here.
+
+**The HIL target** is the machine running Avocado OS with your container on it - the hardware in the loop. It runs the device agent and your service. It is a QEMU target or a physical board; the loop does not care which, and neither does anything on this page.
+
+| Runs on    | What                               | Examples                                                     |
+| ---------- | ---------------------------------- | ------------------------------------------------------------ |
+| Host       | edit, build, serve layers          | `docker build`, `avocado container dev up/sync/status/down`  |
+| HIL target | run the container, apply the layer | your service, `container-agent-dev`, the target's own engine |
+
+The consequence that catches people: **your host's container engine never runs your app.** The container runs on the HIL target, under the target's own engine. So on your host:
+
+```bash title="On Host"
+docker logs my-app          # Error: No such container: my-app
+```
+
+That error is correct, not a fault. To watch your app, look at the target:
+
+```bash title="On HIL target"
+# over SSH to the target
+docker logs -f app                    # the target's engine, where your container runs
+journalctl -u app.service -f          # the service the agent restarts
+journalctl -u avocado-container-agent-dev -f   # pull + restart, as the agent sees it
+```
+
+This is the same host/target split as [hardware in the loop](./hardware-in-the-loop.md), which does for extensions what this page does for containers. If you already run HITL, the mental model carries over unchanged.
+
 ## Prerequisites
 
-- A device running Avocado OS, reachable over SSH from your host.
+- A HIL target running Avocado OS, reachable over SSH from your host.
 - A container engine on your host. Both `docker` and `podman` are supported. The watcher streams tag events from the engine CLI (`docker events` / `podman events`) rather than the API socket, so a rootless podman with no socket still works.
 - Two extensions in your dev runtime: a container engine extension (`avocado-ext-docker` or `avocado-ext-podman`) and the dev agent extension `avocado-ext-container-agent-dev`.
+- **A systemd service on the target that already runs your container.** Container dev mode restarts that service; it does not create it. Ship it with your runtime the way you ship any other service.
+
+The service must recreate the container **from the image tag** on every start:
+
+```ini title="On HIL target"
+[Service]
+ExecStartPre=-/usr/bin/docker rm -f app
+ExecStart=/usr/bin/docker run --rm --name app my-app:dev
+```
+
+A unit that instead restarts an existing container will silently keep running the old code. An engine `restart` re-runs the image ID pinned when the container was created, so the freshly pulled layer is fetched, the restart succeeds, every log line looks healthy, and the app never changes. Re-running `docker run` re-resolves the tag, which is what actually adopts the new image.
 
 ## Configure the runtime
 
@@ -101,13 +142,15 @@ runtimes:
     # highlight-added-end
 ```
 
-Each entry under `images` maps an image you build on your host (`ref`) to the device service that consumes it (`service`). When a watched image is retagged, the agent restarts that service after pulling.
+Each entry maps the two sides: `ref` is an image you build **on your host**, `service` is the systemd unit that runs it **on the HIL target**. When a watched image is retagged, the agent pulls the new layers and restarts that unit.
+
+Both names must already be real. `ref` has to match the tag you actually build, byte for byte, or the watcher ignores your rebuild. `service` has to name a unit that already exists on the target (see [Prerequisites](#prerequisites)) - container dev mode restarts it, it does not create it.
 
 Only one runtime may enable container dev mode per config. If two runtimes carry a `container_dev` block, the CLI refuses to start and names them both.
 
-## Point the CLI at your device
+## Point the CLI at your HIL target
 
-The subcommands take no positional arguments. The device is sourced from the environment, which also lets the CLI auto-detect which host address the device can reach:
+The subcommands take no positional arguments. The target is sourced from the environment, which also lets the CLI auto-detect which host address the target can reach:
 
 ```bash title="On Host"
 export AVOCADO_CONTAINER_DEV_DEVICE=root@192.168.1.50
