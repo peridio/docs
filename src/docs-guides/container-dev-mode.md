@@ -66,7 +66,7 @@ When you run `avocado container dev up`, the CLI:
 4. Opens a control WebSocket the device connects back to.
 5. Writes the bootstrap once over SSH to the device's writable partition: the bulk listener endpoint, the read and control token, and the CA certificate.
 
-After that, steady state runs over the control WebSocket with no further SSH. When you run a normal `docker build` that retags a watched image, the watcher notices, pushes the changed layers into the embedded registry, and notifies the device. The device-side agent pulls over the pinned CA and restarts the mapped service.
+After that, steady state runs over the control WebSocket with no further SSH. When a build retags a watched image, the watcher notices, pushes the changed layers into the embedded registry, and notifies the device. The device-side agent pulls over the pinned CA and restarts the mapped service. Whether your build emits the event the watcher needs depends on the builder, so read [Iterate](#iterate) before relying on it firing on its own.
 
 ## Prerequisites
 
@@ -131,9 +131,30 @@ docker build -t my-app:dev .
 
 The watcher observes the tag event, pushes the changed layers, and notifies the device, which pulls them and restarts the `app` service. Layers that did not change are already present on the device by digest and are not re-sent.
 
+:::caution BuildKit builds emit no tag event
+
+The watcher reads tag events from the engine's event stream, and BuildKit does not emit one when it tags a build result. If `docker build` uses BuildKit, which is the default on current Docker, the watcher never sees the rebuild and nothing is pushed.
+
+Either disable BuildKit for the build so the classic builder emits the event:
+
+```bash title="On Host"
+DOCKER_BUILDKIT=0 docker build -t my-app:dev .
+```
+
+or keep BuildKit and trigger the sync explicitly:
+
+```bash title="On Host"
+docker build -t my-app:dev .
+avocado container dev sync
+```
+
+The explicit trigger is the more durable of the two: it does not depend on the event stream at all, and Docker has already marked the classic builder deprecated. Podman is unaffected.
+
+:::
+
 ## Force a sync
 
-To re-push the current watched image and notify the device without rebuilding:
+`sync` re-pushes the current watched images and notifies the device without waiting on an event. Use it after a BuildKit build, or any time you want to re-push without rebuilding:
 
 ```bash title="On Host"
 avocado container dev sync
