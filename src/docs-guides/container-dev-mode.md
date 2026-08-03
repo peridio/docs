@@ -205,7 +205,7 @@ The explicit trigger is the more durable of the two, since it does not consult t
 
 ## Force a sync
 
-`sync` re-pushes the current watched images and notifies the device without waiting on an event. Use it after a BuildKit build, or any time you want to re-push without rebuilding:
+`sync` re-pushes the current watched images and notifies the device without waiting on an event. Use it when the watcher cannot see your build — a cross-arch `buildx` build emits no tag event whatever the daemon version, and neither does a BuildKit build on a daemon older than Docker 23 — or any time you want to re-push without rebuilding:
 
 ```bash title="On Host"
 avocado container dev sync
@@ -265,15 +265,28 @@ This is scoped to the container dev mode store and is distinct from the top-leve
 | `AVOCADO_CONTAINER_DEV_HOST`       | Override host address auto-detection.                                       |
 | `AVOCADO_CONTAINER_DEV_PORT`       | Override the bulk read listener port.                                       |
 | `AVOCADO_CONTAINER_DEV_WS_PORT`    | Override the control WebSocket port.                                        |
-| `AVOCADO_CONTAINER_DEV_WRITE_PORT` | Override the write listener port.                                           |
+| `AVOCADO_CONTAINER_DEV_WRITE_PORT` | Pin the write listener port instead of binding an ephemeral one. Only needed on the `avocado-vm` push path. |
 
 ## Default ports
 
-| Port   | Listener                                             |
-| ------ | ---------------------------------------------------- |
-| `5599` | Bulk read (the device pulls image layers from here). |
-| `5600` | Control WebSocket.                                   |
-| `5601` | Write (the host engine pushes here).                 |
+| Port        | Listener                                                       |
+| ----------- | -------------------------------------------------------------- |
+| `5599`      | Bulk read (the device pulls image layers from here).            |
+| `5600`      | Control WebSocket.                                              |
+| _ephemeral_ | Write (your host's engine pushes here), bound on loopback only. |
+
+The write listener does not have a fixed default port. It binds an ephemeral
+loopback port that changes every session, and the address is never disclosed to
+the device. `up` reports the port it chose:
+
+```
+write listener loopback-only on 127.0.0.1:34813
+```
+
+`AVOCADO_CONTAINER_DEV_WRITE_PORT` pins it to a known value, which is only needed
+when pushing through an `avocado-vm` engine guest — there the guest's per-registry
+trust store and the pushed tag are both keyed on that port, so it cannot be
+ephemeral.
 
 Port `5000` is deliberately avoided because it collides with the AirPlay receiver on macOS.
 
