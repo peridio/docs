@@ -23,39 +23,32 @@ Container dev mode is a development feature. The device-side agent ships as its 
 
 The loop keeps a real device in it. You edit and build on your machine, the changed layer crosses to the device, and the service restarts there, so what you are looking at is your code running on the target rather than an emulator of it. A QEMU target and a physical board are the same thing to this loop: both are just an SSH-reachable device.
 
-```text
-// highlight-orange-start
-                      edit your app                     <-- you
-                            │
-                            ▼
-              docker build -t my-app:dev .              <-- your normal build
-                            │
-                            ▼
-// highlight-orange-end
-// highlight-green-start
-                  avocado container dev                 <-- started by dev up
-               ┌─────────────────────────┐
-               │ watcher   sees the tag  │
-               │ registry  keeps layers  │
-               │ control   notifies      │
-               └─────────────────────────┘
-                            │
-                            │   only the changed layer
-                            ▼
-// highlight-green-end
-// highlight-blue-start
-              the device (QEMU or a board)              <-- hardware in the loop
-               ┌─────────────────────────┐
-               │ container-agent-dev     │  pulls over the pinned CA
-               │ engine  my-app:dev      │  changed layer applied
-               │ systemd restart app     │  service back up
-               └─────────────────────────┘
-                            │
-                            ▼
-              watch it run on real hardware
-// highlight-blue-end
-                            │
-                            └────▶ edit again, seconds, no reflash
+```mermaid
+flowchart TD
+    edit["edit your app"]
+    build["docker build -t my-app:dev ."]
+    watch["watch it run on real hardware"]
+
+    subgraph host["your host - started by avocado container dev up"]
+        direction TB
+        watcher["watcher<br/>sees the tag"]
+        registry["registry<br/>keeps the layers"]
+        control["control<br/>notifies the target"]
+        watcher --> registry --> control
+    end
+
+    subgraph target["the HIL target - a QEMU guest or a board"]
+        direction TB
+        agent["container-agent-dev<br/>pulls over the pinned CA"]
+        engine["engine<br/>applies the changed layer"]
+        unit["systemd<br/>restarts the service"]
+        agent --> engine --> unit
+    end
+
+    edit --> build --> watcher
+    control -->|"only the changed layer"| agent
+    unit --> watch
+    watch -->|"edit again - seconds, no reflash"| edit
 ```
 
 When you run `avocado container dev up`, the CLI:
@@ -161,35 +154,26 @@ export AVOCADO_CONTAINER_DEV_DEVICE=root@192.168.1.50
 Five commands cover the whole life of a session. `up` and `down` bracket it, and
 everything in between is repeatable as many times as you like.
 
-```text
-// highlight-green-start
-  avocado container dev up                            once, then it stays running
-        │  mints TLS + tokens, opens three listeners,
-        │  starts the watcher, bootstraps the device
-        ▼
-   ┌─────────────────────────────────────────────────────────┐
-   │  the loop is live                                       │
-   │                                                         │
-// highlight-green-end
-// highlight-orange-start
-   │    docker build -t my-app:dev .   ──▶ watcher fires     │  repeat
-   │                                        automatically   │  freely
-// highlight-orange-end
-// highlight-green-start
-   │                                                         │
-   │    avocado container dev sync     ──▶ same push+notify, │
-   │                                       no event needed   │
-   │                                                         │
-   │    avocado container dev status   ──▶ read-only check   │
-   │                                                         │
-   └─────────────────────────────────────────────────────────┘
-        │
-        ▼
-  avocado container dev down                          stops the listeners
-        │  the device keeps running the last image
-        ▼
-  avocado container dev prune                         reclaims disk, any time
-// highlight-green-end
+```mermaid
+flowchart TD
+    up["avocado container dev up<br/>mints TLS and tokens, opens three listeners,<br/>starts the watcher, bootstraps the target"]
+
+    subgraph live["the loop is live - repeat freely"]
+        direction TB
+        b["docker build -t my-app:dev ."]
+        w["the watcher fires automatically"]
+        s["avocado container dev sync<br/>same push and notify, no event needed"]
+        st["avocado container dev status<br/>read-only check"]
+        b --> w
+    end
+
+    down["avocado container dev down<br/>stops the listeners; the target keeps<br/>running the last image it was given"]
+    prune["avocado container dev prune<br/>reclaims disk, at any point"]
+
+    up --> live
+    live --> down
+    down --> prune
+    prune -.->|"start a new session"| up
 ```
 
 `status` and `prune` are read-mostly and safe to run whenever. `prune` does not
@@ -202,44 +186,26 @@ The three stages below are that same cycle in detail.
 
 The only step that touches the device over SSH. Steady state never re-opens it.
 
-```text
-// highlight-green-start
-  HOST                                            HIL TARGET
-  ────                                            ──────────
-  avocado container dev up
-        │
-        ├─ mint a per-project CA
-        ├─ mint TWO tokens:
-        │     Bearer read/control   (the device gets this)
-        │     Basic  write          (never leaves the host)
-        │
-        ├─ open three listeners:
-        │     bulk read   0.0.0.0:5599        TLS, Bearer
-        │     write       127.0.0.1:ephemeral Basic, loopback only
-        │     control WS  0.0.0.0:5600        TLS, Bearer
-        │
-        ├─ start the watcher on your engine's event stream
-        │
-        └─ bootstrap over SSH, ONCE  ─────────────▶ /var/lib/avocado/
-                                                      container-dev/
-                                                      bootstrap.json  (0600)
-// highlight-green-end
-// highlight-blue-start
-                                                             │
-                                                    carries: bulk endpoint,
-                                                             WS endpoint,
-                                                             read token, CA
-                                                    absent:  write token,
-                                                             write endpoint
-                                                             │
-                                                  the agent was waiting on that
-                                                  file, so it now starts:
-                                                             │
-                                                    ├─ loopback proxy on
-                                                    │  127.0.0.1:15151
-                                                    └─ dials the control WS
-                                                       and says Hello
-// highlight-blue-end
+```mermaid
+sequenceDiagram
+    autonumber
+    participant H as Host
+    participant T as HIL target
+
+    Note over H: avocado container dev up
+    H->>H: mint a per-project CA
+    H->>H: mint TWO tokens - Bearer read/control, Basic write
+    H->>H: open bulk read 0.0.0.0:5599 - TLS, Bearer
+    H->>H: open write 127.0.0.1:ephemeral - Basic, loopback only
+    H->>H: open control WS 0.0.0.0:5600 - TLS, Bearer
+    H->>H: start the watcher on your engine's event stream
+
+    H->>T: bootstrap over SSH, ONCE
+    Note over T: /var/lib/avocado/container-dev/bootstrap.json (0600)<br/>carries the bulk endpoint, the WS endpoint,<br/>the read token and the CA<br/><br/>absent: the write token and the write endpoint
+
+    Note over T: the agent was waiting on that file, so it starts
+    T->>T: open its loopback proxy on 127.0.0.1:15151
+    T->>H: dial the control WS and say Hello
 ```
 
 The write token and the write listener's address are the two things the device is
@@ -252,51 +218,34 @@ write routes anyway.
 This is what a `docker build` sets off. `sync` runs the same path, entering at the
 push step instead of waiting for an event.
 
-```text
-// highlight-orange-start
-  HOST                                            HIL TARGET
-  ────                                            ──────────
-  docker build -t my-app:dev .
-        │ the engine emits a tag event
-// highlight-orange-end
-// highlight-green-start
-        ▼
-  watcher sees it
-        │ 300 ms debounce, so a burst collapses to the latest
-        ▼
-  arch guard: image arch vs the arch the device reported
-        │ mismatch -> refuse, and say to use buildx
-        ▼
-  docker tag  my-app:dev  127.0.0.1:<write-port>/my-app:dev
-  docker push             Basic write token, via a throwaway
-        │                 DOCKER_CONFIG, never a persisted login
-        ▼
-  the store gains ONLY the layers that changed
-        │ resolve the tag to its manifest digest
-        ▼
-  control WS: sync{image, tag, digest}  ──────────▶ agent receives it
-// highlight-green-end
-// highlight-blue-start
-                                                             │
-                                                    pull 127.0.0.1:15151/
-                                                         my-app@<digest>
-                                                    through its own proxy,
-                                                    which forwards to the bulk
-                                                    listener over the pinned CA
-                                                             │
-                                                    layers it already has by
-                                                    digest are NOT re-sent
-                                                             │
-                                                    docker tag <digest> my-app:dev
-                                                             │ a digest pull lands
-                                                             │ untagged, so the
-                                                             │ service could not
-                                                             │ otherwise find it
-                                                             ▼
-                                                    systemctl restart <service>
-                                                             │
-                                                    active-image.json rewritten
-// highlight-blue-end
+```mermaid
+sequenceDiagram
+    autonumber
+    participant E as Host engine
+    participant W as Host watcher
+    participant R as Host registry
+    participant A as Target agent
+    participant S as Target systemd
+
+    E->>W: tag event from docker build -t my-app:dev .
+    W->>W: 300 ms debounce, so a burst collapses to the latest
+    W->>W: arch guard - image arch vs the arch the target reported
+    Note over W: on a mismatch it refuses, and says to use buildx
+
+    W->>E: docker tag my-app:dev 127.0.0.1:write-port/my-app:dev
+    W->>R: docker push with the Basic write token
+    Note over W,R: through a throwaway DOCKER_CONFIG,<br/>never a persisted login
+    R->>R: store ONLY the layers that changed
+    W->>R: resolve the tag to its manifest digest
+
+    W->>A: control WS - sync with image, tag and digest
+    A->>R: pull 127.0.0.1:15151/my-app@digest through its own proxy
+    Note over A,R: the proxy forwards to the bulk listener<br/>over the pinned CA
+    R-->>A: only the missing layers - it already has the rest by digest
+    A->>A: docker tag digest my-app:dev
+    Note over A: a digest pull lands UNTAGGED, so the service<br/>could not otherwise find it
+    A->>S: systemctl restart the owning service
+    A->>A: rewrite active-image.json
 ```
 
 The digest sent on the wire is the **registry manifest** digest, not your engine's
@@ -307,42 +256,31 @@ you just pushed would never actually run.
 
 ### Stage 3 - `down`, then `prune`
 
-```text
-// highlight-green-start
-  HOST                                            HIL TARGET
-  ────                                            ──────────
-  avocado container dev down
-        │
-        ├─ signal the running `up` (same path as Ctrl-C)
-        ├─ tear down ALL THREE listeners, the write one
-        │  through a guaranteed-cleanup guard so no
-        │  authenticated port survives an interrupted run
-        └─ remove the session state file
-        │
-// highlight-green-end
-// highlight-blue-start
-        └──────────── the WS drops ───────────────▶ "control WS closed by host"
-                                                             │
-                                                    reconnect loop, exponential
-                                                    backoff - the agent stays up
-                                                             │
-                                                    your container KEEPS RUNNING
-                                                    the last image it was given
-// highlight-blue-end
-// highlight-green-start
+```mermaid
+sequenceDiagram
+    autonumber
+    participant H as Host
+    participant T as HIL target
 
-  survives `down` on the host:  the blob store, the CA, the tokens on disk
-  survives `down` on the device: bootstrap.json, active-image.json, the container
+    Note over H: avocado container dev down
+    H->>H: signal the running up - the same path as Ctrl-C
+    H->>H: tear down all three listeners
+    Note over H: the write listener goes through a guaranteed-cleanup<br/>guard, so no authenticated port survives an<br/>interrupted run
+    H->>H: remove the session state file
 
-  avocado container dev prune
-        │
-        ├─ keep every blob a currently-tagged manifest references
-        ├─ sweep the rest
-        └─ refuse outright while a device is mid-pull, rather
-           than sweeping a blob that pull still needs
+    H--xT: the control WS drops
+    Note over T: "control WS closed by host"
+    T->>T: reconnect loop with exponential backoff - the agent stays up
+    Note over T: your container KEEPS RUNNING the last<br/>image it was given
 
-  never touched by prune: the session token, the per-project CA
-// highlight-green-end
+    Note over H: survives down: the blob store, the CA, the tokens on disk
+    Note over T: survives down: bootstrap.json, active-image.json, the container
+
+    Note over H: avocado container dev prune
+    H->>H: keep every blob a currently-tagged manifest references
+    H->>H: sweep the rest
+    Note over H: it REFUSES outright while a device is mid-pull,<br/>rather than sweeping a blob that pull still needs
+    Note over H: never touched by prune: the session token,<br/>the per-project CA
 ```
 
 Because `down` leaves the device's bootstrap in place and the agent reconnecting, a
