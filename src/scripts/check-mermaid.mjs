@@ -43,23 +43,38 @@ function markdownFiles(dir) {
 }
 
 /**
- * The ```mermaid blocks in one file, with the 1-based line the fence opened on so
- * a failure points at somewhere editable.
+ * An opening mermaid fence. Docusaurus accepts metadata after the language
+ * (```mermaid title="..."), so matching the bare string would skip those blocks
+ * and report success over a diagram nobody validated.
  */
-function mermaidBlocks(file) {
+const OPEN_FENCE = /^```\s*mermaid(\s|$)/
+
+/**
+ * The ```mermaid blocks in `text`, with the 1-based line each fence opened on so
+ * a failure points at somewhere editable.
+ *
+ * A fence that is never closed is returned separately rather than dropped. The
+ * rest of the file is a mermaid block as far as Markdown is concerned, so
+ * discarding it means the one case where the page is definitely broken is the
+ * one case CI stays green for.
+ */
+function scanMermaid(text) {
   const blocks = []
   let current = null
-  fs.readFileSync(file, 'utf8')
-    .split('\n')
-    .forEach((line, i) => {
-      const trimmed = line.trimEnd()
-      if (current === null && trimmed === '```mermaid') current = { line: i + 1, body: [] }
-      else if (current !== null && trimmed === '```') {
-        blocks.push(current)
-        current = null
-      } else if (current !== null) current.body.push(line)
-    })
-  return blocks
+  text.split('\n').forEach((line, i) => {
+    const trimmed = line.trimEnd()
+    if (current === null) {
+      if (OPEN_FENCE.test(trimmed)) current = { line: i + 1, body: [] }
+    } else if (trimmed === '```') {
+      blocks.push(current)
+      current = null
+    } else current.body.push(line)
+  })
+  return { blocks, unterminated: current ? current.line : null }
+}
+
+function mermaidBlocks(file) {
+  return scanMermaid(fs.readFileSync(file, 'utf8'))
 }
 
 /**
@@ -99,6 +114,37 @@ async function parses(mermaid, text) {
       .split('\n')[0]
       .trim()
   }
+}
+
+/**
+ * Prove the scanner still finds what it claims to.
+ *
+ * The parser self-test below cannot cover this: a block the scanner never yields
+ * is never handed to mermaid at all, so a scanner that silently finds nothing
+ * reports "0 blocks, ok" and every diagram in the repo goes unchecked.
+ */
+function selfTestScanner() {
+  const cases = [
+    ['bare fence', '```mermaid\nflowchart TD\n  a --> b\n```', 1, null],
+    ['fence with metadata', '```mermaid title="x"\nflowchart TD\n  a --> b\n```', 1, null],
+    ['two blocks', '```mermaid\na\n```\ntext\n```mermaid\nb\n```', 2, null],
+    ['non-mermaid fence ignored', '```bash\necho hi\n```', 0, null],
+    // `mermaidjs` is a different language tag, not a mermaid block with metadata.
+    ['adjacent language not matched', '```mermaidjs\na\n```', 0, null],
+    ['unterminated fence', 'intro\n```mermaid\nflowchart TD\n  a --> b', 0, 2],
+  ]
+  for (const [name, text, wantBlocks, wantUnterminated] of cases) {
+    const { blocks, unterminated } = scanMermaid(text)
+    if (blocks.length !== wantBlocks || unterminated !== wantUnterminated) {
+      console.error(
+        `self-test FAILED: scanner "${name}" gave ${blocks.length} block(s) / unterminated ${unterminated}, ` +
+          `expected ${wantBlocks} / ${wantUnterminated}`
+      )
+      return false
+    }
+  }
+  console.log(`self-test ok: scanner agrees on ${cases.length} fence shapes`)
+  return true
 }
 
 /**
@@ -149,6 +195,7 @@ async function main() {
   const mermaid = (await import('mermaid')).default
   mermaid.initialize({ startOnLoad: false })
 
+  if (!selfTestScanner()) process.exit(2)
   if (!(await selfTest(mermaid))) process.exit(2)
 
   const files = markdownFiles(SRC)
@@ -156,7 +203,11 @@ async function main() {
   const failures = []
 
   for (const file of files) {
-    for (const block of mermaidBlocks(file)) {
+    const { blocks, unterminated } = mermaidBlocks(file)
+    if (unterminated !== null) {
+      failures.push({ file, line: unterminated, failure: 'mermaid fence is never closed' })
+    }
+    for (const block of blocks) {
       blockCount++
       const failure = await parses(mermaid, block.body.join('\n'))
       if (failure) failures.push({ file, line: block.line, failure })
