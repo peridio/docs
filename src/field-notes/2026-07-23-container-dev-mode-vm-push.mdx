@@ -10,8 +10,18 @@ featured: false
 # PRE-RELEASE NOTE (not for readers): Container Dev Mode is not shipped yet.
 # The framing and the measured results are real, but the CLI and the device
 # extension are pre-release, so a reader cannot reproduce this today. It stays
-# draft:true on this branch until the feature ships and the [ENGINEER: ...]
-# gaps are filled and re-verified on a released build.
+# draft:true on this branch until the feature ships and the ENGINEER gaps are
+# filled and re-verified on a released build. (Worded without the bracketed
+# marker on purpose - see CONTRIBUTING.md's pre-merge grep. A comment carrying
+# the literal marker keeps this file matching forever, which teaches the next
+# person to ignore the gate.)
+#
+# The TestStatus block below carries no `reference` prop on purpose. That prop
+# renders as the anchor text of a real link, and neither the dev server nor a
+# deploy preview honours draft:true, so a placeholder there ships a GitHub-iconed
+# link that reads like a drafting note. Add it back pointing at the
+# /tree/main/<reference-name> subpath, the way every other note does, once the
+# reference code is public.
 #
 # --- internal drafting fields (not rendered) ---
 tested_against: 'avocado-cli 1.0.0-rc.1 (pre-release dev build); qemux86-64; Debian 12 cloud image engine VM'
@@ -23,14 +33,7 @@ promote_to_track: ''
 import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
 
-<TestStatus
-  targets={['qemux86-64']}
-  cli="1.0.0-rc.1"
-  reference={{
-    label: '[ENGINEER: reference link once the code is public]',
-    href: 'https://github.com/avocado-linux/references',
-  }}
-/>
+<TestStatus targets={['qemux86-64']} cli="1.0.0-rc.1" />
 
 **TL;DR** - If you ship a containerized app to an embedded device, your inner loop is probably "rebuild the image, move gigabytes, restart, find out". Container Dev Mode makes it "run `docker build`, and only the changed layer moves". I proved the whole path in a disposable QEMU lab before touching hardware: a one-line change synced **only the changed layer**, and the lab caught two real bugs first - the write registry was serving plain HTTP where the guest required HTTPS, and a 2 MiB body limit was rejecting every real image layer.
 

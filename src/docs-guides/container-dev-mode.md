@@ -3,6 +3,14 @@ sidebar_position: 3
 title: 'Container dev mode'
 copy_markdown: true
 description: 'Layer-aware hot-reload for containers on Avocado OS - change one line and ship only the changed layer to a running device, with no reflash and no full image re-push.'
+draft: true # PRE-RELEASE feature - keep off the live site until Container Dev Mode ships
+# PRE-RELEASE NOTE (not for readers): every `avocado container dev` subcommand on
+# this page exists only on the unmerged avocado-cli container-dev-mode branch, so
+# a reader who follows this guide today runs a subcommand no released CLI has.
+# The companion field note is gated for the same reason. Dropping this one line
+# republishes the page: the `src/sidebars-guides.js` entry stays put, because
+# Docusaurus resolves a draft doc into `draftIds` and leaves the sidebar alone
+# rather than failing. Re-verify the commands against a released build first.
 ---
 
 Container dev mode is the inner development loop for a containerized application running on an Avocado OS device. You keep building images the way you already do (`docker build`), and the changed layer is pushed to the device and the container restarted, in place, on the running system. There is no reflash, no full image re-transfer, and no rebuild of the OS.
@@ -119,7 +127,7 @@ journalctl -u app.service -f          # the service the agent restarts
 journalctl -u avocado-container-agent-dev -f   # pull + restart, as the agent sees it
 ```
 
-This is the same host/target split as [hardware in the loop](./hardware-in-the-loop.md), which does for extensions what this page does for containers. If you already run HITL, the mental model carries over unchanged.
+This is the same host/target split as [hardware in the loop](./hardware-in-the-loop), which does for extensions what this page does for containers. If you already run HIL, the mental model carries over unchanged.
 
 ## Prerequisites
 
@@ -150,7 +158,7 @@ supported_targets:
 runtimes:
   dev:
     extensions:
-      - avocado-dev
+      - avocado-ext-dev
       # highlight-added-start
       - avocado-ext-docker
       - avocado-ext-container-agent-dev
@@ -401,7 +409,7 @@ avocado container dev sync
 avocado container dev status
 ```
 
-`status` reports registry, watcher, and last-sync state. It also surfaces the case where a device presents a stale token and needs `up` to be re-run to re-bootstrap.
+`status` reports registry, watcher, and last-sync state.
 
 ## Stop the loop
 
