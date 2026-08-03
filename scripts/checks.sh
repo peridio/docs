@@ -19,4 +19,7 @@ fi
 
 npm run lint
 npm exec -- prettier --check .
+# Diagrams render in the reader's browser, so `npm run build` below passes even
+# with a malformed one. Check them before the build rather than after deploy.
+npm run check-mermaid
 npm run build

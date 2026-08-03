@@ -393,19 +393,19 @@ This is scoped to the container dev mode store and is distinct from the top-leve
 
 ## Environment variables
 
-| Variable                           | Purpose                                                                     |
-| ---------------------------------- | --------------------------------------------------------------------------- |
-| `AVOCADO_CONTAINER_DEV_DEVICE`     | Device SSH target (`user@host`). Required by `up`.                          |
-| `AVOCADO_CONTAINER_DEV_VM`         | Engine guest SSH target. Only used when pushing through a helper VM engine. |
-| `AVOCADO_CONTAINER_DEV_HOST`       | Override host address auto-detection.                                       |
-| `AVOCADO_CONTAINER_DEV_PORT`       | Override the bulk read listener port.                                       |
-| `AVOCADO_CONTAINER_DEV_WS_PORT`    | Override the control WebSocket port.                                        |
+| Variable                           | Purpose                                                                                                     |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `AVOCADO_CONTAINER_DEV_DEVICE`     | Device SSH target (`user@host`). Required by `up`.                                                          |
+| `AVOCADO_CONTAINER_DEV_VM`         | Engine guest SSH target. Only used when pushing through a helper VM engine.                                 |
+| `AVOCADO_CONTAINER_DEV_HOST`       | Override host address auto-detection.                                                                       |
+| `AVOCADO_CONTAINER_DEV_PORT`       | Override the bulk read listener port.                                                                       |
+| `AVOCADO_CONTAINER_DEV_WS_PORT`    | Override the control WebSocket port.                                                                        |
 | `AVOCADO_CONTAINER_DEV_WRITE_PORT` | Pin the write listener port instead of binding an ephemeral one. Only needed on the `avocado-vm` push path. |
 
 ## Default ports
 
-| Port        | Listener                                                       |
-| ----------- | -------------------------------------------------------------- |
+| Port        | Listener                                                        |
+| ----------- | --------------------------------------------------------------- |
 | `5599`      | Bulk read (the device pulls image layers from here).            |
 | `5600`      | Control WebSocket.                                              |
 | _ephemeral_ | Write (your host's engine pushes here), bound on loopback only. |
