@@ -25,10 +25,10 @@ The loop keeps a real device in it. You edit and build on your machine, the chan
 
 :::info Reading the diagrams on this page
 
-Which machine a step runs on is the thing to keep straight, so every figure says it twice — once in the group's label, once in colour:
+Which machine a step runs on is the thing to keep straight, so every figure says it twice - once in the group's label, once in colour:
 
-- **Blue** — on **your host**: you, your build, and everything `avocado container dev up` starts.
-- **Amber** — on the **HIL target**: the agent, the target's own engine, and your service.
+- **Blue** - on **your host**: you, your build, and everything `avocado container dev up` starts.
+- **Amber** - on the **HIL target**: the agent, the target's own engine, and your service.
 - A **thick amber arrow** is the one hop that actually crosses the network.
 
 The labels carry the meaning on their own, so the figures still read correctly in greyscale or with colour blindness.
@@ -37,14 +37,14 @@ The labels carry the meaning on their own, so the figures still read correctly i
 
 ```mermaid
 flowchart TD
-    subgraph you["ON YOUR HOST - you, building the way you already do"]
+    subgraph you["Your host: you, building the way you already do"]
         direction TB
         edit["edit your app"]
         build["docker build -t my-app:dev ."]
         edit --> build
     end
 
-    subgraph host["ON YOUR HOST - started by avocado container dev up"]
+    subgraph host["Your host: started by avocado container dev up"]
         direction TB
         watcher["watcher<br/>sees the tag"]
         registry["registry<br/>keeps the layers"]
@@ -52,7 +52,7 @@ flowchart TD
         watcher --> registry --> control
     end
 
-    subgraph target["ON THE HIL TARGET - a QEMU guest or a board"]
+    subgraph target["The HIL target: a QEMU guest or a board"]
         direction TB
         agent["container-agent-dev<br/>pulls over the pinned CA"]
         engine["engine<br/>applies the changed layer"]
@@ -186,7 +186,7 @@ everything in between is repeatable as many times as you like.
 
 ```mermaid
 flowchart TD
-    subgraph runs["EVERY COMMAND BELOW RUNS ON YOUR HOST"]
+    subgraph runs["Every command below runs on your host"]
         direction TB
         up["avocado container dev up<br/>mints TLS and tokens, opens three listeners,<br/>starts the watcher, bootstraps the target"]
 
@@ -214,7 +214,7 @@ flowchart TD
 ```
 
 `status` and `prune` are read-mostly and safe to run whenever. `prune` does not
-need the session stopped first — it refuses to sweep a blob a device is still
+need the session stopped first - it refuses to sweep a blob a device is still
 pulling rather than racing it.
 
 The three stages below are that same cycle in detail.
@@ -226,22 +226,22 @@ The only step that touches the device over SSH. Steady state never re-opens it.
 ```mermaid
 sequenceDiagram
     autonumber
-    box rgba(37,99,235,0.12) ON YOUR HOST
+    box rgba(37,99,235,0.12) Your host
     participant H as Host
     end
-    box rgba(217,119,6,0.14) ON THE HIL TARGET
+    box rgba(217,119,6,0.14) The HIL target
     participant T as HIL target
     end
 
     Note over H: avocado container dev up
     H->>H: mint a per-project CA
-    H->>H: mint TWO tokens - Bearer read/control, Basic write
+    H->>H: mint two separate tokens - Bearer read/control, Basic write
     H->>H: open bulk read 0.0.0.0:5599 - TLS, Bearer
     H->>H: open write 127.0.0.1:ephemeral - Basic, loopback only
     H->>H: open control WS 0.0.0.0:5600 - TLS, Bearer
     H->>H: start the watcher on your engine's event stream
 
-    H->>T: bootstrap over SSH, ONCE
+    H->>T: bootstrap over SSH, once and never again
     Note over T: /var/lib/avocado/container-dev/bootstrap.json (0600)<br/>carries the bulk endpoint, the WS endpoint,<br/>the read token and the CA<br/><br/>absent: the write token and the write endpoint
 
     Note over T: the agent was waiting on that file, so it starts
@@ -262,12 +262,12 @@ push step instead of waiting for an event.
 ```mermaid
 sequenceDiagram
     autonumber
-    box rgba(37,99,235,0.12) ON YOUR HOST
+    box rgba(37,99,235,0.12) Your host
     participant E as engine
     participant W as watcher
     participant R as registry
     end
-    box rgba(217,119,6,0.14) ON THE HIL TARGET
+    box rgba(217,119,6,0.14) The HIL target
     participant A as agent
     participant S as systemd
     end
@@ -280,7 +280,7 @@ sequenceDiagram
     W->>E: docker tag my-app:dev 127.0.0.1:write-port/my-app:dev
     W->>R: docker push with the Basic write token
     Note over W,R: through a throwaway DOCKER_CONFIG,<br/>never a persisted login
-    R->>R: store ONLY the layers that changed
+    R->>R: store only the layers that changed
     W->>R: resolve the tag to its manifest digest
 
     W->>A: control WS - sync with image, tag and digest
@@ -288,13 +288,13 @@ sequenceDiagram
     Note over A,R: the proxy forwards to the bulk listener<br/>over the pinned CA
     R-->>A: only the missing layers - it already has the rest by digest
     A->>A: docker tag digest my-app:dev
-    Note over A: a digest pull lands UNTAGGED, so the service<br/>could not otherwise find it
+    Note over A: a digest pull lands untagged, so the service<br/>could not otherwise find it
     A->>S: systemctl restart the owning service
     A->>A: rewrite active-image.json
 ```
 
 The digest sent on the wire is the **registry manifest** digest, not your engine's
-local image ID — the device pulls by digest, so it has to be one the registry can
+local image ID - the device pulls by digest, so it has to be one the registry can
 serve. And the owning **service** is restarted rather than the container: an engine
 `restart` re-runs the image ID pinned when the container was created, so the layer
 you just pushed would never actually run.
@@ -304,10 +304,10 @@ you just pushed would never actually run.
 ```mermaid
 sequenceDiagram
     autonumber
-    box rgba(37,99,235,0.12) ON YOUR HOST
+    box rgba(37,99,235,0.12) Your host
     participant H as Host
     end
-    box rgba(217,119,6,0.14) ON THE HIL TARGET
+    box rgba(217,119,6,0.14) The HIL target
     participant T as HIL target
     end
 
@@ -320,7 +320,7 @@ sequenceDiagram
     H--xT: the control WS drops
     Note over T: "control WS closed by host"
     T->>T: reconnect loop with exponential backoff - the agent stays up
-    Note over T: your container KEEPS RUNNING the last<br/>image it was given
+    Note over T: your container keeps running the last<br/>image it was given
 
     Note over H: survives down: the blob store, the CA, the tokens on disk
     Note over T: survives down: bootstrap.json, active-image.json, the container
@@ -328,12 +328,12 @@ sequenceDiagram
     Note over H: avocado container dev prune
     H->>H: keep every blob a currently-tagged manifest references
     H->>H: sweep the rest
-    Note over H: it REFUSES outright while a device is mid-pull,<br/>rather than sweeping a blob that pull still needs
+    Note over H: it refuses outright while a device is mid-pull,<br/>rather than sweeping a blob that pull still needs
     Note over H: never touched by prune: the session token,<br/>the per-project CA
 ```
 
 Because `down` leaves the device's bootstrap in place and the agent reconnecting, a
-later `up` picks the device straight back up — and the agent's `Hello` reports the
+later `up` picks the device straight back up - and the agent's `Hello` reports the
 digest it is currently running, so the host knows whether anything needs re-sending.
 
 If the device was offline during an `up`, it may present a token from the previous
@@ -389,7 +389,7 @@ The explicit trigger is the more durable of the two, since it does not consult t
 
 ## Force a sync
 
-`sync` re-pushes the current watched images and notifies the device without waiting on an event. Use it when the watcher cannot see your build — a cross-arch `buildx` build emits no tag event whatever the daemon version, and neither does a BuildKit build on a daemon older than Docker 23 — or any time you want to re-push without rebuilding:
+`sync` re-pushes the current watched images and notifies the device without waiting on an event. Use it when the watcher cannot see your build - a cross-arch `buildx` build emits no tag event whatever the daemon version, and neither does a BuildKit build on a daemon older than Docker 23 - or any time you want to re-push without rebuilding:
 
 ```bash title="On Host"
 avocado container dev sync
@@ -468,7 +468,7 @@ write listener loopback-only on 127.0.0.1:34813
 ```
 
 `AVOCADO_CONTAINER_DEV_WRITE_PORT` pins it to a known value, which is only needed
-when pushing through an `avocado-vm` engine guest — there the guest's per-registry
+when pushing through an `avocado-vm` engine guest - there the guest's per-registry
 trust store and the pushed tag are both keyed on that port, so it cannot be
 ephemeral.
 
