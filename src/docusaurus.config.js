@@ -11,6 +11,11 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
   markdown: {
+    // Render ```mermaid fences as diagrams. Note this does NOT make a malformed
+    // diagram fail the build the way onBrokenLinks/onBrokenAnchors do - mermaid
+    // parses in the browser and renders an error box instead, so a diagram change
+    // needs the rendered page checked, not just a green build.
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: 'throw',
     },
@@ -137,6 +142,9 @@ const config = {
         ]
       : []),
   ],
+  // Pinned to the same version as @docusaurus/core; a theme package on a
+  // different version than core is the usual source of Docusaurus theme skew.
+  themes: ['@docusaurus/theme-mermaid'],
   presets: [
     [
       'classic',
@@ -160,6 +168,12 @@ const config = {
         defaultMode: 'light',
         disableSwitch: false,
         respectPrefersColorScheme: true,
+      },
+      // The colour switch above is user-visible, so diagrams have to follow it.
+      // Without this a mermaid diagram keeps its light palette in dark mode and
+      // renders dark text on a dark background.
+      mermaid: {
+        theme: { light: 'neutral', dark: 'dark' },
       },
       docs: {
         sidebar: {
