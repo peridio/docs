@@ -62,7 +62,15 @@ function mermaidBlocks(file) {
   return blocks
 }
 
-/** mermaid needs a DOM to initialise, even to parse. */
+/**
+ * mermaid needs a DOM to initialise, even to parse.
+ *
+ * Promote the WHOLE window surface, not just window/document/navigator. Parts of
+ * mermaid reference browser constructors bare - `box` in a sequence diagram
+ * reaches `Option` - and a missing one throws "X is not defined", which is
+ * indistinguishable from a syntax error at the call site. That would fail a
+ * perfectly valid diagram and block it in CI.
+ */
 function installDom() {
   const dom = new JSDOM('<!DOCTYPE html><body></body>', { pretendToBeVisual: true })
   globalThis.window = dom.window
@@ -72,6 +80,14 @@ function installDom() {
     value: dom.window.navigator,
     configurable: true,
   })
+  for (const key of Object.getOwnPropertyNames(dom.window)) {
+    if (key in globalThis) continue
+    try {
+      globalThis[key] = dom.window[key]
+    } catch {
+      // Getter-only or otherwise unassignable; mermaid does not need it.
+    }
+  }
 }
 
 async function parses(mermaid, text) {
@@ -91,17 +107,32 @@ async function parses(mermaid, text) {
  * below would be meaningless.
  */
 async function selfTest(mermaid) {
-  const good = 'flowchart TD\n  a["x"] --> b["y"]'
+  const good = [
+    ['plain flowchart', 'flowchart TD\n  a["x"] --> b["y"]'],
+    // A sequence `box` reaches browser constructors the bare jsdom globals do not
+    // provide. Getting that wrong rejects a valid diagram with "Option is not
+    // defined", which reads like a syntax error - so pin it here.
+    [
+      'sequence with a styled box',
+      'sequenceDiagram\n  box rgba(37,99,235,0.12) H\n  participant W as w\n  end\n  W->>W: x',
+    ],
+    [
+      'styled flowchart',
+      'flowchart TD\n  a["x"] --> b["y"]\n  style a fill:#2563eb1f,stroke:#2563eb',
+    ],
+  ]
   const bad = [
     ['unknown diagram type', 'flowkart TD\n  a --> b'],
     ['unclosed subgraph', 'flowchart TD\n  subgraph s["t"]\n  a --> b'],
     ['not a diagram', '%%%% nonsense ((('],
   ]
 
-  const goodFailure = await parses(mermaid, good)
-  if (goodFailure) {
-    console.error(`self-test FAILED: a valid diagram was rejected - ${goodFailure}`)
-    return false
+  for (const [name, text] of good) {
+    const goodFailure = await parses(mermaid, text)
+    if (goodFailure) {
+      console.error(`self-test FAILED: valid "${name}" was rejected - ${goodFailure}`)
+      return false
+    }
   }
   for (const [name, text] of bad) {
     if (!(await parses(mermaid, text))) {
@@ -109,7 +140,7 @@ async function selfTest(mermaid) {
       return false
     }
   }
-  console.log(`self-test ok: 1 valid accepted, ${bad.length} malformed rejected`)
+  console.log(`self-test ok: ${good.length} valid accepted, ${bad.length} malformed rejected`)
   return true
 }
 

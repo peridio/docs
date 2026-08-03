@@ -23,6 +23,18 @@ Container dev mode is a development feature. The device-side agent ships as its 
 
 The loop keeps a real device in it. You edit and build on your machine, the changed layer crosses to the device, and the service restarts there, so what you are looking at is your code running on the target rather than an emulator of it. A QEMU target and a physical board are the same thing to this loop: both are just an SSH-reachable device.
 
+:::info Reading the diagrams on this page
+
+Which machine a step runs on is the thing to keep straight, so every figure says it twice — once in the group's label, once in colour:
+
+- **Blue** — on **your host**: you, your build, and everything `avocado container dev up` starts.
+- **Amber** — on the **HIL target**: the agent, the target's own engine, and your service.
+- A **thick amber arrow** is the one hop that actually crosses the network.
+
+The labels carry the meaning on their own, so the figures still read correctly in greyscale or with colour blindness.
+
+:::
+
 ```mermaid
 flowchart TD
     subgraph you["ON YOUR HOST - you, building the way you already do"]
@@ -52,6 +64,21 @@ flowchart TD
     build --> watcher
     control -->|"host to target,<br/>only the changed layer"| agent
     running -->|"watch it, then edit again -<br/>seconds, no reflash"| edit
+
+    %% Blue is your host, amber is the target, everywhere on this page. Blue and
+    %% amber rather than the more obvious green and red because that pair stays
+    %% distinguishable with the common forms of colour blindness. The fills carry
+    %% an alpha channel so they TINT the page rather than paint over it, which is
+    %% what keeps the text legible in both light and dark mode - a solid light
+    %% fill turns illegible the moment the reader flips to dark. Colour is never
+    %% the only signal: each group also says which machine it is.
+    style you fill:#2563eb1f,stroke:#2563eb,stroke-width:2px
+    style host fill:#2563eb1f,stroke:#2563eb,stroke-width:2px
+    style target fill:#d977061f,stroke:#d97706,stroke-width:2px
+    %% Link 7 is the one arrow that leaves your host, thickened so the single
+    %% network hop is the most visible edge in the figure. Indices count every
+    %% link in declaration order, and a chain contributes one per arrow.
+    linkStyle 7 stroke:#d97706,stroke-width:3px
 ```
 
 When you run `avocado container dev up`, the CLI:
@@ -180,6 +207,10 @@ flowchart TD
         down --> prune
         prune -.->|"start a new session"| up
     end
+
+    %% Blue for your host, matching the rest of the page. Nothing here is amber
+    %% because nothing here runs on the target.
+    style runs fill:#2563eb1f,stroke:#2563eb,stroke-width:2px
 ```
 
 `status` and `prune` are read-mostly and safe to run whenever. `prune` does not
@@ -195,8 +226,12 @@ The only step that touches the device over SSH. Steady state never re-opens it.
 ```mermaid
 sequenceDiagram
     autonumber
+    box rgba(37,99,235,0.12) ON YOUR HOST
     participant H as Host
+    end
+    box rgba(217,119,6,0.14) ON THE HIL TARGET
     participant T as HIL target
+    end
 
     Note over H: avocado container dev up
     H->>H: mint a per-project CA
@@ -227,11 +262,15 @@ push step instead of waiting for an event.
 ```mermaid
 sequenceDiagram
     autonumber
-    participant E as Host engine
-    participant W as Host watcher
-    participant R as Host registry
-    participant A as Target agent
-    participant S as Target systemd
+    box rgba(37,99,235,0.12) ON YOUR HOST
+    participant E as engine
+    participant W as watcher
+    participant R as registry
+    end
+    box rgba(217,119,6,0.14) ON THE HIL TARGET
+    participant A as agent
+    participant S as systemd
+    end
 
     E->>W: tag event from docker build -t my-app:dev .
     W->>W: 300 ms debounce, so a burst collapses to the latest
@@ -265,8 +304,12 @@ you just pushed would never actually run.
 ```mermaid
 sequenceDiagram
     autonumber
+    box rgba(37,99,235,0.12) ON YOUR HOST
     participant H as Host
+    end
+    box rgba(217,119,6,0.14) ON THE HIL TARGET
     participant T as HIL target
+    end
 
     Note over H: avocado container dev down
     H->>H: signal the running up - the same path as Ctrl-C
