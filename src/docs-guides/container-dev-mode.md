@@ -25,11 +25,14 @@ The loop keeps a real device in it. You edit and build on your machine, the chan
 
 ```mermaid
 flowchart TD
-    edit["edit your app"]
-    build["docker build -t my-app:dev ."]
-    watch["watch it run on real hardware"]
+    subgraph you["ON YOUR HOST - you, building the way you already do"]
+        direction TB
+        edit["edit your app"]
+        build["docker build -t my-app:dev ."]
+        edit --> build
+    end
 
-    subgraph host["your host - started by avocado container dev up"]
+    subgraph host["ON YOUR HOST - started by avocado container dev up"]
         direction TB
         watcher["watcher<br/>sees the tag"]
         registry["registry<br/>keeps the layers"]
@@ -37,18 +40,18 @@ flowchart TD
         watcher --> registry --> control
     end
 
-    subgraph target["the HIL target - a QEMU guest or a board"]
+    subgraph target["ON THE HIL TARGET - a QEMU guest or a board"]
         direction TB
         agent["container-agent-dev<br/>pulls over the pinned CA"]
         engine["engine<br/>applies the changed layer"]
         unit["systemd<br/>restarts the service"]
-        agent --> engine --> unit
+        running["your app running<br/>on real hardware"]
+        agent --> engine --> unit --> running
     end
 
-    edit --> build --> watcher
-    control -->|"only the changed layer"| agent
-    unit --> watch
-    watch -->|"edit again - seconds, no reflash"| edit
+    build --> watcher
+    control -->|"host to target,<br/>only the changed layer"| agent
+    running -->|"watch it, then edit again -<br/>seconds, no reflash"| edit
 ```
 
 When you run `avocado container dev up`, the CLI:
@@ -156,24 +159,27 @@ everything in between is repeatable as many times as you like.
 
 ```mermaid
 flowchart TD
-    up["avocado container dev up<br/>mints TLS and tokens, opens three listeners,<br/>starts the watcher, bootstraps the target"]
-
-    subgraph live["the loop is live - repeat freely"]
+    subgraph runs["EVERY COMMAND BELOW RUNS ON YOUR HOST"]
         direction TB
-        b["docker build -t my-app:dev ."]
-        w["the watcher fires automatically"]
-        s["avocado container dev sync<br/>same push and notify, no event needed"]
-        st["avocado container dev status<br/>read-only check"]
-        b --> w
+        up["avocado container dev up<br/>mints TLS and tokens, opens three listeners,<br/>starts the watcher, bootstraps the target"]
+
+        subgraph live["the loop is live - repeat freely"]
+            direction TB
+            b["docker build -t my-app:dev ."]
+            w["the watcher fires automatically"]
+            s["avocado container dev sync<br/>same push and notify, no event needed"]
+            st["avocado container dev status<br/>read-only check"]
+            b --> w
+        end
+
+        down["avocado container dev down<br/>stops the listeners; the target keeps<br/>running the last image it was given"]
+        prune["avocado container dev prune<br/>reclaims disk, at any point"]
+
+        up --> live
+        live --> down
+        down --> prune
+        prune -.->|"start a new session"| up
     end
-
-    down["avocado container dev down<br/>stops the listeners; the target keeps<br/>running the last image it was given"]
-    prune["avocado container dev prune<br/>reclaims disk, at any point"]
-
-    up --> live
-    live --> down
-    down --> prune
-    prune -.->|"start a new session"| up
 ```
 
 `status` and `prune` are read-mostly and safe to run whenever. `prune` does not
