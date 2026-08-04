@@ -3,6 +3,11 @@ title: 'Change one line in a 7 GB container, ship only the changed layer to a ru
 description: 'The container inner dev loop on Avocado OS: keep running docker build, and only the changed layer moves to the device. Plus the two bugs a throwaway QEMU lab caught before any hardware.'
 date: 2026-07-23
 draft: true # PRE-RELEASE feature - keep on the branch until Container Dev Mode ships
+# Do not un-draft this file before src/docs-guides/container-dev-mode.md. The body
+# links /developer-reference/container-dev-mode, which is only a route once that
+# guide's own draft:true is dropped, and onBrokenLinks is 'throw' - so publishing
+# the note alone fails `npm run build`. checks.sh runs the build on every PR, so it
+# fails there rather than at deploy, but the two flips belong in one commit.
 authors: [jtia]
 tags: [qemux86-64, containers, testing]
 category: 'Containers'

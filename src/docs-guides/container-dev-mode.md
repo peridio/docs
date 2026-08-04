@@ -11,6 +11,10 @@ draft: true # PRE-RELEASE feature - keep off the live site until Container Dev M
 # republishes the page: the `src/sidebars-guides.js` entry stays put, because
 # Docusaurus resolves a draft doc into `draftIds` and leaves the sidebar alone
 # rather than failing. Re-verify the commands against a released build first.
+# Un-draft this page in the SAME commit as the field note, or before it: the note
+# links /developer-reference/container-dev-mode, which is not a route while this
+# page is draft, and onBrokenLinks is 'throw'. This page can publish alone; the
+# note cannot.
 ---
 
 Container dev mode is the inner development loop for a containerized application running on an Avocado OS device. You keep building images the way you already do (`docker build`), and the changed layer is pushed to the device and the container restarted, in place, on the running system. There is no reflash, no full image re-transfer, and no rebuild of the OS.
@@ -37,7 +41,10 @@ Which machine a step runs on is the thing to keep straight, so every figure says
 
 - **Blue** - on **your host**: you, your build, and everything `avocado container dev up` starts.
 - **Amber** - on the **HIL target**: the agent, the target's own engine, and your service.
-- A **thick amber arrow** is the one hop that actually crosses the network.
+- A **thick amber arrow** crosses the network. There are two such hops, and they
+  are separate on purpose: the host notifies the target on the control port, and
+  the target then pulls the layers back from the host's registry on the bulk port.
+  Opening only the control port is the usual reason a sync appears to stall.
 
 The labels carry the meaning on their own, so the figures still read correctly in greyscale or with colour blindness.
 
@@ -70,7 +77,8 @@ flowchart TD
     end
 
     build --> watcher
-    control -->|"host to target,<br/>only the changed layer"| agent
+    control -->|"notify: a new digest is ready<br/>control WebSocket, 5600"| agent
+    registry -->|"the agent pulls only the changed<br/>layer - bulk read, 5599"| agent
     running -->|"watch it, then edit again -<br/>seconds, no reflash"| edit
 
     %% Blue is your host, amber is the target, everywhere on this page. Blue and
@@ -212,7 +220,13 @@ flowchart TD
 
         up --> live
         live --> down
-        down --> prune
+        %% `prune` is reachable from the live loop, not only after `down`. The
+        %% dotted edges are the optional ones: pruning mid-session is supported
+        %% (it refuses to sweep a blob a device is still pulling), so drawing it
+        %% only downstream of `down` told a reader low on disk to give up a live
+        %% loop the prose says they can keep.
+        live -.->|"reclaim disk without<br/>stopping the loop"| prune
+        down -.-> prune
         prune -.->|"start a new session"| up
     end
 
@@ -307,7 +321,7 @@ serve. And the owning **service** is restarted rather than the container: an eng
 `restart` re-runs the image ID pinned when the container was created, so the layer
 you just pushed would never actually run.
 
-### Stage 3 - `down`, then `prune`
+### Stage 3 - `down`, and `prune` whenever
 
 ```mermaid
 sequenceDiagram
