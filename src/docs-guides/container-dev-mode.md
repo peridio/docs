@@ -475,15 +475,18 @@ This is scoped to the container dev mode store and is distinct from the top-leve
 
 ## Default ports
 
-| Port        | Listener                                                        |
-| ----------- | --------------------------------------------------------------- |
-| `5599`      | Bulk read (the device pulls image layers from here).            |
-| `5600`      | Control WebSocket.                                              |
-| _ephemeral_ | Write (your host's engine pushes here), bound on loopback only. |
+| Port        | Listener                                                                                                              |
+| ----------- | --------------------------------------------------------------------------------------------------------------------- |
+| `5599`      | Bulk read (the device pulls image layers from here).                                                                  |
+| `5600`      | Control WebSocket.                                                                                                    |
+| _ephemeral_ | Write (your host's engine pushes here), bound on loopback only. Fixed rather than ephemeral on the `avocado-vm` path. |
 
-The write listener does not have a fixed default port. It binds an ephemeral
-loopback port that changes every session, and the address is never disclosed to
-the device. `up` reports the port it chose:
+The write listener is always bound on loopback - that part does not vary - but the
+port does. By default it takes an ephemeral one that changes every session and is
+never disclosed to the device. On the `avocado-vm` push path it binds a known port
+instead, which the guest does need (see `AVOCADO_CONTAINER_DEV_WRITE_PORT` below);
+loopback still holds there, because the guest reaches it through the forwarded
+socket rather than over the network. `up` reports the port it chose:
 
 ```
 write listener loopback-only on 127.0.0.1:34813
