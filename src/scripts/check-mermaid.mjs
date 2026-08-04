@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate every ```mermaid block in the docs against mermaid's own parser.
+ * Validate every mermaid diagram in the docs against mermaid itself.
  *
  * Why this exists: `mermaid: true` renders diagrams in the READER's browser, so a
  * malformed diagram does not fail the Docusaurus build the way a broken link or
@@ -9,16 +9,27 @@
  * pre-rendering to SVG would have given us for free. This restores it without
  * adding a headless browser to CI.
  *
- * It self-tests first. A validator that silently stops rejecting anything is worse
- * than no validator, because it reports success forever, so the known-bad cases
- * below must fail before any real block is judged.
+ * Blocks are found by parsing markdown to mdast and selecting code nodes whose
+ * lang is `mermaid`, which is exactly what Docusaurus does
+ * (@docusaurus/mdx-loader/lib/remark/mermaid transforms any code node with
+ * lang === 'mermaid'). Matching the parser rather than guessing at fences is what
+ * keeps the two from disagreeing: a hand-rolled scanner has to re-derive
+ * indentation, fence characters and fence lengths, and every case it gets wrong is
+ * a diagram that renders for readers and is never checked here.
+ *
+ * It self-tests first - the scanner, the file walk, and the validator. A validator
+ * that silently stops rejecting anything is worse than no validator, because it
+ * reports success forever.
  *
  * ESM (.mjs) because mermaid ships ESM only and this package is commonjs.
  */
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { JSDOM } from 'jsdom'
+import { fromMarkdown } from 'mdast-util-from-markdown'
+import { visit } from 'unist-util-visit'
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SKIP_DIRS = new Set([
@@ -43,34 +54,38 @@ function markdownFiles(dir) {
 }
 
 /**
- * An opening mermaid fence. Docusaurus accepts metadata after the language
- * (```mermaid title="..."), so matching the bare string would skip those blocks
- * and report success over a diagram nobody validated.
- */
-const OPEN_FENCE = /^```\s*mermaid(\s|$)/
-
-/**
- * The ```mermaid blocks in `text`, with the 1-based line each fence opened on so
- * a failure points at somewhere editable.
+ * The mermaid diagrams in `text`, each with the 1-based line its fence opened on.
  *
- * A fence that is never closed is returned separately rather than dropped. The
- * rest of the file is a mermaid block as far as Markdown is concerned, so
- * discarding it means the one case where the page is definitely broken is the
- * one case CI stays green for.
+ * Everything context-sensitive falls out of using the real parser rather than
+ * being special-cased:
+ *
+ *  - Indented fences (inside a list item), `~~~mermaid`, and fences longer than
+ *    three characters are all ordinary code nodes, so they are found.
+ *  - A mermaid fence inside a LONGER fence - the CommonMark-correct way to show
+ *    mermaid source on a page - belongs to the outer code node's value, so it is
+ *    not a diagram and is not validated. Documenting a deliberately-bad example no
+ *    longer fails CI.
+ *  - A fence inside an HTML comment is part of an `html` node, not a code node, so
+ *    commented-out diagrams are inert here exactly as they are for a reader.
+ *  - An unclosed fence runs to end of document per CommonMark, which is what
+ *    Docusaurus renders too; it arrives here as one block whose body is the rest of
+ *    the file, and mermaid rejects it with a line number inside the file.
  */
 function scanMermaid(text) {
   const blocks = []
-  let current = null
-  text.split('\n').forEach((line, i) => {
-    const trimmed = line.trimEnd()
-    if (current === null) {
-      if (OPEN_FENCE.test(trimmed)) current = { line: i + 1, body: [] }
-    } else if (trimmed === '```') {
-      blocks.push(current)
-      current = null
-    } else current.body.push(line)
+  // MDX-specific syntax (JSX, ESM imports) is not valid CommonMark, and
+  // fromMarkdown without the mdx extensions treats it as paragraphs/html rather
+  // than throwing. Code fences parse identically either way, so plain CommonMark
+  // is enough to locate diagrams and avoids depending on the MDX plugin set.
+  const tree = fromMarkdown(text)
+  visit(tree, 'code', (node) => {
+    // Docusaurus accepts metadata after the language (```mermaid title="...").
+    // mdast puts the language in `lang` and the rest in `meta`, so metadata needs
+    // no handling here - which is where the old regex had to guess.
+    if (node.lang !== 'mermaid') return
+    blocks.push({ line: node.position.start.line, body: node.value })
   })
-  return { blocks, unterminated: current ? current.line : null }
+  return blocks
 }
 
 function mermaidBlocks(file) {
@@ -78,13 +93,38 @@ function mermaidBlocks(file) {
 }
 
 /**
+ * DOM constructors that Node also defines, so a plain "skip what is already
+ * global" loop leaves them pointing at Node's realm while mermaid operates on
+ * jsdom's. `globalThis.Event !== dom.window.Event` makes
+ * `document.body.dispatchEvent(new Event('x'))` throw "parameter 1 is not of type
+ * 'Event'", and parses() would report that as the author's diagram being invalid.
+ */
+const CROSS_REALM_GLOBALS = [
+  'Event',
+  'EventTarget',
+  'DOMException',
+  'CustomEvent',
+  'MessageEvent',
+  'Blob',
+  'File',
+  'FormData',
+  'WebSocket',
+  'AbortController',
+  'AbortSignal',
+  'URL',
+  'URLSearchParams',
+  'crypto',
+  'performance',
+  'MutationObserver',
+]
+
+/**
  * mermaid needs a DOM to initialise, even to parse.
  *
- * Promote the WHOLE window surface, not just window/document/navigator. Parts of
- * mermaid reference browser constructors bare - `box` in a sequence diagram
- * reaches `Option` - and a missing one throws "X is not defined", which is
- * indistinguishable from a syntax error at the call site. That would fail a
- * perfectly valid diagram and block it in CI.
+ * Promote the whole window surface. Parts of mermaid reference browser
+ * constructors bare - `box` in a sequence diagram reaches `Option` - and a missing
+ * one throws "X is not defined", which is indistinguishable from a syntax error at
+ * the call site. That would fail a perfectly valid diagram and block it in CI.
  */
 function installDom() {
   const dom = new JSDOM('<!DOCTYPE html><body></body>', { pretendToBeVisual: true })
@@ -95,55 +135,191 @@ function installDom() {
     value: dom.window.navigator,
     configurable: true,
   })
-  for (const key of Object.getOwnPropertyNames(dom.window)) {
-    if (key in globalThis) continue
+  const assign = (key) => {
     try {
-      globalThis[key] = dom.window[key]
+      Object.defineProperty(globalThis, key, {
+        value: dom.window[key],
+        writable: true,
+        configurable: true,
+      })
+      return true
     } catch {
       // Getter-only or otherwise unassignable; mermaid does not need it.
+      return false
+    }
+  }
+  // Force the names Node shadows, so mermaid and the document share one realm.
+  for (const key of CROSS_REALM_GLOBALS) {
+    if (key in dom.window) assign(key)
+  }
+  for (const key of Object.getOwnPropertyNames(dom.window)) {
+    if (key in globalThis) continue
+    assign(key)
+  }
+  installSvgMetrics(dom)
+}
+
+/**
+ * jsdom implements no SVG layout, so the measurement calls mermaid uses to place
+ * text do not exist. Without these, render() throws "text2.getBBox is not a
+ * function" on a perfectly valid flowchart - an infrastructure failure that is
+ * indistinguishable from a diagram bug at the call site.
+ *
+ * The numbers are fixed rather than real. That is the accepted limit of this
+ * approach: a failure which only manifests at a particular text width cannot be
+ * caught here. What it does buy is every render-time failure that does not depend
+ * on metrics, which is the class that ships an error box - a gantt whose task
+ * carries an unparseable date is the case that motivated it.
+ */
+function installSvgMetrics(dom) {
+  const proto = dom.window.SVGElement?.prototype
+  if (!proto) return
+  if (!proto.getBBox) {
+    proto.getBBox = function () {
+      return { x: 0, y: 0, width: 100, height: 20 }
+    }
+  }
+  if (!proto.getComputedTextLength) {
+    proto.getComputedTextLength = function () {
+      return 100
+    }
+  }
+  if (!proto.getExtentOfChar) {
+    proto.getExtentOfChar = function () {
+      return { x: 0, y: 0, width: 8, height: 16 }
+    }
+  }
+  if (!proto.getNumberOfChars) {
+    proto.getNumberOfChars = function () {
+      return (this.textContent || '').length
     }
   }
 }
 
-async function parses(mermaid, text) {
+/**
+ * Validate one diagram, returning null when it is fine or the full failure text.
+ *
+ * `parse` is a syntax check only, so a diagram that parses and then throws while
+ * rendering still ships the error box this gate exists to prevent. We own a DOM
+ * already, so render it too and report either failure.
+ *
+ * The whole message is kept, not just its first line: mermaid's parse errors carry
+ * the caret, the offending token and the `Expecting` list on the lines after the
+ * summary, and those are the part that tells an author what to change.
+ */
+async function parses(mermaid, text, id = 'check') {
   try {
     await mermaid.parse(text)
-    return null
   } catch (error) {
-    return String(error?.message ?? error)
-      .split('\n')[0]
-      .trim()
+    return String(error?.message ?? error).trimEnd()
   }
+  try {
+    await mermaid.render(`${id}-${renderSeq++}`, text)
+  } catch (error) {
+    return `renders as an error box: ${String(error?.message ?? error).trimEnd()}`
+  }
+  return null
+}
+
+let renderSeq = 0
+
+/**
+ * Re-point line numbers inside a mermaid message at the file.
+ *
+ * mermaid counts from the start of the diagram body, so printing its number
+ * against the fence line names a line the author did not write. The body begins on
+ * the line after the fence.
+ */
+function absolutize(message, fenceLine) {
+  return message.replace(/\bline (\d+)\b/g, (_, n) => `line ${fenceLine + Number(n)}`)
+}
+
+/** Indent a multi-line failure so it reads as one finding under its location. */
+function indent(message) {
+  return message
+    .split('\n')
+    .map((line) => `      ${line}`)
+    .join('\n')
 }
 
 /**
  * Prove the scanner still finds what it claims to.
  *
- * The parser self-test below cannot cover this: a block the scanner never yields
- * is never handed to mermaid at all, so a scanner that silently finds nothing
- * reports "0 blocks, ok" and every diagram in the repo goes unchecked.
+ * The parser self-test cannot cover this: a block the scanner never yields is
+ * never handed to mermaid, so a scanner that silently finds nothing reports
+ * "0 blocks, ok" and every diagram in the repo goes unchecked.
  */
 function selfTestScanner() {
   const cases = [
-    ['bare fence', '```mermaid\nflowchart TD\n  a --> b\n```', 1, null],
-    ['fence with metadata', '```mermaid title="x"\nflowchart TD\n  a --> b\n```', 1, null],
-    ['two blocks', '```mermaid\na\n```\ntext\n```mermaid\nb\n```', 2, null],
-    ['non-mermaid fence ignored', '```bash\necho hi\n```', 0, null],
+    ['bare fence', '```mermaid\nflowchart TD\n  a --> b\n```', 1],
+    ['fence with metadata', '```mermaid title="x"\nflowchart TD\n  a --> b\n```', 1],
+    ['two blocks', '```mermaid\na\n```\ntext\n```mermaid\nb\n```', 2],
+    ['non-mermaid fence ignored', '```bash\necho hi\n```', 0],
     // `mermaidjs` is a different language tag, not a mermaid block with metadata.
-    ['adjacent language not matched', '```mermaidjs\na\n```', 0, null],
-    ['unterminated fence', 'intro\n```mermaid\nflowchart TD\n  a --> b', 0, 2],
+    ['adjacent language not matched', '```mermaidjs\na\n```', 0],
+    // Renderable shapes the old fence regex dropped without a word.
+    [
+      'indented inside a list item',
+      '- item\n\n  ```mermaid\n  flowchart TD\n    a --> b\n  ```',
+      1,
+    ],
+    ['tilde fence', '~~~mermaid\nflowchart TD\n  a --> b\n~~~', 1],
+    ['four-backtick fence', '````mermaid\nflowchart TD\n  a --> b\n````', 1],
+    ['three-backtick closed by four', '```mermaid\nflowchart TD\n````\ntext\n', 1],
+    // Not diagrams, and must not be validated.
+    ['mermaid shown inside a longer fence', '````markdown\n```mermaid\nflowkart TD\n```\n````', 0],
+    ['commented out', '<!--\n```mermaid\nflowkart TD\n```\n-->', 0],
+    // An unclosed fence is one block running to EOF, which is what a reader gets.
+    ['unterminated fence', 'intro\n```mermaid\nflowchart TD\n  a --> b', 1],
   ]
-  for (const [name, text, wantBlocks, wantUnterminated] of cases) {
-    const { blocks, unterminated } = scanMermaid(text)
-    if (blocks.length !== wantBlocks || unterminated !== wantUnterminated) {
+  for (const [name, text, wantBlocks] of cases) {
+    const blocks = scanMermaid(text)
+    if (blocks.length !== wantBlocks) {
       console.error(
-        `self-test FAILED: scanner "${name}" gave ${blocks.length} block(s) / unterminated ${unterminated}, ` +
-          `expected ${wantBlocks} / ${wantUnterminated}`
+        `self-test FAILED: scanner "${name}" gave ${blocks.length} block(s), expected ${wantBlocks}`
       )
       return false
     }
   }
-  console.log(`self-test ok: scanner agrees on ${cases.length} fence shapes`)
+  // Line numbers are what a failure points at, so pin one rather than trusting it.
+  const [indented] = scanMermaid('- item\n\n  ```mermaid\n  flowchart TD\n  ```')
+  if (indented.line !== 3) {
+    console.error(`self-test FAILED: scanner reported fence line ${indented.line}, expected 3`)
+    return false
+  }
+  console.log(`self-test ok: scanner agrees on ${cases.length} block shapes`)
+  return true
+}
+
+/**
+ * Prove the file walk still finds files.
+ *
+ * markdownFiles() is the other way this gate can report success over nothing, and
+ * the scanner self-test runs on synthetic strings that never touch it.
+ */
+function selfTestWalk() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'check-mermaid-'))
+  try {
+    fs.mkdirSync(path.join(root, 'nested'))
+    fs.mkdirSync(path.join(root, 'node_modules'))
+    fs.writeFileSync(path.join(root, 'a.md'), '# a')
+    fs.writeFileSync(path.join(root, 'nested', 'b.mdx'), '# b')
+    fs.writeFileSync(path.join(root, 'c.txt'), 'not markdown')
+    fs.writeFileSync(path.join(root, 'node_modules', 'd.md'), '# skipped')
+    const found = markdownFiles(root)
+      .map((f) => path.relative(root, f))
+      .sort()
+    const want = ['a.md', path.join('nested', 'b.mdx')].sort()
+    if (JSON.stringify(found) !== JSON.stringify(want)) {
+      console.error(
+        `self-test FAILED: walk found ${JSON.stringify(found)}, expected ${JSON.stringify(want)}`
+      )
+      return false
+    }
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true })
+  }
+  console.log('self-test ok: file walk finds nested markdown and skips generated trees')
   return true
 }
 
@@ -171,6 +347,13 @@ async function selfTest(mermaid) {
     ['unknown diagram type', 'flowkart TD\n  a --> b'],
     ['unclosed subgraph', 'flowchart TD\n  subgraph s["t"]\n  a --> b'],
     ['not a diagram', '%%%% nonsense ((('],
+    // Passes mermaid.parse() and throws at render, so it is only caught because
+    // parses() renders too. Drop the render step and this case goes green while
+    // the page ships an error box - which is the whole reason the step is there.
+    [
+      'parses but fails to render',
+      'gantt\n  title t\n  dateFormat YYYY-MM-DD\n  section s\n  task :a1, notadate, 3d',
+    ],
   ]
 
   for (const [name, text] of good) {
@@ -196,6 +379,7 @@ async function main() {
   mermaid.initialize({ startOnLoad: false })
 
   if (!selfTestScanner()) process.exit(2)
+  if (!selfTestWalk()) process.exit(2)
   if (!(await selfTest(mermaid))) process.exit(2)
 
   const files = markdownFiles(SRC)
@@ -203,18 +387,44 @@ async function main() {
   const failures = []
 
   for (const file of files) {
-    const { blocks, unterminated } = mermaidBlocks(file)
-    if (unterminated !== null) {
-      failures.push({ file, line: unterminated, failure: 'mermaid fence is never closed' })
-    }
-    for (const block of blocks) {
+    for (const block of mermaidBlocks(file)) {
       blockCount++
-      const failure = await parses(mermaid, block.body.join('\n'))
-      if (failure) failures.push({ file, line: block.line, failure })
+      const failure = await parses(mermaid, block.body)
+      if (failure) {
+        failures.push({ file, line: block.line, failure: absolutize(failure, block.line) })
+      }
     }
   }
 
   const scope = `${blockCount} mermaid block(s) in ${files.length} markdown file(s)`
+
+  // Floors. Without these a discovery regression prints "0 mermaid block(s) in 0
+  // markdown file(s)" and exits 0 - reporting success over nothing checked, which
+  // is the failure mode this whole script exists to rule out.
+  if (files.length === 0) {
+    console.error(`mermaid FAILED: no markdown files found under ${SRC} - the walk is broken`)
+    process.exit(2)
+  }
+  if (blockCount === 0) {
+    console.error(
+      `mermaid FAILED: ${files.length} markdown file(s) scanned and not one mermaid block found. ` +
+        'The docs do contain diagrams, so this means the scanner stopped finding them.'
+    )
+    process.exit(2)
+  }
+
+  // Generated reference pages are written by sync-references at build time into a
+  // gitignored directory. They carry upstream markdown we do not control, so when
+  // they are absent the run has a real coverage hole - say so rather than letting
+  // the total imply full coverage.
+  const generated = path.join(SRC, 'docs-guides', 'references')
+  if (!fs.existsSync(generated)) {
+    console.warn(
+      'mermaid warning: src/docs-guides/references/ is absent, so generated reference ' +
+        'pages were NOT checked. Run `npm run sync-references` first to include them.'
+    )
+  }
+
   if (failures.length === 0) {
     console.log(`mermaid ok: ${scope}`)
     return
@@ -222,7 +432,8 @@ async function main() {
 
   console.error(`mermaid FAILED: ${failures.length} of ${scope}`)
   for (const { file, line, failure } of failures) {
-    console.error(`  ${path.relative(SRC, file)}:${line}: ${failure}`)
+    console.error(`  ${path.relative(SRC, file)}:${line}:`)
+    console.error(indent(failure))
   }
   process.exit(1)
 }

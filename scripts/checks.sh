@@ -19,6 +19,11 @@ fi
 
 npm run lint
 npm exec -- prettier --check .
+# Generate the reference pages before validating diagrams. They are written into
+# a gitignored directory by sync-references, which `npm run build` also runs - so
+# checking before the build used to scan the tree while that whole set of live
+# pages was still absent. The build re-runs it; it is cheap and idempotent.
+npm run sync-references
 # Diagrams render in the reader's browser, so `npm run build` below passes even
 # with a malformed one. Check them before the build rather than after deploy.
 npm run check-mermaid
