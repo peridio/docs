@@ -141,7 +141,7 @@ This is the same host/target split as [hardware in the loop](./hardware-in-the-l
 
 - A HIL target running Avocado OS, reachable over SSH from your host.
 - A container engine on your host. Both `docker` and `podman` are supported. The watcher streams tag events from the engine CLI (`docker events` / `podman events`) rather than the API socket, so a rootless podman with no socket still works.
-- Two extensions in your dev runtime: a container engine extension (`avocado-ext-docker` or `avocado-ext-podman`) and the dev agent extension `avocado-ext-container-agent-dev`.
+- Three extensions in your dev runtime: a container engine extension (`avocado-ext-docker` or `avocado-ext-podman`), the dev agent extension `avocado-ext-container-agent-dev`, and an SSH server extension (`avocado-ext-sshd-dev`). `up` delivers the session bootstrap to the target over SSH before the loop starts, so a target without an SSH server cannot be bootstrapped at all - only steady-state syncs run over the control WebSocket. A minimal Avocado image ships no SSH server, so this is easy to miss until `up` fails.
 - **A systemd service on the target that already runs your container.** Container dev mode restarts that service; it does not create it. Ship it with your runtime the way you ship any other service.
 
 The service must recreate the container **from the image tag** on every start:
@@ -406,6 +406,27 @@ avocado container dev sync
 ```
 
 The explicit trigger is the more durable of the two, since it does not consult the event stream at all and Docker has deprecated the classic builder. Podman is unaffected.
+
+:::
+
+:::caution Building for a target whose architecture differs from your host
+
+An x86-64 laptop driving an arm64 board is the common case, and a plain `docker build` produces an x86-64 image that cannot run there. The device-side pull refuses a wrong-architecture image rather than shipping something the target cannot execute, so the sync fails instead of failing later at runtime.
+
+Build for the target's architecture:
+
+```bash title="On Host"
+docker build --platform linux/arm64 -t my-app:dev .
+```
+
+That routes the build through buildx, which is BuildKit - so the caution above applies for a second reason, and on any affected daemon the watcher will not see the rebuild. Pair the cross-build with an explicit trigger:
+
+```bash title="On Host"
+docker build --platform linux/arm64 -t my-app:dev .
+avocado container dev sync
+```
+
+Cross-building needs QEMU emulation registered on the host (`qemu-aarch64` under `/proc/sys/fs/binfmt_misc/`), which Docker Desktop provides and a Linux host usually gets from a `qemu-user-static` package.
 
 :::
 
