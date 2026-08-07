@@ -1,14 +1,14 @@
 ---
 title: Privacy Statement
 sidebar_position: 3
-description: Privacy Statement for the Avocado OS documentation site, Avocado Connect, and Avocado Desktop
+description: Privacy Statement for the Avocado OS documentation site and Avocado Desktop
 slug: privacy
 ---
 
 ## Our Commitment to Privacy
 
 Peridio, Inc. ("Peridio", "we", "us", "our") operates the Avocado OS
-documentation site and the Avocado software applications, and is committed to
+documentation site and the Avocado Desktop application, and is committed to
 protecting your privacy. Avocado OS and the Avocado Linux project are owned and
 operated by Peridio. This Privacy Statement explains what information we
 collect, how we use it, and the choices you have.
@@ -23,11 +23,10 @@ information with anyone, and we do not use it for advertising.**
 This Privacy Statement applies to:
 
 - The **Avocado OS documentation site** (this website).
-- **Avocado Connect**, our web application.
 - **Avocado Desktop**, our desktop application.
 
-Avocado Connect and Avocado Desktop link to this Statement from within the
-applications so you always have access to the current version.
+Avocado Desktop links to this Statement from within the application so you
+always have access to the current version.
 
 ## Information we collect
 
@@ -39,20 +38,19 @@ understand how the documentation site is used (see
 [Analytics and cookies](#analytics-and-cookies) below), which collects certain
 information automatically.
 
-Avocado Connect and Avocado Desktop, unlike the documentation site, require an
-Avocado account to use.
+Avocado Desktop, unlike the documentation site, requires an Avocado account to
+use.
 
-### Avocado Connect and Avocado Desktop
+### Avocado Desktop
 
-When product analytics is enabled, our applications send **product-usage** and
+When product analytics is enabled, Avocado Desktop sends **product-usage** and
 **crash/error** information so we can understand how the software is used and
 detect and fix defects. This includes:
 
 - **Usage events** — which features and workflows you use (for example,
   onboarding steps, creating a project, running Install / Build / Provision /
   Deploy, or opening the agent) and their outcomes (such as success or failure
-  and how long an operation took). In Avocado Connect, this also includes the
-  pages you view and the elements you interact with in the web app.
+  and how long an operation took).
 - **Environment and version information** — the versions of the application,
   the Avocado CLI, and the virtual machine you are running, and coarse counts
   such as how many projects you have.
@@ -65,16 +63,16 @@ detect and fix defects. This includes:
   analytics provider derives from your IP address. We do not collect precise
   or GPS location.
 
-Because Avocado Connect and Avocado Desktop require an Avocado account, events
-are associated with your account **email** so that we can understand usage on a
-per-user basis and provide support. This identifier is shared only with our
-analytics provider, which processes it on our behalf as described in
+Because Avocado Desktop requires an Avocado account, events are associated with
+your account **email** so that we can understand usage on a per-user basis and
+provide support. This identifier is shared only with our analytics provider,
+which processes it on our behalf as described in
 [Analytics providers, processing, and sharing](#analytics-providers-processing-and-sharing);
 it is not disclosed to any other third party.
 
 ## What we do NOT collect
 
-Our applications are designed to leave your content on your machine. We do
+Avocado Desktop is designed to leave your content on your machine. We do
 **not** collect:
 
 - **The contents of your files, projects, or source code.**
@@ -84,8 +82,8 @@ Our applications are designed to leave your content on your machine. We do
 - **Device serial numbers** or the list of USB devices attached to your
   machine.
 
-In Avocado Desktop, crash and error reports are additionally scrubbed on your
-machine before they are sent — secrets, and home-directory paths are removed from the error text.
+Crash and error reports are also scrubbed on your machine before they are
+sent — secrets and home-directory paths are removed from the error text.
 
 ## How we use this information
 
@@ -105,8 +103,7 @@ similarly significant effects about you, and we do not use it for advertising.
 We keep our analytics footprint deliberately small and rely on a limited set of
 service providers who process data **on our behalf** and under our instructions:
 
-- Our **applications** (Avocado Connect and Avocado Desktop) use a single
-  product-analytics provider,
+- **Avocado Desktop** uses a single product-analytics provider,
   [PostHog](https://posthog.com/privacy), to collect and process the usage and
   crash information described above.
 - Our **documentation site** uses **Google Analytics** (see
@@ -123,26 +120,20 @@ de-identified information that cannot reasonably be used to identify you.
 
 ## Data location and retention
 
-Analytics information for our applications is processed and stored on
+Analytics information from Avocado Desktop is processed and stored on
 **US-based** infrastructure. We retain this information only for as long as it
 is needed for the internal purposes described above, after which it is deleted
 or de-identified in the ordinary course.
 
 ## Your choices and opt-out
 
-Product analytics in our applications is **on by default**, but you are always
-in control and can turn it off at any time:
+Product analytics in Avocado Desktop is **on by default**, but you are always in
+control and can turn it off at any time in **Settings → Privacy**.
 
-- **Avocado Connect** — go to **Settings → Account** and turn off the
-  **"Share product analytics"** toggle.
-- **Avocado Desktop** — go to **Settings → Privacy** and turn off the analytics
-  toggle.
-
-Turning the toggle off disables the analytics collection for your account: the application
-stops sending events and our analytics provider no longer receives or collects
-any analytics information from it. This takes effect going forward and persists
-across sessions and launches. We also honor your browser's or operating
-system's **Do Not Track** signal.
+Turning the toggle off disables analytics collection for your account: the
+application stops sending events and our analytics provider no longer receives
+or collects any analytics information from it. This takes effect going forward
+and persists across sessions and launches.
 
 For the documentation site, you can opt out of Google Analytics across sites
 using Google's [opt-out browser add-on](https://tools.google.com/dlpage/gaoptout),
@@ -154,7 +145,7 @@ Depending on where you live, you may have the right to access, correct, or
 delete the personal information we hold about you, or to object to or restrict
 certain processing. To exercise any of these rights, contact us at
 support@peridio.com and we will respond as required by applicable law. Because
-our applications require an account, the simplest way to stop further
+Avocado Desktop requires an account, the simplest way to stop further
 collection is to turn analytics off (see [Your choices and opt-out](#your-choices-and-opt-out) above).
 
 We do not sell your personal information, and we do not share it.
@@ -186,7 +177,7 @@ Peridio.
 If we decide to change our privacy practices, we will post those changes to this
 Privacy Statement and update the "Last updated" date below. We reserve the right
 to modify this Privacy Statement at any time, so please review it frequently.
-Your continued use of the documentation site or our applications after a change
+Your continued use of the documentation site or Avocado Desktop after a change
 takes effect constitutes acceptance of the updated Statement.
 
 ## Contact us
