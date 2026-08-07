@@ -12,6 +12,7 @@ const sidebars = {
         'getting-started/index',
         'getting-started/qemu',
         'getting-started/raspberry-pi',
+        'getting-started/frdm-imx93',
         'getting-started/jetson',
         'getting-started/any-target',
       ],
