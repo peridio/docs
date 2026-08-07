@@ -120,3 +120,83 @@ avocado provision -r dev --profile sd
 After provisioning completes, insert the SD card into your target device and power it on.
 
 The device will boot from the SD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
+
+### Watch it boot
+
+The board carries its debug console on the onboard USB-C port, so no separate TTL adapter is needed. It enumerates as two CDC-ACM devices; the Linux console is the first.
+
+```bash title="Host machine"
+ls /dev/serial/by-id/
+tio -b 115200 /dev/serial/by-id/usb-1a86_USB_Dual_Serial_<serial>-if00
+```
+
+Prefer the `by-id` path over `/dev/ttyACM0`: the `ttyACM` number moves when other USB serial devices are attached, and the `by-id` name does not.
+
+You have a working system when the console reaches a login prompt:
+
+```text
+Avocado OS 0.0.0 avocado-imx93-frdm ttyLP0
+avocado-imx93-frdm login:
+```
+
+### Run a container on it
+
+The `docker` extension provides the container engine. To ship an application container with the image, add an extension that carries both the image and the systemd unit that runs it:
+
+```yaml title="avocado.yaml"
+extensions:
+  my-app:
+    types: [sysext, confext]
+    version: 1.0.0
+    overlay: overlay
+
+    enable_services:
+      - my-app.service
+
+    docker_images:
+      - image: docker.io/<org>/<image>
+        tag: <tag>
+
+runtimes:
+  dev:
+    target: imx93-frdm
+    extensions:
+      - docker
+      - my-app
+```
+
+Two details decide whether this works:
+
+- **The unit belongs at `overlay/usr/lib/systemd/system/my-app.service`.** That is where `enable_services` looks for it in order to create the enablement symlink.
+- **`types` must include both `sysext` and `confext`.** The unit ships in the sysext under `/usr/lib`; the enablement symlink is written under `/etc`, which is confext territory. With only one of the two, the unit is present but never starts.
+
+The unit itself:
+
+```ini title="overlay/usr/lib/systemd/system/my-app.service"
+[Unit]
+Description=My application container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+ExecStartPre=-/usr/bin/docker rm -f my-app
+ExecStart=/usr/bin/docker run --rm --name my-app -p 8080:8080 docker.io/<org>/<image>:<tag>
+ExecStop=/usr/bin/docker stop my-app
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Use `Restart=always` rather than `on-failure`. With `--rm` and `Type=simple`, a container that exits cleanly leaves the unit inactive with nothing to bring it back, so the device silently stops running your application.
+
+`docker_images` pulls the image into the `/var` partition at build time, so a freshly provisioned board runs it without contacting a registry. Build and provision as above, then confirm:
+
+```bash title="Target device"
+systemctl is-enabled my-app.service
+docker ps
+```
+
+The container starts on every boot from then on, with no manual step.
