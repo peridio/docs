@@ -55,16 +55,18 @@ detect and fix defects. This includes:
 - **Environment and version information** — the versions of the application,
   the Avocado CLI, and the virtual machine you are running, and coarse counts
   such as how many projects you have.
-- **Hardware target and distribution** — the hardware target and distro you
-  build for, and the provisioning method you choose (for example, tegraflash,
-  SD, or USB).
+- **Hardware target and distribution** — the hardware target and Linux
+  distribution you build for, and the provisioning method you choose (for
+  example, tegraflash, SD, or USB).
 - **Crash and error reports** — uncaught errors and failure messages, so we can
   find and fix bugs.
 
 Because Avocado Connect and Avocado Desktop require an Avocado account, events
 are associated with your account **email** so that we can understand usage on a
-per-user basis and provide support. This identifier is held only by us and our
-analytics provider and is never disclosed externally.
+per-user basis and provide support. This identifier is shared only with our
+analytics provider, which processes it on our behalf as described in
+[Analytics providers, processing, and sharing](#analytics-providers-processing-and-sharing);
+it is not disclosed to any other third party.
 
 ## What we do NOT collect
 
