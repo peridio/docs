@@ -51,7 +51,8 @@ detect and fix defects. This includes:
 - **Usage events** — which features and workflows you use (for example,
   onboarding steps, creating a project, running Install / Build / Provision /
   Deploy, or opening the agent) and their outcomes (such as success or failure
-  and how long an operation took).
+  and how long an operation took). In Avocado Connect, this also includes the
+  pages you view and the elements you interact with in the web app.
 - **Environment and version information** — the versions of the application,
   the Avocado CLI, and the virtual machine you are running, and coarse counts
   such as how many projects you have.
@@ -60,6 +61,9 @@ detect and fix defects. This includes:
   example, tegraflash, SD, or USB).
 - **Crash and error reports** — uncaught errors and failure messages, so we can
   find and fix bugs.
+- **Approximate location** — a general region (such as country) that our
+  analytics provider derives from your IP address. We do not collect precise
+  or GPS location.
 
 Because Avocado Connect and Avocado Desktop require an Avocado account, events
 are associated with your account **email** so that we can understand usage on a
@@ -77,10 +81,11 @@ Our applications are designed to leave your content on your machine. We do
 - **The contents of your agent conversations.** We record only _that_ the agent
   was used and how often — never your prompts or the agent's responses.
 - **Your credentials.** API keys, tokens, and passwords are never collected.
-  Error and crash text is automatically scrubbed of secrets, home-directory
-  paths, and IP addresses before it leaves your machine.
-- **Device serial numbers**, or a list of the USB devices attached to your
+- **Device serial numbers** or the list of USB devices attached to your
   machine.
+
+In Avocado Desktop, crash and error reports are additionally scrubbed on your
+machine before they are sent — secrets, and home-directory paths are removed from the error text.
 
 ## How we use this information
 
@@ -133,13 +138,26 @@ in control and can turn it off at any time:
 - **Avocado Desktop** — go to **Settings → Privacy** and turn off the analytics
   toggle.
 
-Opting out stops collection going forward and persists across sessions and
-launches. We also honor your browser's or operating system's **Do Not Track**
-signal.
+Turning the toggle off disables the analytics collection for your account: the application
+stops sending events and our analytics provider no longer receives or collects
+any analytics information from it. This takes effect going forward and persists
+across sessions and launches. We also honor your browser's or operating
+system's **Do Not Track** signal.
 
 For the documentation site, you can opt out of Google Analytics across sites
 using Google's [opt-out browser add-on](https://tools.google.com/dlpage/gaoptout),
 and you can manage or block cookies through your browser settings.
+
+## Your data rights
+
+Depending on where you live, you may have the right to access, correct, or
+delete the personal information we hold about you, or to object to or restrict
+certain processing. To exercise any of these rights, contact us at
+support@peridio.com and we will respond as required by applicable law. Because
+our applications require an account, the simplest way to stop further
+collection is to turn analytics off (see [Your choices and opt-out](#your-choices-and-opt-out) above).
+
+We do not sell your personal information, and we do not share it.
 
 ## Analytics and cookies
 
