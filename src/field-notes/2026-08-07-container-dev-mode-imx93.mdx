@@ -1,0 +1,239 @@
+---
+title: 'Change one line on your laptop, watch it land on the board'
+description: 'The container inner dev loop on real hardware: an NXP FRDM i.MX 93 driven from an x86-64 workstation, from a blank SD card to a code change serving off the device.'
+date: 2026-08-07
+draft: true # PRE-RELEASE feature - keep on the branch until Container Dev Mode ships
+# Do not un-draft this file before src/docs-guides/container-dev-mode.md. The body
+# links /developer-reference/container-dev-mode, which is only a route once that
+# guide's own draft:true is dropped, and onBrokenLinks is 'throw' - so publishing
+# the note alone fails `npm run build`.
+authors: [jtia]
+tags: [imx93-frdm, containers, hardware]
+category: 'Containers'
+featured: false
+# PRE-RELEASE NOTE (not for readers): Container Dev Mode is not shipped yet. The
+# steps and the measured results are real and were run end to end on the board on
+# 2026-08-07, but the CLI, the device agent extension and the BSP move are spread
+# across open PRs, so a reader cannot reproduce this from a released build today.
+# The "What this needs" section lists them for internal review; strip that section
+# and pin the released CLI version before flipping draft:false.
+#
+# The TestStatus block carries no `reference` prop on purpose - that prop renders
+# as the anchor text of a real link, and neither the dev server nor a deploy
+# preview honours draft:true, so a placeholder there ships a broken-looking link.
+#
+# --- internal drafting fields (not rendered) ---
+tested_against: 'avocado-cli 1.0.0-rc.1 (pre-release dev build); imx93-frdm hardware, wrynose 6.18.20'
+poster: 'jtia'
+lift_for_blog: 'The container inner loop on real embedded hardware: edit on your laptop, the board is serving it seconds later, no reflash.'
+promote_to_track: ''
+---
+
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus targets={['imx93-frdm']} cli="1.0.0-rc.1" />
+
+**TL;DR** - Shipping a container change to an embedded device usually means rebuild, push, pull, reflash, find out. On an NXP FRDM i.MX 93 I went from a blank SD card to editing an app on my laptop and watching the board serve the change, with no reflash and no registry. Every step below is `avocado`, and the whole path is reproducible on a board you already have.
+
+{/* truncate */}
+
+## The loop this replaces
+
+Picture a computer-vision device. The application is a container: an inference runtime, a pile of Python dependencies, model weights. The image is multi-gigabyte - 7 GB uncompressed is not unusual. It runs on a box in a plant, a yard, or a vehicle, on an immutable OS nobody wants to reflash to try a code change.
+
+So the loop goes: change forty lines of Python, rebuild the image, push the whole thing to a registry, pull the whole thing onto the device, restart, discover the fix was wrong, repeat.
+
+Nothing there is broken, exactly. The cost of one iteration is set by the size of your image instead of the size of your change, and that ratio gets worse every time the model grows. Teams end up batching changes they would rather test one at a time, which is the real tax: not the minutes, the loss of "try it and see".
+
+## What it looks like instead
+
+Name the image you build and the service on the device that runs it, point the CLI at the board, and keep building the way you already do. The CLI watches your engine, pushes only the changed layers into a registry on your host, and notifies the device, which pulls them and restarts the service.
+
+The board stays in the loop the whole time, so what you are watching is your code on the target, not an approximation of it.
+
+## What this needs
+
+{/_ INTERNAL - strip this section before flipping draft:false. It exists so this
+can be reviewed and reproduced while the feature is spread across open PRs. _/}
+
+Container Dev Mode is pre-release, and reproducing this today means building from
+several open PRs rather than a released CLI:
+
+| Repo                        | PR   | What it provides here                                                                                                                                                                                                      |
+| --------------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `avocado-linux/avocado-cli` | #184 | the `avocado container dev` subcommands, the embedded registry and the watcher. Also carries the `enable_services` fix - without it a unit shipped anywhere but `overlay/usr/lib/systemd/system` is silently never enabled |
+| `avocado-linux/avocado-os`  | #46  | the `container-agent-dev` device agent extension, and a worked example app extension                                                                                                                                       |
+| `avocado-linux/avocadoctl`  | #17  | extension mount correctness. Without it, replacing an extension image and re-merging silently keeps serving the old contents                                                                                               |
+| `peridio/docs`              | #473 | this note and the guide                                                                                                                                                                                                    |
+
+One more caveat specific to this board: it was exercised on a wrynose 6.18.20
+build rather than the published BSP. That move is `avocado-linux/meta-avocado`
+#259, which is **on hold** pending an open question about whether i.MX 93 Rev1.1
+and Rev1.2 silicon actually differ here - so a board on the published BSP may
+behave differently, and confirming that is part of what is worth reproducing.
+
+The loop itself is target-agnostic. Nothing in the steps below depends on the BSP
+question; it only decides which image the board is running underneath them.
+
+## Reproduce it
+
+This assumes you have the board, an SD card and a USB-C cable. You are not building a BSP.
+
+On the host you need a container engine, and QEMU emulation registered for the board's architecture, because you will be building for something other than what you are sitting at. Docker Desktop provides this; on a Linux host it usually comes from a `qemu-user-static` package:
+
+```bash title="On Host"
+ls /proc/sys/fs/binfmt_misc/ | grep qemu-aarch64
+```
+
+### 1. Create the project
+
+```bash title="On Host"
+avocado init --target imx93-frdm imx93-frdm
+cd imx93-frdm
+```
+
+### 2. Declare the runtime
+
+Four extensions. The SSH one is the easy miss: `up` delivers the session bootstrap to the device over SSH before the loop exists, and a minimal Avocado image ships no SSH server.
+
+```yaml title="avocado.yaml"
+distro:
+  release: 2026
+  channel: edge
+
+runtimes:
+  dev:
+    target: imx93-frdm
+    extensions:
+      - docker # the container engine
+      - container-agent-dev # the device agent
+      - sshd-dev # up delivers the session bootstrap over SSH
+      - my-app # your app: its image and the unit that runs it
+
+    container_dev:
+      images:
+        - ref: my-app:dev
+          service: my-app
+
+extensions:
+  my-app:
+    # Both types are required. The unit ships in the sysext under /usr/lib;
+    # enable_services writes its enablement symlink under /etc, which is
+    # confext territory. With only one, the unit is present but never starts.
+    types: [sysext, confext]
+    version: 1.0.0
+    overlay: overlay
+
+    enable_services:
+      - my-app.service
+
+    # Seeds the image into the /var partition at build time, so the very first
+    # boot has something to run before any sync has happened.
+    docker_images:
+      - image: my-app
+        tag: dev
+```
+
+`service` names the unit on the device that owns the container, and it is not decoration. With it, a sync restarts that unit, so `ExecStart` re-runs `docker run` and re-resolves the tag. Without it the agent falls back to an engine `restart`, which re-executes the existing container object - bound to the image ID it was created with - and the device keeps running the old code while every layer reports success.
+
+The unit goes at `overlay/usr/lib/systemd/system/my-app.service` - that exact path, because it is where `enable_services` looks for it. A unit placed anywhere else produces an extension that builds, merges, presents the unit, and leaves it disabled forever.
+
+```ini title="overlay/usr/lib/systemd/system/my-app.service"
+[Unit]
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker rm -f my-app
+ExecStart=/usr/bin/docker run --rm --name my-app -p 8080:8080 my-app:dev
+ExecStop=/usr/bin/docker stop my-app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+`Restart=always`, not `on-failure`: with `--rm` and a default `Type=simple`, a container that exits cleanly leaves the unit inactive with nothing to bring it back.
+
+### 3. Build and provision
+
+```bash title="On Host"
+avocado install -f
+avocado build
+avocado provision -r dev --profile sd
+```
+
+The CLI prompts you to pick the block device. It overwrites the one you choose.
+
+### 4. Boot it, on the console
+
+The board's debug console is on its onboard USB-C port and enumerates as two CDC-ACM devices; the Linux console is the first.
+
+```bash title="On Host"
+ls /dev/serial/by-id/
+tio -b 115200 /dev/serial/by-id/usb-1a86_USB_Dual_Serial_<serial>-if00
+```
+
+Insert the SD card, connect USB-C, apply power. Log in as `root` with an empty password, and read the address the loop will use:
+
+```bash title="On the console"
+ip -4 addr show
+```
+
+Your container is already running - `docker_images` seeded the image and `enable_services` enabled the unit, so the board came up serving it:
+
+```bash title="On the console"
+systemctl is-active my-app.service
+docker ps
+```
+
+### 5. Confirm SSH before starting the loop
+
+```bash title="On Host"
+ssh root@<device-ip>
+```
+
+If this fails, `up` cannot bootstrap the device. Fix it here rather than debugging it as a container problem later.
+
+### 6. Start the session
+
+```bash title="On Host"
+export AVOCADO_CONTAINER_DEV_DEVICE=root@<device-ip>
+avocado container dev up
+```
+
+It reports the listeners it opened and `device <ip> bootstrapped`. On the device, the agent's path unit starts its service the moment that bootstrap file lands.
+
+### 7. Change the app and watch it land
+
+Edit your application, then rebuild for the board's architecture:
+
+```bash title="On Host"
+docker build --platform linux/arm64 -t my-app:dev .
+avocado container dev sync
+```
+
+Two things differ from a same-architecture setup, and both bite immediately. An x86-64 host builds an x86-64 image the board cannot execute - the device-side pull refuses it rather than shipping it, so the failure lands at sync time rather than at runtime. `--platform` fixes that and costs a second problem: it routes the build through buildx, which is BuildKit, so the watcher may see no tag event at all. Pairing the cross-build with an explicit `sync` sidesteps both.
+
+Your change is now serving from the board:
+
+```bash title="On Host"
+curl http://<device-ip>:8080/
+```
+
+## How you know it actually worked
+
+The tell is the container's age, not the page contents:
+
+```text
+CONTAINER ID   IMAGE        STATUS          NAMES
+37bb47e38cc4   my-app:dev   Up 30 seconds   my-app
+```
+
+Seconds old means the unit genuinely re-ran and re-resolved the tag. Under the engine-`restart` fallback the container would keep its original age and serve the old image while every layer reported success - which is the failure mode worth knowing about, because nothing in the output says anything is wrong.
+
+## What surprised me
+
+The failures on this path are quiet ones. An extension whose unit sits in the wrong directory builds, merges, presents the unit, and reports success - and `systemctl is-enabled` answers `disabled` on every boot with no journal entry explaining why. A wrong-architecture image fails at sync rather than at runtime. A missing SSH server presents as a container problem. None of them announce themselves, which is why the steps above call out the three places where a quiet failure is waiting rather than leaving them to be discovered.
+
+The full command set and the trust model are in the [Container dev mode guide](/developer-reference/container-dev-mode).
