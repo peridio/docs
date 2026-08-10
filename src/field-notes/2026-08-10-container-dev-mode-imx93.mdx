@@ -79,7 +79,13 @@ The board stays in the loop the whole time, so what you are watching is your cod
 
 ## What this needs
 
-{/* INTERNAL - strip this section before flipping draft:false. It exists so this can be reviewed and reproduced while the feature is spread across open PRs. Keep this comment on ONE line: across two lines a markdown formatter reads the delimiters as emphasis and rewrites them to {/_ _/}, which is not an MDX comment and fails compilation. */}
+{/* Keep this comment on ONE line: across two lines a markdown formatter reads the delimiters as emphasis and rewrites them to {/_ _/}, which is not an MDX comment and fails compilation. */}
+
+:::caution[Internal - delete this whole section before publishing]
+This section exists only so the note can be reviewed and reproduced while the feature is spread across open PRs. It names unmerged branches and internal PR numbers, so it must not ship.
+
+Before flipping `draft: false`: delete this section from its `## What this needs` heading down to the `## Reproduce it` heading, and pin the released CLI version in `tested_against` and in the `<TestStatus>` block at the top.
+:::
 
 Container Dev Mode is pre-release, and reproducing this today means building from
 several open PRs rather than a released CLI:
@@ -285,13 +291,16 @@ One thing not to check: the image ID reported on the device against the one on y
 
 A second pass is not a clean repeat of the first, and three things caught me going round again.
 
-`up` refuses to start while a previous session is still alive, and the previous session outlives the terminal you think you closed it in. Check for it before assuming the CLI is broken:
+`up` refuses to start while a previous session is still alive, and the previous session outlives the terminal you think you closed it in. Ask the CLI rather than hunting for the process:
 
 ```bash title="On Host"
-pgrep -af 'container dev up'
+avocado container dev status
+avocado container dev down
 ```
 
-The transfer figures do not repeat either. Blobs already in `~/.avocado/container-dev` are never re-sent, so a second run reports a first delivery of almost nothing - which reads as a fantastic result and is really just the earlier run's leftovers. Clear that directory before measuring anything.
+`status` reports whether the registry and watcher are running and when the last sync happened. `down` signals the session to stop and tears down every listener, including the authenticated write port, and it clears the session state even when the process behind it is already gone - so it is also the way out of a half-dead session, not only a tidy one.
+
+The transfer figures do not repeat either. Blobs already in `~/.avocado/container-dev` are never re-sent, so a second run reports a first delivery of almost nothing - which reads as a fantastic result and is really just the earlier run's leftovers. Clear that directory before measuring anything. `avocado container dev prune` is the reclaim command, but it is not the one you want here: it sweeps only blobs no currently-tagged manifest references, so the layers you are about to re-send are exactly the ones it keeps.
 
 On the board, restarting the agent repeatedly inside a few minutes trips systemd's start rate limit and the next start is refused outright, with a message about starting too often rather than anything about the loop. Clear the counter and start again:
 
