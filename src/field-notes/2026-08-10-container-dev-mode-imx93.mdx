@@ -287,6 +287,33 @@ Leave that running, rebuild in the other terminal, and you see the old version r
 
 One thing not to check: the image ID reported on the device against the one on your host. They legitimately differ. The device's containerd image store reports the manifest digest and a local build reports the config digest, so comparing them sends you chasing a mismatch that is expected. Compare your own version string instead.
 
+## The command set
+
+Five subcommands, and the walkthrough above only needed the first two:
+
+| Command  | What it does                                                                                                             |
+| -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `up`     | Start the dev registry and watcher, and bootstrap the device. Runs in the foreground for the life of the session          |
+| `sync`   | One-shot re-push of the watched image plus a notify to the device. Needed when the watcher sees no tag event, as with buildx |
+| `status` | Report whether the registry and watcher are running, and when the last sync happened                                       |
+| `down`   | Stop the registry and watcher and tear down the listeners, the authenticated write port included                           |
+| `prune`  | Garbage-collect this project's dev registry store                                                                          |
+
+### Clean up when you are done
+
+The registry store is on your host and it only grows: every layer you have ever pushed to the device is still sitting there. Finish a session with both commands, in this order:
+
+```bash title="On Host"
+avocado container dev down
+avocado container dev prune
+```
+
+The order is not a style preference. `prune` refuses outright while an `up` session is live, because a live session may be streaming a blob to the device or holding a staging file open that the sweep would unlink underneath it.
+
+Left alone, the thing that actually accumulates is not the tagged layers - it is the staging files from pushes that died mid-flight. A session killed by a power cut or an OOM reaper leaves its partial layer behind permanently, and nothing else ever removes it. `prune` sweeps those along with any blob no currently-tagged manifest references, and leaves the session token and the project's CA material untouched.
+
+It is scoped to this project's store. The top-level `avocado prune` is a different command that removes Docker volumes, so reaching for the wrong one either does nothing you wanted or rather more than you wanted.
+
 ## If you run it more than once
 
 A second pass is not a clean repeat of the first, and three things caught me going round again.
@@ -312,4 +339,4 @@ systemctl reset-failed container-agent-dev.service
 
 The failures on this path are quiet ones. An extension whose unit sits in the wrong directory builds, merges, presents the unit, and reports success - and `systemctl is-enabled` answers `disabled` on every boot with no journal entry explaining why. A wrong-architecture image fails at sync rather than at runtime. A missing SSH server presents as a container problem. None of them announce themselves, which is why the steps above call out the three places where a quiet failure is waiting rather than leaving them to be discovered.
 
-The full command set and the trust model are in the [Container dev mode guide](/developer-reference/container-dev-mode).
+The full flag reference and the trust model are in the [Container dev mode guide](/developer-reference/container-dev-mode).
