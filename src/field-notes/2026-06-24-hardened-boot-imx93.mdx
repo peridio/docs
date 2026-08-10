@@ -8,7 +8,7 @@ category: 'Security & Compliance'
 featured: false # Featured selection is Kristen/Bill's call
 image: /img/field-notes/2026-06-24-hardened-boot-imx93-thumb.png
 image_source: local:hardened-boot-imx93.jpg
-tested_against: 'Avocado 0.41.2, avocado-imx93-frdm (AHAB Secure Boot + OP-TEE fTPM), avocado-qemuarm64 (fTPM via QEMU)'
+tested_against: 'Avocado 0.41.2, avocado-qemuarm64 (fTPM via QEMU), on the meta-avocado #232/#236 branches. NOT yet validated on avocado-imx93-frdm hardware.'
 poster: jtia
 lift_for_blog: 'CRA Annex I and IEC 62443-4-2 both require demonstrable data-at-rest protection and integrity; this is the boot-chain half a compliance mapping builds on.'
 promote_to_track: 'Secure-boot / storage-encryption reference candidate once the i.MX93 hardware pass is fully signed off.'
@@ -18,7 +18,7 @@ import TestStatus from '@site/src/components/TestStatus'
 import PullQuote from '@site/src/components/PullQuote'
 
 <TestStatus
-  targets={['imx93-frdm', 'qemuarm64']}
+  targets={['qemuarm64']}
   cli="0.41.2"
   reference={{
     label: 'meta-avocado',
@@ -29,6 +29,25 @@ import PullQuote from '@site/src/components/PullQuote'
 **TL;DR.** If someone pulls the flash chip from an i.MX93 device, can they read the data or slip modified code onto it? This note wires LUKS2 encrypted `/var`, dm-verity rootfs integrity, IMA/EVM runtime appraisal, and TPM2-sealed key unsealing into one boot chain so the answer is no to both: physical access to the storage medium does not equal access to the data or the ability to run tampered code.
 
 {/* truncate */}
+
+:::caution[Verification status: proxy only, the hardware pass is still open]
+This note went out reading as a finished hardware result. It is not one, and the table
+near the end of it has been corrected to match.
+
+What is verified, on `avocado-qemuarm64` standing in for the board: LUKS2 `/var`
+formatted on first boot, and the two-phase enrollment landing an Argon2 recovery
+keyslot alongside a TPM2 keyslot sealed to PCR 7.
+
+What is not verified: any of it on the i.MX93 FRDM board. The implementation is still
+in review ([meta-avocado #232](https://github.com/avocado-linux/meta-avocado/pull/232)
+and [#236](https://github.com/avocado-linux/meta-avocado/pull/236) are open), and two
+results from the proxy run are open questions rather than details: TPM2 unseal on
+*reboot* fails there and falls back to the Argon2 slot, and dm-verity is not active on
+that target at all.
+
+The design below is worth reading and unchanged. Treat the command output as what you
+should expect to see, not as a transcript of a board that has already produced it.
+:::
 
 ## What this is
 
@@ -158,7 +177,7 @@ SRC_URI:append = " \
 
 ## Verify it
 
-After booting the i.MX93 FRDM board:
+These are the checks the hardware pass has to produce, not output it has produced. Run them on the board after boot:
 
 ```bash
 # /var is LUKS2 and mounted from the mapped device
@@ -188,12 +207,17 @@ tpm2_pcrread sha256:10
 
 ### Coverage
 
-| Target                          | LUKS2                 | Phase-2 TPM2                  | dm-verity              | IMA/EVM                   | Module signing          |
-| :------------------------------ | :-------------------- | :---------------------------- | :--------------------- | :------------------------ | :---------------------- |
-| `avocado-imx93-frdm` (hardware) | Verified              | Verified (OP-TEE fTPM, PCR 7) | Verified               | Verified                  | Verified                |
-| `avocado-qemuarm64` (E2E CI)    | `fvl_assert_luks_var` | `fvl_assert_luks_var_tpm`     | `fvl_assert_dm_verity` | `fvl_assert_ima_appraise` | `fvl_assert_module_sig` |
+| Control        | `avocado-qemuarm64` (proxy)                        | `avocado-imx93-frdm` (hardware) |
+| :------------- | :------------------------------------------------- | :------------------------------ |
+| LUKS2 `/var`   | Verified on first boot                              | Not yet run                     |
+| Phase-2 TPM2   | Enrollment verified; unseal on reboot **fails**     | Not yet run                     |
+| dm-verity      | **Not active** on this target                       | Not yet run                     |
+| IMA/EVM        | No harness case exists                              | Not yet run                     |
+| Module signing | No harness case exists                              | Not yet run                     |
 
-The CI seal is that both paths run the same recipes, kernel fragments, and initramfs logic (the `meta-avocado` layer is shared; only the fTPM backend differs: QEMU swtpm vs OP-TEE on the board). A cheap `avocado-qemuarm64` gate guards the expensive hardware path: a change anywhere in Avocado OS that would break the seal, the verity tree, or the appraisal policy fails the harness before it reaches a board.
+Three harness cases back the proxy column (`luks-var`, `luks-var-tpm`, `dm-verity`), and they live on the #232 branch, so they are not gating anything on `scarthgap` yet. There are no IMA or module-signing cases at all; an earlier version of this table named two that do not exist.
+
+The intent still holds: both paths run the same recipes, kernel fragments and initramfs logic, only the fTPM backend differs (QEMU swtpm against OP-TEE on the board), so a cheap proxy gate should guard the expensive hardware path. It is an intent rather than a seal until the cases merge and the board pass runs.
 
 ## Security properties
 
@@ -208,6 +232,8 @@ The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader 
 
 ## Issues and open questions
 
+- **Unseal fails on reboot on the proxy.** The two-phase enrollment lands both slots correctly, and then the very next boot cannot unseal from the TPM2 slot and falls back to Argon2. The likely cause is that PCR 7 is not stably measured under QEMU's OP-TEE fTPM, since there is no real UEFI Secure Boot state going into it - which would make this proxy-specific and fine on a board with AHAB. That is a hypothesis, and it is exactly what the hardware pass has to settle. If PCR 7 turns out to be unstable on the board too, sealing to it is the wrong design and not a bug to patch.
+- **An interrupted first boot wedges the device permanently.** `cryptsetup-var.sh` only runs `mkfs.btrfs` in its first-boot branch. A first boot that dies after `luksFormat` but before `mkfs.btrfs` leaves a LUKS2 header with no filesystem inside, so every later boot takes the open-existing branch, never creates the filesystem, and drops to emergency forever. Re-provisioning does not clear it, because `fwup -t complete` does not touch the `var` partition; recovery means zeroing the LUKS header by hand. The fix is either to detect "header present, no filesystem on the opened mapper" and re-`mkfs`, or to make format-plus-mkfs atomic behind a completion marker.
 - **`luksKillSlot` guard.** The `|| true` on slot 0 removal is intentional but means a failed kill leaves both slots active. A monitoring check after enrollment should confirm slot 0 is gone; the current implementation does not warn if the kill is skipped.
 - **IMA/EVM raises a labeling and update cost.** Every appraised file must carry a valid `security.ima` signature, so the build signs the rootfs and shipped mutable content, and every OS update re-signs and shifts the measured hashes. That makes the attestation server's known-good list an ongoing ops dependency. First boot also runs roughly 5-15% slower while IMA labels and measures, which is why IMA is gated on `ima` rather than always on.
 - **Software fallback Argon2id tier.** Boards without a TPM or fTPM (Renesas RZ/V2N, Synaptics SL1680, Qualcomm QCS6490, Raspberry Pi) fall back to a software-derived key bound to a provisioned secret and the hardware serial. This is a lower-security tier; the per-device provisioning of the secret is not addressed here.
@@ -215,8 +241,10 @@ The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader 
 
 ## Reproduce it
 
-- Boot the FRDM board with a rootfs where one block has been flipped with `dd`. dm-verity halts the boot before any userspace code runs.
-- Enroll phase-2 TPM2 keys on one board, then clone the eMMC to a second board with a different TPM. PCR 7 on the clone does not match what was sealed; the clone cannot decrypt `/var`.
-- Copy a stock binary into `/var/tmp` and run it. IMA appraisal denies the exec (no valid `security.ima` signature), while the same binary in its signed rootfs location runs normally.
+Three adversarial tests, stated as predictions the hardware pass should confirm or break. None has been run on a board yet, and each one failing would say something specific about which control is not doing its job:
+
+- Boot the FRDM board with a rootfs where one block has been flipped with `dd`. dm-verity should halt the boot before any userspace code runs. The proxy cannot answer this one at all, since dm-verity is not active there.
+- Enroll phase-2 TPM2 keys on one board, then clone the eMMC to a second board with a different TPM. PCR 7 on the clone should not match what was sealed, so the clone should not decrypt `/var`. This is the test that matters most right now, because the proxy's unseal already fails on a plain reboot of the *same* machine.
+- Copy a stock binary into `/var/tmp` and run it. IMA appraisal should deny the exec for want of a valid `security.ima` signature, while the same binary in its signed rootfs location runs normally.
 
 The controls live in `meta-avocado` and `meta-avocado-nxp` in the [avocado-linux organization on GitHub](https://github.com/avocado-linux). It composes cleanly with `hardened-security` (runtime posture), and the boot-chain controls satisfy CRA Annex I Part I items (b), (d), and (f) that a compliance mapping can build on.
