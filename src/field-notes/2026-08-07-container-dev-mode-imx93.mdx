@@ -11,6 +11,7 @@ authors: [jtia]
 tags: [imx93-frdm, containers, hardware]
 category: 'Containers'
 featured: false
+image: /img/field-notes/container-dev-mode-imx93.png # the LANDED payoff frame: the reloaded log line and the 2.5 KB against 1.9 MB
 # PRE-RELEASE NOTE (not for readers): Container Dev Mode is not shipped yet. The
 # steps and the measured results are real and were run end to end on the board on
 # 2026-08-07, but the CLI, the device agent extension and the BSP move are spread
@@ -38,6 +39,8 @@ import TestStatus from '@site/src/components/TestStatus'
 {/* truncate */}
 
 The whole loop on the board, unedited: declare what to watch, start dev mode, first deployment, then one rebuild landing on the device.
+
+The app in the recording prints a version and the board's hostname once a second, so the reload is visible as a line changing in a stream. The steps below use one that serves HTTP instead, which is the more useful shape to copy. Same loop either way - the app is only what you point it at, and a printed line is easier to film than a page you have to go and fetch.
 
 {/* VIDEO PLACEHOLDER - not published yet. Source recording: container-dev-mode-imx93-2026-08-10.mp4, 1188x1152, 55s. Upload it, then replace the admonition below with the iframe block that follows it and drop in the real video id. Use aspectRatio '1188 / 1152', NOT the '16 / 9' the other field notes use - this frame is nearly square and 16/9 pillarboxes it down to a stripe. Keep THIS comment on one line; see the note on the internal section below for why. */}
 
