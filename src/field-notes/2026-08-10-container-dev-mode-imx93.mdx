@@ -102,6 +102,10 @@ build rather than the published BSP. That move is `avocado-linux/meta-avocado`
 #259, which is **on hold** pending an open question about whether i.MX 93 Rev1.1
 and Rev1.2 silicon actually differ here - so a board on the published BSP may
 behave differently, and confirming that is part of what is worth reproducing.
+If you do build that BSP yourself rather than taking the prebuilt image, note
+that #259 now sits on `meta-avocado` #268, which makes image content opt-in:
+append `kas/feature/container-dev.yml` or the feed comes out with neither a
+container engine nor an SSH server.
 
 The loop itself is target-agnostic. Nothing in the steps below depends on the BSP
 question; it only decides which image the board is running underneath them.
