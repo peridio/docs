@@ -295,13 +295,13 @@ One thing not to check: the image ID reported on the device against the one on y
 
 Five subcommands, and the walkthrough above only needed the first two:
 
-| Command  | What it does                                                                                                             |
-| -------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `up`     | Start the dev registry and watcher, and bootstrap the device. Runs in the foreground for the life of the session          |
+| Command  | What it does                                                                                                                 |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `up`     | Start the dev registry and watcher, and bootstrap the device. Runs in the foreground for the life of the session             |
 | `sync`   | One-shot re-push of the watched image plus a notify to the device. Needed when the watcher sees no tag event, as with buildx |
-| `status` | Report whether the registry and watcher are running, and when the last sync happened                                       |
-| `down`   | Stop the registry and watcher and tear down the listeners, the authenticated write port included                           |
-| `prune`  | Garbage-collect this project's dev registry store                                                                          |
+| `status` | Report whether the registry and watcher are running, and when the last sync happened                                         |
+| `down`   | Stop the registry and watcher and tear down the listeners, the authenticated write port included                             |
+| `prune`  | Garbage-collect this project's dev registry store                                                                            |
 
 ### Clean up when you are done
 
