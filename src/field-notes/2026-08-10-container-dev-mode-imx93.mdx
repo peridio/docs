@@ -339,7 +339,33 @@ On the board, restarting the agent repeatedly inside a few minutes trips systemd
 systemctl reset-failed container-agent-dev.service
 ```
 
-{/* VIDEO PLACEHOLDER - second recording, the power-cycle run. Source: container-dev-mode-imx93-reboot-2026-08-12.mp4, 1m32s. Same upload-then-replace treatment as the first placeholder above, and the same aspectRatio caveat applies. Keep THIS comment on one line. */}
+{/* VIDEO PLACEHOLDER - second recording, the power-cycle run. Source: container-dev-mode-imx93-reboot-2026-08-12.mp4, 1188x1152, 1m32s. Same upload-then-replace treatment as the first placeholder above, and the same aspectRatio caveat applies - this frame is the same near-square shape, so 16/9 would pillarbox it. Keep THIS comment on one line; see the note on the internal section below for why. */}
+
+:::note[Recording pending upload]
+A second recording covers this section end to end: the app version changes on the
+board, the board is power-cycled, and the container comes back on its own. It is
+worth watching rather than reading, because the two proofs that matter are the
+ones a transcript flattens - the boot id changes across the reboot, and the
+container id changes with it, so what you see is a fresh container from the
+persisted image rather than a resumed one.
+
+Replace this admonition with the embed below before flipping `draft: false`.
+
+```jsx
+<div style={{ aspectRatio: '1188 / 1152', maxWidth: '760px', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/VIDEO_ID"
+    title="Container Dev Mode on an NXP FRDM-IMX93: the container survives a power cycle"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
+```
+
+:::
 
 ## Does it survive a power cycle?
 
