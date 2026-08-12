@@ -15,8 +15,9 @@ collect, how we use it, and the choices you have.
 
 We want to be clear up front: **we use the information described here only for
 our own internal purposes — to understand how our products are used and to find
-and fix problems so we can improve them. We do not sell, rent, or share this
-information with anyone, and we do not use it for advertising.**
+and fix problems so we can improve them. We do not sell or rent this
+information, and we do not share it with third parties for their own purposes or
+use it for advertising.**
 
 ## Scope
 
@@ -38,8 +39,8 @@ understand how the documentation site is used (see
 [Analytics and cookies](#analytics-and-cookies) below), which collects certain
 information automatically.
 
-Avocado Desktop, unlike the documentation site, requires an Avocado account to
-use.
+Signing in to an Avocado account is optional in Avocado Desktop — you can use
+the application without one.
 
 ### Avocado Desktop
 
@@ -63,10 +64,12 @@ detect and fix defects. This includes:
   analytics provider derives from your IP address. We do not collect precise
   or GPS location.
 
-Because Avocado Desktop requires an Avocado account, events are associated with
-your account **email** so that we can understand usage on a per-user basis and
-provide support. This identifier is shared only with our analytics provider,
-which processes it on our behalf as described in
+If you sign in to your Avocado account, your events — including any captured on
+that device before you signed in — are associated with your account **email** so
+that we can understand usage on a per-user basis and provide support. If you do
+not sign in, events carry a randomly generated identifier stored on your device
+that is not tied to your identity. Either way, this information is shared only
+with our analytics provider, which processes it on our behalf as described in
 [Analytics providers, processing, and sharing](#analytics-providers-processing-and-sharing);
 it is not disclosed to any other third party.
 
@@ -130,10 +133,11 @@ or de-identified in the ordinary course.
 Product analytics in Avocado Desktop is **on by default**, but you are always in
 control and can turn it off at any time in **Settings → Privacy**.
 
-Turning the toggle off disables analytics collection for your account: the
+Turning the toggle off disables analytics collection on that installation: the
 application stops sending events and our analytics provider no longer receives
-or collects any analytics information from it. This takes effect going forward
-and persists across sessions and launches.
+or collects any analytics information from it. The setting is stored on that
+device, so if you use Avocado Desktop on more than one machine you can set it on
+each. This takes effect going forward and persists across sessions and launches.
 
 For the documentation site, you can opt out of Google Analytics across sites
 using Google's [opt-out browser add-on](https://tools.google.com/dlpage/gaoptout),
@@ -144,9 +148,9 @@ and you can manage or block cookies through your browser settings.
 Depending on where you live, you may have the right to access, correct, or
 delete the personal information we hold about you, or to object to or restrict
 certain processing. To exercise any of these rights, contact us at
-support@peridio.com and we will respond as required by applicable law. Because
-Avocado Desktop requires an account, the simplest way to stop further
-collection is to turn analytics off (see [Your choices and opt-out](#your-choices-and-opt-out) above).
+support@peridio.com and we will respond as required by applicable law. The
+simplest way to stop further collection is to turn analytics off in Avocado
+Desktop (see [Your choices and opt-out](#your-choices-and-opt-out) above).
 
 We do not sell your personal information, and we do not share it.
 
