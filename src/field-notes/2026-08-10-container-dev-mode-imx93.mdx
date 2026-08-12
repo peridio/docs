@@ -339,6 +339,74 @@ On the board, restarting the agent repeatedly inside a few minutes trips systemd
 systemctl reset-failed container-agent-dev.service
 ```
 
+{/* VIDEO PLACEHOLDER - second recording, the power-cycle run. Source: container-dev-mode-imx93-reboot-2026-08-12.mp4, 1m32s. Same upload-then-replace treatment as the first placeholder above, and the same aspectRatio caveat applies. Keep THIS comment on one line. */}
+
+## Does it survive a power cycle?
+
+Yes, and the reason is worth stating because the failure mode is silent: what
+survives is the image, and what does not is anything you created on the running
+board.
+
+The pulled image is safe. Docker's root is `/var/lib/docker`, and `/var` is its
+own partition - on this board `/dev/mmcblk1p8`, btrfs - so a synced image is
+still there after the power cut and nothing re-pulls on boot.
+
+The unit that runs it is the fragile half. `/etc` on an Avocado image is an
+overlay whose upper layer lives under `/run`, which is tmpfs:
+
+```bash title="On the console"
+findmnt -n -o OPTIONS /etc | tr ',' '\n' | grep upperdir
+# upperdir=/run/systemd/sysext/mh_workspace/etc/etc
+```
+
+So a unit written into `/etc/systemd/system` on a running board works perfectly
+until the first reboot and then is simply gone, and the container it started
+never comes back. Measured on this board across one reboot: the image persisted,
+the hand-written unit did not, and the container stayed down with nothing in the
+journal pointing at the cause - the unit that would have logged the failure was
+the thing that disappeared.
+
+The fix is to ship the unit in an extension rather than create it on the device,
+which is what the `config` confext in step 2 is for. Ship the `WantedBy` symlink
+alongside it rather than relying on `enable_services` alone:
+
+```text
+etc/systemd/system/app.service
+etc/systemd/system/multi-user.target.wants/app.service -> /etc/systemd/system/app.service
+```
+
+Write the unit so a stop is quick and a bad stop is recoverable, or the loop
+punishes you twice:
+
+```ini title="app.service"
+ExecStartPre=-/usr/bin/docker stop -t 3 avocado-dev
+ExecStart=/usr/bin/docker run --rm --name avocado-dev my-app:dev
+Restart=always
+TimeoutStopSec=15
+```
+
+Both lines are there for a measured reason. The agent restarts this unit to
+adopt each pulled image, so the container's stop sits on the critical path of
+every sync - and a container that ignores `SIGTERM` (a shell loop around
+`sleep` does) burns systemd's full 90s `TimeoutStopSec` on each one. Trapping
+the signal in the app took an adopt from 90s to 9s here. When systemd gives up
+and kills `docker run`, the container survives holding the name, and every
+later start fails with "name already in use" while `Restart=always` retries
+forever; the `ExecStartPre` is what turns that permanent loop back into a
+self-healing one.
+
+With those in place, the power-cycle result is the one you want. The board
+comes back, the unit starts, the container is running again with the version
+that was hot-reloaded into it before the reboot - no host involved, nothing to
+redeploy:
+
+```text
+uptime: up 1 min
+app.service: active
+avocado-dev   my-app:dev   Up 34 seconds
+app v3 base=524288B running-on=9052c9bf7b85
+```
+
 ## What surprised me
 
 The failures on this path are quiet ones. An extension whose unit sits in the wrong directory builds, merges, presents the unit, and reports success - and `systemctl is-enabled` answers `disabled` on every boot with no journal entry explaining why. A wrong-architecture image fails at sync rather than at runtime. A missing SSH server presents as a container problem. None of them announce themselves, which is why the steps above call out the three places where a quiet failure is waiting rather than leaving them to be discovered.
