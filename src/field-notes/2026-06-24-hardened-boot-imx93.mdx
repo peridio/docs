@@ -8,7 +8,7 @@ category: 'Security & Compliance'
 featured: false # Featured selection is Kristen/Bill's call
 image: /img/field-notes/2026-06-24-hardened-boot-imx93-thumb.png
 image_source: local:hardened-boot-imx93.jpg
-tested_against: 'Avocado 0.41.2, avocado-qemuarm64 (fTPM via QEMU). LUKS2 /var validated on avocado-imx93-frdm hardware 2026-08-12 (wrynose BSP, meta-avocado #271), first boot and reboot. Phase-2 TPM2, dm-verity, IMA/EVM and module signing NOT yet validated on that hardware.'
+tested_against: 'Avocado 0.41.2, avocado-qemuarm64 (fTPM via QEMU). LUKS2 /var validated on avocado-imx93-frdm hardware 2026-08-12 (wrynose BSP, meta-avocado #271), first boot and reboot. Phase-2 TPM2, dm-verity and module signing NOT yet validated on that hardware; IMA/EVM is design only and not implemented in the layer.'
 poster: jtia
 lift_for_blog: 'CRA Annex I and IEC 62443-4-2 both require demonstrable data-at-rest protection and integrity; this is the boot-chain half a compliance mapping builds on.'
 promote_to_track: 'Secure-boot / storage-encryption reference candidate once the i.MX93 hardware pass is fully signed off.'
@@ -66,7 +66,7 @@ The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443
 - LUKS2 `/var` formatted on first boot by the initramfs, with no pre-provisioned key material shipped in the image
 - Two-phase TPM2 enrollment: phase 1 uses a software Argon2id passphrase as a recovery baseline; phase 2 seals a new key to TPM2 PCR 7 (Secure Boot state) via `systemd-cryptenroll` and kills the Argon2id slot only after a `--token-only` unseal confirms the TPM path works
 - dm-verity rootfs integrity gated on the `secureboot` DISTRO_FEATURE, with every rootfs block cryptographically verified on read
-- IMA/EVM runtime appraisal gated on the `ima` DISTRO_FEATURE: the kernel refuses to open or execute a mutable file whose IMA signature does not verify, with EVM sealing the security xattrs and IMA measurements logged to PCR 10
+- IMA/EVM runtime appraisal - designed, not built. The intent is that the kernel refuses to open or execute a mutable file whose IMA signature does not verify, with EVM sealing the security xattrs and measurements logged to PCR 10. No kernel fragment, policy recipe, or `ima` gate exists in the layer today
 - Build-time UEFI Secure Boot key generation (PK/KEK/db/dbx) via an idempotent recipe that regenerates keys only when absent and never ships private `.key` files to the target
 - Kernel module signing with `MODULE_SIG_FORCE` gated on the `security` DISTRO_FEATURE
 - Device-side TPM2 userspace (`tpm2-tss`, `tpm2-tools`, `tpm2-openssl`) with `tpm2-abrmd` disabled and excluded from the initramfs entirely (the unseal path is D-Bus-free)
@@ -81,7 +81,7 @@ The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443
 | Key derivation (phase 1) | Argon2id via OpenSSL 3 KDF               | Software fallback; combines a provisioned per-device secret with a hardware serial so the key is device-bound without a TPM                        |
 | Key sealing (phase 2)    | TPM2 PCR 7 via `systemd-cryptenroll`     | PCR 7 captures UEFI Secure Boot state; a tampered boot chain makes unseal fail                                                                     |
 | Rootfs integrity         | dm-verity over EROFS                     | Hash tree computed at build time; verified on every block read; gated on `secureboot`                                                              |
-| Mutable-file integrity   | IMA appraisal + EVM                      | Appraises a per-file signature before open/exec; EVM protects `security.ima`; gated on `ima`                                                       |
+| Mutable-file integrity   | IMA appraisal + EVM                      | Designed only - appraises a per-file signature before open/exec and EVM protects `security.ima`, but nothing implements it in the layer yet        |
 | Secure Boot keys         | `gen-sbkeys.sh` (build-time, idempotent) | Generates PK/KEK/db/dbx; public certs to `/usr/share/secureboot-keys`; private `.key` never in `FILES`                                             |
 | Module signing           | `MODULE_SIG_FORCE` kernel config         | Gated on `security`; prevents unsigned kernel modules from loading                                                                                 |
 | TPM2 userspace           | tpm2-tss + tpm2-tools + tpm2-openssl     | `tpm2-tss` is the ESAPI `systemd-cryptenroll` needs; `tpm2-abrmd` is delivered but auto-start disabled, so the initramfs unseal path is D-Bus-free |
@@ -103,21 +103,25 @@ meta-avocado/
     sb-keys.bb                  # do_install[nostamp]; BB_BASEHASH_IGNORE_VARS
     key-store.bb                # installs public certs to /usr/share/secureboot-keys
     files/gen-sbkeys.sh         # PK/KEK/db/dbx generation script
-  recipes-security/ima-policy/
-    ima-policy.bb               # installs the appraisal policy + public IMA cert
-    files/ima-policy            # appraise func=BPRM/FILE_MMAP/MODULE_CHECK
-    files/x509_ima.der          # public IMA cert only; private key never in FILES
-  recipes-avocado/packagegroups/
-    packagegroup-avocado-tpm2.bb                 # tpm2-tss + tpm2-abrmd + tpm2-tools + tpm2-openssl
-    packagegroup-avocado-initramfs-security.bb   # tpm2-tools subset; excludes abrmd
-
-meta-avocado-nxp/
-  recipes-kernel/linux/files/imx93-frdm/
-    dm-crypt.cfg                # CONFIG_DM_CRYPT + AES + XTS + SHA256 + HW_RANDOM_TPM + CAAM (i.MX93-specific)
+  recipes-kernel/linux/files/
+    dm-crypt.cfg                # CONFIG_DM_CRYPT + AES + XTS + SHA256 + HW_RANDOM_TPM (arch-agnostic)
     dm-verity.cfg               # dm-verity rootfs integrity chain
     modsign.cfg                 # MODULE_SIG_FORCE
-    ima.cfg                     # CONFIG_IMA + IMA_APPRAISE + EVM + TRUSTED_KEYRING
+
+meta-avocado-tpm/
+  recipes-avocado/packagegroups/
+    packagegroup-avocado-tpm2.bb            # tpm2-tss + tpm2-abrmd + tpm2-tools + tpm2-openssl
+    packagegroup-avocado-tpm2-initramfs.bb  # tpm2-tools subset; excludes abrmd
+
+meta-avocado-nxp/
+  recipes-core/cryptsetup-var/
+    cryptsetup-var.bbappend     # FILESEXTRAPATHS:prepend:avocado-imx93-frdm
+    files/var-key.sh            # i.MX93 key provider; reads the SoC OCOTP UID
+  recipes-kernel/linux/files/imx93-frdm/
+    dm-crypt.cfg                # forces BLK_DEV_DM and TRUSTED_KEYS to y, adds the CAAM job rings
 ```
+
+There is no IMA recipe and no `ima.cfg` in the layer. The appraisal policy, the public cert recipe, and the kernel fragment described below are design, not code - see the coverage table.
 
 ### The unlock script
 
@@ -168,12 +172,13 @@ do_install[nostamp] = "1"
 Kernel config fragments are wired via `SRC_URI:append`, each conditionally included by `DISTRO_FEATURES`, so a target only pays for the controls it opts into:
 
 ```bash
-SRC_URI:append = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'secureboot', 'file://dm-verity.cfg', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'security',   'file://modsign.cfg',   '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'ima',        'file://ima.cfg',       '', d)} \
-"
+# meta-avocado/recipes-kernel/linux/linux-yocto_%.bbappend
+SRC_URI:append = "${@bb.utils.contains('DISTRO_FEATURES', 'secureboot',    ' file://dm-verity.cfg', '', d)}"
+SRC_URI:append = "${@bb.utils.contains('DISTRO_FEATURES', 'security',      ' file://modsign.cfg',   '', d)}"
+SRC_URI:append = "${@bb.utils.contains('DISTRO_FEATURES', 'encrypted-var', ' file://dm-crypt.cfg',  '', d)}"
 ```
+
+Three gates, not four. An `ima` gate belongs in that list by design and is not in it: nothing in the layer defines `ima.cfg`, so putting `ima` in `DISTRO_FEATURES` today changes nothing about the built kernel. The i.MX93 gets a second, machine-scoped `dm-crypt.cfg` through `meta-avocado-nxp/recipes-kernel/linux/linux-imx_%.bbappend` because its defconfig ships `BLK_DEV_DM=m`, and kconfig caps a tristate at its weakest parent - `DM_CRYPT=y` silently demotes to `=m` unless `BLK_DEV_DM` and `TRUSTED_KEYS` are both forced to `y` first.
 
 ## Reproduce it
 
@@ -236,10 +241,12 @@ tpm2_pcrread sha256:10
 | LUKS2 `/var`   | Verified on first boot                          | **Verified**, first boot and reboot (2026-08-12)   |
 | Phase-2 TPM2   | Enrollment verified; unseal on reboot **fails** | **Not possible on this board yet** - see below     |
 | dm-verity      | **Not active** on this target                   | Not yet run                                        |
-| IMA/EVM        | No harness case exists                          | Not yet run                                        |
+| IMA/EVM        | **Not implemented** - nothing to test            | **Not implemented** - nothing to test              |
 | Module signing | No harness case exists                          | Not yet run                                        |
 
 Three harness cases back the proxy column (`luks-var`, `luks-var-tpm`, `dm-verity`), and they live on the #232 branch, so they are not gating anything on `scarthgap` yet. There are no IMA or module-signing cases at all; an earlier version of this table named two that do not exist.
+
+IMA/EVM is a step further back than "not yet run". Checked on the running board, `/sys/kernel/security/ima/` and `/sys/kernel/security/evm` do not exist and `/proc/cmdline` carries no `ima_policy` or `ima_appraise`; checked in the layer, `ima.cfg` is absent from `scarthgap` and from both secure-boot branches, and no recipe, kas feature, or `DISTRO_FEATURES` gate references `ima` at all. Everything this note says about IMA and EVM is the design, and building it is its own piece of work - a fragment, a signing policy, and a labelled rootfs - not a check someone can run today.
 
 ### The hardware pass (2026-08-12)
 
