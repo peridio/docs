@@ -8,7 +8,7 @@ category: 'Security & Compliance'
 featured: false # Featured selection is Kristen/Bill's call
 image: /img/field-notes/2026-06-24-hardened-boot-imx93-thumb.png
 image_source: local:hardened-boot-imx93.jpg
-tested_against: 'Avocado 0.41.2, avocado-qemuarm64 (fTPM via QEMU), on the meta-avocado #232/#236 branches. NOT yet validated on avocado-imx93-frdm hardware.'
+tested_against: 'Avocado 0.41.2, avocado-qemuarm64 (fTPM via QEMU). LUKS2 /var validated on avocado-imx93-frdm hardware 2026-08-12 (wrynose BSP, meta-avocado #271), first boot and reboot. Phase-2 TPM2, dm-verity, IMA/EVM and module signing NOT yet validated on that hardware.'
 poster: jtia
 lift_for_blog: 'CRA Annex I and IEC 62443-4-2 both require demonstrable data-at-rest protection and integrity; this is the boot-chain half a compliance mapping builds on.'
 promote_to_track: 'Secure-boot / storage-encryption reference candidate once the i.MX93 hardware pass is fully signed off.'
@@ -175,9 +175,33 @@ SRC_URI:append = " \
 "
 ```
 
+## Reproduce it
+
+`encrypted-var` is a kas feature, so composing it onto a board's machine YAML is the whole build step:
+
+```bash
+bakar build \
+  meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml
+```
+
+The stock image gives you no way in, on console or over SSH: `avocado-users` ships `/etc/shadow` with `root:*:`, and a literal `*` means no password can ever match. Stack the dev-access feature when you need a shell to check any of this - dev boards only, it accepts root with an empty password:
+
+```bash
+bakar build \
+  meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml:meta-avocado/kas/feature/ssh-dev.yml
+```
+
+Then write it to the card. `avocado-flash` selects the backend from the medium and refuses anything that is not an unmounted whole disk on a removable bus:
+
+```bash
+meta-avocado/scripts/avocado-flash sd /dev/sdX
+```
+
+Two things that will otherwise cost you an afternoon. The FRDM-IMX93 boots from **eMMC by default** (`SW1[3:0] = 0010` per UM12181), so booting an SD image needs the switches at `0011` - leave them and the board quietly boots the old eMMC contents, which looks like a successful boot of the wrong thing. And the default `-t complete` rewrites the whole medium **including `var`**, which is what you want for a first-boot format and what you do not want on a device whose data must survive; `-t upgrade` writes only the inactive A/B slots and leaves `var` alone.
+
 ## Verify it
 
-These are the checks the hardware pass still has to run. The output below is what they should produce, not output a board has already produced. Run them on the board after boot:
+Everything under LUKS2 below is output a board has produced. The TPM2, dm-verity, IMA/EVM and module-signing checks are what they should produce, not output anything has produced yet - see the coverage table.
 
 ```bash
 # /var is LUKS2 and mounted from the mapped device
@@ -207,21 +231,50 @@ tpm2_pcrread sha256:10
 
 ### Coverage
 
-| Control        | `avocado-qemuarm64` (proxy)                     | `avocado-imx93-frdm` (hardware) |
-| :------------- | :---------------------------------------------- | :------------------------------ |
-| LUKS2 `/var`   | Verified on first boot                          | Not yet run                     |
-| Phase-2 TPM2   | Enrollment verified; unseal on reboot **fails** | Not yet run                     |
-| dm-verity      | **Not active** on this target                   | Not yet run                     |
-| IMA/EVM        | No harness case exists                          | Not yet run                     |
-| Module signing | No harness case exists                          | Not yet run                     |
+| Control        | `avocado-qemuarm64` (proxy)                     | `avocado-imx93-frdm` (hardware)                    |
+| :------------- | :---------------------------------------------- | :------------------------------------------------- |
+| LUKS2 `/var`   | Verified on first boot                          | **Verified**, first boot and reboot (2026-08-12)   |
+| Phase-2 TPM2   | Enrollment verified; unseal on reboot **fails** | **Not possible on this board yet** - see below     |
+| dm-verity      | **Not active** on this target                   | Not yet run                                        |
+| IMA/EVM        | No harness case exists                          | Not yet run                                        |
+| Module signing | No harness case exists                          | Not yet run                                        |
 
 Three harness cases back the proxy column (`luks-var`, `luks-var-tpm`, `dm-verity`), and they live on the #232 branch, so they are not gating anything on `scarthgap` yet. There are no IMA or module-signing cases at all; an earlier version of this table named two that do not exist.
+
+### The hardware pass (2026-08-12)
+
+The board pass ran on an FRDM-IMX93 against the wrynose BSP, and it closed the LUKS2 row. Three defects had to be fixed first, and every one of them was invisible on the proxy because `avocado-qemuarm64` carries a machine override that `avocado-imx93-frdm` did not:
+
+- **`CONFIG_DM_CRYPT` was silently `=m`.** The fragment asks for `=y`, but kconfig caps a tristate at its weakest parent and the i.MX defconfig left both `BLK_DEV_DM` and `TRUSTED_KEYS` at `=m`. The initramfs ships `cryptsetup` with no module and nothing that loads one, so the unlock had no dm-crypt to call. The task check greps the fragment *text*, so it passed while the built kernel disagreed - verify against the produced `.config`, never the fragment.
+- **`AVOCADO_VAR_PART_DEV` was unset.** Both qemu machines point `/var` at `/dev/mapper/var` when `encrypted-var` is on; imx93 fell through to the base-files raw-PARTUUID default, so the container would be created and opened in the initrd while fstab mounted `/var` from the raw partition underneath it.
+- **The key provider read a secret that does not exist.** The shared `var-key.sh` reads `/var/private/var-key-secret` - on the volume being unlocked, not mounted when the provider runs in the initramfs, and created by nothing in the tree. The Argon2id path had therefore never once succeeded on this board.
+
+What the pass showed, on the board:
+
+```text
+# cryptsetup status var
+/dev/mapper/var is active and is in use.
+  type:    LUKS2    cipher: aes-xts-plain64    keysize: 512 [bits]
+  device:  /dev/mmcblk1p8
+
+# findmnt /var
+/var /dev/mapper/var btrfs rw,relatime,ssd,space_cache=v2
+
+# dmsetup targets | grep crypt
+crypt            v1.28.0
+```
+
+First boot ran the whole path - open, no filesystem found, filesystem created at 29.01 GiB, `Finished LUKS2 /var unlock and first-boot format` - and the partition expanded 112M to 29G. A second boot then exercised the **unlock** path rather than first-boot format: `/var` reopened with the same btrfs UUID across a reboot confirmed by a changed `boot_id`. That is the reboot survival the proxy structurally cannot show, though only for the Argon2id slot.
+
+**Phase-2 TPM2 remains unshown, and not for want of running it.** There is no TPM on this board to seal to. The FRDM-IMX93 has no discrete TPM (confirmed against UM12181 and, for its i.MX95 siblings, the schematic BOMs), and the i.MX9 route to a TPM 2.0 interface is a firmware TPM on OP-TEE, which `optee-ftpm-init` currently builds for `avocado-qemuarm64` only. Nothing seals to PCR 7 on an i.MX93 today. The board does have what that route needs - OP-TEE enabled, 32 GB eMMC so RPMB exists, and a `recovery` partition for the TEE store - so this is a porting task rather than a hardware limitation, and it needs no AHAB work. Worth knowing when reading NXP material: on i.MX, "TPM" in a datasheet or device tree usually means the **Timer/PWM Module** peripheral, not a trusted platform module.
 
 The intent still holds: both paths run the same recipes, kernel fragments and initramfs logic, and both seal to the same OP-TEE fTPM (`MACHINE_FEATURES += " optee-ftpm"` on `avocado-qemuarm64`, per `meta-avocado-qemu/conf/machine/avocado-qemuarm64.conf`) - what differs is the platform underneath it, QEMU `virt` against i.MX93 silicon. So a cheap proxy gate should guard the expensive hardware path. It is an intent rather than a seal until the cases merge and the board pass runs.
 
 ## Security properties
 
 Pulling the eMMC off the board gives an attacker AES-256-XTS ciphertext. Without the Argon2id recovery passphrase (device-bound, not in the image) or the TPM2 (physically in the device), they cannot decrypt it, and the two factors are independent.
+
+**On the i.MX93 today that is one factor, not two, and the remaining one is weaker than "passphrase" suggests.** With no TPM to seal to, the Argon2id slot is not a recovery baseline behind a sealed primary - it is the only slot. And the key it derives from is the SoC's 128-bit OCOTP UID, read from `/sys/devices/soc0/serial_number`: that binds the volume to *this* board, so a cloned eMMC will not open elsewhere, but it is not a secret. Anyone who can read the UID from a running system can rederive the key. The design's stronger secret-plus-hardware-id scheme has no provisioning path in the tree yet, which is why the UID provider exists at all. So the honest claim for this board right now is device binding, not confidentiality against an attacker who has already had code execution on it. Sealing to an OP-TEE fTPM restores the two-factor property and is the next step.
 
 <PullQuote>
   The storage chip alone is worthless: the key is sealed to the Secure Boot state, and the TPM is
@@ -232,7 +285,7 @@ The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader 
 
 ## Issues and open questions
 
-- **Unseal fails on reboot on the proxy.** The two-phase enrollment lands both slots correctly, and then the very next boot cannot unseal from the TPM2 slot and falls back to Argon2. The layer already documents why, and it is a property of the emulator rather than of the design: the QEMU `virt` machine has no RPMB, so OP-TEE cannot commit the rollback counter its secure storage depends on, will not trust the fTPM's saved state on the next boot, and the fTPM re-derives its seed. `meta-avocado-qemu/recipes-security/optee-ftpm-init/optee-ftpm-init.bb` states this and calls it a QEMU limitation, not a defect in the layer. What follows for this note is narrower than the symptom suggests but still unresolved: the proxy structurally cannot demonstrate reboot survival, so "the TPM2 slot reopens `/var` on every later boot" rests entirely on the hardware pass, and nothing here has shown it yet.
+- **Unseal fails on reboot on the proxy.** The two-phase enrollment lands both slots correctly, and then the very next boot cannot unseal from the TPM2 slot and falls back to Argon2. The layer already documents why, and it is a property of the emulator rather than of the design: the QEMU `virt` machine has no RPMB, so OP-TEE cannot commit the rollback counter its secure storage depends on, will not trust the fTPM's saved state on the next boot, and the fTPM re-derives its seed. `meta-avocado-qemu/recipes-security/optee-ftpm-init/optee-ftpm-init.bb` states this and calls it a QEMU limitation, not a defect in the layer. What follows for this note is narrower than the symptom suggests but still unresolved: the proxy structurally cannot demonstrate reboot survival, so "the TPM2 slot reopens `/var` on every later boot" rests entirely on the hardware pass. **The 2026-08-12 board pass answered half of it.** `/var` did reopen across a reboot on real hardware, from an existing LUKS2 container, with the same filesystem UUID either side - so the unlock-on-later-boot path is shown. What it was shown for is the Argon2id slot, because the board has no TPM to seal to and the fTPM route is not yet ported to it, so the specific claim about the *TPM2* slot is still unevidenced on any platform: the proxy cannot show it for want of RPMB, and the board cannot show it for want of a TPM.
 - **An interrupted first boot wedges the device permanently.** `cryptsetup-var.sh` only runs `mkfs.btrfs` in its first-boot branch. A first boot that dies after `luksFormat` but before `mkfs.btrfs` leaves a LUKS2 header with no filesystem inside, so every later boot takes the open-existing branch, never creates the filesystem, and drops to emergency forever. Re-provisioning does not clear it, because `fwup -t complete` does not touch the `var` partition; recovery means zeroing the LUKS header by hand. The fix is either to detect "header present, no filesystem on the opened mapper" and re-`mkfs`, or to make format-plus-mkfs atomic behind a completion marker.
 - **`luksKillSlot` guard.** The `|| true` on slot 0 removal is intentional but means a failed kill leaves both slots active. A monitoring check after enrollment should confirm slot 0 is gone; the current implementation does not warn if the kill is skipped.
 - **IMA/EVM raises a labeling and update cost.** Every appraised file must carry a valid `security.ima` signature, so the build signs the rootfs and shipped mutable content, and every OS update re-signs and shifts the measured hashes. That makes the attestation server's known-good list an ongoing ops dependency. First boot also runs roughly 5-15% slower while IMA labels and measures, which is why IMA is gated on `ima` rather than always on.
