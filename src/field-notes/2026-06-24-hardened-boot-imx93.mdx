@@ -239,7 +239,7 @@ tpm2_pcrread sha256:10
 | Control        | `avocado-qemuarm64` (proxy)                     | `avocado-imx93-frdm` (hardware)                    |
 | :------------- | :---------------------------------------------- | :------------------------------------------------- |
 | LUKS2 `/var`   | Verified on first boot                          | **Verified**, first boot and reboot (2026-08-12)   |
-| AHAB signed boot | No harness case exists                        | **Verified** on an open part (2026-08-13) - see below |
+| AHAB signed boot | No harness case exists                        | **Verified** on an open part - bootloader and OS container (2026-08-13), initramfs folded into the signed container (2026-08-14). See below |
 | Phase-2 TPM2   | Enrollment verified; unseal on reboot **fails** | **Not possible on this board yet** - see below     |
 | dm-verity      | **Not active** on this target                   | Not yet run                                        |
 | IMA/EVM        | **Not implemented** - nothing to test            | **Not implemented** - nothing to test              |
@@ -299,6 +299,65 @@ fuse read 16 0 8  ->  all zeros
 So the order is burn `SRK_HASH` while still open, *then* check for zero events,
 *then* close. A plan that validates zero events before the burn cannot be
 satisfied - which is what this note used to imply.
+
+### The gap in that log (2026-08-14)
+
+Read the pass above again and one line gives it away: `Loading Ramdisk`. AHAB
+covered the kernel and the device tree. The initramfs was loaded separately and
+handed to `booti` as `argv[1]`, which `booti` never authenticates - and on this
+image that initrd is what derives the LUKS key and opens `/var`. The single
+unsigned component stood directly in front of the storage control.
+
+The obvious fix is to add it as a second `--data` payload, and it fails
+quietly. `container_get_image_dst()` returns the first exec image and the first
+data image and stops, so a second data payload is authenticated, placed, and
+then never located; `booti` still reads `argv[1]`. Keeping the separate load
+just to obtain its size is worse: `${filesize}` comes from the unauthenticated
+copy on disk, so a larger file leaves unverified bytes past the authenticated
+region - and appending a cpio archive is the documented way to overlay files in
+an initrd.
+
+Bundling it into the kernel closes it by construction. The initramfs rides
+inside the exec payload the container already signs, and `booti` is handed no
+ramdisk at all:
+
+```text
+Booting A
+176028672 bytes read        # os_cntr_signed.bin - kernel, dtb and initramfs
+Authenticate OS container at 0xa8000000
+Starting kernel ...
+[  OK  ] Found device /dev/mapper/var.
+
+# findmnt -no SOURCE,FSTYPE /var
+/dev/mapper/var btrfs
+```
+
+No `Loading Ramdisk` line. That absence is the whole result.
+
+**The cost is size, and it lands in three places.** Bundling embeds the archive
+uncompressed - the build decompresses the `.cpio.zst` and the kernel stores what
+it is handed - so the kernel goes from 33 MB to about 200 MB. Re-compressing is
+not reachable from a config fragment, because the compression choice depends on
+`INITRAMFS_SOURCE`, which only reaches the kernel as a make argument during the
+bundling step and so is unset when the config is written.
+
+That forces the boot partitions from 128 to 256 MiB, `recovery` included since
+it holds a boot filesystem too. It also breaks the memory map, twice. The
+device tree ended up inside the kernel's unpack range (`FDT image overlaps OS
+image`). Then the container, moved out of the way, landed across a hole: this
+board's DRAM is not contiguous - `bdinfo` reports `0x80000000+0x16000000` and
+`0x98000000+0x68000000` with 32 MiB missing between them - and a load spanning
+it is refused with `Reading file would overwrite reserved memory`, which names
+neither the hole nor the size. The container now stages in the second bank,
+above the carve-out Linux later claims as `ele-reserved`.
+
+The guard that was supposed to catch this compared two addresses for equality,
+which is true of any layout that fails this way and false of every layout that
+did. It now measures the built kernel and refuses when it reaches either the
+device tree or the container. It earned that immediately: turning on encrypted
+`/var` grew the initramfs and pushed the kernel past a device tree that had
+already been moved once, and the build stopped with both addresses named rather
+than the board stopping at a prompt.
 
 Worth being plain about two limits. The initramfs is loaded outside the container
 and passed to `booti` as a separate argument, so it is **not** authenticated -
