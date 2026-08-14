@@ -8,6 +8,7 @@
     "start": "docusaurus start",
     "sync-references": "node scripts/sync-references.js",
     "sync-targets": "node scripts/sync-targets.js",
+    "build-connect-api": "node scripts/build-connect-api.js && prettier --write docs-guides/avocado-connect-api",
     "build": "bash scripts/build.sh",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -46,10 +47,10 @@
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
     "react-loadable": "5.5.0",
-    "redocusaurus": "^2.5.0",
     "search-insights": "2.17.3",
     "turndown": "^7.2.4",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "yaml": "^2.9.0"
   },
   "browserslist": {
     "production": [
@@ -68,7 +69,6 @@
     "@docusaurus/eslint-plugin": "^3.10.1",
     "@docusaurus/module-type-aliases": "^3.10.1",
     "@docusaurus/types": "^3.10.1",
-    "@redocly/cli": "^2.34.0",
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
     "prettier": "^3.0.0",

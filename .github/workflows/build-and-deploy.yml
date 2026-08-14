@@ -17,8 +17,6 @@ jobs:
 
       - name: Install dependencies
         run: npm --prefix src ci
-      - name: OpenAPI Lint
-        run: npm --prefix src exec --no -- redocly lint --config src/redocly.yaml
       - name: ESLint
         run: npm --prefix src run lint
       - name: Docusaurus Build
