@@ -48,6 +48,7 @@ function slugify(text) {
 function escapeCell(text) {
   if (!text) return ''
   return String(text)
+    .replace(/\\/g, '\\\\')
     .replace(/\|/g, '\\|')
     .replace(/\s*\n\s*/g, ' ')
     .trim()
