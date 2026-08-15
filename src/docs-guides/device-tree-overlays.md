@@ -6,9 +6,11 @@ draft: true
 description: 'Declare a device-tree overlay in an extension and let avocado build compile it in the SDK and deliver it to the boot medium - no manual dtc, no boot-partition surgery, no BSP fork.'
 ---
 
-:::danger draft - not yet reproducible by a reader
+:::danger draft - Jetson only, and not yet reproducible by a reader
 
-This guide documents behavior that is **not in a released Avocado CLI or SDK image**. Every command below has been run, but only against from-source builds of unmerged branches. Following it with released artifacts will fail at `avocado install`.
+**NVIDIA Jetson (Tegra) is the one target where this is finished and proven on hardware.** Every other target is work in progress and is marked as such throughout this page - the Raspberry Pi path builds but has never been confirmed on a board, and `qemuarm64` delivers the overlay but does not apply it at boot. Read the [target support](#target-support) table before following anything here for a non-Jetson board.
+
+The guide also documents behavior that is **not in a released Avocado CLI or SDK image**. Every command below has been run, but only against from-source builds of unmerged branches. Following it with released artifacts will fail at `avocado install`.
 
 See [Release status](#release-status) at the bottom for the exact list of what must merge and publish before this page can drop `draft: true`.
 
@@ -22,24 +24,26 @@ This guide covers:
 
 - Declaring overlays in `avocado.yaml`
 - Writing an overlay source the compiler will accept
-- Which targets are supported, and what each one does with the blob
+- Building and flashing on a Jetson, the worked example throughout
 - Confirming on a booted board that the overlay actually applied
-- Per-target update consequences (one target needs a reflash)
+- What is still work in progress on the other targets
 
 ## Target support
 
-The declaration is portable; the delivery mechanism is not. Each BSP layer installs its own delivery hook, so what happens to the compiled blob differs by board - including how you ship a _change_ to an overlay later.
+The declaration is portable; the delivery mechanism is not. Each BSP layer installs its own delivery hook, so what happens to the compiled blob differs by board - including how you ship a _change_ to an overlay later, and how far along each target is.
 
-| Target                                      | Delivery mechanism                                             | Where the blob lands                               | Updating an overlay                                                      |
-| ------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------ |
-| `raspberrypi5`, `raspberrypi4`              | Loose `.dtbo` on the boot FAT, selected by a `dtoverlay=` line | `overlays/<name>.dtbo` plus `avocado-overlays.txt` | Ordinary image update                                                    |
-| `jetson-orin-nano-devkit` (and other Tegra) | Merged into the base DTB at build time with `fdtoverlay`       | Replaces the flashed kernel DTB                    | **Reflash** - see [Jetson](#jetson-tegra)                                |
-| `qemuarm64`                                 | Loose `.dtbo` on the boot FAT                                  | `overlays/<name>.dtbo`                             | Delivered but **not applied at boot** yet                                |
-| `qemux86-64`                                | None                                                           | -                                                  | Not applicable - x86 boots via ACPI and has no device tree               |
-| Any other target                            | None                                                           | -                                                  | Build fails, by design - see [Unsupported targets](#unsupported-targets) |
+| Target                                      | Status                             | Delivery mechanism                                             | Updating an overlay                                       |
+| ------------------------------------------- | ---------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------- |
+| `jetson-orin-nano-devkit` (and other Tegra) | **Working** - verified on hardware | Merged into the base DTB at build time with `fdtoverlay`       | **Reflash** - see [Jetson](#jetson-tegra)                 |
+| `raspberrypi5`, `raspberrypi4`              | **WIP** - builds, never booted     | Loose `.dtbo` on the boot FAT, selected by a `dtoverlay=` line | Ordinary image update                                     |
+| `qemuarm64`                                 | **WIP** - delivered, never applied | Loose `.dtbo` on the boot FAT                                  | n/a until the boot chain applies it                       |
+| `qemux86-64`                                | Not applicable                     | None - x86 boots via ACPI and has no device tree               | n/a                                                       |
+| Any other target                            | Not supported                      | None                                                           | Build fails by design - see [below](#unsupported-targets) |
+
+Only the Jetson row has been confirmed by reading the device tree of a running kernel. The other two rows describe what the build produces, which is a weaker claim than it looks - see [Confirming the overlay applied](#confirming-the-overlay-applied) for why a green build proves nothing about a board, and [Targets still in progress](#targets-still-in-progress) for what each one is waiting on.
 
 :::info the declaration is the portable part
-The same `device_tree_overlays` block and the same `.dtso` move between a Pi and a Jetson unchanged. Only the hook underneath differs. That is the point of the hook being per-BSP.
+The same `device_tree_overlays` block and the same `.dtso` move between a Jetson and a Pi unchanged. Only the hook underneath differs. That is the point of the hook being per-BSP - and it is why the WIP targets are held up by delivery and boot wiring rather than by anything you write.
 :::
 
 ## Declaring an overlay
@@ -49,7 +53,7 @@ Overlays are declared on the **extension** that ships them, not on the runtime a
 ```yaml
 runtimes:
   dev:
-    target: raspberrypi5
+    target: jetson-orin-nano-devkit
     extensions:
       - my-board
     packages:
@@ -66,9 +70,9 @@ extensions:
 
 | Key      | Required | Meaning                                                                                                                                                                                                                                                                                                      |
 | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `name`   | yes      | Authoritative. It is the output basename (`overlays/<name>.dtbo`), the `dtoverlay=` argument on Raspberry Pi, and the u-boot overlay entry. Must be a safe basename: no `/`, no whitespace, not `.` or `..`. Names must be unique across the whole runtime - a duplicate is a hard error, not last-one-wins. |
+| `name`   | yes      | Authoritative. It is the compiled blob's basename (`<name>.dtbo`) and, on the targets that select overlays at boot, the selection argument. Must be a safe basename: no `/`, no whitespace, not `.` or `..`. Names must be unique across the whole runtime - a duplicate is a hard error, not last-one-wins. |
 | `src`    | yes      | Path to the overlay source, relative to the project root.                                                                                                                                                                                                                                                    |
-| `params` | no       | A mapping of per-overlay parameters. **Raspberry Pi only** - see [Parameters](#parameters-raspberry-pi-only).                                                                                                                                                                                                |
+| `params` | no       | A mapping of per-overlay parameters. Consumed **only** by the Raspberry Pi hook, which is itself WIP - see [Parameters](#parameters-raspberry-pi-only).                                                                                                                                                      |
 
 :::warning declare `avocado-runtime`
 The runtime must pull `avocado-runtime`, which is what installs `avocado-img-bootfiles` - the package shipping `u-boot.bin` and the `bootfiles/*` entries the bundler needs to build a boot image. A project that omits it fails late, at bundling, with `File 'u-boot.bin' not found in any input directory for FAT image`, which reads like a broken BSP rather than a missing declaration. It cost us two weeks of chasing a product bug that was a project-config omission.
@@ -149,18 +153,22 @@ A `/include/ "shared.dtsi"` (the native DTS include, not a cpp one) resolves rel
 
 ```bash
 avocado install
-avocado build --target raspberrypi5
+avocado build --target jetson-orin-nano-devkit
 ```
 
 The build logs three ordered markers. All three must appear:
 
 ```text
 avocado-dtc-overlay: built .../device-tree-overlays/hello-overlay.dtbo from hello-overlay
-device-tree-overlay-deliver: delivered 1 overlay(s) to rootdisk/boot for avocado-raspberrypi5: hello-overlay
+device-tree-overlay-deliver: delivered 1 overlay(s) merged into tegra234-p3768-0000+p3767-0005-nv-super.dtb for avocado-jetson-orin-nano-devkit: hello-overlay
 [SUCCESS] OS bundle created: .../os-bundle.aos
 ```
 
+The middle line is the one that differs per target: on Jetson it names the base DTB the overlays were merged into, and on the loose-`.dtbo` targets it names the boot directory they were copied to instead.
+
 To inspect what was produced, `avocado save` exports the build state; the archive holds both the compiled `device-tree-overlays/<name>.dtbo` and the finalized `os-bundle.aos`.
+
+Then flash the board. **Do this host-side, not through `avocado runtime provision`** - container-mode provisioning cannot currently reach a Jetson in recovery mode, which is item 6 of [Release status](#release-status). Every result on this page was obtained from a host-side flash.
 
 ### On a brand-new SDK
 
@@ -219,12 +227,6 @@ With both halves, the declaration is the only variable that can explain the diff
 
 ## Per-target details
 
-### Raspberry Pi
-
-The hook writes the `.dtbo` to `overlays/<name>.dtbo` on the boot FAT and emits an `avocado-overlays.txt` alongside it holding one `dtoverlay=<name>` line per overlay. The stock `config.txt` carries a static `include avocado-overlays.txt`, so the firmware picks these up at boot.
-
-`config.txt` itself is never rewritten. That keeps your own `config.txt` overrides and the generated overlay list from fighting over the same file.
-
 ### Jetson (Tegra)
 
 Tegra has nowhere to put a loose `.dtbo`. The flashed partition set has no DTBO partition, the ESP carries only the bootloader, and the overlay lists that do exist in the Tegra flash variables are read by the classic `flash.sh` path - not by the `initrd-flash` flow Avocado uses, which consumes binaries already signed at build time. Anything written to those lists is inert.
@@ -239,11 +241,25 @@ Two consequences:
 
 The base DTB is selected by the `DTBFILE` the BSP records, because a real Tegra BSP ships one base DTB per module SKU - five on an Orin Nano dev kit. You do not choose it; the board's own flash configuration does.
 
-### QEMU
+## Targets still in progress
 
-`qemuarm64` compiles and delivers the overlay to the boot FAT, but u-boot does not yet apply it at boot: the shipped `qemu_arm64_defconfig` does not set `CONFIG_OF_LIBFDT_OVERLAY`, so its u-boot carries every `fdt` subcommand except the one that applies an overlay. Wiring that up is tracked in meta-avocado#273. Until it merges, treat qemuarm64 as delivery-only.
+Everything below builds. None of it has been confirmed on a running kernel, which per [Confirming the overlay applied](#confirming-the-overlay-applied) is the only evidence that counts. Treat these sections as a description of the intended mechanism rather than of observed behavior.
 
-`qemux86-64` has no device tree at all - x86 boots via ACPI - so no hook is installed and declaring an overlay there fails the build.
+### Raspberry Pi - WIP, builds but never booted
+
+The hook writes the `.dtbo` to `overlays/<name>.dtbo` on the boot FAT and emits an `avocado-overlays.txt` alongside it holding one `dtoverlay=<name>` line per overlay. The stock `config.txt` carries a static `include avocado-overlays.txt`, so the firmware should pick these up at boot. `config.txt` itself is never rewritten, which keeps your own overrides and the generated overlay list from fighting over the same file.
+
+The build path is green end to end - compile, deliver, finalized `os-bundle.aos` - and is re-run as a regression gate whenever the Jetson path changes. **That is the whole of the evidence.** No Pi has been booted with a declared overlay and had its device tree read, so whether the firmware actually applies the generated list is currently an assumption. The Jetson experience is the reason to say so plainly: there, every build marker passed for two full rounds while the board applied nothing.
+
+What it is waiting on: a paired positive/negative run on a Pi 5, item 5 of [Release status](#release-status).
+
+### QEMU - WIP, delivered but not applied
+
+`qemuarm64` compiles and delivers the overlay to the boot FAT, and then nothing applies it. The shipped `qemu_arm64_defconfig` does not set `CONFIG_OF_LIBFDT_OVERLAY` at u-boot 2026.01, so its u-boot carries every `fdt` subcommand except the one that applies an overlay - `fdt apply` prints its usage dump instead of running.
+
+This one is understood rather than merely unverified: the mechanism has been proven on a u-boot built from the same tree with the flag set, and the negative control on the shipped binary fails exactly where predicted. It needs three pieces (the config flag, an overlay list written next to the kernel, and an env block that applies them), tracked in meta-avocado#273, plus a full-image build and boot that has not happened.
+
+`qemux86-64` is a different case and will not be supported: x86 boots via ACPI and has no device tree anywhere in the chain, so no hook is installed and declaring an overlay there fails the build.
 
 ## Parameters (Raspberry Pi only)
 
@@ -260,8 +276,10 @@ device_tree_overlays:
 
 produces `dtoverlay=my-spi,cs=0,speed=12000000` (keys are sorted, so the output is stable across builds).
 
-:::warning `params` is silently ignored off Raspberry Pi
-Only the Raspberry Pi hook consumes `params` - it maps onto the Pi firmware's own overlay-parameter mechanism, which has no equivalent elsewhere. The Jetson and QEMU hooks accept a declaration carrying `params` and deliver the overlay without them, with no warning. On those targets, encode the values in the `.dtso` itself.
+:::warning `params` is silently ignored off Raspberry Pi - including on Jetson
+Only the Raspberry Pi hook consumes `params`, because it maps onto the Pi firmware's own overlay-parameter mechanism and nothing else has an equivalent. The Jetson and QEMU hooks accept a declaration carrying `params` and deliver the overlay without them, with no warning.
+
+**On Jetson - the one working target - encode the values in the `.dtso` itself.** A `params` block there is silently inert, and since the Pi hook that would honor it is itself unverified on hardware, this key has no confirmed consumer on any board today.
 :::
 
 ## Unsupported targets
@@ -291,7 +309,7 @@ The same applies one level deeper: if the hook runs but does not claim an overla
 
 ## Release status
 
-This page is `draft: true` because the feature is not reachable from released artifacts. Everything below must land before it publishes.
+This page is `draft: true` for two reasons: the feature is not reachable from released artifacts, and only one target is finished. Items 1-4 and 6-7 gate publication; item 5 is what promotes the Raspberry Pi out of WIP, and meta-avocado#273 does the same for `qemuarm64`.
 
 ### Pull requests
 
@@ -319,11 +337,15 @@ Merge order is constrained only by #28 before #245 (SRCREV re-pin); both are mer
 | 6   | Fix container-mode provisioning on Jetson (part of avocado-cli#183)                                                                  | `avocado runtime provision` cannot flash a Jetson from its container today. Every Jetson flash behind this page was run host-side, so the documented CLI path is not the path that was verified |
 | 7   | Add this page to the Advanced category in `sidebars-guides.js`                                                                       | Deliberately omitted while `draft: true` - a sidebar entry pointing at a draft doc breaks the production build                                                                                  |
 
-### What is already proven
+### Evidence, per target
 
-- **Jetson Orin Nano dev kit (P3767-0005), 2026-08-15**: on-device, paired positive and negative. `/proc/device-tree/hello-overlay/avocado,marker` reads the declared value on the running board and the node is absent with the declaration removed.
-- **raspberrypi5**: build path green end to end - compile, deliver, finalized `os-bundle.aos`. No hardware run yet (item 5 above).
-- **qemuarm64**: compile and deliver green; boot-time application pending #273.
+| Target      | Build path | On hardware                    | Verdict     |
+| ----------- | ---------- | ------------------------------ | ----------- |
+| Jetson Orin | Green      | **Paired positive + negative** | **Working** |
+| rpi5        | Green      | Not run                        | WIP         |
+| qemuarm64   | Green      | Applies nothing at boot        | WIP         |
+
+**Jetson Orin Nano dev kit (P3767-0005), 2026-08-15.** On-device, paired positive and negative: `/proc/device-tree/hello-overlay/avocado,marker` reads the declared value on the running board, and the node is absent on a build with the declaration removed and nothing else changed. This is the only row where the middle column is filled in, and it is the reason Jetson is the worked example throughout this page rather than the Pi it started as.
 
 ## What's next
 
