@@ -45,6 +45,11 @@ const sidebars = {
       items: [
         'cross-compilation',
         'custom-kernel',
+        // 'device-tree-overlays' belongs here, after custom-kernel, but stays
+        // unlisted while that page carries `draft: true`. Drafts are dropped
+        // from the production build, and a sidebar item naming a dropped doc
+        // fails the build. Add it in the same commit that flips the draft flag
+        // (tracked as item 7 of that page's "Release status" table).
         'seeding-var',
         'customizing-rootfs-initramfs',
         'lockfiles-and-build-stamps',
