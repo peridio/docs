@@ -190,6 +190,22 @@ acme,widget
 
 `/proc/device-tree` is the live tree after every stage the bootloader applied, so a node present there is a node in effect.
 
+:::caution you need a shell first, and a stock image will not give you one
+A stock Avocado image sets root's password field in `/etc/shadow` to `*`, which no password can match. The board boots to a console prompt that cannot be satisfied - and this check is only readable from a shell on the board.
+
+Build the verification image with a dev-login kas overlay layered on:
+
+```bash
+# console only, for a board on a serial cable
+kas/machine/<board>.yml:kas/feature/dev-root-login.yml
+
+# or, when you need a shell over the network instead
+kas/machine/<board>.yml:kas/feature/ssh-dev.yml
+```
+
+Both are dev-only and must never be composed into anything that ships. Note the asymmetry this creates: the image you verify is not byte-for-byte the image you ship. That is acceptable here because neither overlay touches the device tree - but it is the reason to keep the overlay list to exactly these, and to re-run the build without them before shipping.
+:::
+
 ### Run the negative control
 
 One positive reading is not enough on its own: a node that was in the base tree all along looks identical to one an overlay added. Build the same project a second time with the `device_tree_overlays` block removed and nothing else changed, boot it on the same board, and confirm the node is **absent**:
@@ -279,17 +295,17 @@ This page is `draft: true` because the feature is not reachable from released ar
 
 ### Pull requests
 
-| PR                                                             | Repo         | Status                            | What it provides                                                      | Required for                                     |
-| -------------------------------------------------------------- | ------------ | --------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------ |
-| [#28](https://github.com/avocado-linux/stone/pull/28)          | stone        | **Merged** 2026-08-12             | `files_append` FAT primitive                                          | All targets                                      |
-| [#245](https://github.com/avocado-linux/meta-avocado/pull/245) | meta-avocado | **Merged** 2026-08-12 (`563d462`) | SDK compile wrapper + RPi and QEMU delivery hooks                     | All targets                                      |
-| [#183](https://github.com/avocado-linux/avocado-cli/pull/183)  | avocado-cli  | Open, **draft**                   | The `device_tree_overlays` config surface and build orchestration     | All targets                                      |
-| [#292](https://github.com/avocado-linux/meta-avocado/pull/292) | meta-avocado | Open, ready                       | Jetson delivery hook (`fdtoverlay` merge)                             | Jetson                                           |
-| [#293](https://github.com/avocado-linux/meta-avocado/pull/293) | meta-avocado | Open, ready                       | Stages the Tegra BSP into the SDK stone dir                           | Jetson - **#292 does not function without it**   |
-| [#291](https://github.com/avocado-linux/meta-avocado/pull/291) | meta-avocado | Open, ready                       | Makes four silent Jetson provisioning failures report their own cause | Jetson walkthrough being followable              |
-| [#273](https://github.com/avocado-linux/meta-avocado/pull/273) | meta-avocado | Open, **draft**                   | Applies delivered overlays at boot on qemuarm64                       | qemuarm64 only - **not** a blocker for this page |
+| PR                                                             | Repo         | Status                            | What it provides                                                                 | Required for                                                                   |
+| -------------------------------------------------------------- | ------------ | --------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [#28](https://github.com/avocado-linux/stone/pull/28)          | stone        | **Merged** 2026-08-12             | `files_append` FAT primitive                                                     | All targets                                                                    |
+| [#245](https://github.com/avocado-linux/meta-avocado/pull/245) | meta-avocado | **Merged** 2026-08-12 (`563d462`) | SDK compile wrapper + RPi and QEMU delivery hooks                                | All targets                                                                    |
+| [#183](https://github.com/avocado-linux/avocado-cli/pull/183)  | avocado-cli  | Open, ready                       | The `device_tree_overlays` config surface and build orchestration                | All targets                                                                    |
+| [#292](https://github.com/avocado-linux/meta-avocado/pull/292) | meta-avocado | Open, ready                       | Jetson delivery hook (`fdtoverlay` merge) **and** the Tegra BSP staging it reads | Jetson                                                                         |
+| [#291](https://github.com/avocado-linux/meta-avocado/pull/291) | meta-avocado | Open, ready                       | Makes five silent Jetson provisioning failures report their own cause            | Jetson walkthrough being followable                                            |
+| [#276](https://github.com/avocado-linux/meta-avocado/pull/276) | meta-avocado | Open, ready                       | `dev-root-login` / `ssh-dev` kas overlays                                        | [Confirming the overlay applied](#confirming-the-overlay-applied) on any board |
+| [#273](https://github.com/avocado-linux/meta-avocado/pull/273) | meta-avocado | Open, **draft**                   | Applies delivered overlays at boot on qemuarm64                                  | qemuarm64 only - **not** a blocker for this page                               |
 
-Merge order is constrained: #28 before #245 (SRCREV re-pin), and #293 before or with #292.
+Merge order is constrained only by #28 before #245 (SRCREV re-pin); both are merged. [#293](https://github.com/avocado-linux/meta-avocado/pull/293) is closed - its Tegra BSP staging is now the first commit of #292, because a hook that cannot find its input and a staging step with no consumer were never separately mergeable.
 
 ### Beyond the PRs
 
