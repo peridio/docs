@@ -198,32 +198,40 @@ acme,widget
 
 `/proc/device-tree` is the live tree after every stage the bootloader applied, so a node present there is a node in effect.
 
-:::caution you need a shell first, and a stock image will not give you one
-A stock Avocado image ships no SSH server and leaves root's password field in `/etc/shadow` as `*`, which no password can match. Flash one and you get a console prompt nothing satisfies - and this check is only readable from a shell on the board.
+:::caution you need a shell first
+A raw image leaves root's password field in `/etc/shadow` as `*`, which no password can match, and this check is only readable from a shell on the board.
 
-Two declarations fix that, and they only work together:
+`avocado init` already solves it. The project it generates carries a `permissions` profile that gives root an empty password, and points the rootfs at it:
+
+```yaml
+rootfs:
+  permissions: dev
+
+permissions:
+  dev:
+    users:
+      root:
+        password: ''
+```
+
+That is enough to log in on the serial console. If you started from `avocado init` you have it already; if you hand-wrote your `avocado.yaml`, this is the piece to add. **Verified on a Jetson Orin Nano**: with this profile the flashed rootfs carries `root::` and the console gives a root prompt.
+
+For a shell over the network instead, add the SSH extension and your own public key. The extension configures sshd to read `/var/lib/ssh/authorized_keys`; `var_files` is what puts a key there, and neither half is useful alone:
 
 ```yaml
 runtimes:
   dev:
     extensions:
-      - avocado-ext-sshd-dev # brings sshd and a permissive dev policy
+      - avocado-ext-sshd-dev
+      - avocado-bsp-{{ avocado.target.board }} # NIC driver lives here
     var_files:
-      - source: 'files/authorized_keys' # your own public key
-        dest: 'lib/ssh/' # -> /var/lib/ssh/authorized_keys
-
-extensions:
-  avocado-ext-sshd-dev:
-    source:
-      type: package
-      version: '*'
+      - source: 'files/authorized_keys'
+        dest: 'lib/ssh/'
 ```
 
-`avocado init` already puts `avocado-ext-sshd-dev` in the `dev` runtime it generates, so a project started that way has the first half. The `var_files` entry is the half people miss: the extension configures sshd to read `/var/lib/ssh/authorized_keys`, but nothing puts a key there for you. Without it the board boots, runs sshd, listens - and refuses every credential, which looks identical to the feature being broken.
+Do not drop the BSP extension to slim a test project. On a Jetson Orin Nano it carries `kernel-module-realtek`, and without it the board boots with no ethernet interface at all - so there is nothing to SSH to, and the cause looks nothing like a missing extension.
 
-Copy your public key to `files/authorized_keys` in the project, then `avocado build` and provision as usual.
-
-Both the extension and the key are **dev-only and must never ship**. That means the image you verify is not byte-for-byte the image you ship. Acceptable here, because neither touches the device tree - but it is the reason to keep the difference to exactly these two declarations and to rebuild without them before shipping.
+The permissions profile, the SSH extension and the key are all **dev-only and must never ship**. That means the image you verify is not byte-for-byte the image you ship. Acceptable here, because none of them touches the device tree - but it is the reason to keep the difference to exactly these declarations and rebuild without them before shipping.
 :::
 
 ### Run the negative control
@@ -338,16 +346,16 @@ Merge order is constrained only by #28 before #245 (SRCREV re-pin); both are mer
 
 ### Beyond the PRs
 
-| #   | Item                                                                                                                                 | Why it blocks                                                                                                                                                                                                         |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Publish the SDK image `avocadolinux/sdk:2024-edge` carrying `nativesdk-avocado-dtc-overlay` and the `files_append` `nativesdk-stone` | `avocado install` cannot resolve the overlay compiler without it                                                                                                                                                      |
-| 2   | Publish the `2024/edge` feed carrying `avocado-dtc-overlay-deliver`                                                                  | The delivery hook is a target package; without it the build hard-errors on a missing hook                                                                                                                             |
-| 3   | Cut an avocado-cli release and name it in this guide                                                                                 | The released `1.0.0-rc.1` does **not** carry the overlay work, despite the from-source build reporting the same version                                                                                               |
-| 4   | Resolve KOS-68, or keep the [brand-new SDK](#on-a-brand-new-sdk) block                                                               | A clean SDK cannot finalize a runtime image without it                                                                                                                                                                |
-| 5   | Raspberry Pi 5 paired positive/negative hardware run                                                                                 | The Pi path is proven only at build level; per [Confirming the overlay applied](#confirming-the-overlay-applied), that is not evidence                                                                                |
-| 6   | Fix container-mode provisioning on Jetson (part of avocado-cli#183)                                                                  | `avocado runtime provision` cannot flash a Jetson from its container today. Every Jetson flash behind this page was run host-side, so the documented CLI path is not the path that was verified                       |
-| 7   | Add this page to the Advanced category in `sidebars-guides.js`                                                                       | Deliberately omitted while `draft: true` - a sidebar entry pointing at a draft doc breaks the production build                                                                                                        |
-| 8   | Confirm the `var_files` key actually authenticates on a booted board                                                                 | The pairing above is verified at build time only: the key is confirmed landing at `/var/lib/ssh/authorized_keys`. sshd accepting it is unobserved, and `StrictModes` could still reject the file on mode or ownership |
+| #   | Item                                                                                                                                 | Why it blocks                                                                                                                                                                                                                                                                                                                                                                   |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Publish the SDK image `avocadolinux/sdk:2024-edge` carrying `nativesdk-avocado-dtc-overlay` and the `files_append` `nativesdk-stone` | `avocado install` cannot resolve the overlay compiler without it                                                                                                                                                                                                                                                                                                                |
+| 2   | Publish the `2024/edge` feed carrying `avocado-dtc-overlay-deliver`                                                                  | The delivery hook is a target package; without it the build hard-errors on a missing hook                                                                                                                                                                                                                                                                                       |
+| 3   | Cut an avocado-cli release and name it in this guide                                                                                 | The released `1.0.0-rc.1` does **not** carry the overlay work, despite the from-source build reporting the same version                                                                                                                                                                                                                                                         |
+| 4   | Resolve KOS-68, or keep the [brand-new SDK](#on-a-brand-new-sdk) block                                                               | A clean SDK cannot finalize a runtime image without it                                                                                                                                                                                                                                                                                                                          |
+| 5   | Raspberry Pi 5 paired positive/negative hardware run                                                                                 | The Pi path is proven only at build level; per [Confirming the overlay applied](#confirming-the-overlay-applied), that is not evidence                                                                                                                                                                                                                                          |
+| 6   | Fix container-mode provisioning on Jetson (part of avocado-cli#183)                                                                  | `avocado runtime provision` cannot flash a Jetson from its container today. Every Jetson flash behind this page was run host-side, so the documented CLI path is not the path that was verified                                                                                                                                                                                 |
+| 7   | Add this page to the Advanced category in `sidebars-guides.js`                                                                       | Deliberately omitted while `draft: true` - a sidebar entry pointing at a draft doc breaks the production build                                                                                                                                                                                                                                                                  |
+| 8   | Confirm the `var_files` key actually authenticates over SSH                                                                          | The console half is now proven on a Jetson Orin Nano (permissions profile, root prompt on `ttyTCU0`). The key half is verified only as far as placement at `/var/lib/ssh/authorized_keys`; sshd accepting it is still unobserved, and `StrictModes` could reject on mode or ownership. Testing it needs a board with a working NIC, so the BSP extension must be in the project |
 
 ### Evidence, per target
 
