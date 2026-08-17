@@ -19,7 +19,9 @@ Avocado CLI ships prebuilt binaries for the following OS / architecture combinat
 
 The Linux `*-musl` builds are statically linked, so they do not depend on the host glibc version, but they still require a compatible Linux kernel and matching architecture. The `*-gnu` build is dynamically linked against glibc and is suitable for mainstream Linux distributions with glibc 2.31 or newer (Debian 11+, Ubuntu 20.04+, Fedora 33+, RHEL 9+).
 
-The install script picks the appropriate binary automatically. For manual installs, download the matching artifact from the [releases page](https://github.com/avocado-linux/avocado-cli/releases).
+The install script picks the appropriate binary automatically. For manual installs, download the matching artifact from the [releases page](https://github.com/avocado-linux/avocado-cli/releases), or use [Downloads](https://www.peridio.com/downloads#cli-artifacts), which lists every shipping build with its size and SHA-256.
+
+Prefer a native app? [Avocado Desktop](https://www.peridio.com/downloads#desktop) bundles the CLI, the build VM, and the cross-compilation toolchain in one install.
 
 ## Install
 

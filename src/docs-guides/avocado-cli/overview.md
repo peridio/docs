@@ -8,6 +8,10 @@ description: 'Avocado CLI tool for initializing, configuring, building, and prov
 
 The Avocado CLI is a powerful tool that allows you to initialize, configure, build, and provision Avocado OS projects.
 
+:::tip Get the CLI
+This page describes what the CLI does. To install it, see [Installation](/developer-reference/avocado-cli/installation), or browse every build, size, and checksum on [Downloads](https://www.peridio.com/downloads#cli-artifacts).
+:::
+
 The CLI provides comprehensive functionality for managing the entire Avocado OS development lifecycle. Core capabilities include project initialization with target architecture support, building and managing SDK environments for cross-compilation, creating and packaging system extensions (sysext) and configuration extensions (confext), managing rootfs and initramfs sysroots, building runtime images, and deploying to target devices.
 
 Advanced features include Avocado Connect platform integration for fleet management (device provisioning, OTA updates, signing key delegation, and trust posture management), hardware-in-the-loop (HITL) testing server support, dependency management with DNF integration, repository metadata fetching and refreshing, container-based development workflows, and flexible provisioning profiles.

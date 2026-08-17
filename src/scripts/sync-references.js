@@ -105,6 +105,48 @@ function rewriteRelativeLinks(body, name) {
   return { body: out, count }
 }
 
+// ── Repoint acquisition links at the page that hands over the artifact ────────
+// Every reference's getting_started.md lists the Avocado CLI as a prerequisite
+// and links it to the CLI *overview* — a page describing what the CLI does, with
+// no way to obtain it. Two spellings are in the wild upstream, and the `/guides/`
+// one 404s outright because that path prefix was retired in favor of
+// `/developer-reference/`.
+//
+// This runs here rather than as a one-time pass over docs-guides/references/
+// because those files are generated: editing them is undone by the next sync.
+// We only have read access to avocado-linux/references, so the durable place to
+// correct the destination is the seam the content passes through. If upstream is
+// ever fixed, these rules simply stop matching.
+const ACQUISITION_REWRITES = [
+  {
+    from: /https:\/\/docs\.peridio\.com\/guides\/avocado-cli\/overview/g,
+    to: 'https://docs.peridio.com/developer-reference/avocado-cli/installation',
+  },
+  {
+    from: /https:\/\/docs\.peridio\.com\/developer-reference\/avocado-cli\/overview/g,
+    to: 'https://docs.peridio.com/developer-reference/avocado-cli/installation',
+  },
+]
+
+function rewriteAcquisitionLinks(body) {
+  let count = 0
+  // Same fenced-code split as rewriteRelativeLinks: a URL shown inside an
+  // example is being quoted, not offered as a link to follow.
+  const segments = body.split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g)
+  const out = segments
+    .map((seg, i) => {
+      if (i % 2 === 1) return seg
+      return ACQUISITION_REWRITES.reduce((acc, rule) => {
+        return acc.replace(rule.from, () => {
+          count++
+          return rule.to
+        })
+      }, seg)
+    })
+    .join('')
+  return { body: out, count }
+}
+
 // ── Strip H1 and img tags from getting_started body ───────────────────────────
 function processGettingStarted(content, name) {
   // Remove inline <img> tags
@@ -116,7 +158,12 @@ function processGettingStarted(content, name) {
   if (count > 0) {
     console.log(`  ${name}: rewrote ${count} relative link(s) → GitHub`)
   }
-  return rewritten
+  // Point "install the CLI" prerequisites at the install page, not the overview
+  const { body: repointed, count: acquisitionCount } = rewriteAcquisitionLinks(rewritten)
+  if (acquisitionCount > 0) {
+    console.log(`  ${name}: repointed ${acquisitionCount} CLI link(s) → installation`)
+  }
+  return repointed
 }
 
 // ── Parse a reference folder ──────────────────────────────────────────────────

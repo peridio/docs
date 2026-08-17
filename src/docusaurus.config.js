@@ -61,10 +61,14 @@ const config = {
           // Avocado Connect is the successor to Peridio Core; keep old bookmarks alive.
           { from: '/peridio-core/overview', to: '/avocado-connect/overview' },
           { from: '/peridio-core', to: '/avocado-connect/overview' },
-          // The Download & Install page was retired in favor of the Desktop overview.
+          // The Download & Install page was retired. It used to point at the
+          // Desktop overview, which meant a URL literally named `download` landed
+          // on prose describing the app instead of anywhere you could get it.
+          // The CLI installation page is the in-docs handover point, and it links
+          // on to the full artifact list on peridio.com/downloads.
           {
             from: '/developer-reference/getting-started/download',
-            to: '/avocado-desktop/overview',
+            to: '/developer-reference/avocado-cli/installation',
           },
         ],
       },
