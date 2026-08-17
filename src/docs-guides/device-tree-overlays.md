@@ -199,19 +199,31 @@ acme,widget
 `/proc/device-tree` is the live tree after every stage the bootloader applied, so a node present there is a node in effect.
 
 :::caution you need a shell first, and a stock image will not give you one
-A stock Avocado image sets root's password field in `/etc/shadow` to `*`, which no password can match. The board boots to a console prompt that cannot be satisfied - and this check is only readable from a shell on the board.
+A stock Avocado image ships no SSH server and leaves root's password field in `/etc/shadow` as `*`, which no password can match. Flash one and you get a console prompt nothing satisfies - and this check is only readable from a shell on the board.
 
-Build the verification image with a dev-login kas overlay layered on:
+Two declarations fix that, and they only work together:
 
-```bash
-# console only, for a board on a serial cable
-kas/machine/<board>.yml:kas/feature/dev-root-login.yml
+```yaml
+runtimes:
+  dev:
+    extensions:
+      - avocado-ext-sshd-dev # brings sshd and a permissive dev policy
+    var_files:
+      - source: 'files/authorized_keys' # your own public key
+        dest: 'lib/ssh/' # -> /var/lib/ssh/authorized_keys
 
-# or, when you need a shell over the network instead
-kas/machine/<board>.yml:kas/feature/ssh-dev.yml
+extensions:
+  avocado-ext-sshd-dev:
+    source:
+      type: package
+      version: '*'
 ```
 
-Both are dev-only and must never be composed into anything that ships. Note the asymmetry this creates: the image you verify is not byte-for-byte the image you ship. That is acceptable here because neither overlay touches the device tree - but it is the reason to keep the overlay list to exactly these, and to re-run the build without them before shipping.
+`avocado init` already puts `avocado-ext-sshd-dev` in the `dev` runtime it generates, so a project started that way has the first half. The `var_files` entry is the half people miss: the extension configures sshd to read `/var/lib/ssh/authorized_keys`, but nothing puts a key there for you. Without it the board boots, runs sshd, listens - and refuses every credential, which looks identical to the feature being broken.
+
+Copy your public key to `files/authorized_keys` in the project, then `avocado build` and provision as usual.
+
+Both the extension and the key are **dev-only and must never ship**. That means the image you verify is not byte-for-byte the image you ship. Acceptable here, because neither touches the device tree - but it is the reason to keep the difference to exactly these two declarations and to rebuild without them before shipping.
 :::
 
 ### Run the negative control
@@ -313,29 +325,29 @@ This page is `draft: true` for two reasons: the feature is not reachable from re
 
 ### Pull requests
 
-| PR                                                             | Repo         | Status                            | What it provides                                                                 | Required for                                                                   |
-| -------------------------------------------------------------- | ------------ | --------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [#28](https://github.com/avocado-linux/stone/pull/28)          | stone        | **Merged** 2026-08-12             | `files_append` FAT primitive                                                     | All targets                                                                    |
-| [#245](https://github.com/avocado-linux/meta-avocado/pull/245) | meta-avocado | **Merged** 2026-08-12 (`563d462`) | SDK compile wrapper + RPi and QEMU delivery hooks                                | All targets                                                                    |
-| [#183](https://github.com/avocado-linux/avocado-cli/pull/183)  | avocado-cli  | Open, ready                       | The `device_tree_overlays` config surface and build orchestration                | All targets                                                                    |
-| [#292](https://github.com/avocado-linux/meta-avocado/pull/292) | meta-avocado | Open, ready                       | Jetson delivery hook (`fdtoverlay` merge) **and** the Tegra BSP staging it reads | Jetson                                                                         |
-| [#291](https://github.com/avocado-linux/meta-avocado/pull/291) | meta-avocado | Open, ready                       | Makes five silent Jetson provisioning failures report their own cause            | Jetson walkthrough being followable                                            |
-| [#276](https://github.com/avocado-linux/meta-avocado/pull/276) | meta-avocado | Open, ready                       | `dev-root-login` / `ssh-dev` kas overlays                                        | [Confirming the overlay applied](#confirming-the-overlay-applied) on any board |
-| [#273](https://github.com/avocado-linux/meta-avocado/pull/273) | meta-avocado | Open, **draft**                   | Applies delivered overlays at boot on qemuarm64                                  | qemuarm64 only - **not** a blocker for this page                               |
+| PR                                                             | Repo         | Status                            | What it provides                                                                 | Required for                                     |
+| -------------------------------------------------------------- | ------------ | --------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [#28](https://github.com/avocado-linux/stone/pull/28)          | stone        | **Merged** 2026-08-12             | `files_append` FAT primitive                                                     | All targets                                      |
+| [#245](https://github.com/avocado-linux/meta-avocado/pull/245) | meta-avocado | **Merged** 2026-08-12 (`563d462`) | SDK compile wrapper + RPi and QEMU delivery hooks                                | All targets                                      |
+| [#183](https://github.com/avocado-linux/avocado-cli/pull/183)  | avocado-cli  | Open, ready                       | The `device_tree_overlays` config surface and build orchestration                | All targets                                      |
+| [#292](https://github.com/avocado-linux/meta-avocado/pull/292) | meta-avocado | Open, ready                       | Jetson delivery hook (`fdtoverlay` merge) **and** the Tegra BSP staging it reads | Jetson                                           |
+| [#291](https://github.com/avocado-linux/meta-avocado/pull/291) | meta-avocado | Open, ready                       | Makes five silent Jetson provisioning failures report their own cause            | Jetson walkthrough being followable              |
+| [#273](https://github.com/avocado-linux/meta-avocado/pull/273) | meta-avocado | Open, **draft**                   | Applies delivered overlays at boot on qemuarm64                                  | qemuarm64 only - **not** a blocker for this page |
 
 Merge order is constrained only by #28 before #245 (SRCREV re-pin); both are merged. [#293](https://github.com/avocado-linux/meta-avocado/pull/293) is closed - its Tegra BSP staging is now the first commit of #292, because a hook that cannot find its input and a staging step with no consumer were never separately mergeable.
 
 ### Beyond the PRs
 
-| #   | Item                                                                                                                                 | Why it blocks                                                                                                                                                                                   |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Publish the SDK image `avocadolinux/sdk:2024-edge` carrying `nativesdk-avocado-dtc-overlay` and the `files_append` `nativesdk-stone` | `avocado install` cannot resolve the overlay compiler without it                                                                                                                                |
-| 2   | Publish the `2024/edge` feed carrying `avocado-dtc-overlay-deliver`                                                                  | The delivery hook is a target package; without it the build hard-errors on a missing hook                                                                                                       |
-| 3   | Cut an avocado-cli release and name it in this guide                                                                                 | The released `1.0.0-rc.1` does **not** carry the overlay work, despite the from-source build reporting the same version                                                                         |
-| 4   | Resolve KOS-68, or keep the [brand-new SDK](#on-a-brand-new-sdk) block                                                               | A clean SDK cannot finalize a runtime image without it                                                                                                                                          |
-| 5   | Raspberry Pi 5 paired positive/negative hardware run                                                                                 | The Pi path is proven only at build level; per [Confirming the overlay applied](#confirming-the-overlay-applied), that is not evidence                                                          |
-| 6   | Fix container-mode provisioning on Jetson (part of avocado-cli#183)                                                                  | `avocado runtime provision` cannot flash a Jetson from its container today. Every Jetson flash behind this page was run host-side, so the documented CLI path is not the path that was verified |
-| 7   | Add this page to the Advanced category in `sidebars-guides.js`                                                                       | Deliberately omitted while `draft: true` - a sidebar entry pointing at a draft doc breaks the production build                                                                                  |
+| #   | Item                                                                                                                                 | Why it blocks                                                                                                                                                                                                         |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Publish the SDK image `avocadolinux/sdk:2024-edge` carrying `nativesdk-avocado-dtc-overlay` and the `files_append` `nativesdk-stone` | `avocado install` cannot resolve the overlay compiler without it                                                                                                                                                      |
+| 2   | Publish the `2024/edge` feed carrying `avocado-dtc-overlay-deliver`                                                                  | The delivery hook is a target package; without it the build hard-errors on a missing hook                                                                                                                             |
+| 3   | Cut an avocado-cli release and name it in this guide                                                                                 | The released `1.0.0-rc.1` does **not** carry the overlay work, despite the from-source build reporting the same version                                                                                               |
+| 4   | Resolve KOS-68, or keep the [brand-new SDK](#on-a-brand-new-sdk) block                                                               | A clean SDK cannot finalize a runtime image without it                                                                                                                                                                |
+| 5   | Raspberry Pi 5 paired positive/negative hardware run                                                                                 | The Pi path is proven only at build level; per [Confirming the overlay applied](#confirming-the-overlay-applied), that is not evidence                                                                                |
+| 6   | Fix container-mode provisioning on Jetson (part of avocado-cli#183)                                                                  | `avocado runtime provision` cannot flash a Jetson from its container today. Every Jetson flash behind this page was run host-side, so the documented CLI path is not the path that was verified                       |
+| 7   | Add this page to the Advanced category in `sidebars-guides.js`                                                                       | Deliberately omitted while `draft: true` - a sidebar entry pointing at a draft doc breaks the production build                                                                                                        |
+| 8   | Confirm the `var_files` key actually authenticates on a booted board                                                                 | The pairing above is verified at build time only: the key is confirmed landing at `/var/lib/ssh/authorized_keys`. sshd accepting it is unobserved, and `StrictModes` could still reject the file on mode or ownership |
 
 ### Evidence, per target
 
