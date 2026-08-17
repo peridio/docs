@@ -231,6 +231,10 @@ runtimes:
 
 Do not drop the BSP extension to slim a test project. On a Jetson Orin Nano it carries `kernel-module-realtek`, and without it the board boots with no ethernet interface at all - so there is nothing to SSH to, and the cause looks nothing like a missing extension.
 
+**Verified on a Jetson Orin Nano**: the key lands root-owned at `/var/lib/ssh/authorized_keys` mode `0644`, which is what `StrictModes` requires, and `ssh -o BatchMode=yes root@<board>` connects. `BatchMode` refuses password and keyboard-interactive auth, so a connection under it is proof the key itself was accepted rather than a password prompt quietly succeeding behind it.
+
+Expect the host key to change on every reflash. Host keys are generated on first boot rather than shipped, so the entry your client recorded for that address is stale the moment you reflash, and SSH reports it as a possible man-in-the-middle rather than as a new board. Replace the recorded entry instead of adding to it - an append leaves the old key in place and the failure persists.
+
 The permissions profile, the SSH extension and the key are all **dev-only and must never ship**. That means the image you verify is not byte-for-byte the image you ship. Acceptable here, because none of them touches the device tree - but it is the reason to keep the difference to exactly these declarations and rebuild without them before shipping.
 :::
 
@@ -355,7 +359,6 @@ Merge order is constrained only by #28 before #245 (SRCREV re-pin); both are mer
 | 5   | Raspberry Pi 5 paired positive/negative hardware run                                                                                 | The Pi path is proven only at build level; per [Confirming the overlay applied](#confirming-the-overlay-applied), that is not evidence                                                                                                                                                                                                                                          |
 | 6   | Fix container-mode provisioning on Jetson (part of avocado-cli#183)                                                                  | `avocado runtime provision` cannot flash a Jetson from its container today. Every Jetson flash behind this page was run host-side, so the documented CLI path is not the path that was verified                                                                                                                                                                                 |
 | 7   | Add this page to the Advanced category in `sidebars-guides.js`                                                                       | Deliberately omitted while `draft: true` - a sidebar entry pointing at a draft doc breaks the production build                                                                                                                                                                                                                                                                  |
-| 8   | Confirm the `var_files` key actually authenticates over SSH                                                                          | The console half is now proven on a Jetson Orin Nano (permissions profile, root prompt on `ttyTCU0`). The key half is verified only as far as placement at `/var/lib/ssh/authorized_keys`; sshd accepting it is still unobserved, and `StrictModes` could reject on mode or ownership. Testing it needs a board with a working NIC, so the BSP extension must be in the project |
 
 ### Evidence, per target
 
@@ -366,6 +369,8 @@ Merge order is constrained only by #28 before #245 (SRCREV re-pin); both are mer
 | qemuarm64   | Green      | Applies nothing at boot        | WIP         |
 
 **Jetson Orin Nano dev kit (P3767-0005), 2026-08-15.** On-device, paired positive and negative: `/proc/device-tree/hello-overlay/avocado,marker` reads the declared value on the running board, and the node is absent on a build with the declaration removed and nothing else changed. This is the only row where the middle column is filled in, and it is the reason Jetson is the worked example throughout this page rather than the Pi it started as.
+
+**Same board, 2026-08-17** - the access mechanisms this page tells you to use, rather than the overlay pipeline. Console: the `permissions` profile yields `root::` in the flashed rootfs and a root prompt. Network: with the BSP extension present the NIC enumerates (`r8169`, `eth0` up at 1Gbps), and `ssh -o BatchMode=yes root@<board>` connects against a key placed by `var_files`. Both were previously documented from the build output alone, which the [negative-control](#run-the-negative-control) argument says is not evidence.
 
 ## What's next
 
