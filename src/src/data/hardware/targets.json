@@ -558,7 +558,7 @@
     "serial": {
       "onboard": true,
       "baud": 115200,
-      "command": "tio -b 115200 /dev/ttyACM0",
+      "command": "tio -b 115200 /dev/serial/by-id/usb-1a86_USB_Dual_Serial_5B6D003987-if00",
       "description": "The board carries its debug console on the onboard USB-C port, so no separate TTL adapter is needed. It enumerates as two CDC-ACM devices and the Linux console is the first one. Prefer the by-id path over the ttyACM number, which moves when other USB serial devices are attached: `tio -b 115200 /dev/serial/by-id/usb-1a86_USB_Dual_Serial_*-if00`. Run `ls /dev/serial/by-id/` to see the serial number for your board."
     },
     "gettingStartedUrl": "/developer-reference/getting-started/frdm-imx93",
