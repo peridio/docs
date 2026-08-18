@@ -68,7 +68,6 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/claim_tokens" \
       "created_by_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
       "cohort_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
       "tags": ["string"],
-      "token": "string",
       "inserted_at": "2026-08-14T12:00:00Z",
       "updated_at": "2026-08-14T12:00:00Z"
     }
@@ -194,7 +193,6 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/claim_tokens/{id}" \
     "created_by_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
     "cohort_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
     "tags": ["string"],
-    "token": "string",
     "inserted_at": "2026-08-14T12:00:00Z",
     "updated_at": "2026-08-14T12:00:00Z",
     "uses": [
@@ -270,7 +268,6 @@ curl -X PUT "https://connect.peridio.com/api/orgs/{org_id}/claim_tokens/{id}" \
     "created_by_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
     "cohort_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
     "tags": ["string"],
-    "token": "string",
     "inserted_at": "2026-08-14T12:00:00Z",
     "updated_at": "2026-08-14T12:00:00Z"
   }
@@ -361,7 +358,6 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id}/claim_
       "created_by_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
       "cohort_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
       "tags": ["string"],
-      "token": "string",
       "inserted_at": "2026-08-14T12:00:00Z",
       "updated_at": "2026-08-14T12:00:00Z"
     }

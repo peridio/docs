@@ -222,7 +222,11 @@ const BASE_URL = (spec.servers && spec.servers[0] && spec.servers[0].url) || ''
 // Synthesize a sample JSON value from a schema, the way Redoc does client-side:
 // spec-provided examples win, then defaults, then enum/format/type-derived
 // placeholders. `seen` guards against circular $refs.
-function sampleFromSchema(schema, seen, depth, hint) {
+// Fields like ClaimToken.token or WebhookEndpoint.secret are documented as
+// "returned only on create" — keep them out of non-create response examples.
+const CREATE_ONLY = /returned only on create/i
+
+function sampleFromSchema(schema, seen, depth, hint, includeCreateOnly) {
   if (!schema || depth > 6) return null
   const name = refName(schema)
   if (name) {
@@ -234,11 +238,17 @@ function sampleFromSchema(schema, seen, depth, hint) {
   if (resolved.default !== undefined) return resolved.default
   if (resolved.enum) return resolved.enum[0]
   if (resolved.oneOf || resolved.anyOf) {
-    return sampleFromSchema((resolved.oneOf || resolved.anyOf)[0], seen, depth + 1, hint)
+    return sampleFromSchema(
+      (resolved.oneOf || resolved.anyOf)[0],
+      seen,
+      depth + 1,
+      hint,
+      includeCreateOnly
+    )
   }
   switch (resolved.type) {
     case 'array': {
-      const item = sampleFromSchema(resolved.items || {}, seen, depth + 1, hint)
+      const item = sampleFromSchema(resolved.items || {}, seen, depth + 1, hint, includeCreateOnly)
       return item === null ? [] : [item]
     }
     case 'string':
@@ -262,7 +272,9 @@ function sampleFromSchema(schema, seen, depth, hint) {
     case undefined: {
       const out = {}
       for (const [key, prop] of Object.entries(resolved.properties || {})) {
-        const value = sampleFromSchema(prop, seen, depth + 1, key)
+        const propResolved = deref(prop)
+        if (!includeCreateOnly && CREATE_ONLY.test(propResolved.description || '')) continue
+        const value = sampleFromSchema(prop, seen, depth + 1, key, includeCreateOnly)
         if (value !== null) out[key] = value
       }
       return out
@@ -273,11 +285,11 @@ function sampleFromSchema(schema, seen, depth, hint) {
 }
 
 // Sample body for a media-type object: explicit example first, else synthesized.
-function sampleBody(mediaType) {
+function sampleBody(mediaType, includeCreateOnly = true) {
   if (!mediaType) return null
   if (mediaType.example !== undefined) return mediaType.example
   if (!mediaType.schema) return null
-  return sampleFromSchema(mediaType.schema, new Set(), 0)
+  return sampleFromSchema(mediaType.schema, new Set(), 0, undefined, includeCreateOnly)
 }
 
 function curlExample(method, pathKey, requestSample) {
@@ -380,7 +392,12 @@ function renderOperation(entry, linkable, heading) {
   )
   if (success) {
     const [status, rawResponse] = success
-    const responseSample = sampleBody(deref(rawResponse).content['application/json'])
+    // Creates (201) legitimately return create-only secrets; every other
+    // response example must omit them per the schema descriptions.
+    const responseSample = sampleBody(
+      deref(rawResponse).content['application/json'],
+      status === '201'
+    )
     if (responseSample !== null) {
       lines.push(`**Example response** (\`${status}\`):`)
       lines.push('')

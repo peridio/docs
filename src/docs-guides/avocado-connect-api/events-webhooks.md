@@ -67,7 +67,6 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/webhooks" \
       "url": "https://example.com",
       "events": ["string"],
       "enabled": true,
-      "secret": "string",
       "inserted_at": "2026-08-14T12:00:00Z",
       "updated_at": "2026-08-14T12:00:00Z"
     }
@@ -185,7 +184,6 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/webhooks/{id}" \
     "url": "https://example.com",
     "events": ["string"],
     "enabled": true,
-    "secret": "string",
     "inserted_at": "2026-08-14T12:00:00Z",
     "updated_at": "2026-08-14T12:00:00Z"
   }
@@ -252,7 +250,6 @@ curl -X PUT "https://connect.peridio.com/api/orgs/{org_id}/webhooks/{id}" \
     "url": "https://example.com",
     "events": ["string"],
     "enabled": true,
-    "secret": "string",
     "inserted_at": "2026-08-14T12:00:00Z",
     "updated_at": "2026-08-14T12:00:00Z"
   }

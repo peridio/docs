@@ -248,8 +248,7 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/api-tokens" \
         },
         "last_used_at": "2026-08-14T12:00:00Z",
         "expires_at": "2026-08-14T12:00:00Z",
-        "created_at": "2026-08-14T12:00:00Z",
-        "token": "string"
+        "created_at": "2026-08-14T12:00:00Z"
       }
     ]
   },
