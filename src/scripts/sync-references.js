@@ -108,9 +108,15 @@ function rewriteRelativeLinks(body, name) {
 // ── Repoint acquisition links at the page that hands over the artifact ────────
 // Every reference's getting_started.md lists the Avocado CLI as a prerequisite
 // and links it to the CLI *overview* — a page describing what the CLI does, with
-// no way to obtain it. Two spellings are in the wild upstream, and the `/guides/`
-// one 404s outright because that path prefix was retired in favor of
-// `/developer-reference/`.
+// no way to obtain it. The `/guides/` prefix was retired in favor of
+// `/developer-reference/`, so any absolute `docs.peridio.com/guides/...` URL
+// 404s, not only the avocado-cli one. Absolute URLs are invisible to
+// Docusaurus's broken-link check, so the rewrite has to cover the prefix class.
+//
+// Order matters: the prefix rule runs first, then overview → installation, so
+// both `/guides/avocado-cli/overview` and `/developer-reference/avocado-cli/overview`
+// land on the install page. Site-absolute `/hardware/...` links are a different
+// plugin and are left untouched.
 //
 // This runs here rather than as a one-time pass over docs-guides/references/
 // because those files are generated: editing them is undone by the next sync.
@@ -119,8 +125,8 @@ function rewriteRelativeLinks(body, name) {
 // ever fixed, these rules simply stop matching.
 const ACQUISITION_REWRITES = [
   {
-    from: /https:\/\/docs\.peridio\.com\/guides\/avocado-cli\/overview/g,
-    to: 'https://docs.peridio.com/developer-reference/avocado-cli/installation',
+    from: /https:\/\/docs\.peridio\.com\/guides\//g,
+    to: 'https://docs.peridio.com/developer-reference/',
   },
   {
     from: /https:\/\/docs\.peridio\.com\/developer-reference\/avocado-cli\/overview/g,
@@ -161,7 +167,7 @@ function processGettingStarted(content, name) {
   // Point "install the CLI" prerequisites at the install page, not the overview
   const { body: repointed, count: acquisitionCount } = rewriteAcquisitionLinks(rewritten)
   if (acquisitionCount > 0) {
-    console.log(`  ${name}: repointed ${acquisitionCount} CLI link(s) → installation`)
+    console.log(`  ${name}: repointed ${acquisitionCount} docs.peridio.com URL(s)`)
   }
   return repointed
 }
