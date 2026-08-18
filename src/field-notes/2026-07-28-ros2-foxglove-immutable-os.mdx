@@ -1,6 +1,6 @@
 ---
 title: 'ROS2 and Foxglove - Running on Avocado OS'
-description: 'A full ROS2 Humble deployment with a Foxglove visualization bridge over websockets. Avocado OS enables a quick and easy way to get up and running quickly, with custom immutable OS that is OTA ready out of the box.'
+description: 'A full ROS2 Humble deployment with a Foxglove visualization bridge over WebSockets. Avocado OS enables a quick and easy way to get up and running, with custom immutable OS that is OTA ready out of the box.'
 date: 2026-07-28
 draft: false
 authors: [nsinas]
@@ -27,7 +27,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR:** We ran a full ROS 2 Humble graph and a Foxglove bridge inside using container on Avocado OS. The host has **no ROS 2 installed**. The container drove a UFACTORY Lite 6 arm, and we watched the live robot model in a browser through Foxglove. ROS 2 was only installed on target.
+**TL;DR:** We ran a full ROS 2 Humble graph and a Foxglove bridge inside a container on Avocado OS. The host has **no ROS 2 installed**. The container drove a UFACTORY Lite 6 arm, and we watched the live robot model in a browser through Foxglove. ROS 2 was only installed on target.
 
 {/* truncate */}
 
@@ -177,12 +177,12 @@ avocado runtime deploy dev --device root@<device-ip>
 
 That command streams only the changed sysext bytes to the device. It runs `systemd-sysext refresh`, and the `app` extension `on_merge` hook restarts the container with the new image. The read-only OS stays intact, and you do not re-provision.
 
-This is a local deployment. To issue an OTA you will need an Avocado Connect account, and run `avocado connect auth login` and `avocado connect init`. This will configure your project with your new account. Then run `avocado intall -f` and `avocado build` again. Upload your runtime with `avocadoc connect upload dev`. Then create a deployment and issue your OTA.
+This is a local deployment. To issue an OTA you will need an Avocado Connect account, and run `avocado connect auth login` and `avocado connect init`. This will configure your project with your new account. Then run `avocado install -f` and `avocado build` again. Upload your runtime with `avocado connect upload dev`. Then create a deployment and issue your OTA.
 
 ## Can AI Create A New Movement?
 
 To author arm poses by hand is slow. The **Avocado Desktop Agent** did it for us. It connected to the live arm and created new motion sequences directly. It wrote and improved the poses while the physical UFACTORY Lite 6 ran them.  
-As you can see below, I gave it a simple prompt to create a new movement, and given that its enabled by the MCP and ACP to drive Avocado Desktop, it also was able to build and deploy and control the arm directly by SSH'ing into the hardware target and iterating on its work.
+As you can see below, I gave it a simple prompt to create a new movement, and given that it's enabled by the MCP and ACP to drive Avocado Desktop, it also was able to build and deploy and control the arm directly by SSHing into the hardware target and iterating on its work.
 
 <div
   style={{
