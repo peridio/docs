@@ -144,6 +144,19 @@
 
 .featuredThumb {
   aspect-ratio: 16 / 10;
+  /* Black fill behind the image, so a portrait/tall thumbnail centered by
+     `contain` (below) sits on black bars instead of empty space. For a 16:10
+     landscape image the image covers the box and the fill never shows. */
+  background: #000;
+  border-radius: 2px;
+}
+
+/* Show the whole image rather than cropping it to fill the 16:10 box. Matters
+   for portrait/tall thumbnails (e.g. a vertical demo gif), which `cover` would
+   crop top and bottom. For a 16:10 landscape image this is identical to cover,
+   so existing and future featured images are unaffected. */
+.featuredThumb img {
+  object-fit: contain;
 }
 
 .featuredTitle {
