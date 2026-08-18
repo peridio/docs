@@ -183,6 +183,13 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/projects/{id}" \
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "description": "string",
+    "everyone_enabled": true,
+    "organization_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "access_users": [
       {
         "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -339,6 +346,13 @@ curl -X POST "https://connect.peridio.com/api/orgs/{org_id}/projects/{id}/access
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "description": "string",
+    "everyone_enabled": true,
+    "organization_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "access_users": [
       {
         "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -435,6 +449,13 @@ curl -X POST "https://connect.peridio.com/api/orgs/{org_id}/projects/{id}/access
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "description": "string",
+    "everyone_enabled": true,
+    "organization_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "access_users": [
       {
         "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -641,6 +662,14 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id}/cohort
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "description": "string",
+    "everyone_enabled": true,
+    "project_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "device_count": 0,
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "access_users": [
       {
         "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -801,6 +830,14 @@ curl -X POST "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "description": "string",
+    "everyone_enabled": true,
+    "project_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "device_count": 0,
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "access_users": [
       {
         "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -899,6 +936,14 @@ curl -X POST "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "description": "string",
+    "everyone_enabled": true,
+    "project_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "device_count": 0,
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "access_users": [
       {
         "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -1058,10 +1103,17 @@ Changeset validation error. Keys are field names; values are lists of messages.
 
 ### ProjectWithAccess
 
-| Field           | Type                                   | Description |
-| --------------- | -------------------------------------- | ----------- |
-| `access_users`  | array of [`AccessUser`](#accessuser)   |             |
-| `access_groups` | array of [`AccessGroup`](#accessgroup) |             |
+| Field              | Type                                   | Description                                                                         |
+| ------------------ | -------------------------------------- | ----------------------------------------------------------------------------------- |
+| `id`               | `string`                               |                                                                                     |
+| `name`             | `string`                               |                                                                                     |
+| `description`      | `string`                               | Nullable.                                                                           |
+| `everyone_enabled` | `boolean`                              | When true, all org members have access; otherwise access is granted per-user/group. |
+| `organization_id`  | `string`                               |                                                                                     |
+| `inserted_at`      | `string (date-time)`                   |                                                                                     |
+| `updated_at`       | `string (date-time)`                   |                                                                                     |
+| `access_users`     | array of [`AccessUser`](#accessuser)   |                                                                                     |
+| `access_groups`    | array of [`AccessGroup`](#accessgroup) |                                                                                     |
 
 ### AccessUser
 
@@ -1102,7 +1154,15 @@ Simple acknowledgement.
 
 ### CohortWithAccess
 
-| Field           | Type                                   | Description |
-| --------------- | -------------------------------------- | ----------- |
-| `access_users`  | array of [`AccessUser`](#accessuser)   |             |
-| `access_groups` | array of [`AccessGroup`](#accessgroup) |             |
+| Field              | Type                                   | Description                |
+| ------------------ | -------------------------------------- | -------------------------- |
+| `id`               | `string`                               |                            |
+| `name`             | `string`                               |                            |
+| `description`      | `string`                               | Nullable.                  |
+| `everyone_enabled` | `boolean`                              |                            |
+| `project_id`       | `string`                               |                            |
+| `device_count`     | `integer`                              | Present on list responses. |
+| `inserted_at`      | `string (date-time)`                   |                            |
+| `updated_at`       | `string (date-time)`                   |                            |
+| `access_users`     | array of [`AccessUser`](#accessuser)   |                            |
+| `access_groups`    | array of [`AccessGroup`](#accessgroup) |                            |

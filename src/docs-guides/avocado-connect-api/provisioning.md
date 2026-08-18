@@ -185,6 +185,18 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/claim_tokens/{id}" \
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "expires_at": "2026-08-14T12:00:00Z",
+    "max_uses": 0,
+    "consume_count": 0,
+    "organization_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "created_by_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "cohort_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "tags": ["string"],
+    "token": "string",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "uses": [
       {
         "device_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -405,11 +417,23 @@ Changeset validation error. Keys are field names; values are lists of messages.
 
 ### ClaimTokenWithUses
 
-| Field               | Type                 | Description |
-| ------------------- | -------------------- | ----------- |
-| `uses`              | `object[]`           |             |
-| `uses[].device_id`  | `string`             |             |
-| `uses[].claimed_at` | `string (date-time)` |             |
+| Field               | Type                 | Description                                      |
+| ------------------- | -------------------- | ------------------------------------------------ |
+| `id`                | `string`             |                                                  |
+| `name`              | `string`             | Nullable.                                        |
+| `expires_at`        | `string (date-time)` | Nullable.                                        |
+| `max_uses`          | `integer`            | Nullable.                                        |
+| `consume_count`     | `integer`            |                                                  |
+| `organization_id`   | `string`             |                                                  |
+| `created_by_id`     | `string`             | Nullable.                                        |
+| `cohort_id`         | `string`             | Nullable.                                        |
+| `tags`              | `string[]`           | Tags applied to devices claimed with this token. |
+| `token`             | `string`             | Raw claim token — returned only on create.       |
+| `inserted_at`       | `string (date-time)` |                                                  |
+| `updated_at`        | `string (date-time)` |                                                  |
+| `uses`              | `object[]`           |                                                  |
+| `uses[].device_id`  | `string`             |                                                  |
+| `uses[].claimed_at` | `string (date-time)` |                                                  |
 
 ### Error
 

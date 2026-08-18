@@ -54,6 +54,25 @@ function escapeCell(text) {
     .trim()
 }
 
+// Effective schema for rendering: merges `allOf` members into a single object
+// schema (properties + required, base first so own definitions win). Schemas
+// like Runtime or ProjectWithAccess extend a base via allOf; reading only
+// `.properties` would drop every base field.
+function effectiveSchema(schema) {
+  const resolved = deref(schema)
+  if (!resolved || !resolved.allOf) return resolved
+  const properties = {}
+  const required = []
+  for (const member of resolved.allOf) {
+    const part = effectiveSchema(member) || {}
+    Object.assign(properties, part.properties || {})
+    required.push(...(part.required || []))
+  }
+  Object.assign(properties, resolved.properties || {})
+  required.push(...(resolved.required || []))
+  return { ...resolved, allOf: undefined, properties, required }
+}
+
 // Render a schema as a short type label. `linkable` is the set of component
 // schema names that have their own section on the page.
 function typeLabel(schema, linkable) {
@@ -94,7 +113,7 @@ function propDescription(schema) {
 // Flatten an object schema into table rows with dotted field paths.
 function flattenProperties(schema, prefix, requiredByParent, linkable, rows, depth) {
   if (!schema || depth > 4) return
-  const resolved = deref(schema)
+  const resolved = effectiveSchema(schema)
   for (const [key, rawProp] of Object.entries(resolved.properties || {})) {
     const prop = deref(rawProp)
     const fieldPath = prefix ? `${prefix}.${key}` : key
@@ -145,7 +164,7 @@ function bodySummary(schema, linkable) {
   if (!schema) return ''
   const name = refName(schema)
   if (name) return typeLabel(schema, linkable)
-  const resolved = deref(schema)
+  const resolved = effectiveSchema(schema)
   if (resolved.type === 'object' && resolved.properties) {
     const parts = Object.entries(resolved.properties).map(([key, prop]) => {
       const propName = refName(prop)
@@ -204,7 +223,7 @@ function sampleFromSchema(schema, seen, depth, hint) {
     if (seen.has(name)) return null
     seen = new Set([...seen, name])
   }
-  const resolved = deref(schema)
+  const resolved = effectiveSchema(schema)
   if (resolved.example !== undefined) return resolved.example
   if (resolved.default !== undefined) return resolved.default
   if (resolved.enum) return resolved.enum[0]
@@ -335,7 +354,7 @@ function renderOperation(entry, linkable, heading) {
     const response = deref(rawResponse)
     const content = response.content && response.content['application/json']
     const summary = content && content.schema ? bodySummary(content.schema, linkable) : '—'
-    lines.push(`| \`${status}\` | ${summary} | ${escapeCell(response.description)} |`)
+    lines.push(`| \`${status}\` | ${escapeCell(summary)} | ${escapeCell(response.description)} |`)
   }
   lines.push('')
 
@@ -431,6 +450,19 @@ function fileNameForTag(tagName) {
   return `${slugify(tagName.replace(/&/g, ' '))}.md`
 }
 
+// Render every page up front so a mid-generation failure (malformed schema,
+// unresolvable $ref) exits before any existing page has been deleted.
+const tags = spec.tags || []
+const seenFiles = new Set(['overview.md'])
+const pages = tags.map((tag, i) => {
+  const file = fileNameForTag(tag.name)
+  if (seenFiles.has(file)) {
+    throw new Error(`tag "${tag.name}" collides with an existing page filename: ${file}`)
+  }
+  seenFiles.add(file)
+  return { file, content: `${renderTagPage(tag, i + 2)}\n` }
+})
+
 fs.mkdirSync(OUT_DIR, { recursive: true })
 
 // Remove stale generated pages (everything except the hand-written overview).
@@ -440,11 +472,10 @@ for (const existing of fs.readdirSync(OUT_DIR)) {
   }
 }
 
-const tags = spec.tags || []
-tags.forEach((tag, i) => {
-  const outPath = path.join(OUT_DIR, fileNameForTag(tag.name))
-  fs.writeFileSync(outPath, `${renderTagPage(tag, i + 2)}\n`)
+for (const page of pages) {
+  const outPath = path.join(OUT_DIR, page.file)
+  fs.writeFileSync(outPath, page.content)
   console.log(`wrote ${path.relative(process.cwd(), outPath)}`)
-})
+}
 
-console.log(`${tags.length} pages generated from ${path.relative(process.cwd(), SPEC_PATH)}`)
+console.log(`${pages.length} pages generated from ${path.relative(process.cwd(), SPEC_PATH)}`)

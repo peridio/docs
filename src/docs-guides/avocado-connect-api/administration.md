@@ -299,6 +299,9 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/groups/{id}" \
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "name": "string",
+    "description": "string",
     "members": [
       {
         "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
@@ -1166,9 +1169,12 @@ Changeset validation error. Keys are field names; values are lists of messages.
 
 ### GroupWithMembers
 
-| Field     | Type                               | Description |
-| --------- | ---------------------------------- | ----------- |
-| `members` | array of [`OrgMember`](#orgmember) |             |
+| Field         | Type                               | Description |
+| ------------- | ---------------------------------- | ----------- |
+| `id`          | `string`                           |             |
+| `name`        | `string`                           |             |
+| `description` | `string`                           | Nullable.   |
+| `members`     | array of [`OrgMember`](#orgmember) |             |
 
 ### Ok
 

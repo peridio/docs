@@ -147,6 +147,20 @@ curl -X POST "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "version": "string",
+    "build_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "display_version": "string",
+    "description": "string",
+    "manifest": {},
+    "manifest_written_at": "2026-08-14T12:00:00Z",
+    "status": "string",
+    "project_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "created_by_user_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "content_key_hex": "string",
+    "content_keyid": "string",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "config": {},
     "lockfile": {},
     "artifacts": [
@@ -238,6 +252,20 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id}/runtim
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "version": "string",
+    "build_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "display_version": "string",
+    "description": "string",
+    "manifest": {},
+    "manifest_written_at": "2026-08-14T12:00:00Z",
+    "status": "string",
+    "project_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "created_by_user_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "content_key_hex": "string",
+    "content_keyid": "string",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "config": {},
     "lockfile": {},
     "artifacts": [
@@ -315,6 +343,20 @@ curl -X PUT "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id}
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "version": "string",
+    "build_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "display_version": "string",
+    "description": "string",
+    "manifest": {},
+    "manifest_written_at": "2026-08-14T12:00:00Z",
+    "status": "string",
+    "project_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "created_by_user_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "content_key_hex": "string",
+    "content_keyid": "string",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "config": {},
     "lockfile": {},
     "artifacts": [
@@ -428,6 +470,20 @@ curl -X POST "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id
 ```json
 {
   "data": {
+    "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "version": "string",
+    "build_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "display_version": "string",
+    "description": "string",
+    "manifest": {},
+    "manifest_written_at": "2026-08-14T12:00:00Z",
+    "status": "string",
+    "project_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "created_by_user_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+    "content_key_hex": "string",
+    "content_keyid": "string",
+    "inserted_at": "2026-08-14T12:00:00Z",
+    "updated_at": "2026-08-14T12:00:00Z",
     "config": {},
     "lockfile": {},
     "artifacts": [
@@ -530,11 +586,25 @@ Cursor pagination metadata. Present only when the request supplied a pagination 
 
 Runtime detail (adds `config` and `lockfile`; `artifacts` present on create/complete).
 
-| Field       | Type                                 | Description |
-| ----------- | ------------------------------------ | ----------- |
-| `config`    | `object`                             | Nullable.   |
-| `lockfile`  | `object`                             | Nullable.   |
-| `artifacts` | array of [`UploadSpec`](#uploadspec) |             |
+| Field                 | Type                                 | Description |
+| --------------------- | ------------------------------------ | ----------- |
+| `id`                  | `string`                             |             |
+| `version`             | `string`                             |             |
+| `build_id`            | `string`                             | Nullable.   |
+| `display_version`     | `string`                             |             |
+| `description`         | `string`                             | Nullable.   |
+| `manifest`            | `object`                             | Nullable.   |
+| `manifest_written_at` | `string (date-time)`                 | Nullable.   |
+| `status`              | `string`                             |             |
+| `project_id`          | `string`                             |             |
+| `created_by_user_id`  | `string`                             | Nullable.   |
+| `content_key_hex`     | `string`                             | Nullable.   |
+| `content_keyid`       | `string`                             | Nullable.   |
+| `inserted_at`         | `string (date-time)`                 |             |
+| `updated_at`          | `string (date-time)`                 |             |
+| `config`              | `object`                             | Nullable.   |
+| `lockfile`            | `object`                             | Nullable.   |
+| `artifacts`           | array of [`UploadSpec`](#uploadspec) |             |
 
 ### UploadSpec
 

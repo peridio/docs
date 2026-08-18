@@ -51,6 +51,11 @@ curl "https://connect.peridio.com/api/me" \
       "organization_id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12"
     },
     "user": {
+      "id": "0198a2e6-6f24-7cc3-b456-663cd21c4b12",
+      "email": "string",
+      "name": "string",
+      "username": "string",
+      "avatar_url": "string",
       "is_super_user": true,
       "has_logged_in": true,
       "auth_provider": "string"
