@@ -113,10 +113,13 @@ function rewriteRelativeLinks(body, name) {
 // 404s, not only the avocado-cli one. Absolute URLs are invisible to
 // Docusaurus's broken-link check, so the rewrite has to cover the prefix class.
 //
-// Order matters: the prefix rule runs first, then overview → installation, so
-// both `/guides/avocado-cli/overview` and `/developer-reference/avocado-cli/overview`
-// land on the install page. Site-absolute `/hardware/...` links are a different
-// plugin and are left untouched.
+// Destinations are site-root-relative so preview, staging, and local builds
+// stay on the current host. Order matters: production-domain URLs collapse to
+// `/developer-reference/` first, then overview → installation, so both
+// `/guides/avocado-cli/overview` and `/developer-reference/avocado-cli/overview`
+// (with an optional trailing slash, query, or fragment) land on the install
+// page. Site-absolute `/hardware/...` links are a different plugin and are
+// left untouched.
 //
 // This runs here rather than as a one-time pass over docs-guides/references/
 // because those files are generated: editing them is undone by the next sync.
@@ -125,12 +128,12 @@ function rewriteRelativeLinks(body, name) {
 // ever fixed, these rules simply stop matching.
 const ACQUISITION_REWRITES = [
   {
-    from: /https:\/\/docs\.peridio\.com\/guides\//g,
-    to: 'https://docs.peridio.com/developer-reference/',
+    from: /https:\/\/docs\.peridio\.com\/(?:guides|developer-reference)\//g,
+    to: '/developer-reference/',
   },
   {
-    from: /https:\/\/docs\.peridio\.com\/developer-reference\/avocado-cli\/overview/g,
-    to: 'https://docs.peridio.com/developer-reference/avocado-cli/installation',
+    from: /\/developer-reference\/avocado-cli\/overview\/?([?#][^)\s]*)?(?=[)\s]|$)/g,
+    to: '/developer-reference/avocado-cli/installation$1',
   },
 ]
 
@@ -143,9 +146,10 @@ function rewriteAcquisitionLinks(body) {
     .map((seg, i) => {
       if (i % 2 === 1) return seg
       return ACQUISITION_REWRITES.reduce((acc, rule) => {
-        return acc.replace(rule.from, () => {
+        return acc.replace(rule.from, (...args) => {
           count++
-          return rule.to
+          const groups = args.slice(1, -2)
+          return rule.to.replace(/\$(\d+)/g, (_, n) => groups[Number(n) - 1] ?? '')
         })
       }, seg)
     })
@@ -167,7 +171,7 @@ function processGettingStarted(content, name) {
   // Point "install the CLI" prerequisites at the install page, not the overview
   const { body: repointed, count: acquisitionCount } = rewriteAcquisitionLinks(rewritten)
   if (acquisitionCount > 0) {
-    console.log(`  ${name}: repointed ${acquisitionCount} docs.peridio.com URL(s)`)
+    console.log(`  ${name}: applied ${acquisitionCount} acquisition rewrite(s)`)
   }
   return repointed
 }
