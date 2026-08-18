@@ -117,7 +117,7 @@ function propDescription(schema) {
 }
 
 // Flatten an object schema into table rows with dotted field paths.
-function flattenProperties(schema, prefix, requiredByParent, linkable, rows, depth) {
+function flattenProperties(schema, prefix, linkable, rows, depth) {
   if (!schema || depth > 4) return
   const resolved = effectiveSchema(schema)
   for (const [key, rawProp] of Object.entries(resolved.properties || {})) {
@@ -131,12 +131,12 @@ function flattenProperties(schema, prefix, requiredByParent, linkable, rows, dep
       description: propDescription(prop),
     })
     if (!refName(rawProp) && prop.type === 'object' && prop.properties) {
-      flattenProperties(prop, fieldPath, prop.required || [], linkable, rows, depth + 1)
+      flattenProperties(prop, fieldPath, linkable, rows, depth + 1)
     }
     if (!refName(rawProp) && prop.type === 'array') {
       const items = deref(prop.items || {})
       if (!refName(prop.items) && items.type === 'object' && items.properties) {
-        flattenProperties(items, `${fieldPath}[]`, items.required || [], linkable, rows, depth + 1)
+        flattenProperties(items, `${fieldPath}[]`, linkable, rows, depth + 1)
       }
     }
   }
@@ -144,7 +144,7 @@ function flattenProperties(schema, prefix, requiredByParent, linkable, rows, dep
 
 function propertyTable(schema, linkable, { withRequired }) {
   const rows = []
-  flattenProperties(schema, '', [], linkable, rows, 0)
+  flattenProperties(schema, '', linkable, rows, 0)
   if (!rows.length) return null
   const lines = []
   if (withRequired) {
