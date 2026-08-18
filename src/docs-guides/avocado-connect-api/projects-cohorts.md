@@ -1,5 +1,5 @@
 ---
-title: Projects & Cohorts
+title: 'Projects & Cohorts'
 sidebar_position: 4
 description: 'Organize your fleet: projects group your work; cohorts group devices for targeted deployments and access control.'
 copy_markdown: true

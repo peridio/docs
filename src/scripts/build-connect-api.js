@@ -45,6 +45,12 @@ function slugify(text) {
     .replace(/ +/g, '-')
 }
 
+// Single-quoted YAML scalar: newlines collapsed, quotes doubled. Keeps front
+// matter valid for any tag name/description (e.g. one containing `: ` or `&`).
+function yamlSingle(text) {
+  return `'${String(text).replace(/\s+/g, ' ').trim().replace(/'/g, "''")}'`
+}
+
 function escapeCell(text) {
   if (!text) return ''
   return String(text)
@@ -404,9 +410,9 @@ function renderTagPage(tag, position) {
 
   const lines = []
   lines.push('---')
-  lines.push(`title: ${tag.name}`)
+  lines.push(`title: ${yamlSingle(tag.name)}`)
   lines.push(`sidebar_position: ${position}`)
-  lines.push(`description: '${(tag.description || '').replace(/'/g, "''")}'`)
+  lines.push(`description: ${yamlSingle(tag.description || '')}`)
   lines.push('copy_markdown: true')
   lines.push('---')
   lines.push('')

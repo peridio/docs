@@ -1,5 +1,5 @@
 ---
-title: Administration
+title: 'Administration'
 sidebar_position: 10
 description: 'Organization membership, teams, invitations, and account-level requests.'
 copy_markdown: true

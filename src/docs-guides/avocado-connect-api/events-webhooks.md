@@ -1,5 +1,5 @@
 ---
-title: Events & Webhooks
+title: 'Events & Webhooks'
 sidebar_position: 11
 description: 'Subscribe to fleet events via webhooks and query aggregated activity.'
 copy_markdown: true

@@ -1,5 +1,5 @@
 ---
-title: Deployments
+title: 'Deployments'
 sidebar_position: 6
 description: 'Roll a runtime out to a cohort of devices and track per-device deployment status.'
 copy_markdown: true

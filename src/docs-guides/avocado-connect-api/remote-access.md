@@ -1,5 +1,5 @@
 ---
-title: Remote Access
+title: 'Remote Access'
 sidebar_position: 7
 description: 'Open secure WireGuard tunnels to individual devices, governed by tunnel policy.'
 copy_markdown: true

@@ -1,5 +1,5 @@
 ---
-title: Devices
+title: 'Devices'
 sidebar_position: 3
 description: 'Manage the devices in your fleet — list, inspect, tag, update, and assign to cohorts.'
 copy_markdown: true

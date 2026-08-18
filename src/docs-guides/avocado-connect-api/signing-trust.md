@@ -1,5 +1,5 @@
 ---
-title: Signing & Trust
+title: 'Signing & Trust'
 sidebar_position: 9
 description: 'TUF trust-root and signing-key management for update integrity (advanced).'
 copy_markdown: true

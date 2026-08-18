@@ -1,5 +1,5 @@
 ---
-title: Provisioning
+title: 'Provisioning'
 sidebar_position: 8
 description: 'Claim tokens that let new devices join your fleet at first boot.'
 copy_markdown: true
