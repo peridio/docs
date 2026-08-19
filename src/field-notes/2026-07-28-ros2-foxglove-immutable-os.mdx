@@ -111,10 +111,10 @@ avocado build
 
 ```bash
 # Raspberry Pi 5
-avocado provision -r dev --profile sd
+avocado provision dev --profile sd
 
 # imx95-frdm (i.MX 9x, UUU / eMMC)
-avocado provision -r dev --profile uuu-emmc
+avocado provision dev --profile uuu-emmc
 ```
 
 On boot, the `app` extension merges, `container-app.service` runs `docker load` on the tarball, and the container starts and drives the arm. Wave it to confirm:
@@ -177,7 +177,7 @@ avocado runtime deploy dev --device root@<device-ip>
 
 That command streams only the changed sysext bytes to the device. It runs `systemd-sysext refresh`, and the `app` extension `on_merge` hook restarts the container with the new image. The read-only OS stays intact, and you do not re-provision.
 
-This is a local deployment. To issue an OTA you will need an Avocado Connect account, and run `avocado connect auth login` and `avocado connect init`. This will configure your project with your new account. Then run `avocado install -f` and `avocado build` again. Upload your runtime with `avocado connect upload dev`. Then create a deployment and issue your OTA.
+This is a local deployment. To issue an OTA you will need an Avocado Connect account, and run `avocado connect auth login` and `avocado connect init`. This will configure your project with your new account. Then run `avocado install -f` and `avocado build` again. Upload your runtime with `avocado connect upload dev --version v0.0.1-dev`. Then create a deployment and issue your OTA.
 
 ## Can AI Create A New Movement?
 
@@ -242,8 +242,8 @@ avocado install -f
 # set LITE6_IP in overlay/app/etc/container-app/container-app.env  (or LITE6_IP=mock)
 TARGET_PLATFORM=linux/arm64 sh build-image.sh
 avocado build
-avocado provision -r dev --profile sd           # Raspberry Pi 5
-avocado provision -r dev --profile uuu-emmc     # imx95-frdm (i.MX 9x)
+avocado provision dev --profile sd           # Raspberry Pi 5
+avocado provision dev --profile uuu-emmc     # imx95-frdm (i.MX 9x)
 # then: curl -X POST http://<device-ip>:8080/wave
 ```
 
