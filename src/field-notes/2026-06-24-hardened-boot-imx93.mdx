@@ -188,8 +188,9 @@ Three gates, not four. An `ima` gate belongs in that list by design and is not i
 `encrypted-var` is a kas feature, so composing it onto a board's machine YAML is the whole build step. Add `ftpm.yml` for phase-2 PCR-7 sealing (verified 2026-08-19; see below) - it needs no `ahab`:
 
 ```bash
-bakar build \
-  meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml:meta-avocado/kas/feature/ftpm.yml
+KAS_YML="meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml:meta-avocado/kas/feature/ftpm.yml"
+source init-build "$KAS_YML"
+kas build "$KAS_YML"
 ```
 
 A checkout older than meta-avocado#279 hits `Error: Wrong container header` on this
@@ -199,8 +200,9 @@ build regardless of the `ahab` feature. Fixed 2026-08-19; see below.
 The stock image gives you no way in, on console or over SSH: `avocado-users` ships `/etc/shadow` with `root:*:`, and a literal `*` means no password can ever match. Stack the dev-access feature when you need a shell to check any of this - dev boards only, it accepts root with an empty password:
 
 ```bash
-bakar build \
-  meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml:meta-avocado/kas/feature/ssh-dev.yml
+KAS_YML="meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml:meta-avocado/kas/feature/ssh-dev.yml"
+source init-build "$KAS_YML"
+kas build "$KAS_YML"
 ```
 
 Then write it to the card. `avocado-flash` selects the backend from the medium and refuses anything that is not an unmounted whole disk on a removable bus:
