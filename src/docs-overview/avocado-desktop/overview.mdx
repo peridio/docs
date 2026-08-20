@@ -8,7 +8,7 @@ import CalloutButton from '@site/src/components/CalloutButton'
 
 Build and provision Avocado OS from your own machine. Describe what you want in plain English and a built-in AI agent drives the whole toolchain — editing config, cross-compiling, building the image, and writing it to hardware — so you ship a real device without memorizing a single config key.
 
-Avocado Desktop is the native app for building Avocado OS, Peridio's immutable embedded Linux runtime. It bundles the build VM, cross-compilation toolchain, hardware provisioning, and a developer-preview AI agent wired to the Avocado MCP into one workspace that runs locally on your machine.
+Avocado Desktop is the native app for building Avocado OS, Peridio's immutable embedded Linux runtime. It bundles the cross-compilation toolchain, hardware provisioning, and a developer-preview AI agent wired to the Avocado MCP into one workspace that runs locally on your machine. On macOS it also bundles the build VM your images are built in. On Linux it builds with the host's Docker instead.
 
 <div style={{ marginBottom: '1.75rem' }}>
   <CalloutButton
@@ -36,10 +36,12 @@ Avocado Desktop is the native app for building Avocado OS, Peridio's immutable e
 
 ## Getting Started
 
-Avocado Desktop is available for macOS today, and it self-updates in place once installed — you don't re-download it for new releases. Windows and Linux builds are on the way.
+Avocado Desktop is available for macOS and Linux, with a Windows build on the way. On macOS it self-updates in place once installed, so you don't re-download it for new releases. On Linux, each release is installed as a new package.
 
-1. **Install the app** — download the [macOS release](https://www.peridio.com/downloads#desktop) directly, or install it with Homebrew: `brew install --cask avocado-linux/tap/avocado-desktop`. Avocado Desktop requires macOS 13.0 (Ventura) or later.
-2. **Open a project** — point Desktop at a new or existing Avocado project. The build VM and toolchain are bundled, so there's nothing else to set up.
+1. **Install the app** — every build, with its size and publish date, is listed on [Downloads](https://www.peridio.com/downloads#desktop).
+   - **macOS** — take the universal disk image, or install it with Homebrew: `brew install --cask avocado-linux/tap/avocado-desktop`. Requires macOS 13.0 (Ventura) or later.
+   - **Linux** — take the deb, rpm, or pacman package for your distribution. Every build needs WebKitGTK 4.1, which ships on Ubuntu 22.04+, Debian 12+, and current Fedora and Arch, plus Docker, which is where builds run. The pacman package also needs the Avocado CLI installed separately, because it links one rather than bundling it. USB device passthrough needs your distribution's usbip tools.
+2. **Open a project** — point Desktop at a new or existing Avocado project. On macOS the build VM and toolchain are bundled, so there's nothing else to set up. On Linux, install Docker first, because that is where the app runs builds.
 3. **Build and provision** — describe what you want to the agent, or run the build and provisioning steps yourself, then flash your first device to verify the loop end to end.
 
 ---
@@ -86,7 +88,7 @@ Under the hood, the agent is wired to the **Avocado MCP**, a [Model Context Prot
 
 Avocado Desktop cross-compiles your application to the target architecture and assembles a complete image — the parts that are easy to get wrong by hand are handled for you.
 
-- **Bundled build VM** — the build environment ships with the app; no separate SDK install or container setup
+- **Build environment** — on macOS the build VM ships with the app, so there is no separate SDK install or container setup; on Linux the app builds with the host's Docker
 - **Cross-compilation** — produces real target binaries, such as `aarch64-avocado-linux-gnu` ELF executables, not prebuilt drop-ins
 - **Config handled for you** — the SDK toolchain, sysroot-aware compile steps, and `avocado.yaml` are generated and maintained by the agent
 

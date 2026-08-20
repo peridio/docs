@@ -21,7 +21,7 @@ The Linux `*-musl` builds are statically linked, so they do not depend on the ho
 
 The install script picks the appropriate binary automatically. For manual installs, download the matching artifact from the [releases page](https://github.com/avocado-linux/avocado-cli/releases), or use [Downloads](https://www.peridio.com/downloads#cli-artifacts), which lists every shipping build with its size and SHA-256.
 
-Prefer a native app? [Avocado Desktop](https://www.peridio.com/downloads#desktop) bundles the CLI, the build VM, and the cross-compilation toolchain in one install.
+Prefer a native app? [Avocado Desktop](https://www.peridio.com/downloads#desktop) ships for macOS and Linux, carrying the CLI and the cross-compilation toolchain in one install, plus the build VM on macOS. The Arch Linux package (`pacman`) is the exception: it links a CLI you install separately rather than bundling one.
 
 ## Install
 
