@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "prestart": "npm run sync-references && npm run sync-targets",
-    "start": "docusaurus start",
+    "start": "node scripts/dev-server.js start",
     "sync-references": "node scripts/sync-references.js",
     "sync-targets": "node scripts/sync-targets.js",
     "thumbs": "node scripts/make-thumbnails.js",
@@ -15,7 +15,7 @@
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
+    "serve": "node scripts/dev-server.js serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "format": "prettier --write .",

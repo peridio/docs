@@ -2,6 +2,55 @@
 
 This directory contains utility scripts for development and maintenance.
 
+## Development server
+
+### src/scripts/dev-server.js
+
+Wraps `docusaurus start` and `docusaurus serve` so the site is reachable from a
+phone. Docusaurus binds to localhost by default, which no other device on the
+network can see; this binds to `0.0.0.0` and, once the site has actually
+compiled, prints the LAN URL with a QR code beside it.
+
+It backs `npm start` and `npm run serve` (and so `make dev`, `make start`,
+`make serve`) — there is no separate command to remember.
+
+**Usage:**
+
+```bash
+npm start                  # dev server, localhost + LAN + QR
+npm run serve              # same, for the last production build
+PORT=4000 npm start        # start looking for a free port at 4000
+npm start -- --no-open     # extra flags pass through to docusaurus
+```
+
+**What it does:**
+
+- Picks the first free port from `--port`, else `$PORT`, else 3000, so a second
+  checkout can run alongside the first instead of prompting
+- Waits for a real HTTP response before printing, so the banner lands _below_
+  webpack's output rather than scrolling away above it
+- Picks the LAN address from the first non-virtual private IPv4 interface, and
+  degrades to a localhost-only banner when there is nothing routable
+- Forwards `SIGINT`/`SIGTERM` to the child so the server never outlives the
+  wrapper holding the port
+
+Hot reload works over the LAN too, so edits show up on the phone as you make
+them. Everything else on the network can reach the server while it runs — worth
+knowing on a network you do not trust.
+
+### src/scripts/qr.js
+
+The QR encoder behind that banner: byte mode, versions 1–6, error correction
+level M with an L fallback, rendered with half-block characters and explicit
+black/white ANSI colours so it scans on a light or dark terminal alike. It is
+about 300 lines and has no dependencies, which is the point — a dev-server
+convenience does not justify a package in the tree.
+
+`scripts/qr.test.js` reads each symbol back the way a scanner does, with the
+layout rules re-derived rather than imported, and checks the Reed–Solomon
+syndromes. The encoder was additionally verified against macOS CoreImage's
+decoder for every payload length from 1 to 134 bytes.
+
 ## Field Notes thumbnails
 
 ### thumbnails.sh

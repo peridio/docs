@@ -5,6 +5,9 @@
 # the sync scripts. `docusaurus start` does NOT run those syncs, so a bare
 # `npm start` fails on the missing sidebar ids. `make dev` runs the sync
 # first, then starts the server, so it boots clean every time.
+#
+# Both `start` and `serve` bind to the LAN and print a QR code once the site is
+# up, so a phone on the same Wi-Fi can scan it. See src/scripts/dev-server.js.
 
 SRC := src
 NPM := npm --prefix $(SRC)
@@ -29,7 +32,7 @@ sync: ## Generate the reference + hardware-target docs
 thumbs: ## Regenerate the dithered Field Notes thumbnails (fetches src/.tools/didder)
 	./scripts/thumbnails.sh
 
-dev: sync start ## Sync generated docs, then start the dev server (http://localhost:3000)
+dev: sync start ## Sync generated docs, then start the dev server (localhost + LAN QR)
 
 start: ## Start the dev server without re-syncing (fast re-run once synced)
 	$(NPM) run start
@@ -37,7 +40,7 @@ start: ## Start the dev server without re-syncing (fast re-run once synced)
 build: ## Full production build (runs the syncs, then docusaurus build)
 	$(NPM) run build
 
-serve: ## Serve the last production build
+serve: ## Serve the last production build (localhost + LAN QR)
 	$(NPM) run serve
 
 clean: ## Clear the Docusaurus cache and the generated docs
