@@ -245,14 +245,14 @@ tpm2_pcrread sha256:10
 
 ### Coverage
 
-| Control        | `avocado-qemuarm64` (proxy)                     | `avocado-imx93-frdm` (hardware)                    |
-| :------------- | :---------------------------------------------- | :------------------------------------------------- |
-| LUKS2 `/var`   | Verified on first boot                          | **Verified**, first boot and reboot (2026-08-12)   |
-| AHAB signed boot | No harness case exists                        | **Verified** on an open part - bootloader and OS container (2026-08-13), initramfs folded into the signed container (2026-08-14). This exact board can no longer re-run this check - see below |
-| Phase-2 TPM2   | Enrollment verified; unseal on reboot **fails** | **Verified** - PCR-7 keyslot enrolled via the OP-TEE fTPM on first boot (2026-08-19); reboot-survival of this specific TPM2 slot not yet independently re-tested on hardware. See below |
-| dm-verity      | **Not active** on this target                   | Not yet run                                        |
-| IMA/EVM        | **Not implemented** - nothing to test            | **Not implemented** - nothing to test              |
-| Module signing | No harness case exists                          | Not yet run                                        |
+| Control          | `avocado-qemuarm64` (proxy)                     | `avocado-imx93-frdm` (hardware)                                                                                                                                                                |
+| :--------------- | :---------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LUKS2 `/var`     | Verified on first boot                          | **Verified**, first boot and reboot (2026-08-12)                                                                                                                                               |
+| AHAB signed boot | No harness case exists                          | **Verified** on an open part - bootloader and OS container (2026-08-13), initramfs folded into the signed container (2026-08-14). This exact board can no longer re-run this check - see below |
+| Phase-2 TPM2     | Enrollment verified; unseal on reboot **fails** | **Verified** - PCR-7 keyslot enrolled via the OP-TEE fTPM on first boot (2026-08-19); reboot-survival of this specific TPM2 slot not yet independently re-tested on hardware. See below        |
+| dm-verity        | **Not active** on this target                   | Not yet run                                                                                                                                                                                    |
+| IMA/EVM          | **Not implemented** - nothing to test           | **Not implemented** - nothing to test                                                                                                                                                          |
+| Module signing   | No harness case exists                          | Not yet run                                                                                                                                                                                    |
 
 Three harness cases back the proxy column (`luks-var`, `luks-var-tpm`, `dm-verity`), and they live on the #232 branch, so they are not gating anything on `scarthgap` yet. There are no IMA or module-signing cases at all; an earlier version of this table named two that do not exist.
 
@@ -305,8 +305,8 @@ Lifecycle: 0x00000008, OEM Open
 fuse read 16 0 8  ->  all zeros
 ```
 
-So the order is burn `SRK_HASH` while still open, *then* check for zero events,
-*then* close. A plan that validates zero events before the burn cannot be
+So the order is burn `SRK_HASH` while still open, _then_ check for zero events,
+_then_ close. A plan that validates zero events before the burn cannot be
 satisfied - which is what this note used to imply.
 
 ### The gap in that log (2026-08-14)
@@ -379,7 +379,7 @@ leave a board unable to boot anything you hold keys for.
 
 The board pass ran on an FRDM-IMX93 against the wrynose BSP, and it closed the LUKS2 row. Three defects had to be fixed first, and every one of them was invisible on the proxy because `avocado-qemuarm64` carries a machine override that `avocado-imx93-frdm` did not:
 
-- **`CONFIG_DM_CRYPT` was silently `=m`.** The fragment asks for `=y`, but kconfig caps a tristate at its weakest parent and the i.MX defconfig left both `BLK_DEV_DM` and `TRUSTED_KEYS` at `=m`. The initramfs ships `cryptsetup` with no module and nothing that loads one, so the unlock had no dm-crypt to call. The task check greps the fragment *text*, so it passed while the built kernel disagreed - verify against the produced `.config`, never the fragment.
+- **`CONFIG_DM_CRYPT` was silently `=m`.** The fragment asks for `=y`, but kconfig caps a tristate at its weakest parent and the i.MX defconfig left both `BLK_DEV_DM` and `TRUSTED_KEYS` at `=m`. The initramfs ships `cryptsetup` with no module and nothing that loads one, so the unlock had no dm-crypt to call. The task check greps the fragment _text_, so it passed while the built kernel disagreed - verify against the produced `.config`, never the fragment.
 - **`AVOCADO_VAR_PART_DEV` was unset.** Both qemu machines point `/var` at `/dev/mapper/var` when `encrypted-var` is on; imx93 fell through to the base-files raw-PARTUUID default, so the container would be created and opened in the initrd while fstab mounted `/var` from the raw partition underneath it.
 - **The key provider read a secret that does not exist.** The shared `var-key.sh` reads `/var/private/var-key-secret` - on the volume being unlocked, not mounted when the provider runs in the initramfs, and created by nothing in the tree. The Argon2id path had therefore never once succeeded on this board.
 
@@ -474,7 +474,7 @@ The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader 
 
 ## Issues and open questions
 
-- **Unseal fails on reboot on the proxy; the TPM2-specific reboot claim is still open even on hardware.** The two-phase enrollment lands both slots correctly on QEMU, and then the very next boot cannot unseal from the TPM2 slot and falls back to Argon2. The layer already documents why, and it is a property of the emulator rather than of the design: the QEMU `virt` machine has no RPMB, so OP-TEE cannot commit the rollback counter its secure storage depends on, will not trust the fTPM's saved state on the next boot, and the fTPM re-derives its seed. **The 2026-08-12 board pass showed reboot survival for the Argon2id slot** - `/var` reopened across a reboot from an existing LUKS2 container, same filesystem UUID either side - and **the 2026-08-19 pass showed the eMMC-backed board *does* have RPMB and a working fTPM, with the PCR-7 keyslot enrolling cleanly on first boot.** What remains genuinely untested on any platform is the specific case that matters: reopen `/var` via the TPM2 token specifically (not the Argon2id fallback) on a *second* boot of an *already-enrolled* image on real hardware. `cryptsetup-var.sh` is written to prefer the TPM2 token on open and fall back to Argon2id only on failure, so this should work - it just has not been independently re-tested this way yet.
+- **Unseal fails on reboot on the proxy; the TPM2-specific reboot claim is still open even on hardware.** The two-phase enrollment lands both slots correctly on QEMU, and then the very next boot cannot unseal from the TPM2 slot and falls back to Argon2. The layer already documents why, and it is a property of the emulator rather than of the design: the QEMU `virt` machine has no RPMB, so OP-TEE cannot commit the rollback counter its secure storage depends on, will not trust the fTPM's saved state on the next boot, and the fTPM re-derives its seed. **The 2026-08-12 board pass showed reboot survival for the Argon2id slot** - `/var` reopened across a reboot from an existing LUKS2 container, same filesystem UUID either side - and **the 2026-08-19 pass showed the eMMC-backed board _does_ have RPMB and a working fTPM, with the PCR-7 keyslot enrolling cleanly on first boot.** What remains genuinely untested on any platform is the specific case that matters: reopen `/var` via the TPM2 token specifically (not the Argon2id fallback) on a _second_ boot of an _already-enrolled_ image on real hardware. `cryptsetup-var.sh` is written to prefer the TPM2 token on open and fall back to Argon2id only on failure, so this should work - it just has not been independently re-tested this way yet.
 - **An interrupted first boot wedges the device permanently.** `cryptsetup-var.sh` only runs `mkfs.btrfs` in its first-boot branch. A first boot that dies after `luksFormat` but before `mkfs.btrfs` leaves a LUKS2 header with no filesystem inside, so every later boot takes the open-existing branch, never creates the filesystem, and drops to emergency forever. Re-provisioning does not clear it, because `fwup -t complete` does not touch the `var` partition; recovery means zeroing the LUKS header by hand. The fix is either to detect "header present, no filesystem on the opened mapper" and re-`mkfs`, or to make format-plus-mkfs atomic behind a completion marker.
 - **`luksKillSlot` guard.** The `|| true` on slot 0 removal is intentional but means a failed kill leaves both slots active. A monitoring check after enrollment should confirm slot 0 is gone; the current implementation does not warn if the kill is skipped.
 - **IMA/EVM raises a labeling and update cost.** Every appraised file must carry a valid `security.ima` signature, so the build signs the rootfs and shipped mutable content, and every OS update re-signs and shifts the measured hashes. That makes the attestation server's known-good list an ongoing ops dependency. First boot also runs roughly 5-15% slower while IMA labels and measures, which is why IMA is gated on `ima` rather than always on.
