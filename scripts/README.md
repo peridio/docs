@@ -2,6 +2,52 @@
 
 This directory contains utility scripts for development and maintenance.
 
+## Field Notes thumbnails
+
+### thumbnails.sh
+
+Generates the dithered thumbnails for the Field Notes index. Runnable from
+anywhere in the repo; `make thumbs` is a thin alias for it.
+
+**Usage:**
+
+```bash
+./scripts/thumbnails.sh                       # convert what changed
+./scripts/thumbnails.sh --only <note-slug>    # one note
+./scripts/thumbnails.sh --force               # ignore the lock, rebuild all
+./scripts/thumbnails.sh --check               # report drift, write nothing
+./scripts/thumbnails.sh --list-presets        # print each preset's didder argv
+```
+
+**What it does:**
+
+- Fetches the pinned [didder](https://github.com/makew0rld/didder) binary into
+  gitignored `src/.tools/` if missing, verifying it against the release checksums
+- Reads each note's `image_source`, centre-crops the source to 16:9, sharpens it,
+  and dithers it into a `-thumb` (400px) and a `-hero` (1152px) asset
+- Fills in the note's `image` field, whose extension depends on whether the
+  source turned out to be animated
+- Records source hashes, preset hashes and frame counts in
+  `src/field-notes/thumbnails.lock.json`, so unchanged notes are skipped
+
+**A note opts in with one line of front matter:**
+
+```yaml
+image_source: local:my-capture.png # or unsplash:<photo-id> / url:<link>
+```
+
+Animated GIF sources stay animated. Original images are never modified — the
+outputs are new derived files.
+
+**Changing the look:** the palette, dot size, sharpening and frame stride live in
+`src/scripts/thumbnails/presets.json`. Editing that file invalidates every note,
+so a plain run regenerates them all.
+
+**Requirements:**
+
+- Network access on first run, to fetch the didder binary
+- `curl` and either `sha256sum` or `shasum`
+
 ## Deckard development scripts
 
 ### deckard-link.sh

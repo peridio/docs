@@ -1,0 +1,46 @@
+{
+  "didderVersion": "1.3.0",
+  "sizes": {
+    "thumb": 400,
+    "tile": 800,
+    "hero": 1152
+  },
+  "aspect": [16, 9],
+  "dotSize": 2,
+  "sourceEdgeCap": 1600,
+  "sharpen": {
+    "radius": 2.0,
+    "amount": 1.4,
+    "threshold": 3
+  },
+  "animation": {
+    "preset": "grain-mono",
+    "frameStride": 2,
+    "fps": 7.5
+  },
+  "presets": {
+    "grain-mono": {
+      "default": true,
+      "palette": "000000 333333 666666 999999 cccccc ffffff",
+      "recolor": "000000 333333 666666 999999 cccccc ffffff",
+      "strength": "90%",
+      "contrast": "20%",
+      "command": ["edm", "--serpentine", "FloydSteinberg"]
+    },
+    "motion-mono": {
+      "palette": "000000 333333 666666 999999 cccccc ffffff",
+      "recolor": "000000 333333 666666 999999 cccccc ffffff",
+      "strength": "64%",
+      "contrast": "20%",
+      "brightness": "-12%",
+      "command": ["bayer", "8x8"]
+    },
+    "grain-violet": {
+      "palette": "1a1a1a 222222 363636 616161 9c9c9c ececec",
+      "recolor": "1a1a1e 2e1a47 3424ee 5f51ff 9d93f5 f3e8ff",
+      "strength": "90%",
+      "contrast": "20%",
+      "command": ["edm", "--serpentine", "FloydSteinberg"]
+    }
+  }
+}

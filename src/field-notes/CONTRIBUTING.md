@@ -32,19 +32,21 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 
 ## Frontmatter fields
 
-| Field              | Required | Rendered | Purpose                                                                        |
-| ------------------ | -------- | -------- | ------------------------------------------------------------------------------ |
-| `title`            | yes      | yes      | The note title                                                                 |
-| `date`             | yes      | yes      | The dated contract — "true as of this date"                                    |
-| `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                          |
-| `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                              |
-| `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag          |
-| `image`            | no       | yes      | Index thumbnail (`/img/field-notes/<slug>.png`); placeholder box if omitted    |
-| `featured`         | no       | yes      | `true` pins the note to the large hero slot on the index                       |
-| `tested_against`   | no       | **no**   | Free-text versions for greppability (rendered test status uses `<TestStatus>`) |
-| `poster`           | no       | **no**   | Engineer who posts the note and is on-call in comments for ~24h                |
-| `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                |
-| `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                          |
+| Field              | Required | Rendered | Purpose                                                                                                 |
+| ------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `title`            | yes      | yes      | The note title                                                                                          |
+| `date`             | yes      | yes      | The dated contract — "true as of this date"                                                             |
+| `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                                                   |
+| `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                                                       |
+| `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag                                   |
+| `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`) — written by `make thumbs`, not by hand |
+| `image_source`     | no       | yes      | Where the art comes from: `local:<path>`, `unsplash:<photo-id>` or `url:<link>`                         |
+| `image_preset`     | no       | **no**   | Override the dither preset for one note; omit — one preset serves every note                            |
+| `featured`         | no       | yes      | `true` pins the note to the large hero slot on the index                                                |
+| `tested_against`   | no       | **no**   | Free-text versions for greppability (rendered test status uses `<TestStatus>`)                          |
+| `poster`           | no       | **no**   | Engineer who posts the note and is on-call in comments for ~24h                                         |
+| `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                                         |
+| `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                                                   |
 
 `poster`, `lift_for_blog`, and `promote_to_track` are editorial metadata. They never render to readers, but they live in frontmatter so the team can grep them. Run from `src/field-notes/`:
 
@@ -85,6 +87,15 @@ The masthead — the "FIELD NOTES" eyebrow, title, date, **tag pills**, and the 
 - **Author byline** — add yourself to `authors.yml` (`name`, `title`, and an optional `image_url` monogram/photo under `static/img/field-notes/authors/`), then list your key in `authors`. The byline renders link-free (a deliberate choice — author-page links tripped a password-manager overlay).
 
 - **Images** — drop them in `static/img/field-notes/` and reference as `/img/field-notes/<name>`. Any image in the body is **click-to-zoom** automatically.
+
+- **Index thumbnails are generated — don't hand-make them.** Point `image_source` at your art and run `./scripts/thumbnails.sh` (or `make thumbs`). It writes a square, dithered `<slug>-thumb.png` plus a larger `<slug>-hero.png` for the featured slot, sets `image` for you, and records what it did in `thumbnails.lock.json`. Commit the generated files with the note.
+  - `local:<file>` — a capture you already committed under `static/img/field-notes/`. Subdirectories are fine (`local:imx8mp-npu-pose/02-demo-layout.jpg`).
+  - `unsplash:<photo-id>` — needs `UNSPLASH_ACCESS_KEY` in your environment. The photographer credit is fetched and recorded automatically, which is what Unsplash's API terms require.
+  - `url:<link>` — no API key needed, but set `image_credit` and `image_credit_url` by hand.
+
+  **Animated sources stay animated.** A GIF in gives a dithered GIF out, at every second frame and 7.5 fps. Your original file is never modified — it stays committed and keeps serving the note body in full colour; only the index tile is derived from it.
+
+  The look is one recipe for every note, defined in `src/scripts/thumbnails/presets.json`. To retune it, edit that file and run `make thumbs` again — the run is idempotent, so unchanged notes are skipped. `npm --prefix src run thumbs -- --check` reports drift without writing anything.
 
 - **Code blocks** — always tag a language (` ```bash `, ` ```ini `, ` ```text `, …) so they syntax-highlight.
 

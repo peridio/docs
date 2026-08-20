@@ -8,6 +8,9 @@ build/
 .docusaurus
 .cache-loader
 
+# Pinned tool binaries fetched by src/scripts/thumbnails/ensure-didder.sh
+src/.tools/
+
 # Misc
 .DS_Store
 .tool-versions

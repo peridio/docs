@@ -11,7 +11,7 @@ NPM := npm --prefix $(SRC)
 
 .DEFAULT_GOAL := all
 
-.PHONY: all help install sync dev start build serve clean
+.PHONY: all help install sync thumbs dev start build serve clean
 
 all: build serve ## Build, then serve it at http://localhost:3000 (bare `make`)
 
@@ -25,6 +25,9 @@ install: ## Install dependencies (root + src via postinstall)
 sync: ## Generate the reference + hardware-target docs
 	$(NPM) run sync-references
 	$(NPM) run sync-targets
+
+thumbs: ## Regenerate the dithered Field Notes thumbnails (fetches src/.tools/didder)
+	./scripts/thumbnails.sh
 
 dev: sync start ## Sync generated docs, then start the dev server (http://localhost:3000)
 
