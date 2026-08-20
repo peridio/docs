@@ -18,12 +18,12 @@ hardware needs no VM. Releases publish three packages, all x86_64:
 Every build needs WebKitGTK 4.1, which ships on Ubuntu 22.04+, Debian 12+, and
 current Fedora and Arch. Builds run on the host's Docker rather than in the
 bundled VM that macOS uses, so Docker has to be installed. USB passthrough also
-needs your distribution's usbip tools.
+needs your distribution's `usbip` tools.
 
 Two differences from macOS worth knowing before you install:
 
 - **Updates** — the macOS app replaces itself in place; the Linux packages do
-  not, so a new release is installed as a new package.
+  not, so upgrade them through your package manager.
 - **The Arch package links the Avocado CLI rather than bundling one** — install
   `avocado-cli` first. The `.deb` and `.rpm` carry the toolchain themselves.
 
