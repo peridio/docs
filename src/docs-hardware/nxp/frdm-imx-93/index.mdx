@@ -98,25 +98,14 @@ Monitor both application and real-time cores. Track AI inference performance and
 
 ## Getting Started
 
-### Init, Install, & Build
-
-Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `imx93-frdm`. The provisioning specifics are below.
-
-### Provision
-
-Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
-
-:::note Provisioning on a Linux host
-If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
-:::
+The [NXP FRDM i.MX 93 guide](/developer-reference/getting-started/frdm-imx93) walks through the whole path for this board: prerequisites, the serial console, building, provisioning to an SD card, first boot, and running your own container so that it comes back after a power cycle.
 
 ```bash title="Host machine"
+avocado init --target imx93-frdm imx93-frdm
+cd imx93-frdm
+avocado install -f
 avocado build
 avocado provision -r dev --profile sd
 ```
 
-### Run
-
-After provisioning completes, insert the SD card into your target device and power it on.
-
-The device will boot from the SD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
+Insert the SD card, connect the USB-C cable, and apply power. The `root` user is passwordless in the `dev` runtime.
