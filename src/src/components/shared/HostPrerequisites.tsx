@@ -37,7 +37,8 @@ export default function HostPrerequisites() {
           as a deb, rpm, or pacman package. Docker is required either way on Linux: Desktop builds
           with the host&apos;s Docker rather than the VM it bundles on macOS. The pacman package is
           the exception to &quot;either&quot;, since it links the Avocado CLI rather than bundling
-          one, so install that too. For USB provisioning, add your distribution&apos;s usbip tools.
+          one, so install that too. For USB provisioning, add your distribution&apos;s{' '}
+          <code>usbip</code> tools.
         </li>
         <li>
           Every shipping CLI build, with its size and SHA-256, is listed on{' '}

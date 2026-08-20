@@ -23,7 +23,7 @@ needs your distribution's `usbip` tools.
 Two differences from macOS worth knowing before you install:
 
 - **Updates** — the macOS app replaces itself in place; the Linux packages do
-  not, so upgrade them through your package manager.
+  not. Upgrade them through your package manager.
 - **The Arch package links the Avocado CLI rather than bundling one** — install
   `avocado-cli` first. The `.deb` and `.rpm` carry the toolchain themselves.
 
