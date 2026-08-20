@@ -31,6 +31,7 @@ const sidebars = {
       items: [
         'provisioning',
         'hardware-in-the-loop',
+        'container-dev-mode',
         'sideloading',
         'package-feeds',
         'feed-search',
