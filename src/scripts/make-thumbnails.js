@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generate dithered square thumbnails for the Field Notes index.
+// Generate dithered 16:9 thumbnails for the Field Notes index.
 //
 //   npm --prefix src run thumbs                 # everything that changed
 //   npm --prefix src run thumbs -- --only <slug>

@@ -300,7 +300,6 @@
   padding: 2.5rem 0;
   color: inherit;
   text-decoration: none;
-  cursor: pointer;
 }
 
 .featuredThumb {
@@ -337,7 +336,6 @@
   padding: 2rem 0;
   color: inherit;
   text-decoration: none;
-  cursor: pointer;
 }
 
 .featured,
@@ -463,7 +461,9 @@
    a wrapped title, which is most of them on a phone. */
 .title a,
 .featuredTitle a {
-  color: #fff;
+  /* The title sits on the page background, not on the CRT black of the thumb,
+     so it has to follow the theme rather than being pinned to white. */
+  color: var(--ifm-heading-color);
   text-decoration: underline;
   text-decoration-color: color-mix(
     in srgb,

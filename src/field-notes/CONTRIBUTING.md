@@ -32,21 +32,21 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 
 ## Frontmatter fields
 
-| Field              | Required | Rendered | Purpose                                                                                                 |
-| ------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `title`            | yes      | yes      | The note title                                                                                          |
-| `date`             | yes      | yes      | The dated contract — "true as of this date"                                                             |
-| `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                                                   |
-| `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                                                       |
-| `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag                                   |
-| `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`) — written by `make thumbs`, not by hand |
-| `image_source`     | no       | yes      | Where the art comes from: `local:<path>`, `unsplash:<photo-id>` or `url:<link>`                         |
-| `image_preset`     | no       | **no**   | Override the dither preset for one note; omit — one preset serves every note                            |
-| `featured`         | no       | yes      | `true` pins the note to the large hero slot on the index                                                |
-| `tested_against`   | no       | **no**   | Free-text versions for greppability (rendered test status uses `<TestStatus>`)                          |
-| `poster`           | no       | **no**   | Engineer who posts the note and is on-call in comments for ~24h                                         |
-| `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                                         |
-| `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                                                   |
+| Field              | Required | Rendered | Purpose                                                                                                                                           |
+| ------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`            | yes      | yes      | The note title                                                                                                                                    |
+| `date`             | yes      | yes      | The dated contract — "true as of this date"                                                                                                       |
+| `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                                                                                             |
+| `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                                                                                                 |
+| `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag                                                                             |
+| `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`, or `-thumb.gif` from an animated source) — written by `make thumbs`, not by hand  |
+| `image_source`     | no       | **no**   | Where `make thumbs` gets the art: `local:<path>`, `unsplash:<photo-id>` or `url:<link>`. Build input only — the theme renders `image`, never this |
+| `image_preset`     | no       | **no**   | Override the dither preset for one note; omit — one preset serves every note                                                                      |
+| `featured`         | no       | yes      | `true` pins the note to the large hero slot on the index                                                                                          |
+| `tested_against`   | no       | **no**   | Free-text versions for greppability (rendered test status uses `<TestStatus>`)                                                                    |
+| `poster`           | no       | **no**   | Engineer who posts the note and is on-call in comments for ~24h                                                                                   |
+| `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                                                                                   |
+| `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                                                                                             |
 
 `poster`, `lift_for_blog`, and `promote_to_track` are editorial metadata. They never render to readers, but they live in frontmatter so the team can grep them. Run from `src/field-notes/`:
 
@@ -88,7 +88,7 @@ The masthead — the "FIELD NOTES" eyebrow, title, date, **tag pills**, and the 
 
 - **Images** — drop them in `static/img/field-notes/` and reference as `/img/field-notes/<name>`. Any image in the body is **click-to-zoom** automatically.
 
-- **Index thumbnails are generated — don't hand-make them.** Point `image_source` at your art and run `./scripts/thumbnails.sh` (or `make thumbs`). It writes a square, dithered `<slug>-thumb.png` plus a larger `<slug>-hero.png` for the featured slot, sets `image` for you, and records what it did in `thumbnails.lock.json`. Commit the generated files with the note.
+- **Index thumbnails are generated — don't hand-make them.** Point `image_source` at your art and run `./scripts/thumbnails.sh` (or `make thumbs`). It writes a dithered **16:9** set at three widths — `<slug>-thumb.png` (400px, the index rows), `<slug>-tile.png` (800px, what the browser picks once the grid collapses to one column) and `<slug>-hero.png` (1152px, the featured slot) — sets `image` to the thumb for you, and records what it did in `thumbnails.lock.json`. The theme derives the other two from `image`, so you only ever set that one. Animated sources emit `.gif` at every width instead of `.png`. Commit the generated files with the note.
   - `local:<file>` — a capture you already committed under `static/img/field-notes/`. Subdirectories are fine (`local:imx8mp-npu-pose/02-demo-layout.jpg`).
   - `unsplash:<photo-id>` — needs `UNSPLASH_ACCESS_KEY` in your environment. The photographer credit is fetched and recorded automatically, which is what Unsplash's API terms require.
   - `url:<link>` — no API key needed, but set `image_credit` and `image_credit_url` by hand.
