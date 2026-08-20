@@ -1154,6 +1154,12 @@ html[data-theme="dark"] .code-copy-tooltip {
   /* Lighter accent, used only for the category eyebrow labels so they read
      softer than the full-strength accent on dividers/links/thumbnails. */
   --field-notes-eyebrow: #7c73ed;
+  /* Hover-only duotone wash on the non-featured thumbnails. brand-400 is the same
+     purple the active navbar tab uses in dark mode -- lighter and less inky than
+     the accent, so a hovered tile reads as soft lavender rather than deep indigo.
+     Not theme-split: the tiles sit on the fixed CRT black in both themes, so the
+     wash lands on the same backdrop either way. */
+  --field-notes-thumb-tint: var(--color-brand-400);
 }
 
 html[data-theme="dark"] .plugin-id-field-notes {

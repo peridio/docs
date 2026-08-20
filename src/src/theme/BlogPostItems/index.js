@@ -1,9 +1,51 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import { BlogPostProvider } from '@docusaurus/plugin-content-blog/client'
+import { createViewportFocus } from './viewportFocus'
 import styles from './styles.module.css'
+
+// Every card shares one controller, so the feed costs one scroll listener and one
+// IntersectionObserver rather than one of each per card. Created on first use to
+// keep it off the server render.
+let focusController = null
+function sharedFocus() {
+  if (!focusController) focusController = createViewportFocus(window)
+  return focusController
+}
+
+/* A pointer lights a card by hovering it. Without one -- `(hover: none)`, i.e.
+   phones and tablets -- the card lights from where it sits in the viewport
+   instead, ramping in and out as you scroll (see viewportFocus.js). The media
+   queries are live, so an iPad that gains a trackpad mid-session hands the job
+   back to :hover. Reduced motion opts out and leaves the tiles as they are. */
+function useViewportFocus() {
+  const card = useRef(null)
+  useEffect(() => {
+    const el = card.current
+    if (!el || typeof window === 'undefined' || !window.matchMedia) return undefined
+    const noPointer = window.matchMedia('(hover: none)')
+    const calmed = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let joined = false
+    const sync = () => {
+      const wanted = noPointer.matches && !calmed.matches
+      if (wanted === joined) return
+      joined = wanted
+      if (wanted) sharedFocus().add(el)
+      else sharedFocus().remove(el)
+    }
+    sync()
+    noPointer.addEventListener('change', sync)
+    calmed.addEventListener('change', sync)
+    return () => {
+      noPointer.removeEventListener('change', sync)
+      calmed.removeEventListener('change', sync)
+      if (joined) sharedFocus().remove(el)
+    }
+  }, [])
+  return card
+}
 
 function formatDate(iso) {
   const d = new Date(iso)
@@ -53,19 +95,55 @@ function Eyebrow({ post, isFeatured }) {
   )
 }
 
-function Thumb({ post, className }) {
+// `make thumbs` writes one asset per entry in presets.json `sizes`: <slug>-thumb
+// (400) for the row tiles, <slug>-tile (800) for those same tiles once mobile
+// stretches them, and <slug>-hero (1152) for the featured slot. Front matter
+// points at the thumb, so the others are derived from it rather than plumbed
+// through separately.
+function variantSrc(image, kind) {
+  return image && kind !== 'thumb' ? image.replace('-thumb.', `-${kind}.`) : image
+}
+
+// The dither is baked into the file, so any browser rescale mushes the dots. The
+// desktop row column is 218px of chassis around a ~200px screen, which resolves
+// the 400w thumb 1:1 on a retina display. Below 768px the grid collapses to one
+// column (see styles.module.css) and the tile spans the content width, where the
+// thumb would be blown up ~3x; the 800w entry is what the browser picks there.
+// The 768px here must track that breakpoint.
+const ROW_SIZES = '(max-width: 768px) 100vw, 200px'
+
+function Thumb({ post, className, variant = 'thumb' }) {
   const { image, image_alt: imageAlt } = post.frontMatter
+  const src = variantSrc(image, variant)
+  const srcSet =
+    variant === 'thumb' && image ? `${image} 400w, ${variantSrc(image, 'tile')} 800w` : undefined
   return (
     <Link
       to={post.metadata.permalink}
       className={clsx(styles.thumb, className)}
       aria-label={post.metadata.title}
     >
-      {image ? (
-        <img src={image} alt={imageAlt || ''} loading="lazy" />
-      ) : (
-        <span className={styles.thumbPlaceholder} />
-      )}
+      <span className={styles.gasket}>
+        <span className={styles.screen} data-fn-screen="">
+          {src ? (
+            <img
+              src={src}
+              srcSet={srcSet}
+              sizes={srcSet ? ROW_SIZES : undefined}
+              alt={imageAlt || ''}
+              loading="lazy"
+            />
+          ) : (
+            <span className={styles.thumbPlaceholder} />
+          )}
+          <span className={styles.scanlines} />
+          <span className={styles.vignette} />
+        </span>
+      </span>
+      <span className={styles.pips} aria-hidden="true">
+        <span className={styles.pipAmber} />
+        <span className={styles.pipGreen} />
+      </span>
     </Link>
   )
 }
@@ -89,9 +167,10 @@ function Meta({ metadata }) {
 function FeaturedItem({ post }) {
   const { metadata, frontMatter } = post
   const dek = metadata.description || frontMatter.description || ''
+  const focus = useViewportFocus()
   return (
-    <article className={styles.featured}>
-      <Thumb post={post} className={styles.featuredThumb} />
+    <article className={styles.featured} ref={focus}>
+      <Thumb post={post} className={styles.featuredThumb} variant="hero" />
       <div>
         <Eyebrow post={post} isFeatured />
         <Heading as="h2" className={styles.featuredTitle}>
@@ -107,8 +186,9 @@ function FeaturedItem({ post }) {
 function Row({ post }) {
   const { metadata, frontMatter } = post
   const dek = metadata.description || frontMatter.description || ''
+  const focus = useViewportFocus()
   return (
-    <article className={styles.row}>
+    <article className={styles.row} ref={focus}>
       <Thumb post={post} className={styles.rowThumb} />
       <div>
         <Eyebrow post={post} isFeatured={false} />

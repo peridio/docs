@@ -5,10 +5,15 @@
    work; --field-notes-accent is defined in custom.css. */
 
 .list {
+  --fn-rule: color-mix(in srgb, var(--color-text-primary) 8%, var(--ifm-background-color));
+  --fn-rule-fade: linear-gradient(to right, transparent, var(--fn-rule));
   width: 100%;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
+  background-image: var(--fn-rule-fade);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
 }
 
 /* ----- Shared eyebrow + meta ----- */
@@ -96,8 +101,10 @@
 
 .meta {
   font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.8rem;
-  color: var(--ifm-color-emphasis-600);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--ifm-color-emphasis-500);
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
@@ -109,54 +116,200 @@
   color: var(--ifm-color-emphasis-400);
 }
 
-/* ----- Thumbnails (image or placeholder) ----- */
+/* ----- Thumbnails: gasketed lab chassis around a serial-console CRT ----- */
 .thumb {
-  display: block;
+  /* 16:9. It must match the aspect the generated tiles are cropped to (`aspect` in
+     scripts/thumbnails/presets.json), because a mismatch crops AND rescales, which
+     turns the baked dither into grey mush. The thumb asset is 400 wide, whose 16:9
+     height is 225 but which dithers at 200x112 and doubles to 400x224 -- a 0.4%
+     ratio difference that `object-fit: cover` absorbs as a sub-pixel crop.
+
+     The gasketed housing sits *around* that screen. Bezel + gasket are added
+     outside the 200px / 576px content box (see `.row` column and `.featuredThumb`
+     max-width) so the dither still paints 1:1 on a retina display.
+
+     That 1:1 holds only while the screen stays 200px wide. Below the 768px
+     breakpoint the row grid collapses to one column and the tile spans the content
+     width instead, so index.js hands the browser an 800-wide asset there via
+     srcset. Moving that breakpoint means moving the `sizes` attribute with it. */
+  --field-notes-thumb-ratio: 16 / 9;
+  --fn-crt: #0c0c10;
+  --fn-bezel: 10px;
+  --fn-gasket: 3px;
+  --fn-chin: 6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
+  padding: var(--fn-bezel);
+  padding-bottom: calc(var(--fn-bezel) + var(--fn-chin));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 30%),
+    linear-gradient(145deg, #242428, #141418);
+  border: 0;
+  border-radius: 5px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 26px rgba(0, 0, 0, 0.36);
+  text-decoration: none;
+  color: inherit;
 }
 
-.thumb img {
+/* Infima's `a:hover { text-decoration: underline }` beats `.thumb` alone. */
+.thumb:hover,
+.thumb:focus,
+.thumb:focus-visible {
+  text-decoration: none;
+  color: inherit;
+}
+
+.gasket {
+  display: block;
+  padding: var(--fn-gasket);
+  background: #0a0a0c;
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px #2e2e28,
+    inset 0 0 0 1px #000,
+    0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.screen {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 100%;
+  aspect-ratio: var(--field-notes-thumb-ratio);
+  overflow: hidden;
+  background: var(--fn-crt);
+  border-radius: 1px;
+}
+
+.pips {
+  position: absolute;
+  left: 12px;
+  bottom: 5px;
+  display: flex;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.pipAmber,
+.pipGreen {
+  position: relative;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1a1a1e;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Lit state. It rides an overlay rather than swapping `background` and
+   `box-shadow` on the pip itself so it crossfades on a single interpolatable
+   property -- the scroll ramp below writes fractional values every frame, and a
+   half-lit pip has to read as half-lit rather than as one of two states. */
+.pipAmber::after,
+.pipGreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: var(--fn-focus, 0);
+  transition: opacity 0.18s ease;
+}
+
+.pipAmber::after {
+  background: #f5a623;
+  box-shadow: 0 0 7px #f5a623;
+}
+
+.pipGreen::after {
+  background: #34d399;
+  box-shadow: 0 0 7px #34d399;
+}
+
+.screen img,
+.thumbPlaceholder {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 0;
+}
+
+/* The thumbnails are dithered into the file by `make thumbs`, so the dot pattern
+   is the subject rather than an encoding artefact. At 2x DPR both slots draw
+   their asset 1:1 and this hint does nothing; it earns its place at 1x DPR and
+   at browser zoom, where the default would average neighbouring dots into flat
+   mid-tones. */
+.screen img {
+  image-rendering: pixelated;
 }
 
 .thumbPlaceholder {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 2px;
+  border: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 7px,
+      rgba(255, 255, 255, 0.03) 7px,
+      rgba(255, 255, 255, 0.03) 8px
+    ),
+    var(--fn-crt);
+}
+
+.scanlines,
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scanlines {
+  z-index: 3;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.18) 0,
+    rgba(0, 0, 0, 0.18) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+}
+
+.vignette {
+  z-index: 4;
+  box-shadow:
+    inset 0 0 18px rgba(0, 0, 0, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ----- Featured hero ----- */
 .featured {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 2.5rem;
+  /* Chassis overflows into this column-gap (bezel + gasket on each side),
+     so 5.5rem leaves ~4rem of visible space between housing and copy. */
+  gap: 5.5rem;
   align-items: center;
   padding: 2.5rem 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .featuredThumb {
-  aspect-ratio: 16 / 10;
-  /* Black fill behind the image, so a portrait/tall thumbnail centered by
-     `contain` (below) sits on black bars instead of empty space. For a 16:10
-     landscape image the image covers the box and the fill never shows. */
-  background: #000;
-  border-radius: 2px;
-}
-
-/* Show the whole image rather than cropping it to fill the 16:10 box. Matters
-   for portrait/tall thumbnails (e.g. a vertical demo gif), which `cover` would
-   crop top and bottom. For a 16:10 landscape image this is identical to cover,
-   so existing and future featured images are unaffected. */
-.featuredThumb img {
-  object-fit: contain;
+  /* Hero asset is 1152px wide → 576px CSS at 2x. Chassis padding is outside
+     that: 10px bezel + 3px gasket per side = 602px outer cap. Width grows into
+     the featured grid gap so the screen still fills the column (1:1 on retina)
+     instead of shrinking inside the bezel. */
+  width: calc(100% + 2 * (var(--fn-bezel) + var(--fn-gasket)));
+  max-width: 602px;
 }
 
 .featuredTitle {
@@ -168,58 +321,124 @@
 }
 
 .featuredDek {
-  font-size: 1.05rem;
-  line-height: 1.55;
-  color: var(--ifm-color-emphasis-700);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-600);
   margin: 0 0 1.1rem 0;
 }
 
 /* ----- Standard row ----- */
 .row {
   display: grid;
-  grid-template-columns: 200px minmax(0, 1fr);
+  grid-template-columns: 218px minmax(0, 1fr);
   gap: 2rem;
   align-items: stretch;
   padding: 2rem 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-/* Non-featured thumbnails get a purple duotone: the image is desaturated to
-   grayscale, then an accent-colored overlay blended with mix-blend-mode:color
-   re-maps that luminance to the brand hue — dark tones read as deep purple,
-   light tones as pale purple. `isolation` keeps the blend confined to the
-   thumbnail so the page background never bleeds through. The featured hero
-   image is intentionally left in full color. */
-.rowThumb {
-  position: relative;
+.featured,
+.row {
+  background-image: var(--fn-rule-fade);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+}
+
+/* Tiles carry no *static* colour treatment: the dither and the grayscale ramp are
+   baked into the asset by `make thumbs`. A permanent CSS duotone would flatten that
+   ramp, and a CSS dither lattice at the same 2px pitch as the baked dots would
+   moire against them.
+
+   The lit state is the exception, and it is a smooth gradient rather than a
+   lattice, so it tints without fighting the dots: brand colour at the top falling
+   to transparent, blended with `color` so the baked luminance (and therefore every
+   dot) survives untouched and only hue changes. Applied to both slots -- featured
+   and rows -- so lighting any card behaves the same.
+
+   `--fn-focus` is how lit a card is, 0 to 1, and everything below reads it: the
+   screen tint, the two pips, the title underline. A pointer drives it to 1 on
+   hover; touch has no pointer, so viewportFocus.js ramps it from the card's
+   distance to the middle of the viewport as you scroll. Every reader passes a
+   `, 0` fallback so an unset property means "dark" rather than "invalid", which
+   for `opacity` would compute to 1 and light every tile at once. */
+.thumb .screen {
   isolation: isolate;
 }
 
-/* The thumbnail height is driven by the text column beside it (the row stretches
-   both cells to the same height): the image and placeholder are taken out of
-   flow so they contribute no intrinsic height and simply fill whatever height
-   the title/dek/meta occupy. Its bottom edge always lines up with the text. */
-.rowThumb img,
-.rowThumb .thumbPlaceholder {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.rowThumb img {
-  filter: grayscale(1) contrast(1) brightness(1.08);
-}
-
-.rowThumb::after {
+.thumb .screen::after {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 2px;
+  z-index: 1;
   pointer-events: none;
-  background: var(--field-notes-accent);
+  background: linear-gradient(
+    180deg,
+    var(--field-notes-thumb-tint, var(--field-notes-accent)) 0%,
+    color-mix(in srgb, var(--field-notes-thumb-tint, var(--field-notes-accent)) 38%, transparent)
+      52%,
+    transparent 100%
+  );
   mix-blend-mode: color;
-  opacity: 0.45;
+  opacity: var(--fn-focus, 0);
+  transition: opacity 0.18s ease;
+}
+
+/* Only a real pointer gets :hover. iOS synthesises it on tap and then latches it
+   to that card, which left one tile lit while you scrolled past the rest of the
+   feed; gating it here is what lets the scroll ramp own the state on touch. */
+@media (hover: hover) {
+  .featured:hover,
+  .row:hover,
+  .title a:hover,
+  .featuredTitle a:hover {
+    --fn-focus: 1;
+  }
+}
+
+/* Keyboard focus lights the card on any device. On touch the inline value written
+   by the scroll ramp sits on the same element and wins, so a tap cannot strand a
+   card lit the way :focus-within used to. */
+.featured:focus-within,
+.row:focus-within,
+.thumb:focus-visible {
+  --fn-focus: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb .screen::after,
+  .pipAmber::after,
+  .pipGreen::after,
+  .title a,
+  .featuredTitle a {
+    transition: none;
+  }
+}
+
+/* A 16:9 tile is shorter than the text column beside it, so it top-aligns with
+   the eyebrow rather than stretching. */
+.rowThumb {
+  --fn-bezel: 7px;
+  --fn-gasket: 2px;
+  align-self: start;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 6px 16px rgba(0, 0, 0, 0.28);
+}
+
+.rowThumb .pips {
+  left: 8px;
+  bottom: 3px;
+  gap: 3px;
+}
+
+.rowThumb .pipAmber,
+.rowThumb .pipGreen {
+  width: 4px;
+  height: 4px;
 }
 
 .title {
@@ -231,22 +450,38 @@
 }
 
 .dek {
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--ifm-color-emphasis-700);
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-600);
   margin: 0 0 0.9rem 0;
 }
 
-/* ----- Title links (shared) ----- */
+/* The underline fades in with the rest of the lit state rather than switching on,
+   so it tracks the scroll ramp. Mixing the accent down to nothing keeps it on one
+   animatable property; a pseudo-element bar would only underline the first line of
+   a wrapped title, which is most of them on a phone. */
 .title a,
 .featuredTitle a {
-  color: var(--ifm-heading-color);
-  text-decoration: none;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--field-notes-accent) calc(var(--fn-focus, 0) * 100%),
+    transparent
+  );
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color 0.18s ease;
 }
 
-.title a:hover,
-.featuredTitle a:hover {
-  color: var(--field-notes-accent);
+/* Infima styles anything link-ish inside the card; the card itself never changes
+   colour or gains an underline when it lights up. */
+.featured:hover,
+.row:hover,
+.featured:focus-visible,
+.row:focus-visible {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -259,9 +494,13 @@
     padding: 1.75rem 0;
   }
 
-  .featuredThumb,
-  .rowThumb {
-    aspect-ratio: 16 / 9;
+  /* The hero tile grows past its column on desktop to fill the featured grid
+     gap; in one column there is no gap to grow into, so that overhang would be
+     clipped by the viewport. Pull it back to the content width -- the chassis
+     then lines up with the copy below it and with the row tiles. */
+  .featuredThumb {
+    width: 100%;
+    max-width: 100%;
   }
 
   .featuredTitle {
