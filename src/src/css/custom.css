@@ -16,6 +16,16 @@
   --ifm-font-family-base: "Inter", sans-serif;
 }
 
+/* Desktop navbar is two rows (logo + tabs) with height: auto, so the
+   rendered bar is taller than the 5rem token. Sticky TOC / headers use
+   this as `top`; keep it in sync with nav.navbar's offsetHeight or they
+   pin underneath the bar. Measured 118px at the two-row layout. */
+@media (min-width: 997px) {
+  :root {
+    --ifm-navbar-height: 118px;
+  }
+}
+
 /* Center sidebar + content as a unit, like Roboflow */
 [class*="docRoot"] {
   max-width: 1400px !important;
