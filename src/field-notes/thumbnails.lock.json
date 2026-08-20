@@ -1,0 +1,169 @@
+{
+  "didderVersion": "1.3.0",
+  "notes": {
+    "2026-06-15-power-pull-orin-nx": {
+      "source": "local:power-pull-orin-nx.jpg",
+      "sourceSha256": "c95139dc0664ce7d9d6a05da72d3ae1546a8e13a128fbccda62e443866d55a5e",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "8e7971b09a8b93bdf32d0b33922f73aaab1eb8804ef686e4fba7ced0d3561cad",
+        "tile": "a8edc8ccbfc1f3e4eb3895a60694f657b7f8d0afd79338f8b85bc7e2c27b850a",
+        "hero": "0c4b8119a8f2cb77b52ffbfb627964f3a40959f766d449585c2f4b97b78e4643"
+      }
+    },
+    "2026-06-16-rpi5-from-macos": {
+      "source": "local:rpi5-from-macos.jpg",
+      "sourceSha256": "c154ecf838cddb5d42df614095afc9d19b4573d7e95bd553ce1a8c05bde7479c",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "dfee63a0b95fabb153083bbf48f9fb386be48c26eb5c5eb46b4177fe4bc799b2",
+        "tile": "039a994d0f87796f57f79611194160018af26844dd1a3ee88a67c1292f8ec660",
+        "hero": "9b8cf6d116dd8a835f68a203c55a96b7247017381690cedc6381ad547b734fc6"
+      }
+    },
+    "2026-06-17-pre-seeded-docker-cache": {
+      "source": "local:pre-seeded-docker-cache.jpg",
+      "sourceSha256": "50bc0b2905a2cbcdb4c2f9e8e3c208401d19836e5a4eceed91be11d3b97e943d",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "ddb10f9c32fb1414c804d25f5780057d5bebc4f9bf21c71b0d600a7bd4b3d3ee",
+        "tile": "12f9d1d47b2e56ac6a41893b7e227d96c66b97ab4d0005a2ee2a0d49215b0ad3",
+        "hero": "d0dc28d4cdd214ebac5097eba2774f5339b3d625026b812ae31bb26e6950f4f9"
+      }
+    },
+    "2026-06-20-two-boots-trust-update": {
+      "source": "local:two-boots-trust-update.jpg",
+      "sourceSha256": "7e1e781afceb439a41adf5879828354d29b434117386926539b8157eb10f1a06",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "a5134f81a24597d945a73468ecaca8e945da2ed1b84200a0c551383f5b9d71df",
+        "tile": "cbc57998852258cfaf22b278fbd1ffbc56ad45431c01c4606888798fd46c0a51",
+        "hero": "3e505be9a39b579467c3ed5587ec85c6a9b8b47b81a83b793baccb7ebc06e979"
+      }
+    },
+    "2026-06-22-fastest-path-ai-vision-nvidia": {
+      "source": "local:deepstream-demo.gif",
+      "sourceSha256": "cc058ad5ce176c0a8d034583e5612c3dd113e08076c55765013f91034672f3d2",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": true,
+      "ext": "gif",
+      "frames": {
+        "kept": 46,
+        "total": 91,
+        "fps": 7.5
+      },
+      "outputs": {
+        "thumb": "dc80e2125d1bd1d17b122ef2a62589a321b9d845281439888f728b24b0aae91a",
+        "tile": "9b126e50e57b9fa5fa1e3e50e41bdb32a99722f6db173edc25812f553882a8ad",
+        "hero": "df956594c9b9cdd0262345694f15dda1553ba6db804315eddde5fdcf3f789a72"
+      }
+    },
+    "2026-06-24-hardened-boot-imx93": {
+      "source": "local:hardened-boot-imx93.jpg",
+      "sourceSha256": "1733953266d1937d8e371d89d9733c4f150fd33caf5593a7bb47a33a895fc1ba",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "cc2778f8ce2ba497ec32cbc809ad54c6cc4bcfdfc04036b91e660ac2fe3b99ef",
+        "tile": "dc1d8af672fa0c32bdbb469de8111e236fff1cb2451ab01d35afe6df4d162706",
+        "hero": "4c12f27f83cf48153e128f952dcbe5e43b54b04e7ce5aabf51d64bc1ab8393e8"
+      }
+    },
+    "2026-07-01-nodejs-dashboard-portability": {
+      "source": "local:nodejs-dashboard-portability.png",
+      "sourceSha256": "9a1c569b136b1ceb80c15299dc86b7808a2dd8b50692368ab6986b7282295435",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "e26182e9a3f660d24233965e8605e38ef5d3d430977323b95d06910a08f7b7ff",
+        "tile": "3c3b626775a8b7d757373d8cac8b5d83135a7b7136fff49688aa246d6146af6c",
+        "hero": "295df1e125414f18913850f73fe7b5e72a2909142300d3aff9809486c651c293"
+      }
+    },
+    "2026-07-02-agentic-mcp-pi-exporter": {
+      "source": "local:agentic-mcp-pi-exporter-desktop.png",
+      "sourceSha256": "962e3f8b35ab6281f2e5c69ea99e09e3d1907839244a5e94cf3d4941565d9199",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "5be6412c0bfb3eb875f4884c96e9b31cd29a7f8e9dc05560f77d75a3b1ed92d7",
+        "tile": "187a3f80654efb900820876263ce2bdaff8c0fd3cf33bd41444ed8cf5f7fdee9",
+        "hero": "5a0c6804881b5c56f07fdd0bd5e28321c33e49b40b82f5b183d5df91a64d4769"
+      }
+    },
+    "2026-07-08-imx8mp-npu-pose": {
+      "source": "local:imx8mp-npu-pose/02-demo-layout.jpg",
+      "sourceSha256": "4e4c2c6d48d51122496b8fb8fdb11e30e43c0f7a7caa3de82dc74af8ece29fc3",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "8e62da14089d8924267abfaee87a384f88079b54b45410e87373e8a5c15afb64",
+        "tile": "934ae792a28ec16dc3b71f17ef9330d547ced310cefd03018a616f08423a607b",
+        "hero": "a9b967649bc588d6eeff832af5f84c12b9e8ac1d6281be3df87f78aa318316b6"
+      }
+    },
+    "2026-07-15-python-multiversion-uv": {
+      "source": "local:python-multiversion-uv.png",
+      "sourceSha256": "a4aa56ba465ae3ef3e4158d551d3b071a55ee9b997e52f1cce940dc6d27a10fc",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": false,
+      "ext": "png",
+      "outputs": {
+        "thumb": "9ff78351f4ac507601b1b0a1d0265c258518983b4840f1d03476446ff2255431",
+        "tile": "e085fe888d437c8beadc71fd0887821e71d128eb1a51ce3ffd16244727a030b2",
+        "hero": "32b4c18b604250e5226fb58130a64dc639b5d13c1cc9fd1a5b5a67b1c809c3d4"
+      }
+    },
+    "2026-07-28-ros2-foxglove-immutable-os": {
+      "source": "local:robot.gif",
+      "sourceSha256": "b964346051355d514f46ef97b585c14b12f1fcf18cd124691fc01c17ad304af1",
+      "preset": "grain-mono",
+      "presetSha256": "5337b6560041feab354c97c4a4f04f292b064b99b7e6141460fd409fd160353c",
+      "didderVersion": "1.3.0",
+      "animated": true,
+      "ext": "gif",
+      "frames": {
+        "kept": 46,
+        "total": 92,
+        "fps": 7.5
+      },
+      "outputs": {
+        "thumb": "7aa689c30e5df609dfc54403cac87c77eb94554461a8ca10d41070b1707032a2",
+        "tile": "ec606570e6d41c29ba3c60f7ca14e61faca0b5eb78df7100fa9b36687145696b",
+        "hero": "3bd27816347847cd19e4e86671da4401d8b812ddad596b76b5a0d5eab18c7558"
+      }
+    }
+  }
+}

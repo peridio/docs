@@ -16,6 +16,16 @@
   --ifm-font-family-base: "Inter", sans-serif;
 }
 
+/* Desktop navbar is two rows (logo + tabs) with height: auto, so the
+   rendered bar is taller than the 5rem token. Sticky TOC / headers use
+   this as `top`; keep it in sync with nav.navbar's offsetHeight or they
+   pin underneath the bar. Measured 118px at the two-row layout. */
+@media (min-width: 997px) {
+  :root {
+    --ifm-navbar-height: 118px;
+  }
+}
+
 /* Center sidebar + content as a unit, like Roboflow */
 [class*="docRoot"] {
   max-width: 1400px !important;
@@ -1154,6 +1164,12 @@ html[data-theme="dark"] .code-copy-tooltip {
   /* Lighter accent, used only for the category eyebrow labels so they read
      softer than the full-strength accent on dividers/links/thumbnails. */
   --field-notes-eyebrow: #7c73ed;
+  /* Hover-only duotone wash on the non-featured thumbnails. brand-400 is the same
+     purple the active navbar tab uses in dark mode -- lighter and less inky than
+     the accent, so a hovered tile reads as soft lavender rather than deep indigo.
+     Not theme-split: the tiles sit on the fixed CRT black in both themes, so the
+     wash lands on the same backdrop either way. */
+  --field-notes-thumb-tint: var(--color-brand-400);
 }
 
 html[data-theme="dark"] .plugin-id-field-notes {
