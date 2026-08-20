@@ -5,6 +5,13 @@ const sidebars = {
   changelog: [
     {
       type: 'category',
+      label: 'August 2026',
+      collapsible: false,
+      collapsed: false,
+      items: ['august-2026/desktop-1.0.0-rc.7'],
+    },
+    {
+      type: 'category',
       label: 'July 2026',
       collapsible: false,
       collapsed: false,
