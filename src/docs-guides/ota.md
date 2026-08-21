@@ -36,12 +36,12 @@ Sign up for a **free developer account** at [connect.peridio.com/login](https://
   />
 </div>
 
-- The browser confirms the CLI session and creates a personal access token; return to your terminal.
+- The browser confirms the CLI session and issues an API token scoped to your organization; return to your terminal.
 
 <div className="framed-shot">
   <img
     src="/img/guides/ota/cli-auth.png"
-    alt="Browser confirmation page after logging in: CLI Authenticated — your Avocado CLI is now connected and a personal access token has been created for this session."
+    alt="Browser confirmation page after logging in: CLI Authenticated — your Avocado CLI is now connected and an access token has been created for this session."
     style={{width: '50%', display: 'block', margin: '0 auto'}}
     loading="lazy"
     decoding="async"
@@ -80,7 +80,7 @@ Before you can upload, you need a built runtime and a running device to update. 
 
 1. Install dependencies: `avocado install -f`
 2. Build the runtime: `avocado build`
-3. Provision a device — either [QEMU](/developer-reference/getting-started/qemu) or [supported hardware](/developer-reference/provisioning) (`avocado provision`). Since the project was initialized with Connect in Step 2, the device enrolls and auto-claims into your project on first boot.
+3. Provision a device — either [QEMU](/developer-reference/getting-started/qemu) or [supported hardware](/developer-reference/provisioning) (`avocado provision`). For QEMU, provisioning only creates the disk image — boot the VM afterwards with `avocado sdk run -iE vm dev`. Since the project was initialized with Connect in Step 2, the device enrolls and auto-claims into your project on first boot.
 4. Confirm the device is online in Connect: open your project's fleet, find the device, and check that its status shows **Online**.
 
 <div className="framed-shot">
@@ -204,7 +204,7 @@ Deployments target a cohort, so before creating one, make sure your device is as
   />
 </div>
 
-- Once the deployment is active, verify it on the device: connect over UART or SSH, run `avocadoctl runtime list` to confirm the new runtime is active, and check that the change shipped (e.g., the new packages are present).
+- The rollout is asynchronous — the device applies the update and reboots on its own schedule. Once it shows **On target** in the deployment's **Rollout** tab (see Step 5), verify it on the device: connect over UART or SSH, run `avocadoctl runtime list` to confirm the new runtime is active, and check that the change shipped (e.g., the new packages are present).
 
 <div className="framed-shot">
   <img
@@ -230,7 +230,7 @@ Deployments target a cohort, so before creating one, make sure your device is as
   />
 </div>
 
-- Verify on the device the same way: `avocadoctl runtime list` shows the new runtime active, and the new package is present.
+- Verify on the device the same way once it shows **On target** in the deployment's **Rollout** tab: `avocadoctl runtime list` shows the new runtime active, and the new package is present.
 
 <div className="framed-shot">
   <img
