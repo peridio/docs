@@ -12,7 +12,7 @@ Along the way you'll see each step done multiple ways where multiple tools suppo
 
 - A **runtime** is the versioned artifact you deploy. You build it locally, then upload and publish it to your Connect project.
 - A **deployment** targets a published runtime at a **cohort** of devices (optionally filtered to specific devices or tags).
-- Devices verify every update against TUF signatures before installing, and updates apply to A/B partitions with automatic rollback on boot failure. See the [update architecture](/avocado-os/security/update-architecture) overview.
+- Devices verify every update against TUF signatures before installing. How the update applies depends on what changed: extension-level changes (like the package additions in this guide) merge live with no reboot, while updates that carry a new OS image apply to A/B partitions and reboot into the new slot, with automatic rollback on boot failure. See the [update architecture](/avocado-os/security/update-architecture) overview and the [activation process](/developer-reference/avocadoctl/runtime-management/activation-process) for the exact rules.
 
 ## Prerequisites
 
@@ -71,7 +71,7 @@ Sign up for a **free developer account** at [connect.peridio.com/login](https://
 </div>
 
 :::info
-If your device was provisioned before Connect was initialized in the project, follow the enrollment steps in [Connect Getting Started](/avocado-connect/getting-started) to claim it.
+If your device was provisioned before Connect was initialized in the project, its image contains no Connect configuration, so it cannot enroll. After running `avocado connect init`, rebuild the image so it picks up the Connect extensions and device config (`avocado install -f && avocado build`), then re-provision the device. It enrolls and auto-claims into your project on first boot.
 :::
 
 ## Step 3: Upload your runtime
@@ -204,7 +204,7 @@ Deployments target a cohort, so before creating one, make sure your device is as
   />
 </div>
 
-- The rollout is asynchronous — the device applies the update and reboots on its own schedule. Once it shows **On target** in the deployment's **Rollout** tab (see Step 5), verify it on the device: connect over UART or SSH, run `avocadoctl runtime list` to confirm the new runtime is active, and check that the change shipped (e.g., the new packages are present).
+- The rollout is asynchronous — the device applies the update on its own schedule (an extension-only change like this one merges live; a reboot happens only when the update carries a new OS image). Once it shows **On target** in the deployment's **Rollout** tab (see Step 5), verify it on the device: connect over UART or SSH, run `avocadoctl runtime list` to confirm the new runtime is active, and check that the change shipped (e.g., the new packages are present).
 
 <div className="framed-shot">
   <img
@@ -256,7 +256,7 @@ When the rollout starts, devices in the cohort show as **Pending** with their cu
   />
 </div>
 
-As each device applies the update and reboots, it moves to **On target**. When every device converges, the deployment is **Completed**.
+As each device applies the update, it moves to **On target**. When every device converges, the deployment is **Completed**.
 
 <div className="framed-shot">
   <img
@@ -269,5 +269,5 @@ As each device applies the update and reboots, it moves to **On target**. When e
 
 ## Rollback and safety
 
-- What happens on a bad deployment? A/B rollback to the rescue — read our Field Note: [Two boots to trust an update](/field-notes/2026/06/20/two-boots-trust-update).
+- What happens when a bad OS update ships? A/B rollback to the rescue — read our Field Note: [Two boots to trust an update](/field-notes/2026/06/20/two-boots-trust-update).
 - For more information, see [Deployments](/avocado-connect/deployments) and the [update architecture](/avocado-os/security/update-architecture).
