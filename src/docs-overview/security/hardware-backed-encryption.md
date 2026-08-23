@@ -17,7 +17,7 @@ Where the keys live matters as much as the encryption itself. A LUKS volume whos
 
 ### LUKS encryption
 
-Avocado uses LUKS2 with AES-256-XTS for full-disk encryption of writable partitions. The BTRFS `/var` partition — which holds extensions, application data, and device state — is encrypted at the block level. The immutable root filesystem uses dm-verity for integrity (not encryption), since its contents are public (the OS itself) and integrity matters more than confidentiality.
+Avocado uses LUKS2 with AES-256-XTS for full-disk encryption of writable partitions. The BTRFS `/var` partition — which holds extensions, application data, and device state — is encrypted at the block level. The immutable root filesystem is not encrypted, since its contents are public (the OS itself) and integrity matters more than confidentiality there. That integrity comes from the root being read-only and signature-verified at install time; see [Filesystem Integrity](filesystem-integrity) for what that covers.
 
 ### Hardware key storage
 

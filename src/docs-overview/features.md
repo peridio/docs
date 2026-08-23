@@ -54,7 +54,7 @@ The developer experience matters here. The config is readable, the CLI is fast, 
 
 ## Runtimes and Extensions
 
-Extensions are the building blocks of Avocado systems. Every piece of user-defined functionality ships as an extension — application binaries, configuration files, kernel modules, systemd services. Extensions are built on systemd's sysext and confext mechanisms, which means they inherit dm-verity integrity checking and LUKS encryption support out of the box. The secure boot chain extends all the way through the extension layer.
+Extensions are the building blocks of Avocado systems. Every piece of user-defined functionality ships as an extension — application binaries, configuration files, kernel modules, systemd services. Extensions are built on systemd's sysext and confext mechanisms, so each one ships as a read-only image that is replaced whole rather than patched, and can be signed at build time. Extensions live on `/var`, which is LUKS-encrypted on targets that enable it.
 
 Runtimes define which extensions are composed together for a given deployment:
 
@@ -196,12 +196,12 @@ This matters economically. Devices on 5G or cellular networks have expensive dat
 
 ## Security All the Way Through
 
-Security in Avocado OS is not a feature you bolt on later — it's structural. The secure boot chain starts at the hardware root of trust and extends through every layer of the system, including extensions.
+Security in Avocado OS is not a feature you bolt on later — it's structural. The secure boot chain starts at the hardware root of trust and runs through the bootloader into the kernel. From there, the root filesystem and every extension are immutable images, verified when they are installed.
 
-- [Secure boot](/avocado-os/security/secure-boot) with a verified boot chain from bootloader through kernel through extensions
-- [dm-verity filesystem integrity](/avocado-os/security/filesystem-integrity) on every read-only image, including extensions
+- [Secure boot](/avocado-os/security/secure-boot) with a verified boot chain from the hardware root of trust through the bootloader and kernel
+- [Filesystem integrity](/avocado-os/security/filesystem-integrity) from an immutable read-only root and signature-verified updates
 - [Hardware-backed encryption](/avocado-os/security/encryption) with LUKS and TPM support
 - [Atomic update architecture](/avocado-os/security/update-architecture) that eliminates partial-update attack vectors
-- Immutable root filesystem that cannot be tampered with at runtime
+- Immutable root filesystem that cannot be modified at runtime
 
-Every extension image carries its own dm-verity hash tree. If a single bit is altered, the system detects it. Combined with secure boot, this means the chain of trust extends from the silicon all the way up to your application code — not just to the kernel, not just to the root filesystem, but through every extension in the runtime.
+Every extension is a read-only image, replaced whole rather than patched, and can be signed at build time so you can tell who produced it. Block-level verification at read time, for the root filesystem and for extensions alike, is not enabled yet. [Filesystem Integrity](/avocado-os/security/filesystem-integrity) sets out what is covered today and what is not.

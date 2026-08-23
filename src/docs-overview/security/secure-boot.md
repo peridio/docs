@@ -9,7 +9,9 @@ description: 'Hardware root of trust and cryptographic boot chain verification i
 
 Hardware root of trust configured out of the box.
 
-Secure boot establishes an unbroken cryptographic chain of trust beginning at the silicon and extending through the bootloader, kernel, root filesystem, and every loaded system extension. Each component in the chain verifies the next before transferring control. If any component fails verification, the system refuses to boot — protecting against both malicious tampering and unintentional corruption.
+Secure boot establishes a cryptographic chain of trust beginning at the silicon and extending through the bootloader into the kernel. Each stage verifies the next before transferring control, and a stage that fails verification refuses to boot, protecting against both malicious tampering and unintentional corruption.
+
+Past the kernel, the root filesystem and extensions rest on immutability and on signature verification at install time, not on verification at read time. Read-time block verification is not enabled yet; see [Filesystem Integrity](filesystem-integrity) for what that covers and what it does not.
 
 The challenge is that every silicon vendor has a different mechanism for establishing a root of trust, different fuse provisioning procedures, and different signing toolchains. Avocado abstracts this behind a unified interface that works the same way regardless of the underlying hardware.
 
@@ -32,9 +34,9 @@ The boot chain verification flows through each stage:
 
 1. **Silicon ROM** — Vendor-programmed immutable code validates the first-stage bootloader against keys burned into hardware fuses.
 2. **Bootloader** — Verified bootloader validates the kernel image and device tree using developer-provided signing keys.
-3. **Kernel** — Verified kernel enforces dm-verity on the root filesystem (see [Filesystem Integrity](filesystem-integrity)).
-4. **Root filesystem** — Immutable SquashFS image, verified block-by-block at read time.
-5. **Extensions** — Every system extension (sysext) and configuration extension (confext) is independently signed and verified before overlay.
+3. **Kernel** — Verified kernel mounts the immutable root filesystem. Block-level verification of that filesystem at read time is not enabled yet (see [Filesystem Integrity](filesystem-integrity)).
+4. **Root filesystem** — Immutable read-only erofs image, signature-verified when it was installed and unmodifiable at runtime.
+5. **Extensions** — System extensions (sysext) and configuration extensions (confext) are replaced whole rather than patched, and can be signed as KAB packages at build time. Per-extension verification before overlay is not enabled yet.
 
 ### Multi-vendor signing authorities
 

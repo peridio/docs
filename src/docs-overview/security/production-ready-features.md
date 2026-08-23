@@ -74,7 +74,7 @@ IEC 62443 is the primary cybersecurity standard for industrial automation and co
 - **Defense in depth** — IEC 62443 explicitly requires multiple independent layers of security. A single control (e.g., encryption alone) is insufficient — the architecture must combine multiple mechanisms so that failure of one doesn't compromise the system.
 - **Security levels** — Higher SLs require stronger controls. SL-2 (protection against intentional violation with simple means) is the baseline for most industrial deployments. SL-3 (sophisticated means) requires hardware-backed security.
 
-**How Avocado addresses this:** The layered security architecture — secure boot, dm-verity, LUKS encryption, extension isolation — provides the defense-in-depth that IEC 62443 requires. Hardware-backed key storage supports SL-3 deployments. The immutable root with verified extensions provides data integrity at the OS level. Audit logging and boot mode separation support access control and use control requirements. Atomic updates with rollback provide resource availability during maintenance.
+**How Avocado addresses this:** The layered security architecture — secure boot, an immutable signature-verified root, LUKS encryption, extension isolation — provides the defense-in-depth that IEC 62443 requires. Hardware-backed key storage supports SL-3 deployments. The immutable root with signed extensions provides data integrity at the OS level. Audit logging and boot mode separation support access control and use control requirements. Atomic updates with rollback provide resource availability during maintenance.
 
 #### Common Criteria (ISO/IEC 15408)
 
@@ -114,7 +114,7 @@ These data protection regulations apply when embedded devices process personal d
 
 ### Immutable system core
 
-The read-only root filesystem prevents runtime modification of system binaries, libraries, and configuration. Even with root access in production mode, the SquashFS root cannot be written to. Combined with dm-verity, this ensures that the system running in the field is exactly the system that was built and signed.
+The read-only root filesystem prevents runtime modification of system binaries, libraries, and configuration. Even with root access in production mode, the read-only erofs root cannot be written to. Combined with signature verification at install time, this means the system running in the field is the system that was built and signed, short of the storage medium being modified offline.
 
 ### Extension isolation
 

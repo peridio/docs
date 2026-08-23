@@ -2,61 +2,75 @@
 title: 'Filesystem Integrity'
 slug: /avocado-os/security/filesystem-integrity
 sidebar_position: 1
-description: 'dm-verity based block-level integrity verification in Avocado OS — every read verified against a Merkle hash tree.'
+description: 'How Avocado OS protects root filesystem integrity: an immutable read-only erofs root, signature-verified updates, and A/B rollback.'
 ---
 
 # Filesystem Integrity
 
-Integrity verification on every startup — and every read after that.
+An immutable root that nothing on the device can rewrite, and updates that are verified before they are installed.
 
-Avocado OS uses dm-verity to provide continuous, block-level integrity verification of the root filesystem. Rather than checking integrity once at boot, dm-verity intercepts every filesystem read and verifies each block against a pre-computed Merkle hash tree. Any modification to the filesystem — whether from a malicious actor, a cosmic ray flipping bits in storage, or silent disk corruption — is detected at read time. If a block doesn't match its expected hash, the read fails rather than silently executing corrupted code.
+:::caution dm-verity is not enabled yet
 
-## How it works
+Avocado OS does not currently verify filesystem blocks at read time. The kernel is built with dm-verity support on `secureboot` builds, but nothing generates a hash tree at build time and nothing activates a verity device at boot. Root filesystem integrity today comes from immutability and from signature verification at update time, both described below.
 
-### Immutable root filesystem
+An earlier version of this page described per-block dm-verity verification and per-extension hash trees as shipped features. They were not implemented. Runtime block verification is planned, and [What dm-verity will add](#what-dm-verity-will-add) below describes what changes when it lands.
 
-The Avocado root filesystem is a read-only image. Nothing at runtime can modify it — there is no writable root. This is the foundation that makes dm-verity practical: you can compute a complete hash tree at build time because the filesystem will never change.
+:::
+
+## What protects the root filesystem today
+
+### Immutable read-only root
+
+The Avocado root filesystem is a read-only [erofs](https://docs.kernel.org/filesystems/erofs.html) image, mounted `ro`. Nothing at runtime can modify it: there is no writable root, and no path by which a compromised process, a failed update, or an operator with a shell rewrites a system binary in place.
 
 ```
 Root filesystem
-├── Read-only mount
-├── dm-verity hash tree computed at build time
-└── Every block verified on read against Merkle tree
+├── Read-only erofs image (erofs-lz4 by default)
+├── Mounted ro, with no writable root at runtime
+└── Replaced whole on update, never patched in place
 ```
 
-### Merkle hash tree
+All mutable state lives on a separate BTRFS `/var` partition. On targets that declare the `encrypted-var` capability, that partition is LUKS2-encrypted (see [Hardware-Backed Encryption](/avocado-os/security/encryption)).
 
-At build time, Avocado computes a cryptographic hash for every block in the root filesystem. These hashes form a Merkle tree — a binary tree where each parent node is the hash of its children. The root hash of this tree is a single value that represents the integrity of the entire filesystem.
+Immutability is a real integrity property, and it is the one an attack on a running system meets first. What it does not cover is offline tampering: someone who can write to the storage medium directly, with the device powered off, can modify the image, and nothing on the device detects that at read time. Closing that gap is what dm-verity is for.
 
-This root hash is signed and embedded in the boot chain. When the kernel mounts the root filesystem with dm-verity enabled, it uses this root hash to verify every subsequent block read. Verifying any single block requires walking the tree from that block up to the root — a fast, constant-depth operation.
+### Signature-verified updates
 
-### Extension verification
+A root filesystem image is not trusted because of where it came from. Every update is verified before it is installed:
 
-Avocado's system extensions (sysext) and configuration extensions (confext) each carry their own independent hash trees. This means:
+- Update metadata is signed, and the signature chain is validated on the device before any payload is applied.
+- Each image is checked against the hash and length recorded in that signed metadata, so a payload altered or truncated in transit is rejected rather than written.
+- A payload failing either check is not installed, and the active slot is untouched.
 
-- Each extension is verified independently of the base system
-- A corrupted extension doesn't require re-verifying the entire OS
-- Extensions can be updated, added, or removed without affecting the integrity of other components
-- Rollback to a previous extension version restores a known-good, verified state
+This is integrity at install time over the whole image, rather than per-block integrity at read time. The distinction matters: a verified install proves the image was authentic when it landed, and immutability means the running system cannot rewrite it, but neither one detects a later offline modification of the storage.
 
-### What happens on verification failure
+### A/B slots and rollback
 
-When dm-verity detects a block that doesn't match its expected hash:
+Avocado keeps two complete boot slots. Updates are written to the inactive slot while the active system keeps running, and the switch is a single atomic flag flip. A slot that fails to boot rolls back to the last known-good slot automatically. [Atomic Update Architecture](/avocado-os/security/update-architecture) covers the full flow.
 
-1. The read operation returns an I/O error
-2. The system logs the failure with the specific block that failed verification
-3. Depending on configuration, the system can continue in degraded mode or trigger a reboot into the recovery partition
-4. On reboot, the A/B partition scheme allows falling back to the last known-good slot
+For integrity specifically, this means a corrupted or rejected update cannot leave the device running a half-written root filesystem. The update either lands whole in the inactive slot or does not land at all.
+
+## Extensions
+
+System extensions (sysext) and configuration extensions (confext) ship as read-only erofs or squashfs `.raw` images, overlaid at boot. Like the root filesystem, an extension image is replaced whole rather than patched, and its contents cannot be modified in place at runtime.
+
+Extension images can also be wrapped and signed as KAB packages at build time, which authenticates who produced the package. That is a different property from block-level integrity: it answers "did the holder of the signing keyset produce this image", not "does every block still match what was signed". Per-extension dm-verity hash trees are not implemented today.
 
 ## Relationship to secure boot
 
-dm-verity and secure boot are complementary layers:
+[Secure boot](secure-boot) and filesystem integrity are separate layers, and today they cover different ranges of the boot chain:
 
-- **Secure boot** ensures that only authorized code starts executing — it validates the chain from silicon through bootloader through kernel.
-- **dm-verity** ensures that the filesystem the kernel reads from hasn't been modified — it validates every block, every time it's read.
+- **Secure boot** validates code before it executes, from the silicon root of trust through the bootloader and into the kernel.
+- **Filesystem integrity**, as it stands, rests on the root being immutable and having been signature-verified when it was installed.
 
-Together, they create a continuous verification chain: secure boot trusts the kernel, the kernel trusts the dm-verity root hash, and dm-verity verifies every block of the root filesystem and every extension overlay.
+The chain is continuous up to the kernel. From the kernel onward it depends on install-time verification rather than read-time verification. dm-verity is the piece that extends cryptographic verification past the kernel into every block the kernel reads.
 
-## No runtime overhead in practice
+## What dm-verity will add
 
-dm-verity verification is a hash comparison on each block read. On modern hardware with hardware-accelerated cryptography, this adds negligible latency. Blocks are verified on first read and cached — subsequent reads of the same block hit the page cache without re-verification. For embedded workloads, the performance impact is effectively zero.
+When dm-verity lands, three things change:
+
+1. A Merkle hash tree is computed over the root filesystem image at build time, and its root hash is signed.
+2. The kernel verifies that root hash against a trusted key, then verifies every block against the tree as it is read. A block that does not match returns an I/O error instead of being executed.
+3. Offline tampering becomes detectable. Modifying the image on the storage medium, with the device powered off, is caught on the first read of a modified block rather than not at all.
+
+That closes the offline-modification gap described above. Until it ships, treat the root filesystem's integrity guarantee as verified at install and immutable at runtime, not verified on every read.
