@@ -2,16 +2,22 @@
 title: 'Hardware-Backed Encryption'
 slug: /avocado-os/security/encryption
 sidebar_position: 2
-description: 'LUKS full-disk encryption with TPM, TEE, and secure enclave integration in Avocado OS — data at rest protection standard.'
+description: 'LUKS2 encryption of the /var partition in Avocado OS: Argon2id key derivation everywhere, and TPM-sealed keys on targets with the OP-TEE firmware TPM.'
 ---
 
 # Hardware-Backed Encryption
 
-Data at rest protection standard.
+LUKS2 on the writable partition.
 
-Avocado OS implements LUKS (Linux Unified Key Setup) encryption to protect sensitive data on deployed devices. When hardware security modules are available — TPMs, TrustZone TEEs, or secure enclaves — Avocado uses them to seal encryption keys so they never exist in accessible memory. For devices without dedicated security hardware, the platform provides software-based key derivation that still delivers meaningful protection.
+Avocado OS encrypts `/var` — extensions, application data and device state — with LUKS2. The key is derived on the device at first boot, and on a target with the OP-TEE firmware TPM it is additionally sealed to that TPM so it is only released when the boot measurement matches.
 
-Where the keys live matters as much as the encryption itself. A LUKS volume whose key is stored in a plaintext file on the same disk provides no real protection. Hardware-backed key storage ensures that encryption keys are bound to specific hardware and cannot be extracted, even with physical access to the storage media.
+Where the key lives matters as much as the encryption. A LUKS volume whose key sits in a plaintext file on the same disk protects nothing. So it is worth being precise about which of the two paths below a given device is on, because they defend against different attackers: the derived key protects the media once removed, and only the sealed key also protects against code running on the device.
+
+:::caution Availability
+
+TPM sealing is available on the NXP i.MX 93 FRDM, and only when the image is built with the fTPM feature. Every other target uses the Argon2id key described below, which binds the volume to the device but is not hardware-sealed. `/var` encryption itself is a build-time feature; a device gets it by being provisioned or updated with an image that has it enabled.
+
+:::
 
 ## How it works
 
@@ -21,41 +27,43 @@ Avocado uses LUKS2 with AES-256-XTS for full-disk encryption of writable partiti
 
 ### Hardware key storage
 
-When the target hardware provides a security module, Avocado uses it:
+One mechanism is implemented today, on one target:
 
-| Hardware                                                | Key storage mechanism                                                                |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| TPM 2.0                                                 | Key sealed to TPM PCR state — only released when boot chain is in a known-good state |
-| ARM TrustZone TEE                                       | Key stored in secure world, inaccessible from normal world OS                        |
-| Secure enclave (e.g., NXP CAAM, NVIDIA security engine) | Key derived from hardware-unique secrets, never leaves the enclave                   |
-| Crypto authentication co-processor                      | Key sealed to device-specific identity                                               |
+| Hardware                                     | Key storage mechanism                                                                        | Status                                                                           |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| TPM 2.0, provided by the OP-TEE firmware TPM | `/var` key sealed to the TPM and bound to PCR 7, released only when that measurement matches | Available on the NXP i.MX 93 FRDM, when the image is built with the fTPM feature |
 
-The key point: encryption keys are bound to the hardware. Removing the storage media and mounting it on another device won't decrypt the data. The key only exists inside the security module on the original device.
+The firmware TPM runs as an OP-TEE trusted application in ARM TrustZone's secure world, so on this target the TPM and the TEE are the same mechanism rather than two. The key is sealed under it, with the Argon2id key below retained as a recovery path.
+
+Where a seal is in place, the encryption key is bound to that device: removing the storage media and mounting it elsewhere will not decrypt the data.
+
+:::caution Scope
+
+Discrete TPMs, NXP CAAM, the NVIDIA security engine and crypto authentication co-processors are not wired to `/var` key storage. An earlier version of this page listed them as available mechanisms. On any target other than the one above, `/var` encryption uses the Argon2id key described below and is not hardware-sealed.
+
+:::
 
 ### Software fallback
 
-Not every embedded platform has a dedicated security module. For these devices, Avocado supports split-knowledge key derivation using Argon2id — a memory-hard key derivation function that combines multiple device-specific inputs (hardware serial numbers, provisioned secrets, boot state) to derive the encryption key. This makes brute-force extraction significantly harder than a simple passphrase, even without hardware protection.
+This is the default path, and the only one on targets without the fTPM above. The key is derived with Argon2id, a memory-hard function, from the SoC's hardware-unique identifier. Memory-hardness makes brute-force extraction far more expensive than a passphrase.
+
+Be clear about what this does and does not give you. The SoC identifier binds the key to the device, but it is readable by software on the running system rather than secret, so a derived key protects the volume at rest against someone who takes the storage media — not against code running on the device. That is the gap the fTPM seal closes, and why it is worth enabling where it exists.
 
 ### Per-application encryption domains
 
-Through Avocado's extension system, different applications can maintain separate encryption domains. A system extension containing an AI model can encrypt its model weights with application-specific keys, separate from the system-level encryption. This multi-layered approach means:
-
-- Sensitive application data is encrypted with application-specific keys
-- System data uses system-level encryption
-- Compromise of one domain doesn't expose the other
-- Extensions can be encrypted independently of each other
+Not implemented. Extensions are not encrypted independently of each other or of system data, and there is no per-application key. An earlier version of this page described separate encryption domains per extension — with an AI model extension encrypting its own weights — as an available capability. Everything under `/var`, including all extensions, is covered by the single `/var` volume key described above.
 
 ### Hardware-accelerated cryptography
 
 Avocado automatically detects and uses hardware cryptographic accelerators present on the target platform. Most modern SoCs include dedicated crypto engines (AES-NI on x86, ARM Crypto Extensions on ARM) that handle encryption at near-native throughput. The system falls back to optimized software implementations only when hardware acceleration is unavailable.
 
-## Provisioning and key management
+## Where the key comes from
 
-Key provisioning is integrated into the `avocado provision` workflow. During manufacturing provisioning, the CLI can:
+Keys are established by the device on its first boot, not by a provisioning step and not by the CLI.
 
-- Generate and seal device-unique encryption keys
-- Program keys into hardware security modules
-- Establish key hierarchies for multi-tenant or multi-domain encryption
-- Record key metadata for fleet-level key management
+On that first boot the device derives the Argon2id key from its SoC identifier, creates the LUKS2 container on the `/var` partition, and then — on a target with the fTPM — enrolls a second keyslot sealed to the TPM at PCR 7. Every later boot unlocks through the sealed keyslot, falling back to the Argon2id one if the seal cannot be released. Nothing has to be loaded onto the device, and no key material leaves it.
 
-This happens as part of the standard provisioning flow — not as a separate manual step on the manufacturing line.
+Two consequences worth planning around:
+
+- **Enabling encryption reformats `/var`.** The container is created over whatever was on the partition, so turning it on is a provisioning-time decision, not a field upgrade that preserves data. See [Atomic Update Architecture](/avocado-os/security/update-architecture) for how the OS itself is updated.
+- **`avocado provision` does not manage encryption keys.** It deploys a runtime; it does not generate, seal, or program key material, and there is no fleet-level key escrow or key hierarchy. An earlier version of this page described key generation, HSM programming, key hierarchies for multi-tenant encryption, and fleet key metadata as part of the provisioning flow. None of that exists. For the signing keys used on images and extensions — which are a separate concern from volume encryption, and do support hardware tokens — see [Secure Boot](/avocado-os/security/secure-boot).
