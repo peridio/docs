@@ -59,7 +59,7 @@ Peridio makes Avocado OS, an immutable embedded Linux runtime: a read-only A/B r
 
 An attacker who removes the eMMC or NVMe chip gets plaintext data, can patch the rootfs, can drop a modified config or binary into a mutable path, and can load an unsigned kernel module, unless four controls are in place: encrypted storage, rootfs integrity verification, runtime appraisal of mutable files (IMA/EVM), and a boot chain that gates decryption on the signature state of the firmware. Each control alone is weaker; together they require the attacker to compromise all four simultaneously.
 
-dm-verity and IMA/EVM cover complementary halves of the integrity problem. dm-verity protects the immutable read-only rootfs with a build-time hash tree; it cannot say anything about files that are not in that tree. IMA/EVM closes that gap by appraising mutable files (writable config, dropped binaries, extension content) against a signature before the kernel opens or executes them, with EVM protecting the security xattr that holds the signature. The two together mean neither the immutable nor the mutable surface accepts tampered code.
+dm-verity and IMA/EVM cover complementary halves of the integrity problem. dm-verity protects an immutable read-only rootfs with a build-time hash tree; it cannot say anything about files that are not in that tree. IMA/EVM closes that gap by appraising mutable files (writable config, dropped binaries, extension content) against a signature before the kernel opens or executes them, with EVM protecting the security xattr that holds the signature. The two together mean neither the immutable nor the mutable surface accepts tampered code.
 
 The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443-4-2 SL-2 both require demonstrable protection of data at rest; LUKS2 with TPM2 PCR 7 sealing satisfies that, and dm-verity plus IMA/EVM cover the integrity half.
 
@@ -67,7 +67,7 @@ The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443
 
 - LUKS2 `/var` formatted on first boot by the initramfs, with no pre-provisioned key material shipped in the image
 - Two-phase TPM2 enrollment: phase 1 uses a software Argon2id passphrase as a recovery baseline; phase 2 seals a new key to TPM2 PCR 7 (Secure Boot state) via `systemd-cryptenroll` and kills the Argon2id slot only after a `--token-only` unseal confirms the TPM path works
-- dm-verity rootfs integrity gated on the `secureboot` DISTRO_FEATURE, with every rootfs block cryptographically verified on read
+- dm-verity rootfs integrity - kernel support only. `dm-verity.cfg` sets `CONFIG_DM_VERITY=y` on `secureboot` builds, but nothing in the layer generates a hash tree, signs a roothash, or opens a verity device, and the same fragment disables `CONFIG_PKCS7_MESSAGE_PARSER`, so a signed roothash could not be verified even if one existed. The intent is that every rootfs block is cryptographically verified on read
 - IMA/EVM runtime appraisal - designed, not built. The intent is that the kernel refuses to open or execute a mutable file whose IMA signature does not verify, with EVM sealing the security xattrs and measurements logged to PCR 10. No kernel fragment, policy recipe, or `ima` gate exists in the layer today
 - Build-time UEFI Secure Boot key generation (PK/KEK/db/dbx) via an idempotent recipe that regenerates keys only when absent and never ships private `.key` files to the target
 - Kernel module signing with `MODULE_SIG_FORCE` gated on the `security` DISTRO_FEATURE
@@ -82,7 +82,7 @@ The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443
 | Data encryption          | LUKS2 AES-256-XTS 512-bit key            | XTS is the standard for block-device encryption; 512-bit key matches the AES-256 keyslot                                                           |
 | Key derivation (phase 1) | Argon2id via OpenSSL 3 KDF               | Software fallback; combines a provisioned per-device secret with a hardware serial so the key is device-bound without a TPM                        |
 | Key sealing (phase 2)    | TPM2 PCR 7 via `systemd-cryptenroll`     | PCR 7 captures UEFI Secure Boot state; a tampered boot chain makes unseal fail                                                                     |
-| Rootfs integrity         | dm-verity over EROFS                     | Hash tree computed at build time; verified on every block read; gated on `secureboot`                                                              |
+| Rootfs integrity         | dm-verity over EROFS                     | Kernel support only - `CONFIG_DM_VERITY=y` on `secureboot` builds, but no hash tree is generated, no roothash signed, and no verity device opened  |
 | Mutable-file integrity   | IMA appraisal + EVM                      | Designed only - appraises a per-file signature before open/exec and EVM protects `security.ima`, but nothing implements it in the layer yet        |
 | Secure Boot keys         | `gen-sbkeys.sh` (build-time, idempotent) | Generates PK/KEK/db/dbx; public certs to `/usr/share/secureboot-keys`; private `.key` never in `FILES`                                             |
 | Module signing           | `MODULE_SIG_FORCE` kernel config         | Gated on `security`; prevents unsigned kernel modules from loading                                                                                 |
@@ -470,7 +470,9 @@ Pulling the eMMC off the board gives an attacker AES-256-XTS ciphertext. Without
   not on the chip.
 </PullQuote>
 
-The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader or disabled Secure Boot changes PCR 7 before the initramfs runs, so the TPM refuses to unseal, and you cannot clone the eMMC to another board and boot it. dm-verity verifies every rootfs block against a build-time hash tree, so an offline patch is caught before the patched code executes. IMA/EVM extends that to mutable files: a binary dropped into `/var` or an overlay has no valid `security.ima` signature, so the kernel refuses to execute it. Module signing closes the in-band injection path: even with a shell, the attacker cannot load a custom kernel module.
+The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader or disabled Secure Boot changes PCR 7 before the initramfs runs, so the TPM refuses to unseal, and you cannot clone the eMMC to another board and boot it. That half is built, and verified on this board.
+
+The integrity half is design rather than delivery, and the coverage table above says which is which. The intent: dm-verity verifies every rootfs block against a build-time hash tree, so an offline patch is caught before the patched code executes; IMA/EVM extends that to mutable files, so a binary dropped into `/var` or an overlay has no valid `security.ima` signature and the kernel refuses to execute it; and module signing closes the in-band injection path, so even with a shell an attacker cannot load a custom kernel module. None of those three is implemented in the layer today.
 
 ## Issues and open questions
 
