@@ -23,7 +23,7 @@ TPM sealing is available on the NXP i.MX 93 FRDM, and only when the image is bui
 
 ### LUKS encryption
 
-Avocado uses LUKS2 with AES-256-XTS for full-disk encryption of writable partitions. The BTRFS `/var` partition — which holds extensions, application data, and device state — is encrypted at the block level. The immutable root filesystem is not encrypted, since its contents are public (the OS itself) and integrity matters more than confidentiality there. That integrity comes from the root being read-only and signature-verified at install time; see [Filesystem Integrity](filesystem-integrity) for what that covers.
+Avocado uses LUKS2 with AES-256-XTS for full-disk encryption of writable partitions. The BTRFS `/var` partition, which holds extensions, application data, and device state, is encrypted at the block level. The immutable root filesystem is not encrypted, since its contents are public (the OS itself) and integrity matters more than confidentiality there. That integrity comes from the root being read-only and signature-verified at install time; see [Filesystem Integrity](filesystem-integrity) for what that covers.
 
 ### Hardware key storage
 
@@ -61,7 +61,7 @@ The fTPM seal above is stronger in one specific way: the key lives inside the TE
 
 ### Per-application encryption domains
 
-Not implemented. Extensions are not encrypted independently of each other or of system data, and there is no per-application key. An earlier version of this page described separate encryption domains per extension — with an AI model extension encrypting its own weights — as an available capability. Everything under `/var`, including all extensions, is covered by the single `/var` volume key described above.
+Not implemented. Extensions are not encrypted independently of each other or of system data, and there is no per-application key. An earlier version of this page described separate encryption domains per extension (with an AI model extension encrypting its own weights) as an available capability. Everything under `/var`, including all extensions, is covered by the single `/var` volume key described above.
 
 ### Hardware-accelerated cryptography
 
@@ -76,4 +76,4 @@ On that first boot the device derives the Argon2id key from its SoC identifier, 
 Two consequences worth planning around:
 
 - **Enabling encryption reformats `/var`.** The container is created over whatever was on the partition, so turning it on is a provisioning-time decision, not a field upgrade that preserves data. See [Atomic Update Architecture](/avocado-os/security/update-architecture) for how the OS itself is updated.
-- **`avocado provision` does not manage encryption keys.** It deploys a runtime; it does not generate, seal, or program key material, and there is no fleet-level key escrow or key hierarchy. An earlier version of this page described key generation, HSM programming, key hierarchies for multi-tenant encryption, and fleet key metadata as part of the provisioning flow. None of that exists. For the signing keys used on images and extensions — which are a separate concern from volume encryption, and do support hardware tokens — see [Secure Boot](/avocado-os/security/secure-boot).
+- **`avocado provision` does not manage encryption keys.** It deploys a runtime; it does not generate, seal, or program key material, and there is no fleet-level key escrow or key hierarchy. An earlier version of this page described key generation, HSM programming, key hierarchies for multi-tenant encryption, and fleet key metadata as part of the provisioning flow. None of that exists. For the signing keys used on images and extensions, which are a separate concern from volume encryption and do support hardware tokens, see [Secure Boot](/avocado-os/security/secure-boot).

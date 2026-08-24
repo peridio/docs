@@ -54,7 +54,7 @@ The developer experience matters here. The config is readable, the CLI is fast, 
 
 ## Runtimes and Extensions
 
-Extensions are the building blocks of Avocado systems. Every piece of user-defined functionality ships as an extension — application binaries, configuration files, kernel modules, systemd services. Extensions are built on systemd's sysext and confext mechanisms, so each one ships as a read-only image that is replaced whole rather than patched, and can be signed at build time. Extensions live on `/var`, which is LUKS-encrypted on targets that enable it.
+Extensions are the building blocks of Avocado systems. Every piece of user-defined functionality ships as an extension: application binaries, configuration files, kernel modules, systemd services. Extensions are built on systemd's sysext and confext mechanisms, so each one ships as a read-only image that is replaced whole rather than patched, and can be signed at build time. Extensions live on `/var`, which is LUKS-encrypted on targets that enable it.
 
 Runtimes define which extensions are composed together for a given deployment:
 
@@ -196,7 +196,7 @@ This matters economically. Devices on 5G or cellular networks have expensive dat
 
 ## Security All the Way Through
 
-Security in Avocado OS is not a feature you bolt on later — it's structural. The secure boot chain starts at the hardware root of trust and runs through the bootloader into the kernel. From there, the root filesystem and every extension are immutable images, verified when they are installed.
+Security in Avocado OS is not a feature you bolt on later; it's structural. The secure boot chain starts at the hardware root of trust and runs through the bootloader into the kernel. From there, the root filesystem and every extension are immutable images, verified when they are installed.
 
 - [Secure boot](/avocado-os/security/secure-boot) with a verified boot chain from the hardware root of trust through the bootloader and kernel
 - [Filesystem integrity](/avocado-os/security/filesystem-integrity) from an immutable read-only root and signature-verified updates
