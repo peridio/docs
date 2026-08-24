@@ -6,7 +6,7 @@ description: 'Open a secure WireGuard remote access tunnel to an Avocado OS devi
 
 This guide shows how to open a **remote access tunnel** to a deployed Avocado OS device from the **Avocado Connect** console and use it for SSH, a web dashboard, or any other TCP service on the device.
 
-Remote tunnels are a feature of [Avocado Connect](/avocado-connect/overview), the fleet management and device operations platform for Avocado OS. Tunnels are encrypted end to end with **WireGuard** and brokered by Connect's relay infrastructure: the device dials out, so you can reach hardware behind NAT, firewalls, or cellular links with no static IPs, port forwarding, or VPN setup. Every session is audit logged — who connected, when, and for how long.
+Remote tunnels are a feature of [Avocado Connect](/avocado-connect/overview), the fleet management and device operations platform for Avocado OS. The device dials out and Connect's relay brokers the connection, so you can reach hardware behind NAT, firewalls, or cellular links with no static IPs, port forwarding, or VPN setup. The device-to-relay leg is encrypted with **WireGuard**; traffic between your machine and the relay endpoint is forwarded as-is, carrying only the encryption the tunneled service itself provides (SSH encrypts itself, plain HTTP does not). Every session is audit-logged — who connected, when, and for how long.
 
 ## Prerequisites
 
@@ -48,7 +48,7 @@ Custom ports are where tunnels get interesting beyond a shell: if your applicati
   <img
     src="/img/guides/remote-tunnel/connect-ports.png"
     alt="The Tunnels panel up close: New tunnel shortcuts for SSH port 22, HTTP port 80, HTTPS port 443, Cockpit port 9090, and Custom, with the Open SSH Tunnel quick action below."
-    style={{width: '60%', display: 'block', margin: '0 auto'}}
+    style={{ width: '60%', display: 'block', margin: '0 auto' }}
     loading="lazy"
     decoding="async"
   />
@@ -60,7 +60,7 @@ Custom ports are where tunnels get interesting beyond a shell: if your applicati
   <img
     src="/img/guides/remote-tunnel/connect-in-progress.png"
     alt="The Tunnels panel showing one active tunnel being set up: Establishing WireGuard tunnel on port 22, with a progress indicator and a Close action."
-    style={{width: '60%', display: 'block', margin: '0 auto'}}
+    style={{ width: '60%', display: 'block', margin: '0 auto' }}
     loading="lazy"
     decoding="async"
   />
@@ -72,7 +72,7 @@ Custom ports are where tunnels get interesting beyond a shell: if your applicati
   <img
     src="/img/guides/remote-tunnel/connect-established.png"
     alt="The Tunnels panel with a tunnel established on port 22 and a copyable SSH command: ssh -p 62042 root@13.219.213.3."
-    style={{width: '60%', display: 'block', margin: '0 auto'}}
+    style={{ width: '60%', display: 'block', margin: '0 auto' }}
     loading="lazy"
     decoding="async"
   />
@@ -91,9 +91,11 @@ Custom ports are where tunnels get interesting beyond a shell: if your applicati
   />
 </div>
 
-- **Web ports (80/443/9090/custom)**: open the tunnel endpoint in your browser. For a device hosting a frontend on port `3000` or `5000`, you see exactly what a local user sees; for Cockpit on `9090`, you get the device's management UI.
+- **Web ports (80/443/9090/custom)**: open the tunnel endpoint in your browser — `http://<host:port>` for plain HTTP, `https://<host:port>` for HTTPS and Cockpit. On the TLS ports, expect a browser certificate warning: the certificate identifies the device, not the relay address (and Cockpit's default certificate is self-signed). For a device hosting a frontend on port `3000` or `5000`, you see exactly what a local user sees; for Cockpit on `9090`, you get the device's management UI.
 
 ### Example: view a device dashboard on a custom port
+
+First, close the SSH tunnel from the previous section (**Close** next to the tunnel) — the developer plan and the default per-device tunnel policy allow one active tunnel at a time.
 
 Say your application serves a dashboard on port `5000` — this example uses the [python-flask reference](https://github.com/avocado-linux/references/blob/main/python-flask/getting_started.md), which hosts a live device dashboard. Choose **Custom**, enter the port, and click **Connect**.
 
@@ -101,7 +103,7 @@ Say your application serves a dashboard on port `5000` — this example uses the
   <img
     src="/img/guides/remote-tunnel/connect-custom-port.png"
     alt="The Tunnels panel with Custom selected: a port field containing 5000 and a Connect button."
-    style={{width: '60%', display: 'block', margin: '0 auto'}}
+    style={{ width: '60%', display: 'block', margin: '0 auto' }}
     loading="lazy"
     decoding="async"
   />
@@ -113,7 +115,7 @@ Once established, the tunnel shows an endpoint (host and port) instead of an SSH
   <img
     src="/img/guides/remote-tunnel/connect-custom-port-established.png"
     alt="The Tunnels panel with a tunnel established on port 5000 and a copyable endpoint: 13.219.213.3:58954."
-    style={{width: '60%', display: 'block', margin: '0 auto'}}
+    style={{ width: '60%', display: 'block', margin: '0 auto' }}
     loading="lazy"
     decoding="async"
   />
@@ -130,8 +132,13 @@ Open the endpoint in your browser: the device's dashboard renders live through t
   />
 </div>
 
+:::warning
+This dashboard is plain HTTP: traffic between your machine and the relay is unencrypted, and the endpoint is reachable by anyone your organization's tunnel-policy CIDR allowlist permits (`0.0.0.0/0` by default) until the tunnel closes. Tighten the allowlist for sensitive services.
+:::
+
 ## Tunnel lifetime
 
 - Tunnels expire automatically after their TTL, so access is temporary by default. Close a tunnel early from the device's Tunnels view in Connect.
 - Every tunnel session is recorded for audit: who opened it, to which device and port, and for how long.
-- Availability and limits (TTL, concurrency, allowed windows) are governed by your organization's tunnel policy — see the [Remote Access API](/developer-reference/avocado-connect-api/remote-access) for details.
+- Availability and limits (TTL, concurrency, CIDR allowlist, allowed windows) are governed by your organization's tunnel policy — see the [Remote Access API](/developer-reference/avocado-connect-api/remote-access) for details.
+- For a higher-level look at remote access in Connect, see the [Remote Access overview](/avocado-connect/tunnels).
