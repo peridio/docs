@@ -32,6 +32,7 @@ const sidebars = {
         'provisioning',
         'hardware-in-the-loop',
         'sideloading',
+        'ota',
         'package-feeds',
         'feed-search',
         'linux-auto-mounting',
