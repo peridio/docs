@@ -29,6 +29,7 @@ const sidebars = {
       collapsible: false,
       collapsed: false,
       items: [
+        'hardware-targets',
         'provisioning',
         'hardware-in-the-loop',
         'sideloading',

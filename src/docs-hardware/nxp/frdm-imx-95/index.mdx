@@ -1,0 +1,106 @@
+---
+title: 'Production-Ready NXP FRDM i.MX 95 Deployment'
+sidebar_position: 0
+description: 'Deploy NXP FRDM-i.MX 95 devices in production with Avocado OS. Six Cortex-A55 cores, safety-domain M7/M33, a 2.0 TOPS eIQ Neutron NPU, and M.2 Ara expansion for safety-critical AI and industrial edge.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+<HardwareHero
+  vendor="NXP"
+  vendorUrl="https://www.nxp.com/design/design-center/development-boards-and-designs/i-mx-evaluation-and-development-boards/freedom-development-platform-for-i-mx-95:FRDM-IMX95"
+  model="NXP FRDM i.MX 95"
+  tagline="i.MX 95 Freedom platform with a 2.0 TOPS eIQ Neutron NPU, safety-domain cores, and M.2 Ara expansion — for safety-critical AI, vision robotics, and industrial edge."
+  image="/img/hardware/nxp/FRDM-IMX95.png"
+  imageAlt="NXP FRDM i.MX 95"
+  stats={[
+    { value: '6x Cortex-A55', label: 'up to 2.0 GHz' },
+    { value: '2.0 TOPS', label: 'eIQ Neutron NPU' },
+    { value: '8GB', label: 'LPDDR4X Memory' },
+    { value: '32GB eMMC', label: 'On-Board Storage' },
+    { value: 'Wi-Fi 6 + BT 5.3', label: 'Wireless Connectivity' },
+    { value: 'Cortex-M7 + M33', label: 'Safety-Domain Cores' },
+  ]}
+  target="imx95-frdm"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
+
+## Overview
+
+The FRDM-i.MX 95 is NXP's Freedom development board for the i.MX 95 applications
+processor family, integrating six Cortex-A55 cores, Cortex-M7 and M33
+safety-domain cores, an Arm Mali GPU, a 2.0 TOPS eIQ Neutron NPU, 4K VPU, and
+ISP. It provides a comprehensive evaluation platform with Gigabit Ethernet, USB
+3, PCIe Gen3, and an M.2 slot for Ara-series AI accelerator expansion. Paired
+with Avocado OS and Avocado Connect, it gains production-ready enterprise Linux,
+atomic OTA updates, and fleet management.
+
+## Specifications
+
+| Specification | Value                                | Notes                |
+| ------------- | ------------------------------------ | -------------------- |
+| CPU           | 6x Arm Cortex-A55 @ up to 2.0GHz     |                      |
+| Safety CPU    | 1x Arm Cortex-M7 + 1x Arm Cortex-M33 |                      |
+| GPU           | Arm Mali                             |                      |
+| NPU           | eIQ Neutron, 2.0 TOPS                |                      |
+| VPU           | 4K Video Processing Unit             |                      |
+| ISP           | Integrated Image Signal Processor    |                      |
+| Memory        | 8GB LPDDR4X (32-bit)                 |                      |
+| Storage       | 32GB eMMC 5.1                        |                      |
+| Ethernet      | 1x Gigabit (RGMII)                   | Supports XFI/USXGMII |
+| USB           | USB 3                                |                      |
+| PCIe          | PCIe Gen 3                           |                      |
+| Wireless      | Wi-Fi 6 (802.11ax) + Bluetooth 5.3   | SoC integrated       |
+| Expansion     | M.2 M-Key (for NXP Ara NPU modules)  |                      |
+
+## Use Cases
+
+### Safety-Critical Edge AI
+
+Prototype ASIL-rated devices that pair the Cortex-A55 application cores with the
+M7/M33 safety domain and the eIQ Neutron NPU.
+
+### Vision-Enabled Robotics
+
+Combine the NPU and integrated ISP for on-device vision, expandable with an
+Ara-series M.2 accelerator.
+
+### Industrial HMI and Gateways
+
+Gigabit networking, PCIe Gen3, and Wi-Fi 6 for connected industrial edge
+deployments.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target)
+instructions under Getting Started to begin. This target is `imx95-frdm`. The
+provisioning specifics are below.
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the
+system image and flash it to your target hardware.
+
+:::note Provisioning on a Linux host
+If your Linux desktop auto-mounts removable media, disable it first — see
+[Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+:::
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile sd
+```
+
+### Run
+
+After provisioning completes, insert the SD card into your target device and
+power it on. The device will boot with the provisioned system. The `root` user
+is passwordless in the `dev` runtime used by this guide.

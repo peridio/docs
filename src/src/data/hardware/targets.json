@@ -208,9 +208,9 @@
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/raspberry-pi/raspberry-pi-zero-2-w"
   },
-  "jetson-orin-nano-devkit": {
+  "jetson-orin-nano": {
     "name": "NVIDIA Jetson Orin Nano",
-    "target": "jetson-orin-nano-devkit",
+    "target": "jetson-orin-nano",
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
     "provisioning": {
@@ -307,9 +307,9 @@
     "gettingStartedUrl": "/developer-reference/getting-started/jetson",
     "hardwareUrl": "/hardware/nvidia/jetson-orin-nano-developer-kit"
   },
-  "jetson-agx-orin-devkit": {
+  "jetson-agx-orin": {
     "name": "NVIDIA Jetson AGX Orin",
-    "target": "jetson-agx-orin-devkit",
+    "target": "jetson-agx-orin",
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
     "provisioning": {
@@ -407,7 +407,10 @@
     "category": "sd",
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "prerequisites": [
+        "microSD card (8GB+) + external SD card reader (for SD provisioning)",
+        "USB-C cable (for eMMC provisioning with uuu)"
+      ],
       "options": [
         {
           "id": "sd",
@@ -415,8 +418,21 @@
           "profile": "sd",
           "media": "microSD card (8GB+)",
           "autoMount": true,
+          "prerequisites": ["microSD card (8GB+)", "external SD card reader"],
+          "description": "Provisioning from SD writes the image to a microSD card using an external SD card writer on your host, then boots the board from that card. Make sure the board’s boot switch is set to boot from SD.",
           "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "bootInstructions": "Set the boot switch to boot from SD, insert the SD card, and apply power."
+        },
+        {
+          "id": "uuu-emmc",
+          "label": "eMMC (uuu)",
+          "profile": "uuu-emmc",
+          "media": "Onboard eMMC (flashed over USB with uuu)",
+          "autoMount": false,
+          "prerequisites": ["USB-C cable (board to host)"],
+          "description": "Provisioning to eMMC flashes the image to the board’s onboard eMMC over USB using uuu. First set the boot switch to serial downloader mode and connect the USB-C cable to your host, then run provisioning.",
+          "command": "avocado provision -r dev --profile uuu-emmc",
+          "bootInstructions": "Once provisioning completes, set the boot switch to eMMC and power-cycle the board — it boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -485,9 +501,8 @@
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
       "prerequisites": [
-        "CompuLab UCM-i.MX8M-Plus on a compatible carrier board",
-        "microSD card (8GB+)",
-        "SD card reader"
+        "microSD card (8GB+) + external SD card reader (for SD provisioning)",
+        "USB-C cable (for eMMC provisioning with uuu)"
       ],
       "options": [
         {
@@ -496,8 +511,21 @@
           "profile": "sd",
           "media": "microSD card (8GB+)",
           "autoMount": true,
+          "prerequisites": ["microSD card (8GB+)", "external SD card reader"],
+          "description": "Provisioning from SD writes the image to a microSD card using an external SD card writer on your host, then boots the board from that card. Make sure the board’s boot switch is set to boot from SD.",
           "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the carrier and apply power."
+          "bootInstructions": "Set the boot switch to boot from SD, insert the SD card, and apply power."
+        },
+        {
+          "id": "uuu-emmc",
+          "label": "eMMC (uuu)",
+          "profile": "uuu-emmc",
+          "media": "Onboard eMMC (flashed over USB with uuu)",
+          "autoMount": false,
+          "prerequisites": ["USB-C cable (board to host)"],
+          "description": "Provisioning to eMMC flashes the image to the board’s onboard eMMC over USB using uuu. First set the boot switch to serial downloader mode and connect the USB-C cable to your host, then run provisioning.",
+          "command": "avocado provision -r dev --profile uuu-emmc",
+          "bootInstructions": "Once provisioning completes, set the boot switch to eMMC and power-cycle the board — it boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -515,7 +543,10 @@
     "category": "sd",
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "prerequisites": [
+        "microSD card (8GB+) + external SD card reader (for SD provisioning)",
+        "USB-C cable (for eMMC provisioning with uuu)"
+      ],
       "options": [
         {
           "id": "sd",
@@ -523,8 +554,21 @@
           "profile": "sd",
           "media": "microSD card (8GB+)",
           "autoMount": true,
+          "prerequisites": ["microSD card (8GB+)", "external SD card reader"],
+          "description": "Provisioning from SD writes the image to a microSD card using an external SD card writer on your host, then boots the board from that card. Make sure the board’s boot switch is set to boot from SD.",
           "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "bootInstructions": "Set the boot switch to boot from SD, insert the SD card, and apply power."
+        },
+        {
+          "id": "uuu-emmc",
+          "label": "eMMC (uuu)",
+          "profile": "uuu-emmc",
+          "media": "Onboard eMMC (flashed over USB with uuu)",
+          "autoMount": false,
+          "prerequisites": ["USB-C cable (board to host)"],
+          "description": "Provisioning to eMMC flashes the image to the board’s onboard eMMC over USB using uuu. First set the boot switch to serial downloader mode and connect the USB-C cable to your host, then run provisioning.",
+          "command": "avocado provision -r dev --profile uuu-emmc",
+          "bootInstructions": "Once provisioning completes, set the boot switch to eMMC and power-cycle the board — it boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -542,7 +586,10 @@
     "category": "sd",
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "prerequisites": [
+        "microSD card (8GB+) + external SD card reader (for SD provisioning)",
+        "USB-C cable (for eMMC provisioning with uuu)"
+      ],
       "options": [
         {
           "id": "sd",
@@ -550,8 +597,21 @@
           "profile": "sd",
           "media": "microSD card (8GB+)",
           "autoMount": true,
+          "prerequisites": ["microSD card (8GB+)", "external SD card reader"],
+          "description": "Provisioning from SD writes the image to a microSD card using an external SD card writer on your host, then boots the board from that card. Make sure the board’s boot switch is set to boot from SD.",
           "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "bootInstructions": "Set the boot switch to boot from SD, insert the SD card, and apply power."
+        },
+        {
+          "id": "uuu-emmc",
+          "label": "eMMC (uuu)",
+          "profile": "uuu-emmc",
+          "media": "Onboard eMMC (flashed over USB with uuu)",
+          "autoMount": false,
+          "prerequisites": ["USB-C cable (board to host)"],
+          "description": "Provisioning to eMMC flashes the image to the board’s onboard eMMC over USB using uuu. First set the boot switch to serial downloader mode and connect the USB-C cable to your host, then run provisioning.",
+          "command": "avocado provision -r dev --profile uuu-emmc",
+          "bootInstructions": "Once provisioning completes, set the boot switch to eMMC and power-cycle the board — it boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -569,7 +629,10 @@
     "category": "sd",
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "prerequisites": [
+        "microSD card (8GB+) + external SD card reader (for SD provisioning)",
+        "USB-C cable (for eMMC provisioning with uuu)"
+      ],
       "options": [
         {
           "id": "sd",
@@ -577,8 +640,21 @@
           "profile": "sd",
           "media": "microSD card (8GB+)",
           "autoMount": true,
+          "prerequisites": ["microSD card (8GB+)", "external SD card reader"],
+          "description": "Provisioning from SD writes the image to a microSD card using an external SD card writer on your host, then boots the board from that card. Make sure the board’s boot switch is set to boot from SD.",
           "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "bootInstructions": "Set the boot switch to boot from SD, insert the SD card, and apply power."
+        },
+        {
+          "id": "uuu-emmc",
+          "label": "eMMC (uuu)",
+          "profile": "uuu-emmc",
+          "media": "Onboard eMMC (flashed over USB with uuu)",
+          "autoMount": false,
+          "prerequisites": ["USB-C cable (board to host)"],
+          "description": "Provisioning to eMMC flashes the image to the board’s onboard eMMC over USB using uuu. First set the boot switch to serial downloader mode and connect the USB-C cable to your host, then run provisioning.",
+          "command": "avocado provision -r dev --profile uuu-emmc",
+          "bootInstructions": "Once provisioning completes, set the boot switch to eMMC and power-cycle the board — it boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -690,33 +766,6 @@
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/stmicroelectronics/stm32mp257f-dk"
   },
-  "icam-540": {
-    "name": "Advantech ICAM-540",
-    "target": "icam-540",
-    "category": "other",
-    "provisioning": {
-      "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["Advantech ICAM-540"],
-      "options": [
-        {
-          "id": "default",
-          "label": "Default",
-          "profile": null,
-          "media": null,
-          "autoMount": false,
-          "command": "avocado provision -r dev",
-          "bootInstructions": "Apply power to the device."
-        }
-      ]
-    },
-    "serial": {
-      "baud": 115200,
-      "voltage": "3.3V",
-      "command": "tio -b 115200 /dev/ttyUSB0"
-    },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
-    "hardwareUrl": "/hardware/advantech/icam-540"
-  },
   "intel-x86-64-v3": {
     "name": "Intel x86-64-v3",
     "target": "intel-x86-64-v3",
@@ -820,5 +869,99 @@
     },
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/solidrun/hummingboard-rz-v2n-aiot"
+  },
+  "jetson-orin-nx": {
+    "name": "NVIDIA Jetson Orin NX",
+    "target": "jetson-orin-nx",
+    "category": "tegraflash",
+    "description": "The Jetson Orin NX module is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container. Recovery-mode steps vary by carrier board (developer kit, ICAM-540, MIC-712-OX, etc.) — consult your board's hardware guide.",
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": [
+        "Jetson Orin NX module on a supported carrier board",
+        "NVMe SSD (M.2 2280 form factor)",
+        "16 GB available disk space",
+        "USB-C cable (host to carrier board, for flashing)"
+      ],
+      "options": [
+        {
+          "id": "tegraflash",
+          "label": "USB recovery (tegraflash)",
+          "profile": "tegraflash",
+          "media": "NVMe SSD (M.2 2280)",
+          "autoMount": false,
+          "command": "avocado provision -r dev --profile tegraflash",
+          "description": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
+          "recoveryMode": {
+            "steps": [
+              {
+                "text": "Connect a USB-C cable from the carrier board to your host for flashing."
+              },
+              {
+                "text": "Put the board into Force Recovery mode — see your carrier board's hardware guide for the specific button sequence."
+              }
+            ],
+            "verifyCommand": "lsusb",
+            "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
+          },
+          "bootSteps": [
+            "Remove power from the board",
+            "Remove the USB-C cable",
+            "If you want a serial console, leave the serial cable connected",
+            "Apply power"
+          ],
+          "bootNote": "The device will boot with the provisioned system. The root user has an empty password — log in over the serial console (if connected) or via SSH once the device is on the network."
+        }
+      ]
+    },
+    "serial": {
+      "baud": 115200,
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/nvidia/jetson-orin-nx"
+  },
+  "imx95-frdm": {
+    "name": "NXP FRDM i.MX 95",
+    "target": "imx95-frdm",
+    "category": "sd",
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": [
+        "microSD card (8GB+) + external SD card reader (for SD provisioning)",
+        "USB-C cable (for eMMC provisioning with uuu)"
+      ],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "prerequisites": ["microSD card (8GB+)", "external SD card reader"],
+          "description": "Provisioning from SD writes the image to a microSD card using an external SD card writer on your host, then boots the board from that card. Make sure the board’s boot switch is set to boot from SD.",
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Set the boot switch to boot from SD, insert the SD card, and apply power."
+        },
+        {
+          "id": "uuu-emmc",
+          "label": "eMMC (uuu)",
+          "profile": "uuu-emmc",
+          "media": "Onboard eMMC (flashed over USB with uuu)",
+          "autoMount": false,
+          "prerequisites": ["USB-C cable (board to host)"],
+          "description": "Provisioning to eMMC flashes the image to the board’s onboard eMMC over USB using uuu. First set the boot switch to serial downloader mode and connect the USB-C cable to your host, then run provisioning.",
+          "command": "avocado provision -r dev --profile uuu-emmc",
+          "bootInstructions": "Once provisioning completes, set the boot switch to eMMC and power-cycle the board — it boots Avocado OS from the onboard eMMC."
+        }
+      ]
+    },
+    "serial": {
+      "baud": 115200,
+      "voltage": "3.3V",
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/nxp/frdm-imx-95"
   }
 }

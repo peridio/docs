@@ -64,8 +64,8 @@ Look for an entry containing `NVIDIA Corp. APX` — this confirms the device is 
 Create a new project targeting the Jetson Orin Nano.
 
 ```bash
-avocado init --target jetson-orin-nano-devkit jetson-orin-nano-devkit
-cd jetson-orin-nano-devkit
+avocado init --target jetson-orin-nano jetson-orin-nano
+cd jetson-orin-nano
 ```
 
 ## Install
