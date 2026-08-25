@@ -1,0 +1,175 @@
+---
+title: NXP FRDM i.MX 93
+description: Getting started with Avocado OS on the NXP FRDM i.MX 93.
+sidebar_position: 3
+---
+
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
+import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
+
+# NXP FRDM i.MX 93
+
+This guide walks you through building and deploying Avocado OS to an NXP FRDM i.MX 93, then running your own container on it.
+
+## Prerequisites
+
+- NXP FRDM i.MX 93 development board
+- microSD card (8 GB+)
+- An SD card reader
+- A USB-C cable (the board's debug console and power)
+- macOS 10.12+ or Linux (Ubuntu 22.04+, Fedora 39+)
+- 8 GB available disk space
+
+<HostPrerequisites />
+
+## Serial console
+
+<SerialConsoleOptional />
+
+The board carries its debug console on the onboard USB-C port, so no separate TTL adapter is needed. It enumerates as **two** CDC-ACM devices and the Linux console is the first of them.
+
+```bash
+ls /dev/serial/by-id/
+```
+
+You will see a pair like this — the serial number is your board's:
+
+```text
+usb-1a86_USB_Dual_Serial_5B6D003987-if00 -> ../../ttyACM0
+usb-1a86_USB_Dual_Serial_5B6D003987-if02 -> ../../ttyACM1
+```
+
+Open the first one:
+
+```bash
+tio -b 115200 /dev/serial/by-id/usb-1a86_USB_Dual_Serial_5B6D003987-if00
+```
+
+Prefer this `by-id` path over `/dev/ttyACM0`. The `ttyACM` number shifts when other USB serial devices are attached; the `by-id` name does not.
+
+## Initialize
+
+Create a new project targeting the FRDM i.MX 93.
+
+```bash
+avocado init --target imx93-frdm imx93-frdm
+cd imx93-frdm
+```
+
+## Install
+
+Install the SDK toolchain, extension dependencies, and runtime packages.
+
+```bash
+avocado install -f
+```
+
+## Build
+
+Build the system image.
+
+```bash
+avocado build
+```
+
+## Provision
+
+Insert your SD card into a reader on your host, then write the `dev` runtime to it:
+
+:::note Provisioning on a Linux host
+If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+:::
+
+```bash
+avocado provision -r dev --profile sd
+```
+
+The CLI detects the available block devices and prompts you to select the target. Verify you select the correct device — this operation overwrites the target disk.
+
+## Run
+
+1. Insert the provisioned SD card into the board.
+2. Connect the USB-C cable to your host.
+3. Apply power.
+
+With a serial console attached you will see the boot reach a login prompt:
+
+```text
+Avocado OS 0.0.0 avocado-imx93-frdm ttyLP0
+avocado-imx93-frdm login:
+```
+
+Log in as `root` with an empty password.
+
+### SSH access
+
+Once booted, you can SSH into the device if you know its IP address:
+
+```bash
+ssh root@<device-ip>
+```
+
+The `dev` runtime includes an SSH server with passwordless root login for development purposes.
+
+## Run your own container
+
+The board can run application containers, and they come back on their own after a power cycle. Add a container engine and an extension carrying both your image and the systemd unit that runs it:
+
+```yaml title="avocado.yaml"
+extensions:
+  my-app:
+    types: [sysext, confext]
+    version: 1.0.0
+    overlay: overlay
+
+    enable_services:
+      - my-app.service
+
+    docker_images:
+      - image: docker.io/<org>/<image>
+        tag: <tag>
+
+runtimes:
+  dev:
+    target: imx93-frdm
+    extensions:
+      - docker
+      - my-app
+```
+
+Three details decide whether this works, and each one fails quietly rather than loudly:
+
+- **The unit belongs at `overlay/usr/lib/systemd/system/my-app.service`.** That is where `enable_services` looks for it in order to write the enablement symlink.
+- **`types` needs both `sysext` and `confext`.** The unit ships in the sysext under `/usr/lib`; the enablement symlink is written under `/etc`, which is confext territory. With only one of the two, the unit is present on the device but never starts.
+- **`docker_images` is honored on a runtime build.** It pulls the image into the `/var` partition at build time, so a freshly provisioned board runs it without ever contacting a registry.
+
+The unit itself:
+
+```ini title="overlay/usr/lib/systemd/system/my-app.service"
+[Unit]
+Description=My application container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+ExecStartPre=-/usr/bin/docker rm -f my-app
+ExecStart=/usr/bin/docker run --rm --name my-app -p 8080:8080 docker.io/<org>/<image>:<tag>
+ExecStop=/usr/bin/docker stop my-app
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Use `Restart=always` rather than `on-failure`. With `--rm` and `Type=simple`, a container that exits cleanly — your app shutting down, or an external `docker stop` — leaves the unit inactive with nothing to bring it back, so the device silently stops running your application.
+
+Rebuild, provision, and boot. Then confirm on the device:
+
+```bash title="On the device"
+systemctl is-enabled my-app.service
+docker ps
+```
+
+`enabled` means the unit will start itself on every boot from now on. Power-cycle the board and run the same two commands to see it come back with no manual step.
