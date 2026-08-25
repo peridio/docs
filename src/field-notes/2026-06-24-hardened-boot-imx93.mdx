@@ -8,7 +8,7 @@ category: 'Security & Compliance'
 featured: false # Featured selection is Kristen/Bill's call
 image: /img/field-notes/2026-06-24-hardened-boot-imx93-thumb.png
 image_source: local:hardened-boot-imx93.jpg
-tested_against: 'Avocado 0.41.2, avocado-imx93-frdm (AHAB Secure Boot + OP-TEE fTPM), avocado-qemuarm64 (fTPM via QEMU)'
+tested_against: 'Avocado 0.41.2, avocado-qemuarm64 (fTPM via QEMU). LUKS2 /var and phase-2 OP-TEE fTPM PCR-7 sealing both validated on avocado-imx93-frdm hardware (2026-08-12 and 2026-08-19, meta-avocado #279). dm-verity and module signing NOT yet validated on that hardware; IMA/EVM is design only and not implemented in the layer.'
 poster: jtia
 lift_for_blog: 'CRA Annex I and IEC 62443-4-2 both require demonstrable data-at-rest protection and integrity; this is the boot-chain half a compliance mapping builds on.'
 promote_to_track: 'Secure-boot / storage-encryption reference candidate once the i.MX93 hardware pass is fully signed off.'
@@ -18,7 +18,7 @@ import TestStatus from '@site/src/components/TestStatus'
 import PullQuote from '@site/src/components/PullQuote'
 
 <TestStatus
-  targets={['imx93-frdm', 'qemuarm64']}
+  targets={['qemuarm64', 'imx93-frdm']}
   cli="0.41.2"
   reference={{
     label: 'meta-avocado',
@@ -30,6 +30,27 @@ import PullQuote from '@site/src/components/PullQuote'
 
 {/* truncate */}
 
+:::caution Verification status: LUKS2 and TPM2 sealing verified on hardware; dm-verity, IMA/EVM and module signing are not
+This note went out reading as a finished hardware result before any of it had run on a
+board. LUKS2 `/var` and phase-2 OP-TEE fTPM sealing are now genuinely verified on
+`avocado-imx93-frdm` hardware; the table near the end of this note reflects that.
+
+What is verified, on the board: LUKS2 `/var` formatted on first boot and surviving a
+reboot (2026-08-12); AHAB-signed boot end to end with the initramfs folded into the
+signed container (2026-08-13/14); and, as of 2026-08-19, a TPM2 keyslot sealed to PCR 7
+via the OP-TEE fTPM, enrolled automatically on first boot and coexisting permanently
+with the Argon2id recovery slot (that slot is never killed - see the corrected
+"Phase-2 TPM2 enrollment" section below, which no longer matches what shipped).
+
+What is still not verified on this board: dm-verity and module signing (not yet run),
+and IMA/EVM (design only - nothing in the layer implements it). One board-specific
+constraint: this exact physical unit can never validate AHAB again after an
+out-of-band SRK fuse-burn error - see "The fTPM hardware pass (2026-08-19)" below.
+
+The design below is worth reading; treat any command output not attributed to a dated
+hardware pass as what you should expect to see, not a transcript already produced.
+:::
+
 ## What this is
 
 Peridio makes Avocado OS, an immutable embedded Linux runtime: a read-only A/B root filesystem, composed sysext/confext extensions, and a writable `/var`. The `hardened-security` baseline covers the runtime posture (SSH hardening, firewall, auditd, sysctl). It deliberately excludes storage encryption and boot integrity, because those require provisioning-workflow changes and hardware-specific key stores. This note fills that gap on the i.MX93 FRDM board.
@@ -38,7 +59,7 @@ Peridio makes Avocado OS, an immutable embedded Linux runtime: a read-only A/B r
 
 An attacker who removes the eMMC or NVMe chip gets plaintext data, can patch the rootfs, can drop a modified config or binary into a mutable path, and can load an unsigned kernel module, unless four controls are in place: encrypted storage, rootfs integrity verification, runtime appraisal of mutable files (IMA/EVM), and a boot chain that gates decryption on the signature state of the firmware. Each control alone is weaker; together they require the attacker to compromise all four simultaneously.
 
-dm-verity and IMA/EVM cover complementary halves of the integrity problem. dm-verity protects the immutable read-only rootfs with a build-time hash tree; it cannot say anything about files that are not in that tree. IMA/EVM closes that gap by appraising mutable files (writable config, dropped binaries, extension content) against a signature before the kernel opens or executes them, with EVM protecting the security xattr that holds the signature. The two together mean neither the immutable nor the mutable surface accepts tampered code.
+dm-verity and IMA/EVM cover complementary halves of the integrity problem. dm-verity protects an immutable read-only rootfs with a build-time hash tree; it cannot say anything about files that are not in that tree. IMA/EVM closes that gap by appraising mutable files (writable config, dropped binaries, extension content) against a signature before the kernel opens or executes them, with EVM protecting the security xattr that holds the signature. The two together mean neither the immutable nor the mutable surface accepts tampered code.
 
 The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443-4-2 SL-2 both require demonstrable protection of data at rest; LUKS2 with TPM2 PCR 7 sealing satisfies that, and dm-verity plus IMA/EVM cover the integrity half.
 
@@ -46,8 +67,8 @@ The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443
 
 - LUKS2 `/var` formatted on first boot by the initramfs, with no pre-provisioned key material shipped in the image
 - Two-phase TPM2 enrollment: phase 1 uses a software Argon2id passphrase as a recovery baseline; phase 2 seals a new key to TPM2 PCR 7 (Secure Boot state) via `systemd-cryptenroll` and kills the Argon2id slot only after a `--token-only` unseal confirms the TPM path works
-- dm-verity rootfs integrity gated on the `secureboot` DISTRO_FEATURE, with every rootfs block cryptographically verified on read
-- IMA/EVM runtime appraisal gated on the `ima` DISTRO_FEATURE: the kernel refuses to open or execute a mutable file whose IMA signature does not verify, with EVM sealing the security xattrs and IMA measurements logged to PCR 10
+- dm-verity rootfs integrity - kernel support only. `dm-verity.cfg` sets `CONFIG_DM_VERITY=y` on `secureboot` builds, but nothing in the layer generates a hash tree, signs a roothash, or opens a verity device, and the same fragment disables `CONFIG_PKCS7_MESSAGE_PARSER`, so a signed roothash could not be verified even if one existed. The intent is that every rootfs block is cryptographically verified on read
+- IMA/EVM runtime appraisal - designed, not built. The intent is that the kernel refuses to open or execute a mutable file whose IMA signature does not verify, with EVM sealing the security xattrs and measurements logged to PCR 10. No kernel fragment, policy recipe, or `ima` gate exists in the layer today
 - Build-time UEFI Secure Boot key generation (PK/KEK/db/dbx) via an idempotent recipe that regenerates keys only when absent and never ships private `.key` files to the target
 - Kernel module signing with `MODULE_SIG_FORCE` gated on the `security` DISTRO_FEATURE
 - Device-side TPM2 userspace (`tpm2-tss`, `tpm2-tools`, `tpm2-openssl`) with `tpm2-abrmd` disabled and excluded from the initramfs entirely (the unseal path is D-Bus-free)
@@ -61,8 +82,8 @@ The threat is concrete in regulated industries. CRA Annex I Part I and IEC 62443
 | Data encryption          | LUKS2 AES-256-XTS 512-bit key            | XTS is the standard for block-device encryption; 512-bit key matches the AES-256 keyslot                                                           |
 | Key derivation (phase 1) | Argon2id via OpenSSL 3 KDF               | Software fallback; combines a provisioned per-device secret with a hardware serial so the key is device-bound without a TPM                        |
 | Key sealing (phase 2)    | TPM2 PCR 7 via `systemd-cryptenroll`     | PCR 7 captures UEFI Secure Boot state; a tampered boot chain makes unseal fail                                                                     |
-| Rootfs integrity         | dm-verity over EROFS                     | Hash tree computed at build time; verified on every block read; gated on `secureboot`                                                              |
-| Mutable-file integrity   | IMA appraisal + EVM                      | Appraises a per-file signature before open/exec; EVM protects `security.ima`; gated on `ima`                                                       |
+| Rootfs integrity         | dm-verity over EROFS                     | Kernel support only - `CONFIG_DM_VERITY=y` on `secureboot` builds, but no hash tree is generated, no roothash signed, and no verity device opened  |
+| Mutable-file integrity   | IMA appraisal + EVM                      | Designed only - appraises a per-file signature before open/exec and EVM protects `security.ima`, but nothing implements it in the layer yet        |
 | Secure Boot keys         | `gen-sbkeys.sh` (build-time, idempotent) | Generates PK/KEK/db/dbx; public certs to `/usr/share/secureboot-keys`; private `.key` never in `FILES`                                             |
 | Module signing           | `MODULE_SIG_FORCE` kernel config         | Gated on `security`; prevents unsigned kernel modules from loading                                                                                 |
 | TPM2 userspace           | tpm2-tss + tpm2-tools + tpm2-openssl     | `tpm2-tss` is the ESAPI `systemd-cryptenroll` needs; `tpm2-abrmd` is delivered but auto-start disabled, so the initramfs unseal path is D-Bus-free |
@@ -84,21 +105,25 @@ meta-avocado/
     sb-keys.bb                  # do_install[nostamp]; BB_BASEHASH_IGNORE_VARS
     key-store.bb                # installs public certs to /usr/share/secureboot-keys
     files/gen-sbkeys.sh         # PK/KEK/db/dbx generation script
-  recipes-security/ima-policy/
-    ima-policy.bb               # installs the appraisal policy + public IMA cert
-    files/ima-policy            # appraise func=BPRM/FILE_MMAP/MODULE_CHECK
-    files/x509_ima.der          # public IMA cert only; private key never in FILES
-  recipes-avocado/packagegroups/
-    packagegroup-avocado-tpm2.bb                 # tpm2-tss + tpm2-abrmd + tpm2-tools + tpm2-openssl
-    packagegroup-avocado-initramfs-security.bb   # tpm2-tools subset; excludes abrmd
-
-meta-avocado-nxp/
-  recipes-kernel/linux/files/imx93-frdm/
-    dm-crypt.cfg                # CONFIG_DM_CRYPT + AES + XTS + SHA256 + HW_RANDOM_TPM + CAAM (i.MX93-specific)
+  recipes-kernel/linux/files/
+    dm-crypt.cfg                # CONFIG_DM_CRYPT + AES + XTS + SHA256 + HW_RANDOM_TPM (arch-agnostic)
     dm-verity.cfg               # dm-verity rootfs integrity chain
     modsign.cfg                 # MODULE_SIG_FORCE
-    ima.cfg                     # CONFIG_IMA + IMA_APPRAISE + EVM + TRUSTED_KEYRING
+
+meta-avocado-tpm/
+  recipes-avocado/packagegroups/
+    packagegroup-avocado-tpm2.bb            # tpm2-tss + tpm2-abrmd + tpm2-tools + tpm2-openssl
+    packagegroup-avocado-tpm2-initramfs.bb  # tpm2-tools subset; excludes abrmd
+
+meta-avocado-nxp/
+  recipes-core/cryptsetup-var/
+    cryptsetup-var.bbappend     # FILESEXTRAPATHS:prepend:avocado-imx93-frdm
+    files/var-key.sh            # i.MX93 key provider; reads the SoC OCOTP UID
+  recipes-kernel/linux/files/imx93-frdm/
+    dm-crypt.cfg                # forces BLK_DEV_DM and TRUSTED_KEYS to y, adds the CAAM job rings
 ```
+
+There is no IMA recipe and no `ima.cfg` in the layer. The appraisal policy, the public cert recipe, and the kernel fragment described below are design, not code - see the coverage table.
 
 ### The unlock script
 
@@ -117,19 +142,20 @@ cryptsetup isLuks "$DEV" || {
 
 ### Phase-2 TPM2 enrollment
 
-After Secure Boot is enabled on the target (PCR 7 has a stable, authenticated value), run enrollment once from the booted device:
+**Corrected 2026-08-19 - this no longer describes what shipped.** The design below was a manual, one-time enrollment that killed the Argon2id slot once the TPM2 path proved itself. What is actually built and verified on hardware is automatic and never kills the recovery slot: `cryptsetup-var.sh`'s `ensure_tpm2_enroll()` runs on every boot, and if no `systemd-tpm2` token exists yet and `/dev/tpm0` plus `systemd-cryptenroll` are present, it enrolls PCR 7 unattended:
 
 ```bash
-# Seal a new key to PCR 7; slot 0 = Argon2id recovery, slot 1 = TPM2
-systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/disk/by-partlabel/var
-
-# Confirm unsealing works before killing the recovery slot
-cryptsetup open --token-only /dev/disk/by-partlabel/var var-tpm-test && \
-    cryptsetup close var-tpm-test && \
-    cryptsetup luksKillSlot /dev/disk/by-partlabel/var 0 || true
+# Runs unattended in cryptsetup-var.sh on every boot; idempotent via has_tpm2_token()
+systemd-cryptenroll --unlock-key-file="$KEY_FILE" \
+    --tpm2-device=auto --tpm2-pcrs=7 "$VAR_DEV"
 ```
 
-The `|| true` guard on `luksKillSlot` prevents a failed slot removal from leaving the device with neither slot working. If `--token-only` fails, the Argon2id slot stays intact as a recovery path.
+The Argon2id slot (slot 0) is **never** killed. That is deliberate: a legitimate PCR 7
+change - a Secure Boot policy update, a key rotation - makes the TPM2 unseal fail, and
+the recovery slot is what keeps `/var` reachable instead of a permanent lockout. On
+open, `cryptsetup-var.sh` prefers the TPM2 token (`cryptsetup open --token-only`) and
+falls back to the Argon2id key file only if that fails. The manual `luksKillSlot`
+choreography above never runs on real boards.
 
 ### PCR assignment: keep IMA and LUKS apart
 
@@ -149,16 +175,47 @@ do_install[nostamp] = "1"
 Kernel config fragments are wired via `SRC_URI:append`, each conditionally included by `DISTRO_FEATURES`, so a target only pays for the controls it opts into:
 
 ```bash
-SRC_URI:append = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'secureboot', 'file://dm-verity.cfg', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'security',   'file://modsign.cfg',   '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'ima',        'file://ima.cfg',       '', d)} \
-"
+# meta-avocado/recipes-kernel/linux/linux-yocto_%.bbappend
+SRC_URI:append = "${@bb.utils.contains('DISTRO_FEATURES', 'secureboot',    ' file://dm-verity.cfg', '', d)}"
+SRC_URI:append = "${@bb.utils.contains('DISTRO_FEATURES', 'security',      ' file://modsign.cfg',   '', d)}"
+SRC_URI:append = "${@bb.utils.contains('DISTRO_FEATURES', 'encrypted-var', ' file://dm-crypt.cfg',  '', d)}"
 ```
+
+Three gates, not four. An `ima` gate belongs in that list by design and is not in it: nothing in the layer defines `ima.cfg`, so putting `ima` in `DISTRO_FEATURES` today changes nothing about the built kernel. The i.MX93 gets a second, machine-scoped `dm-crypt.cfg` through `meta-avocado-nxp/recipes-kernel/linux/linux-imx_%.bbappend` because its defconfig ships `BLK_DEV_DM=m`, and kconfig caps a tristate at its weakest parent - `DM_CRYPT=y` silently demotes to `=m` unless `BLK_DEV_DM` and `TRUSTED_KEYS` are both forced to `y` first.
+
+## Reproduce it
+
+`encrypted-var` is a kas feature, so composing it onto a board's machine YAML is the whole build step. Add `ftpm.yml` for phase-2 PCR-7 sealing (verified 2026-08-19; see below) - it needs no `ahab`:
+
+```bash
+KAS_YML="meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml:meta-avocado/kas/feature/ftpm.yml"
+source init-build "$KAS_YML"
+kas build "$KAS_YML"
+```
+
+A checkout older than meta-avocado#279 hits `Error: Wrong container header` on this
+exact command - a u-boot bug forced AHAB authentication onto every imx93-frdm/imx91-frdm
+build regardless of the `ahab` feature. Fixed 2026-08-19; see below.
+
+The stock image gives you no way in, on console or over SSH: `avocado-users` ships `/etc/shadow` with `root:*:`, and a literal `*` means no password can ever match. Stack the dev-access feature when you need a shell to check any of this - dev boards only, it accepts root with an empty password:
+
+```bash
+KAS_YML="meta-avocado/kas/machine/imx93-frdm.yml:meta-avocado/kas/feature/encrypted-var.yml:meta-avocado/kas/feature/ssh-dev.yml"
+source init-build "$KAS_YML"
+kas build "$KAS_YML"
+```
+
+Then write it to the card. `avocado-flash` selects the backend from the medium and refuses anything that is not an unmounted whole disk on a removable bus:
+
+```bash
+meta-avocado/scripts/avocado-flash sd /dev/sdX
+```
+
+Two things that will otherwise cost you an afternoon. The FRDM-IMX93 boots from **eMMC by default** (`SW1[3:0] = 0010` per UM12181), so booting an SD image needs the switches at `0011` - leave them and the board quietly boots the old eMMC contents, which looks like a successful boot of the wrong thing. And the default `-t complete` rewrites the whole medium **including `var`**, which is what you want for a first-boot format and what you do not want on a device whose data must survive; `-t upgrade` writes only the inactive A/B slots and leaves `var` alone.
 
 ## Verify it
 
-After booting the i.MX93 FRDM board:
+Everything under LUKS2 below is output a board has produced. The TPM2, dm-verity, IMA/EVM and module-signing checks are what they should produce, not output anything has produced yet - see the coverage table.
 
 ```bash
 # /var is LUKS2 and mounted from the mapped device
@@ -188,26 +245,239 @@ tpm2_pcrread sha256:10
 
 ### Coverage
 
-| Target                          | LUKS2                 | Phase-2 TPM2                  | dm-verity              | IMA/EVM                   | Module signing          |
-| :------------------------------ | :-------------------- | :---------------------------- | :--------------------- | :------------------------ | :---------------------- |
-| `avocado-imx93-frdm` (hardware) | Verified              | Verified (OP-TEE fTPM, PCR 7) | Verified               | Verified                  | Verified                |
-| `avocado-qemuarm64` (E2E CI)    | `fvl_assert_luks_var` | `fvl_assert_luks_var_tpm`     | `fvl_assert_dm_verity` | `fvl_assert_ima_appraise` | `fvl_assert_module_sig` |
+| Control          | `avocado-qemuarm64` (proxy)                     | `avocado-imx93-frdm` (hardware)                                                                                                                                                                |
+| :--------------- | :---------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LUKS2 `/var`     | Verified on first boot                          | **Verified**, first boot and reboot (2026-08-12)                                                                                                                                               |
+| AHAB signed boot | No harness case exists                          | **Verified** on an open part - bootloader and OS container (2026-08-13), initramfs folded into the signed container (2026-08-14). This exact board can no longer re-run this check - see below |
+| Phase-2 TPM2     | Enrollment verified; unseal on reboot **fails** | **Verified** - PCR-7 keyslot enrolled via the OP-TEE fTPM on first boot (2026-08-19); reboot-survival of this specific TPM2 slot not yet independently re-tested on hardware. See below        |
+| dm-verity        | **Not active** on this target                   | Not yet run                                                                                                                                                                                    |
+| IMA/EVM          | **Not implemented** - nothing to test           | **Not implemented** - nothing to test                                                                                                                                                          |
+| Module signing   | No harness case exists                          | Not yet run                                                                                                                                                                                    |
 
-The CI seal is that both paths run the same recipes, kernel fragments, and initramfs logic (the `meta-avocado` layer is shared; only the fTPM backend differs: QEMU swtpm vs OP-TEE on the board). A cheap `avocado-qemuarm64` gate guards the expensive hardware path: a change anywhere in Avocado OS that would break the seal, the verity tree, or the appraisal policy fails the harness before it reaches a board.
+Three harness cases back the proxy column (`luks-var`, `luks-var-tpm`, `dm-verity`), and they live on the #232 branch, so they are not gating anything on `scarthgap` yet. There are no IMA or module-signing cases at all; an earlier version of this table named two that do not exist.
+
+IMA/EVM is a step further back than "not yet run". Checked on the running board, `/sys/kernel/security/ima/` and `/sys/kernel/security/evm` do not exist and `/proc/cmdline` carries no `ima_policy` or `ima_appraise`; checked in the layer, `ima.cfg` is absent from `scarthgap` and from both secure-boot branches, and no recipe, kas feature, or `DISTRO_FEATURES` gate references `ima` at all. Everything this note says about IMA and EVM is the design, and building it is its own piece of work - a fragment, a signing policy, and a labelled rootfs - not a check someone can run today.
+
+### The signed-boot pass (2026-08-13)
+
+The whole chain now boots on the board: NXP-signed ELE container, OEM-signed
+`imx-boot`, OEM-signed OS container, Linux, and LUKS2 `/var` underneath it.
+
+```text
+Booting A
+35519488 bytes read        # os_cntr_signed.bin
+44262937 bytes read        # initramfs
+Authenticate OS container at 0x88000000
+## Flattened Device Tree blob at 83000000
+   Loading Ramdisk to fa469000, end fce9f619 ... OK
+Starting kernel ...
+[    0.000000] Machine model: NXP FRDM-IMX93
+[  OK  ] Found device /dev/mapper/var.
+```
+
+Signing is SPSDK, not CST. `cst_signer`'s own source refuses AHAB without SPSDK,
+and its README says i.MX 8x/8ULP/9 go through SPSDK while only 6/7/8M stay on
+CST - so `nxpimage ahab sign` takes the finished container and locates the
+header and signature block itself. There are no offsets to scrape out of a build
+log.
+
+**Enabling `CONFIG_AHAB_BOOT` changes what `booti` means, and that is the part
+that bites.** Its first argument stops being a kernel and becomes a container:
+`cmd/booti.c` authenticates it, then calls `container_get_image_dst()` on the
+same address to find where the kernel landed. But authentication has already
+copied each image to the destination recorded inside the container - so if the
+container is staged at the kernel's own destination, authentication overwrites
+what the next line parses. It surfaces as `Parse kernel and fdt address failed
+-1`, or as a bad-container report, depending on how far the copy got.
+
+That hides behind `auth_cntr`, which calls the same function and passes every
+time because nothing reads the container afterwards. Four separate experiments
+exonerated the container while `booti` kept failing on identical input. Stage the
+container somewhere it does not overlap its own payload.
+
+**`ahab_status` cannot report zero events before fusing.** On an unfused part the
+ELE has no `SRK_HASH` to compare the container's SRK table against, so it logs
+`ELE_BAD_KEY_HASH_FAILURE_IND (0xFA)` and returns `ELE_SUCCESS_IND` - the open
+part tolerates it and boots:
+
+```text
+Lifecycle: 0x00000008, OEM Open
+fuse read 16 0 8  ->  all zeros
+```
+
+So the order is burn `SRK_HASH` while still open, _then_ check for zero events,
+_then_ close. A plan that validates zero events before the burn cannot be
+satisfied - which is what this note used to imply.
+
+### The gap in that log (2026-08-14)
+
+Read the pass above again and one line gives it away: `Loading Ramdisk`. AHAB
+covered the kernel and the device tree. The initramfs was loaded separately and
+handed to `booti` as `argv[1]`, which `booti` never authenticates - and on this
+image that initrd is what derives the LUKS key and opens `/var`. The single
+unsigned component stood directly in front of the storage control.
+
+The obvious fix is to add it as a second `--data` payload, and it fails
+quietly. `container_get_image_dst()` returns the first exec image and the first
+data image and stops, so a second data payload is authenticated, placed, and
+then never located; `booti` still reads `argv[1]`. Keeping the separate load
+just to obtain its size is worse: `${filesize}` comes from the unauthenticated
+copy on disk, so a larger file leaves unverified bytes past the authenticated
+region - and appending a cpio archive is the documented way to overlay files in
+an initrd.
+
+Bundling it into the kernel closes it by construction. The initramfs rides
+inside the exec payload the container already signs, and `booti` is handed no
+ramdisk at all:
+
+```text
+Booting A
+176028672 bytes read        # os_cntr_signed.bin - kernel, dtb and initramfs
+Authenticate OS container at 0xa8000000
+Starting kernel ...
+[  OK  ] Found device /dev/mapper/var.
+
+# findmnt -no SOURCE,FSTYPE /var
+/dev/mapper/var btrfs
+```
+
+No `Loading Ramdisk` line. That absence is the whole result.
+
+**The cost is size, and it lands in three places.** Bundling embeds the archive
+uncompressed - the build decompresses the `.cpio.zst` and the kernel stores what
+it is handed - so the kernel goes from 33 MB to about 200 MB. Re-compressing is
+not reachable from a config fragment, because the compression choice depends on
+`INITRAMFS_SOURCE`, which only reaches the kernel as a make argument during the
+bundling step and so is unset when the config is written.
+
+That forces the boot partitions from 128 to 256 MiB, `recovery` included since
+it holds a boot filesystem too. It also breaks the memory map, twice. The
+device tree ended up inside the kernel's unpack range (`FDT image overlaps OS
+image`). Then the container, moved out of the way, landed across a hole: this
+board's DRAM is not contiguous - `bdinfo` reports `0x80000000+0x16000000` and
+`0x98000000+0x68000000` with 32 MiB missing between them - and a load spanning
+it is refused with `Reading file would overwrite reserved memory`, which names
+neither the hole nor the size. The container now stages in the second bank,
+above the carve-out Linux later claims as `ele-reserved`.
+
+The guard that was supposed to catch this compared two addresses for equality,
+which is true of any layout that fails this way and false of every layout that
+did. It now measures the built kernel and refuses when it reaches either the
+device tree or the container. It earned that immediately: turning on encrypted
+`/var` grew the initramfs and pushed the kernel past a device tree that had
+already been moved once, and the build stopped with both addresses named rather
+than the board stopping at a prompt.
+
+Worth being plain about two limits. The initramfs is loaded outside the container
+and passed to `booti` as a separate argument, so it is **not** authenticated -
+and on this image it is what unlocks LUKS `/var`. And nothing here is enforced
+yet: the part is open, so a signature failure is logged rather than fatal.
+Enforcement is what closing the device buys, and closing is the step that can
+leave a board unable to boot anything you hold keys for.
+
+### The hardware pass (2026-08-12)
+
+The board pass ran on an FRDM-IMX93 against the wrynose BSP, and it closed the LUKS2 row. Three defects had to be fixed first, and every one of them was invisible on the proxy because `avocado-qemuarm64` carries a machine override that `avocado-imx93-frdm` did not:
+
+- **`CONFIG_DM_CRYPT` was silently `=m`.** The fragment asks for `=y`, but kconfig caps a tristate at its weakest parent and the i.MX defconfig left both `BLK_DEV_DM` and `TRUSTED_KEYS` at `=m`. The initramfs ships `cryptsetup` with no module and nothing that loads one, so the unlock had no dm-crypt to call. The task check greps the fragment _text_, so it passed while the built kernel disagreed - verify against the produced `.config`, never the fragment.
+- **`AVOCADO_VAR_PART_DEV` was unset.** Both qemu machines point `/var` at `/dev/mapper/var` when `encrypted-var` is on; imx93 fell through to the base-files raw-PARTUUID default, so the container would be created and opened in the initrd while fstab mounted `/var` from the raw partition underneath it.
+- **The key provider read a secret that does not exist.** The shared `var-key.sh` reads `/var/private/var-key-secret` - on the volume being unlocked, not mounted when the provider runs in the initramfs, and created by nothing in the tree. The Argon2id path had therefore never once succeeded on this board.
+
+What the pass showed, on the board:
+
+```text
+# cryptsetup status var
+/dev/mapper/var is active and is in use.
+  type:    LUKS2    cipher: aes-xts-plain64    keysize: 512 [bits]
+  device:  /dev/mmcblk1p8
+
+# findmnt /var
+/var /dev/mapper/var btrfs rw,relatime,ssd,space_cache=v2
+
+# dmsetup targets | grep crypt
+crypt            v1.28.0
+```
+
+First boot ran the whole path - open, no filesystem found, filesystem created at 29.01 GiB, `Finished LUKS2 /var unlock and first-boot format` - and the partition expanded 112M to 29G. A second boot then exercised the **unlock** path rather than first-boot format: `/var` reopened with the same btrfs UUID across a reboot confirmed by a changed `boot_id`. That is the reboot survival the proxy structurally cannot show, though only for the Argon2id slot.
+
+**Phase-2 TPM2 remains unshown, and not for want of running it.** There is no TPM on this board to seal to. The FRDM-IMX93 has no discrete TPM (confirmed against UM12181 and, for its i.MX95 siblings, the schematic BOMs), and the i.MX9 route to a TPM 2.0 interface is a firmware TPM on OP-TEE, which `optee-ftpm-init` currently builds for `avocado-qemuarm64` only. Nothing seals to PCR 7 on an i.MX93 today. The board does have what that route needs - OP-TEE enabled, 32 GB eMMC so RPMB exists, and a `recovery` partition for the TEE store - so this is a porting task rather than a hardware limitation, and it needs no AHAB work. Worth knowing when reading NXP material: on i.MX, "TPM" in a datasheet or device tree usually means the **Timer/PWM Module** peripheral, not a trusted platform module.
+
+The intent still holds: both paths run the same recipes, kernel fragments and initramfs logic, and both seal to the same OP-TEE fTPM (`MACHINE_FEATURES += " optee-ftpm"` on `avocado-qemuarm64`, per `meta-avocado-qemu/conf/machine/avocado-qemuarm64.conf`) - what differs is the platform underneath it, QEMU `virt` against i.MX93 silicon. So a cheap proxy gate should guard the expensive hardware path. It is an intent rather than a seal until the cases merge and the board pass runs.
+
+### The fTPM hardware pass (2026-08-19)
+
+The porting task named above - `optee-ftpm` for imx93, gated behind `kas/feature/ftpm.yml` -
+landed and ran on the board. Built `avocado-imx93-frdm` with
+`kas/feature/encrypted-var.yml:kas/feature/ftpm.yml`, `ahab` feature absent entirely.
+Confirmed live on the board, not inferred from reading the layer:
+
+```text
+# /dev/tpm0 and /dev/tpmrm0 registered at boot
+crw------- 1 root root  10,   224 /dev/tpm0
+crw------- 1 root root 252, 65536 /dev/tpmrm0
+
+# journal, first boot
+cryptsetup-var: first boot - formatting /dev/disk/by-partlabel/var as LUKS2
+cryptsetup-var: opening LUKS2 container on /dev/disk/by-partlabel/var
+cryptsetup-var: enrolling TPM2 keyslot (PCR 7)
+
+# cryptsetup luksDump /dev/mmcblk1p8 (excerpt)
+Tokens:
+  0: systemd-tpm2
+        tpm2-hash-pcrs:   7
+        tpm2-srk:         true
+        tpm2-primary-alg: ecc
+        Keyslot:    1
+```
+
+Slot 0 stays `argon2i` - the recovery keyslot - and is never removed; see the corrected
+"Phase-2 TPM2 enrollment" section above. `/var` mounts live from `/dev/mapper/var`
+(btrfs), no emergency-mode fallback.
+
+fTPM has zero dependency on AHAB: `kas/feature/ftpm.yml` never references `ahab`
+anywhere, and this exact boot had the `ahab` feature off. That independence is worth
+stating plainly because a bug briefly obscured it (next).
+
+**A separate u-boot bug, unrelated to fTPM itself, blocked this build until fixed.**
+`u-boot-imx_%.bbappend` applied `ahab.cfg` (`CONFIG_AHAB_BOOT=y`) unconditionally on
+`imx93-frdm`/`imx91-frdm` - gated on the machine, not on the `ahab` DISTRO_FEATURE. With
+that compiled in, `booti` always tries to authenticate `argv[1]` as a signed AHAB
+container; a build with `ahab` off never constructs one, so `booti` got a bare kernel
+Image and failed with `Error: Wrong container header`. Fixed on
+[meta-avocado #279](https://github.com/avocado-linux/meta-avocado/pull/279), gating
+both `SRC_URI:append` lines on `bb.utils.contains('DISTRO_FEATURES', 'ahab', ...)` to
+match the sibling gate two lines below it in the same file. Confirmed on hardware:
+same board, same non-`ahab` build, clean boot with no AHAB authentication attempt.
+
+**This specific board can no longer validate AHAB at all**, independent of the bug
+above. Reading fuse bank 16 (SRK_HASH) directly off this board's u-boot console shows
+the correct SRK table hash burned in the wrong byte order - an out-of-band `fuse-srk`
+tool unpacked the fuse file big-endian instead of NXP's native order (documented in
+meta-avocado commit `0f3fc697`, 2026-08-13). The fuse is OTP; no key choice, old or
+new, can make the ELE's native-order comparison match a byte-reversed value. The board
+remains OEM Open (never closed) and boots fine for everything non-AHAB, fTPM included -
+it just cannot re-run the AHAB row of the coverage table above. A different, unfused
+FRDM-IMX93 unit is needed for that.
 
 ## Security properties
 
 Pulling the eMMC off the board gives an attacker AES-256-XTS ciphertext. Without the Argon2id recovery passphrase (device-bound, not in the image) or the TPM2 (physically in the device), they cannot decrypt it, and the two factors are independent.
+
+**Updated 2026-08-19: the i.MX93 now has both factors, via the OP-TEE fTPM.** Earlier text here said the board had one factor, not two, because it had no TPM to seal to and the Argon2id slot - derived from the SoC's readable, non-secret OCOTP UID - was the only slot. That gap is closed: fTPM PCR-7 sealing is verified on this board (previous section), and the Argon2id slot is now genuinely a recovery path behind a sealed primary, not the sole key. One claim from that earlier text still holds and is not yet re-tested: the cloned-eMMC scenario in "Reproduce it" below (enroll on one board, boot the eMMC on a different one) has not been run against real fTPM hardware, so PCR-7 sealing blocking a cross-board clone is confirmed by design, not yet by an adversarial hardware test.
 
 <PullQuote>
   The storage chip alone is worthless: the key is sealed to the Secure Boot state, and the TPM is
   not on the chip.
 </PullQuote>
 
-The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader or disabled Secure Boot changes PCR 7 before the initramfs runs, so the TPM refuses to unseal, and you cannot clone the eMMC to another board and boot it. dm-verity verifies every rootfs block against a build-time hash tree, so an offline patch is caught before the patched code executes. IMA/EVM extends that to mutable files: a binary dropped into `/var` or an overlay has no valid `security.ima` signature, so the kernel refuses to execute it. Module signing closes the in-band injection path: even with a shell, the attacker cannot load a custom kernel module.
+The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader or disabled Secure Boot changes PCR 7 before the initramfs runs, so the TPM refuses to unseal, and you cannot clone the eMMC to another board and boot it. That half is built, and verified on this board.
+
+The integrity half is design rather than delivery, and the coverage table above says which is which. The intent: dm-verity verifies every rootfs block against a build-time hash tree, so an offline patch is caught before the patched code executes; IMA/EVM extends that to mutable files, so a binary dropped into `/var` or an overlay has no valid `security.ima` signature and the kernel refuses to execute it; and module signing closes the in-band injection path, so even with a shell an attacker cannot load a custom kernel module. None of those three is implemented in the layer today.
 
 ## Issues and open questions
 
+- **Unseal fails on reboot on the proxy; the TPM2-specific reboot claim is still open even on hardware.** The two-phase enrollment lands both slots correctly on QEMU, and then the very next boot cannot unseal from the TPM2 slot and falls back to Argon2. The layer already documents why, and it is a property of the emulator rather than of the design: the QEMU `virt` machine has no RPMB, so OP-TEE cannot commit the rollback counter its secure storage depends on, will not trust the fTPM's saved state on the next boot, and the fTPM re-derives its seed. **The 2026-08-12 board pass showed reboot survival for the Argon2id slot** - `/var` reopened across a reboot from an existing LUKS2 container, same filesystem UUID either side - and **the 2026-08-19 pass showed the eMMC-backed board _does_ have RPMB and a working fTPM, with the PCR-7 keyslot enrolling cleanly on first boot.** What remains genuinely untested on any platform is the specific case that matters: reopen `/var` via the TPM2 token specifically (not the Argon2id fallback) on a _second_ boot of an _already-enrolled_ image on real hardware. `cryptsetup-var.sh` is written to prefer the TPM2 token on open and fall back to Argon2id only on failure, so this should work - it just has not been independently re-tested this way yet.
+- **An interrupted first boot wedges the device permanently.** `cryptsetup-var.sh` only runs `mkfs.btrfs` in its first-boot branch. A first boot that dies after `luksFormat` but before `mkfs.btrfs` leaves a LUKS2 header with no filesystem inside, so every later boot takes the open-existing branch, never creates the filesystem, and drops to emergency forever. Re-provisioning does not clear it, because `fwup -t complete` does not touch the `var` partition; recovery means zeroing the LUKS header by hand. The fix is either to detect "header present, no filesystem on the opened mapper" and re-`mkfs`, or to make format-plus-mkfs atomic behind a completion marker.
 - **`luksKillSlot` guard.** The `|| true` on slot 0 removal is intentional but means a failed kill leaves both slots active. A monitoring check after enrollment should confirm slot 0 is gone; the current implementation does not warn if the kill is skipped.
 - **IMA/EVM raises a labeling and update cost.** Every appraised file must carry a valid `security.ima` signature, so the build signs the rootfs and shipped mutable content, and every OS update re-signs and shifts the measured hashes. That makes the attestation server's known-good list an ongoing ops dependency. First boot also runs roughly 5-15% slower while IMA labels and measures, which is why IMA is gated on `ima` rather than always on.
 - **Software fallback Argon2id tier.** Boards without a TPM or fTPM (Renesas RZ/V2N, Synaptics SL1680, Qualcomm QCS6490, Raspberry Pi) fall back to a software-derived key bound to a provisioned secret and the hardware serial. This is a lower-security tier; the per-device provisioning of the secret is not addressed here.
@@ -215,8 +485,10 @@ The LUKS key is sealed to PCR 7 (UEFI Secure Boot state). A tampered bootloader 
 
 ## Reproduce it
 
-- Boot the FRDM board with a rootfs where one block has been flipped with `dd`. dm-verity halts the boot before any userspace code runs.
-- Enroll phase-2 TPM2 keys on one board, then clone the eMMC to a second board with a different TPM. PCR 7 on the clone does not match what was sealed; the clone cannot decrypt `/var`.
-- Copy a stock binary into `/var/tmp` and run it. IMA appraisal denies the exec (no valid `security.ima` signature), while the same binary in its signed rootfs location runs normally.
+Three adversarial tests, stated as predictions the hardware pass should confirm or break. None has been run on a board yet, and each one failing would say something specific about which control is not doing its job:
+
+- Boot the FRDM board with a rootfs where one block has been flipped with `dd`. dm-verity should halt the boot before any userspace code runs. The proxy cannot answer this one at all, since dm-verity is not active there.
+- Enroll phase-2 TPM2 keys on one board, then clone the eMMC to a second board with a different TPM. PCR 7 on the clone should not match what was sealed, so the clone should not decrypt `/var`. This is the test that matters most right now, because the proxy's unseal already fails on a plain reboot of the _same_ machine.
+- Copy a stock binary into `/var/tmp` and run it. IMA appraisal should deny the exec for want of a valid `security.ima` signature, while the same binary in its signed rootfs location runs normally.
 
 The controls live in `meta-avocado` and `meta-avocado-nxp` in the [avocado-linux organization on GitHub](https://github.com/avocado-linux). It composes cleanly with `hardened-security` (runtime posture), and the boot-chain controls satisfy CRA Annex I Part I items (b), (d), and (f) that a compliance mapping can build on.
