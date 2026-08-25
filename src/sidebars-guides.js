@@ -33,6 +33,7 @@ const sidebars = {
         'hardware-in-the-loop',
         'sideloading',
         'ota',
+        'remote-tunnel',
         'package-feeds',
         'feed-search',
         'linux-auto-mounting',
