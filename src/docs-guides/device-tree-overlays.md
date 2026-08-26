@@ -161,9 +161,17 @@ device-tree-overlay-deliver: delivered 1 overlay(s) merged into tegra234-p3768-0
 
 The middle line is the one that differs per target: on Jetson it names the base DTB the overlays were merged into, and on the loose-`.dtbo` targets it names the boot directory they were copied to instead.
 
-To inspect what was produced, `avocado save` exports the build state; the archive holds both the compiled `device-tree-overlays/<name>.dtbo` and the finalized `os-bundle.aos`.
+To inspect what was produced, `avocado save` exports the build state - the archive holds both the compiled `device-tree-overlays/<name>.dtbo` and the finalized `os-bundle.aos`:
 
-Then flash the board. **Do this host-side, not through `avocado runtime provision`** - container-mode provisioning cannot currently reach a Jetson in recovery mode, which is a known gap. Every result on this page was obtained from a host-side flash.
+```bash
+avocado save -o build-state.tar.zst
+```
+
+Then flash the board. Provisioning is not specific to overlays, so follow [Getting started: Jetson](./getting-started/jetson) for the procedure - put the board in recovery mode and run `avocado provision -r dev --profile tegraflash`.
+
+:::note how these results were produced
+Every result on this page came from running the board's `stone-provision-tegraflash.sh` directly on the host, driving it with `AVOCADO_STONE_MANIFEST`, `AVOCADO_STONE_DATA_DIR` and `AVOCADO_PROVISION_PROFILE`, rather than through `avocado provision`. Both paths flash the same artifacts, and the overlay is merged into the DTB at build time either way, so nothing on this page depends on which one you use. It is recorded because it is the difference between what was verified and what is documented.
+:::
 
 ### On a brand-new SDK
 
