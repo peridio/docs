@@ -30,7 +30,7 @@ This guide covers:
 The declaration is portable; the delivery mechanism is not. Each BSP layer installs its own delivery hook, so what happens to the compiled blob differs by board - including how you ship a _change_ to an overlay later.
 
 | Target                                      | Status                             | Delivery mechanism                                       | Updating an overlay                                       |
-| ------------------------------------------- | ---------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------- |
+| ------------------------------------------- | ---------------------------------- | -------------------------------------------------------- | --------------------------------------------------------- |
 | `jetson-orin-nano-devkit` (and other Tegra) | **Working** - verified on hardware | Merged into the base DTB at build time with `fdtoverlay` | **Reflash** - see [Jetson](#jetson-tegra)                 |
 | `qemux86-64`                                | Not applicable                     | None - x86 boots via ACPI and has no device tree         | n/a                                                       |
 | Any other target                            | Not documented yet                 | Varies by BSP                                            | Build fails by design - see [below](#unsupported-targets) |
@@ -67,7 +67,7 @@ extensions:
 | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `name`   | yes      | Authoritative. It is the compiled blob's basename (`<name>.dtbo`) and, on the targets that select overlays at boot, the selection argument. Must be a safe basename: no `/`, no whitespace, not `.` or `..`. Names must be unique across the whole runtime - a duplicate is a hard error, not last-one-wins. |
 | `src`    | yes      | Path to the overlay source, relative to the project root.                                                                                                                                                                                                                                                    |
-| `params` | no       | A mapping of per-overlay parameters. Accepted by the schema, but no hook on a documented target consumes it - the Jetson hook ignores it silently. Encode the values in the `.dtso` instead.                 |
+| `params` | no       | A mapping of per-overlay parameters. Accepted by the schema, but no hook on a documented target consumes it - the Jetson hook ignores it silently. Encode the values in the `.dtso` instead.                                                                                                                 |
 
 :::warning declare `avocado-runtime`
 The runtime must pull `avocado-runtime`, which is what installs `avocado-img-bootfiles` - the package shipping `u-boot.bin` and the `bootfiles/*` entries the bundler needs to build a boot image. A project that omits it fails late, at bundling, with `File 'u-boot.bin' not found in any input directory for FAT image`, which reads like a broken BSP rather than a missing declaration. It cost us two weeks of chasing a product bug that was a project-config omission.
