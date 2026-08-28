@@ -27,7 +27,7 @@ export const data: SolutionData = {
       text: 'Request Demo',
       link: 'https://peridio.com/book-a-meeting',
     },
-    image: '/img/hardware/nxp/NXP-FRDM-MCXN947.png',
+    image: '/img/hardware/nxp/nxp_frdm-imx-93.png',
     imageAlt: 'NXP FRDM i.MX 93 development board',
   },
 
