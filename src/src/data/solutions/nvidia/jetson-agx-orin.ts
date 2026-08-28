@@ -6,7 +6,7 @@ export const data: SolutionData = {
     'Production-ready NVIDIA Jetson AGX Orin deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for the most powerful edge AI platform.',
   keywords:
     'nvidia jetson agx orin, device management, ota updates, yocto, embedded linux, industrial ai, robotics, fleet management, autonomous systems, edge computing',
-  ogImage: '/img/nvidia-jetson-agx-orin.jpg',
+  ogImage: '/img/nvidia-jetson-orin.jpg',
   canonicalUrl: 'https://docs.peridio.com/solutions/nvidia/jetson-agx-orin',
 
   hero: {
@@ -27,8 +27,8 @@ export const data: SolutionData = {
       text: 'Request Demo',
       link: 'https://peridio.com/book-a-meeting',
     },
-    image: '/img/jetson-agx-orin.png',
-    imageAlt: 'NVIDIA Jetson AGX Orin development kit',
+    image: '/img/hardware/nvidia/agx-orin.png',
+    imageAlt: 'NVIDIA Jetson AGX Orin module',
   },
 
   valueProposition: {
@@ -76,21 +76,21 @@ export const data: SolutionData = {
       title: 'Autonomous Vehicles',
       description:
         '275 TOPS powers full self-driving stacks with real-time sensor fusion, path planning, and decision making for Level 4+ autonomy.',
-      image: '/img/use-cases/autonomous-vehicles.png',
+      image: '/img/use-cases/factory-quality-inspection.png',
       imageAlt: 'Autonomous Vehicles',
     },
     {
       title: 'Surgical Robotics',
       description:
         'Ultra-low latency AI inference for precision surgical procedures. Real-time computer vision and haptic feedback systems.',
-      image: '/img/use-cases/surgical-robotics.png',
+      image: '/img/use-cases/ml-inference-server.png',
       imageAlt: 'Surgical Robotics',
     },
     {
       title: 'Smart City Infrastructure',
       description:
         'Process hundreds of camera feeds for traffic optimization, crowd analysis, and emergency response with enterprise reliability.',
-      image: '/img/use-cases/smart-city.png',
+      image: '/img/use-cases/traffic-flow-optimization.png',
       imageAlt: 'Smart City Infrastructure',
     },
   ],

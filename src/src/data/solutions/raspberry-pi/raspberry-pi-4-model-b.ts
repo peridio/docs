@@ -6,7 +6,7 @@ export const data: SolutionData = {
     'Deploy Raspberry Pi 4 Model B devices in production with Peridio Fleet + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.',
   keywords:
     'raspberry pi 4 model b, device management, ota updates, yocto, embedded linux, iot, edge computing, fleet management',
-  ogImage: '/img/raspberry-pi.jpg',
+  ogImage: '/img/Raspberrypi4.png',
   canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi',
 
   hero: {

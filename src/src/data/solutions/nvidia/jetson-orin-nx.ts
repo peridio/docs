@@ -27,8 +27,8 @@ export const data: SolutionData = {
       text: 'Request Demo',
       link: 'https://peridio.com/book-a-meeting',
     },
-    image: '/img/jetson-nano.png',
-    imageAlt: 'NVIDIA Jetson Orin NX development kit',
+    image: '/img/hardware/nvidia/orin-nx.png',
+    imageAlt: 'NVIDIA Jetson Orin NX module',
   },
 
   valueProposition: {
