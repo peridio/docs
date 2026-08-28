@@ -7,7 +7,7 @@ export const data: SolutionData = {
   keywords:
     'raspberry pi 4 model b, device management, ota updates, yocto, embedded linux, iot, edge computing, fleet management',
   ogImage: '/img/Raspberrypi4.png',
-  canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi',
+  canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi-4-model-b',
 
   hero: {
     title: 'Production-Ready Raspberry Pi 4 Model B Deployment',

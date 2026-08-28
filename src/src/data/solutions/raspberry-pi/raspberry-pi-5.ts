@@ -7,7 +7,7 @@ export const data: SolutionData = {
   keywords:
     'raspberry pi 5, device management, ota updates, yocto, embedded linux, iot, edge computing, fleet management',
   ogImage: '/img/raspberrypi-5.jpg',
-  canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi',
+  canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi-5',
 
   hero: {
     title: 'Production-Ready Raspberry Pi 5 Deployment',
