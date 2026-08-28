@@ -6,8 +6,8 @@ export const data: SolutionData = {
     'Deploy Raspberry Pi 5 devices in production with Peridio Fleet + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.',
   keywords:
     'raspberry pi 5, device management, ota updates, yocto, embedded linux, iot, edge computing, fleet management',
-  ogImage: '/img/raspberry-pi.jpg',
-  canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi',
+  ogImage: '/img/raspberrypi-5.jpg',
+  canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi-5',
 
   hero: {
     title: 'Production-Ready Raspberry Pi 5 Deployment',

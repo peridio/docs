@@ -6,7 +6,7 @@ export const data: SolutionData = {
     'Deploy NXP i.MX 8M Plus for industrial vision and edge AI. 2.3 TOPS NPU, dual cameras, real-time processing. Production-ready with Peridio Fleet + Avocado OS.',
   keywords:
     'nxp imx8mp, i.mx 8m plus, industrial vision, edge ai camera, npu, dual camera, real-time processing, device management',
-  ogImage: '/img/nxp-imx8mp.jpg',
+  ogImage: '/img/nxp-imx8p.jpg',
   canonicalUrl: 'https://docs.peridio.com/solutions/nxp/imx8mp',
 
   hero: {

@@ -7,7 +7,7 @@ export const data: SolutionData = {
   keywords:
     'seeed reterminal, raspberry pi cm4, industrial hmi, touchscreen, edge computing, fleet management',
   ogImage: '/img/reterminal.jpg',
-  canonicalUrl: 'https://docs.peridio.com/solutions/seeed',
+  canonicalUrl: 'https://docs.peridio.com/solutions/seeed/reterminal',
 
   hero: {
     title: 'Industrial HMI with Seeed reTerminal',
