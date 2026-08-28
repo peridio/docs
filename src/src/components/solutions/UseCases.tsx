@@ -7,6 +7,7 @@ interface UseCasesProps {
     title: string
     description: string
     image?: string
+    imageAlt?: string
   }>
   title?: string
 }
@@ -22,7 +23,11 @@ export default function UseCases({ useCases, title = 'Production Use Cases' }: U
           {useCases.map((useCase, index) => (
             <div key={index} className={styles.useCase}>
               {useCase.image && (
-                <img src={useCase.image} alt={useCase.title} className={styles.useCaseImage} />
+                <img
+                  src={useCase.image}
+                  alt={useCase.imageAlt ?? useCase.title}
+                  className={styles.useCaseImage}
+                />
               )}
               <Heading as="h3">{useCase.title}</Heading>
               <p>{useCase.description}</p>

@@ -76,15 +76,15 @@ export const data: SolutionData = {
       title: 'Autonomous Vehicles',
       description:
         '275 TOPS powers full self-driving stacks with real-time sensor fusion, path planning, and decision making for Level 4+ autonomy.',
-      image: '/img/use-cases/factory-quality-inspection.png',
-      imageAlt: 'Autonomous Vehicles',
+      image: '/img/use-cases/road-scene-perception.png',
+      imageAlt: 'Street scene with cars, pedestrians, and signage picked out by object detection',
     },
     {
       title: 'Surgical Robotics',
       description:
         'Ultra-low latency AI inference for precision surgical procedures. Real-time computer vision and haptic feedback systems.',
       image: '/img/use-cases/ml-inference-server.png',
-      imageAlt: 'Surgical Robotics',
+      imageAlt: 'Abstract rendering of an AI inference accelerator module',
     },
     {
       title: 'Smart City Infrastructure',
