@@ -9,6 +9,10 @@ description: 'Hardware root of trust and cryptographic boot chain verification i
 
 Hardware root of trust configured out of the box.
 
+:::tip Enabling it
+See [Boot signing](/developer-reference/security/boot-signing) in the developer reference for the `signing.fit_key` workflow, making the bootloader enforce your key, and AHAB on i.MX 9.
+:::
+
 Secure boot establishes an unbroken cryptographic chain of trust beginning at the silicon and extending through the bootloader, kernel, root filesystem, and every loaded system extension. Each component in the chain verifies the next before transferring control. If any component fails verification, the system refuses to boot — protecting against both malicious tampering and unintentional corruption.
 
 The challenge is that every silicon vendor has a different mechanism for establishing a root of trust, different fuse provisioning procedures, and different signing toolchains. Avocado abstracts this behind a unified interface that works the same way regardless of the underlying hardware.

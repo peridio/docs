@@ -9,6 +9,10 @@ description: 'dm-verity based block-level integrity verification in Avocado OS �
 
 Integrity verification on every startup — and every read after that.
 
+:::tip Enabling it
+See [Filesystem verity](/developer-reference/security/verity) in the developer reference for the `image.verity` opt-in on the rootfs and on extensions.
+:::
+
 Avocado OS uses dm-verity to provide continuous, block-level integrity verification of the root filesystem. Rather than checking integrity once at boot, dm-verity intercepts every filesystem read and verifies each block against a pre-computed Merkle hash tree. Any modification to the filesystem — whether from a malicious actor, a cosmic ray flipping bits in storage, or silent disk corruption — is detected at read time. If a block doesn't match its expected hash, the read fails rather than silently executing corrupted code.
 
 ## How it works
