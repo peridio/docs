@@ -2,7 +2,6 @@ import React from 'react'
 import Link from '@docusaurus/Link'
 import DataTable from '../DataTable'
 import advantechData from '../../data/hardware/under-evaluation-advantech.json'
-import nvidiaData from '../../data/hardware/under-evaluation-nvidia.json'
 import qualcommData from '../../data/hardware/under-evaluation-qualcomm.json'
 import nxpData from '../../data/hardware/under-evaluation-nxp.json'
 import renesasData from '../../data/hardware/under-evaluation-renesas.json'
@@ -23,7 +22,6 @@ const PAGE_SLUGS = {
   'CompuLab EdgeAI-ORN': 'compulab-edgeai-orn',
   'Connect Tech Rogue Carrier': 'connect-tech-rogue',
   'Connect Tech Rudi Embedded System': 'connect-tech-rudi',
-  'Jetson AGX Thor': 'jetson-agx-thor',
   'PI-SG565D Smart MOB Development Board': 'pi-sg565d',
   'IQ-9075': 'iq-9075',
   'Rubik Pi 3': 'rubik-pi-3',
@@ -68,7 +66,6 @@ const columns = [
 export default function UnderEvaluationMatrix() {
   const data = [
     advantechData,
-    nvidiaData,
     qualcommData,
     nxpData,
     renesasData,

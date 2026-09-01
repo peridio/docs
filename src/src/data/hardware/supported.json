@@ -101,6 +101,17 @@
       }
     },
     {
+      "name": "NVIDIA Jetson AGX Thor",
+      "target": "jetson-agx-thor",
+      "board": "",
+      "url": "/hardware/nvidia/jetson-agx-thor",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "supported"
+      }
+    },
+    {
       "name": "NVIDIA Jetson Orin NX",
       "target": "jetson-orin-nx",
       "board": "",
