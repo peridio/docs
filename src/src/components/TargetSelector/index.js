@@ -294,7 +294,7 @@ export default function TargetSelector() {
           {t.releases &&
             Object.keys(t.releases).length > 0 &&
             (() => {
-              const years = Object.keys(t.releases).sort()
+              const years = Object.keys(t.releases).sort((a, b) => Number(a) - Number(b))
               // Prefer a fully-supported release for the example value; else the newest available.
               const preferred =
                 years.filter((y) => t.releases[y] === 'supported').pop() || years[years.length - 1]
