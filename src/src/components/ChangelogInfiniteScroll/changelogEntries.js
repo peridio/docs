@@ -1,11 +1,11 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
 // -- August 2026 --
-import REF_2026_08 from '../../../docs-changelog/august-2026/reference-2026.08.md'
+import V1_0_0_RC_2 from '../../../docs-changelog/august-2026/1.0.0-rc.2.md'
 import DESKTOP_1_0_0_RC_7 from '../../../docs-changelog/august-2026/desktop-1.0.0-rc.7.md'
+import REF_2026_08 from '../../../docs-changelog/august-2026/reference-2026.08.md'
 import CONNECT_2026_08 from '../../../docs-changelog/august-2026/connect-2026.08.md'
 import MCP_5_2_1 from '../../../docs-changelog/august-2026/mcp-5.2.1.md'
-import CLI_1_0_0_RC_2 from '../../../docs-changelog/august-2026/cli-1.0.0-rc.2.md'
 // -- July 2026 --
 import REF_2026_07 from '../../../docs-changelog/july-2026/reference-2026.07.md'
 import DESKTOP_1_0_0_RC_6 from '../../../docs-changelog/july-2026/desktop-1.0.0-rc.6.md'
@@ -84,12 +84,11 @@ export const PRODUCTS = [
  */
 const rawEntries = [
   {
-    product: 'cli',
     version: '1.0.0-rc.2',
     monthSlug: 'august-2026',
     monthLabel: 'August 2026',
-    permalink: '/changelog/august-2026/cli-1.0.0-rc.2',
-    Component: CLI_1_0_0_RC_2,
+    permalink: '/changelog/august-2026/1.0.0-rc.2',
+    Component: V1_0_0_RC_2,
   },
   {
     product: 'desktop',
