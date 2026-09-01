@@ -98,6 +98,20 @@ Onboard Wi-Fi 6 and BLE 5.4 with 802.15.4 for Thread/Zigbee. Connect to any wire
 
 Hardware-in-the-loop development with Avocado OS. Edit code locally, test on hardware instantly — no rebuild required.
 
+## Security features
+
+| Capability           | Status on `imx91-frdm`                                                                    |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| AHAB boot container  | Built as a feed feature: EdgeLock authenticates SPL, ATF and U-Boot against SRK fuses     |
+| dm-verity extensions | Built. `extensions.<name>.image.verity` is carried in the runtime manifest                |
+| Encrypted `/var`     | Not declared yet — the machine does not list `encrypted-var` in its capabilities          |
+| Signed boot FIT      | Not declared yet — this board boots with `booti`, so there is no FIT to sign              |
+| Rootfs dm-verity     | Hash partitions are staged in the stone manifest, but need the FIT to carry the root hash |
+
+AHAB is applied when the feed is built rather than from `avocado.yaml`, because it signs the boot container the ROM loads. Signing does not close the part — an OPEN device boots a signed image without checking it, which is the window to validate in before burning SRK fuses. See [Boot signing](/developer-reference/security/boot-signing#ahab-signing-the-imx-9-boot-container).
+
+The sibling [FRDM i.MX 93](/hardware/nxp/frdm-imx-93) carries the same AHAB wiring plus encrypted `/var`, verified boot and rootfs verity.
+
 ## Getting Started
 
 ### Init, Install, & Build

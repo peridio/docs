@@ -271,3 +271,4 @@ As each device applies the update, it moves to **On target**. When every device 
 
 - What happens when a bad OS update ships? A/B rollback to the rescue — read our Field Note: [Two boots to trust an update](/field-notes/2026/06/20/two-boots-trust-update).
 - For more information, see [Deployments](/avocado-connect/deployments) and the [update architecture](/avocado-os/security/update-architecture).
+- Turning on a manifest-level security feature (`image.verity`, `var.encrypt`) over OTA has an ordering rule: an update is applied by the avocadoctl **already on the device**, so ship the current avocadoctl in a plain OS update first. [Security features](/developer-reference/security) covers which transitions work over OTA and which need a reprovision.
