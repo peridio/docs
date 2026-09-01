@@ -140,7 +140,7 @@ export default function HardwareHero({
               <div className={styles.targetGroup}>
                 <ChipIcon size={14} />
                 <span className={styles.targetLabel}>Avocado target name</span>
-                <code className={styles.target}>{target}</code>
+                <code className={`${styles.target} copyable`}>{target}</code>
               </div>
             )}
           </div>

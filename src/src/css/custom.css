@@ -1118,7 +1118,8 @@ html[data-theme="dark"] .dropdown__menu--link:hover {
 }
 
 /* ── Inline code click-to-copy tooltip ─────────────────────── */
-.theme-doc-markdown code:not(pre code) {
+/* Opt-in: only code tagged `.copyable` (hardware target/board chips). */
+.theme-doc-markdown code.copyable {
   cursor: pointer;
 }
 
