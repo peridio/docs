@@ -393,32 +393,31 @@ journal pointing at the cause - the unit that would have logged the failure was
 the thing that disappeared.
 
 The fix is to ship the unit in an extension rather than create it on the device,
-which is what the `config` confext in step 2 is for. Ship the `WantedBy` symlink
-alongside it rather than relying on `enable_services` alone:
+which is what step 2 already does. The `my-app` extension declares both types on
+purpose: the unit itself ships in the sysext at
+`overlay/usr/lib/systemd/system/my-app.service`, and `enable_services` writes its
+`multi-user.target.wants` symlink into the confext half. Both halves are part of
+the image, so both come back after the power cut - which is exactly what a unit
+hand-written into `/etc` on the running board does not do.
 
-```text
-etc/systemd/system/app.service
-etc/systemd/system/multi-user.target.wants/app.service -> /etc/systemd/system/app.service
-```
+Two changes to that unit earn their place here, and both are about the stop
+rather than the start:
 
-Write the unit so a stop is quick and a bad stop is recoverable, or the loop
-punishes you twice:
-
-```ini title="app.service"
-ExecStartPre=-/usr/bin/docker stop -t 3 avocado-dev
-ExecStart=/usr/bin/docker run --rm --name avocado-dev my-app:dev
-Restart=always
+```ini title="overlay/usr/lib/systemd/system/my-app.service"
+ExecStop=/usr/bin/docker stop -t 3 my-app
 TimeoutStopSec=15
 ```
 
-Both lines are there for a measured reason. The agent restarts this unit to
-adopt each pulled image, so the container's stop sits on the critical path of
-every sync - and a container that ignores `SIGTERM` (a shell loop around
-`sleep` does) burns systemd's full 90s `TimeoutStopSec` on each one. Trapping
-the signal in the app took an adopt from 90s to 9s here. When systemd gives up
-and kills `docker run`, the container survives holding the name, and every
-later start fails with "name already in use" while `Restart=always` retries
-forever; the `ExecStartPre` is what turns that permanent loop back into a
+Both are there for a measured reason. The agent restarts this unit to adopt each
+pulled image, so the container's stop sits on the critical path of every sync -
+and a container that ignores `SIGTERM` (a shell loop around `sleep` does) burns
+docker's stop grace and then systemd's 90s default on top of it. Trapping the
+signal in the app took an adopt from 90s to 9s here; bounding both timeouts is
+what keeps a container that does not trap it from costing that much every time.
+When systemd gives up and kills `docker run`, the container survives holding the
+name, and every later start fails with "name already in use" while
+`Restart=always` retries forever - the `ExecStartPre=-/usr/bin/docker rm -f`
+already in the step 2 unit is what turns that permanent loop back into a
 self-healing one.
 
 With those in place, the power-cycle result is the one you want. The board
@@ -428,8 +427,8 @@ redeploy:
 
 ```text
 uptime: up 1 min
-app.service: active
-avocado-dev   my-app:dev   Up 34 seconds
+my-app.service: active
+my-app   my-app:dev   Up 34 seconds
 app v3 base=524288B running-on=9052c9bf7b85
 ```
 
