@@ -77,8 +77,8 @@ flowchart TD
     end
 
     build --> watcher
-    control -->|"notify: a new digest is ready<br/>control WebSocket, 5600"| agent
-    registry -->|"the agent pulls only the changed<br/>layer - bulk read, 5599"| agent
+    control e_notify@-->|"notify: a new digest is ready<br/>control WebSocket, 5600"| agent
+    registry e_pull@-->|"the agent pulls only the changed<br/>layer - bulk read, 5599"| agent
     running -->|"watch it, then edit again -<br/>seconds, no reflash"| edit
 
     %% Blue is your host, amber is the target, everywhere on this page. Blue and
@@ -91,10 +91,17 @@ flowchart TD
     style you fill:#2563eb1f,stroke:#2563eb,stroke-width:2px
     style host fill:#2563eb1f,stroke:#2563eb,stroke-width:2px
     style target fill:#d977061f,stroke:#d97706,stroke-width:2px
-    %% Link 7 is the one arrow that leaves your host, thickened so the single
-    %% network hop is the most visible edge in the figure. Indices count every
-    %% link in declaration order, and a chain contributes one per arrow.
-    linkStyle 7 stroke:#d97706,stroke-width:3px
+    %% BOTH arrows that leave your host are thickened. The callout above tells
+    %% the reader to look for two network hops, so a figure that emphasises one
+    %% of them contradicts the text it illustrates.
+    %%
+    %% Styled by edge id (`e_notify@-->`) rather than `linkStyle N`: link indices
+    %% are positional over declaration order, so adding an arrow anywhere above
+    %% silently moves the styling onto a different edge - and the diagram still
+    %% parses, so check-mermaid still passes. An id stays attached to its own
+    %% arrow. Edge ids need mermaid >= 11.6, which theme-mermaid already floors.
+    classDef crossesTheNetwork stroke:#d97706,stroke-width:3px
+    class e_notify,e_pull crossesTheNetwork
 ```
 
 When you run `avocado container dev up`, the CLI:
