@@ -83,15 +83,15 @@ docker build -t my-app:dev .
 The device stays in the loop the whole time, so what you are watching is your code on the target, not an approximation of it. A QEMU target and a board on your desk are the same thing here: both are just an SSH-reachable device.
 
 ```text
-// highlight-orange-start
+// highlight-blue-start
                       edit your app                     <-- you
                             │
                             ▼
               docker build -t my-app:dev .              <-- your normal build
                             │
                             ▼
-// highlight-orange-end
-// highlight-green-start
+// highlight-blue-end
+// highlight-blue-start
                   avocado container dev                 <-- started by dev up
                ┌─────────────────────────┐
                │ watcher   sees the tag  │
@@ -101,8 +101,8 @@ The device stays in the loop the whole time, so what you are watching is your co
                             │
                             │   only the changed layer
                             ▼
-// highlight-green-end
-// highlight-blue-start
+// highlight-blue-end
+// highlight-orange-start
               the device (QEMU or a board)              <-- hardware in the loop
                ┌─────────────────────────┐
                │ container-agent-dev     │  pulls over the pinned CA
@@ -112,7 +112,7 @@ The device stays in the loop the whole time, so what you are watching is your co
                             │
                             ▼
               watch it run on real hardware
-// highlight-blue-end
+// highlight-orange-end
                             │
                             └────▶ edit again, seconds, no reflash
 ```
