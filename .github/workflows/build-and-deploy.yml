@@ -19,17 +19,16 @@ jobs:
         run: npm --prefix src ci
       - name: ESLint
         run: npm --prefix src run lint
-      # Generate the reference pages first. sync-references writes them into a
-      # gitignored directory that the build also populates, so validating before
-      # the build left that whole set of live pages unchecked.
-      - name: Sync Reference Pages
-        run: npm --prefix src run sync-references
-      # The build below cannot catch a malformed diagram - mermaid renders in the
-      # browser - so gate the deploy on it explicitly.
-      - name: Mermaid Diagrams
-        run: npm --prefix src run check-mermaid
       - name: Docusaurus Build
         run: npm --prefix src run build
+      # The build cannot catch a malformed diagram - mermaid renders in the
+      # reader's browser - so gate the deploy on it explicitly. It runs after the
+      # build rather than before because the build's own sync-references step
+      # populates the generated reference pages this check needs to see; a
+      # separate sync step here cloned avocado-linux/references a second time for
+      # nothing. Ordering does not weaken the gate: deploy needs this whole job.
+      - name: Mermaid Diagrams
+        run: npm --prefix src run check-mermaid
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
