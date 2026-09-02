@@ -45,7 +45,7 @@ The rootfs tree is written as a standalone image, not appended, because systemd'
 
 - `veritysetup` in the SDK (present in the published SDKs).
 - `CONFIG_DM_VERITY` on the target kernel.
-- For **rootfs** verity: a machine that boots a FIT and whose U-Boot environment reads `avocado,roothash` back out of it. Today that is `imx8mp-evk` and `imx93-frdm`. The build refuses unless the FIT can be built, so `runtimes.<name>.signing.fit_key` must name a key — or `signing.fit_unsigned: true` must state explicitly that this machine's U-Boot enforces none:
+- For **rootfs** verity: a machine that boots a FIT and whose U-Boot environment reads `avocado,roothash` back out of it. Today that is `imx8mp-evk` and `imx93-frdm`. The build refuses unless the FIT can be built, so `runtimes.<name>.signing.fit_key` must name a key — or `runtimes.<name>.signing.fit_unsigned: true` must state explicitly that this machine's U-Boot enforces none:
 
   ```
   ERROR: rootfs.image.verity is on, which needs the boot FIT rebuilt with the
