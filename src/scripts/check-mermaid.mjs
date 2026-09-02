@@ -385,13 +385,23 @@ async function main() {
   const files = markdownFiles(SRC)
   let blockCount = 0
   const failures = []
+  const generatedFailures = []
+
+  // Generated reference pages are written by sync-references from a clone of
+  // avocado-linux/references at unpinned origin/main. A malformed diagram
+  // committed to THAT repo is not fixable from this one, so failing on it would
+  // hand an unrelated repo a red deploy button here. Report it and keep going;
+  // authored content stays fail-closed, which is what the gate is for.
+  const generated = path.join(SRC, 'docs-guides', 'references')
+  const isGenerated = (file) => file.startsWith(generated + path.sep)
 
   for (const file of files) {
     for (const block of mermaidBlocks(file)) {
       blockCount++
       const failure = await parses(mermaid, block.body)
       if (failure) {
-        failures.push({ file, line: block.line, failure: absolutize(failure, block.line) })
+        const entry = { file, line: block.line, failure: absolutize(failure, block.line) }
+        ;(isGenerated(file) ? generatedFailures : failures).push(entry)
       }
     }
   }
@@ -413,16 +423,26 @@ async function main() {
     process.exit(2)
   }
 
-  // Generated reference pages are written by sync-references at build time into a
-  // gitignored directory. They carry upstream markdown we do not control, so when
-  // they are absent the run has a real coverage hole - say so rather than letting
-  // the total imply full coverage.
-  const generated = path.join(SRC, 'docs-guides', 'references')
+  // The generated tree is absent until sync-references has run. That is a real
+  // coverage hole rather than a pass - say so rather than letting the total
+  // imply full coverage.
   if (!fs.existsSync(generated)) {
     console.warn(
       'mermaid warning: src/docs-guides/references/ is absent, so generated reference ' +
         'pages were NOT checked. Run `npm run sync-references` first to include them.'
     )
+  }
+
+  if (generatedFailures.length > 0) {
+    console.warn(
+      `mermaid warning: ${generatedFailures.length} malformed diagram(s) in generated ` +
+        'reference pages. These come from avocado-linux/references and cannot be fixed ' +
+        'here, so they do not fail this check - fix them upstream.'
+    )
+    for (const { file, line, failure } of generatedFailures) {
+      console.warn(`  ${path.relative(SRC, file)}:${line}:`)
+      console.warn(indent(failure))
+    }
   }
 
   if (failures.length === 0) {
