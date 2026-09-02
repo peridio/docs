@@ -1,6 +1,8 @@
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment'
 
-const SELECTOR = '.theme-doc-markdown code'
+// Opt-in only: inline code is copyable when tagged with `.copyable`
+// (hardware target/board chips). Plain inline code in prose is not.
+const SELECTOR = '.theme-doc-markdown code.copyable'
 
 function showTooltip(anchor) {
   const tip = document.createElement('span')

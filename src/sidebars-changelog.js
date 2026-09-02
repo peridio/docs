@@ -8,7 +8,13 @@ const sidebars = {
       label: 'August 2026',
       collapsible: false,
       collapsed: false,
-      items: ['august-2026/desktop-1.0.0-rc.7'],
+      items: [
+        'august-2026/1.0.0-rc.2',
+        'august-2026/desktop-1.0.0-rc.7',
+        'august-2026/reference-2026.08',
+        'august-2026/connect-2026.08',
+        'august-2026/mcp-5.2.1',
+      ],
     },
     {
       type: 'category',

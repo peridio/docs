@@ -41,14 +41,14 @@ const columns = [
     header: 'Target',
     width: '19%',
     align: 'left',
-    render: (device) => (device.target ? <code>{device.target}</code> : '—'),
+    render: (device) => (device.target ? <code className="copyable">{device.target}</code> : '—'),
   },
   {
     key: 'board',
     header: 'Board',
     width: '19%',
     align: 'left',
-    render: (device) => (device.board ? <code>{device.board}</code> : '—'),
+    render: (device) => (device.board ? <code className="copyable">{device.board}</code> : '—'),
   },
   {
     key: 'lts2024',
