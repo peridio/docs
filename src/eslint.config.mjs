@@ -9,7 +9,12 @@ export default [
     ignores: ['build', 'vendor', '.cache-references'],
   },
   {
-    files: ['**/*.{js,jsx}'],
+    // `.mjs` belongs here, not in a gap. Node scripts that must be ESM (mermaid
+    // ships ESM only, this package is commonjs) carry that extension, and
+    // without it `npm run lint` reports 0 rules for them - a green lint that
+    // says nothing about the file. `sourceType: 'module'` below is already what
+    // `.mjs` needs.
+    files: ['**/*.{js,jsx,mjs}'],
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
