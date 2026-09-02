@@ -21,11 +21,13 @@ The challenge is that every silicon vendor has a different mechanism for establi
 
 ### Board-agnostic CLI
 
-Avocado's CLI abstracts the vendor-specific complexity behind consistent commands. When you issue a command to configure secure boot, the CLI automatically invokes the appropriate board-specific module — handling key management, signature generation, and hardware configuration for you.
+Avocado's CLI abstracts the vendor-specific complexity behind configuration rather than per-vendor commands. You name a signing key in `avocado.yaml`; the build invokes the appropriate board-specific module — handling key management, signature generation, and bootloader enforcement for you.
 
-```
-# Same command, different hardware — the CLI handles the rest
-avocado secure-boot enable
+```yaml title="avocado.yaml"
+runtimes:
+  prod:
+    signing:
+      fit_key: product-fit
 ```
 
 Under the hood, this leverages a modular backend with board-specific modules created from host tools provided by vendor Yocto layers. These modules are packaged into Avocado's composable SDK package repositories, so secure boot tooling is installed only when needed and stays consistently versioned with the rest of your development environment.
