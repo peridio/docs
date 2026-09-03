@@ -1,0 +1,439 @@
+---
+title: 'Change one line on your laptop, watch it land on the board'
+description: 'The container inner dev loop on real hardware: an NXP FRDM i.MX 93 driven from an x86-64 workstation, from a blank SD card to a code change serving off the device.'
+date: 2026-08-10
+draft: true # PRE-RELEASE feature - keep on the branch until Container Dev Mode ships
+# Do not un-draft this file before src/docs-guides/container-dev-mode.md. The body
+# links /developer-reference/container-dev-mode, which is only a route once that
+# guide's own draft:true is dropped, and onBrokenLinks is 'throw' - so publishing
+# the note alone fails `npm run build`.
+authors: [jtia]
+tags: [imx93-frdm, containers, hardware]
+category: 'Containers'
+featured: false
+image: /img/field-notes/container-dev-mode-imx93.png # the LANDED payoff frame: the reloaded log line and the 2.5 KB against 1.9 MB
+# PRE-RELEASE NOTE (not for readers): Container Dev Mode is not shipped yet. The
+# steps and the measured results are real and were run end to end on the board on
+# 2026-08-10, but the CLI, the device agent extension and the BSP move are spread
+# across open PRs, so a reader cannot reproduce this from a released build today.
+# The "What this needs" section lists them for internal review; strip that section
+# and pin the released CLI version before flipping draft:false.
+#
+# The TestStatus block carries no `reference` prop on purpose - that prop renders
+# as the anchor text of a real link, and neither the dev server nor a deploy
+# preview honours draft:true, so a placeholder there ships a broken-looking link.
+#
+# --- internal drafting fields (not rendered) ---
+tested_against: 'avocado-cli 1.0.0-rc.1 (pre-release dev build); imx93-frdm hardware, wrynose 6.18.20'
+poster: 'jtia'
+lift_for_blog: 'The container inner loop on real embedded hardware: edit on your laptop, the board is serving it seconds later, no reflash.'
+promote_to_track: ''
+---
+
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus targets={['imx93-frdm']} cli="1.0.0-rc.1" />
+
+**TL;DR** - Shipping a container change to an embedded device usually means rebuild, push, pull, reflash, find out. On an NXP FRDM i.MX 93 I went from a blank SD card to editing an app on my laptop and watching the board serve the change, with no reflash and no registry. Every step below is `avocado`, and the whole path is reproducible on a board you already have.
+
+{/* truncate */}
+
+The whole loop on the board, unedited: declare what to watch, start dev mode, first deployment, then one rebuild landing on the device.
+
+The app in the recording prints a version and the board's hostname once a second, so the reload is visible as a line changing in a stream. The steps below use one that serves HTTP instead, which is the more useful shape to copy. Same loop either way - the app is only what you point it at, and a printed line is easier to film than a page you have to go and fetch.
+
+{/* VIDEO PLACEHOLDER - not published yet. Source recording: container-dev-mode-imx93-2026-08-10.mp4, 1188x1152, 55s. Upload it, then replace the admonition below with the iframe block that follows it and drop in the real video id. Use aspectRatio '1188 / 1152', NOT the '16 / 9' the other field notes use - this frame is nearly square and 16/9 pillarboxes it down to a stripe. Keep THIS comment on one line; see the note on the internal section below for why. */}
+
+:::note[Recording pending upload]
+The demo is recorded and reviewed but not published yet. Replace this admonition with the embed below before flipping `draft: false`.
+
+```jsx
+<div style={{ aspectRatio: '1188 / 1152', maxWidth: '760px', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/VIDEO_ID"
+    title="Container Dev Mode on an NXP FRDM-IMX93: one rebuild lands on the board"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
+```
+
+:::
+
+## The loop this replaces
+
+Picture a computer-vision device. The application is a container: an inference runtime, a pile of Python dependencies, model weights. The image is multi-gigabyte - 7 GB uncompressed is not unusual. It runs on a box in a plant, a yard, or a vehicle, on an immutable OS nobody wants to reflash to try a code change.
+
+So the loop goes: change forty lines of Python, rebuild the image, push the whole thing to a registry, pull the whole thing onto the device, restart, discover the fix was wrong, repeat.
+
+Nothing there is broken, exactly. The cost of one iteration is set by the size of your image instead of the size of your change, and that ratio gets worse every time the model grows. Teams end up batching changes they would rather test one at a time, which is the real tax: not the minutes, the loss of "try it and see".
+
+## What it looks like instead
+
+Name the image you build and the service on the device that runs it, point the CLI at the board, and keep building the way you already do. The CLI watches your engine, pushes only the changed layers into a registry on your host, and notifies the device, which pulls them and restarts the service.
+
+The board stays in the loop the whole time, so what you are watching is your code on the target, not an approximation of it.
+
+## What this needs
+
+{/* Keep this comment on ONE line: across two lines a markdown formatter reads the delimiters as emphasis and rewrites them to {/_ _/}, which is not an MDX comment and fails compilation. */}
+
+:::caution[Internal - delete this whole section before publishing]
+This section exists only so the note can be reviewed and reproduced while the feature is spread across open PRs. It names unmerged branches and internal PR numbers, so it must not ship.
+
+Before flipping `draft: false`: delete this section from its `## What this needs` heading down to the `## Reproduce it` heading, and pin the released CLI version in `tested_against` and in the `<TestStatus>` block at the top.
+:::
+
+Container Dev Mode is pre-release, and reproducing this today means building from
+several open PRs rather than a released CLI:
+
+| Repo                        | PR   | What it provides here                                                                                                                                                                                                      |
+| --------------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `avocado-linux/avocado-cli` | #184 | the `avocado container dev` subcommands, the embedded registry and the watcher. Also carries the `enable_services` fix - without it a unit shipped anywhere but `overlay/usr/lib/systemd/system` is silently never enabled |
+| `avocado-linux/avocado-os`  | #46  | the `container-agent-dev` device agent extension, and a worked example app extension                                                                                                                                       |
+| `avocado-linux/avocadoctl`  | #17  | extension mount correctness. Without it, replacing an extension image and re-merging silently keeps serving the old contents                                                                                               |
+| `peridio/docs`              | #473 | this note and the guide                                                                                                                                                                                                    |
+
+One more caveat specific to this board: it was exercised on a wrynose 6.18.20
+build rather than the published BSP. That move is `avocado-linux/meta-avocado`
+#259, which is **on hold** pending an open question about whether i.MX 93 Rev1.1
+and Rev1.2 silicon actually differ here - so a board on the published BSP may
+behave differently, and confirming that is part of what is worth reproducing.
+If you do build that BSP yourself rather than taking the prebuilt image, note
+that #259 now sits on `meta-avocado` #268, which makes image content opt-in:
+append `kas/feature/container-dev.yml` or the feed comes out with neither a
+container engine nor an SSH server.
+
+The loop itself is target-agnostic. Nothing in the steps below depends on the BSP
+question; it only decides which image the board is running underneath them.
+
+## Reproduce it
+
+This assumes you have the board, an SD card and a USB-C cable. You are not building a BSP.
+
+On the host you need a container engine, and QEMU emulation registered for the board's architecture, because you will be building for something other than what you are sitting at. Docker Desktop provides this; on a Linux host it usually comes from a `qemu-user-static` package:
+
+```bash title="On Host"
+ls /proc/sys/fs/binfmt_misc/ | grep qemu-aarch64
+```
+
+Every step below says which machine it runs on, in its heading and again on each command block. Two machines and an SSH hop between them is exactly the setup where a command run in the wrong place fails in a way that looks like the feature is broken.
+
+### 1. Create the project (on host)
+
+```bash title="On Host"
+avocado init --target imx93-frdm imx93-frdm
+cd imx93-frdm
+```
+
+### 2. Declare the runtime (on host)
+
+Four extensions. The SSH one is the easy miss: `up` delivers the session bootstrap to the device over SSH before the loop exists, and a minimal Avocado image ships no SSH server.
+
+```yaml title="avocado.yaml"
+distro:
+  release: 2026
+  channel: edge
+
+runtimes:
+  dev:
+    target: imx93-frdm
+    extensions:
+      - docker # the container engine
+      - container-agent-dev # the device agent
+      - sshd-dev # up delivers the session bootstrap over SSH
+      - my-app # your app: its image and the unit that runs it
+
+    container_dev:
+      images:
+        - ref: my-app:dev
+          service: my-app
+
+extensions:
+  my-app:
+    # Both types are required. The unit ships in the sysext under /usr/lib;
+    # enable_services writes its enablement symlink under /etc, which is
+    # confext territory. With only one, the unit is present but never starts.
+    types: [sysext, confext]
+    version: 1.0.0
+    overlay: overlay
+
+    enable_services:
+      - my-app.service
+
+    # Seeds the image into the /var partition at build time, so the very first
+    # boot has something to run before any sync has happened.
+    docker_images:
+      - image: my-app
+        tag: dev
+```
+
+`service` names the unit on the device that owns the container, and it is not decoration. With it, a sync restarts that unit, so `ExecStart` re-runs `docker run` and re-resolves the tag. Without it the agent falls back to an engine `restart`, which re-executes the existing container object - bound to the image ID it was created with - and the device keeps running the old code while every layer reports success.
+
+The unit goes at `overlay/usr/lib/systemd/system/my-app.service` - that exact path, because it is where `enable_services` looks for it. A unit placed anywhere else produces an extension that builds, merges, presents the unit, and leaves it disabled forever.
+
+```ini title="overlay/usr/lib/systemd/system/my-app.service"
+[Unit]
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker rm -f my-app
+ExecStart=/usr/bin/docker run --rm --name my-app -p 8080:8080 my-app:dev
+ExecStop=/usr/bin/docker stop my-app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+`Restart=always`, not `on-failure`: with `--rm` and a default `Type=simple`, a container that exits cleanly leaves the unit inactive with nothing to bring it back.
+
+### 3. Build and provision (on host)
+
+```bash title="On Host"
+avocado install -f
+avocado build
+avocado provision -r dev --profile sd
+```
+
+This is the long part, and the only long part. `install` and `build` pull and assemble the runtime, which on a cold cache is tens of minutes; `provision` writes the card. Everything after this step is seconds, so if you are timing the loop, start the clock here.
+
+The CLI prompts you to pick the block device. It overwrites the one you choose.
+
+### 4. Boot it (on the board)
+
+The board's debug console is on its onboard USB-C port and enumerates as two CDC-ACM devices; the Linux console is the first.
+
+```bash title="On Host"
+ls /dev/serial/by-id/
+tio -b 115200 /dev/serial/by-id/usb-1a86_USB_Dual_Serial_<serial>-if00
+```
+
+Insert the SD card, connect USB-C, apply power. Log in as `root` with an empty password, and read the address the loop will use:
+
+```bash title="On the console"
+ip -4 addr show
+```
+
+Your container is already running - `docker_images` seeded the image and `enable_services` enabled the unit, so the board came up serving it:
+
+```bash title="On the console"
+systemctl is-active my-app.service
+docker ps
+```
+
+### 5. Confirm SSH before starting the loop (host to board)
+
+```bash title="On Host"
+ssh root@<device-ip>
+```
+
+If this fails, `up` cannot bootstrap the device. Fix it here rather than debugging it as a container problem later.
+
+### 6. Start the session (on host)
+
+```bash title="On Host"
+export AVOCADO_CONTAINER_DEV_DEVICE=root@<device-ip>
+avocado container dev up
+```
+
+`up` runs in the foreground and stays there for as long as you want the loop: it is the registry and the file watcher, so closing it ends the session. Give it a terminal of its own.
+
+It takes a couple of seconds and ends on a line naming the bulk listener it opened, plus `device <ip> bootstrapped`. That listener line is the readiness signal - until it appears there is nothing for a sync to talk to. On the device, the agent's path unit starts its service the moment the bootstrap file lands, so you do not start anything on the board yourself.
+
+### 7. Change the app and watch it land (host, then the board)
+
+Edit your application, then rebuild for the board's architecture:
+
+```bash title="On Host"
+docker build --platform linux/arm64 -t my-app:dev .
+avocado container dev sync
+```
+
+Two things differ from a same-architecture setup, and both bite immediately. An x86-64 host builds an x86-64 image the board cannot execute - the device-side pull refuses it rather than shipping it, so the failure lands at sync time rather than at runtime. `--platform` fixes that and costs a second problem: it routes the build through buildx, which is BuildKit, so the watcher may see no tag event at all. Pairing the cross-build with an explicit `sync` sidesteps both.
+
+The size difference between the first sync and this one is the whole point, and it is worth watching rather than taking on faith. The registry keeps its blobs under `~/.avocado/container-dev` on the host, and it writes each blob exactly once - a layer already there is never re-sent. So the directory's growth across a sync is what actually crossed to the device:
+
+```bash title="On Host"
+du -sh ~/.avocado/container-dev
+```
+
+Check it before and after. On my run the first delivery moved the whole image and every later one moved only the rebuilt top layer - megabytes against kilobytes, on an image small enough to be honest about. Scale that ratio to a multi-gigabyte inference image and it is the entire argument for the loop.
+
+Your change is now serving from the board:
+
+```bash title="On Host"
+curl http://<device-ip>:8080/
+```
+
+## How you know it actually worked
+
+The tell is the container's age, not the page contents:
+
+```text
+CONTAINER ID   IMAGE        STATUS          NAMES
+37bb47e38cc4   my-app:dev   Up 30 seconds   my-app
+```
+
+Seconds old means the unit genuinely re-ran and re-resolved the tag. Under the engine-`restart` fallback the container would keep its original age and serve the old image while every layer reported success - which is the failure mode worth knowing about, because nothing in the output says anything is wrong.
+
+A single `curl` after the fact is a weaker check than it looks: it tells you what is serving now, not that anything changed. Have the app print a version string on a timer, and watch the log from the host across the rebuild instead of sampling it once:
+
+```bash title="On Host"
+ssh root@<device-ip> 'journalctl -u my-app.service -f -o cat'
+```
+
+Leave that running, rebuild in the other terminal, and you see the old version repeating, then the new one, in one stream. That distinguishes "it is serving the new code" from "it was already serving this and nothing happened", which a one-shot request cannot. Make the version obvious in the line - it arrives as one line among several identical ones, and it is easy to scroll straight past the moment you were waiting for.
+
+One thing not to check: the image ID reported on the device against the one on your host. They legitimately differ. The device's containerd image store reports the manifest digest and a local build reports the config digest, so comparing them sends you chasing a mismatch that is expected. Compare your own version string instead.
+
+## The command set
+
+Five subcommands, and the walkthrough above only needed the first two:
+
+| Command  | What it does                                                                                                                 |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `up`     | Start the dev registry and watcher, and bootstrap the device. Runs in the foreground for the life of the session             |
+| `sync`   | One-shot re-push of the watched image plus a notify to the device. Needed when the watcher sees no tag event, as with buildx |
+| `status` | Report whether the registry and watcher are running, and when the last sync happened                                         |
+| `down`   | Stop the registry and watcher and tear down the listeners, the authenticated write port included                             |
+| `prune`  | Garbage-collect this project's dev registry store                                                                            |
+
+### Clean up when you are done
+
+The registry store is on your host and it only grows: every layer you have ever pushed to the device is still sitting there. Finish a session with both commands, in this order:
+
+```bash title="On Host"
+avocado container dev down
+avocado container dev prune
+```
+
+The order is not a style preference. `prune` refuses outright while an `up` session is live, because a live session may be streaming a blob to the device or holding a staging file open that the sweep would unlink underneath it.
+
+Left alone, the thing that actually accumulates is not the tagged layers - it is the staging files from pushes that died mid-flight. A session killed by a power cut or an OOM reaper leaves its partial layer behind permanently, and nothing else ever removes it. `prune` sweeps those along with any blob no currently-tagged manifest references, and leaves the session token and the project's CA material untouched.
+
+It is scoped to this project's store. The top-level `avocado prune` is a different command that removes Docker volumes, so reaching for the wrong one either does nothing you wanted or rather more than you wanted.
+
+## If you run it more than once
+
+A second pass is not a clean repeat of the first, and three things caught me going round again.
+
+`up` refuses to start while a previous session is still alive, and the previous session outlives the terminal you think you closed it in. Ask the CLI rather than hunting for the process:
+
+```bash title="On Host"
+avocado container dev status
+avocado container dev down
+```
+
+`status` reports whether the registry and watcher are running and when the last sync happened. `down` signals the session to stop and tears down every listener, including the authenticated write port, and it clears the session state even when the process behind it is already gone - so it is also the way out of a half-dead session, not only a tidy one.
+
+The transfer figures do not repeat either. Blobs already in `~/.avocado/container-dev` are never re-sent, so a second run reports a first delivery of almost nothing - which reads as a fantastic result and is really just the earlier run's leftovers. Clear that directory before measuring anything. `avocado container dev prune` is the reclaim command, but it is not the one you want here: it sweeps only blobs no currently-tagged manifest references, so the layers you are about to re-send are exactly the ones it keeps.
+
+On the board, restarting the agent repeatedly inside a few minutes trips systemd's start rate limit and the next start is refused outright, with a message about starting too often rather than anything about the loop. Clear the counter and start again:
+
+```bash title="On the console"
+systemctl reset-failed container-agent-dev.service
+```
+
+{/* VIDEO PLACEHOLDER - second recording, the power-cycle run. Source: container-dev-mode-imx93-reboot-2026-08-12.mp4, 1188x1152, 1m32s. Same upload-then-replace treatment as the first placeholder above, and the same aspectRatio caveat applies - this frame is the same near-square shape, so 16/9 would pillarbox it. Keep THIS comment on one line; see the note on the internal section below for why. */}
+
+:::note[Recording pending upload]
+A second recording covers this section end to end: the app version changes on the
+board, the board is power-cycled, and the container comes back on its own. It is
+worth watching rather than reading, because the two proofs that matter are the
+ones a transcript flattens - the boot id changes across the reboot, and the
+container id changes with it, so what you see is a fresh container from the
+persisted image rather than a resumed one.
+
+Replace this admonition with the embed below before flipping `draft: false`.
+
+```jsx
+<div style={{ aspectRatio: '1188 / 1152', maxWidth: '760px', marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/VIDEO_ID"
+    title="Container Dev Mode on an NXP FRDM-IMX93: the container survives a power cycle"
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
+```
+
+:::
+
+## Does it survive a power cycle?
+
+Yes, and the reason is worth stating because the failure mode is silent: what
+survives is the image, and what does not is anything you created on the running
+board.
+
+The pulled image is safe. Docker's root is `/var/lib/docker`, and `/var` is its
+own partition - on this board `/dev/mmcblk1p8`, btrfs - so a synced image is
+still there after the power cut and nothing re-pulls on boot.
+
+The unit that runs it is the fragile half. `/etc` on an Avocado image is an
+overlay whose upper layer lives under `/run`, which is tmpfs:
+
+```bash title="On the console"
+findmnt -n -o OPTIONS /etc | tr ',' '\n' | grep upperdir
+# upperdir=/run/systemd/sysext/mh_workspace/etc/etc
+```
+
+So a unit written into `/etc/systemd/system` on a running board works perfectly
+until the first reboot and then is simply gone, and the container it started
+never comes back. Measured on this board across one reboot: the image persisted,
+the hand-written unit did not, and the container stayed down with nothing in the
+journal pointing at the cause - the unit that would have logged the failure was
+the thing that disappeared.
+
+The fix is to ship the unit in an extension rather than create it on the device,
+which is what step 2 already does. The `my-app` extension declares both types on
+purpose: the unit itself ships in the sysext at
+`overlay/usr/lib/systemd/system/my-app.service`, and `enable_services` writes its
+`multi-user.target.wants` symlink into the confext half. Both halves are part of
+the image, so both come back after the power cut - which is exactly what a unit
+hand-written into `/etc` on the running board does not do.
+
+Two changes to that unit earn their place here, and both are about the stop
+rather than the start:
+
+```ini title="overlay/usr/lib/systemd/system/my-app.service"
+ExecStop=/usr/bin/docker stop -t 3 my-app
+TimeoutStopSec=15
+```
+
+Both are there for a measured reason. The agent restarts this unit to adopt each
+pulled image, so the container's stop sits on the critical path of every sync -
+and a container that ignores `SIGTERM` (a shell loop around `sleep` does) burns
+docker's stop grace and then systemd's 90s default on top of it. Trapping the
+signal in the app took an adopt from 90s to 9s here; bounding both timeouts is
+what keeps a container that does not trap it from costing that much every time.
+When systemd gives up and kills `docker run`, the container survives holding the
+name, and every later start fails with "name already in use" while
+`Restart=always` retries forever - the `ExecStartPre=-/usr/bin/docker rm -f`
+already in the step 2 unit is what turns that permanent loop back into a
+self-healing one.
+
+With those in place, the power-cycle result is the one you want. The board
+comes back, the unit starts, the container is running again with the version
+that was hot-reloaded into it before the reboot - no host involved, nothing to
+redeploy:
+
+```text
+uptime: up 1 min
+my-app.service: active
+my-app   my-app:dev   Up 34 seconds
+app v3 base=524288B running-on=9052c9bf7b85
+```
+
+## What surprised me
+
+The failures on this path are quiet ones. An extension whose unit sits in the wrong directory builds, merges, presents the unit, and reports success - and `systemctl is-enabled` answers `disabled` on every boot with no journal entry explaining why. A wrong-architecture image fails at sync rather than at runtime. A missing SSH server presents as a container problem. None of them announce themselves, which is why the steps above call out the three places where a quiet failure is waiting rather than leaving them to be discovered.
+
+The full flag reference and the trust model are in the [Container dev mode guide](/developer-reference/container-dev-mode).

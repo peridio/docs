@@ -20,3 +20,9 @@ fi
 npm run lint
 npm exec -- prettier --check .
 npm run build
+# Diagrams render in the reader's browser, so `npm run build` above passes even
+# with a malformed one - check them here rather than finding out after deploy.
+# After the build, because the build's own sync-references populates the
+# generated reference pages this needs to scan; running it first meant either
+# skipping those pages or cloning avocado-linux/references twice.
+npm run check-mermaid

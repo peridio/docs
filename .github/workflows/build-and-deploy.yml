@@ -21,6 +21,14 @@ jobs:
         run: npm --prefix src run lint
       - name: Docusaurus Build
         run: npm --prefix src run build
+      # The build cannot catch a malformed diagram - mermaid renders in the
+      # reader's browser - so gate the deploy on it explicitly. It runs after the
+      # build rather than before because the build's own sync-references step
+      # populates the generated reference pages this check needs to see; a
+      # separate sync step here cloned avocado-linux/references a second time for
+      # nothing. Ordering does not weaken the gate: deploy needs this whole job.
+      - name: Mermaid Diagrams
+        run: npm --prefix src run check-mermaid
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
