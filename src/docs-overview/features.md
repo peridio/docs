@@ -91,7 +91,7 @@ The base system is read-only. Everything below the line is immutable. Everything
 │  /var  ·  BTRFS  ·  read-write              │  Your data, state, logs
 │  Extensions, app data, sub-volumes          │
 ├─────────────────────────────────────────────┤
-│  Extensions  ·  erofs/squashfs  ·  read-only│  Apps, configs, kernel modules
+│  Extensions  ·  erofs/squashfs · read-only  │  Apps, configs, kernel modules
 ├──────────────────────┬──────────────────────┤
 │  Avocado Linux (A)   │  Avocado Linux (B)   │  Immutable base OS
 ├──────────────────────┼──────────────────────┤

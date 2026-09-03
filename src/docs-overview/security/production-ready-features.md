@@ -108,7 +108,7 @@ These data protection regulations apply when embedded devices process personal d
 - **Data minimization** — The system should only store the personal data necessary for its function. The OS architecture should support selective encryption and data lifecycle management.
 - **Right to erasure** — For GDPR, the system must be able to cryptographically erase personal data on request. This means the OS must support secure key destruction, which effectively renders the encrypted data unrecoverable.
 
-**How Avocado addresses this:** LUKS encryption provides data at rest protection for the writable var partition where application data lives. Per-application encryption domains through the extension system support data minimization — different data classes can be encrypted with different keys. Secure key destruction via the hardware security module enables cryptographic erasure for right-to-erasure requests. Extension isolation provides structural access control boundaries between application components. Systemd journal logging provides audit trail capabilities.
+**How Avocado addresses this:** LUKS encryption provides data at rest protection for the writable var partition where application data lives, under a single `/var` volume key covering all extensions and application data — per-application encryption domains are not implemented (see [Hardware-Backed Encryption](/avocado-os/security/encryption)). Secure key destruction via the hardware security module enables cryptographic erasure for right-to-erasure requests. Extension isolation provides structural access control boundaries between application components. Systemd journal logging provides audit trail capabilities.
 
 ## Runtime security
 
