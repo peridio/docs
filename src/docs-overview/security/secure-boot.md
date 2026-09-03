@@ -76,7 +76,7 @@ Most silicon that offers a hardware root of trust establishes it in one-time pro
 
 Avocado does not program fuses today. `avocado provision` deploys a runtime to a device and does not touch them, and there is no fuse-burning tooling in the board layers either. Burning fuses is a manual step with the silicon vendor's own tool, and folding it into the provisioning flow is part of the enforcement work above.
 
-Treat it as one-way. A fuse cannot be un-burned, a wrong value cannot be corrected, and a board whose key hash is burned incorrectly can no longer establish a root of trust at all. Practice the procedure on a board you are willing to lose before running it on anything else, and check the byte order the vendor's tool expects against the byte order your key hash is printed in, because the two do not always match.
+Treat it as one-way. A fuse cannot be unburned, a wrong value cannot be corrected, and a board whose key hash is burned incorrectly can no longer establish a root of trust at all. Practice the procedure on a board you are willing to lose before running it on anything else, and check the byte order the vendor's tool expects against the byte order your key hash is printed in, because the two do not always match.
 
 ## Security from day one
 
