@@ -361,6 +361,32 @@ Options:
 
 ---
 
+### `avocado sbom`
+
+```
+Emit an SPDX 3.0 SBOM of the packages installed in this project
+
+Usage: avocado sbom [OPTIONS]
+
+Options:
+  -o, --output-path <PATH>              Write the document here instead of to stdout
+  -C, --config <CONFIG>                 Path to avocado.yaml (defaults to ./avocado.yaml) [default: ./avocado.yaml]
+  -t, --target <TARGET>                 Target architecture
+      --include-sdk                     Also describe the SDK and target sysroot. They run on the build host and ship nothing to a device, so they are excluded by default: an SBOM answering "what is on this device" must not list the cross toolchain alongside what the device actually holds
+  -v, --verbose                         Verbose output
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --output <OUTPUT>                 Output format. The document itself is JSON-LD either way; this only controls whether the summary lines accompany it [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
 ### `avocado sign`
 
 ```
@@ -438,6 +464,28 @@ Options:
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
   -h, --help                   Print help
+
+```
+
+---
+
+### `avocado update`
+
+```
+Move a target forward: advance to the latest feed snapshot and re-resolve packages to their latest versions on the next install (rewrites the lock)
+
+Usage: avocado update [OPTIONS]
+
+Options:
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose              Enable verbose output
+  -t, --target <TARGET>      Target architecture
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
 
 ```
 
