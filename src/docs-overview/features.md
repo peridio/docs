@@ -84,7 +84,7 @@ Systemd extensions give you the same dependency declaration benefit without the 
 
 ## Immutable System Architecture
 
-The base system is read-only. Everything below the line is immutable. Everything above it is your space to work in. A/B slots protect every layer.
+The base system is read-only. Everything below the line is immutable. Everything above it is your space to work in. A/B slots cover the three layers at the bottom of the diagram: boot files, BSP and kernel, and the base OS. Extensions and your data live on `/var` and are updated in place, so a bad extension update rolls back by shipping a new extension rather than by switching slots.
 
 ```text
 ┌─────────────────────────────────────────────┐

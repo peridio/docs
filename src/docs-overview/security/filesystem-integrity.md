@@ -21,7 +21,9 @@ An earlier version of this page described per-block dm-verity verification and p
 
 ### Immutable read-only root
 
-The Avocado root filesystem is a read-only [erofs](https://docs.kernel.org/filesystems/erofs.html) image, mounted `ro`. Nothing at runtime can modify it: there is no writable root, and no path by which a compromised process, a failed update, or an operator with a shell rewrites a system binary in place.
+The Avocado root filesystem is a read-only [erofs](https://docs.kernel.org/filesystems/erofs.html) image, mounted `ro`. Nothing writes to it through the filesystem: there is no writable root, so a compromised process, a failed update, or an operator with a shell has no path by which to rewrite a system binary in place.
+
+That covers writes through the mount, not every write. Code privileged enough to open the backing block device can write the image underneath the filesystem, and without dm-verity nothing authenticates those blocks when the kernel reads them back. Immutability raises the bar; it is not a seal.
 
 ```
 Root filesystem
@@ -32,7 +34,7 @@ Root filesystem
 
 All mutable state lives on a separate BTRFS `/var` partition. On targets that declare the `encrypted-var` capability, that partition is LUKS2-encrypted (see [Hardware-Backed Encryption](/avocado-os/security/encryption)).
 
-Immutability is a real integrity property, and it is the one an attack on a running system meets first. What it does not cover is offline tampering: someone who can write to the storage medium directly, with the device powered off, can modify the image, and nothing on the device detects that at read time. Closing that gap is what dm-verity is for.
+Immutability is a real integrity property, and it is the one an attack on a running system meets first. What it does not cover is any write that goes around the mount: someone with the device powered off who can write to the storage medium directly, and equally a privileged process on a running device writing to the backing block device rather than through the filesystem. Either modifies the image, and nothing on the device detects it at read time. Closing that gap is what dm-verity is for.
 
 ### Signature-verified updates
 
@@ -46,7 +48,7 @@ This is integrity at install time over the whole image, rather than per-block in
 
 ### A/B slots and rollback
 
-Avocado keeps two complete boot slots. Updates are written to the inactive slot while the active system keeps running, and the switch is a single atomic flag flip. A slot that fails to boot rolls back to the last known-good slot automatically. [Atomic Update Architecture](/avocado-os/security/update-architecture) covers the full flow.
+Avocado keeps two complete boot slots. Updates are written to the inactive slot while the active system keeps running, and the new slot is activated only once it has been written whole. What activation consists of is per-target, and not always a single flag: it can be a U-Boot environment update, an EFI boot entry change, or an MBR partition-table rewrite. The invariant to rely on is the ordering, not the mechanism. A slot that fails to boot rolls back to the last known-good slot automatically. [Atomic Update Architecture](/avocado-os/security/update-architecture) covers the full flow.
 
 For integrity specifically, this means a corrupted or rejected update cannot leave the device running a half-written root filesystem. The update either lands whole in the inactive slot or does not land at all.
 

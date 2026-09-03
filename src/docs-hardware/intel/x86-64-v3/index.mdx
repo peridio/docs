@@ -75,7 +75,7 @@ All system libraries and packages compiled with AVX2 baseline. Measurable perfor
 
 ### Production Hardening
 
-Immutable read-only erofs root filesystem with A/B partitioning. No filesystem corruption, no failed updates in the field.
+Immutable read-only erofs root filesystem with A/B partitioning. Nothing rewrites the running system in place, and an update that fails leaves the active slot untouched.
 
 ### Atomic OTA Updates
 
