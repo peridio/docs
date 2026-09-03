@@ -2,6 +2,10 @@
 
 set -e
 
+# Cheap and dependency-free, so it runs before the install and reports a missing
+# changelog registration in seconds rather than after a full build.
+"$(dirname "$0")/check-changelog-registration.sh"
+
 cd src
 
 npm ci

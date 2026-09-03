@@ -51,6 +51,57 @@ layout rules re-derived rather than imported, and checks the Reed–Solomon
 syndromes. The encoder was additionally verified against macOS CoreImage's
 decoder for every payload length from 1 to 134 bytes.
 
+## Checks
+
+### check-changelog-registration.sh
+
+Asserts that every file in `src/docs-changelog/` is registered in all the places
+a reader depends on. Runs from `checks.sh` (and so in CI on every PR) before
+`npm ci`, because it needs nothing installed and should fail fast.
+
+Publishing a changelog entry touches four places. A missing file or import breaks
+the build, but **a missing `rawEntries` member or sidebar id still builds, still
+serves the page and still passes lint** — the entry just never shows up where
+people look. That silent success is what this catches:
+
+| Place | Cost of skipping it |
+| --- | --- |
+| `src/docs-changelog/<month>/<entry>.md` or `.mdx` | the content itself |
+| `changelogEntries.js` — the `import` | nothing renders it |
+| `changelogEntries.js` — `rawEntries` | absent from the `/changelog` feed |
+| `sidebars-changelog.js` | unreachable from the nav |
+
+The `rawEntries` half is the quietest of the four: an import with no member is
+an _unused import_, which is not an error, so every check passes and the entry
+is simply invisible.
+
+That member carries a `permalink`, which fails the same way. It is typed by hand,
+and the feed resolves deep links by matching it exactly, so a typo leaves the
+entry sitting in the sidebar with a link that goes nowhere. It has to equal
+`/changelog/` plus the entry's own path, which the file already tells us, so the
+check derives it rather than trusting it.
+
+A duplicated `rawEntries` member is caught too — two members rendering the same
+import make the entry appear twice in the feed.
+
+It also checks the reverse — a registry entry with no file behind it — and it
+**fails if its own parsing finds nothing**, so a future change to the file
+layout cannot quietly turn it into a no-op that reports success forever.
+
+Each defect is reported once. An entry that was never imported cannot be in the
+feed either, so it is reported as the missing import it is, rather than a second
+time as a missing member that contradicts the first.
+
+`index.mdx` and `latest.mdx` are exempt: they live under `docs-changelog/`
+without being entries. Registrations disabled with a `/* ... */` block comment
+still read as active — the guard is text matching, not a JS parser.
+
+**Usage:**
+
+```bash
+./scripts/check-changelog-registration.sh
+```
+
 ## Field Notes thumbnails
 
 ### thumbnails.sh
