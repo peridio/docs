@@ -196,7 +196,7 @@ This matters economically. Devices on 5G or cellular networks have expensive dat
 
 ## Security All the Way Through
 
-Security in Avocado OS is not a feature you bolt on later; it's structural. The secure boot chain starts at the hardware root of trust and runs through the bootloader into the kernel. From there, the root filesystem and every extension are immutable images, verified when they are installed.
+Security in Avocado OS is not a feature you bolt on later; it's structural. The groundwork is in place: a secure boot chain from the hardware root of trust through the bootloader and kernel, and a root filesystem that's immutable and signature-verified when it's installed. Extensions can be signed at build time to authenticate their origin, but per-extension verification before overlay is not enabled yet.
 
 - [Secure boot](/avocado-os/security/secure-boot) with signing-key management today, building toward a verified boot chain from the hardware root of trust through the bootloader and kernel
 - [Filesystem integrity](/avocado-os/security/filesystem-integrity) from an immutable read-only root and signature-verified updates

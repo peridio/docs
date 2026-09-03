@@ -60,10 +60,10 @@ Extension images can also be wrapped and signed as KAB packages at build time, w
 
 [Secure boot](secure-boot) and filesystem integrity are separate layers, and today they cover different ranges of the boot chain:
 
-- **Secure boot** validates code before it executes, from the silicon root of trust through the bootloader and into the kernel.
+- **Secure boot**, once its enforcement ships, validates code before it executes: from the silicon root of trust through the bootloader and into the kernel. That enforcement is in development rather than shipped; see [Secure Boot](secure-boot) for where each target stands.
 - **Filesystem integrity**, as it stands, rests on the root being immutable and having been signature-verified when it was installed.
 
-The chain is continuous up to the kernel. From the kernel onward it depends on install-time verification rather than read-time verification. dm-verity is the piece that extends cryptographic verification past the kernel into every block the kernel reads.
+Neither layer reaches full enforcement today. Boot-chain verification does not yet extend into the kernel, and filesystem integrity depends on install-time verification rather than read-time verification. dm-verity is the piece that will extend cryptographic verification past the kernel into every block the kernel reads, once both land.
 
 ## What dm-verity will add
 
