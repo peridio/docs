@@ -9,6 +9,10 @@ description: 'LUKS full-disk encryption with TPM, TEE, and secure enclave integr
 
 Data at rest protection standard.
 
+:::tip Enabling it
+See [Encrypted /var](/developer-reference/security/encrypted-var) in the developer reference for the `var.encrypt` opt-in, choosing the key engine with `var.hardware`, and holding an operator recovery key.
+:::
+
 Avocado OS implements LUKS (Linux Unified Key Setup) encryption to protect sensitive data on deployed devices. When hardware security modules are available — TPMs, TrustZone TEEs, or secure enclaves — Avocado uses them to seal encryption keys so they never exist in accessible memory. For devices without dedicated security hardware, the platform provides software-based key derivation that still delivers meaningful protection.
 
 Where the keys live matters as much as the encryption itself. A LUKS volume whose key is stored in a plaintext file on the same disk provides no real protection. Hardware-backed key storage ensures that encryption keys are bound to specific hardware and cannot be extracted, even with physical access to the storage media.

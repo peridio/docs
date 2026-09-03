@@ -9,7 +9,13 @@ description: 'Hardware root of trust and cryptographic boot chain verification i
 
 Hardware root of trust configured out of the box.
 
-Secure boot establishes an unbroken cryptographic chain of trust beginning at the silicon and extending through the bootloader, kernel, root filesystem, and every loaded system extension. Each component in the chain verifies the next before transferring control. If any component fails verification, the system refuses to boot — protecting against both malicious tampering and unintentional corruption.
+:::tip Enabling it
+See [Boot signing](/developer-reference/security/boot-signing) in the developer reference for the `signing.fit_key` workflow, making the bootloader enforce your key, and AHAB on i.MX 9.
+:::
+
+Secure boot establishes a cryptographic chain of trust beginning at the silicon and extending through the bootloader and kernel: each stage verifies the next before transferring control, and if any stage fails verification the system refuses to boot — protecting against both malicious tampering and unintentional corruption.
+
+The chain can be carried further, to the root filesystem and to individual system extensions, with dm-verity. That is an opt-in per image (`image.verity`) rather than something enabled by default, and for the rootfs it currently depends on the target being able to carry the root hash in a signed boot image. See [Filesystem Integrity](filesystem-integrity) for what applies where.
 
 The challenge is that every silicon vendor has a different mechanism for establishing a root of trust, different fuse provisioning procedures, and different signing toolchains. Avocado abstracts this behind a unified interface that works the same way regardless of the underlying hardware.
 
@@ -17,11 +23,13 @@ The challenge is that every silicon vendor has a different mechanism for establi
 
 ### Board-agnostic CLI
 
-Avocado's CLI abstracts the vendor-specific complexity behind consistent commands. When you issue a command to configure secure boot, the CLI automatically invokes the appropriate board-specific module — handling key management, signature generation, and hardware configuration for you.
+Avocado's CLI abstracts the vendor-specific complexity behind configuration rather than per-vendor commands. You name a signing key in `avocado.yaml`; the build invokes the appropriate board-specific module — handling key management, signature generation, and bootloader enforcement for you.
 
-```
-# Same command, different hardware — the CLI handles the rest
-avocado secure-boot enable
+```yaml title="avocado.yaml"
+runtimes:
+  prod:
+    signing:
+      fit_key: product-fit
 ```
 
 Under the hood, this leverages a modular backend with board-specific modules created from host tools provided by vendor Yocto layers. These modules are packaged into Avocado's composable SDK package repositories, so secure boot tooling is installed only when needed and stays consistently versioned with the rest of your development environment.
@@ -32,9 +40,9 @@ The boot chain verification flows through each stage:
 
 1. **Silicon ROM** — Vendor-programmed immutable code validates the first-stage bootloader against keys burned into hardware fuses.
 2. **Bootloader** — Verified bootloader validates the kernel image and device tree using developer-provided signing keys.
-3. **Kernel** — Verified kernel enforces dm-verity on the root filesystem (see [Filesystem Integrity](filesystem-integrity)).
-4. **Root filesystem** — Immutable SquashFS image, verified block-by-block at read time.
-5. **Extensions** — Every system extension (sysext) and configuration extension (confext) is independently signed and verified before overlay.
+3. **Kernel** — Verified kernel can enforce dm-verity on the root filesystem when the rootfs image opts in (see [Filesystem Integrity](filesystem-integrity)).
+4. **Root filesystem** — Immutable EROFS image. With verity enabled it is verified block-by-block at read time; without it the image is still read-only, but unverified.
+5. **Extensions** — Each system extension (sysext) and configuration extension (confext) can be verity-protected with `image.verity`, and is then verified before overlay.
 
 ### Multi-vendor signing authorities
 

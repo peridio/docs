@@ -149,7 +149,16 @@
         },
         "additionalProperties": false
       },
-      "examples": [[{ "my-key": "sha256-abc123" }, { "other-key": "sha256-def456" }]]
+      "examples": [
+        [
+          {
+            "my-key": "sha256-abc123"
+          },
+          {
+            "other-key": "sha256-def456"
+          }
+        ]
+      ]
     }
   },
   "additionalProperties": true,
@@ -207,7 +216,14 @@
         },
         "release": {
           "title": "Release",
-          "oneOf": [{ "type": "string" }, { "type": "integer" }],
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
           "description": "Distribution feed year (e.g., '2024' or 2024). Accepts both strings and integers. Can be overridden with the AVOCADO_DISTRO_RELEASE environment variable. Previously named 'version' which is still accepted as an alias.",
           "examples": ["2024", 2024]
         },
@@ -272,7 +288,9 @@
             },
             "include": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "description": "Optional list of config sections to include from the remote extension. Supports dot-separated paths (e.g., 'provision_profiles.tegraflash') and wildcards (e.g., 'provision_profiles.*'). The extension's own section is always included.",
               "examples": [["provision_profiles.*", "sdk.compile.tegraflash"]]
             }
@@ -302,13 +320,17 @@
             },
             "sparse_checkout": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "description": "Optional sparse checkout paths.",
               "examples": [["extensions/my-ext"]]
             },
             "include": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "description": "Optional list of config sections to include from the remote extension.",
               "examples": [["provision_profiles.*"]]
             }
@@ -333,7 +355,9 @@
             },
             "include": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "description": "Optional list of config sections to include from the extension.",
               "examples": [["sdk.compile.*"]]
             }
@@ -359,7 +383,9 @@
         "extensions": {
           "title": "Extensions",
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "List of extension names to include in this runtime. Extensions must be defined in the 'extensions' section.",
           "examples": [["avocado-ext-dev", "avocado-ext-sshd-dev"]]
         },
@@ -370,7 +396,9 @@
         },
         "stone_include_paths": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Additional stone include paths for this runtime."
         },
         "stone_manifest": {
@@ -390,8 +418,14 @@
           "description": "Static files to copy from the source directory onto the var partition at build time. Each entry maps a source path (relative to src_dir) to a destination path on the var partition. Directories are copied recursively. The dest for a directory should end with /.",
           "examples": [
             [
-              { "source": "config/app-defaults/", "dest": "lib/myapp/" },
-              { "source": "certs/device.pem", "dest": "lib/myapp/certs/device.pem" }
+              {
+                "source": "config/app-defaults/",
+                "dest": "lib/myapp/"
+              },
+              {
+                "source": "certs/device.pem",
+                "dest": "lib/myapp/certs/device.pem"
+              }
             ]
           ]
         },
@@ -422,6 +456,9 @@
             }
           },
           "additionalProperties": false
+        },
+        "var": {
+          "$ref": "#/definitions/varConfig"
         }
       },
       "additionalProperties": true
@@ -448,7 +485,7 @@
     "signingConfig": {
       "title": "Signing configuration",
       "type": "object",
-      "description": "Configuration for image signing.",
+      "description": "Signing configuration for this runtime. Names keys from the machine-local signing-key registry (`avocado signing-keys`) - no key material is stored in avocado.yaml.",
       "properties": {
         "key": {
           "type": "string",
@@ -460,9 +497,31 @@
           "enum": ["sha256", "blake3"],
           "default": "sha256",
           "description": "Checksum algorithm to use for signing."
+        },
+        "content_key": {
+          "type": "string",
+          "description": "Separate key for signing delegated-targets metadata only. Falls back to `key` when unset.",
+          "examples": ["product-content"]
+        },
+        "server_key": {
+          "type": "string",
+          "description": "Avocado Connect server's TUF signing public key (hex). Overrides `connect.server_key` for this runtime."
+        },
+        "fit_key": {
+          "type": "string",
+          "description": "Key that signs this runtime's boot FIT, on FIT-booting machines: the registry name or key id of an RSA PEM key (`avocado signing-keys import`, or `create --algorithm rsa2048`). Required when `rootfs.image.verity` is set, since the root hash rides in the FIT. Replaces the removed AVOCADO_FIT_KEY_DIR environment variable.",
+          "examples": ["product-fit"]
+        },
+        "fit_unsigned": {
+          "type": "boolean",
+          "default": false,
+          "description": "Build this runtime's boot FIT unsigned. Mutually exclusive with `fit_key`, and explicit so that an unsigned boot image is never the accidental result of a missing key. Replaces the removed AVOCADO_FIT_UNSIGNED environment variable."
+        },
+        "fit_key_in_bootloader": {
+          "type": "boolean",
+          "description": "Also re-pack the feed's bootloader so U-Boot enforces `fit_key` (on i.MX 8M, through the feed's imx-boot-tools/rekey-imx-boot.sh). Defaults to true whenever `fit_key` is set: a signed FIT the bootloader does not require is only half the feature. Set false to keep the distro bootloader, e.g. on a feed built with the verified-boot feature."
         }
       },
-      "required": ["key"],
       "additionalProperties": false
     },
     "sdkConfig": {
@@ -660,13 +719,17 @@
         },
         "requires": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "RPM Requires dependencies for the package.",
           "examples": [["openssl >= 3.0", "glibc"]]
         },
         "files": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Glob patterns for files to include in the main package (relative to $DESTDIR). Defaults to all files if not specified.",
           "examples": [["usr/bin/**", "usr/lib/*.so*"]]
         },
@@ -712,12 +775,16 @@
         },
         "requires": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "RPM Requires for the sub-package."
         },
         "files": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Glob patterns for files to include in this sub-package (relative to $DESTDIR). Files claimed by a sub-package are excluded from the main package.",
           "examples": [["usr/include/**", "usr/lib/*.a"]]
         }
@@ -887,10 +954,42 @@
           "description": "Docker images to pull and pre-cache onto the var partition at build time. When declared, the CLI automatically adds --privileged to the SDK container args and runs a temporary dockerd to pull images for the target architecture. Requires var_files to exclude var/lib/docker/** from the .raw image.",
           "examples": [
             [
-              { "image": "docker.io/library/redis", "tag": "7-alpine" },
-              { "image": "docker.io/library/nginx", "tag": "1.25" }
+              {
+                "image": "docker.io/library/redis",
+                "tag": "7-alpine"
+              },
+              {
+                "image": "docker.io/library/nginx",
+                "tag": "1.25"
+              }
             ]
           ]
+        },
+        "image": {
+          "$ref": "#/definitions/extensionImageConfig"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extensionDependency"
+          },
+          "description": "Other extensions this one builds on. The CLI expands the closure everywhere it matters: fetch resolves and installs dependencies in one DNF transaction, install seeds each dependent's rpmdb from its dependency, the runtime list orders dependents ahead of their dependencies for merge priority, and install stamps carry a transitive fingerprint so a change anywhere underneath invalidates every dependent. Solver-derived dependencies are pinned in avocado.lock.",
+          "examples": [
+            ["weston-base"],
+            [
+              {
+                "name": "weston-base",
+                "version": ">=1.2.0"
+              }
+            ]
+          ]
+        },
+        "device_tree_overlays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deviceTreeOverlay"
+          },
+          "description": "Device-tree overlays this extension ships. The SDK tooling is provisioned at `sdk install`, and each overlay is compiled and delivered into the OS bundle during `avocado build` through the per-BSP delivery hook."
         }
       },
       "additionalProperties": true
@@ -1000,6 +1099,134 @@
           "avocado-img-initramfs": "*"
         }
       ]
+    },
+    "varConfig": {
+      "title": "Var partition configuration",
+      "type": "object",
+      "description": "Configuration of the writable btrfs /var partition: compression, subvolumes, and the encryption opt-in.",
+      "properties": {
+        "compression": {
+          "type": "string",
+          "description": "Partition-wide default compression, overridden per subvolume. Examples: `zstd`, `zstd:3`, `lzo`, `zlib:6`, `no`.",
+          "examples": ["zstd:3"]
+        },
+        "subvolumes": {
+          "type": "object",
+          "description": "Subvolumes keyed by path relative to the var root. Each value is `true`, `false`, `\"ro\"`, or a subvolume object.",
+          "additionalProperties": true,
+          "examples": [
+            {
+              "lib/docker": {
+                "nodatacow": true,
+                "quota": "10G"
+              },
+              "lib/logs": true
+            }
+          ]
+        },
+        "encrypt": {
+          "type": "boolean",
+          "default": false,
+          "description": "Encrypt /var on the device as a LUKS2 container whose key is bound to the target's hardware key store (CAAM on i.MX 8M, the OP-TEE fTPM on Jetson). The build adds cryptsetup-var to the initramfs and cryptsetup-var-udev to the rootfs, and writes an /etc/avocado/var-encrypt marker into this runtime's initramfs; the first boot encrypts the flashed var image in place, so seeded content survives. Turning it back off is not a supported downgrade - reprovision.",
+          "examples": [true]
+        },
+        "hardware": {
+          "type": "string",
+          "enum": ["auto", "caam", "tpm2", "none"],
+          "default": "auto",
+          "description": "Which hardware key engine binds /var. `auto`: enrol whatever the machine ships and probes OK, degrading to the SoC-UID-derived key and reporting it. `caam` / `tpm2`: that engine must hold a keyslot, and the boot fails closed rather than opening /var on the derived key. `none`: no hardware keyslot; requires `recovery`.",
+          "examples": ["tpm2"]
+        },
+        "recovery": {
+          "type": "string",
+          "description": "Name of a registry secret (`avocado signing-keys create <name> --algorithm hmac-sha256`) that is the master for an operator-held recovery keyslot. Nothing derived from it enters a build: `avocado var-key enroll --device` derives this unit's passphrase as HMAC-SHA256(master, SoC UID) and enrols it over the device session. Requires `encrypt`.",
+          "examples": ["fleet-var-master"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "extensionImageConfig": {
+      "title": "Extension image configuration",
+      "type": "object",
+      "description": "How the produced extension image is wrapped and protected.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["raw", "kab"],
+          "default": "raw",
+          "description": "`kab` wraps the produced image with kabtool; `raw` (or absent) keeps the raw artifact."
+        },
+        "args": {
+          "type": "string",
+          "description": "Extra arguments passed to kabtool when `type: kab`.",
+          "examples": ["-b -t kos.layer.basefs"]
+        },
+        "verity": {
+          "type": "boolean",
+          "default": false,
+          "description": "Produce a dm-verity hash tree over the finished image and record its root hash in the runtime manifest. Strict boolean - `\"true\"`, `1` and `yes` are rejected rather than coerced. Requires avocadoctl 0.11.0 or newer on the device; `avocado deploy` and `avocado connect upload` refuse a runtime with verity extensions until they publish the hash trees.",
+          "examples": [true]
+        }
+      },
+      "additionalProperties": false
+    },
+    "extensionDependency": {
+      "title": "Extension dependency",
+      "description": "One entry of `depends_on`: either the dependency's name as a bare string, or an object naming it with an optional semver range.",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "The dependency extension's name.",
+          "examples": ["weston-base"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The dependency extension's name."
+            },
+            "version": {
+              "type": "string",
+              "description": "Semver range the dependency must satisfy. Must be a quoted string.",
+              "examples": [">=1.2.0"]
+            }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "deviceTreeOverlay": {
+      "title": "Device-tree overlay",
+      "type": "object",
+      "description": "One device-tree overlay shipped by an extension. Compiled by the SDK at `avocado build` and delivered into the OS bundle by the BSP's delivery hook. This is not the filesystem `overlay` key, which copies files into an image.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Authoritative basename: the stone output is `overlays/<name>.dtbo`, the Raspberry Pi `config.txt` argument is `dtoverlay=<name>`, and it is the U-Boot overlay entry. Must be a safe basename.",
+          "examples": ["my-spi"]
+        },
+        "src": {
+          "type": "string",
+          "description": "Source `.dtso` or `.dts`, relative to the project root (bind-mounted at /opt/src in the SDK container).",
+          "examples": ["overlays/my-spi.dtso"]
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional per-overlay parameters, appended as `dtoverlay=<name>,<key>=<value>`.",
+          "examples": [
+            {
+              "speed": "12000000"
+            }
+          ]
+        }
+      },
+      "required": ["name", "src"],
+      "additionalProperties": false
     }
   },
   "examples": [

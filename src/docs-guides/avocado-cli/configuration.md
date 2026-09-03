@@ -45,6 +45,13 @@ The following environment variables are deprecated but still supported as fallba
 | `AVOCADO_SDK_REPO_URL`     | `AVOCADO_REPO_URL`   |
 | `AVOCADO_SDK_REPO_RELEASE` | `AVOCADO_RELEASEVER` |
 
+These two are **removed**, not deprecated — they are no longer read at all:
+
+| Removed variable       | Replacement                            |
+| ---------------------- | -------------------------------------- |
+| `AVOCADO_FIT_KEY_DIR`  | `runtimes.<name>.signing.fit_key`      |
+| `AVOCADO_FIT_UNSIGNED` | `runtimes.<name>.signing.fit_unsigned` |
+
 ## Default runtime
 
 Set `default_runtime` to avoid passing `--runtime` on every invocation. Resolution order from highest to lowest precedence:
@@ -126,6 +133,31 @@ connect:
 | `project`    | Default project ID for `avocado connect` commands                                              |
 | `server_key` | Connect server's TUF signing public key (hex). Per-runtime `signing.server_key` overrides this |
 
+## Runtime signing configuration
+
+The per-runtime `signing` section names keys from the machine-local signing-key registry (`avocado signing-keys`). Only names appear in `avocado.yaml`; no key material is ever committed.
+
+```yaml
+runtimes:
+  prod:
+    signing:
+      key: product-tuf # TUF metadata signing
+      fit_key: product-fit # boot FIT signing
+      fit_key_in_bootloader: true # default when fit_key is set
+```
+
+| Field                   | Default                      | Description                                                                                                                     |
+| ----------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `key`                   |                              | Signing key for the runtime's TUF metadata. Required for Level 2 (user-controlled root)                                         |
+| `content_key`           | `key`                        | Separate key for delegated-targets metadata only                                                                                |
+| `checksum_algorithm`    | `sha256`                     | `sha256` or `blake3`                                                                                                            |
+| `server_key`            |                              | Connect server's TUF signing public key (hex); overrides `connect.server_key`                                                   |
+| `fit_key`               |                              | RSA PEM key that signs this runtime's boot FIT. Required when `rootfs.image.verity` is on, since the root hash rides in the FIT |
+| `fit_unsigned`          | `false`                      | Build the boot FIT unsigned. Mutually exclusive with `fit_key`                                                                  |
+| `fit_key_in_bootloader` | `true` when `fit_key` is set | Also re-pack the feed's bootloader so U-Boot enforces `fit_key`. Set `false` to keep the distro bootloader                      |
+
+`fit_key` replaces the `AVOCADO_FIT_KEY_DIR` and `AVOCADO_FIT_UNSIGNED` environment variables, which are no longer read. See [Boot signing](/developer-reference/security/boot-signing).
+
 ## Rootfs configuration
 
 The `rootfs` section configures the shared rootfs sysroot used by runtime builds.
@@ -138,11 +170,12 @@ rootfs:
     avocado-pkg-rootfs: '*'
 ```
 
-| Field        | Default     | Description                                    |
-| ------------ | ----------- | ---------------------------------------------- |
-| `filesystem` | `erofs-lz4` | Image format: `erofs-lz4` or `erofs-zst`       |
-| `overlay`    |             | Path or object — see [Overlay](#overlay) below |
-| `packages`   |             | Map of package names to version constraints    |
+| Field        | Default     | Description                                                       |
+| ------------ | ----------- | ----------------------------------------------------------------- |
+| `filesystem` | `erofs-lz4` | Image format: `erofs-lz4` or `erofs-zst`                          |
+| `overlay`    |             | Path or object — see [Overlay](#overlay) below                    |
+| `packages`   |             | Map of package names to version constraints                       |
+| `image`      |             | Image wrapper options — see [Image options](#image-options) below |
 
 ## Initramfs configuration
 
@@ -161,6 +194,31 @@ initramfs:
 | `filesystem` | `cpio.zst` | Image format: `cpio`, `cpio.zst`, `cpio.lz4`, or `cpio.gz` |
 | `overlay`    |            | Path or object — see [Overlay](#overlay) below             |
 | `packages`   |            | Map of package names to version constraints                |
+
+## Image options
+
+The `image` block is accepted on `rootfs`, on `initramfs`, and on each extension. It configures how the produced filesystem image is wrapped and protected.
+
+```yaml
+rootfs:
+  image:
+    verity: true
+
+extensions:
+  my-ext:
+    image:
+      type: kab # "kab" wraps the image with kabtool; absent or "raw" keeps the raw artifact
+      args: '-b -t kos.layer.basefs'
+      verity: true
+```
+
+| Field    | Default | Description                                                                                                                |
+| -------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `type`   | `raw`   | `kab` wraps the produced image with `kabtool`; `raw` (or absent) keeps the raw artifact                                    |
+| `args`   |         | Extra arguments passed to `kabtool` when `type: kab`                                                                       |
+| `verity` | `false` | Produce a dm-verity hash tree and root hash for this image — see [Filesystem verity](/developer-reference/security/verity) |
+
+`verity` is a strict boolean: `"true"`, `1` and `yes` are rejected rather than coerced, because a security opt-in should not be decided by a value that only looks true.
 
 ## Overlay
 
@@ -270,10 +328,15 @@ A built-in `lib/avocado` subvolume is always present (writable). Declaring it ex
 
 ### `var` fields
 
-| Field         | Default | Description                                                                                                        |
-| ------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
-| `compression` | none    | Partition-wide default compression (e.g. `zstd`, `zstd:3`, `lzo`, `zlib:6`, `no`). Overridden by per-subvolume set |
-| `subvolumes`  |         | Map of path → subvolume entry. Paths are relative to the var root                                                  |
+| Field         | Default | Description                                                                                                                                                       |
+| ------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `compression` | none    | Partition-wide default compression (e.g. `zstd`, `zstd:3`, `lzo`, `zlib:6`, `no`). Overridden by per-subvolume set                                                |
+| `subvolumes`  |         | Map of path → subvolume entry. Paths are relative to the var root                                                                                                 |
+| `encrypt`     | `false` | Encrypt `/var` as a LUKS2 container keyed to the device's hardware key store                                                                                      |
+| `hardware`    | `auto`  | Which key engine binds it: `auto`, `caam`, `tpm2`, or `none`. `caam`/`tpm2` fail the boot closed if that engine cannot hold a keyslot; `none` requires `recovery` |
+| `recovery`    |         | Name of a registry secret (`signing-keys create <name> --algorithm hmac-sha256`) that is the master for an operator-held recovery keyslot                         |
+
+`encrypt`, `hardware` and `recovery` are validated at config load — `recovery` without `encrypt`, an unknown `hardware` value, or `hardware: none` without `recovery` are all errors. See [Encrypted /var](/developer-reference/security/encrypted-var) for the full workflow.
 
 ### Subvolume entry forms
 
