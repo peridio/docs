@@ -45,27 +45,7 @@ const sidebars = {
       items: [
         'cross-compilation',
         'custom-kernel',
-        // 'device-tree-overlays' belongs here, after custom-kernel, but stays
-        // unlisted while that page carries `draft: true`. Drafts are dropped
-        // from the production build, and a sidebar item naming a dropped doc
-        // fails the build. Add it in the same commit that flips the draft flag.
-        //
-        // The flag waits on all of:
-        //   - publish the SDK image avocadolinux/sdk:2024-edge carrying the
-        //     overlay compiler, or `avocado install` cannot resolve it
-        //   - publish the 2024/edge feed carrying avocado-dtc-overlay-deliver,
-        //     or the build hard-errors on a missing delivery hook
-        //   - cut an avocado-cli release and name it in the guide; the released
-        //     1.0.0-rc.1 does not carry the overlay work despite a from-source
-        //     build reporting the same version string
-        //   - add `device_tree_overlays` to schemas/avocado-config.json, which
-        //     currently rejects the key the guide documents
-        //   - ship the image-build toolchain in the SDK, or keep the guide's
-        //     "On a brand-new SDK" block
-        //
-        // Listed here rather than referenced elsewhere on purpose: this comment
-        // is the only in-repo trace of the gates, and a pointer to a table or a
-        // pull request body is a pointer that goes stale without anyone noticing.
+        'device-tree-overlays',
         'seeding-var',
         'customizing-rootfs-initramfs',
         'lockfiles-and-build-stamps',

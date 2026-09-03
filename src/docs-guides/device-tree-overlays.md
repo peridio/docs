@@ -2,15 +2,13 @@
 sidebar_position: 6.5
 title: 'Device-tree overlays'
 copy_markdown: true
-draft: true
+draft: false
 description: 'Declare a device-tree overlay in an extension and let avocado build compile it in the SDK and deliver it to the boot medium - no manual dtc, no boot-partition surgery, no BSP fork.'
 ---
 
-:::danger draft - Jetson only, and not yet reproducible by a reader
+:::info Jetson only
 
 **NVIDIA Jetson (Tegra) is the one target this page documents, and the only one proven on hardware.** Other targets are not covered here: their delivery paths have not been confirmed on a board, and this page does not describe a mechanism nobody has watched work.
-
-The guide also documents behavior that is **not in a released Avocado CLI or SDK image**. Every command below has been run, but only against from-source builds of unmerged branches. Following it with released artifacts will fail at `avocado install`.
 
 :::
 
@@ -172,20 +170,6 @@ Then flash the board. Provisioning is not specific to overlays, so follow [Getti
 :::note how these results were produced
 Every result on this page came from running the board's `stone-provision-tegraflash.sh` directly on the host, driving it with `AVOCADO_STONE_MANIFEST`, `AVOCADO_STONE_DATA_DIR` and `AVOCADO_PROVISION_PROFILE`, rather than through `avocado provision`. Both paths flash the same artifacts, and the overlay is merged into the DTB at build time either way, so nothing on this page depends on which one you use. It is recorded because it is the difference between what was verified and what is documented.
 :::
-
-### On a brand-new SDK
-
-The SDK does not yet ship the image-build toolchain, so a clean one needs it declared explicitly:
-
-```yaml
-sdk:
-  packages:
-    nativesdk-erofs-utils: '*'
-    nativesdk-btrfs-tools: '*'
-    nativesdk-zstd: '*'
-    nativesdk-stone: '*'
-    avocado-sdk-target: '*'
-```
 
 ## Confirming the overlay applied
 
