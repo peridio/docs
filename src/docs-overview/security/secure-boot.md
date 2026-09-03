@@ -50,7 +50,7 @@ avocado signing-keys create release-signing \
 
 Secure boot itself is configured when the image is built, not switched on afterward from the CLI. The `secureboot` distro feature is enabled by default, and generates the UEFI key chain (PK, KEK, db, dbx) per machine during the build. The private halves stay on the build host and are never placed in an image, by design.
 
-The public certificates stay on the build host too, for now. A recipe exists to package them for the target under `/usr/share/avocado/sb-keys`, but no image pulls it in yet, so a running device does not currently carry its own certificates. That is part of the enforcement work rather than a separate gap.
+The public UEFI keychain certificates (PK, KEK, db, dbx) stay on the build host too, for now. A recipe exists to package them for the target under `/usr/share/avocado/sb-keys`, but no image pulls it in yet, so a running device does not currently carry its own certificates. That is part of the enforcement work rather than a separate gap.
 
 Whether the bootloader then _enforces_ a signature depends on the silicon's own mechanism, and that is configured per board rather than through a common switch. See the enforcement note above for where each target stands.
 
@@ -59,7 +59,7 @@ Whether the bootloader then _enforces_ a signature depends on the silicon's own 
 This is the model the work above is building toward. Stages 1 and 2 are what "enforcement" means, and per the note above they are in development rather than shipped. Stages 3 to 5 describe protections that hold today independent of that enforcement, immutability and install-time signature verification, not a verified boot chain reaching the kernel.
 
 1. **Silicon ROM** — Vendor-programmed immutable code validates the first-stage bootloader against keys burned into hardware fuses.
-2. **Bootloader** — Verified bootloader validates the kernel image and device tree against developer-provided verification keys (the device holds only public keys; private signing keys never leave the build host).
+2. **Bootloader** — In an enforced configuration, the verified bootloader validates the kernel image and device tree against the device's public verification keys; private signing keys never leave the build host.
 3. **Kernel** — Mounts the immutable root filesystem read-only. Whether the kernel itself was verified before it started is stage 2's job and isn't enforced yet; block-level verification of the filesystem at read time is not enabled either (see [Filesystem Integrity](filesystem-integrity)).
 4. **Root filesystem** — Immutable read-only erofs image, signature-verified when it was installed and unmodifiable at runtime.
 5. **Extensions** — System extensions (sysext) and configuration extensions (confext) are replaced whole rather than patched, and can be signed as KAB packages at build time. Per-extension verification before overlay is not enabled yet.

@@ -39,7 +39,7 @@ Where a seal is in place, the encryption key is bound to that device: removing t
 
 :::caution The seal is not bound to a boot measurement
 
-The keyslot is enrolled naming PCR 7, and `cryptsetup luksDump` reports it that way, but on this target the PCR policy is **not enforced**. Nothing measures into PCR 7 on the way up: the firmware TPM is an OP-TEE application that only becomes available once the initramfs is running, which is well after the boot chain it would need to measure. `systemd-cryptenroll` says so at enrollment time - "none of the selected PCRs are valid ... PCR policy effectively unenforced".
+The keyslot is enrolled for PCR 7, and `cryptsetup luksDump` reports it that way, but on this target the PCR policy is **not enforced**. Nothing measures into PCR 7 on the way up: the firmware TPM is an OP-TEE application that only becomes available once the initramfs is running, which is well after the boot chain it would need to measure. `systemd-cryptenroll` says so at enrollment time - "none of the selected PCRs are valid ... PCR policy effectively unenforced".
 
 The practical effect is that the seal binds the key to the device but not to a particular boot state. It stops the volume being read on other hardware; it does not stop code running on this device from asking the TPM to unseal. Treat this page's guarantee as device binding until a measured boot chain feeds the firmware TPM.
 
