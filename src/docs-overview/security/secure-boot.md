@@ -11,11 +11,11 @@ Hardware root of trust, configured at build time.
 
 Secure boot means a cryptographic chain of trust that begins at the silicon and extends through the bootloader into the kernel. Each stage verifies the next before transferring control, and a stage that fails verification refuses to boot, protecting against both malicious tampering and unintentional corruption.
 
-Past the kernel, the root filesystem and extensions rest on immutability and on signature verification at install time, not on verification at read time. Read-time block verification is not enabled yet; see [Filesystem Integrity](filesystem-integrity) for what that covers and what it does not.
+Past the kernel, the root filesystem rests on immutability and on signature verification at install time, not on verification at read time. Extensions are weaker still: they can be signed at build time, but nothing verifies that signature before an extension image is overlaid. Read-time block verification is not enabled for either; see [Filesystem Integrity](filesystem-integrity) for what that covers and what it does not.
 
 :::caution Enforcement status
 
-Boot chain enforcement is not enabled on any target in the current release. What ships today is the groundwork: per-machine key generation at build time, and signing-key management through the CLI, both described below. Signature verification in the bootloader is in development for the NXP i.MX 93, using both the SoC's own AHAB mechanism and U-Boot FIT signature verification; other targets have not been started.
+Boot chain enforcement is not enabled on any target in the current release. What ships today is signing-key management through the CLI, described below. Build-time generation of a per-machine UEFI key chain is not in the shipping build either; the recipe that would add it has not landed. Signature verification in the bootloader is in development for the NXP i.MX 93, using both the SoC's own AHAB mechanism and U-Boot FIT signature verification; other targets have not been started.
 
 Read the chain of trust below as the model this is being built toward, and the sections around it as what you can set up now. An earlier version of this page described an `avocado secure-boot enable` command and vendor-specific CLI backends. Neither exists.
 
@@ -48,15 +48,15 @@ avocado signing-keys create release-signing \
 
 ### Build-time configuration
 
-Secure boot itself is configured when the image is built, not switched on afterward from the CLI. The `secureboot` distro feature is enabled by default, and generates the UEFI key chain (PK, KEK, db, dbx) per machine during the build. The private halves stay on the build host and are never placed in an image, by design.
+Secure boot itself is configured when the image is built, not switched on afterward from the CLI. The `secureboot` distro feature is enabled by default, but today that flag only marks the build as targeting secure boot. Nothing yet generates the UEFI key chain (PK, KEK, db, dbx) per machine during the build.
 
-The public UEFI keychain certificates (PK, KEK, db, dbx) stay on the build host too, for now. A recipe exists to package them for the target under `/usr/share/avocado/sb-keys`, but no image pulls it in yet, so a running device does not currently carry its own certificates. That is part of the enforcement work rather than a separate gap.
+Because no key chain is produced, there is also nothing to package for the target: a running device does not carry its own certificates under `/usr/share/avocado/sb-keys`. Generating the key chain and shipping the public halves to the device are both part of the enforcement work rather than separate gaps. When they land, the private halves will stay on the build host and never be placed in an image, by design.
 
 Whether the bootloader then _enforces_ a signature depends on the silicon's own mechanism, and that is configured per board rather than through a common switch. See the enforcement note above for where each target stands.
 
 ### Chain of trust
 
-This is the model the work above is building toward. Stages 1 and 2 are what "enforcement" means, and per the note above they are in development rather than shipped. Stages 3 to 5 describe protections that hold today independent of that enforcement, immutability and install-time signature verification, not a verified boot chain reaching the kernel.
+This is the model the work above is building toward. Stages 1 and 2 are what "enforcement" means, and per the note above they are in development rather than shipped. Stages 3 to 5 describe what holds today independent of that enforcement: immutability throughout, install-time signature verification for the root filesystem, and for extensions a build-time signature that nothing checks before overlay. None of that is a verified boot chain reaching the kernel.
 
 1. **Silicon ROM** — Vendor-programmed immutable code validates the first-stage bootloader against keys burned into hardware fuses.
 2. **Bootloader** — In an enforced configuration, the verified bootloader validates the kernel image and device tree against the device's public verification keys; private signing keys never leave the build host.
@@ -80,4 +80,4 @@ Treat it as one-way. A fuse cannot be unburned, a wrong value cannot be correcte
 
 ## Security from day one
 
-Because the same signing infrastructure is available in development, staging, and production, there's no late-stage "security integration phase." The controls that do ship today (signing keys including hardware-backed ones, per-machine key generation, an immutable root, and [encrypted storage](/avocado-os/security/encryption)) are the same in a development build as in a production one, so you can set them up and validate them early rather than discovering compatibility issues right before ship. Bootloader enforcement lands into that same configuration rather than replacing it.
+Because the same signing infrastructure is available in development, staging, and production, there's no late-stage "security integration phase." The controls that do ship today (signing keys including hardware-backed ones, an immutable root, and [encrypted storage](/avocado-os/security/encryption)) are the same in a development build as in a production one, so you can set them up and validate them early rather than discovering compatibility issues right before ship. Bootloader enforcement lands into that same configuration rather than replacing it.
