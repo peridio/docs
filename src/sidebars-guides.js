@@ -47,6 +47,7 @@ const sidebars = {
       items: [
         'cross-compilation',
         'custom-kernel',
+        'device-tree-overlays',
         'seeding-var',
         'customizing-rootfs-initramfs',
         'lockfiles-and-build-stamps',
