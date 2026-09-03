@@ -1,7 +1,7 @@
 ---
 title: Package Feeds
 description: Browse and search available packages from Avocado OS package feeds using the CLI.
-sidebar_position: 2
+sidebar_position: 5
 copy_markdown: true
 ---
 

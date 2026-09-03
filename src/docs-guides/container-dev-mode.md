@@ -139,7 +139,7 @@ That error is correct, not a fault. To watch your app, look at the target:
 # over SSH to the target
 docker logs -f app                    # the target's engine, where your container runs
 journalctl -u app.service -f          # the service the agent restarts
-journalctl -u avocado-container-agent-dev -f   # pull + restart, as the agent sees it
+journalctl -u container-agent-dev -f          # pull + restart, as the agent sees it
 ```
 
 This is the same host/target split as [hardware in the loop](./hardware-in-the-loop), which does for extensions what this page does for containers. If you already run HIL, the mental model carries over unchanged.
@@ -148,7 +148,7 @@ This is the same host/target split as [hardware in the loop](./hardware-in-the-l
 
 - A HIL target running Avocado OS, reachable over SSH from your host.
 - A container engine on your host. Both `docker` and `podman` are supported. The watcher streams tag events from the engine CLI (`docker events` / `podman events`) rather than the API socket, so a rootless podman with no socket still works.
-- Three extensions in your dev runtime: a container engine extension (`avocado-ext-docker` or `avocado-ext-podman`), the dev agent extension `avocado-ext-container-agent-dev`, and an SSH server extension (`avocado-ext-sshd-dev`). `up` delivers the session bootstrap to the target over SSH before the loop starts, so a target without an SSH server cannot be bootstrapped at all - only steady-state syncs run over the control WebSocket. A minimal Avocado image ships no SSH server, so this is easy to miss until `up` fails.
+- Three extensions in your dev runtime: a container engine extension (`docker` or `podman`), the dev agent extension `container-agent-dev`, and an SSH server extension (`sshd-dev`). `up` delivers the session bootstrap to the target over SSH before the loop starts, so a target without an SSH server cannot be bootstrapped at all - only steady-state syncs run over the control WebSocket. A minimal Avocado image ships no SSH server, so this is easy to miss until `up` fails.
 - **A systemd service on the target that already runs your container.** Container dev mode restarts that service; it does not create it. Ship it with your runtime the way you ship any other service.
 
 The service must recreate the container **from the image tag** on every start:
@@ -173,10 +173,11 @@ supported_targets:
 runtimes:
   dev:
     extensions:
-      - avocado-ext-dev
+      - avocado-dev
       # highlight-added-start
-      - avocado-ext-docker
-      - avocado-ext-container-agent-dev
+      - docker
+      - container-agent-dev
+      - sshd-dev
       # highlight-added-end
     packages:
       avocado-runtime: '*'
@@ -512,7 +513,7 @@ This is scoped to the container dev mode store and is distinct from the top-leve
 The write listener is always bound on loopback - that part does not vary - but the
 port does. By default it takes an ephemeral one that changes every session and is
 never disclosed to the device. On the `avocado-vm` push path it binds a known port
-instead, which the guest does need (see `AVOCADO_CONTAINER_DEV_WRITE_PORT` below);
+instead, which the guest does need (see `AVOCADO_CONTAINER_DEV_WRITE_PORT` in Environment variables);
 loopback still holds there, because the guest reaches it through the forwarded
 socket rather than over the network. `up` reports the port it chose:
 
