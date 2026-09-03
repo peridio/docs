@@ -352,7 +352,9 @@ function selfTestScanner() {
   // Prose that trips the MDX-aware parse (an unterminated heading-ID brace,
   // here) must still fall back to the CommonMark scan rather than losing the
   // diagram entirely.
-  const fallback = scanMermaid('## Heading {#not-a-valid-expr\n\ntext\n\n```mermaid\nflowchart TD\n  a --> b\n```')
+  const fallback = scanMermaid(
+    '## Heading {#not-a-valid-expr\n\ntext\n\n```mermaid\nflowchart TD\n  a --> b\n```'
+  )
   if (!fallback.degraded) {
     console.error('self-test FAILED: scanner did not report degrading on unparseable MDX prose')
     return false
