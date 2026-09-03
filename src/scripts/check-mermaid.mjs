@@ -28,7 +28,9 @@ import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { JSDOM } from 'jsdom'
+import { mdxFromMarkdown } from 'mdast-util-mdx'
 import { fromMarkdown } from 'mdast-util-from-markdown'
+import { mdxjs } from 'micromark-extension-mdxjs'
 import { visit } from 'unist-util-visit'
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -41,6 +43,31 @@ const SKIP_DIRS = new Set([
   '.git',
 ])
 
+// Mirrors what Docusaurus actually parses with: MDX, not CommonMark. A mermaid
+// fence on the line directly after a JSX/HTML open tag (`<TabItem>`,
+// `<details><summary>`) is a code node under an MDX element, not a top-level
+// CommonMark code node - plain `fromMarkdown()` misses it entirely, so a broken
+// diagram in that position passed this gate silently.
+const MDX_PARSE_OPTIONS = { extensions: [mdxjs()], mdastExtensions: [mdxFromMarkdown()] }
+
+/**
+ * Blank out a leading YAML frontmatter block, keeping every later line number
+ * unchanged.
+ *
+ * Docusaurus slices frontmatter off with gray-matter before content ever
+ * reaches remark/MDX, so the real renderer never sees it. Author-facing
+ * frontmatter comments routinely contain stray `<tags>` (see
+ * `field-notes/_template.mdx`'s `<slug>` placeholder) that are harmless as
+ * YAML but not balanced MDX, so leaving them in front of the MDX-aware parser
+ * below throws on files that build just fine.
+ */
+function stripFrontmatter(text) {
+  const match = /^---\r?\n[\s\S]*?\r?\n---\r?\n/.exec(text)
+  if (!match) return text
+  const newlineCount = (match[0].match(/\n/g) || []).length
+  return '\n'.repeat(newlineCount) + text.slice(match[0].length)
+}
+
 /** Every markdown file under `dir`, skipping generated and vendored trees. */
 function markdownFiles(dir) {
   const out = []
@@ -51,6 +78,19 @@ function markdownFiles(dir) {
     else if (/\.mdx?$/.test(entry.name)) out.push(full)
   }
   return out
+}
+
+/** Pull every `code` node with `lang === 'mermaid'` out of a parsed tree. */
+function collectMermaidBlocks(tree) {
+  const blocks = []
+  visit(tree, 'code', (node) => {
+    // Docusaurus accepts metadata after the language (```mermaid title="...").
+    // mdast puts the language in `lang` and the rest in `meta`, so metadata needs
+    // no handling here - which is where the old regex had to guess.
+    if (node.lang !== 'mermaid') return
+    blocks.push({ line: node.position.start.line, body: node.value })
+  })
+  return blocks
 }
 
 /**
@@ -70,22 +110,29 @@ function markdownFiles(dir) {
  *  - An unclosed fence runs to end of document per CommonMark, which is what
  *    Docusaurus renders too; it arrives here as one block whose body is the rest of
  *    the file, and mermaid rejects it with a line number inside the file.
+ *  - A fence directly after a JSX/HTML open tag (`<TabItem>`, `<details><summary>`)
+ *    is a code node nested under that element, which only an MDX-aware parse
+ *    sees - plain CommonMark treats the tag as inert HTML and never re-enters
+ *    block context for what follows, so the fence is silently dropped.
+ *
+ * MDX-aware parsing is tried first. Docusaurus applies its own compat
+ * preprocessing before MDX ever runs (escaped `{#heading-ids}`, HTML-comment
+ * support) that this scanner does not reproduce, so a file whose surrounding
+ * prose trips the plain MDX parser falls back to the CommonMark scan the old
+ * version of this script always used. That fallback is a real, reported
+ * coverage gap for that one file - not a silent one, and not a crash.
  */
 function scanMermaid(text) {
-  const blocks = []
-  // MDX-specific syntax (JSX, ESM imports) is not valid CommonMark, and
-  // fromMarkdown without the mdx extensions treats it as paragraphs/html rather
-  // than throwing. Code fences parse identically either way, so plain CommonMark
-  // is enough to locate diagrams and avoids depending on the MDX plugin set.
-  const tree = fromMarkdown(text)
-  visit(tree, 'code', (node) => {
-    // Docusaurus accepts metadata after the language (```mermaid title="...").
-    // mdast puts the language in `lang` and the rest in `meta`, so metadata needs
-    // no handling here - which is where the old regex had to guess.
-    if (node.lang !== 'mermaid') return
-    blocks.push({ line: node.position.start.line, body: node.value })
-  })
-  return blocks
+  const body = stripFrontmatter(text)
+  try {
+    return { blocks: collectMermaidBlocks(fromMarkdown(body, MDX_PARSE_OPTIONS)), degraded: false }
+  } catch (error) {
+    return {
+      blocks: collectMermaidBlocks(fromMarkdown(body)),
+      degraded: true,
+      degradeReason: String(error?.message ?? error).split('\n')[0],
+    }
+  }
 }
 
 function mermaidBlocks(file) {
@@ -271,9 +318,23 @@ function selfTestScanner() {
     ['commented out', '<!--\n```mermaid\nflowkart TD\n```\n-->', 0],
     // An unclosed fence is one block running to EOF, which is what a reader gets.
     ['unterminated fence', 'intro\n```mermaid\nflowchart TD\n  a --> b', 1],
+    // The failure mode this scanner exists to catch: plain CommonMark never
+    // re-enters block context after a JSX/HTML open tag, so the fence right
+    // after it was previously invisible here while Docusaurus still rendered
+    // (and could still break) the diagram.
+    [
+      'mermaid fence directly after a JSX open tag',
+      '<TabItem value="a">\n```mermaid\nflowchart TD\n  a --> b\n```\n</TabItem>',
+      1,
+    ],
+    [
+      'mermaid fence directly after a nested HTML open tag',
+      '<details>\n<summary>x</summary>\n```mermaid\nflowchart TD\n  a --> b\n```\n</details>',
+      1,
+    ],
   ]
   for (const [name, text, wantBlocks] of cases) {
-    const blocks = scanMermaid(text)
+    const { blocks } = scanMermaid(text)
     if (blocks.length !== wantBlocks) {
       console.error(
         `self-test FAILED: scanner "${name}" gave ${blocks.length} block(s), expected ${wantBlocks}`
@@ -282,9 +343,24 @@ function selfTestScanner() {
     }
   }
   // Line numbers are what a failure points at, so pin one rather than trusting it.
-  const [indented] = scanMermaid('- item\n\n  ```mermaid\n  flowchart TD\n  ```')
+  const { blocks: indentedBlocks } = scanMermaid('- item\n\n  ```mermaid\n  flowchart TD\n  ```')
+  const [indented] = indentedBlocks
   if (indented.line !== 3) {
     console.error(`self-test FAILED: scanner reported fence line ${indented.line}, expected 3`)
+    return false
+  }
+  // Prose that trips the MDX-aware parse (an unterminated heading-ID brace,
+  // here) must still fall back to the CommonMark scan rather than losing the
+  // diagram entirely.
+  const fallback = scanMermaid('## Heading {#not-a-valid-expr\n\ntext\n\n```mermaid\nflowchart TD\n  a --> b\n```')
+  if (!fallback.degraded) {
+    console.error('self-test FAILED: scanner did not report degrading on unparseable MDX prose')
+    return false
+  }
+  if (fallback.blocks.length !== 1) {
+    console.error(
+      `self-test FAILED: fallback scan gave ${fallback.blocks.length} block(s), expected 1`
+    )
     return false
   }
   console.log(`self-test ok: scanner agrees on ${cases.length} block shapes`)
@@ -386,6 +462,7 @@ async function main() {
   let blockCount = 0
   const failures = []
   const generatedFailures = []
+  const degradedFiles = []
 
   // Generated reference pages are written by sync-references from a clone of
   // avocado-linux/references at unpinned origin/main. A malformed diagram
@@ -396,7 +473,9 @@ async function main() {
   const isGenerated = (file) => file.startsWith(generated + path.sep)
 
   for (const file of files) {
-    for (const block of mermaidBlocks(file)) {
+    const { blocks, degraded, degradeReason } = mermaidBlocks(file)
+    if (degraded) degradedFiles.push({ file, reason: degradeReason })
+    for (const block of blocks) {
       blockCount++
       const failure = await parses(mermaid, block.body)
       if (failure) {
@@ -442,6 +521,19 @@ async function main() {
     for (const { file, line, failure } of generatedFailures) {
       console.warn(`  ${path.relative(SRC, file)}:${line}:`)
       console.warn(indent(failure))
+    }
+  }
+
+  if (degradedFiles.length > 0) {
+    console.warn(
+      `mermaid warning: ${degradedFiles.length} file(s) fell back to a CommonMark-only scan ` +
+        'because their surrounding prose is not valid plain MDX (Docusaurus applies compat ' +
+        'preprocessing this scanner does not reproduce - escaped heading IDs, HTML-comment ' +
+        'support). A mermaid fence directly after a JSX/HTML open tag in one of these files ' +
+        'would not be found.'
+    )
+    for (const { file, reason } of degradedFiles) {
+      console.warn(`  ${path.relative(SRC, file)}: ${reason}`)
     }
   }
 
