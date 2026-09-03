@@ -33,7 +33,7 @@ At any given time, one slot is active and one is inactive. Updates are written e
 ### Update flow
 
 1. **Download** — The update payload is downloaded and written to the inactive slot. The active system continues running normally throughout.
-2. **Verify** — Cryptographic signatures are validated against the signing keys provisioned on the device, and each image is checked against the hash and length recorded in that signed metadata. A payload that fails either check is not installed, and the active slot is left untouched.
+2. **Verify** — Cryptographic signatures are validated against the verification keys provisioned on the device (the device holds only public keys; private signing keys never leave the build host), and each image is checked against the hash and length recorded in that signed metadata. A payload that fails either check is not installed, and the active slot is left untouched.
 3. **Commit** — The bootloader is atomically updated to point to the new slot on next boot. This is a single flag flip — not a gradual migration.
 4. **Reboot** — The device boots into the new slot. The bootloader marks it as "pending verification."
 5. **Health check** — The new system runs self-diagnostics. If the system is healthy, the slot is marked as "good." If not, the next reboot automatically falls back to the previous slot.

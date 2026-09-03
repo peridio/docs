@@ -74,7 +74,7 @@ IEC 62443 is the primary cybersecurity standard for industrial automation and co
 - **Defense in depth** — IEC 62443 explicitly requires multiple independent layers of security. A single control (e.g., encryption alone) is insufficient — the architecture must combine multiple mechanisms so that failure of one doesn't compromise the system.
 - **Security levels** — Higher SLs require stronger controls. SL-2 (protection against intentional violation with simple means) is the baseline for most industrial deployments. SL-3 (sophisticated means) requires hardware-backed security.
 
-**How Avocado addresses this:** The layered security architecture (secure boot, an immutable signature-verified root, LUKS encryption, extension isolation) provides the defense-in-depth that IEC 62443 requires. Hardware-backed key storage supports SL-3 deployments. The immutable root with signed extensions provides data integrity at the OS level. Audit logging and boot mode separation support access control and use control requirements. Atomic updates with rollback provide resource availability during maintenance.
+**How Avocado addresses this:** The layered security architecture (secure boot, an immutable signature-verified root, LUKS encryption, extension isolation) provides the defense-in-depth that IEC 62443 requires. Hardware-backed key storage supports SL-3 deployments. The immutable, signature-verified root provides data integrity at the OS level; extensions can additionally be signed at build time to authenticate their origin. Audit logging and boot mode separation support access control and use control requirements. Atomic updates with rollback provide resource availability during maintenance.
 
 #### Common Criteria (ISO/IEC 15408)
 
@@ -118,7 +118,7 @@ The read-only root filesystem prevents runtime modification of system binaries, 
 
 ### Extension isolation
 
-System extensions overlay onto the immutable root but maintain clear boundaries. Each extension is independently signed, independently verified, and independently updatable. A compromised application extension cannot modify the core OS or other extensions — the overlay architecture enforces this structurally, not just by policy.
+System extensions overlay onto the immutable root but maintain clear boundaries. Each extension is independently updatable and can be independently signed at build time; read-time verification per extension is not enabled yet (see [Filesystem Integrity](/avocado-os/security/filesystem-integrity)). A compromised application extension cannot modify the core OS or other extensions — the overlay architecture enforces this structurally, not just by policy.
 
 ### Recovery mode
 

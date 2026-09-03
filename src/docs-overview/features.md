@@ -84,14 +84,14 @@ Systemd extensions give you the same dependency declaration benefit without the 
 
 ## Immutable System Architecture
 
-The base system is read-only. Everything below the line is immutable SquashFS. Everything above it is your space to work in. A/B slots protect every layer.
+The base system is read-only. Everything below the line is immutable. Everything above it is your space to work in. A/B slots protect every layer.
 
 ```text
 ┌─────────────────────────────────────────────┐
 │  /var  ·  BTRFS  ·  read-write              │  Your data, state, logs
 │  Extensions, app data, sub-volumes          │
 ├─────────────────────────────────────────────┤
-│  Extensions  ·  SquashFS  ·  read-only      │  Apps, configs, kernel modules
+│  Extensions  ·  erofs/squashfs  ·  read-only│  Apps, configs, kernel modules
 ├──────────────────────┬──────────────────────┤
 │  Avocado Linux (A)   │  Avocado Linux (B)   │  Immutable base OS
 ├──────────────────────┼──────────────────────┤
@@ -198,7 +198,7 @@ This matters economically. Devices on 5G or cellular networks have expensive dat
 
 Security in Avocado OS is not a feature you bolt on later; it's structural. The secure boot chain starts at the hardware root of trust and runs through the bootloader into the kernel. From there, the root filesystem and every extension are immutable images, verified when they are installed.
 
-- [Secure boot](/avocado-os/security/secure-boot) with a verified boot chain from the hardware root of trust through the bootloader and kernel
+- [Secure boot](/avocado-os/security/secure-boot) with signing-key management today, building toward a verified boot chain from the hardware root of trust through the bootloader and kernel
 - [Filesystem integrity](/avocado-os/security/filesystem-integrity) from an immutable read-only root and signature-verified updates
 - [Hardware-backed encryption](/avocado-os/security/encryption) with LUKS and TPM support
 - [Atomic update architecture](/avocado-os/security/update-architecture) that eliminates partial-update attack vectors
