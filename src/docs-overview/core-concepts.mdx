@@ -130,7 +130,7 @@ Switch between runtimes with one command. The same extensions, different composi
 
 ## Extensions
 
-Extensions are the building blocks of the system. Every piece of user-defined functionality ships as an extension — application binaries, configuration files, kernel modules, systemd services. Avocado's extension system builds on systemd's sysext and confext mechanisms, which means extensions inherit dm-verity integrity checking and LUKS encryption support out of the box. The secure boot chain extends all the way through the extension layer.
+Extensions are the building blocks of the system. Every piece of user-defined functionality ships as an extension: application binaries, configuration files, kernel modules, systemd services. Avocado's extension system builds on systemd's sysext and confext mechanisms, so each extension ships as a read-only image that is replaced whole rather than patched, and can be signed at build time. Extensions live on `/var`, which is LUKS-encrypted on targets that enable it.
 
 ### Extension types
 

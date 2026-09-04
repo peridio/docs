@@ -121,7 +121,7 @@ export const data: SolutionData = {
       icon: 'LockClosed',
       title: 'Production Security',
       description:
-        'Secure boot with TrustZone, dm-verity, and LUKS encryption. Industrial-grade security from day one.',
+        'TrustZone isolation with secure-boot groundwork in the build, a read-only root, and LUKS encryption of the writable partition.',
     },
     {
       icon: 'Wifi',
