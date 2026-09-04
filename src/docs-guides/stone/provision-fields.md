@@ -18,7 +18,7 @@ those variables should be collected.
 
 ## Shape
 
-```jsonc
+```json
 "provision": {
   "envs": {
     "device_info": {

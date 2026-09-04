@@ -2,6 +2,7 @@
 title: Commands
 sidebar_position: 4
 description: 'Reference for every stone command and its flags.'
+copy_markdown: true
 ---
 
 # Commands
@@ -27,7 +28,7 @@ stone describe-manifest -m manifest.json [--overlay overlay.json ...]
 
 ## `stone validate`
 
-Checks that every file the manifest references (images, FAT source files, fwup templates, provision scripts and extra files) is present in the input directories, and that provision profile references resolve. Fails with a list of everything missing.
+Checks that every file the manifest references — images, FAT source files, fwup templates, and provision profile scripts — is present in the input directories, and that provision profile references resolve. Fails with a list of everything missing. It does **not** check `provision.files` (shared helpers); a missing one is not caught here and surfaces later at `create`.
 
 ```
 stone validate -m manifest.json -i . [--overlay overlay.json ...]
@@ -55,19 +56,19 @@ stone bundle -m manifest.json --os-release ./os-release -o os-bundle.aos -i . \
   [--os-release-initrd ./os-release-initrd] [--partition-size var=536870912] [--overlay overlay.json ...]
 ```
 
-| Flag                            | Default           | Description                                                           |
-| ------------------------------- | ----------------- | --------------------------------------------------------------------- |
-| `--os-release <PATH>`           | — (required)      | OS release file; source of `AVOCADO_OS_BUILD_ID`.                     |
-| `--os-release-initrd <PATH>`    | —                 | Initramfs os-release; adds `initramfs_build_id` / `verify_initramfs`. |
-| `-o, --output <PATH>`           | `os-bundle.aos`   | Output `.aos` path.                                                   |
-| `--build-dir <DIR>`             | `<output>/_build` | Directory for intermediate artifacts.                                 |
-| `--partition-size <NAME=BYTES>` | —                 | Concrete size for a size-less `expand` partition. Repeatable.         |
+| Flag                            | Default                    | Description                                                                                                                                            |
+| ------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--os-release <PATH>`           | — (required)               | OS release file; source of `AVOCADO_OS_BUILD_ID`.                                                                                                      |
+| `--os-release-initrd <PATH>`    | —                          | Initramfs os-release; adds `initramfs_build_id` / `verify_initramfs`.                                                                                  |
+| `-o, --output <PATH>`           | `os-bundle.aos`            | Output `.aos` path.                                                                                                                                    |
+| `--build-dir <DIR>`             | `_build` beside `--output` | Directory for intermediate artifacts. Defaults to a `_build/` directory in the same directory as `--output` (e.g. `-o build/os.aos` → `build/_build`). |
+| `--partition-size <NAME=BYTES>` | —                          | Concrete size for a size-less `expand` partition. Repeatable.                                                                                          |
 
 The resulting `.aos` is applied on-device by avocadoctl — see [Bundle Format](/developer-reference/avocadoctl/os-bundles/bundle-format).
 
 ## `stone provision`
 
-Builds all images, builds the device image via its fwup template (passing partition geometry and device/OS metadata as `AVOCADO_*` env vars), resolves any size-less `expand` partition to a concrete size, then runs the selected provision profile's script against the target.
+Builds all images, builds the device image via its fwup template (passing partition geometry and device/OS metadata as `AVOCADO_*` env vars), then runs the selected provision profile's script against the target. A size-less `expand` partition requires a `--partition-size` override here just as it does at bundle time.
 
 ```
 stone provision -i ./out [--partition-size var=536870912] [--overlay overlay.json ...]
@@ -75,11 +76,11 @@ stone provision -i ./out [--partition-size var=536870912] [--overlay overlay.jso
 
 `provision` locates `manifest.json` inside `--input-dir` rather than taking `-m`. It requires an `os-release` file in the input directory and uses a fresh `_build` directory next to the manifest. The profile is chosen from the `AVOCADO_PROVISION_PROFILE` environment variable, falling back to `runtime.provision_default`. The script runs with these env vars set:
 
-| Variable                  | Description                               |
-| ------------------------- | ----------------------------------------- |
-| `AVOCADO_STONE_MANIFEST`  | Absolute path to the (resolved) manifest. |
-| `AVOCADO_STONE_BUILD_DIR` | Absolute path to the `_build` directory.  |
-| `AVOCADO_STONE_DATA_DIR`  | Absolute path to the input directory.     |
+| Variable                  | Description                              |
+| ------------------------- | ---------------------------------------- |
+| `AVOCADO_STONE_MANIFEST`  | Absolute path to the manifest.           |
+| `AVOCADO_STONE_BUILD_DIR` | Absolute path to the `_build` directory. |
+| `AVOCADO_STONE_DATA_DIR`  | Absolute path to the input directory.    |
 
 ...plus every variable resolved from the profile's `envs`.
 
