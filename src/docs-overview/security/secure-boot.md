@@ -61,7 +61,7 @@ This is the model the work above is building toward. Stages 1 and 2 are what "en
 1. **Silicon ROM** — Vendor-programmed immutable code validates the first-stage bootloader against keys burned into hardware fuses.
 2. **Bootloader** — In an enforced configuration, the verified bootloader validates the kernel image and device tree against the device's public verification keys; private signing keys never leave the build host.
 3. **Kernel** — Mounts the immutable root filesystem read-only. Whether the kernel itself was verified before it started is stage 2's job and isn't enforced yet; block-level verification of the filesystem at read time is not enabled either (see [Filesystem Integrity](filesystem-integrity)).
-4. **Root filesystem** — Immutable read-only erofs image, signature-verified when it was installed and unmodifiable at runtime.
+4. **Root filesystem** — Immutable read-only erofs image, signature-verified when it was installed and not writable through the mounted filesystem at runtime. Privileged code can still write the backing block device; see [Filesystem Integrity](filesystem-integrity).
 5. **Extensions** — System extensions (sysext) and configuration extensions (confext) are replaced whole rather than patched, and can be signed as KAB packages at build time. Per-extension verification before overlay is not enabled yet.
 
 ### Multi-vendor signing authorities

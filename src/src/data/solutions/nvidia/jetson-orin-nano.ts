@@ -121,7 +121,7 @@ export const data: SolutionData = {
       icon: 'LockClosed',
       title: 'Production Security',
       description:
-        'Secure boot, dm-verity, and LUKS encryption across all architectures. Reproducible images simplify certification.',
+        'Read-only root filesystem, signature-verified updates, and LUKS encryption of the writable partition. Reproducible images simplify certification.',
     },
     {
       icon: 'Wifi',

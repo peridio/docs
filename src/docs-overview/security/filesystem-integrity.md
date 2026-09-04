@@ -7,7 +7,7 @@ description: 'How Avocado OS protects root filesystem integrity: an immutable re
 
 # Filesystem Integrity
 
-An immutable root that nothing on the device can rewrite, and updates that are verified before they are installed.
+An immutable root that nothing on the device can rewrite through the filesystem, and updates that are verified before they are installed.
 
 :::caution dm-verity is not enabled yet
 
@@ -54,7 +54,9 @@ For integrity specifically, this means a corrupted or rejected update cannot lea
 
 ## Extensions
 
-System extensions (sysext) and configuration extensions (confext) ship as read-only erofs or squashfs `.raw` images, overlaid at boot. Like the root filesystem, an extension image is replaced whole rather than patched, and its contents cannot be modified in place at runtime.
+System extensions (sysext) and configuration extensions (confext) ship as read-only erofs or squashfs `.raw` images, overlaid at boot. Like the root filesystem, an extension image is replaced whole rather than patched, and its contents cannot be modified in place through the mounted filesystem.
+
+The limit that applies to the root image applies here too, and more sharply. Extension `.raw` files live on the writable `/var`, so privileged code that can reach the backing file can alter an image underneath its read-only mount. Without per-extension hash trees, nothing detects that at read time.
 
 Extension images can also be wrapped and signed as KAB packages at build time, which authenticates who produced the package. That is a different property from block-level integrity: it answers "did the holder of the signing keyset produce this image", not "does every block still match what was signed". Per-extension dm-verity hash trees are not implemented today.
 
