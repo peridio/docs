@@ -15,7 +15,11 @@ Where the key lives matters as much as the encryption. A LUKS volume whose key s
 
 :::caution Availability
 
-TPM sealing targets the NXP i.MX 93 FRDM, and only when the image is built with the fTPM feature. It is implemented but has not been validated on that hardware yet, so read it as a path under test rather than a shipped guarantee. Every other target uses the Argon2id key described below, which is not hardware-sealed. `/var` encryption itself is a build-time feature, and a device gets it by being provisioned with an image that has it enabled. Turning it on reformats `/var`, so it is not a data-preserving upgrade for a device already in the field; see [Where the key comes from](#where-the-key-comes-from) below.
+`/var` encryption is a build-time capability, and most targets do not declare it. The ones that do are the seven NVIDIA Jetson-family machines, the NXP i.MX 8M Plus EVK and i.MX 93 FRDM, and the two QEMU targets. The Intel x86-64 targets and the Raspberry Pi family do not declare it, so on those `/var` is plaintext and nothing on this page applies to them.
+
+TPM sealing is narrower again. It targets the NXP i.MX 93 FRDM, and only when the image is built with the fTPM feature. It is implemented but has not been validated on that hardware yet, so read it as a path under test rather than a shipped guarantee. Every other target uses the Argon2id key described below, which is not hardware-sealed.
+
+A device gets `/var` encryption by being provisioned with an image that has it enabled. Turning it on reformats `/var`, so it is not a data-preserving upgrade for a device already in the field; see [Where the key comes from](#where-the-key-comes-from) below.
 
 :::
 
@@ -27,13 +31,16 @@ Avocado uses LUKS2 with AES-256-XTS to encrypt the writable partition. This is p
 
 ### Hardware key storage
 
-One mechanism is implemented, on one target, and its hardware validation is still outstanding:
+One mechanism is implemented, on two target families, and its hardware validation is outstanding on both:
 
-| Hardware                                     | Key storage mechanism                                                                 | Status                                                                                         |
-| -------------------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| TPM 2.0, provided by the OP-TEE firmware TPM | `/var` key sealed to the TPM, with the Argon2id keyslot retained as the recovery path | Implemented for the NXP i.MX 93 FRDM with the fTPM feature; not yet validated on that hardware |
+| Hardware                                                 | Key storage mechanism                                                                 | Status                                                                                          |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| TPM 2.0, provided by the OP-TEE firmware TPM, on i.MX 93 | `/var` key sealed to the TPM, with the Argon2id keyslot retained as the recovery path | Implemented for the NXP i.MX 93 FRDM with the fTPM feature; not yet validated on that hardware   |
+| The same mechanism, on the NVIDIA Jetson family          | As above                                                                              | Built and wired on all seven Jetson-family targets; not yet validated on that hardware          |
 
-The firmware TPM runs as an OP-TEE trusted application in ARM TrustZone's secure world, so on this target the TPM and the TEE are the same mechanism rather than two. The key is sealed under it, with the Argon2id key below retained as a recovery path.
+The firmware TPM runs as an OP-TEE trusted application in ARM TrustZone's secure world, so on these targets the TPM and the TEE are the same mechanism rather than two. The key is sealed under it, with the Argon2id key below retained as a recovery path.
+
+The two rows are at different depths even though neither is validated. On the i.MX 93 the enrolment path is implemented end to end. On Jetson the kernel fragments, the OP-TEE trusted application, the NV store partition and the cryptsetup TPM2 plugin are all present in the build and resolve, but the capability was added as groundwork and no board has been observed sealing and reopening a volume. Plan against the Argon2id guarantee on both until that changes.
 
 Where a seal is in place, the sealed keyslot is bound to that device. That alone does not make a copied volume unreadable, because the Argon2id keyslot stays enrolled and its key is derived from an identifier any process on the original device can read. Anyone who has read that identifier can derive the recovery key and open a copy of the volume anywhere. Sealing raises the cost of an offline attack; it is not an unlock-on-this-device-only guarantee.
 
@@ -58,6 +65,16 @@ This is the default path, and the only one on targets without the fTPM above. Th
 Be clear about what this does and does not give you. The SoC identifier ties the key to one device's identity, but it is readable by software on the running system rather than secret. Anyone who has read it can derive the key and open a copy of the volume on any machine, so this protects the media against whoever takes the storage and nothing more. It does not protect against code running on the device, and it does not survive an attacker who has already had code there.
 
 The fTPM seal above is stronger in one specific way: the unlock secret is held by the TPM and released only when asked, instead of being derivable by anything that can read the SoC identifier. It is worth enabling where it exists for that reason. It does not close the on-device gap, because the seal is not bound to a boot measurement (see the caution above), and it does not close the copied-volume gap either while the Argon2id keyslot remains enrolled as recovery.
+
+Which identifier a target uses is per silicon: the SoC UID on i.MX, the device-tree serial number on Jetson, DMI board identifiers on x86-64. What they have in common is being unique per board and readable early enough for the initramfs to unlock with.
+
+A build will not produce an image whose key could not be derived. A target that asks for `/var` encryption has to ship a key provider declaring which identifiers it reads, and the build runs that provider against two synthetic identities and requires two different keys out of it, then against an empty one and requires it to refuse. A provider that returns a fixed value, that reads past its declared sources, or that substitutes a constant when it finds no identity fails the build rather than shipping. That check runs where the image is built, so it establishes the derivation is sound and device-dependent; whether the identifier is readable on a particular board at boot is a property of that board and is settled by booting it.
+
+:::caution QEMU derives a shared key
+
+The QEMU targets are the exception, and it matters if you are evaluating on them. A virtual machine has no unique board identifier, so the provider substitutes a fixed value and every VM built from the same image derives the same `/var` key. That provider is marked test-only in the build for exactly this reason, and the build warns whenever a machine resolves to it. It is correct for a disposable evaluation target and is not a property to carry into an assessment of the hardware targets.
+
+:::
 
 ### Per-application encryption domains
 
