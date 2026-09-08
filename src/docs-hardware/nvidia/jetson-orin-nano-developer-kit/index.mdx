@@ -101,6 +101,29 @@ Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio
 
 10+ years of kernel/security maintenance. Combined with Jetson's industrial lifecycle ensures device longevity.
 
+## Security features
+
+The published Jetson feed builds encrypted `/var` for every Jetson target; it is opted into per runtime in `avocado.yaml`, with no distro rebuild.
+
+| Capability          | Status                                                                                                                |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Encrypted `/var`    | Built. LUKS2 key sealed to the OP-TEE fTPM against PCR 7, with an Argon2id fallback                                   |
+| Recovery key        | Built. Operator-held master, per-unit passphrase enrolled with `avocado var-key enroll`                               |
+| Extension dm-verity | Built. `extensions.<name>.image.verity` is manifest-carried, so it works here too                                     |
+| Signed boot FIT     | Not applicable — Jetson boots the NVIDIA chain, not a U-Boot FIT                                                      |
+| Rootfs dm-verity    | Not available — the root hash travels in a boot FIT, and the Jetson stone manifests carry no per-slot hash partitions |
+
+```yaml title="avocado.yaml"
+runtimes:
+  prod:
+    var:
+      encrypt: true
+      hardware: tpm2
+      recovery: fleet-var-master
+```
+
+The first boot encrypts the flashed `/var` in place, so seeded content — subvolumes, `var_files`, primed Docker images — survives. See [Encrypted /var](/developer-reference/security/encrypted-var).
+
 ## Getting Started
 
 ### Init, Install, & Build

@@ -101,6 +101,34 @@ Time-sensitive networking with dual Gigabit Ethernet supports deterministic cont
 
 10-15 year availability with enterprise maintenance ensures supply stability for long-lived industrial products.
 
+## Security features
+
+The published i.MX 8M Plus feed builds every security capability this SoC can deliver; each one is opted into per runtime in `avocado.yaml`, with no distro rebuild.
+
+| Capability            | Status on `imx8mp-evk`                                                |
+| --------------------- | --------------------------------------------------------------------- |
+| Encrypted `/var`      | Built. Key bound to a CAAM black key, stored in the LUKS2 header      |
+| Signed boot FIT       | Built. U-Boot re-packed with your key, so the first flash enforces it |
+| dm-verity rootfs      | Built. Root hash carried in the signed FIT                            |
+| dm-verity extensions  | Built                                                                 |
+| Bootloader OTA (eMMC) | Built. `boot0`/`boot1` coupled to the OS slots, with rollback         |
+
+```yaml title="avocado.yaml"
+rootfs:
+  image:
+    verity: true
+
+runtimes:
+  prod:
+    var:
+      encrypt: true
+      hardware: caam
+    signing:
+      fit_key: product-fit
+```
+
+See [Security features](/developer-reference/security) for the full workflow, including the operator-held [`/var` recovery key](/developer-reference/security/encrypted-var#operator-recovery-key) and [boot signing](/developer-reference/security/boot-signing).
+
 ## Getting Started
 
 ### Init, Install, & Build

@@ -369,6 +369,79 @@ avocadoctl hitl unmount my-app my-config
 
 ---
 
+## `avocadoctl var-key` {#var-key-commands}
+
+Manages the operator's recovery keyslot on the encrypted `/var`. The device side of `avocado var-key` — the host CLI derives this unit's passphrase from a master you hold and pipes it in, so nothing but the resulting keyslot is ever on the device. See [Encrypted /var](/developer-reference/security/encrypted-var) for the whole workflow.
+
+None of the passphrases that open `/var` (hardware-bound or SoC-UID-derived) are reachable from the running system. So these commands authorize keyslot changes with the volume key that `cryptsetup-var` links into root's user keyring at open time, via `cryptsetup luksAddKey --volume-key-keyring`. The backing partition is read from `cryptsetup status var`, so the machine's partition label does not matter.
+
+### `avocadoctl var-key enroll`
+
+Adds a recovery keyslot from a high-entropy passphrase on stdin. An existing recovery slot is replaced only after the new one exists, and a failed token import removes the slot it just added, so an interrupted enrollment never leaves `/var` with no way in.
+
+```
+avocadoctl var-key enroll [OPTIONS]
+```
+
+#### Options
+
+| Option            | Description                                                                                                  |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ |
+| `--key-file FILE` | Read the passphrase from `FILE` instead of stdin                                                             |
+| `--kind KIND`     | How the passphrase was derived, recorded in the token for the operator's benefit (default `hmac-sha256-uid`) |
+
+The slot is recorded with an `avocado-recovery` LUKS2 token naming it. Key derivation is PBKDF2 rather than Argon2id: the input is already high-entropy, so the cost of a memory-hard KDF buys nothing here.
+
+#### Examples
+
+```bash
+# Normally invoked for you by the host CLI, over SSH:
+#   avocado var-key enroll <runtime> --device root@<host>
+
+# By hand, from a passphrase derived on a bench:
+avocado var-key derive prod --uid 0x0123456789abcdef --raw \
+  | ssh root@device avocadoctl var-key enroll
+```
+
+---
+
+### `avocadoctl var-key list`
+
+Shows the `/var` keyslots and what unlocks each one — which slot is the hardware-bound token, which is the SoC-UID-derived key, and whether a recovery slot is enrolled.
+
+```
+avocadoctl var-key list
+```
+
+#### Examples
+
+```bash
+avocadoctl var-key list
+avocadoctl --json var-key list
+```
+
+---
+
+### `avocadoctl var-key remove`
+
+Removes the recovery keyslot. `--yes` is required; there is no interactive prompt.
+
+```
+avocadoctl var-key remove --yes
+```
+
+#### Options
+
+| Option  | Description                                           |
+| ------- | ----------------------------------------------------- |
+| `--yes` | Required. Confirms the recovery slot is to be removed |
+
+:::warning
+Once a recovery token exists, the initrd retires the SoC-UID-derived keyslot — the one key anyone who can read the SoC UID could reproduce. Removing the recovery slot after that leaves only the hardware-bound keyslot, so a failed key store takes `/var` with it.
+:::
+
+---
+
 ## `avocadoctl runtime` {#runtime-commands}
 
 ### `avocadoctl runtime activate`

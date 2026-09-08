@@ -42,6 +42,18 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Security',
+      collapsible: false,
+      collapsed: false,
+      items: [
+        'security/index',
+        'security/encrypted-var',
+        'security/verity',
+        'security/boot-signing',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Advanced',
       collapsible: false,
       collapsed: false,
