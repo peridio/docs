@@ -55,7 +55,7 @@ Building one recipe is much cheaper than building an image, but it still require
 
 Some components are installed into both the rootfs and the initramfs. When that happens a device carries two copies of the same binary, and they are not interchangeable:
 
-- The **rootfs** copy is what runs once the system is up. It backs the CLI and any long-running service.
+- The **rootfs** copy is what runs once the system is up. It backs the on-device commands you type and any long-running on-device service, `avocadoctl serve` among them.
 - The **initramfs** copy runs during early boot, before the root filesystem is mounted. It is built into the boot image.
 
 This distinction decides your rebuild cost. A change that only affects runtime behaviour needs the rootfs copy. A change that affects early boot needs a new initramfs, which means rebuilding and reprovisioning the boot image.

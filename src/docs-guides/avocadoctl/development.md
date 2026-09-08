@@ -7,16 +7,16 @@ description: 'Build and test a modified avocadoctl: which of its two on-device c
 
 avocadoctl ships inside the Avocado base OS rather than as an extension, so changing it is not the same as iterating on your own application or on extension contents. This page covers what a change to avocadoctl costs to test.
 
-Read [Modifying OS components](/developer-reference/modifying-os-components) first for the general rule. The short version: the CLI consumes RPMs from the feed and does not produce them, so getting _your_ avocadoctl onto a device means rebuilding its recipe with BitBake.
+Read [Modifying OS components](/developer-reference/modifying-os-components) first for the general rule. The short version: the Avocado CLI consumes RPMs from the feed and does not produce them, so getting _your_ avocadoctl onto a device means rebuilding its recipe with BitBake.
 
 ## avocadoctl ships twice
 
 avocadoctl is installed into two sysroots, so a device carries two copies:
 
-| Copy      | Installed by            | Runs                                                                    |
-| --------- | ----------------------- | ----------------------------------------------------------------------- |
-| rootfs    | `avocado-pkg-rootfs`    | `avocadoctl.service` and `avocadoctl.socket`, plus every CLI invocation |
-| initramfs | `avocado-pkg-initramfs` | `avocado-extension-initrd.service` only                                 |
+| Copy      | Installed by            | Units enabled                                                                                               |
+| --------- | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| rootfs    | `avocado-pkg-rootfs`    | `avocadoctl.socket`, `avocadoctl.service`, `avocado-extension.service`, `avocado-ensure-extensions.service` |
+| initramfs | `avocado-pkg-initramfs` | `avocadoctl.socket`, `avocado-extension-initrd.service`                                                     |
 
 Those are the metapackages each sysroot installs by default, and the ones you list in `avocado.yaml` if you customize a sysroot's package set. See [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs). In the Yocto layer each expands to a `packagegroup-avocado-*` packagegroup, which is where the dependency on `avocadoctl` is actually declared.
 
@@ -24,15 +24,17 @@ They are separate binaries built from the same recipe. Which one your change aff
 
 ### What the initramfs copy does
 
-Exactly one thing: merge extensions during early boot. Its unit runs `avocadoctl refresh` and is gated on `ConditionPathExists=/etc/initrd-release`, so it is inert once the system has switched root.
+The Varlink daemon is reachable in the initramfs, not only after switch-root. `avocadoctl.socket` is enabled there as well as in the system scope, so an `avocadoctl` invocation during early boot socket-activates `avocadoctl serve` the same way one after boot does. This is the "both the initramfs and system scopes" the [avocadoctl overview](/developer-reference/avocadoctl/overview) describes.
+
+What is narrow in the initramfs is not what is reachable but what calls it. Exactly one unit does: `avocado-extension-initrd.service` runs `avocadoctl refresh` to merge extensions during early boot, and nothing else in the initramfs opens the socket. That unit is gated on `ConditionPathExists=/etc/initrd-release`, so it is inert once the system has switched root; its rootfs counterpart `avocado-extension.service` carries the complementary condition and covers the same job after switch-root.
 
 ### What the rootfs copy does
 
-Everything else, including the entire OS update path. The update code is reached only from the CLI command handlers, the Varlink service handlers, and the update orchestrator, all of which run after boot.
+Everything else, including the entire OS update path. Both copies are built from the same source, so the update code is compiled into both; what differs is who calls it. It is reached from avocadoctl's own subcommand handlers, from the Varlink service handlers, and from the update orchestrator, and nothing in the initramfs invokes any of the three.
 
 :::tip
 
-A change to update, runtime, or extension-management behaviour affects only the rootfs copy. You do not need a new initramfs for it, which means no boot-image rebuild and no reprovisioning.
+A change to the update path, to runtime lifecycle, or to any extension operation other than the early-boot merge is only ever exercised after switch-root, so testing it needs the rootfs copy alone. You do not need a new initramfs for it, which means no boot-image rebuild and no reprovisioning.
 
 :::
 
@@ -56,6 +58,6 @@ That path covers extensions only. It does not apply to avocadoctl, which is not 
 
 ## What's next
 
-- [Modifying OS components](/developer-reference/modifying-os-components) for the general CLI-versus-Yocto boundary
-- [Commands](/developer-reference/avocadoctl/commands) for the full CLI surface
+- [Modifying OS components](/developer-reference/modifying-os-components) for the general Avocado-CLI-versus-Yocto boundary
+- [Commands](/developer-reference/avocadoctl/commands) for the full `avocadoctl` command surface
 - [Varlink API](/developer-reference/avocadoctl/varlink-api/overview) for the IPC interfaces
