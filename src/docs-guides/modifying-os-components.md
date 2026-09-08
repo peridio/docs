@@ -5,7 +5,7 @@ copy_markdown: true
 description: 'Where the Avocado CLI ends and Yocto begins: what to rebuild when you change a component that ships in the Avocado base OS.'
 ---
 
-Most development on Avocado never touches Yocto. You declare packages, build extensions, and cross-compile your own applications entirely through the CLI. But when you need to change a component that ships *inside* the base OS, such as `avocadoctl` or a BSP package, you cross a boundary and the workflow changes.
+Most development on Avocado never touches Yocto. You declare packages, build extensions, and cross-compile your own applications entirely through the CLI. But when you need to change a component that ships _inside_ the base OS, such as `avocadoctl` or a BSP package, you cross a boundary and the workflow changes.
 
 This guide explains where that boundary is and what each kind of change costs.
 
@@ -15,21 +15,23 @@ This guide explains where that boundary is and what each kind of change costs.
 
 Everything the CLI installs, into the SDK sysroot, the rootfs and initramfs sysroots, or an extension, was built by BitBake upstream and published to the package feed. The SDK container is itself a Yocto artifact.
 
-This is why "can I just build it as an RPM?" is usually the wrong question. Every BitBake recipe already produces an RPM, so the answer is always yes, and it still does not help. The constraint is *which source* the published RPM was built from: the recipe's pinned `SRCREV`, not your working tree.
+This is why "can I just build it as an RPM?" is usually the wrong question. Every BitBake recipe already produces an RPM, so the answer is always yes, and it still does not help. The constraint is _which source_ the published RPM was built from: the recipe's pinned `SRCREV`, not your working tree.
 
 ## What to rebuild
 
-| You changed | Yocto needed | How |
-| ----------- | ------------ | --- |
-| An extension's declared packages | No | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build` |
-| Your own application source | No | [Cross-compilation](/developer-reference/cross-compilation) in the SDK |
-| The rootfs or initramfs package list | No | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs) |
-| A published package, to a different published version | No | Pin the version in `avocado.yaml` |
-| The **source** of a packaged component | **Yes** | `bitbake <recipe>` |
-| A recipe, bbappend, packagegroup, or machine config | **Yes** | `bitbake` |
-| Kernel configuration or an in-tree driver | **Yes** | [Custom kernel](/developer-reference/custom-kernel) |
+| You changed                                           | Yocto needed | How                                                                                             |
+| ----------------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- |
+| An extension's declared packages                      | No           | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build` |
+| Your own application source                           | No           | [Cross-compilation](/developer-reference/cross-compilation) in the SDK                          |
+| The rootfs or initramfs package list                  | No           | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs)       |
+| A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                   |
+| The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                              |
+| A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                       |
+| Kernel configuration or an in-tree driver             | **Yes**      | [Custom kernel](/developer-reference/custom-kernel)                                             |
 
 The first four rows are the common case. The CLI covers them, and nothing in this guide applies.
+
+Version pins have one wrinkle. Once a package has a lockfile entry, the CLI installs the locked version whatever `avocado.yaml` asks for, so editing the pin on its own leaves you on the old one. Run [`avocado unlock`](/developer-reference/avocado-cli/commands#avocado-unlock) for the scope that holds the package, then `avocado install`, and the new pin resolves. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps#updating-locked-versions).
 
 ## When you do need Yocto
 
@@ -58,7 +60,7 @@ Some components are installed into both the rootfs and the initramfs. When that 
 
 This distinction decides your rebuild cost. A change that only affects runtime behaviour needs the rootfs copy. A change that affects early boot needs a new initramfs, which means rebuilding and reprovisioning the boot image.
 
-Check which packagegroups pull a component in before assuming which copy you need. For `avocadoctl` specifically, see [avocadoctl development](/developer-reference/avocadoctl/development).
+Check which sysroot's package set pulls a component in before assuming which copy you need. For `avocadoctl` specifically, see [avocadoctl development](/developer-reference/avocadoctl/development).
 
 ## What's next
 

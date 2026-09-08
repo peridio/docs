@@ -7,16 +7,18 @@ description: 'Build and test a modified avocadoctl: which of its two on-device c
 
 avocadoctl ships inside the Avocado base OS rather than as an extension, so changing it is not the same as iterating on your own application or on extension contents. This page covers what a change to avocadoctl costs to test.
 
-Read [Modifying OS components](/developer-reference/modifying-os-components) first for the general rule. The short version: the CLI consumes RPMs from the feed and does not produce them, so getting *your* avocadoctl onto a device means rebuilding its recipe with BitBake.
+Read [Modifying OS components](/developer-reference/modifying-os-components) first for the general rule. The short version: the CLI consumes RPMs from the feed and does not produce them, so getting _your_ avocadoctl onto a device means rebuilding its recipe with BitBake.
 
 ## avocadoctl ships twice
 
 avocadoctl is installed into two sysroots, so a device carries two copies:
 
-| Copy | Pulled in by | Runs |
-| ---- | ------------ | ----- |
-| rootfs | `packagegroup-avocado-rootfs` | `avocadoctl.service` and `avocadoctl.socket`, plus every CLI invocation |
-| initramfs | `packagegroup-avocado-initramfs` | `avocado-extension-initrd.service` only |
+| Copy      | Installed by            | Runs                                                                    |
+| --------- | ----------------------- | ----------------------------------------------------------------------- |
+| rootfs    | `avocado-pkg-rootfs`    | `avocadoctl.service` and `avocadoctl.socket`, plus every CLI invocation |
+| initramfs | `avocado-pkg-initramfs` | `avocado-extension-initrd.service` only                                 |
+
+Those are the metapackages each sysroot installs by default, and the ones you list in `avocado.yaml` if you customize a sysroot's package set. See [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs). In the Yocto layer each expands to a `packagegroup-avocado-*` packagegroup, which is where the dependency on `avocadoctl` is actually declared.
 
 They are separate binaries built from the same recipe. Which one your change affects decides how expensive it is to test.
 
@@ -48,7 +50,7 @@ This produces an updated RPM in the build's `tmp/deploy/rpm/<arch>/` directory. 
 
 ## Iterating on extensions instead
 
-If what you are actually iterating on is *extension contents* rather than avocadoctl itself, you do not need any of the above. avocadoctl supports mounting extensions live over NFS from a development host, so you can change an extension and re-merge it without rebuilding or reflashing. See [Hardware-in-the-loop](/developer-reference/hardware-in-the-loop) and the [org.avocado.Hitl interface](/developer-reference/avocadoctl/varlink-api/org-avocado-hitl).
+If what you are actually iterating on is _extension contents_ rather than avocadoctl itself, you do not need any of the above. avocadoctl supports mounting extensions live over NFS from a development host, so you can change an extension and re-merge it without rebuilding or reflashing. See [Hardware-in-the-loop](/developer-reference/hardware-in-the-loop) and the [org.avocado.Hitl interface](/developer-reference/avocadoctl/varlink-api/org-avocado-hitl).
 
 That path covers extensions only. It does not apply to avocadoctl, which is not an extension.
 
