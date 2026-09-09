@@ -7,7 +7,9 @@ description: 'Build and test a modified avocadoctl: which of its two on-device c
 
 avocadoctl ships inside the Avocado base OS rather than as an extension, so changing it is not the same as iterating on your own application or on extension contents. This page covers what a change to avocadoctl costs to test.
 
-Read [Modifying OS components](/developer-reference/modifying-os-components) first for the general rule. The short version: the Avocado CLI consumes RPMs from the feed and does not produce them, so getting _your_ avocadoctl onto a device means rebuilding its recipe with BitBake.
+Read [Modifying OS components](/developer-reference/modifying-os-components) first for the general rule. The short version: the Avocado CLI consumes RPMs from the feed and does not produce them, so producing a _shippable_ avocadoctl means rebuilding its recipe with BitBake.
+
+Producing an RPM and testing a binary are separate questions, though, and only the first one needs BitBake. If you just want to see your change run on a device, see [Testing a binary without an RPM](#testing-a-binary-without-an-rpm) below.
 
 ## avocadoctl ships twice
 
@@ -50,11 +52,34 @@ bitbake avocadoctl
 
 This produces an updated RPM in the build's `tmp/deploy/rpm/<arch>/` directory. Because the recipe pins `SRCREV`, point it at your commit before building, otherwise you rebuild the same published source.
 
+## Testing a binary without an RPM
+
+The base OS is built with `read-only-rootfs`, so it is reasonable to assume `/usr/bin` cannot be written and that an RPM is the only way in. That holds for the rootfs itself, but not for a running device.
+
+Once extensions are merged, `/usr` is no longer the rootfs directly: it is an overlay. avocadoctl merges with `systemd-sysext merge --mutable=ephemeral`, and `ephemeral` gives that overlay a writable tmpfs upper layer. Writes to `/usr` land there and shadow the read-only base rather than failing, so copying a binary over `/usr/bin/avocadoctl` works:
+
+```bash
+scp target/<triple>/release/avocadoctl device:/usr/bin/avocadoctl
+ssh device systemctl restart avocadoctl.socket avocadoctl.service
+```
+
+The restart matters because the running daemon holds the previous binary's inode; replacing the file on disk does not change the process already serving Varlink.
+
+:::caution
+
+The change is ephemeral in the precise sense: it lives in a tmpfs upper layer, so a reboot discards it, and so does any `avocadoctl refresh`. Refresh is unmerge-then-merge, and every runtime mutation calls it, which means an unrelated `runtime` operation can silently put the packaged binary back while you are still testing. If a behaviour you were just observing disappears, check whether something refreshed.
+
+:::
+
+This is a development loop, not a delivery mechanism. Nothing about it survives a reboot, and it leaves no record on the device of what is actually running, so a change that is going anywhere near a fleet still needs the RPM.
+
+The mutability mode is configurable, and `ephemeral` is avocadoctl's own default rather than systemd's. An image that sets `ext.sysext_mutable = "no"` in `/etc/avocado/avocadoctl.conf` gets a read-only merged `/usr`, where the copy above fails with `EROFS` instead. If that is your image, the RPM route is the only one.
+
 ## Iterating on extensions instead
 
 If what you are actually iterating on is _extension contents_ rather than avocadoctl itself, you do not need any of the above. avocadoctl supports mounting extensions live over NFS from a development host, so you can change an extension and re-merge it without rebuilding or reflashing. See [Hardware-in-the-loop](/developer-reference/hardware-in-the-loop) and the [org.avocado.Hitl interface](/developer-reference/avocadoctl/varlink-api/org-avocado-hitl).
 
-That path covers extensions only. It does not apply to avocadoctl, which is not an extension.
+That path covers extensions only. avocadoctl is not an extension, so HITL does not reach it; the overlay write above is its equivalent inner loop.
 
 ## What's next
 
