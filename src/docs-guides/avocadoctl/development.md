@@ -67,7 +67,9 @@ The restart matters because the running daemon holds the previous binary's inode
 
 :::caution
 
-The change is ephemeral in the precise sense: it lives in a tmpfs upper layer, so a reboot discards it, and so does any `avocadoctl refresh`. Refresh is unmerge-then-merge, and every runtime mutation calls it, which means an unrelated `runtime` operation can silently put the packaged binary back while you are still testing. If a behaviour you were just observing disappears, check whether something refreshed.
+The change is ephemeral in the precise sense: it lives in a tmpfs upper layer, so a reboot discards it, and so does any `avocadoctl refresh`. Refresh is unmerge-then-merge, and every runtime mutation calls it, so an unrelated `runtime` operation can restore the packaged binary while you are still testing.
+
+Refresh reverts the _file_ but does not restart the daemon, so for a while `avocadoctl --version` reports the packaged version while the running service is still your build. The change actually disappears at the next restart. If the two disagree, something refreshed.
 
 :::
 
