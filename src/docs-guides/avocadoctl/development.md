@@ -59,8 +59,8 @@ The base OS is built with `read-only-rootfs`, so it is reasonable to assume `/us
 Once extensions are merged, `/usr` is no longer the rootfs directly: it is an overlay. avocadoctl merges with `systemd-sysext merge --mutable=ephemeral`, and `ephemeral` gives that overlay a writable tmpfs upper layer. Writes to `/usr` land there and shadow the read-only base rather than failing, so copying a binary over `/usr/bin/avocadoctl` works:
 
 ```bash
-scp target/<triple>/release/avocadoctl device:/usr/bin/avocadoctl
-ssh device systemctl restart avocadoctl.socket avocadoctl.service
+scp target/<triple>/release/avocadoctl root@<device-ip>:/usr/bin/avocadoctl
+ssh root@<device-ip> systemctl restart avocadoctl.socket avocadoctl.service
 ```
 
 The restart matters because the running daemon holds the previous binary's inode; replacing the file on disk does not change the process already serving Varlink.
