@@ -73,7 +73,7 @@ The change is ephemeral in the precise sense: it lives in a tmpfs upper layer, s
 
 This is a development loop, not a delivery mechanism. Nothing about it survives a reboot, and it leaves no record on the device of what is actually running, so a change that is going anywhere near a fleet still needs the RPM.
 
-The mutability mode is configurable, and `ephemeral` is avocadoctl's own default rather than systemd's. An image that sets `ext.sysext_mutable = "no"` in `/etc/avocado/avocadoctl.conf` gets a read-only merged `/usr`, where the copy above fails with `EROFS` instead. If that is your image, the RPM route is the only one.
+The mutability mode is configurable, and `ephemeral` is avocadoctl's own default rather than systemd's. An image that sets `avocado.ext.sysext_mutable = "no"` in `/etc/avocado/avocadoctl.conf` gets a read-only merged `/usr`, where the copy above fails with `EROFS` instead. If that is your image, the RPM route is the only one.
 
 ## Iterating on extensions instead
 
