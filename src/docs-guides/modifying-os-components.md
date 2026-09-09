@@ -5,7 +5,7 @@ copy_markdown: true
 description: 'Where the Avocado CLI ends and Yocto begins: what to rebuild when you change a component that ships in the Avocado base OS.'
 ---
 
-Most development on Avocado never touches Yocto. You declare packages, build extensions, and cross-compile your own applications entirely through the CLI. But when you need to change a component that ships _inside_ the base OS, such as `avocadoctl` or a BSP package, you cross a boundary and the workflow changes.
+Most development on Avocado never touches Yocto. You declare packages, build extensions, and cross-compile your own applications entirely through the Avocado CLI. But when you need to change a component that ships _inside_ the base OS, such as `avocadoctl` or a BSP package, you cross a boundary and the workflow changes.
 
 This guide explains where that boundary is and what each kind of change costs.
 
