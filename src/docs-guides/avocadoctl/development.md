@@ -5,7 +5,7 @@ copy_markdown: true
 description: 'Build and test a modified avocadoctl: which of its two on-device copies your change affects, and what that means for your rebuild.'
 ---
 
-avocadoctl ships inside the Avocado base OS rather than as an extension, so changing it is not the same as iterating on your own application or on extension contents. This page covers what a change to avocadoctl costs to test.
+avocadoctl ships in the Avocado base OS as an RPM, installed into the rootfs and initramfs sysroots. It is the tool that manages systemd-sysext and confext extensions, but it is not delivered as one itself, so changing it is not the same as iterating on your own application or on extension contents. This page covers what a change to avocadoctl costs to test.
 
 Read [Modifying OS components](/developer-reference/modifying-os-components) first for the general rule. The short version: the Avocado CLI consumes RPMs from the feed and does not produce them, so producing a _shippable_ avocadoctl means rebuilding its recipe with BitBake.
 
