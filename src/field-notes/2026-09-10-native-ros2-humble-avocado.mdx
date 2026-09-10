@@ -1,0 +1,262 @@
+---
+title: 'Native ROS 2 Humble on Avocado OS'
+description: 'We built a ROS 2 Humble extension using Avocado, packaged it as an RPM, and consumed it in our Jetson Orin Nano based robotics product.'
+date: 2026-09-10
+draft: false
+authors: [goatracer]
+tags: [ros2, robotics, jetson-orin-nano-devkit, cross-compilation, extensions]
+category: 'Robotics'
+image: /img/field-notes/2026-09-10-native-ros2-humble-avocado-thumb.gif
+image_source: local:2026-09-10-native-ros2-humble-avocado/goat.gif
+featured: true
+# --- internal drafting fields (not rendered) ---
+tested_against: 'Avocado 2024 edge channel, ROS 2 Humble, Avocado CLI >=0.41.0, target jetson-orin-nano-devkit, reference Reality-Web-Services/ros-avocado'
+poster: nsinas
+lift_for_blog: ''
+promote_to_track: ''
+---
+
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus
+  targets={['jetson-orin-nano-devkit']}
+  cli=">=0.41.0"
+  reference={{
+    label: 'Reality-Web-Services/ros-avocado',
+    href: 'https://github.com/Reality-Web-Services/ros-avocado',
+  }}
+/>
+
+:::note[Guest field note]
+
+This guest field note comes from the GOAT Racer team and documents our experience building and deploying native ROS 2 applications on Avocado OS. More information about the GOAT Racer team can be found here: [https://cryptide.com/](https://cryptide.com/)
+
+:::
+
+**TL;DR** — We built a ROS 2 Humble extension using Avocado, packaged it as an RPM, and consumed it in our Jetson Orin Nano based robotics product. Avocado packages the ROS underlay and the two nodes as separate system extensions, with systemd starting the nodes when the runtime boots. The ROS graph runs directly on the device without an application container. On hardware, both services started and exchanged advancing messages on `/avocado/chatter`.
+
+{/* truncate */}
+
+<figure style={{ margin: '0 0 2rem' }}>
+  <img
+    src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/goat.gif"
+    alt="Two autonomous GOAT Racer rovers, Lookahead-v0 and Lookahead-v1, race a taped course with a live leaderboard, throttle and steering traces, speed, and lap distance."
+    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+  />
+</figure>
+
+## Why ROS 2?
+
+We use ROS 2 for the tooling it brings to a complex, multi-component system. It gives our sensors, motor control, and application nodes a common way to communicate, with tools to inspect those connections as we develop and debug. That shared structure makes the system easier to maintain as individual components change.
+
+We run ROS 2 natively so the robot's application nodes follow the same deployment and service model as the rest of the device. Avocado extensions carry the software, systemd manages the services, and calibration stays in writable state.
+
+Most teams working with ROS 2 are using Docker. While Docker has its place, there are simply too many benefits to running ROS 2 natively with Avocado - improved performance, reduced build times, delta OTAs, and the simplicity it brings to our system.
+
+## Why cross-compilation matters on Jetson
+
+The Jetson is the hardware acceptance target, not the build workstation. Compiling every change on it would occupy hardware needed for vehicle testing, require build dependencies on the deployed system, and make each build depend on that robot's state.
+
+Instead, the developer machine can run macOS or Linux on x86-64 or Arm64 while the target remains an AArch64 Jetson running Avocado Linux. Even when both processors are Arm64, macOS binaries and libraries are not Linux binaries and libraries. The target operating system, ABI, headers, and package set still have to match.
+
+The [Avocado SDK](https://docs.avocadolinux.org/guides/sdk-architecture) supplies that target environment off-device: a Jetson sysroot, CMake toolchain, AArch64 compiler, DNF package manager, and extension-building tools. Every developer builds against the same target headers and libraries.
+
+That changes the development loop. We edit on the host, cross-compile against the Jetson sysroot, package the result as an extension, deploy it, and then use the Jetson for the checks only the Jetson can prove: boot behavior, systemd startup, the live ROS graph, serial devices, sensors, GPU access, and timing. The target receives only the resulting Linux libraries, executables, extensions, and service units—not the compiler or build environment.
+
+<PullQuote>
+  **That changes the development loop.** We edit on the host, cross-compile against the Jetson
+  sysroot, package the result as an extension, deploy it, and then use the Jetson for the checks
+  only the Jetson can prove
+</PullQuote>
+
+Application iteration stays small as well. A change to one ROS package can rebuild and deploy its extension without recompiling the ROS distribution, rebuilding the full image, or transferring another application-container layer. The same artifact can then be tested across Jetsons built from the same runtime, separating repeatable software construction from hardware acceptance.
+
+The repository keeps those build rates separate:
+
+```text
+pinned ROS sources
+    -> rws-ext-ros2/ builds AArch64 RPMs and a static package feed
+    -> project/ installs those RPMs into the target sysroot
+    -> colcon cross-compiles the application workspace once
+    -> each ROS package is staged into its own Avocado extension
+    -> the dev runtime is provisioned to the Jetson
+```
+
+`rws-ext-ros2/` pins the upstream ROS repositories and revisions in `sources.lock`. Its package list starts with `rclcpp` and `rclpy` for C++ and Python nodes, `rmw_fastrtps_cpp` for Fast DDS middleware, `ros2cli` and `ros2topic` for command-line inspection, `ros_environment`, and `std_msgs` for standard message types. The build resolves their transitive dependencies from the pinned source set.
+
+The result is split into two AArch64 packages. `ros-avocado-humble-runtime` contains the libraries and tools used on the device. `ros-avocado-humble-dev` contains the headers, CMake metadata, generators, and build tools used inside the application SDK. ROS changes slowly, so that feed can remain fixed while the application workspace changes quickly.
+
+`project/` contains the ROS workspace, runtime definition, extension overlays, and systemd units. It installs the two ROS RPMs as the underlay and runs one colcon build over `project/ros_ws/src`. `AMENT_PREFIX_PATH`, `CMAKE_PREFIX_PATH`, and `COLCON_PREFIX_PATH` point at the Humble underlay in the target sysroot, and CMake receives Avocado's cross-toolchain file.
+
+```text
+.
+├── project/
+│   ├── ros_ws/
+│   ├── avocado.lock
+│   ├── avocado.yaml
+│   └── build.sh
+├── rws-ext-ros2/
+│   ├── ros/humble/
+│   ├── scripts/
+│   ├── avocado.lock
+│   ├── avocado.yaml
+│   └── build.sh
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
+The demonstration workspace contains two conventional C++ packages. `avocado_publisher` publishes a numbered message once per second on `/avocado/chatter`; `avocado_subscriber` logs each message it receives.
+
+## Build and package it
+
+Build the pinned ROS distribution:
+
+```bash
+cd rws-ext-ros2
+./build.sh
+```
+
+The script produces the runtime and development RPMs, then assembles a static DNF repository with package metadata, checksums, source archives, license archives, and build manifests. Serve that feed from the development machine:
+
+```bash
+cd rws-ext-ros2/build/feed
+python3 -m http.server 8000 --bind 0.0.0.0
+```
+
+Build the application runtime from another terminal:
+
+```bash
+cd project
+./build.sh base
+ROS_AVOCADO_FEED_ORIGIN=http://10.0.2.2:8000 ./build.sh dev
+```
+
+For dev, `project/build.sh` supplies the feed URL to DNF, installs the ROS underlay into the SDK, runs `avocado sdk compile ros-workspace`, and then runs `avocado build`. The workspace compiles once, but `install.py` stages each named package into an independent extension. `ros-humble` owns the shared underlay; `ros-publisher` and `ros-subscriber` own their executables and services.
+
+## Read-only software, writable robot state
+
+Avocado uses a read-only root filesystem with composed system and configuration extensions, plus a writable `/var`. That gives ROS nodes a simple filesystem contract: versioned software belongs in an extension; device-specific state does not.
+
+In this project, the ROS installation lands under `/opt/ros/humble`, and the service units land under `/usr/lib/systemd/system`. Both arrive through the extensions and remain read-only at runtime. The publisher and subscriber units set `HOME` and `ROS_HOME` under `/var/lib/ros-avocado`, put caches under `/var/cache/ros-avocado`, and use systemd's `StateDirectory` and `CacheDirectory` directives to create those writable locations. `ProtectSystem=strict` prevents a node from treating the installed software tree as scratch space.
+
+We used that contract again in the GOAT Racer LiDAR stack. The application and service ship in a read-only extension, while hardware configuration and calibration live under `/var`. Updating the software changes the extension; recalibrating one car changes only its writable state.
+
+## Provision and verify the Jetson
+
+The Jetson Orin Nano DevKit boots from NVMe, so I provisioned the runtime with the Tegraflash NVMe profile:
+
+```bash
+avocado provision dev
+```
+
+After provisioning wrote the NVMe layout, Avocado booted with the `ros-humble`, `ros-publisher`, and `ros-subscriber` extensions. The first UART capture confirms the target architecture, ROS distribution, and active systemd services.
+
+<figure style={{ margin: '0 0 2rem' }}>
+  <img
+    src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/uart-01-services-active.png"
+    alt="UART capture showing the aarch64 Jetson running ROS 2 Humble with both application services active."
+    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+  />
+  <figcaption
+    style={{
+      fontSize: '0.8125rem',
+      lineHeight: 1.4,
+      color: 'var(--ifm-color-emphasis-600)',
+      marginTop: '0.5rem',
+    }}
+  >
+    <em>The provisioned aarch64 Jetson runs ROS 2 Humble with both application services active.</em>
+  </figcaption>
+</figure>
+
+I then loaded the device profile and read one message directly from the ROS graph:
+
+```bash
+. /etc/profile
+ros2 topic echo /avocado/chatter std_msgs/msg/String --once --no-daemon
+```
+
+The second capture shows `data: hello from Avocado 1100` alongside subscriber messages 1097 through 1100. Those consecutive values confirm that the publisher, topic, and subscriber were all live.
+
+<figure style={{ margin: '0 0 2rem' }}>
+  <img
+    src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/uart-02-topic-echo.png"
+    alt="Serial session showing one live topic read and four successive subscriber messages."
+    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+  />
+  <figcaption
+    style={{
+      fontSize: '0.8125rem',
+      lineHeight: 1.4,
+      color: 'var(--ifm-color-emphasis-600)',
+      marginTop: '0.5rem',
+    }}
+  >
+    <em>
+      The same serial session shows one live topic read and four successive subscriber messages.
+    </em>
+  </figcaption>
+</figure>
+
+## What we built next: native LiDAR
+
+Publisher and subscriber are intentionally small: they prove the toolchain, package boundary, service lifecycle, and ROS graph without hiding those pieces behind an application. We used the same framework to build the native LiDAR path on GOAT Racer.
+
+The LiDAR application follows the same path as the example nodes: cross-compile it against the pinned ROS underlay, package it as an Avocado extension, deploy it to the Jetson, and let systemd start it with the robot. Once it is running, the live scan is available to normal ROS tools such as RViz.
+
+<figure style={{ margin: '0 0 2rem' }}>
+  <img
+    src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/lidar-01-unmasked.png"
+    alt="RViz showing an unmasked LiDAR scan with a full view around the sensor."
+    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+  />
+  <figcaption
+    style={{
+      fontSize: '0.8125rem',
+      lineHeight: 1.4,
+      color: 'var(--ifm-color-emphasis-600)',
+      marginTop: '0.5rem',
+    }}
+  >
+    <em>The unmasked scan provides a full view around the sensor for initial bring-up.</em>
+  </figcaption>
+</figure>
+
+The mounted sensor also sees parts of the robot carrying it. We capture those fixed self-returns as a per-robot body mask and store the calibration under `/var`. The application remains versioned and read-only, while each physical car keeps its own measured state.
+
+For the vehicle application, we then limit the output to the robot-forward 180-degree field of view:
+
+<figure style={{ margin: '0 0 2rem' }}>
+  <img
+    src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/lidar-02-masked-180.png"
+    alt="RViz showing T4YLOR's live scan limited to the robot-forward 180-degree field of view, with a yellow arc marking the boundary."
+    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+  />
+  <figcaption
+    style={{
+      fontSize: '0.8125rem',
+      lineHeight: 1.4,
+      color: 'var(--ifm-color-emphasis-600)',
+      marginTop: '0.5rem',
+    }}
+  >
+    <em>
+      RViz showing T4YLOR's live scan limited to the robot-forward 180-degree field of view. The
+      yellow arc makes the boundary explicit.
+    </em>
+  </figcaption>
+</figure>
+
+The point is not the sensor protocol or package layout. It is that the same development model scales from two demonstration nodes to a real hardware application: build off-device, deploy a small extension, keep calibration in writable state, and inspect the result through the native ROS graph.
+
+<PullQuote>
+  It is that **the same development model scales from two demonstration nodes to a real hardware
+  application**: build off-device, deploy a small extension, keep calibration in writable state, and
+  inspect the result through the native ROS graph.
+</PullQuote>
+
+## Reproduce it
+
+The complete pub/sub project is available at [Reality-Web-Services/ros-avocado](https://github.com/Reality-Web-Services/ros-avocado). Clone it, build `rws-ext-ros2/`, serve the generated feed, build `project/`, provision the dev runtime, and echo `/avocado/chatter` on the device. To substitute an application package, add it to `project/ros_ws/src` and list it under the corresponding extension's `x-ros-packages`. The SDK will compile it against the same pinned ROS underlay and stage it into its assigned extension.
