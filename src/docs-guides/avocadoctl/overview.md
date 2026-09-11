@@ -18,7 +18,7 @@ avocadoctl is the on-device management tool for Avocado Linux. It provides both 
 
 ## Architecture
 
-avocadoctl operates in a client-daemon model. The daemon listens on a Unix socket and exposes four Varlink interfaces. It is automatically started at boot by the included `avocadoctl` service extension, which is enabled by default in both the initramfs and system scopes. CLI commands connect to the daemon to execute operations. Third-party applications on the device can also connect to the same socket.
+avocadoctl operates in a client-daemon model. The daemon listens on a Unix socket and exposes four Varlink interfaces. It is socket-activated by `avocadoctl.socket`, which the base OS enables by default in both the initramfs and system scopes. CLI commands connect to the daemon to execute operations. Third-party applications on the device can also connect to the same socket.
 
 ```
 ┌─────────────────┐     ┌─────────────────────────────────────┐

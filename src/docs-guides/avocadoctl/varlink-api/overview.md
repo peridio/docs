@@ -10,7 +10,7 @@ avocadoctl exposes four Varlink interfaces over a Unix domain socket. Any applic
 
 **Socket address:** `unix:/run/avocado/avocadoctl.sock`
 
-The daemon is automatically started at boot by the included `avocadoctl` service extension, which is enabled by default in both the initramfs and system scopes. This means the Varlink API is available immediately on all Avocado runtimes without any manual setup.
+The daemon is socket-activated by `avocadoctl.socket`, which the base OS enables by default in both the initramfs and system scopes. This means the Varlink API is available immediately on all Avocado runtimes without any manual setup.
 
 The daemon can also be started manually if needed:
 
