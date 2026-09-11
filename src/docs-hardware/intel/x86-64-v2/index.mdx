@@ -75,7 +75,7 @@ A single image runs on any x86-64-v2 capable processor — Intel or AMD, desktop
 
 ### Production Hardening
 
-Immutable SquashFS root filesystem with A/B partitioning. No filesystem corruption, no failed updates in the field.
+Immutable read-only erofs root filesystem with A/B partitioning. Nothing rewrites the running system in place, and an update that fails leaves the active slot untouched.
 
 ### Atomic OTA Updates
 
