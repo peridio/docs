@@ -49,6 +49,96 @@ Through Avocado's extension system, different applications can maintain separate
 
 Avocado automatically detects and uses hardware cryptographic accelerators present on the target platform. Most modern SoCs include dedicated crypto engines (AES-NI on x86, ARM Crypto Extensions on ARM) that handle encryption at near-native throughput. The system falls back to optimized software implementations only when hardware acceleration is unavailable.
 
+## Enabling encrypted `/var`
+
+Encryption is off by default. An unset or `false` value leaves the plaintext
+`/var` behaviour untouched. Opt a runtime in through its `var` block:
+
+```yaml
+runtimes:
+  prod:
+    target: jetson-orin-nano
+    var:
+      encrypt: true
+      hardware: tpm2
+      recovery: var-recovery
+```
+
+### Choosing a key engine
+
+`hardware` selects which engine binds the volume, and the default is not the
+right choice for production:
+
+| Value | Behaviour |
+| --- | --- |
+| `auto` (default) | Uses whatever the machine ships and probes successfully. If no engine probes, it degrades to Argon2id and reports the degrade. |
+| `tpm2` | Binds to the TPM, and fails closed when that engine is missing. |
+| `caam` | Binds to the NXP CAAM, failing closed the same way. |
+| `none` | No hardware keyslot. Requires `recovery`. |
+
+On `auto`, a unit whose security module did not come up still boots, using a
+software-derived key. Setting `tpm2` turns that case into a failure instead of
+a silent downgrade to software protection.
+
+### Supported targets
+
+On Jetson the key is sealed to the OP-TEE firmware TPM. These targets support
+it today, on the `2026` release and `next` channel:
+
+- `jetson-orin-nano`
+- `jetson-orin-nx`
+- `jetson-agx-orin`
+- `jetson-agx-thor`
+
+A target whose feed does not declare the `encrypted-var` capability and publish
+`cryptsetup-var` fails closed. The initramfs refuses to touch the partition and
+`/var` does not mount, rather than silently staying plaintext.
+
+### What happens on first boot
+
+The flashed partition is encrypted in place, so content seeded at build time
+survives. The initramfs enrols a keyslot sealed to the security module, and
+creates a recovery keyslot alongside it. Later boots open through the sealed
+token, falling back to recovery if the seal no longer matches, which a firmware
+update can cause.
+
+### Operator-held recovery
+
+The default recovery keyslot derives from the device's SoC UID, which is
+readable on the device. For fleet use, hold the master yourself instead:
+
+```console
+$ avocado signing-keys create var-recovery --algorithm hmac-sha256
+```
+
+Name that key in the runtime's `var.recovery`, then enrol a device that is
+already running:
+
+```console
+$ avocado var-key enroll prod --device root@<device-ip>
+```
+
+Nothing derived from the master enters the build. To recover a unit later, with
+the master on the bench and the unit's UID in hand:
+
+```console
+$ avocado var-key derive prod --uid <soc-uid>
+```
+
+This prints the passphrase as hex; `--raw` emits the bytes for piping into
+`cryptsetup --key-file -`.
+
+### Confirming what a device is doing
+
+A unit whose sealed token no longer matches still boots, on the recovery
+keyslot. That is deliberate, so a firmware update cannot strand a device, but
+it means a device can stop being hardware-bound without anyone noticing. Each
+boot publishes its posture, and the pair worth alerting on is a device that has
+a TPM keyslot and did not use it. The same condition is logged at warning level.
+
+Treat posture as an observation for spotting drift across a fleet. It is not
+tamper-evident and is not an attestation.
+
 ## Provisioning and key management
 
 Key provisioning is integrated into the `avocado provision` workflow. During manufacturing provisioning, the CLI can:
