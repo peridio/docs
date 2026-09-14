@@ -18,7 +18,7 @@ import {
 
 Avocado OS is built to help you place products on the EU market.
 
-This page maps the requirements of Regulation (EU) 2024/2847 — the Cyber Resilience Act — to what the operating system provides, what it lets you configure, and what stays in your scope as the manufacturer. The regulation's own wording, numbering, and source citations are included so you can check every mapping against the text and against your own analysis.
+This page maps the requirements of Regulation (EU) 2024/2847 — the Cyber Resilience Act — to what the operating system provides, what it lets you configure, and what stays in your scope as the manufacturer. The Annex I matrices quote the regulation's own wording beneath each requirement, and every section carries its numbering and citations, so you can check the mappings against the text and against your own analysis.
 
 **Jump to:**
 
@@ -67,7 +67,7 @@ The CRA applies in phases. Milestones already in force are struck through below.
 
 <CraTimeline />
 
-Article 14 reporting has been enforceable since 11 September 2026 — fifteen months ahead of the Annex I requirements. It is an organizational capability rather than a technical one, so no operating system can stand it up on your behalf. If you are placing products on the EU market today and have not registered with your national CSIRT, that is the gap to close first.
+Article 14 reporting has been enforceable since 11 September 2026 — fifteen months ahead of the Annex I requirements. It is an organizational capability rather than a technical one, so no operating system can stand it up on your behalf. If you are placing products on the EU market today, being able to identify a reportable event and notify your designated coordinator CSIRT and ENISA inside 24 hours is the gap to close first.
 
 ## Annex I Part I — product properties
 
@@ -79,7 +79,7 @@ The labels below follow the regulation's wording. The status and mapping in each
 
 <AnnexIPartI />
 
-Six of the fourteen are properties of the operating system itself and need no work from you. Six more are capabilities the OS supports but whose policy is yours to set, because the right setting depends on what your product does. The two that remain — the Article 13(2) risk assessment and vulnerability tracking for your own application code — are yours entirely.
+Five of the fourteen are properties of the operating system itself and need no work from you. Seven are capabilities the OS supports but whose policy is yours to set, because the right setting depends on what your product does and who operates it. The two that remain — the Article 13(2) risk assessment and vulnerability tracking for your own application code — are yours entirely.
 
 ## Annex I Part II — vulnerability handling
 
@@ -121,8 +121,9 @@ Annex I Part II, Article 13(8), and Article 14 are organizational obligations. W
     generates. The CRA requires top-level dependencies at minimum. *(Annex I Part II (1))*
   </FeatureCard>
   <FeatureCard title="Vulnerability handling and CVD policy">
-    Your CVD policy, `SECURITY.md`, `security.txt`, advisory format, and response SLAs. Avocado
-    Linux runs the same set for OS components. *(Annex I Part II (4)–(6))*
+    Your CVD policy, `SECURITY.md`, `security.txt`, advisory format, and response SLAs — for your
+    product as a whole. These obligations sit with you as the manufacturer and are not discharged by
+    citing an upstream policy. *(Annex I Part II (4)–(6))*
   </FeatureCard>
   <FeatureCard title="Support period definition">
     Specify and publish a support period, communicated to the user before purchase. Recital 61
@@ -130,8 +131,9 @@ Annex I Part II, Article 13(8), and Article 14 are organizational obligations. W
     *(Article 13(8))*
   </FeatureCard>
   <FeatureCard title="Article 14 reporting capability">
-    Register with your national CSIRT, run the 24-hour / 72-hour / 14-day-or-1-month cadence, and
-    train an on-call rotation. Enforceable since 11 September 2026. *(Article 14(1)–(2))*
+    Identify your designated coordinator CSIRT, run the 24-hour / 72-hour / 14-day-or-1-month
+    cadence, and train an on-call rotation. Enforceable since 11 September 2026. *(Article
+    14(1)–(2))*
   </FeatureCard>
   <FeatureCard title="Conformity assessment and CE marking">
     Complete the assessment route that applies to your product, sign the EU Declaration of

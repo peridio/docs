@@ -123,12 +123,14 @@ const partI = [
         req: 'Security updates, including automatic where applicable',
         quote:
           'ensure that vulnerabilities can be addressed through security updates, including, where applicable, through automatic security updates… with a clear and easy-to-use opt-out mechanism',
-        status: 'os',
+        status: 'cfg',
         where: (
           <>
             TUF-verified updates (Ed25519), A/B partitions with automatic rollback, PKCS#11
-            hardware-backed signing, delta compression, and fleet OTA through{' '}
-            <Link to="/avocado-connect/overview">Avocado Connect</Link>. See{' '}
+            hardware-backed signing, and delta compression. Fleet delivery runs through{' '}
+            <Link to="/avocado-connect/overview">Avocado Connect</Link>, which you configure and
+            from which you activate each deployment — so whether updates are automatic, and what
+            opting out means for your users, is your policy rather than a default. See{' '}
             <Link to="/avocado-os/security/update-architecture">Atomic Update Architecture</Link>.
           </>
         ),
@@ -170,10 +172,10 @@ const partI = [
         status: 'os',
         where: (
           <>
-            Read-only EROFS rootfs, dm-verity with a signed root hash, per-extension SHA-256
-            verification, and BTRFS checksums on <code>/var</code>. The boot chain is signed from
-            the silicon up, with vendor key fuses burned during provisioning. Corruption surfaces in
-            the systemd journal. See{' '}
+            A read-only EROFS rootfs nothing at runtime can modify, SHA-256 verification of every
+            extension before it is merged, and BTRFS checksums on <code>/var</code>. Corruption
+            surfaces in the systemd journal. A signed boot chain, with vendor key fuses burned at
+            provisioning, is available per target rather than everywhere — confirm it for yours. See{' '}
             <Link to="/avocado-os/security/filesystem-integrity">Filesystem Integrity</Link> and{' '}
             <Link to="/avocado-os/security/secure-boot">Secure Boot</Link>.
           </>
@@ -356,9 +358,9 @@ const partII = [
         req: 'Free, timely updates with advisory messages',
         quote:
           'where security patches or updates are available… they are disseminated without delay and free of charge, accompanied by advisory messages providing users with the relevant information',
-        status: 'os',
+        status: 'cfg',
         where:
-          'Signed security updates delivered without delay through the TUF channel, free of charge, with the security content of each release documented in the changelog.',
+          'The OS gives you a signed distribution channel, and the security content of each release is documented in the changelog. Whether your updates reach your users without delay and free of charge depends on the deployments you activate and the terms you set — that half is yours.',
       },
     ],
   },
@@ -464,7 +466,7 @@ const milestones = [
     when: '11 September 2026',
     what: 'Article 14 reporting',
     detail:
-      'Actively exploited vulnerabilities and severe incidents must be notified on the cadence below. CSIRT registration, on-call capability, and reporting templates are required from this date.',
+      'Actively exploited vulnerabilities and severe incidents must be notified on the cadence below. The capability to do that — triage, on-call, and reporting templates — needs to be in place from this date.',
   },
   {
     date: '2027-12-11',
@@ -500,8 +502,14 @@ const timelineColumns = [
 ]
 
 export function CraTimeline() {
-  const today = new Date()
-  const data = [{ rows: milestones.map((m) => ({ ...m, past: new Date(m.date) <= today })) }]
+  /* Compare UTC calendar days on both sides. `new Date('2026-09-11')` parses as UTC
+     midnight while `new Date()` is local, so comparing them directly flips a milestone
+     between "In force" and "Upcoming" depending on the viewer's timezone, and can differ
+     between the static build and hydration. String comparison of YYYY-MM-DD is stable.
+     ponytail: still re-evaluated on the client, so a page held open across UTC midnight
+     hydrates a day stale; inject a build-time constant if that ever matters. */
+  const todayUtc = new Date().toISOString().slice(0, 10)
+  const data = [{ rows: milestones.map((m) => ({ ...m, past: m.date <= todayUtc })) }]
   return (
     <DataTable
       columns={timelineColumns}
