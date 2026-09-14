@@ -63,6 +63,8 @@ The CRA applies to virtually all products with digital elements sold in the EU, 
 - **Secure by default** — Products must ship with secure configurations out of the box. No default passwords, no unnecessary open ports, no debug interfaces left enabled in production. The OS must enforce this structurally, not rely on manual hardening checklists.
 - **Secure update mechanism** — Automatic security updates must be available. The update mechanism itself must be secure — signed, verified, and resilient to tampering.
 
+See the [Cyber Resilience Act](/avocado-os/cra) page for a requirement-by-requirement mapping of Annex I Parts I and II, the Article 14 reporting cadence, and the Annex VII documentation checklist.
+
 **How Avocado addresses this:** Deterministic builds mean every artifact is traceable to its exact source configuration. SBOM generation is built into the build process. The immutable root filesystem enforces secure-by-default — there's nothing to harden because the system can't be modified at runtime. The A/B atomic update architecture with cryptographic verification provides the secure update mechanism the CRA requires. Package feed maintenance with regular CVE patches provides the vulnerability handling cadence.
 
 #### IEC 62443
