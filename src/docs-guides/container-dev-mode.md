@@ -183,6 +183,40 @@ Both names must already be real. `ref` has to match the tag you actually build, 
 
 Only one runtime may enable container dev mode per config. If two runtimes carry a `container_dev` block, the CLI refuses to start and names them both.
 
+### Declare the SDK toolchain
+
+The agent extension ships its source and is compiled for your target when you
+build, so your project needs a cross toolchain in its SDK. The extension
+declares these in its own manifest, but a package-sourced extension does not
+carry them across - you declare them in your config:
+
+```yaml title="avocado.yaml"
+sdk:
+  image: "docker.io/avocadolinux/sdk:{{ config.distro.release }}"
+  # highlight-added-start
+  packages:
+    avocado-sdk-toolchain: '*'
+    nativesdk-binutils: '*'
+    nativesdk-cargo: '*'
+    nativesdk-gcc: '*'
+    nativesdk-glibc-dev: '*'
+    nativesdk-libgcc-dev: '*'
+    nativesdk-rust: '*'
+    packagegroup-rust-cross-canadian-avocado-{{ avocado.target }}: '*'
+  # highlight-added-end
+```
+
+Without them `avocado build` fails part-way through, inside a dependency's build
+script rather than anywhere that names the extension:
+
+```text
+warning: ring@0.17.14: ToolNotFound: failed to find tool "x86_64-avocado-linux-gcc"
+error: failed to run custom build command for `ring v0.17.14`
+```
+
+`avocado install` succeeds either way, and so does the extension's own sysroot
+creation, so the gap does not surface until the build reaches the compile step.
+
 ## Point the CLI at your HIL target
 
 The subcommands take no positional arguments. The target is sourced from the environment, which also lets the CLI auto-detect which host address the target can reach:
