@@ -1,0 +1,181 @@
+---
+title: 'Cyber Resilience Act'
+slug: /avocado-os/cra
+sidebar_position: 5
+description: 'How Avocado OS maps to Regulation (EU) 2024/2847 — Annex I Part I and Part II requirement by requirement, the Article 14 reporting cadence, and the Annex VII documentation you still own.'
+---
+
+import FeatureCardGrid, { FeatureCard } from '@site/src/components/FeatureCardGrid'
+import {
+  AnnexIPartI,
+  AnnexIPartII,
+  AnnexVII,
+  CraTimeline,
+  Legend,
+} from '@site/src/components/CraMatrix'
+
+# Cyber Resilience Act
+
+Avocado OS is built to help you place products on the EU market.
+
+This page maps the requirements of Regulation (EU) 2024/2847 — the Cyber Resilience Act — to what the operating system provides, what it lets you configure, and what stays in your scope as the manufacturer. The Annex I matrices quote the regulation's own wording beneath each requirement, and every section carries its numbering and citations, so you can check the mappings against the text and against your own analysis.
+
+**Jump to:**
+
+- [Where Avocado OS sits inside the regulation](#where-avocado-os-sits-inside-the-regulation) — classification, conformity route, manufacturer status, penalties
+- [Timeline](#timeline) — the four phased dates, and which are already in force
+- [Annex I Part I — product properties](#annex-i-part-i--product-properties) — the fourteen technical requirements, mapped
+- [Annex I Part II — vulnerability handling](#annex-i-part-ii--vulnerability-handling) — the eight process obligations, and who owns each
+- [Article 14 — reporting](#article-14--reporting-to-your-csirt-and-enisa) — the 24-hour / 72-hour / final-report cadence
+- [Annex VII — technical documentation](#annex-vii--the-technical-documentation) — the file your conformity assessment asks for
+- [What stays in your scope](#what-stays-in-your-scope) — the work no operating system can do for you
+
+## Where Avocado OS sits inside the regulation
+
+Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October 2024 sets horizontal cybersecurity requirements for products with digital elements. It was published in the Official Journal on 20 November 2024 and entered into force on 10 December 2024.
+
+<FeatureCardGrid columns={1}>
+  <FeatureCard title="Classification">
+    Annex III lists **operating systems** among the Important Class I categories. On our reading,
+    Avocado OS as an embedded Linux operating system placed on the EU market is likely to fall into
+    this class — though final classification depends on your product and its intended use. *(Annex
+    III)*
+  </FeatureCard>
+  <FeatureCard title="Conformity assessment route">
+    Important Class I manufacturers may be able to use **Module A (internal control)** where
+    harmonised standards or a European cybersecurity certification scheme are applied. Provisions
+    for free and open-source software may also affect the available route. Confirm which route
+    applies to your product. *(Article 32, Annex VIII)*
+  </FeatureCard>
+  <FeatureCard title="Manufacturer status">
+    Article 24 introduces a lighter regime for non-commercial open source software stewards. A
+    commercial entity placing a product on the EU market under its own name will, in most cases, be
+    a **manufacturer under Article 13** — carrying the conformity assessment, technical
+    documentation, and Article 14 reporting obligations. *(Articles 13 and 24)*
+  </FeatureCard>
+  <FeatureCard title="Penalties">
+    As we read Article 64, the highest tier is set for non-compliance with the Annex I essential
+    requirements and the obligations in Articles 13 and 14: up to **€15M or 2.5% of worldwide annual
+    turnover**, whichever is higher. Other obligations reach €10M / 2%, and incorrect or misleading
+    information to authorities €5M / 1%. *(Article 64)*
+  </FeatureCard>
+</FeatureCardGrid>
+
+## Timeline
+
+The CRA applies in phases. Milestones already in force are struck through below.
+
+<CraTimeline />
+
+Article 14 reporting has been enforceable since 11 September 2026 — fifteen months ahead of the Annex I requirements. It is an organizational capability rather than a technical one, so no operating system can stand it up on your behalf. If you are placing products on the EU market today, being able to identify a reportable event and notify your designated coordinator CSIRT and ENISA inside 24 hours is the gap to close first.
+
+## Annex I Part I — product properties
+
+Part I carries fourteen requirements: an umbrella risk-based design obligation in point (1), a stand-alone "no known exploitable vulnerabilities" in point (2), and twelve risk-dependent sub-items in point (3)(a)–(3)(l) that apply _where applicable_ based on your cybersecurity risk assessment under Article 13(2).
+
+The labels below follow the regulation's wording. The status and mapping in each row are Avocado's assessment, which you should verify for your own product.
+
+<Legend />
+
+<AnnexIPartI />
+
+Five of the fourteen are properties of the operating system itself and need no work from you. Seven are capabilities the OS supports but whose policy is yours to set, because the right setting depends on what your product does and who operates it. The two that remain — the Article 13(2) risk assessment and vulnerability tracking for your own application code — are yours entirely.
+
+## Annex I Part II — vulnerability handling
+
+Part II places eight process obligations on the manufacturer. These are organizational, not technical — the OS carries the update and SBOM machinery, but the policies and the people are yours.
+
+Be careful with the assumption that you can cite an upstream policy instead of writing your own. The OS gives you SBOM generation and a signed update channel; CVE monitoring and structured security advisories for the components in your image are available as a commercial feature. The policies and the people — your CVD policy, your security contact, your response process — are yours either way, and the rows below say which is which.
+
+<AnnexIPartII />
+
+## Article 14 — reporting to your CSIRT and ENISA
+
+Article 14 imposes two separate reporting obligations: **actively exploited vulnerabilities** under Article 14(1), and **severe incidents having an impact on product security** under Article 14(2). Both follow a 24-hour early warning and a 72-hour notification. The final report timing differs.
+
+| Deadline          | Report                                                   | Applies to                                                                                                                    |
+| ----------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Within 24 hours   | Early warning                                            | Both vulnerabilities (14(1)) and severe incidents (14(2))                                                                     |
+| Within 72 hours   | Vulnerability or incident notification, in fuller detail | Both vulnerabilities and incidents                                                                                            |
+| 14 days / 1 month | Final report                                             | **14 days** after a corrective measure is available (vulnerabilities); **1 month** after the 72-hour notification (incidents) |
+
+Notifications go to the CSIRT designated as coordinator under the NIS2 framework in your Member State; ENISA receives them through the single reporting platform. The regulation provides for lighter treatment of microenterprises and small enterprises in some respects — check how that applies to you. Vulnerabilities discovered in components, including open-source components, are (as we read Article 13(6)) to be reported to the entity maintaining the component. Confirm the exact cadences against Article 14 before relying on them.
+
+## Annex VII — the technical documentation
+
+Annex VII names the contents of the technical documentation you must produce and retain for the period the regulation sets — generally at least ten years after the product is placed on the market, or the support period if that is longer. Avocado OS is an input to several of these items, not a substitute for any of them.
+
+<Legend statuses={['shared', 'you']} />
+
+<AnnexVII />
+
+## What stays in your scope
+
+Annex I Part II, Article 13(8), and Article 14 are organizational obligations. The OS supplies concrete technical inputs you can fold into them — the SPDX document, the signed update artifacts, the changelog — but the processes, the policies, and the people are yours. None of it is discharged by citing an upstream project.
+
+<FeatureCardGrid columns={1}>
+  <FeatureCard title="Cybersecurity risk assessment">
+    Required by Article 13(2). It determines which Annex I (3) items apply to your product and how
+    rigorously, and it is documented in your technical documentation. *(Article 13(2), Annex VII)*
+  </FeatureCard>
+  <FeatureCard title="Product SBOM">
+    A combined SBOM covering your application dependencies plus the SPDX document Avocado OS
+    generates. The CRA requires top-level dependencies at minimum. *(Annex I Part II (1))*
+  </FeatureCard>
+  <FeatureCard title="Vulnerability handling and CVD policy">
+    Your CVD policy, `SECURITY.md`, `security.txt`, advisory format, and response SLAs — for your
+    product as a whole. These obligations sit with you as the manufacturer and are not discharged by
+    citing an upstream policy. *(Annex I Part II (4)–(6))*
+  </FeatureCard>
+  <FeatureCard title="Support period definition">
+    Specify and publish a support period, communicated to the user before purchase. Recital 61
+    indicates an expectation of at least five years unless the expected product lifetime is shorter.
+    *(Article 13(8))*
+  </FeatureCard>
+  <FeatureCard title="Article 14 reporting capability">
+    Identify your designated coordinator CSIRT, run the 24-hour / 72-hour / 14-day-or-1-month
+    cadence, and train an on-call rotation. Enforceable since 11 September 2026. *(Article
+    14(1)–(2))*
+  </FeatureCard>
+  <FeatureCard title="Conformity assessment and CE marking">
+    Complete the assessment route that applies to your product, sign the EU Declaration of
+    Conformity, and affix the CE marking before placing the product on the market. *(Article 32,
+    Annex V, Annex VIII)*
+  </FeatureCard>
+</FeatureCardGrid>
+
+## Related reading
+
+Nothing on this page is a claim without a source. The architecture behind each mapping is documented across the Security section, the developer reference, and the Field Notes.
+
+### Security architecture
+
+- [Secure Boot](/avocado-os/security/secure-boot) — the hardware root of trust behind Annex I (3)(a) and (3)(e)
+- [Filesystem Integrity](/avocado-os/security/filesystem-integrity) — dm-verity and the immutable rootfs behind (3)(a), (3)(e), and (3)(i)
+- [Hardware-Backed Encryption](/avocado-os/security/encryption) — LUKS and hardware key storage behind (3)(d) and (3)(l)
+- [Atomic Update Architecture](/avocado-os/security/update-architecture) — A/B updates and rollback behind (3)(b) and Part II (7)–(8)
+- [Production-Ready Features](/avocado-os/security/production-ready) — SBOM generation, CVE cadence, and manufacturing security
+
+### How it works in practice
+
+- [OTA Updates](/developer-reference/ota) — the signed update path you operate for (3)(b) and Part II (7)–(8)
+- [Provisioning](/developer-reference/provisioning) — factory provisioning and the re-provisioning route behind (3)(a) and (3)(l)
+- [Package Feeds](/developer-reference/package-feeds) — where the CVE patch cadence behind Annex I (2) comes from
+- [Lockfiles and Build Stamps](/developer-reference/lockfiles-and-build-stamps) — the build determinism that makes an SBOM attributable for Part II (1)
+
+### Field Notes
+
+- [Two boots to trust an update](/field-notes/2026/06/20/two-boots-trust-update) — how A/B rollback makes a bad release survivable, the evidence behind (3)(b) and (3)(g)
+- [Pull the flash off our i.MX93 and you get ciphertext](/field-notes/2026/06/24/hardened-boot-imx93) — LUKS2 `/var` and a TPM2-sealed keyslot verified on i.MX93 hardware, the evidence behind (3)(d). The note is explicit about which controls in it are verified and which are still design, which is the standard to hold any compliance claim to
+
+## References
+
+- **Regulation (EU) 2024/2847** — Official Journal of the European Union, 20 November 2024. [Full text on EUR-Lex](https://eur-lex.europa.eu/eli/reg/2024/2847/oj)
+- [Consolidated version (20 November 2024)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02024R2847-20241120)
+- [PDF](https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32024R2847)
+
+:::warning[Informational only — not legal advice]
+
+This page reflects Avocado's good-faith reading of Regulation (EU) 2024/2847 and maps the OS's technical capabilities to that reading. The CRA's interpretation will continue to be shaped by harmonised standards, official guidance, and enforcement practice that are still developing. Nothing here guarantees compliance. How your product is classified, which conformity assessment route applies, and which requirements apply to it are determinations you are responsible for making — ideally with qualified legal counsel.
+
+:::

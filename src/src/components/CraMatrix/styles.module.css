@@ -1,0 +1,129 @@
+/* CRA compliance matrices — status pills and the verbatim regulation quote.
+   Shares the DataTable card frame; only the in-cell treatments live here. */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Handled by the OS itself — nothing for the manufacturer to build. */
+.os {
+  color: var(--color-status-success);
+}
+.os::before {
+  background: var(--color-status-success);
+}
+
+/* Present in the OS but driven by deployment policy the manufacturer sets. */
+.cfg {
+  color: var(--color-accent-primary);
+}
+.cfg::before {
+  background: transparent;
+  border: 2px solid var(--color-accent-primary);
+}
+
+/* Organizational work no operating system can do on the manufacturer's behalf. */
+.you {
+  color: var(--color-text-tertiary);
+}
+.you::before {
+  background: var(--color-status-neutral);
+}
+
+/* Verbatim wording from the regulation, quoted under each requirement label. */
+.verbatim {
+  display: block;
+  margin-top: 0.35rem;
+  padding-left: 0.6rem;
+  border-left: 2px solid var(--color-border-strong);
+  font-size: 0.72rem;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--color-text-tertiary);
+}
+
+/* "Avocado provides / you add" split inside a single cell. */
+.split {
+  display: block;
+}
+
+.split + .split {
+  margin-top: 0.4rem;
+}
+
+.legend {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin: 1.5rem 0 -0.75rem;
+  padding: 0.625rem 1rem;
+  background: var(--color-bg-muted);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  color: var(--color-text-tertiary);
+}
+
+/* ---- Timeline ---- */
+
+/* A date that has already passed. Struck through so a reader landing on the
+   page mid-2027 isn't told to prepare for something that is already in force.
+   Evaluated at build time, so it refreshes on every deploy. */
+.past {
+  text-decoration: line-through;
+  color: var(--color-text-tertiary);
+}
+
+.when {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.phase {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: 1px;
+}
+
+.inForce {
+  background: var(--color-status-success-bg);
+  color: var(--color-status-success-text);
+}
+
+.upcoming {
+  background: var(--color-brand-a10);
+  color: var(--color-accent-primary);
+}
+
+/* Annex VII's joint-ownership marker. Distinct from .cfg so two different
+   meanings never share one visual. */
+.shared {
+  color: var(--color-accent-primary);
+}
+
+.shared::before {
+  background: var(--color-accent-primary);
+  opacity: 0.45;
+}
