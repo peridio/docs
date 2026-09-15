@@ -52,9 +52,19 @@ Avocado automatically detects and uses hardware cryptographic accelerators prese
 ## Enabling encrypted `/var`
 
 Encryption is off by default. An unset or `false` value leaves the plaintext
-`/var` behaviour untouched. Opt a runtime in through its `var` block:
+`/var` behaviour untouched.
+
+The packages this needs are published on the **2026** release, `next` channel
+only, so a project has to select that feed as well as opting the runtime in.
+`cryptsetup-var` does not exist in the 2024 feed at all, and a 2024 project that
+sets `encrypt: true` fails during `avocado install` with an error that names no
+missing package.
 
 ```yaml
+distro:
+  release: 2026
+  channel: next
+
 runtimes:
   prod:
     target: jetson-orin-nano
@@ -82,17 +92,25 @@ a silent downgrade to software protection.
 
 ### Supported targets
 
-On Jetson the key is sealed to the OP-TEE firmware TPM. These targets support
-it today, on the `2026` release and `next` channel:
+On Jetson the key is sealed to the OP-TEE firmware TPM. These targets declare
+the capability and have the packages published on the `2026` release, `next`
+channel:
 
-- `jetson-orin-nano`
-- `jetson-orin-nx`
-- `jetson-agx-orin`
-- `jetson-agx-thor`
+| Target | Status |
+| --- | --- |
+| `jetson-orin-nano` | verified on hardware |
+| `jetson-orin-nx` | capability declared, not yet verified on hardware |
+| `jetson-agx-orin` | capability declared, not yet verified on hardware |
+| `jetson-agx-thor` | capability declared, not yet verified on hardware |
 
-A target whose feed does not declare the `encrypted-var` capability and publish
-`cryptsetup-var` fails closed. The initramfs refuses to touch the partition and
-`/var` does not mount, rather than silently staying plaintext.
+All four share the same fTPM path, so the three unverified rows are expected to
+behave identically. They are marked separately because only the Orin Nano has
+been booted and inspected end to end.
+
+A target whose feed does not declare the `encrypted-var` capability, or does not
+publish `cryptsetup-var`, fails closed. Either omission is enough: the initramfs
+refuses to touch the partition and `/var` does not mount, rather than silently
+staying plaintext.
 
 ### What happens on first boot
 
@@ -131,10 +149,36 @@ This prints the passphrase as hex; `--raw` emits the bytes for piping into
 ### Confirming what a device is doing
 
 A unit whose sealed token no longer matches still boots, on the recovery
-keyslot. That is deliberate, so a firmware update cannot strand a device, but
-it means a device can stop being hardware-bound without anyone noticing. Each
-boot publishes its posture, and the pair worth alerting on is a device that has
-a TPM keyslot and did not use it. The same condition is logged at warning level.
+keyslot. That is deliberate, so a firmware update cannot strand a device, but it
+means a device can stop being hardware-bound without anyone noticing.
+
+Ask the device which keyslots it has and which one opened it:
+
+```console
+# avocadoctl var-key list
+device: /dev/mmcblk0p16
+slot 0: passphrase (Argon2id recovery / derived key)
+slot 1: systemd-tpm2
+```
+
+A unit that still lists a `systemd-tpm2` slot but opened without it is the case
+to catch. The same condition is logged at warning level, so it appears in
+`journalctl -p warning`:
+
+```text
+avocado-posture: /var has a TPM2 keyslot but opened with the Argon2id recovery
+key - PCR 7 no longer matches what was sealed
+```
+
+On targets that boot through U-Boot the same facts are also published into the
+U-Boot environment each boot, as `avocado_var_encrypted`, `avocado_var_unlock`,
+`avocado_var_tpm2_token`, `avocado_var_hwkey` and `avocado_var_recovery`, which
+gives a fleet a single value to query. The pair worth alerting on there is
+`avocado_var_tpm2_token=yes` with `avocado_var_unlock=argon2id`.
+
+**Jetson has no U-Boot in its boot chain**, so that path publishes nothing there
+and `fw_printenv` shows no `avocado_var_*` keys. On Jetson use `avocadoctl
+var-key list` and the journal.
 
 Treat posture as an observation for spotting drift across a fleet. It is not
 tamper-evident and is not an attestation.
