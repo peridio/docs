@@ -323,8 +323,7 @@ const partII = [
         req: 'Coordinated vulnerability disclosure policy',
         quote: 'put in place and enforce a policy on coordinated vulnerability disclosure',
         status: 'you',
-        youAdd:
-          'Your product-level CVD policy. Avocado Linux does not publish one today, so do not plan to cite ours for the OS components — write yours to stand on its own.',
+        youAdd: 'A coordinated vulnerability disclosure policy for your product.',
       },
       {
         cite: 'Part II (6)',
@@ -335,8 +334,7 @@ const partII = [
         youAdd: (
           <>
             A <code>SECURITY.md</code>, a <code>security.txt</code> at <code>/.well-known/</code>,
-            and a contact address someone actually monitors, so a researcher has an unambiguous
-            route to reach you.
+            and a monitored contact address for vulnerability reports.
           </>
         ),
       },
