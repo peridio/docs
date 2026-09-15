@@ -21,6 +21,12 @@ const config = {
     },
   },
   favicon: 'img/logo.svg',
+  customFields: {
+    // Serialized once at build and read identically on server and client, so
+    // anything dating itself against "now" renders the same value in the static
+    // HTML, after hydration, and for a visitor with JavaScript disabled.
+    buildDate: new Date().toISOString().slice(0, 10),
+  },
   organizationName: 'peridio',
   projectName: 'peridio-docs',
   trailingSlash: false,

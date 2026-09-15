@@ -1,6 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import Link from '@docusaurus/Link'
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import DataTable from '../DataTable'
 import styles from './styles.module.css'
 
@@ -11,7 +12,7 @@ const STATUS = {
   cfg: { className: styles.cfg, label: 'Configurable' },
   you: { className: styles.you, label: 'You complete' },
   /* Annex VII only: the item is jointly sourced rather than configured. */
-  shared: { className: styles.cfg, label: 'Avocado + you' },
+  shared: { className: styles.shared, label: 'Avocado + you' },
 }
 
 function Pill({ status }) {
@@ -19,14 +20,23 @@ function Pill({ status }) {
   return <span className={clsx(styles.pill, className)}>{label}</span>
 }
 
-export function Legend() {
+const LEGEND_TEXT = {
+  os: 'OS default — handled by Avocado OS',
+  cfg: 'Configurable — supported in the OS, you set the policy',
+  you: 'You complete — manufacturer obligation',
+  shared: 'Avocado + you — our artifact, folded into your document',
+}
+
+/* Each table renders the subset of statuses its own rows use, so a reader never
+   meets a pill the legend above it does not explain. */
+export function Legend({ statuses = ['os', 'cfg', 'you'] }) {
   return (
     <div className={styles.legend} role="note" aria-label="Status legend">
-      <span className={clsx(styles.pill, styles.os)}>OS default — handled by Avocado OS</span>
-      <span className={clsx(styles.pill, styles.cfg)}>
-        Configurable — supported in the OS, you set the policy
-      </span>
-      <span className={clsx(styles.pill, styles.you)}>You complete — manufacturer obligation</span>
+      {statuses.map((key) => (
+        <span key={key} className={clsx(styles.pill, STATUS[key].className)}>
+          {LEGEND_TEXT[key]}
+        </span>
+      ))}
     </div>
   )
 }
@@ -157,9 +167,11 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            LUKS2 encryption for the writable <code>/var</code> partition, with the key sealed to a
-            TPM2 and enrolled on first boot, alongside a per-device recovery keyslot derived from
-            the SoC UID (<code>avocado var-key</code>). Pull the flash and you get ciphertext. See{' '}
+            LUKS2 encryption for the writable <code>/var</code> partition. Where the target carries
+            a TPM2 or equivalent security module the key is sealed to it and enrolled on first boot;
+            where it does not, software key derivation is the fallback. A per-device recovery
+            keyslot derived from the SoC UID is enrolled alongside it. Confirm which path your
+            target takes. See{' '}
             <Link to="/avocado-os/security/encryption">Hardware-Backed Encryption</Link>.
           </>
         ),
@@ -293,9 +305,11 @@ const partII = [
         req: 'Address and remediate without delay; separate security from functionality updates where feasible',
         quote:
           'address and remediate vulnerabilities without delay, including by providing security updates; where technically feasible, new security updates shall be provided separately from functionality updates',
-        status: 'os',
-        where:
-          'TUF-verified security updates for Avocado OS. Extension-level granularity is what lets a security update ship without carrying a functional change alongside it.',
+        status: 'you',
+        provides:
+          'Security updates for the OS components, and extension-level granularity so a security update can ship without carrying a functional change alongside it.',
+        youAdd:
+          'The remediation process for your product — triage, prioritisation, and shipping the fix without delay. A distribution mechanism is not the same as a process that uses it.',
       },
       {
         cite: 'Part II (3)',
@@ -419,9 +433,9 @@ const annexVII = [
       },
       {
         item: 'Vulnerability handling process description (Annex I Part II)',
-        status: 'shared',
+        status: 'you',
         notes:
-          'Your CVD policy and security contact, referencing the Avocado Linux upstream processes for OS components.',
+          'Your CVD policy, security contact, and response process. Manufacturer-owned end to end.',
       },
       {
         item: 'Software Bill of Materials',
@@ -500,14 +514,14 @@ const timelineColumns = [
 ]
 
 export function CraTimeline() {
-  /* Compare UTC calendar days on both sides. `new Date('2026-09-11')` parses as UTC
-     midnight while `new Date()` is local, so comparing them directly flips a milestone
-     between "In force" and "Upcoming" depending on the viewer's timezone, and can differ
-     between the static build and hydration. String comparison of YYYY-MM-DD is stable.
-     ponytail: still re-evaluated on the client, so a page held open across UTC midnight
-     hydrates a day stale; inject a build-time constant if that ever matters. */
-  const todayUtc = new Date().toISOString().slice(0, 10)
-  const data = [{ rows: milestones.map((m) => ({ ...m, past: m.date <= todayUtc })) }]
+  /* Dated against the build, not the wall clock. siteConfig.customFields.buildDate is a
+     UTC YYYY-MM-DD string serialized once at build time, so the static HTML, the hydrated
+     page, and a no-JavaScript visitor all agree on which milestones are in force. Reading
+     `new Date()` here instead would let the same page disagree with itself across a
+     midnight boundary. Both sides are UTC calendar days, compared as strings. */
+  const { siteConfig } = useDocusaurusContext()
+  const buildDate = siteConfig.customFields.buildDate
+  const data = [{ rows: milestones.map((m) => ({ ...m, past: m.date <= buildDate })) }]
   return (
     <DataTable
       columns={timelineColumns}

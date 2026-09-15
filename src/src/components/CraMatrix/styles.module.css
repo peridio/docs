@@ -116,3 +116,14 @@
   background: var(--color-brand-a10);
   color: var(--color-accent-primary);
 }
+
+/* Annex VII's joint-ownership marker. Distinct from .cfg so two different
+   meanings never share one visual. */
+.shared {
+  color: var(--color-accent-primary);
+}
+
+.shared::before {
+  background: var(--color-accent-primary);
+  opacity: 0.45;
+}
