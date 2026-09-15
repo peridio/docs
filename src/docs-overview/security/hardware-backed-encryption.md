@@ -67,7 +67,7 @@ distro:
 
 runtimes:
   prod:
-    target: imx93-frdm
+    target: jetson-orin-nano
     var:
       encrypt: true
       hardware: tpm2
@@ -79,12 +79,12 @@ runtimes:
 `hardware` selects which engine binds the volume, and the default is not the
 right choice for production:
 
-| Value | Behaviour |
-| --- | --- |
+| Value            | Behaviour                                                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `auto` (default) | Uses whatever the machine ships and probes successfully. If no engine probes, it degrades to Argon2id and reports the degrade. |
-| `tpm2` | Binds to the TPM, and fails closed when that engine is missing. |
-| `caam` | Binds to the NXP CAAM, failing closed the same way. |
-| `none` | No hardware keyslot. Requires `recovery`. |
+| `tpm2`           | Binds to the TPM, and fails closed when that engine is missing.                                                                |
+| `caam`           | Binds to the NXP CAAM, failing closed the same way.                                                                            |
+| `none`           | No hardware keyslot. Requires `recovery`.                                                                                      |
 
 On `auto`, a unit whose security module did not come up still boots, using a
 software-derived key. Setting `tpm2` turns that case into a failure instead of
@@ -92,48 +92,55 @@ a silent downgrade to software protection.
 
 ### Supported targets
 
-The key is sealed to an OP-TEE firmware TPM (fTPM). That path is wired and
-verified on `imx93-frdm`; it is not available on Jetson yet:
+On Jetson the key is sealed to the OP-TEE firmware TPM. These targets declare
+the capability and have the packages published on the `2026` release, `next`
+channel:
 
-| Target | Status |
-| --- | --- |
-| `imx93-frdm` | verified on hardware |
-| `jetson-orin-nano-devkit` | not available - `optee-ftpm` is not yet wired for this board family |
-| `jetson-agx-orin-devkit` | not available - `optee-ftpm` is not yet wired for this board family |
+| Target             | Status                                            |
+| ------------------ | ------------------------------------------------- |
+| `jetson-orin-nano` | verified on hardware                              |
+| `jetson-orin-nx`   | capability declared, not yet verified on hardware |
+| `jetson-agx-orin`  | capability declared, not yet verified on hardware |
+| `jetson-agx-thor`  | capability declared, not yet verified on hardware |
 
-Setting `hardware: tpm2` on a Jetson target hits the "engine missing" case
-from the table above: there is no fTPM to bind to on those boards yet, so the
-initramfs fails closed rather than mounting `/var` unsealed.
+All four share the same fTPM path, so the three unverified rows are expected to
+behave identically. They are marked separately because only the Orin Nano has
+been booted and inspected end to end.
 
-A target whose feed does not declare the `encrypted-var` capability at all, or
-does not publish `cryptsetup-var`, fails closed the same way.
+Note the 2026 feed drops the `-devkit` suffix the 2024 feed used
+(`jetson-orin-nano-devkit` there vs. `jetson-orin-nano` here), so a project
+moving release also renames its target.
+
+A target whose feed does not declare the `encrypted-var` capability, or does not
+publish `cryptsetup-var`, fails closed. Either omission is enough: the initramfs
+refuses to touch the partition and `/var` does not mount, rather than silently
+staying plaintext.
 
 ### What happens on first boot
 
-First boot runs `luksFormat` on the raw partition and creates a fresh BTRFS
-filesystem inside the new LUKS2 container - it does not convert whatever was
-already on the partition. Anything seeded into `/var` at build time is
-discarded, not preserved; ship seed data through a different mechanism if a
-device needs it present on first boot. The initramfs enrols a keyslot sealed
-to the security module at the same time, and creates a recovery keyslot
-alongside it. Later boots open through the sealed token, falling back to
-recovery if the seal no longer matches, which a firmware update can cause.
+The flashed partition is encrypted in place, so content seeded at build time
+survives. `cryptsetup-var` runs `cryptsetup reencrypt --encrypt`, confined to
+the filesystem's own extent, rather than reformatting the partition - a
+`luksFormat` only runs on a genuinely blank partition, as the fallback for a
+device that was never seeded. The initramfs enrols a keyslot sealed to the
+security module at the same time, and creates a recovery keyslot alongside it.
+Later boots open through the sealed token, falling back to recovery if the seal
+no longer matches, which a firmware update can cause.
 
 ### Operator-held recovery
 
 The default recovery keyslot derives from the device's SoC UID, which is
 readable on the device. For fleet use, hold the master yourself instead.
 
-`avocado signing-keys create` does not apply here - it manages PKCS#11 and
-hardware-backed signing keys, not a raw HMAC secret. Generate the master with
-a standard tool instead:
+An operator-held master fixes that, and lets the UID-derived slot be retired.
+Create it once:
 
 ```console
-$ openssl rand -hex 32 > var-recovery.hex
+$ avocado signing-keys create var-recovery --algorithm hmac-sha256
 ```
 
-Save it as `var-recovery` to match the runtime's `var.recovery`, then enrol a
-device that is already running:
+Name that key in the runtime's `var.recovery`, then enrol a device that is
+already running:
 
 ```console
 $ avocado var-key enroll prod --device root@<device-ip>
