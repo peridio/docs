@@ -3,18 +3,6 @@ sidebar_position: 3
 title: 'Container dev mode'
 copy_markdown: true
 description: 'Layer-aware hot-reload for containers on Avocado OS - change one line and ship only the changed layer to a running device, with no reflash and no full image re-push.'
-draft: true # PRE-RELEASE feature - keep off the live site until Container Dev Mode ships
-# PRE-RELEASE NOTE (not for readers): every `avocado container dev` subcommand on
-# this page exists only on the unmerged avocado-cli container-dev-mode branch, so
-# a reader who follows this guide today runs a subcommand no released CLI has.
-# The companion field note is gated for the same reason. Dropping this one line
-# republishes the page: the `src/sidebars-guides.js` entry stays put, because
-# Docusaurus resolves a draft doc into `draftIds` and leaves the sidebar alone
-# rather than failing. Re-verify the commands against a released build first.
-# Un-draft this page in the SAME commit as the field note, or before it: the note
-# links /developer-reference/container-dev-mode, which is not a route while this
-# page is draft, and onBrokenLinks is 'throw'. This page can publish alone; the
-# note cannot.
 ---
 
 Container dev mode is the inner development loop for a containerized application running on an Avocado OS device. You keep building images the way you already do (`docker build`), and the changed layer is pushed to the device and the container restarted, in place, on the running system. There is no reflash, no full image re-transfer, and no rebuild of the OS.
