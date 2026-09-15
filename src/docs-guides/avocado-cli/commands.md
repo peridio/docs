@@ -1886,6 +1886,7 @@ Options:
       --key-label <LABEL>       Label of existing key to reference in the device
       --generate                Generate a new key in the device
       --auth <METHOD>           Authentication method for PKCS#11 device (none, prompt, env) [default: prompt]
+      --algorithm <ALGORITHM>   Key algorithm: ed25519 (default), rsa2048 / rsa4096 for boot-FIT signing (a PEM key + self-signed certificate, generated with openssl), or hmac-sha256 for the secret master a runtime's var.recovery names [default: ed25519]
       --runs-on <USER@HOST>     Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>     NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>         SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
@@ -1932,6 +1933,78 @@ Options:
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
   -h, --help                 Print help
 
+```
+
+---
+
+## Var Key Commands
+
+### `avocado var-key`
+
+```
+Operator-held recovery key for an encrypted /var (runtimes.<r>.var.recovery)
+
+Usage: avocado var-key [OPTIONS] <COMMAND>
+
+Commands:
+  enroll  Enrol this device's recovery keyslot: derive HMAC(master, SoC UID) and hand it to avocadoctl over SSH
+  derive  Print the recovery passphrase for a device UID (bench recovery of a unit's /var)
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+```
+
+---
+
+### `avocado var-key enroll`
+
+```
+Enrol this device's recovery keyslot: derive HMAC(master, SoC UID) and hand it to avocadoctl over SSH
+
+Usage: avocado var-key enroll [OPTIONS] --device <DEVICE> <RUNTIME>
+
+Arguments:
+  <RUNTIME>  Runtime whose var.recovery names the master secret
+
+Options:
+  -d, --device <DEVICE>      Device to enrol, as user@host
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose              Show the device's output
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+```
+
+---
+
+### `avocado var-key derive`
+
+```
+Print the recovery passphrase for a device UID (bench recovery of a unit's /var)
+
+Usage: avocado var-key derive [OPTIONS] --uid <UID> <RUNTIME>
+
+Arguments:
+  <RUNTIME>  Runtime whose var.recovery names the master secret
+
+Options:
+      --uid <UID>            The device's SoC UID as it reports it (device tree serial-number, or soc0 serial_number)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --raw                  Emit the raw 32 bytes instead of hex, for `cryptsetup --key-file -`
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
 ```
 
 ---
