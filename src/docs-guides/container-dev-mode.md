@@ -192,7 +192,7 @@ carry them across - you declare them in your config:
 
 ```yaml title="avocado.yaml"
 sdk:
-  image: "docker.io/avocadolinux/sdk:{{ avocado.distro.release }}-{{ avocado.distro.channel }}"
+  image: 'docker.io/avocadolinux/sdk:{{ avocado.distro.release }}-{{ avocado.distro.channel }}'
   # highlight-added-start
   packages:
     avocado-sdk-toolchain: '*'
