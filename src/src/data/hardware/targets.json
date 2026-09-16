@@ -72,6 +72,58 @@
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/qualcomm/rubik-pi-3"
   },
+  "rb3gen2": {
+    "name": "Qualcomm RB3 Gen 2",
+    "target": "rb3gen2",
+    "releases": {
+      "2026": "supported"
+    },
+    "category": "physical",
+    "description": "The RB3 Gen 2 is provisioned by flashing the kit's onboard UFS storage over USB while the SoC is in Qualcomm EDL (Emergency Download) mode. One target backs the core kit and both mezzanines; name the kit with default_target_board (rb3gen2-vision or rb3gen2-industrial) and set distro.release to 2026 and distro.channel to next before installing.",
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": [
+        "Qualcomm RB3 Gen 2 Development Kit (core kit, Vision Kit or Industrial Kit) with its power supply",
+        "USB-C data cable from the kit's USB-C port to your host for flashing"
+      ],
+      "options": [
+        {
+          "id": "ufs",
+          "label": "UFS (EDL)",
+          "profile": "ufs",
+          "media": "Onboard UFS storage (flashed over USB)",
+          "autoMount": false,
+          "command": "avocado provision -r dev --profile ufs",
+          "description": "Provision the dev runtime to the kit's onboard UFS storage. The system image is flashed over the USB-C data connection while the SoC is in EDL mode. The ufs profile is required: it mounts the host's USB bus into the provisioning container.",
+          "steps": [
+            {
+              "type": "text",
+              "content": "Provisioning flashes the runtime to UFS over USB. When it completes you'll see:"
+            },
+            {
+              "type": "code",
+              "content": "[SUCCESS] Successfully provisioned runtime 'dev'"
+            }
+          ],
+          "recoveryMode": {
+            "reference": {
+              "url": "https://www.qualcomm.com/developer/hardware/rb3-gen-2-development-kit",
+              "label": "Qualcomm RB3 Gen 2 Development Kit"
+            },
+            "steps": [
+              "With the USB-C data cable connected to your host, put the kit into Qualcomm EDL mode following the RB3 Gen 2 documentation linked above."
+            ],
+            "verifyCommand": "lsusb",
+            "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode). 05c6:900e is the SoC's dload/ramdump mode, not EDL \u2014 power-cycle the board into EDL again if you see it."
+          },
+          "bootInstructions": "Disconnect the USB-C data cable and power-cycle the kit. It boots Avocado OS from the onboard UFS storage.",
+          "bootNote": "The root user is passwordless in the dev runtime, and the avocado-ext-sshd-dev extension in the generated project brings up SSH."
+        }
+      ]
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/qualcomm/rb3-gen-2"
+  },
   "qemuarm64": {
     "name": "QEMU ARM64",
     "target": "qemuarm64",

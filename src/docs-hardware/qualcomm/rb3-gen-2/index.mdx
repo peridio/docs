@@ -1,0 +1,122 @@
+---
+title: 'Qualcomm RB3 Gen 2 Development Kit'
+sidebar_position: 0
+description: 'Qualcomm RB3 Gen 2 (QCS6490) Vision and Industrial kits on Avocado OS: PREEMPT_RT kernel, KVM, camera pipeline, secure OTA and fleet management on the 2026 release feed.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+<HardwareHero
+  vendor="Qualcomm"
+  vendorUrl="https://www.qualcomm.com/developer/hardware/rb3-gen-2-development-kit"
+  model="RB3 Gen 2"
+  tagline="Qualcomm's QCS6490 reference kit for robotics and edge AI, with Vision and Industrial mezzanines, production-ready with Avocado OS + Avocado Connect."
+  image="/img/rb3gen2/rb3-gen-2.png"
+  imageAlt="Qualcomm RB3 Gen 2 development kit"
+  stats={[
+    { value: '12 TOPS', label: 'AI Performance' },
+    { value: 'QCS6490', label: 'Octa-core Kryo 670 (6nm)' },
+    { value: '8GB', label: 'LPDDR4x Memory' },
+    { value: '128GB', label: 'UFS 2.2 Storage' },
+    { value: 'Wi-Fi 6E', label: 'Bluetooth 5.2' },
+    { value: 'PREEMPT_RT', label: 'Real-time kernel + KVM' },
+  ]}
+  target="rb3gen2"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+  }}
+/>
+
+## Overview
+
+The Qualcomm RB3 Gen 2 is Qualcomm's own development kit for the QCS6490: a core board with the SoC, memory, storage and wireless, plus optional mezzanine boards that add the hardware for a use case. Qualcomm sells it as the **Vision Kit** (core kit plus the vision mezzanine and cameras) and the **Industrial Kit** (core kit plus the industrial mezzanine).
+
+With Avocado OS the kit becomes a production target: an immutable, composable Linux base with secure OTA updates, rollback protection and fleet management through Avocado Connect. Each mezzanine is its own board support extension, so the same project targets the core kit or either mezzanine by naming the board.
+
+## Specifications
+
+| Specification  | Value                                            | Notes                                        |
+| -------------- | ------------------------------------------------ | -------------------------------------------- |
+| Processor      | Qualcomm QCS6490, Kryo 670 octa-core             | 6nm process, Cortex-A78 and Cortex-A55 cores |
+| AI Performance | 12 TOPS                                          | Hexagon Processor with fused AI-accelerator  |
+| GPU            | Adreno 643                                       |                                              |
+| Memory         | 8GB LPDDR4x                                      |                                              |
+| Storage        | 128GB UFS 2.2                                    | Provisioned over USB in EDL mode             |
+| Wireless       | Wi-Fi 6E, Bluetooth 5.2                          |                                              |
+| Mezzanines     | Vision (cameras, ISP), Industrial (discrete TPM) | Selected per project by board name           |
+| OS Support     | Avocado OS 2026 release                          | Stock and PREEMPT_RT kernels in the feed     |
+
+## Kits and board names
+
+One Avocado target, `rb3gen2`, backs every kit. The mezzanine is chosen by the **board** name, which selects the matching BSP extension; the mezzanine extensions depend on the core-kit extension, so naming a mezzanine pulls both in order.
+
+| Kit                    | Board name           | BSP extension                    | Adds                                                           | Status                                   |
+| ---------------------- | -------------------- | -------------------------------- | -------------------------------------------------------------- | ---------------------------------------- |
+| Core kit, no mezzanine | `rb3gen2` (default)  | `avocado-bsp-rb3gen2`            | Base board support                                             | Published, not yet validated on hardware |
+| Vision Kit             | `rb3gen2-vision`     | `avocado-bsp-rb3gen2-vision`     | Camera pipeline: the CAMSS ISP and the cameras as V4L2 devices | Validated on hardware                    |
+| Industrial Kit         | `rb3gen2-industrial` | `avocado-bsp-rb3gen2-industrial` | The mezzanine's discrete TPM                                   | Published, not yet validated on hardware |
+
+Set the board next to the target in `avocado.yaml`:
+
+```yaml title="avocado.yaml"
+default_target: rb3gen2
+default_target_board: rb3gen2-vision
+```
+
+`AVOCADO_TARGET_BOARD=rb3gen2-vision` in the environment or `--target-board rb3gen2-vision` on the command line does the same for one invocation; see [Default target and board](/developer-reference/avocado-cli/configuration#default-target-and-board) for the precedence rules. The mezzanine's device-tree overlay is built into the runtime image, so a core kit that was provisioned without a board can be moved to a mezzanine with an OTA update rather than a reflash.
+
+## On Avocado OS
+
+- **2026 release feed.** The target is published on the 2026 release, `next` channel. `avocado init` writes a 2024 `distro:` block, so change it before the first install (see below).
+- **Real-time and virtualization.** The 2026 feed for this target carries both a stock and a PREEMPT_RT kernel; the project picks one with `kernel.version`. KVM is available on the RT kernel when the board runs the KVM firmware configuration.
+- **Camera pipeline.** With the Vision Kit board selected, the ISP comes up and the kit's cameras appear as `/dev/video*` devices.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `rb3gen2`, available on the **2026** release feed. After `avocado init --target rb3gen2`, point the project at the 2026 feed and name your kit:
+
+```yaml title="avocado.yaml"
+default_target: rb3gen2
+default_target_board: rb3gen2-vision # or rb3gen2-industrial; omit for the core kit
+
+distro:
+  release: 2026
+  channel: next
+```
+
+Then install and build as usual:
+
+```bash title="Host machine"
+avocado install
+avocado build
+```
+
+### Provision
+
+Provisioning flashes Avocado OS to the kit's onboard UFS storage over USB while the SoC is in Qualcomm EDL (Emergency Download) mode. Connect a USB-C data cable from the kit's USB-C port to your host and put the kit into EDL mode following [Qualcomm's RB3 Gen 2 documentation](https://www.qualcomm.com/developer/hardware/rb3-gen-2-development-kit). Confirm it before flashing:
+
+```bash title="Host machine"
+lsusb
+```
+
+Look for a Qualcomm device with ID `05c6:9008`. `05c6:900e` is the SoC's dload/ramdump mode, where the board lands after a failed boot, not EDL; power-cycle the board into EDL again if you see it.
+
+Then provision the `dev` runtime with the `ufs` profile. The profile is required: it is what mounts the host's USB bus into the provisioning container.
+
+```bash title="Host machine"
+avocado provision -r dev --profile ufs
+```
+
+### Run
+
+Once provisioning completes, disconnect the USB-C data cable and power-cycle the kit. It boots Avocado OS from the onboard UFS storage. The `root` user is passwordless in the `dev` runtime used by this guide, and the `avocado-ext-sshd-dev` extension in the generated project brings up SSH.
+
+## Example project
+
+[KVM ivshmem zero-copy](https://github.com/avocado-linux/references/tree/jschneck/kvm-ivshmem-zero-copy/kvm-ivshmem-zero-copy) runs two KVM guests on the RB3 Gen 2's PREEMPT_RT kernel and passes data between them through shared host memory with no copies. It exercises the RT kernel selection, the mezzanine board flow and the EDL provisioning path described above, and is a working template for an extension-per-VM layout.

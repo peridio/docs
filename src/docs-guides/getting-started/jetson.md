@@ -73,7 +73,7 @@ cd jetson-orin-nano-devkit
 Install the SDK toolchain, extension dependencies, and runtime packages.
 
 ```bash
-avocado install -f
+avocado install
 ```
 
 ## Build

@@ -309,62 +309,61 @@ avocadoctl ext unmerge --unmount
 
 ### `avocadoctl hitl mount`
 
-Mounts extensions from a remote NFS server for hardware-in-the-loop (HITL) development. This enables live development on target hardware by mounting extension directories from the development host. NFS is mounted with NFSv4, hard timeout, and caching disabled for live updates.
+Mounts extensions served by `avocado hitl start` on the development host over NFS and merges them into the running system, so the device runs the extension tree from the host instead of the installed image. The mount is NFSv4.1 with soft timeouts and caching enabled; after rebuilding on the host, `avocado hitl sync` (which runs `avocadoctl ext refresh` on the device) makes the device pick up the change. A watchdog started by `mount` unmounts the share and falls back to the installed extension if the server goes away, instead of leaving the merged overlay hanging on a dead mount.
+
+:::danger Physical hardware
+Live-mounting an extension that the running system already depends on has taken down a physical device's `/usr` until a power-cycle. Until the fix lands, use HITL against the QEMU target only. See [Hardware in the loop](/developer-reference/hardware-in-the-loop).
+:::
 
 ```
-avocadoctl hitl mount [OPTIONS] -s <SERVER_IP> <EXTENSION>...
+avocadoctl hitl mount [OPTIONS] -s <IP> -e <NAME>...
 ```
 
 #### Options
 
-| Option                          | Description                      |
-| ------------------------------- | -------------------------------- |
-| `-s`, `--server-ip <SERVER_IP>` | NFS server IP address (required) |
-| `-e`, `--server-port <PORT>`    | NFS server port                  |
-
-#### Arguments
-
-| Argument       | Description                          |
-| -------------- | ------------------------------------ |
-| `EXTENSION...` | One or more extension names to mount |
+| Option                       | Description                                       |
+| ---------------------------- | ------------------------------------------------- |
+| `-s`, `--server-ip <IP>`     | HITL server IP address (required)                 |
+| `-p`, `--server-port <PORT>` | HITL server NFS port (default: `12049`)           |
+| `-e`, `--extension <NAME>`   | Extension to mount; repeat for several (required) |
 
 #### Examples
 
 ```bash
-# Mount a single extension from a remote server
-avocadoctl hitl mount -s 192.168.1.100 my-app
+# Mount a single extension from the development host
+avocadoctl hitl mount -s 192.168.1.100 -e my-app
 
 # Mount multiple extensions
-avocadoctl hitl mount -s 192.168.1.100 my-app my-config
+avocadoctl hitl mount -s 192.168.1.100 -e my-app -e my-config
 
-# Mount with a custom NFS port
-avocadoctl hitl mount -s 192.168.1.100 -e 2049 my-app
+# Mount from a server on a non-default port
+avocadoctl hitl mount -s 192.168.1.100 -p 2049 -e my-app
 ```
 
 ---
 
 ### `avocadoctl hitl unmount`
 
-Unmounts previously mounted NFS extensions. Extensions are unmerged before unmounting to avoid dangling references.
+Unmounts previously mounted HITL extensions. Extensions are unmerged before unmounting to avoid dangling references, and the installed extension takes over again.
 
 ```
-avocadoctl hitl unmount [OPTIONS] <EXTENSION>...
+avocadoctl hitl unmount -e <NAME>...
 ```
 
-#### Arguments
+#### Options
 
-| Argument       | Description                            |
-| -------------- | -------------------------------------- |
-| `EXTENSION...` | One or more extension names to unmount |
+| Option                     | Description                                         |
+| -------------------------- | --------------------------------------------------- |
+| `-e`, `--extension <NAME>` | Extension to unmount; repeat for several (required) |
 
 #### Examples
 
 ```bash
 # Unmount a single extension
-avocadoctl hitl unmount my-app
+avocadoctl hitl unmount -e my-app
 
 # Unmount multiple extensions
-avocadoctl hitl unmount my-app my-config
+avocadoctl hitl unmount -e my-app -e my-config
 ```
 
 ---
