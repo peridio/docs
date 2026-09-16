@@ -42,9 +42,9 @@ extensions:
   boot-device:
     types:
       - sysext
-    version: "1.0.0"
+    version: '1.0.0'
     packages:
-      avocado-boot-device: "*"
+      avocado-boot-device: '*'
 
 runtimes:
   dev:
@@ -139,13 +139,13 @@ Reboot once so the firmware enumerates the disk, then run it again.
 
 ## Other messages you may see
 
-| Message | What it means |
-| --- | --- |
-| `Already first in the boot order; nothing to do.` | The device you asked for is already the firmware's first choice. Nothing was written. |
-| `BootOrder is unset; refusing to invent one` | The firmware has no boot order at all. Writing one from scratch would be guessing at entries the board may not boot, so the tool stops. Use `--once` instead, which does not need an existing order. |
-| `efivarfs is not mounted at /sys/firmware/efi/efivars` | This system did not boot via UEFI, so there is no boot order to change. |
-| `efibootmgr is not installed` | The `avocado-boot-device` package is not in the running image. Check the extension is listed in the runtime you booted. |
-| `unknown device class '<x>'` | Only `nvme`, `sd`, `emmc` and `usb` are recognised. `--help` lists them. |
+| Message                                                | What it means                                                                                                                                                                                        |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Already first in the boot order; nothing to do.`      | The device you asked for is already the firmware's first choice. Nothing was written.                                                                                                                |
+| `BootOrder is unset; refusing to invent one`           | The firmware has no boot order at all. Writing one from scratch would be guessing at entries the board may not boot, so the tool stops. Use `--once` instead, which does not need an existing order. |
+| `efivarfs is not mounted at /sys/firmware/efi/efivars` | This system did not boot via UEFI, so there is no boot order to change.                                                                                                                              |
+| `efibootmgr is not installed`                          | The `avocado-boot-device` package is not in the running image. Check the extension is listed in the runtime you booted.                                                                              |
+| `unknown device class '<x>'`                           | Only `nvme`, `sd`, `emmc` and `usb` are recognised. `--help` lists them.                                                                                                                             |
 
 The tool writes UEFI variables, so it needs root.
 
