@@ -2,13 +2,13 @@
 sidebar_position: 1.5
 title: 'Boot device selection'
 copy_markdown: true
-draft: false
+draft: true
 description: 'Choose which storage device a board boots from. Provisioning decides where an image is written; firmware decides which disk boots, and on a board with two bootable disks those are separate choices.'
 ---
 
 :::caution Jetson only, and newer than your image
 
-NVIDIA Jetson (Tegra) is the only target this page covers, and `avocado-set-boot-device` ships in the `avocado-boot-device` package. An image built before that package existed does not have the tool, and `--list` will tell you so.
+NVIDIA Jetson (Tegra) is the only target this page covers, and `avocado-set-boot-device` ships in the `avocado-boot-device` package. An image built before that package existed does not have the tool at all, so `avocado-set-boot-device --list` returns a plain `command not found` rather than any message from the tool itself. Add the `boot-device` extension (see below) and rebuild before running anything on this page.
 
 What has been checked on an Orin Nano: the boot entries and their device paths this page describes, that writing UEFI `BootOrder` persists across a reboot with `BootCurrent` following it, and the kernel-versus-rootfs mismatch described at the end. What has not: the tool's own write path running end to end on a board.
 

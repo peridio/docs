@@ -30,6 +30,7 @@ const sidebars = {
       collapsed: false,
       items: [
         'provisioning',
+        'boot-device-selection',
         'hardware-in-the-loop',
         'container-dev-mode',
         'sideloading',
