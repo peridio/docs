@@ -196,7 +196,7 @@
       "external": false,
       "lts": {
         "2024": "none",
-        "2026": "supported"
+        "2026": "in-progress"
       }
     },
     {
@@ -218,7 +218,7 @@
       "external": false,
       "lts": {
         "2024": "none",
-        "2026": "supported"
+        "2026": "in-progress"
       }
     },
     {
