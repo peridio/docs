@@ -8,7 +8,7 @@ description: 'Choose which storage device a board boots from. Provisioning decid
 
 :::caution Jetson only, and newer than your image
 
-NVIDIA Jetson (Tegra) is the only target this page covers, and `avocado-set-boot-device` ships in the `avocado-boot-device` package. An image built before that package existed does not have the tool at all, so `avocado-set-boot-device --list` returns a plain `command not found` rather than any message from the tool itself. Add the `boot-device` extension (see below) and rebuild before running anything on this page.
+NVIDIA Jetson (Tegra) is the only target this page covers, and `avocado-set-boot-device` ships in the `avocado-boot-device` package. An image built before that package existed does not have the tool at all, so `avocado-set-boot-device --list` returns a plain `command not found` rather than any message from the tool itself. Add `avocado-boot-device` under `rootfs.packages` (see below) and rebuild before running anything on this page.
 
 Checked end to end on an Orin Nano carrying both an NVMe and a bootable SD card: the boot entries and device paths this page describes, `--list` classifying every entry on the board, `--dry-run` writing nothing, and `--once` writing `BootNext`, reading it back, being honoured by firmware on the next boot, and reverting on its own the boot after that.
 
@@ -146,7 +146,7 @@ Reboot once so the firmware enumerates the disk, then run it again.
 | `Already first in the boot order; nothing to do.`      | The device you asked for is already the firmware's first choice. Nothing was written.                                                                                                                |
 | `BootOrder is unset; refusing to invent one`           | The firmware has no boot order at all. Writing one from scratch would be guessing at entries the board may not boot, so the tool stops. Use `--once` instead, which does not need an existing order. |
 | `efivarfs is not mounted at /sys/firmware/efi/efivars` | This system did not boot via UEFI, so there is no boot order to change.                                                                                                                              |
-| `efibootmgr is not installed`                          | The `avocado-boot-device` package is not in the running image. Check the extension is listed in the runtime you booted.                                                                              |
+| `efibootmgr is not installed`                          | `avocado-boot-device` is installed - that's what printed this message - but `efibootmgr` did not land with it. Rebuild with the package declared under `rootfs.packages`, not an extension.          |
 | `unknown device class '<x>'`                           | Only `nvme`, `sd`, `emmc` and `usb` are recognised. `--help` lists them.                                                                                                                             |
 
 The tool writes UEFI variables, so it needs root.
