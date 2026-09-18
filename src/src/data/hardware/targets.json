@@ -79,7 +79,7 @@
       "2026": "supported"
     },
     "category": "physical",
-    "description": "The RB3 Gen 2 is provisioned by flashing the kit's onboard UFS storage over USB while the SoC is in Qualcomm EDL (Emergency Download) mode. One target backs the core kit and both mezzanines. The Vision Kit is validated on hardware; core and Industrial Kit support is in progress, with packages published but not yet hardware-validated.",
+    "description": "The RB3 Gen 2 is provisioned by flashing the kit's onboard UFS storage over USB while the SoC is in Qualcomm EDL (Emergency Download) mode. One target backs the core kit and both mezzanines. The Vision Kit is validated on hardware; core and Industrial Kit packages are published but not yet hardware-validated.",
     "configuration": {
       "description": "After initializing, update these settings in avocado.yaml before installing. Use rb3gen2-vision for the Vision Kit or rb3gen2-industrial for the Industrial Kit; omit default_target_board for the core kit. All three use the 2026 next feed.",
       "yaml": "default_target: rb3gen2\ndefault_target_board: rb3gen2-vision # or rb3gen2-industrial; omit for the core kit\n\ndistro:\n  release: 2026\n  channel: next"
