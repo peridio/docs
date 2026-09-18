@@ -50,9 +50,13 @@ rootfs:
 
 Then build and provision as usual. The tool lands at `/usr/sbin/avocado-set-boot-device`.
 
-:::caution Put it in the rootfs, not in an extension
+:::caution Do not add it through your own extension's `packages:`
 
-Installing `avocado-boot-device` through an extension's `packages:` does not work on avocado-cli 1.0.0-rc.4. `avocado install` resolves and installs the package into the extension's sysroot and reports success, but the built extension image comes out empty - 4096 bytes, containing only its own `extension-release` marker - and the tool is absent at runtime. Reproduced on an Orin Nano with a `sysext`-only extension and with one combining `sysext` and `confext`.
+On avocado-cli 1.0.0-rc.4, naming a package under `packages:` in an extension **you declare in your own `avocado.yaml`** does not put it in the image. `avocado install` resolves the package, installs it, and reports success, and the built extension image still comes out empty - 4096 bytes, holding only its own `extension-release` marker - so the tool is absent at runtime. Reproduced with a `sysext`-only extension and with one combining `sysext` and `confext`.
+
+This is narrower than it may sound, and the distinction matters if you are reading it to decide how to ship something else. An extension fetched as a package, the way a BSP extension is, installs its `packages:` correctly on the same CLI version - so the defect is in the inline path rather than in extensions generally. Tracked as [avocado-cli#283](https://github.com/avocado-linux/avocado-cli/issues/283).
+
+An extension's `overlay:` is also unaffected: files you place there do reach the image.
 
 :::
 
