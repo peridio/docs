@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 # Regenerate src/docs-guides/avocado-cli/commands.md from the `avocado` binary
 # on PATH. Every section is that command's `--help`; nothing here is hand-typed
-# except NOTE below. Run after a CLI release, then let prettier format it:
+# except NOTE below. Requires Bash 4+ (on macOS, install it with `brew install bash`
+# and use that bash rather than /bin/bash). Run after a CLI release, then let prettier format it:
 #
 #   bash scripts/gen-cli-commands.sh
 #   (cd src && npm exec -- prettier --write docs-guides/avocado-cli/commands.md)
 set -euo pipefail
+
+if (( BASH_VERSINFO[0] < 4 )); then
+  echo 'error: gen-cli-commands.sh requires Bash 4+. On macOS, run `brew install bash` and use the installed bash instead of /bin/bash.' >&2
+  exit 1
+fi
 
 OUT="$(cd "$(dirname "$0")/.." && pwd)/src/docs-guides/avocado-cli/commands.md"
 VER="$(avocado --version)"
@@ -32,6 +38,14 @@ leaf() { # heading hashes, then command words
   printf -- '---\n\n'
 }
 
+command_tree() {
+  local h=$1 s; shift
+  leaf "$h" "$@"
+  for s in $(subs "$@"); do
+    command_tree "#$h" "$@" "$s"
+  done
+}
+
 group() {
   local g=$1 s t u
   printf '## %s Commands\n\n' "${LABEL[$g]:-${g^}}"
@@ -40,7 +54,7 @@ group() {
     t=$(subs "$g" "$s")
     if [ -n "$t" ]; then
       printf '### `avocado %s %s` {#%s-%s}\n\n' "$g" "$s" "$g" "$s"
-      for u in $t; do leaf '####' "$g" "$s" "$u"; done
+      for u in $t; do command_tree '####' "$g" "$s" "$u"; done
     else
       leaf '###' "$g" "$s"
     fi
@@ -78,4 +92,4 @@ for c in "${groups[@]}"; do
   group "$c"
 done
 } > "$OUT"
-echo "wrote $OUT ($(grep -c '^### \|^#### ' "$OUT") sections, $VER)"
+echo "wrote $OUT ($(grep -Ec '^#{3,} ' "$OUT") sections, $VER)"

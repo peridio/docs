@@ -1127,6 +1127,109 @@ Options:
 
 ---
 
+##### `avocado connect devices reclaim list`
+
+```
+List reclaim requests (defaults to pending)
+
+Usage: avocado connect devices reclaim list [OPTIONS]
+
+Options:
+      --org <ORG>              Organization ID (or set connect.org in avocado.yaml)
+      --status <STATUS>        Filter by status [default: pending] [possible values: pending, approved, completed, denied, expired, all]
+      --device-id <DEVICE_ID>  Filter to a single device by id. Returns at most one row when combined with --status pending (the partial unique index allows one pending reclaim per device)
+  -C, --config <CONFIG>        Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>      Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>    Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                   Print help
+
+```
+
+---
+
+##### `avocado connect devices reclaim approve`
+
+```
+Approve a pending reclaim request
+
+Usage: avocado connect devices reclaim approve [OPTIONS] <ID>
+
+Arguments:
+  <ID>  Reclaim request ID
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -y, --yes                  Skip confirmation prompt
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+##### `avocado connect devices reclaim deny`
+
+```
+Deny a pending reclaim request
+
+Usage: avocado connect devices reclaim deny [OPTIONS] <ID>
+
+Arguments:
+  <ID>  Reclaim request ID
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --reason <REASON>      Reason for denial (max 1024 chars). If omitted, prompts interactively. Pass --reason "" to skip
+  -y, --yes                  Skip confirmation prompt
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+##### `avocado connect devices reclaim delete`
+
+```
+Delete a denied reclaim request (recovery for typo'd denies)
+
+Usage: avocado connect devices reclaim delete [OPTIONS] <ID>
+
+Arguments:
+  <ID>  Reclaim request ID
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -y, --yes                  Skip confirmation prompt
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
 ### `avocado connect cohorts` {#connect-cohorts}
 
 #### `avocado connect cohorts list`
