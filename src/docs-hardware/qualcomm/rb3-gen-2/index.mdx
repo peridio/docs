@@ -107,6 +107,18 @@ lsusb
 
 Look for a Qualcomm device with ID `05c6:9008`. `05c6:900e` is the SoC's dload/ramdump mode, where the board lands after a failed boot, not EDL; power-cycle the board into EDL again if you see it.
 
+:::tip Enter EDL from a running device
+
+If the kit is already running Avocado OS, you don't need the hardware key combo — reboot it straight into forced download mode from the serial console or over SSH:
+
+```bash title="Avocado OS"
+reboot edl
+```
+
+It re-enumerates on the host as `05c6:9008`, ready to provision. This is also the quickest way to recover a kit that dropped to `05c6:900e`: power-cycle it back to a booted state, then `reboot edl`.
+
+:::
+
 Then provision the `dev` runtime with the `ufs` profile. The profile is required: it is what mounts the host's USB bus into the provisioning container.
 
 ```bash title="Host machine"
