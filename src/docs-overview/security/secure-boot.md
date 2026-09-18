@@ -2,50 +2,82 @@
 title: 'Secure Boot'
 slug: /avocado-os/security/secure-boot
 sidebar_position: 0
-description: 'Hardware root of trust and cryptographic boot chain verification in Avocado OS — configured out of the box across NVIDIA, NXP, Raspberry Pi, and more.'
+description: 'Hardware root of trust and boot chain verification in Avocado OS: signing-key management, per-vendor mechanisms, and what is enforced on which target today.'
 ---
 
 # Secure Boot
 
-Hardware root of trust configured out of the box.
+Hardware root of trust, configured at build time.
 
-Secure boot establishes an unbroken cryptographic chain of trust beginning at the silicon and extending through the bootloader, kernel, root filesystem, and every loaded system extension. Each component in the chain verifies the next before transferring control. If any component fails verification, the system refuses to boot — protecting against both malicious tampering and unintentional corruption.
+Secure boot means a cryptographic chain of trust that begins at the silicon and extends through the bootloader into the kernel. Each stage verifies the next before transferring control, and a stage that fails verification refuses to boot, protecting against both malicious tampering and unintentional corruption.
 
-The challenge is that every silicon vendor has a different mechanism for establishing a root of trust, different fuse provisioning procedures, and different signing toolchains. Avocado abstracts this behind a unified interface that works the same way regardless of the underlying hardware.
+Past the kernel, the root filesystem rests on immutability and on signature verification at install time, not on verification at read time. Extensions are weaker still: they can be signed at build time, but nothing verifies that signature before an extension image is overlaid. Read-time block verification is not enabled for either; see [Filesystem Integrity](filesystem-integrity) for what that covers and what it does not.
+
+:::caution Enforcement status
+
+Boot chain enforcement is not enabled on any target in the current release. What ships today is signing-key management through the CLI, described below. Build-time generation of a per-machine UEFI key chain is not in the shipping build either; the recipe that would add it has not landed. Signature verification in the bootloader is in development for the NXP i.MX 93, using both the SoC's own AHAB mechanism and U-Boot FIT signature verification; other targets have not been started.
+
+Read the chain of trust below as the model this is being built toward, and the sections around it as what you can set up now. An earlier version of this page described an `avocado secure-boot enable` command and vendor-specific CLI backends. Neither exists.
+
+:::
+
+The challenge is that every silicon vendor has a different mechanism for establishing a root of trust, different fuse provisioning procedures, and different signing toolchains. Avocado's approach is to keep key management uniform in the CLI and let the per-vendor mechanism stay where it belongs, in the board's own build configuration.
 
 ## How it works
 
-### Board-agnostic CLI
+### Signing keys
 
-Avocado's CLI abstracts the vendor-specific complexity behind consistent commands. When you issue a command to configure secure boot, the CLI automatically invokes the appropriate board-specific module — handling key management, signature generation, and hardware configuration for you.
+Key management is the part that is uniform across hardware. `avocado signing-keys` registers, lists, and removes the keys used for extension and image signing:
 
+```bash
+avocado signing-keys create release-signing
+avocado signing-keys list
 ```
-# Same command, different hardware — the CLI handles the rest
-avocado secure-boot enable
+
+A key can live in an external PKCS#11 token rather than on disk, which keeps the private half off the build host entirely. Pass a token URI, or name a device type and let the CLI find it:
+
+```bash
+avocado signing-keys create release-signing \
+  --uri 'pkcs11:token=YubiKey;object=signing-key'
+
+avocado signing-keys create release-signing \
+  --pkcs11-device yubikey --generate
 ```
 
-Under the hood, this leverages a modular backend with board-specific modules created from host tools provided by vendor Yocto layers. These modules are packaged into Avocado's composable SDK package repositories, so secure boot tooling is installed only when needed and stays consistently versioned with the rest of your development environment.
+`--generate` creates the key inside the device, so the private half never exists outside it. `tpm` is accepted in place of `yubikey` for a TPM-backed key.
+
+### Build-time configuration
+
+Secure boot itself is configured when the image is built, not switched on afterward from the CLI. The `secureboot` distro feature is enabled by default, but today that flag only marks the build as targeting secure boot. Nothing yet generates the UEFI key chain (PK, KEK, db, dbx) per machine during the build.
+
+Because no key chain is produced, there is also nothing to package for the target: a running device does not carry its own certificates under `/usr/share/avocado/sb-keys`. Generating the key chain and shipping the public halves to the device are both part of the enforcement work rather than separate gaps. When they land, the private halves will stay on the build host and never be placed in an image, by design.
+
+Whether the bootloader then _enforces_ a signature depends on the silicon's own mechanism, and that is configured per board rather than through a common switch. See the enforcement note above for where each target stands.
 
 ### Chain of trust
 
-The boot chain verification flows through each stage:
+This is the model the work above is building toward. Stages 1 and 2 are what "enforcement" means, and per the note above they are in development rather than shipped. Stages 3 to 5 describe what holds today independent of that enforcement: immutability throughout, install-time signature verification for the root filesystem, and for extensions a build-time signature that nothing checks before overlay. None of that is a verified boot chain reaching the kernel.
 
 1. **Silicon ROM** — Vendor-programmed immutable code validates the first-stage bootloader against keys burned into hardware fuses.
-2. **Bootloader** — Verified bootloader validates the kernel image and device tree using developer-provided signing keys.
-3. **Kernel** — Verified kernel enforces dm-verity on the root filesystem (see [Filesystem Integrity](filesystem-integrity)).
-4. **Root filesystem** — Immutable SquashFS image, verified block-by-block at read time.
-5. **Extensions** — Every system extension (sysext) and configuration extension (confext) is independently signed and verified before overlay.
+2. **Bootloader** — In an enforced configuration, the verified bootloader validates the kernel image and device tree against the device's public verification keys; private signing keys never leave the build host.
+3. **Kernel** — Mounts the immutable root filesystem read-only. Whether the kernel itself was verified before it started is stage 2's job and isn't enforced yet; block-level verification of the filesystem at read time is not enabled either (see [Filesystem Integrity](filesystem-integrity)).
+4. **Root filesystem** — Immutable read-only erofs image, signature-verified when it was installed and not writable through the mounted filesystem at runtime. Privileged code can still write the backing block device; see [Filesystem Integrity](filesystem-integrity).
+5. **Extensions** — System extensions (sysext) and configuration extensions (confext) are replaced whole rather than patched, and can be signed as KAB packages at build time. Per-extension verification before overlay is not enabled yet.
 
 ### Multi-vendor signing authorities
 
-Production supply chains are rarely simple. The OEM controls the core system, but third-party vendors may supply extensions, drivers, or application layers. Avocado supports multiple signing authorities — different components can be authorized by separate entities while maintaining an end-to-end chain of trust.
+Production supply chains are rarely simple. The OEM controls the core system, but third-party vendors may supply extensions, drivers, or application layers. Avocado supports multiple signing authorities: any number of keys can be registered, each held by whoever owns it, and PKCS#11 support means a partner's key can stay in their own token.
 
-This means an OEM can control core system signing while enabling hardware partners to sign their own driver extensions, without either party needing access to the other's keys.
+This means an OEM can control core system signing while enabling hardware partners to sign their own driver extensions, without either party needing access to the other's keys. What this does not yet give you is a single verified chain linking those signatures together at boot, which is the enforcement work described above.
 
 ### Fuse provisioning
 
-For silicon vendors that use one-time programmable (OTP) fuses to establish the hardware root of trust, Avocado's provisioning toolchain handles fuse programming as part of the manufacturing flow. The `avocado provision` command manages this alongside image flashing — one step, not a separate manual procedure.
+Most silicon that offers a hardware root of trust establishes it in one-time programmable (OTP) fuses: you burn a hash of your public key into the SoC, and from then on its ROM will only start a bootloader signed by the matching private key.
+
+Avocado does not program fuses today. `avocado provision` deploys a runtime to a device and does not touch them, and there is no fuse-burning tooling in the board layers either. Burning fuses is a manual step with the silicon vendor's own tool, and folding it into the provisioning flow is part of the enforcement work above.
+
+Treat it as one-way. A fuse cannot be unburned, a wrong value cannot be corrected, and a board whose key hash is burned incorrectly can no longer establish a root of trust at all. Practice the procedure on a board you are willing to lose before running it on anything else, and check the byte order the vendor's tool expects against the byte order your key hash is printed in, because the two do not always match.
 
 ## Security from day one
 
-Because the same signing infrastructure is available in development, staging, and production, there's no late-stage "security integration phase." Development builds can run with the same security controls that production uses. Teams can progressively enable and validate security features throughout development rather than discovering compatibility issues right before ship.
+Because the same signing infrastructure is available in development, staging, and production, there's no late-stage "security integration phase." The controls that do ship today (signing keys including hardware-backed ones, an immutable root, and [encrypted storage](/avocado-os/security/encryption)) are the same in a development build as in a production one, so you can set them up and validate them early rather than discovering compatibility issues right before ship. Bootloader enforcement lands into that same configuration rather than replacing it.
