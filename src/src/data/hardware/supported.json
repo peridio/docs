@@ -189,6 +189,39 @@
       }
     },
     {
+      "name": "Qualcomm RB3 Gen 2",
+      "target": "rb3gen2",
+      "board": "",
+      "url": "/hardware/qualcomm/rb3-gen-2",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "supported"
+      }
+    },
+    {
+      "name": "Qualcomm RB3 Gen 2 Vision Kit",
+      "target": "rb3gen2",
+      "board": "rb3gen2-vision",
+      "url": "/hardware/qualcomm/rb3-gen-2",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "supported"
+      }
+    },
+    {
+      "name": "Qualcomm RB3 Gen 2 Industrial Kit",
+      "target": "rb3gen2",
+      "board": "rb3gen2-industrial",
+      "url": "/hardware/qualcomm/rb3-gen-2",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "supported"
+      }
+    },
+    {
       "name": "Raspberry Pi 4 Model B",
       "target": "raspberrypi4",
       "board": "",

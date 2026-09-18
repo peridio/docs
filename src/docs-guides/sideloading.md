@@ -107,12 +107,12 @@ The example repository comes with a pre-configured `avocado.yaml` that includes 
 
 ## Install dependencies
 
-The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). The `--force` flag (`-f`) skips interactive prompts during package installation.
+The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). It never prompts; `--force` (`-f`) clears and re-seeds every extension's sysroot, discarding its built content, so leave it off for normal iteration.
 
 #### Command
 
 ```bash
-avocado install -f
+avocado install
 ```
 
 #### Output
@@ -383,7 +383,7 @@ After making the dependency change, rebuild the components with the new package 
 ##### Install dependencies
 
 ```bash
-avocado install -f
+avocado install
 ```
 
 ##### Build components
@@ -436,7 +436,7 @@ You should now see the `tcpdump` version information, confirming that the packag
 This sideloading workflow enables rapid iteration during development:
 
 1. **Make changes** to your `avocado.yaml` configuration
-2. **Rebuild** with `avocado install -f && avocado build && avocado provision -r dev`
+2. **Rebuild** with `avocado install && avocado build && avocado provision -r dev`
 3. **Deploy** with `avocado deploy -r dev -d <device-address>`
 4. **Test** your changes on the live device
 5. **Repeat** as needed

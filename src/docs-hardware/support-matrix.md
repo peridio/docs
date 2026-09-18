@@ -16,6 +16,8 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 - **2024 (scarthgap)** and **2026 (wrynose)** are the Yocto LTS bases each feed is built on.
 - **Target** is the SoC/platform; **Board** is a specific carrier or variant on that target. One target can back several boards — see [CLI configuration](/developer-reference/avocado-cli/configuration#default-target-and-board) for how to set them.
 
+**RB3 Gen 2 validation:** All three kits have published packages on the 2026 `next` feed. Only the Vision Kit is validated on hardware; the core and Industrial kits are not yet hardware-validated. See [kit status](/hardware/qualcomm/rb3-gen-2#kits-and-board-names) for details.
+
 ## Additional Hardware Under Evaluation
 
 <UnderEvaluationMatrix />

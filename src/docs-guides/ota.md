@@ -71,14 +71,14 @@ Sign up for a **free developer account** at [connect.peridio.com/login](https://
 </div>
 
 :::info
-If your device was provisioned before Connect was initialized in the project, its image contains no Connect configuration, so it cannot enroll. After running `avocado connect init`, rebuild the image so it picks up the Connect extensions and device config (`avocado install -f && avocado build`), then re-provision the device. It enrolls and auto-claims into your project on first boot.
+If your device was provisioned before Connect was initialized in the project, its image contains no Connect configuration, so it cannot enroll. After running `avocado connect init`, rebuild the image so it picks up the Connect extensions and device config (`avocado install && avocado build`), then re-provision the device. It enrolls and auto-claims into your project on first boot.
 :::
 
 ## Step 3: Upload your runtime
 
 Before you can upload, you need a built runtime and a running device to update. From the project directory:
 
-1. Install dependencies: `avocado install -f`
+1. Install dependencies: `avocado install`
 2. Build the runtime: `avocado build`
 3. Provision a device — either [QEMU](/developer-reference/getting-started/qemu) or [supported hardware](/developer-reference/provisioning) (`avocado provision`). For QEMU, provisioning only creates the disk image — boot the VM afterwards with `avocado sdk run -iE vm dev`. Since the project was initialized with Connect in Step 2, the device enrolls and auto-claims into your project on first boot.
 4. Confirm the device is online in Connect: open your project's fleet, find the device, and check that its status shows **Online**.
@@ -92,7 +92,7 @@ Before you can upload, you need a built runtime and a running device to update. 
   />
 </div>
 
-Then make a visible change to deploy (e.g., add a package to `avocado.yaml`) and rebuild: `avocado install -f && avocado build`
+Then make a visible change to deploy (e.g., add a package to `avocado.yaml`) and rebuild: `avocado install && avocado build`
 
 ### Option A: Avocado CLI
 

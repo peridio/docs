@@ -5,11 +5,15 @@ copy_markdown: true
 description: 'Hardware-in-the-loop development with Avocado OS - iterate against live targets with NFS-mounted extensions for fast feedback loops and interactive debugging.'
 ---
 
-Hardware-in-the-loop (HITL) lets you iterate against a live target while keeping fast, developer-friendly workflows. With Avocado OS, extensions can be NFS-mounted into a running device (virtual or physical), so code and configuration changes are reflected immediately without full system rebuilds or reflashing. This facilitates tight feedback loops, interactive debugging, and soft restarts of only the components you're changing. This aligns day-to-day development with production-ready, immutable system images.
+Hardware-in-the-loop (HITL) lets you iterate against a live target while keeping fast, developer-friendly workflows. This guide mounts Avocado OS extensions over NFS into a running QEMU guest, so you can refresh code and configuration changes without full system rebuilds or reflashing. This supports tight feedback loops, interactive debugging, and extension lifecycle restarts.
 
-Combining HITL development with a QEMU target, you can start developing well before hardware is available, then switch to physical boards without changing your workflow. The same composable extension model runs in both environments, providing consistent behavior so hardware and software teams can co-develop in parallel and validate changes on real hardware as soon as boards arrive.
+Combining HITL development with a QEMU target, you can start developing before hardware is available. The same composable extensions can later be built and deployed to physical boards with `avocado deploy`. Live NFS mounting on physical hardware is currently unsafe; use the QEMU workflow below until the issue described in the warning is fixed.
 
 This page shows how to use hardware-in-the-loop to develop and iterate on your extension(s).
+
+:::danger Do not live-mount onto physical hardware yet
+On a physical device, mounting an extension that the running system already depends on has collapsed the device's `/usr` (every non-builtin command gone, SSH down) until a power-cycle. A reboot recovers the device, but the cause is still being worked. Until that fix ships, run this workflow against the QEMU target as shown here, and iterate on hardware with `avocado deploy` instead.
+:::
 
 :::info
 Run all commands in this guide from the root of your Avocado project on your host machine — the directory that contains your Avocado config. Code blocks labeled "On Device (VM)" are executed inside the running QEMU VM.
@@ -87,12 +91,12 @@ This creates the extension's image(s) in Avocado's state.
 
 ### Start HITL server
 
-Start the HITL server to serve your extension over NFS so the device can mount it live.
+Start the HITL server to serve your extension over NFS so the device can mount it live. It runs detached: `avocado hitl status` lists the servers on this machine, `avocado hitl logs -f` follows this project's server log, and `avocado hitl stop` removes it. `avocado hitl server` is the same thing in the foreground.
 
 #### Command
 
 ```bash title="On Host"
-avocado hitl server -e my-app
+avocado hitl start -e my-app
 ```
 
 ### Run device virtual machine
@@ -147,9 +151,19 @@ avocado sdk run cd /opt/_avocado \&\& \
 The inner command runs inside the SDK container but is passed through your host shell first. Shell operators like `&&` and `>` are escaped as `\&\&` and `\>` so they are not consumed by the host shell and instead reach the container's shell unchanged.
 :::
 
+### Refresh the device
+
+The device caches directory listings and file attributes from the share, so a file added or changed on the host is not guaranteed to show up until the device re-runs its extension lifecycle. From the host, `avocado hitl sync -d root@<device>` does that over SSH by running `avocadoctl ext refresh` on the device. The QEMU guest is not reachable from the host over SSH in this setup, so run the device-side command directly:
+
+#### Command
+
+```bash title="On Device (VM)"
+avocadoctl ext refresh
+```
+
 ### Verify the file appears in the VM
 
-As we have the HITL NFS server running, and the extenion mounted, the placed artifacts should immediately appear inside the VM at the corresponding path.
+With the HITL server running, the extension mounted and refreshed, the placed artifacts appear inside the VM at the corresponding path.
 
 #### Command
 

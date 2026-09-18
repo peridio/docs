@@ -31,10 +31,10 @@ cd qemux86-64
 Install the SDK toolchain, extension dependencies, and runtime packages defined in `avocado.yaml`.
 
 ```bash
-avocado install -f
+avocado install
 ```
 
-This pulls the SDK container image and installs all required packages into their respective sysroots. The `-f` flag skips confirmation prompts.
+This pulls the SDK container image and installs all required packages into their respective sysroots.
 
 ## Build
 
@@ -53,7 +53,7 @@ Reset the build state and rebuild:
 ```bash
 avocado clean
 avocado prune
-avocado install -f
+avocado install
 avocado build
 ```
 

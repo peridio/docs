@@ -7,11 +7,66 @@ copy_markdown: true
 
 # `commands`
 
-A complete reference of every `avocado` command and subcommand on a single page. Use your browser's find (Ctrl+F / Cmd+F) to search.
+A complete reference of every `avocado` command and subcommand on a single page, taken from `--help` of `avocado 1.0.0-rc.4 (29d7b21 2026-09-15)`. Use your browser's find (Ctrl+F / Cmd+F) to search.
 
 ---
 
 ## Top-Level Commands
+
+### `avocado`
+
+```
+Avocado CLI - A command line interface for Avocado
+
+Usage: avocado [OPTIONS] <COMMAND>
+
+Commands:
+  sdk           SDK related commands
+  ext           Extension related commands
+  rootfs        Rootfs sysroot and image commands
+  initramfs     Initramfs sysroot and image commands
+  kernel        Kernel image commands
+  sbom          Emit an SPDX 3.0 SBOM of the packages installed in this project
+  init          Initialize a new avocado project
+  runtime       Runtime management commands
+  hitl          Hardware-in-the-loop testing commands
+  vm            Manage the local avocado-vm helper VM (macOS / Windows dev hosts)
+  container     Container Dev Mode: iterate on containers running on a device
+  config        Project configuration introspection (read-only)
+  clean         Clean the avocado project by removing docker volumes and state files
+  install       Install all components, or add specific packages to an extension/runtime/SDK
+  uninstall     Remove packages from an extension, runtime, or SDK and update avocado.yaml
+  upgrade       Upgrade the CLI to the latest (or specified) version
+  completion    Generate a shell completion registration script
+  build         Build all components (SDK compile, extensions, and runtime images)
+  fetch         Fetch and refresh repository metadata for sysroots
+  provision     Provision a runtime (shortcut for 'runtime provision')
+  deploy        Deploy a runtime to a device (shortcut for 'runtime deploy')
+  signing-keys  Manage signing keys for extension and image signing
+  var-key       Operator-held recovery key for an encrypted /var (runtimes.<r>.var.recovery)
+  sign          Sign runtime images (shortcut for 'runtime sign')
+  prune         Remove abandoned Docker volumes no longer associated with active configs
+  save          Save the current build state to a compressed archive
+  load          Load build state from a compressed archive
+  unlock        Unlock (remove lock entries for) sysroots to allow package updates
+  update        Move a target forward: advance to the latest feed snapshot and re-resolve packages to their latest versions on the next install (rewrites the lock)
+  login         Log in to Connect (shortcut for `connect auth login`)
+  connect       Avocado Connect platform commands (auth, upload)
+
+Options:
+      --target <TARGET>      Global target architecture
+      --no-stamps            Disable stamp validation and writing
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+  -V, --version              Print version
+
+```
+
+---
 
 ### `avocado build`
 
@@ -26,12 +81,15 @@ Options:
   -r, --runtime <RUNTIME>               Runtime name to build (if not provided, builds all runtimes)
   -e, --extension <EXTENSION>           Extension name to build (if not provided, builds all required extensions)
   -t, --target <TARGET>                 Target architecture
+      --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --output <OUTPUT>                 Output format. JSON skips TUI rendering and emits NDJSON events [default: human] [possible values: human, json]
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -73,8 +131,50 @@ Options:
           SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
+
+```
+
+---
+
+### `avocado completion`
+
+```
+Generate a shell completion registration script.
+
+The output is a small wrapper that, when sourced, makes the shell call `avocado` itself for each TAB press. That round-trip lets completions stay live for values that depend on the local `avocado.yaml` (extension/runtime/target names) and the user's signing-key registry.
+
+Install: bash: `avocado completion bash > /etc/bash_completion.d/avocado` (or add `source <(avocado completion bash)` to ~/.bashrc) zsh:  add `source <(avocado completion zsh)` to ~/.zshrc
+
+Usage: avocado completion [OPTIONS] <SHELL>
+
+Arguments:
+  <SHELL>
+          Shell to generate completions for
+
+          [possible values: bash, elvish, fish, powershell, zsh]
+
+Options:
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+  -h, --help
+          Print help (see a summary with '-h')
 
 ```
 
@@ -97,11 +197,13 @@ Options:
   -d, --device <DEVICE>                 Device to deploy to as [user@]host[:port] (e.g. root@192.168.1.100:2222)
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --connect-sign                    Sign TUF metadata via Avocado Connect instead of locally (use for a device that has taken a Connect OTA). Requires a local signing key configured for the runtime (Level 2: signing.key + avocado connect trust promote-root --key <KEY>); without one no root.json is baked and the deploy fails during Phase 1 hash collection.
+      --connect-sign                    Sign TUF metadata via the Connect platform instead of locally. Use this when deploying to a device that has received a Connect OTA update. Requires a local signing key configured for the runtime (Level 2: signing.key + avocado connect trust promote-root --key <KEY>); without one no root.json is baked and the deploy fails during Phase 1 hash collection
+      --output <OUTPUT>                 Output format. JSON skips TUI rendering and emits NDJSON events [default: human] [possible values: human, json]
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -127,6 +229,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -141,19 +244,23 @@ Initialize a new avocado project
 Usage: avocado init [OPTIONS] [DIRECTORY]
 
 Arguments:
-  [DIRECTORY]  Directory to initialize (defaults to current directory)
+  [DIRECTORY]  Directory to initialize (defaults to current directory). When `--name` is also given, the project is created at <directory>/<name>/ instead of being written directly into <directory>
 
 Options:
       --target <TARGET>
           Target architecture (e.g., "qemux86-64")
       --reference <REFERENCE>
-          Reference example to initialize from (downloads from avocado-os/references)
+          Reference example to initialize from (downloads from avocado-linux/references)
       --reference-branch <REFERENCE_BRANCH>
           Branch to fetch reference from (defaults to "main")
       --reference-commit <REFERENCE_COMMIT>
           Specific commit SHA to fetch reference from
       --reference-repo <REFERENCE_REPO>
-          Repository to fetch reference from (format: "owner/repo", defaults to "avocado-linux/avocado-os")
+          Repository to fetch reference from (format: "owner/repo", defaults to "avocado-linux/references")
+      --name <NAME>
+          Name for the new project. When provided, the project is created in `<directory>/<name>/`. Defaults to the reference name when initializing from a reference, or to the destination directory name otherwise
+      --output <OUTPUT>
+          Output format [default: human] [possible values: human, json]
       --runs-on <USER@HOST>
           Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>
@@ -162,6 +269,8 @@ Options:
           SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -195,7 +304,9 @@ Options:
           Enable verbose output
 
   -f, --force
-          Force the operation to proceed, bypassing warnings or confirmation prompts
+          Reinstall extensions from scratch: clear every extension's sysroot and re-seed it.
+
+          Not needed to skip dnf's prompts — installs never prompt. Forcing discards every extension's built content, so the next build has to redo all of it.
 
   -r, --runtime <RUNTIME>
           Runtime name to install packages into (or sync when no packages given)
@@ -209,11 +320,20 @@ Options:
   -t, --target <TARGET>
           Target architecture
 
+      --target-board <TARGET_BOARD>
+          Target board override for `{{ avocado.target.board }}`
+
       --container-arg <CONTAINER_ARGS>
           Additional arguments to pass to the container runtime
 
       --dnf-arg <DNF_ARGS>
           Additional arguments to pass to DNF commands
+
+      --output <OUTPUT>
+          Output format. JSON skips TUI rendering and emits NDJSON events
+
+          [default: human]
+          [possible values: human, json]
 
       --runs-on <USER@HOST>
           Run command on remote host using local volume via NFS (format: user@host)
@@ -226,6 +346,9 @@ Options:
 
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
   -h, --help
           Print help (see a summary with '-h')
@@ -260,8 +383,60 @@ Options:
           SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
+
+```
+
+---
+
+### `avocado login`
+
+```
+Log in to Connect (shortcut for `connect auth login`)
+
+Your builds then identify themselves to the package feeds, which raises your rate limit and gives access to private feeds.
+
+Usage: avocado login [OPTIONS]
+
+Options:
+      --url <URL>
+          API URL (defaults to https://connect.peridio.com or AVOCADO_CONNECT_URL env var)
+
+      --profile <PROFILE>
+          Profile name (defaults to "default")
+
+      --token <TOKEN>
+          Use an existing API token instead of browser login
+
+      --org <ORG>
+          Organization id (UUID) to scope the new token to. Required for non-interactive multi-org logins; ignored when --token is set
+
+      --output <OUTPUT>
+          Output format
+
+          [default: human]
+          [possible values: human, json]
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+  -h, --help
+          Print help (see a summary with '-h')
 
 ```
 
@@ -282,15 +457,19 @@ Options:
   -v, --verbose                         Enable verbose output
   -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -t, --target <TARGET>                 Target architecture
+      --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
       --profile <PROVISION_PROFILE>     Provision profile to use
       --env <ENV>                       Environment variables to pass to the provision process
       --out <OUT>                       Output path relative to src_dir for provisioning artifacts
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --list                            List the provisioning profiles available for the resolved target instead of provisioning. Reads the stone manifest from the installed SDK volume; requires `avocado install` to have run
+      --output <OUTPUT>                 Output format. JSON skips TUI rendering and emits NDJSON events [default: human] [possible values: human, json]
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -319,6 +498,8 @@ Options:
           SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -354,6 +535,8 @@ Options:
           SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -407,6 +590,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -437,6 +621,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -463,6 +648,7 @@ Options:
       --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                   Print help
 
 ```
@@ -504,6 +690,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -511,6 +698,132 @@ Options:
 ---
 
 ## Connect Commands
+
+### `avocado connect`
+
+```
+Avocado Connect platform commands (auth, upload)
+
+Usage: avocado connect [OPTIONS] <COMMAND>
+
+Commands:
+  auth          Authenticate with the Connect platform
+  init          Initialize connect settings in avocado.yaml (org, project, server key, extensions, claim token, device config)
+  clean         Remove connect configuration (connect section, connect-config extension, and device config overlay)
+  orgs          Manage organizations
+  ext           Publish extensions to the feed (super-admin)
+  projects      Manage projects
+  devices       Manage devices
+  cohorts       Manage cohorts
+  runtimes      List uploaded runtimes on the Connect platform
+  claim-tokens  Manage claim tokens
+  upload        Upload current runtime build to the Connect platform
+  deploy        Deploy a runtime to a cohort
+  server-key    Retrieve the Connect server's TUF signing public key
+  keys          Manage signing keys registered with the Connect server
+  trust         Fleet trust posture commands
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado connect auth` {#connect-auth}
+
+```
+Authenticate with the Connect platform
+
+Usage: avocado connect auth [OPTIONS] <COMMAND>
+
+Commands:
+  login   Login to the Connect platform
+  logout  Logout from the Connect platform
+  status  Show current auth status
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect auth login`
+
+```
+Login to the Connect platform
+
+Usage: avocado connect auth login [OPTIONS]
+
+Options:
+      --url <URL>            API URL (defaults to https://connect.peridio.com or AVOCADO_CONNECT_URL env var)
+      --profile <PROFILE>    Profile name (defaults to "default")
+      --token <TOKEN>        Use an existing API token instead of browser login
+      --org <ORG>            Organization id (UUID) to scope the new token to. Required for non-interactive multi-org logins; ignored when --token is set
+      --output <OUTPUT>      Output format [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect auth logout`
+
+```
+Logout from the Connect platform
+
+Usage: avocado connect auth logout [OPTIONS]
+
+Options:
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --output <OUTPUT>      Output format [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect auth status`
+
+```
+Show current auth status
+
+Usage: avocado connect auth status [OPTIONS]
+
+Options:
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --output <OUTPUT>      Output format [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
 
 ### `avocado connect init`
 
@@ -526,10 +839,12 @@ Options:
   -r, --runtime <RUNTIME>    Runtime to add connect extensions to (default: dev) [default: dev]
   -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
       --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --output <OUTPUT>      Output format (human prose or NDJSON event stream) [default: human] [possible values: human, json]
       --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -546,10 +861,12 @@ Usage: avocado connect clean [OPTIONS]
 Options:
   -r, --runtime <RUNTIME>    Runtime to remove connect-config extension from (default: dev) [default: dev]
   -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --output <OUTPUT>      Output format (human prose or single JSON object) [default: human] [possible values: human, json]
       --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -558,189 +875,233 @@ Removes Connect state from the project: strips the `connect:` section and the `a
 
 ---
 
-### `avocado connect deploy`
+### `avocado connect orgs` {#connect-orgs}
 
 ```
-Deploy a runtime to a cohort
+Manage organizations
 
-Usage: avocado connect deploy [OPTIONS]
+Usage: avocado connect orgs [OPTIONS] <COMMAND>
+
+Commands:
+  list  List organizations you belong to
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect orgs list`
+
+```
+List organizations you belong to
+
+Usage: avocado connect orgs list [OPTIONS]
+
+Options:
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --output <OUTPUT>      Output format (human prose or single JSON object) [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado connect ext` {#connect-ext}
+
+```
+Publish extensions to the feed (super-admin)
+
+Usage: avocado connect ext [OPTIONS] <COMMAND>
+
+Commands:
+  publish  Build-once publish a packaged extension RPM to the feed (super-admin)
+  status   Show the status of a published extension version
+  list     List published extension versions
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect ext publish`
+
+```
+Build-once publish a packaged extension RPM to the feed (super-admin)
+
+Usage: avocado connect ext publish [OPTIONS] <RPM>
+
+Arguments:
+  <RPM>  Path to the extension RPM (from `avocado ext package`)
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --name <NAME>          Extension name (default: parsed from the RPM filename)
+      --version <VERSION>    Extension version (default: parsed from the RPM filename)
+      --release <RELEASE>    Extension release (default: parsed, else r0)
+      --arch <ARCH>          Extension arch (default: parsed, else noarch)
+      --targets <TARGETS>    Override the target machines (comma-separated). Defaults to the project's `supported_targets` from avocado.yaml; only pass this to override that
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect ext status`
+
+```
+Show the status of a published extension version
+
+Usage: avocado connect ext status [OPTIONS] <ID>
+
+Arguments:
+  <ID>  Version id
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect ext list`
+
+```
+List published extension versions
+
+Usage: avocado connect ext list [OPTIONS]
+
+Options:
+      --name <NAME>          Filter by package name
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado connect projects` {#connect-projects}
+
+```
+Manage projects
+
+Usage: avocado connect projects [OPTIONS] <COMMAND>
+
+Commands:
+  list    List projects in an organization
+  create  Create a new project
+  delete  Delete a project
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect projects list`
+
+```
+List projects in an organization
+
+Usage: avocado connect projects list [OPTIONS]
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --output <OUTPUT>      Output format (human prose or single JSON object) [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect projects create`
+
+```
+Create a new project
+
+Usage: avocado connect projects create [OPTIONS] --name <NAME>
 
 Options:
       --org <ORG>                  Organization ID (or set connect.org in avocado.yaml)
-      --project <PROJECT>          Project ID (or set connect.project in avocado.yaml)
-      --runtime <RUNTIME>          Runtime ID (skip interactive prompt)
-      --cohort <COHORT>            Cohort ID (skip interactive prompt)
-      --name <NAME>                Deployment name (auto-generated if omitted)
-      --description <DESCRIPTION>  Description for the deployment
-  -t, --tag <TAG>                  Filter by tags — only deploy to devices with these tags (repeatable)
-      --activate                   Activate immediately (skip draft status)
+      --name <NAME>                Project name
+      --description <DESCRIPTION>  Project description
   -C, --config <CONFIG>            Path to avocado.yaml configuration file [default: avocado.yaml]
       --profile <PROFILE>          Profile name (defaults to the active default profile)
+      --output <OUTPUT>            Output format (human prose or single JSON object) [default: human] [possible values: human, json]
       --runs-on <USER@HOST>        Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                       Print help
 
 ```
 
 ---
 
-### `avocado connect upload`
+#### `avocado connect projects delete`
 
 ```
-Upload current runtime build to the Connect platform
+Delete a project
 
-Usage: avocado connect upload [OPTIONS] <RUNTIME>
-
-Arguments:
-  <RUNTIME>  Runtime name to upload
-
-Options:
-      --org <ORG>                      Organization ID (or set connect.org in avocado.yaml)
-      --project <PROJECT>              Project ID (or set connect.project in avocado.yaml)
-      --version <VERSION>              Version string (defaults to runtime name-version from manifest)
-      --description <DESCRIPTION>      Description for the upload
-  -C, --config <CONFIG>                Path to avocado.yaml configuration file [default: avocado.yaml]
-  -t, --target <TARGET>                Target architecture
-      --file <FILE>                    Path to pre-built tarball or artifact directory (skips export from Docker volume)
-      --profile <PROFILE>              Profile name (defaults to the active default profile)
-      --publish                        Publish the runtime immediately after upload (draft → published)
-      --deploy-cohort <DEPLOY_COHORT>  Deploy after upload: cohort ID to target
-      --deploy-name <DEPLOY_NAME>      Deploy after upload: deployment name (auto-generated if omitted)
-      --deploy-tag <DEPLOY_TAG>        Deploy after upload: filter by tags (repeatable)
-      --deploy-activate                Deploy after upload: activate immediately (skip draft)
-      --runs-on <USER@HOST>            Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>            NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                         Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                           Print help
-
-```
-
----
-
-### `avocado connect server-key`
-
-```
-Retrieve the Connect server's TUF signing public key
-
-Usage: avocado connect server-key [OPTIONS]
+Usage: avocado connect projects delete [OPTIONS] --id <ID>
 
 Options:
       --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-### `avocado connect auth` {#connect-auth}
-
-#### `avocado connect auth login`
-
-```
-Login to the Connect platform
-
-Usage: avocado connect auth login [OPTIONS]
-
-Options:
-      --url <URL>            API URL (defaults to https://connect.peridio.com or AVOCADO_CONNECT_URL env var)
-      --profile <PROFILE>    Profile name (defaults to "default")
-      --token <TOKEN>        Use an existing API token instead of browser login
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-#### `avocado connect auth logout`
-
-```
-Logout from the Connect platform
-
-Usage: avocado connect auth logout [OPTIONS]
-
-Options:
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-#### `avocado connect auth status`
-
-```
-Show current auth status
-
-Usage: avocado connect auth status [OPTIONS]
-
-Options:
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-### `avocado connect claim-tokens` {#connect-claim-tokens}
-
-#### `avocado connect claim-tokens create`
-
-```
-Create a new claim token
-
-Usage: avocado connect claim-tokens create [OPTIONS] --name <NAME>
-
-Options:
-      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-      --project <PROJECT>    Project ID (skip interactive prompt)
-      --cohort <COHORT>      Cohort ID (skip interactive prompt)
-      --name <NAME>          Token name
-  -t, --tag <TAG>            Tags to associate with devices claimed using this token (repeatable)
-      --max-uses <MAX_USES>  Maximum number of times this token can be used
-      --no-expiration        Disable expiration (default: expires in 24h)
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-#### `avocado connect claim-tokens delete`
-
-```
-Delete a claim token
-
-Usage: avocado connect claim-tokens delete [OPTIONS] --id <ID>
-
-Options:
-      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-      --id <ID>              Claim token ID to delete
+      --id <ID>              Project ID to delete
   -y, --yes                  Skip confirmation prompt
   -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
       --profile <PROFILE>    Profile name (defaults to the active default profile)
@@ -748,18 +1109,44 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
 
 ---
 
-#### `avocado connect claim-tokens list`
+### `avocado connect devices` {#connect-devices}
 
 ```
-List claim tokens in an organization
+Manage devices
 
-Usage: avocado connect claim-tokens list [OPTIONS]
+Usage: avocado connect devices [OPTIONS] <COMMAND>
+
+Commands:
+  list     List devices in an organization
+  create   Create a new device
+  delete   Delete a device
+  reclaim  Manage admin-approved device reclaim requests
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect devices list`
+
+```
+List devices in an organization
+
+Usage: avocado connect devices list [OPTIONS]
 
 Options:
       --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
@@ -769,6 +1156,183 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect devices create`
+
+```
+Create a new device
+
+Usage: avocado connect devices create [OPTIONS] --name <NAME> --identifier <IDENTIFIER>
+
+Options:
+      --org <ORG>                Organization ID (or set connect.org in avocado.yaml)
+      --name <NAME>              Device name
+      --identifier <IDENTIFIER>  Device identifier (must be unique per org)
+  -C, --config <CONFIG>          Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>        Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>      Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>      NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                   Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start         On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                     Print help
+
+```
+
+---
+
+#### `avocado connect devices delete`
+
+```
+Delete a device
+
+Usage: avocado connect devices delete [OPTIONS] --id <ID>
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --id <ID>              Device ID to delete
+  -y, --yes                  Skip confirmation prompt
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect devices reclaim`
+
+```
+Manage admin-approved device reclaim requests
+
+Usage: avocado connect devices reclaim [OPTIONS] <COMMAND>
+
+Commands:
+  list     List reclaim requests (defaults to pending)
+  approve  Approve a pending reclaim request
+  deny     Deny a pending reclaim request
+  delete   Delete a denied reclaim request (recovery for typo'd denies)
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+##### `avocado connect devices reclaim list`
+
+```
+List reclaim requests (defaults to pending)
+
+Usage: avocado connect devices reclaim list [OPTIONS]
+
+Options:
+      --org <ORG>              Organization ID (or set connect.org in avocado.yaml)
+      --status <STATUS>        Filter by status [default: pending] [possible values: pending, approved, completed, denied, expired, all]
+      --device-id <DEVICE_ID>  Filter to a single device by id. Returns at most one row when combined with --status pending (the partial unique index allows one pending reclaim per device)
+  -C, --config <CONFIG>        Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>      Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>    Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                   Print help
+
+```
+
+---
+
+##### `avocado connect devices reclaim approve`
+
+```
+Approve a pending reclaim request
+
+Usage: avocado connect devices reclaim approve [OPTIONS] <ID>
+
+Arguments:
+  <ID>  Reclaim request ID
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -y, --yes                  Skip confirmation prompt
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+##### `avocado connect devices reclaim deny`
+
+```
+Deny a pending reclaim request
+
+Usage: avocado connect devices reclaim deny [OPTIONS] <ID>
+
+Arguments:
+  <ID>  Reclaim request ID
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --reason <REASON>      Reason for denial (max 1024 chars). If omitted, prompts interactively. Pass --reason "" to skip
+  -y, --yes                  Skip confirmation prompt
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+##### `avocado connect devices reclaim delete`
+
+```
+Delete a denied reclaim request (recovery for typo'd denies)
+
+Usage: avocado connect devices reclaim delete [OPTIONS] <ID>
+
+Arguments:
+  <ID>  Reclaim request ID
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -y, --yes                  Skip confirmation prompt
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -776,6 +1340,52 @@ Options:
 ---
 
 ### `avocado connect cohorts` {#connect-cohorts}
+
+```
+Manage cohorts
+
+Usage: avocado connect cohorts [OPTIONS] <COMMAND>
+
+Commands:
+  list    List cohorts in a project
+  create  Create a new cohort
+  delete  Delete a cohort
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect cohorts list`
+
+```
+List cohorts in a project
+
+Usage: avocado connect cohorts list [OPTIONS]
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --project <PROJECT>    Project ID (or set connect.project in avocado.yaml)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --output <OUTPUT>      Output format (human prose or single JSON object) [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
 
 #### `avocado connect cohorts create`
 
@@ -795,6 +1405,7 @@ Options:
       --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                       Print help
 
 ```
@@ -819,69 +1430,143 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
 
 ---
 
-#### `avocado connect cohorts list`
+### `avocado connect runtimes` {#connect-runtimes}
 
 ```
-List cohorts in a project
+List uploaded runtimes on the Connect platform
 
-Usage: avocado connect cohorts list [OPTIONS]
+Usage: avocado connect runtimes [OPTIONS] <COMMAND>
+
+Commands:
+  list  List runtimes uploaded to the Connect platform
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect runtimes list`
+
+```
+List runtimes uploaded to the Connect platform
+
+Usage: avocado connect runtimes list [OPTIONS]
 
 Options:
       --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
       --project <PROJECT>    Project ID (or set connect.project in avocado.yaml)
   -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
       --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --output <OUTPUT>      Output format (human prose or single JSON object) [default: human] [possible values: human, json]
       --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
 
 ---
 
-### `avocado connect devices` {#connect-devices}
-
-#### `avocado connect devices create`
+### `avocado connect claim-tokens` {#connect-claim-tokens}
 
 ```
-Create a new device
+Manage claim tokens
 
-Usage: avocado connect devices create [OPTIONS] --name <NAME> --identifier <IDENTIFIER>
+Usage: avocado connect claim-tokens [OPTIONS] <COMMAND>
+
+Commands:
+  list    List claim tokens in an organization
+  create  Create a new claim token
+  delete  Delete a claim token
 
 Options:
-      --org <ORG>                Organization ID (or set connect.org in avocado.yaml)
-      --name <NAME>              Device name
-      --identifier <IDENTIFIER>  Device identifier (must be unique per org)
-  -C, --config <CONFIG>          Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>        Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>      Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>      NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                   Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                     Print help
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
 
 ```
 
 ---
 
-#### `avocado connect devices delete`
+#### `avocado connect claim-tokens list`
 
 ```
-Delete a device
+List claim tokens in an organization
 
-Usage: avocado connect devices delete [OPTIONS] --id <ID>
+Usage: avocado connect claim-tokens list [OPTIONS]
 
 Options:
       --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-      --id <ID>              Device ID to delete
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect claim-tokens create`
+
+```
+Create a new claim token
+
+Usage: avocado connect claim-tokens create [OPTIONS] --name <NAME>
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --project <PROJECT>    Project ID (skip interactive prompt)
+      --cohort <COHORT>      Cohort ID (skip interactive prompt)
+      --name <NAME>          Token name
+  -t, --tag <TAG>            Tags to associate with devices claimed using this token (repeatable)
+      --max-uses <MAX_USES>  Maximum number of times this token can be used
+      --no-expiration        Disable expiration (default: expires in 24h)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect claim-tokens delete`
+
+```
+Delete a claim token
+
+Usage: avocado connect claim-tokens delete [OPTIONS] --id <ID>
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --id <ID>              Claim token ID to delete
   -y, --yes                  Skip confirmation prompt
   -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
       --profile <PROFILE>    Profile name (defaults to the active default profile)
@@ -889,18 +1574,85 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
 
 ---
 
-#### `avocado connect devices list`
+### `avocado connect upload`
 
 ```
-List devices in an organization
+Upload current runtime build to the Connect platform
 
-Usage: avocado connect devices list [OPTIONS]
+Usage: avocado connect upload [OPTIONS] --version <VERSION> <RUNTIME>
+
+Arguments:
+  <RUNTIME>  Runtime name to upload
+
+Options:
+      --org <ORG>                      Organization ID (or set connect.org in avocado.yaml)
+      --project <PROJECT>              Project ID (or set connect.project in avocado.yaml)
+      --version <VERSION>              Human-readable version for this upload (e.g. v0.0.2-dev)
+      --description <DESCRIPTION>      Description for the upload
+  -C, --config <CONFIG>                Path to avocado.yaml configuration file [default: avocado.yaml]
+  -t, --target <TARGET>                Target architecture
+      --file <FILE>                    Path to pre-built tarball or artifact directory (skips export from Docker volume)
+      --profile <PROFILE>              Profile name (defaults to the active default profile)
+      --publish                        Publish the runtime immediately after upload (draft → published)
+      --deploy-cohort <DEPLOY_COHORT>  Deploy after upload: cohort ID to target
+      --deploy-name <DEPLOY_NAME>      Deploy after upload: deployment name (auto-generated if omitted)
+      --deploy-tag <DEPLOY_TAG>        Deploy after upload: filter by tags (repeatable)
+      --deploy-activate                Deploy after upload: activate immediately (skip draft)
+      --output <OUTPUT>                Output format (human prose or NDJSON event stream) [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>            Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>            NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                         Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start               On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                           Print help
+
+```
+
+---
+
+### `avocado connect deploy`
+
+```
+Deploy a runtime to a cohort
+
+Usage: avocado connect deploy [OPTIONS]
+
+Options:
+      --org <ORG>                  Organization ID (or set connect.org in avocado.yaml)
+      --project <PROJECT>          Project ID (or set connect.project in avocado.yaml)
+      --runtime <RUNTIME>          Runtime ID (skip interactive prompt)
+      --cohort <COHORT>            Cohort ID (skip interactive prompt)
+      --name <NAME>                Deployment name (auto-generated if omitted)
+      --description <DESCRIPTION>  Description for the deployment
+  -t, --tag <TAG>                  Filter by tags — only deploy to devices with these tags (repeatable)
+      --activate                   Activate immediately (skip draft status)
+  -C, --config <CONFIG>            Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>          Profile name (defaults to the active default profile)
+      --output <OUTPUT>            Output format (human prose or NDJSON event stream) [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>        Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                       Print help
+
+```
+
+---
+
+### `avocado connect server-key`
+
+```
+Retrieve the Connect server's TUF signing public key
+
+Usage: avocado connect server-key [OPTIONS]
 
 Options:
       --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
@@ -910,6 +1662,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -918,46 +1671,23 @@ Options:
 
 ### `avocado connect keys` {#connect-keys}
 
-#### `avocado connect keys approve`
-
 ```
-Approve a staged delegate key (admin only)
+Manage signing keys registered with the Connect server
 
-Usage: avocado connect keys approve [OPTIONS] <KEYID>
+Usage: avocado connect keys [OPTIONS] <COMMAND>
 
-Arguments:
-  <KEYID>  Key ID of the staged key to approve
+Commands:
+  register  Register a local signing key with the Connect server
+  approve   Approve a staged delegate key (admin only)
+  list      List delegate keys registered with the server
+  retire    Discard a staged delegate key
 
 Options:
-      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>    Profile name
       --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-#### `avocado connect keys list`
-
-```
-List delegate keys registered with the server
-
-Usage: avocado connect keys list [OPTIONS]
-
-Options:
-      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-      --type <KEY_TYPE>      Filter by key type: content or root
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>    Profile name
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -981,6 +1711,55 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect keys approve`
+
+```
+Approve a staged delegate key (admin only)
+
+Usage: avocado connect keys approve [OPTIONS] <KEYID>
+
+Arguments:
+  <KEYID>  Key ID of the staged key to approve
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect keys list`
+
+```
+List delegate keys registered with the server
+
+Usage: avocado connect keys list [OPTIONS]
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+      --type <KEY_TYPE>      Filter by key type: content or root
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1005,96 +1784,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-### `avocado connect orgs` {#connect-orgs}
-
-#### `avocado connect orgs list`
-
-```
-List organizations you belong to
-
-Usage: avocado connect orgs list [OPTIONS]
-
-Options:
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-### `avocado connect projects` {#connect-projects}
-
-#### `avocado connect projects create`
-
-```
-Create a new project
-
-Usage: avocado connect projects create [OPTIONS] --name <NAME>
-
-Options:
-      --org <ORG>                  Organization ID (or set connect.org in avocado.yaml)
-      --name <NAME>                Project name
-      --description <DESCRIPTION>  Project description
-  -C, --config <CONFIG>            Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>          Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>        Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                       Print help
-
-```
-
----
-
-#### `avocado connect projects delete`
-
-```
-Delete a project
-
-Usage: avocado connect projects delete [OPTIONS] --id <ID>
-
-Options:
-      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-      --id <ID>              Project ID to delete
-  -y, --yes                  Skip confirmation prompt
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-#### `avocado connect projects list`
-
-```
-List projects in an organization
-
-Usage: avocado connect projects list [OPTIONS]
-
-Options:
-      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1102,6 +1792,50 @@ Options:
 ---
 
 ### `avocado connect trust` {#connect-trust}
+
+```
+Fleet trust posture commands
+
+Usage: avocado connect trust [OPTIONS] <COMMAND>
+
+Commands:
+  status             Show fleet trust status for an organization
+  promote-root       Promote root trust to user control (Level 1 → 2)
+  rotate-server-key  Rotate the server signing key
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect trust status`
+
+```
+Show fleet trust status for an organization
+
+Usage: avocado connect trust status [OPTIONS]
+
+Options:
+      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+      --profile <PROFILE>    Profile name (defaults to the active default profile)
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
 
 #### `avocado connect trust promote-root`
 
@@ -1119,6 +1853,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1141,27 +1876,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-#### `avocado connect trust status`
-
-```
-Show fleet trust status for an organization
-
-Usage: avocado connect trust status [OPTIONS]
-
-Options:
-      --org <ORG>            Organization ID (or set connect.org in avocado.yaml)
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-      --profile <PROFILE>    Profile name (defaults to the active default profile)
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1169,6 +1884,121 @@ Options:
 ---
 
 ## Extension Commands
+
+### `avocado ext`
+
+```
+Extension related commands
+
+Usage: avocado ext [OPTIONS] <COMMAND>
+
+Commands:
+  install   Install dependencies into extension sysroots
+  fetch     Fetch remote extensions from repo, git, or path sources
+  build     Build sysext and/or confext extensions from configuration
+  list      List extension names
+  deps      List dependencies for extensions
+  dnf       Run DNF commands in an extension's context
+  clean     Clean an extension's sysroot
+  checkout  Check out files from extension sysroot to source directory
+  image     Create squashfs image from system extension
+  package   Package extension sysroot into an RPM
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado ext install`
+
+```
+Install dependencies into extension sysroots
+
+Usage: avocado ext install [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]
+          Extension name (if not provided, installs all extensions)
+
+Options:
+  -C, --config <CONFIG>
+          Path to avocado.yaml configuration file
+
+          [default: avocado.yaml]
+
+  -v, --verbose
+          Enable verbose output
+
+  -f, --force
+          Reinstall from scratch: clear this extension's sysroot and re-seed it.
+
+          Not needed to skip dnf's prompts — installs never prompt. Forcing discards the extension's built content, so the next build has to redo it.
+
+  -t, --target <TARGET>
+          Target architecture
+
+      --container-arg <CONTAINER_ARGS>
+          Additional arguments to pass to the container runtime
+
+      --dnf-arg <DNF_ARGS>
+          Additional arguments to pass to DNF commands
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado ext fetch`
+
+```
+Fetch remote extensions from repo, git, or path sources
+
+Usage: avocado ext fetch [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]  Extension name (if not provided, fetches all remote extensions)
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -f, --force                           Force re-fetch even if already installed
+      --locked                          Fail instead of updating avocado.lock: a declared extension with no lock entry, a pinned version that moved, or a pin that cannot satisfy the current requirements. Never writes the lock. Use this in CI
+  -t, --target <TARGET>                 Target architecture
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
 
 ### `avocado ext build`
 
@@ -1184,81 +2014,37 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -t, --target <TARGET>                 Target architecture
-  -r, --runtime <RUNTIME>               Runtime to build the extension against (kernel/rootfs context). Resolves from AVOCADO_RUNTIME / default_runtime / sole-runtime when omitted
+      --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
+  -r, --runtime <RUNTIME>               Runtime to build the extension against (kernel/rootfs context). Required when the project has multiple runtimes. Resolves from AVOCADO_RUNTIME / default_runtime / sole-runtime when omitted
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
 
 ---
 
-### `avocado ext checkout`
+### `avocado ext list`
 
 ```
-Check out files from extension sysroot to source directory
+List extension names
 
-Usage: avocado ext checkout [OPTIONS] --ext-path <EXT_PATH> --src-path <SRC_PATH> [NAME]
-
-Arguments:
-  [NAME]  Extension name
+Usage: avocado ext list [OPTIONS]
 
 Options:
-  -C, --config <CONFIG>
-          Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose
-          Enable verbose output
-  -t, --target <TARGET>
-          Target architecture
-      --ext-path <EXT_PATH>
-          Path within the extension sysroot to checkout (e.g., /etc/config.json or /etc for directory)
-      --src-path <SRC_PATH>
-          Destination path in source directory (relative to src root)
-  -r, --runtime <RUNTIME>
-          Runtime context for the checkout (selects which sysroot tree the files come from)
-      --container-tool <CONTAINER_TOOL>
-          Container tool to use (docker/podman) [default: docker]
-      --runs-on <USER@HOST>
-          Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>
-          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>
-          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui
-          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help
-          Print help
-
-```
-
----
-
-### `avocado ext clean`
-
-```
-Clean an extension's sysroot
-
-Usage: avocado ext clean [OPTIONS] [NAME]
-
-Arguments:
-  [NAME]  Extension name
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-  -r, --runtime <RUNTIME>               Runtime context for the clean. Falls through to per-target behavior when no runtime resolves
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+  -t, --target <TARGET>      Target architecture
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
 
 ```
 
@@ -1281,6 +2067,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1309,33 +2096,78 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
 
 ---
 
-### `avocado ext fetch`
+### `avocado ext clean`
 
 ```
-Fetch remote extensions from repo, git, or path sources
+Clean an extension's sysroot
 
-Usage: avocado ext fetch [OPTIONS] [NAME]
+Usage: avocado ext clean [OPTIONS] [NAME]
 
 Arguments:
-  [NAME]  Extension name (if not provided, fetches all remote extensions)
+  [NAME]  Extension name
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -f, --force                           Force re-fetch even if already installed
   -t, --target <TARGET>                 Target architecture
+  -r, --runtime <RUNTIME>               Runtime context for the clean (resolves which extension sysroot tree to operate on). Falls through to legacy per-target behavior when no runtime resolves
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
+
+```
+
+---
+
+### `avocado ext checkout`
+
+```
+Check out files from extension sysroot to source directory
+
+Usage: avocado ext checkout [OPTIONS] --ext-path <EXT_PATH> --src-path <SRC_PATH> [NAME]
+
+Arguments:
+  [NAME]  Extension name
+
+Options:
+  -C, --config <CONFIG>
+          Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose
+          Enable verbose output
+  -t, --target <TARGET>
+          Target architecture
+  -r, --runtime <RUNTIME>
+          Runtime context for the checkout (selects which sysroot tree the files come from)
+      --ext-path <EXT_PATH>
+          Path within the extension sysroot to checkout (e.g., /etc/config.json or /etc for directory)
+      --src-path <SRC_PATH>
+          Destination path in source directory (relative to src root)
+      --container-tool <CONTAINER_TOOL>
+          Container tool to use (docker/podman) [default: docker]
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help
+          Print help
 
 ```
 
@@ -1344,7 +2176,7 @@ Options:
 ### `avocado ext image`
 
 ```
-Create erofs image from system extension
+Create squashfs image from system extension
 
 Usage: avocado ext image [OPTIONS] [NAME]
 
@@ -1355,7 +2187,7 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -t, --target <TARGET>                 Target architecture
-  -r, --runtime <RUNTIME>               Runtime to image the extension under (kernel/rootfs context). Same resolution rules as ext build -r
+  -r, --runtime <RUNTIME>               Runtime to image the extension under (kernel/rootfs context). Same resolution rules as `ext build -r`
       --out <OUT_DIR>                   Output directory on host to copy the resulting image to
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
@@ -1363,54 +2195,8 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
-
-```
-
----
-
-### `avocado ext install`
-
-```
-Install dependencies into extension sysroots
-
-Usage: avocado ext install [OPTIONS] [NAME]
-
-Arguments:
-  [NAME]  Extension name (if not provided, installs all extensions)
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
-
-```
-
----
-
-### `avocado ext list`
-
-```
-List extension names
-
-Usage: avocado ext list [OPTIONS]
-
-Options:
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-  -t, --target <TARGET>      Target architecture
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
 
 ```
 
@@ -1438,6 +2224,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -1445,6 +2232,92 @@ Options:
 ---
 
 ## Runtime Commands
+
+### `avocado runtime`
+
+```
+Runtime management commands
+
+Usage: avocado runtime [OPTIONS] <COMMAND>
+
+Commands:
+  install    Install dependencies into runtime installroots
+  build      Build a runtime
+  provision  Provision a runtime
+  list       List runtime names
+  deps       List dependencies for a runtime
+  dnf        Run DNF commands in a runtime's context
+  clean      Clean runtime installroot directory
+  deploy     Deploy a runtime to a device
+  sign       Sign runtime images
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado runtime install`
+
+```
+Install dependencies into runtime installroots
+
+Usage: avocado runtime install [OPTIONS] [NAME]
+
+Arguments:
+  [NAME]
+          Runtime name (if not provided, installs for all runtimes)
+
+Options:
+  -C, --config <CONFIG>
+          Path to avocado.yaml configuration file
+
+          [default: avocado.yaml]
+
+  -v, --verbose
+          Enable verbose output
+
+  -f, --force
+          Run without the live checklist.
+
+          Clears nothing. Not needed to skip dnf's prompts — installs never prompt.
+
+  -t, --target <TARGET>
+          Target architecture
+
+      --container-arg <CONTAINER_ARGS>
+          Additional arguments to pass to the container runtime
+
+      --dnf-arg <DNF_ARGS>
+          Additional arguments to pass to DNF commands
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
 
 ### `avocado runtime build`
 
@@ -1461,24 +2334,26 @@ Options:
   -v, --verbose                         Enable verbose output
   -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -t, --target <TARGET>                 Target architecture
+      --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
 
 ---
 
-### `avocado runtime clean`
+### `avocado runtime provision`
 
 ```
-Clean runtime installroot directory
+Provision a runtime
 
-Usage: avocado runtime clean [OPTIONS] [NAME]
+Usage: avocado runtime provision [OPTIONS] [NAME]
 
 Arguments:
   [NAME]  Runtime name
@@ -1486,42 +2361,41 @@ Arguments:
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
+  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -t, --target <TARGET>                 Target architecture
+      --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
+      --profile <PROVISION_PROFILE>     Provision profile to use
+      --env <ENV>                       Environment variables to pass to the provision process
+      --out <OUT>                       Output path relative to src_dir for provisioning artifacts
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
 
 ---
 
-### `avocado runtime deploy`
+### `avocado runtime list`
 
 ```
-Deploy a runtime to a device
+List runtime names
 
-Usage: avocado runtime deploy [OPTIONS] --device <DEVICE> [NAME]
-
-Arguments:
-  [NAME]  Runtime name
+Usage: avocado runtime list [OPTIONS]
 
 Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-  -d, --device <DEVICE>                 Device to deploy to as [user@]host[:port] (e.g. root@192.168.1.100:2222)
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --connect-sign                    Sign TUF metadata via Avocado Connect instead of locally (use for a device that has taken a Connect OTA). Requires a local signing key configured for the runtime (Level 2: signing.key + avocado connect trust promote-root --key <KEY>); without one no root.json is baked and the deploy fails during Phase 1 hash collection.
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
+  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
+  -t, --target <TARGET>      Target architecture
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
 
 ```
 
@@ -1544,6 +2418,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1571,65 +2446,19 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
 
 ---
 
-### `avocado runtime install`
+### `avocado runtime clean`
 
 ```
-Install dependencies into runtime installroots
+Clean runtime installroot directory
 
-Usage: avocado runtime install [OPTIONS] [NAME]
-
-Arguments:
-  [NAME]  Runtime name (if not provided, installs for all runtimes)
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
-
-```
-
----
-
-### `avocado runtime list`
-
-```
-List runtime names
-
-Usage: avocado runtime list [OPTIONS]
-
-Options:
-  -C, --config <CONFIG>      Path to avocado.yaml configuration file [default: avocado.yaml]
-  -t, --target <TARGET>      Target architecture
-      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                 Print help
-
-```
-
----
-
-### `avocado runtime provision`
-
-```
-Provision a runtime
-
-Usage: avocado runtime provision [OPTIONS] [NAME]
+Usage: avocado runtime clean [OPTIONS] [NAME]
 
 Arguments:
   [NAME]  Runtime name
@@ -1637,17 +2466,44 @@ Arguments:
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -t, --target <TARGET>                 Target architecture
-      --profile <PROVISION_PROFILE>     Provision profile to use
-      --env <ENV>                       Environment variables to pass to the provision process
-      --out <OUT>                       Output path relative to src_dir for provisioning artifacts
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+### `avocado runtime deploy`
+
+```
+Deploy a runtime to a device
+
+Usage: avocado runtime deploy [OPTIONS] --device <DEVICE> [NAME]
+
+Arguments:
+  [NAME]  Runtime name
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -t, --target <TARGET>                 Target architecture
+  -d, --device <DEVICE>                 Device to deploy to as [user@]host[:port] (e.g. root@192.168.1.100:2222)
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --connect-sign                    Sign TUF metadata via the Connect platform instead of locally. Use this when deploying to a device that has received a Connect OTA update. Requires a local signing key configured for the runtime (Level 2: signing.key + avocado connect trust promote-root --key <KEY>); without one no root.json is baked and the deploy fails during Phase 1 hash collection
+      --output <OUTPUT>                 Output format. JSON skips TUI rendering and emits NDJSON events [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -1674,6 +2530,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -1682,152 +2539,29 @@ Options:
 
 ## SDK Commands
 
-### `avocado sdk clean`
+### `avocado sdk`
 
 ```
-Remove the SDK directory Clean the SDK or run clean scripts for specific compile sections
+SDK related commands
 
-Usage: avocado sdk clean [OPTIONS] [SECTIONS]...
+Usage: avocado sdk [OPTIONS] <COMMAND>
 
-Arguments:
-  [SECTIONS]...  Specific compile sections to clean (runs their clean scripts)
+Commands:
+  run      Create and run an SDK container
+  deps     List SDK dependencies
+  compile  Run compile scripts
+  dnf      Run DNF commands in the SDK context
+  install  Install dependencies into the SDK
+  clean    Remove the SDK directory Clean the SDK or run clean scripts for specific compile sections
+  package  Package a compiled SDK section into an RPM
 
 Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
-
-```
-
----
-
-### `avocado sdk compile`
-
-```
-Run compile scripts
-
-Usage: avocado sdk compile [OPTIONS] [SECTIONS]...
-
-Arguments:
-  [SECTIONS]...  Specific compile sections to run
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
-
-```
-
----
-
-### `avocado sdk deps`
-
-```
-List SDK dependencies
-
-Usage: avocado sdk deps [OPTIONS]
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
-
-```
-
----
-
-### `avocado sdk dnf`
-
-```
-Run DNF commands in the SDK context
-
-Usage: avocado sdk dnf [OPTIONS] [COMMAND]...
-
-Arguments:
-  [COMMAND]...  DNF command and arguments to execute
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
-
-```
-
----
-
-### `avocado sdk install`
-
-```
-Install dependencies into the SDK
-
-Usage: avocado sdk install [OPTIONS]
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
-
-```
-
----
-
-### `avocado sdk package`
-
-```
-Package a compiled SDK section into an RPM
-
-Usage: avocado sdk package [OPTIONS] <SECTION>
-
-Arguments:
-  <SECTION>  Compile section to package (must have a 'package' block in config)
-
-Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-      --out <OUT_DIR>                   Output directory on host for the built RPM(s)
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
 
 ```
 
@@ -1861,6 +2595,194 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+### `avocado sdk deps`
+
+```
+List SDK dependencies
+
+Usage: avocado sdk deps [OPTIONS]
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -t, --target <TARGET>                 Target architecture
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+### `avocado sdk compile`
+
+```
+Run compile scripts
+
+Usage: avocado sdk compile [OPTIONS] [SECTIONS]...
+
+Arguments:
+  [SECTIONS]...  Specific compile sections to run
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -t, --target <TARGET>                 Target architecture
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+### `avocado sdk dnf`
+
+```
+Run DNF commands in the SDK context
+
+Usage: avocado sdk dnf [OPTIONS] [COMMAND]...
+
+Arguments:
+  [COMMAND]...  DNF command and arguments to execute
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -t, --target <TARGET>                 Target architecture
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+### `avocado sdk install`
+
+```
+Install dependencies into the SDK
+
+Usage: avocado sdk install [OPTIONS]
+
+Options:
+  -C, --config <CONFIG>
+          Path to avocado.yaml configuration file
+
+          [default: avocado.yaml]
+
+  -v, --verbose
+          Enable verbose output
+
+  -f, --force
+          Install the SDK, rootfs, initramfs and target-dev sysroots in parallel rather than one at a time.
+
+          Clears nothing. Not needed to skip dnf's prompts — installs never prompt.
+
+  -t, --target <TARGET>
+          Target architecture
+
+      --target-board <TARGET_BOARD>
+          Target board override for `{{ avocado.target.board }}`
+
+      --container-arg <CONTAINER_ARGS>
+          Additional arguments to pass to the container runtime
+
+      --dnf-arg <DNF_ARGS>
+          Additional arguments to pass to DNF commands
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado sdk clean`
+
+```
+Remove the SDK directory Clean the SDK or run clean scripts for specific compile sections
+
+Usage: avocado sdk clean [OPTIONS] [SECTIONS]...
+
+Arguments:
+  [SECTIONS]...  Specific compile sections to clean (runs their clean scripts)
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -t, --target <TARGET>                 Target architecture
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+### `avocado sdk package`
+
+```
+Package a compiled SDK section into an RPM
+
+Usage: avocado sdk package [OPTIONS] <SECTION>
+
+Arguments:
+  <SECTION>  Compile section to package (must have a 'package' block in config)
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -t, --target <TARGET>                 Target architecture
+      --out <OUT_DIR>                   Output directory on host for the built RPM(s)
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -1868,6 +2790,31 @@ Options:
 ---
 
 ## Signing Key Commands
+
+### `avocado signing-keys`
+
+```
+Manage signing keys for extension and image signing
+
+Usage: avocado signing-keys [OPTIONS] <COMMAND>
+
+Commands:
+  create  Create a new signing key or register an external PKCS#11 key
+  import  Import an existing RSA PEM key and certificate (for boot-FIT signing)
+  list    List all registered signing keys
+  remove  Remove a signing key
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
 
 ### `avocado signing-keys create`
 
@@ -1891,7 +2838,33 @@ Options:
       --nfs-port <NFS_PORT>     NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>         SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                  Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start        On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                    Print help
+
+```
+
+---
+
+### `avocado signing-keys import`
+
+```
+Import an existing RSA PEM key and certificate (for boot-FIT signing)
+
+Usage: avocado signing-keys import [OPTIONS] --key <FILE> --cert <FILE> <NAME>
+
+Arguments:
+  <NAME>  Name for the key, referenced from `runtimes.<name>.signing.fit_key`
+
+Options:
+      --key <FILE>             PEM private key file
+      --cert <FILE>            PEM X.509 certificate for that key
+      --algorithm <ALGORITHM>  Expected key size (rsa2048 or rsa4096); read from the key when omitted
+      --runs-on <USER@HOST>    Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                   Print help
 
 ```
 
@@ -1909,6 +2882,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1931,6 +2905,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1957,6 +2932,7 @@ Options:
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
+
 ```
 
 ---
@@ -1981,6 +2957,7 @@ Options:
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
+
 ```
 
 ---
@@ -2005,30 +2982,87 @@ Options:
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
+
 ```
 
 ---
 
 ## Initramfs Commands
 
-### `avocado initramfs clean`
+### `avocado initramfs`
 
 ```
-Remove initramfs sysroot
+Initramfs sysroot and image commands
 
-Usage: avocado initramfs clean [OPTIONS]
+Usage: avocado initramfs [OPTIONS] <COMMAND>
+
+Commands:
+  install  Install initramfs sysroot packages via DNF
+  image    Build initramfs image from sysroot
+  clean    Remove initramfs sysroot
 
 Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado initramfs install`
+
+```
+Install initramfs sysroot packages via DNF
+
+Usage: avocado initramfs install [OPTIONS]
+
+Options:
+  -C, --config <CONFIG>
+          Path to avocado.yaml configuration file
+
+          [default: avocado.yaml]
+
+  -v, --verbose
+          Enable verbose output
+
+  -f, --force
+          Accepted for compatibility with older scripts; has no effect.
+
+          Clears nothing. Not needed to skip dnf's prompts — installs never prompt.
+
+  -t, --target <TARGET>
+          Target architecture
+
+      --target-board <TARGET_BOARD>
+          Target board override for `{{ avocado.target.board }}`
+
+      --container-arg <CONTAINER_ARGS>
+          Additional arguments to pass to the container runtime
+
+      --dnf-arg <DNF_ARGS>
+          Additional arguments to pass to DNF commands
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+  -h, --help
+          Print help (see a summary with '-h')
 
 ```
 
@@ -2052,23 +3086,23 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
 
 ---
 
-### `avocado initramfs install`
+### `avocado initramfs clean`
 
 ```
-Install initramfs sysroot packages via DNF
+Remove initramfs sysroot
 
-Usage: avocado initramfs install [OPTIONS]
+Usage: avocado initramfs clean [OPTIONS]
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
@@ -2076,6 +3110,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2084,24 +3119,80 @@ Options:
 
 ## Rootfs Commands
 
-### `avocado rootfs clean`
+### `avocado rootfs`
 
 ```
-Remove rootfs sysroot
+Rootfs sysroot and image commands
 
-Usage: avocado rootfs clean [OPTIONS]
+Usage: avocado rootfs [OPTIONS] <COMMAND>
+
+Commands:
+  install  Install rootfs sysroot packages via DNF
+  image    Build rootfs image from sysroot
+  clean    Remove rootfs sysroot
 
 Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -t, --target <TARGET>                 Target architecture
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-  -h, --help                            Print help
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado rootfs install`
+
+```
+Install rootfs sysroot packages via DNF
+
+Usage: avocado rootfs install [OPTIONS]
+
+Options:
+  -C, --config <CONFIG>
+          Path to avocado.yaml configuration file
+
+          [default: avocado.yaml]
+
+  -v, --verbose
+          Enable verbose output
+
+  -f, --force
+          Accepted for compatibility with older scripts; has no effect.
+
+          Clears nothing. Not needed to skip dnf's prompts — installs never prompt.
+
+  -t, --target <TARGET>
+          Target architecture
+
+      --target-board <TARGET_BOARD>
+          Target board override for `{{ avocado.target.board }}`
+
+      --container-arg <CONTAINER_ARGS>
+          Additional arguments to pass to the container runtime
+
+      --dnf-arg <DNF_ARGS>
+          Additional arguments to pass to DNF commands
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+  -h, --help
+          Print help (see a summary with '-h')
 
 ```
 
@@ -2125,23 +3216,23 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
 
 ---
 
-### `avocado rootfs install`
+### `avocado rootfs clean`
 
 ```
-Install rootfs sysroot packages via DNF
+Remove rootfs sysroot
 
-Usage: avocado rootfs install [OPTIONS]
+Usage: avocado rootfs clean [OPTIONS]
 
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
   -t, --target <TARGET>                 Target architecture
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
@@ -2149,6 +3240,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2157,10 +3249,148 @@ Options:
 
 ## HITL Commands
 
+### `avocado hitl`
+
+```
+Hardware-in-the-loop testing commands
+
+Usage: avocado hitl [OPTIONS] <COMMAND>
+
+Commands:
+  start   Start a managed HITL NFS server for this project (detached; see `status`, `logs`, `stop`)
+  status  List HITL servers on this machine
+  stop    Stop and remove this project's HITL server (or every one with --all)
+  logs    Show this project's HITL server log
+  sync    Re-run the extension lifecycle on a device after rebuilding what it is served
+  server  Start a HITL server in the foreground (alias for `start --foreground`)
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado hitl start`
+
+```
+Start a managed HITL NFS server for this project (detached; see `status`, `logs`, `stop`)
+
+Usage: avocado hitl start [OPTIONS] --extension <EXTENSIONS>
+
+Options:
+  -C, --config-path <CONFIG_PATH>       Path to avocado.yaml configuration file [default: avocado.yaml]
+  -e, --extension <EXTENSIONS>          Extensions to serve
+      --container-arg <CONTAINER_ARGS>  Additional container arguments
+      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
+  -t, --target <TARGET>                 Target
+  -v, --verbose                         Enable verbose output
+  -p, --port <PORT>                     NFS port number to use
+      --no-stamps                       Disable stamp validation
+      --foreground                      Stay attached and stream the server log instead of detaching
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+### `avocado hitl status`
+
+```
+List HITL servers on this machine
+
+Usage: avocado hitl status [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado hitl stop`
+
+```
+Stop and remove this project's HITL server (or every one with --all)
+
+Usage: avocado hitl stop [OPTIONS]
+
+Options:
+  -C, --config-path <CONFIG_PATH>  Path to avocado.yaml configuration file [default: avocado.yaml]
+  -t, --target <TARGET>            Target
+      --all                        Stop every HITL server, not just this project's
+      --runs-on <USER@HOST>        Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                       Print help
+
+```
+
+---
+
+### `avocado hitl logs`
+
+```
+Show this project's HITL server log
+
+Usage: avocado hitl logs [OPTIONS]
+
+Options:
+  -C, --config-path <CONFIG_PATH>  Path to avocado.yaml configuration file [default: avocado.yaml]
+  -t, --target <TARGET>            Target
+  -f, --follow                     Follow the log
+      --runs-on <USER@HOST>        Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                       Print help
+
+```
+
+---
+
+### `avocado hitl sync`
+
+```
+Re-run the extension lifecycle on a device after rebuilding what it is served
+
+Usage: avocado hitl sync [OPTIONS] --device <DEVICE>
+
+Options:
+  -d, --device <DEVICE>      Device as [user@]host, e.g. root@192.168.1.77
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
 ### `avocado hitl server`
 
 ```
-Start a HITL server container with preconfigured settings
+Start a HITL server in the foreground (alias for `start --foreground`)
 
 Usage: avocado hitl server [OPTIONS]
 
@@ -2177,7 +3407,566 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
+
+```
+
+---
+
+## Config Commands
+
+### `avocado config`
+
+```
+Project configuration introspection (read-only)
+
+Usage: avocado config [OPTIONS] <COMMAND>
+
+Commands:
+  show  Show the parsed avocado.yaml in a stable JSON or YAML-ish summary
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado config show`
+
+```
+Show the parsed avocado.yaml in a stable JSON or YAML-ish summary
+
+Usage: avocado config show [OPTIONS]
+
+Options:
+  -c, --config <CONFIG>      Path to avocado.yaml (defaults to ./avocado.yaml) [default: ./avocado.yaml]
+      --output <OUTPUT>      Output format [default: human] [possible values: human, json]
+      --detail               Include nested detail (extensions, packages, SDK summary, runtime↔extension cross-references) under a `detail` key. Default output is unchanged when this flag is absent so existing consumers keep working byte-for-byte
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+## Container Commands
+
+### `avocado container`
+
+```
+Container Dev Mode: iterate on containers running on a device
+
+Usage: avocado container [OPTIONS] <COMMAND>
+
+Commands:
+  dev  Layer-aware hot-reload loop for a container running on a device
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado container dev` {#container-dev}
+
+```
+Layer-aware hot-reload loop for a container running on a device
+
+Usage: avocado container dev [OPTIONS] <COMMAND>
+
+Commands:
+  up      Start the dev registry + watcher and bootstrap the device
+  sync    One-shot re-push of the current watched image + notify the device
+  status  Report registry/watcher/last-sync state for the dev loop
+  down    Stop the dev registry + watcher and tear down listeners
+  prune   Garbage-collect this project's Container Dev Mode registry store (distinct from the top-level `prune`, which removes Docker volumes)
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado container dev up`
+
+```
+Start the dev registry + watcher and bootstrap the device
+
+Usage: avocado container dev up [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado container dev sync`
+
+```
+One-shot re-push of the current watched image + notify the device
+
+Usage: avocado container dev sync [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado container dev status`
+
+```
+Report registry/watcher/last-sync state for the dev loop
+
+Usage: avocado container dev status [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado container dev down`
+
+```
+Stop the dev registry + watcher and tear down listeners
+
+Usage: avocado container dev down [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado container dev prune`
+
+```
+Garbage-collect this project's Container Dev Mode registry store (distinct from the top-level `prune`, which removes Docker volumes)
+
+Usage: avocado container dev prune [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+## Kernel Commands
+
+### `avocado kernel`
+
+```
+Kernel image commands
+
+Usage: avocado kernel [OPTIONS] <COMMAND>
+
+Commands:
+  image  Wrap the rootfs sysroot's kernel binary into a signed kos.layer.kernel KAB. Requires `avocado rootfs install` to have run first (the kernel-image-* package lands the binary in the rootfs sysroot's /boot dir)
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado kernel image`
+
+```
+Wrap the rootfs sysroot's kernel binary into a signed kos.layer.kernel KAB. Requires `avocado rootfs install` to have run first (the kernel-image-* package lands the binary in the rootfs sysroot's /boot dir)
+
+Usage: avocado kernel image [OPTIONS]
+
+Options:
+  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
+  -v, --verbose                         Enable verbose output
+  -t, --target <TARGET>                 Target architecture
+      --out <OUT_DIR>                   Output directory on host for the resulting image
+      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
+      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                            Print help
+
+```
+
+---
+
+## VM Commands
+
+### `avocado vm`
+
+```
+Manage the local avocado-vm helper VM (macOS / Windows dev hosts)
+
+Usage: avocado vm [OPTIONS] <COMMAND>
+
+Commands:
+  start    Boot the avocado-vm (no-op if already running)
+  stop     Stop the avocado-vm (graceful; falls back to SIGKILL with --force)
+  status   Show running state + manifest metadata
+  shell    Open an SSH session into the running avocado-vm
+  logs     Print (or tail with -f) the QEMU serial console log
+  rebuild  Re-record the manifest from a fresh --vm-source. Preserves data disk unless --reset-data is given. VM must be stopped first
+  reset    Wipe the persistent `var.btrfs` and re-seed from the installed var artifact. Use this when you want a clean /var (Docker volumes, container caches, project work in /data, etc.). Doesn't change the VM image version — see `vm update` for that
+  config   Read/write persistent VM configuration at `~/.avocado/vm/config.yaml`. Same file the Avocado.app settings UI edits — every knob shipped in the desktop is reachable here
+  update   Check for and apply VM image updates from the release channel. Stops + restarts the VM if it was running. A release that ships a new `var` image schedules a state sync applied on the next start; the VM's Docker volumes, SDKs and /data are preserved
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm start`
+
+```
+Boot the avocado-vm (no-op if already running)
+
+Usage: avocado vm start [OPTIONS]
+
+Options:
+      --vm-source <VM_SOURCE>          Directory containing `direct` profile output (manifest.json + artifacts). Resolution order when unset: $AVOCADO_VM_DIR → ~/.avocado/vm/install/ (populated by `avocado vm update`) → last `vm start`/`vm rebuild` dir → error
+      --memory-mib <MEMORY_MIB>        Memory in MiB. Resolution order: this flag → `runtime.memory_mib` in `~/.avocado/vm/config.yaml` (also written by Avocado.app's settings UI) → 4096. When passed, the value is persisted back to the config so the next flag-less `vm start` reuses it
+      --cpus <CPUS>                    vCPU count. Same resolution + persistence as `--memory-mib`, falling back to `runtime.cpus` or 4
+      --ssh-port <SSH_PORT>            Bind SSH on this host port (default: pick a free high port)
+      --cmdline-extra <CMDLINE_EXTRA>  Extra kernel cmdline appended to the manifest's default
+      --workspace <WORKSPACE>          Host directory exposed to the VM as a 9p workspace (mounted at /mnt/workspace in the guest). Defaults to $AVOCADO_VM_WORKSPACE or $HOME. Every project the CLI operates on must live under this path
+      --var-size <VAR_SIZE>            Persistent /var disk size (e.g. "50G", "100G"). Growable on each start; shrink requires `vm rebuild --reset-data`. The file is sparse, so the on-disk footprint only grows as data is written. Default 50G — comfortable for SDK image + several container images
+      --dns <DNS>                      One-shot DNS override applied to this start only. Repeatable — `--dns 1.1.1.1 --dns 8.8.8.8` sets both. Wins over any value persisted via `vm config set network.dns`; the persisted value is unchanged. Useful when a VPN's slirp DNS proxy is broken
+  -w, --watch                          Tail the serial log live while waiting for boot-sync. On failure, the tail of the log is printed automatically even without this flag
+      --foreground                     Stay in the foreground (does not yet implement live serial; placeholder)
+      --runs-on <USER@HOST>            Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>            NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>                SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                         Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start               On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                           Print help
+
+```
+
+---
+
+### `avocado vm stop`
+
+```
+Stop the avocado-vm (graceful; falls back to SIGKILL with --force)
+
+Usage: avocado vm stop [OPTIONS]
+
+Options:
+      --force
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm status`
+
+```
+Show running state + manifest metadata
+
+Usage: avocado vm status [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm shell`
+
+```
+Open an SSH session into the running avocado-vm
+
+Usage: avocado vm shell [OPTIONS] [-- <COMMAND>...]
+
+Arguments:
+  [COMMAND]...  Optional command + args to run instead of an interactive shell
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm logs`
+
+```
+Print (or tail with -f) the QEMU serial console log
+
+Usage: avocado vm logs [OPTIONS]
+
+Options:
+  -f, --follow
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm rebuild`
+
+```
+Re-record the manifest from a fresh --vm-source. Preserves data disk unless --reset-data is given. VM must be stopped first
+
+Usage: avocado vm rebuild [OPTIONS]
+
+Options:
+      --vm-source <VM_SOURCE>  Falls back to $AVOCADO_VM_DIR if unset
+      --reset-data
+      --runs-on <USER@HOST>    Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                   Print help
+
+```
+
+---
+
+### `avocado vm reset`
+
+```
+Wipe the persistent `var.btrfs` and re-seed from the installed var artifact. Use this when you want a clean /var (Docker volumes, container caches, project work in /data, etc.). Doesn't change the VM image version — see `vm update` for that
+
+Usage: avocado vm reset [OPTIONS]
+
+Options:
+  -y, --yes                  Skip the interactive confirmation prompt
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm config` {#vm-config}
+
+```
+Read/write persistent VM configuration at `~/.avocado/vm/config.yaml`. Same file the Avocado.app settings UI edits — every knob shipped in the desktop is reachable here
+
+Usage: avocado vm config [OPTIONS] <COMMAND>
+
+Commands:
+  get    Print the value of a dotted key (e.g. `network.dns`). Silent on missing keys; use `--output json` to disambiguate missing vs empty
+  set    Set a dotted key. Multiple values become a list (e.g. `vm config set network.dns 1.1.1.1 8.8.8.8`)
+  unset  Remove a dotted key. No-op if it doesn't exist
+  list   Print the entire config (YAML by default, JSON with `--output json`). The same JSON shape is what avocado-desktop reads to render its UI
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm config get`
+
+```
+Print the value of a dotted key (e.g. `network.dns`). Silent on missing keys; use `--output json` to disambiguate missing vs empty
+
+Usage: avocado vm config get [OPTIONS] <KEY>
+
+Arguments:
+  <KEY>  Dotted key path, e.g. `network.dns` or `network.dns_search`
+
+Options:
+      --output <OUTPUT>      Output format (human plain text or JSON `{key, value}`) [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm config set`
+
+```
+Set a dotted key. Multiple values become a list (e.g. `vm config set network.dns 1.1.1.1 8.8.8.8`)
+
+Usage: avocado vm config set [OPTIONS] <KEY> <VALUES>...
+
+Arguments:
+  <KEY>        Dotted key path
+  <VALUES>...  One or more values. A single value is stored as a scalar; two or more are stored as a list. Use `vm config unset` to remove
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm config unset`
+
+```
+Remove a dotted key. No-op if it doesn't exist
+
+Usage: avocado vm config unset [OPTIONS] <KEY>
+
+Arguments:
+  <KEY>  Dotted key path
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm config list`
+
+```
+Print the entire config (YAML by default, JSON with `--output json`). The same JSON shape is what avocado-desktop reads to render its UI
+
+Usage: avocado vm config list [OPTIONS]
+
+Options:
+      --output <OUTPUT>      [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm update`
+
+```
+Check for and apply VM image updates from the release channel. Stops + restarts the VM if it was running. A release that ships a new `var` image schedules a state sync applied on the next start; the VM's Docker volumes, SDKs and /data are preserved
+
+Usage: avocado vm update [OPTIONS]
+
+Options:
+      --channel <CHANNEL>    Channel name (default: `~/.avocado/config.yaml [vm].channel`, or `stable` if unset)
+      --check                Print availability + exit without downloading
+  -y, --yes                  Skip the interactive confirmation prompt
+      --output <OUTPUT>      Output format (human prose or single JSON object) [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
 
 ```
 

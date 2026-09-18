@@ -310,12 +310,16 @@ export default function TargetSelector() {
                       </li>
                     ))}
                   </ul>
-                  <p>
-                    Set the release in your <code>avocado.yaml</code>:
-                  </p>
-                  <pre>
-                    <code>{`distro:\n  release: ${preferred}`}</code>
-                  </pre>
+                  {!t.configuration && (
+                    <>
+                      <p>
+                        Set the release in your <code>avocado.yaml</code>:
+                      </p>
+                      <pre>
+                        <code>{`distro:\n  release: ${preferred}`}</code>
+                      </pre>
+                    </>
+                  )}
                 </>
               )
             })()}
@@ -448,7 +452,15 @@ export default function TargetSelector() {
           <pre>
             <code>{`avocado init --target ${t.target} ${t.target}\ncd ${t.target}`}</code>
           </pre>
-          {t.board && (
+          {t.configuration && (
+            <>
+              <p>{t.configuration.description}</p>
+              <pre>
+                <code>{t.configuration.yaml}</code>
+              </pre>
+            </>
+          )}
+          {!t.configuration && t.board && (
             <>
               <p>
                 This target also requires a <strong>board</strong>. Set both keys at the top of your{' '}
@@ -463,7 +475,7 @@ export default function TargetSelector() {
           <Heading as="h2">Install</Heading>
           <p>Install the SDK toolchain, extension dependencies, and runtime packages.</p>
           <pre>
-            <code>avocado install -f</code>
+            <code>avocado install</code>
           </pre>
 
           <Heading as="h2">Build</Heading>
