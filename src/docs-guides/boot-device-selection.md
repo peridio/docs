@@ -10,7 +10,7 @@ description: 'Choose which storage device a board boots from. Provisioning decid
 
 NVIDIA Jetson (Tegra) is the only target this page covers, and `avocado-set-boot-device` ships in the `avocado-boot-device` package. An image built before that package existed does not have the tool at all, so `avocado-set-boot-device --list` returns a plain `command not found` rather than any message from the tool itself. Add the `boot-device` extension (see below) and rebuild before running anything on this page.
 
-What has been checked on an Orin Nano: the boot entries and their device paths this page describes, that writing UEFI `BootOrder` persists across a reboot with `BootCurrent` following it, and the kernel-versus-rootfs mismatch described at the end. What has not: the tool's own write path running end to end on a board.
+Checked end to end on an Orin Nano carrying both an NVMe and a bootable SD card: the boot entries and device paths this page describes, `--list` classifying every entry on the board, `--dry-run` writing nothing, and `--once` writing `BootNext`, reading it back, being honoured by firmware on the next boot, and reverting on its own the boot after that.
 
 :::
 
@@ -33,26 +33,28 @@ This guide covers:
 - switching the boot device, permanently or for one boot
 - what the tool refuses to do, and why
 
-## Add it to a runtime
+## Add it to the rootfs
 
-The tool ships as the `avocado-boot-device` package. Declare an extension that installs it and add that extension to your runtime:
+The tool ships as the `avocado-boot-device` package. Name it under `rootfs.packages`:
 
 ```yaml title="avocado.yaml"
-extensions:
-  boot-device:
-    types:
-      - sysext
-    version: '1.0.0'
-    packages:
-      avocado-boot-device: '*'
-
-runtimes:
-  dev:
-    extensions:
-      - boot-device
+rootfs:
+  packages:
+    avocado-pkg-rootfs: '*'
+    avocado-boot-device: '*'
 ```
 
+`avocado-pkg-rootfs` is repeated deliberately. Naming this map replaces the default package set rather than adding to it, so dropping it gives you an image missing everything else - see [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs).
+
+`efibootmgr` and `efivar` arrive with it through the package's own dependencies; you do not name them.
+
 Then build and provision as usual. The tool lands at `/usr/sbin/avocado-set-boot-device`.
+
+:::caution Put it in the rootfs, not in an extension
+
+Installing `avocado-boot-device` through an extension's `packages:` does not work on avocado-cli 1.0.0-rc.4. `avocado install` resolves and installs the package into the extension's sysroot and reports success, but the built extension image comes out empty - 4096 bytes, containing only its own `extension-release` marker - and the tool is absent at runtime. Reproduced on an Orin Nano with a `sysext`-only extension and with one combining `sysext` and `confext`.
+
+:::
 
 ## See what the firmware can boot
 
