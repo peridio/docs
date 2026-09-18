@@ -3,18 +3,6 @@ sidebar_position: 3
 title: 'Container dev mode'
 copy_markdown: true
 description: 'Layer-aware hot-reload for containers on Avocado OS - change one line and ship only the changed layer to a running device, with no reflash and no full image re-push.'
-draft: true # PRE-RELEASE feature - keep off the live site until Container Dev Mode ships
-# PRE-RELEASE NOTE (not for readers): every `avocado container dev` subcommand on
-# this page exists only on the unmerged avocado-cli container-dev-mode branch, so
-# a reader who follows this guide today runs a subcommand no released CLI has.
-# The companion field note is gated for the same reason. Dropping this one line
-# republishes the page: the `src/sidebars-guides.js` entry stays put, because
-# Docusaurus resolves a draft doc into `draftIds` and leaves the sidebar alone
-# rather than failing. Re-verify the commands against a released build first.
-# Un-draft this page in the SAME commit as the field note, or before it: the note
-# links /developer-reference/container-dev-mode, which is not a route while this
-# page is draft, and onBrokenLinks is 'throw'. This page can publish alone; the
-# note cannot.
 ---
 
 Container dev mode is the inner development loop for a containerized application running on an Avocado OS device. You keep building images the way you already do (`docker build`), and the changed layer is pushed to the device and the container restarted, in place, on the running system. There is no reflash, no full image re-transfer, and no rebuild of the OS.
@@ -194,6 +182,40 @@ Each entry maps the two sides: `ref` is an image you build **on your host**, `se
 Both names must already be real. `ref` has to match the tag you actually build, byte for byte, or the watcher ignores your rebuild. `service` has to name a unit that already exists on the target (see [Prerequisites](#prerequisites)) - container dev mode restarts it, it does not create it.
 
 Only one runtime may enable container dev mode per config. If two runtimes carry a `container_dev` block, the CLI refuses to start and names them both.
+
+### Declare the SDK toolchain
+
+The agent extension ships its source and is compiled for your target when you
+build, so your project needs a cross toolchain in its SDK. The extension
+declares these in its own manifest, but a package-sourced extension does not
+carry them across - you declare them in your config:
+
+```yaml title="avocado.yaml"
+sdk:
+  image: 'docker.io/avocadolinux/sdk:{{ avocado.distro.release }}-{{ avocado.distro.channel }}'
+  # highlight-added-start
+  packages:
+    avocado-sdk-toolchain: '*'
+    nativesdk-binutils: '*'
+    nativesdk-cargo: '*'
+    nativesdk-gcc: '*'
+    nativesdk-glibc-dev: '*'
+    nativesdk-libgcc-dev: '*'
+    nativesdk-rust: '*'
+    packagegroup-rust-cross-canadian-avocado-{{ avocado.target }}: '*'
+  # highlight-added-end
+```
+
+Without them `avocado build` fails part-way through, inside a dependency's build
+script rather than anywhere that names the extension:
+
+```text
+warning: ring@0.17.14: ToolNotFound: failed to find tool "x86_64-avocado-linux-gcc"
+error: failed to run custom build command for `ring v0.17.14`
+```
+
+`avocado install` succeeds either way, and so does the extension's own sysroot
+creation, so the gap does not surface until the build reaches the compile step.
 
 ## Point the CLI at your HIL target
 
