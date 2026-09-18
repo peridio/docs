@@ -18,7 +18,11 @@ VER="$(avocado --version)"
 
 # Names listed under "Commands:" in a --help output (continuation lines are
 # indented deeper than two spaces, so they never match).
-subs() { avocado "$@" --help | awk '/^Commands:$/{f=1;next} f&&/^$/{exit} f&&/^  [a-z]/{print $1}' | grep -vx help || true; }
+subs() {
+  local help
+  help=$(avocado "$@" --help) || return
+  awk '/^Commands:$/{f=1;next} f&&/^$/{exit} f&&/^  [a-z]/&&$1!="help"{print $1}' <<< "$help"
+}
 
 # Groups in the order the page has always shown them; new groups follow.
 GROUP_ORDER=(connect ext runtime sdk signing-keys var-key initramfs rootfs hitl)
@@ -30,36 +34,49 @@ declare -A NOTE=(
   ['connect clean']='Removes Connect state from the project: strips the `connect:` section and the `avocado-ext-connect-config` extension from `avocado.yaml`, and deletes `overlay/etc/avocado-conn/`. Operations are idempotent — missing items are skipped with an info message.'
 )
 
-leaf() { # heading hashes, then command words
-  local h=$1; shift
-  local k="${*:-_}"
-  printf '%s `avocado%s`\n\n```\n%s\n\n```\n\n' "$h" "${*:+ $*}" "$(avocado "$@" --help)"
+help_block() {
+  local k="${*:-_}" help
+  help=$(avocado "$@" --help) || return
+  printf '```\n%s\n\n```\n\n' "$help"
   [ -n "${NOTE[$k]:-}" ] && printf '%s\n\n' "${NOTE[$k]}"
   printf -- '---\n\n'
 }
 
+leaf() { # heading hashes, then command words
+  local h=$1; shift
+  printf '%s `avocado%s`\n\n' "$h" "${*:+ $*}"
+  help_block "$@"
+}
+
 command_tree() {
-  local h=$1 s; shift
+  local h=$1 s children; shift
   leaf "$h" "$@"
-  for s in $(subs "$@"); do
+  children=$(subs "$@")
+  for s in $children; do
     command_tree "#$h" "$@" "$s"
   done
 }
 
 group() {
-  local g=$1 s t u
+  local g=$1 s t u children
   printf '## %s Commands\n\n' "${LABEL[$g]:-${g^}}"
   leaf '###' "$g"
-  for s in $(subs "$g"); do
+  children=$(subs "$g")
+  for s in $children; do
     t=$(subs "$g" "$s")
     if [ -n "$t" ]; then
       printf '### `avocado %s %s` {#%s-%s}\n\n' "$g" "$s" "$g" "$s"
+      help_block "$g" "$s"
       for u in $t; do command_tree '####' "$g" "$s" "$u"; done
     else
       leaf '###' "$g" "$s"
     fi
   done
 }
+
+# Publish only a complete generation; a failed --help must leave the old page intact.
+TMP_OUT=$(mktemp "${OUT}.XXXXXX")
+trap 'rm -f "$TMP_OUT"' EXIT
 
 {
 cat <<HDR
@@ -81,8 +98,10 @@ A complete reference of every \`avocado\` command and subcommand on a single pag
 HDR
 leaf '###'
 groups=()
-for c in $(subs | sort); do
-  if [ -n "$(subs "$c")" ]; then groups+=("$c"); else leaf '###' "$c"; fi
+commands=$(subs | sort)
+for c in $commands; do
+  children=$(subs "$c")
+  if [ -n "$children" ]; then groups+=("$c"); else leaf '###' "$c"; fi
 done
 for g in "${GROUP_ORDER[@]}"; do
   for c in "${groups[@]}"; do [ "$c" = "$g" ] && group "$g"; done
@@ -91,5 +110,6 @@ for c in "${groups[@]}"; do
   for g in "${GROUP_ORDER[@]}"; do [ "$c" = "$g" ] && continue 2; done
   group "$c"
 done
-} > "$OUT"
+} > "$TMP_OUT"
+mv "$TMP_OUT" "$OUT"
 echo "wrote $OUT ($(grep -Ec '^#{3,} ' "$OUT") sections, $VER)"
