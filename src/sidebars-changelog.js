@@ -5,6 +5,13 @@ const sidebars = {
   changelog: [
     {
       type: 'category',
+      label: 'September 2026',
+      collapsible: false,
+      collapsed: false,
+      items: ['september-2026/1.0.0-rc.5'],
+    },
+    {
+      type: 'category',
       label: 'August 2026',
       collapsible: false,
       collapsed: false,

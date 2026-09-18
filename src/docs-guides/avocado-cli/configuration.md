@@ -26,15 +26,16 @@ For detailed information about all available configuration options, see the [con
 
 Environment variables take precedence over configuration file values. When set, they override the corresponding config field.
 
-| Environment variable     | Config equivalent        | Description                                                                                  |
-| ------------------------ | ------------------------ | -------------------------------------------------------------------------------------------- |
-| `AVOCADO_TARGET`         | `default_target`         | Target architecture for builds and deployments.                                              |
-| `AVOCADO_TARGET_BOARD`   | `default_target_board`   | Board variant within the target, feeding `{{ avocado.target.board }}` interpolation.         |
-| `AVOCADO_RUNTIME`        | `default_runtime`        | Default runtime for commands that scope by runtime. Overrides `default_runtime` from config. |
-| `AVOCADO_REPO_URL`       | `distro.repo.url`        | Package repository URL.                                                                      |
-| `AVOCADO_RELEASEVER`     | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).                                                 |
-| `AVOCADO_DISTRO_RELEASE` | `distro.release`         | Distribution feed year (e.g., `2024`).                                                       |
-| `AVOCADO_DISTRO_CHANNEL` | `distro.channel`         | Distribution stability channel (e.g., `edge`, `stable`).                                     |
+| Environment variable     | Config equivalent        | Description                                                                                                                                   |
+| ------------------------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AVOCADO_TARGET`         | `default_target`         | Target architecture for builds and deployments.                                                                                               |
+| `AVOCADO_TARGET_BOARD`   | `default_target_board`   | Board variant within the target, feeding `{{ avocado.target.board }}` interpolation.                                                          |
+| `AVOCADO_RUNTIME`        | `default_runtime`        | Default runtime for commands that scope by runtime. Overrides `default_runtime` from config.                                                  |
+| `AVOCADO_REPO_URL`       | `distro.repo.url`        | Package repository URL.                                                                                                                       |
+| `AVOCADO_RELEASEVER`     | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).                                                                                                  |
+| `AVOCADO_DISTRO_RELEASE` | `distro.release`         | Distribution feed year (e.g., `2024`).                                                                                                        |
+| `AVOCADO_DISTRO_CHANNEL` | `distro.channel`         | Distribution stability channel (e.g., `edge`, `stable`).                                                                                      |
+| `AVOCADO_PARALLEL_TASKS` | none                     | How many tasks run at once across the install DAG, the build DAG and the SDK phase. Defaults to `min(cpus, 4)`, and to `1` under `--runs-on`. |
 
 ### Legacy environment variables
 
@@ -223,6 +224,15 @@ Two mutually exclusive modes:
 | `compile` | SDK compile section name (references `sdk.compile.<section>`). Mutually exclusive with `package`   |
 | `install` | Install script path — copies kernel artifacts to runtime build dir. Required when `compile` is set |
 
+**Command line** (either mode, or on its own):
+
+| Field           | Description                                                                                                            |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `cmdline`       | Complete kernel command line, replacing the platform's own. Mutually exclusive with `cmdline_extra`                    |
+| `cmdline_extra` | Arguments appended to the platform's command line (e.g. `isolcpus=4-6`, `earlycon`). Mutually exclusive with `cmdline` |
+
+A `kernel:` block that sets only `cmdline` or `cmdline_extra` is valid, and it does not change where the kernel comes from. The kernel is still selected by the runtime's named reference, the top-level entry, or the platform, exactly as if the block were absent; the project is only changing how that kernel boots. Precedence is per concern: a runtime's `cmdline` / `cmdline_extra` wins over the top-level one, while the kernel itself keeps resolving by its own rules. Both resolve per target, so a `target-<name>:` override at either level is honored. The command line reaches the build and provision hooks as `AVOCADO_KERNEL_CMDLINE` / `AVOCADO_KERNEL_CMDLINE_EXTRA`, and editing it alone invalidates the runtime build.
+
 ### Runtime kernel references
 
 A runtime can reference a named top-level kernel entry or provide an inline override:
@@ -236,6 +246,10 @@ runtimes:
     kernel: # inline override (object)
       package: kernel-image
       version: '6.6.*'
+
+  rt:
+    kernel: # command line only; the kernel itself resolves as if this block were absent
+      cmdline_extra: 'isolcpus=4-6 nohz_full=4-6'
 ```
 
 When `kernel:` is omitted on a runtime, the CLI falls back to the top-level `default` kernel entry, or — when no top-level kernel is configured — to the `avocado-runtime` meta-package's legacy bootfiles behavior.
