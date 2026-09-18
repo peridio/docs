@@ -1,5 +1,7 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
+// -- September 2026 --
+import V1_0_0_RC_5 from '../../../docs-changelog/september-2026/1.0.0-rc.5.md'
 // -- August 2026 --
 import V1_0_0_RC_2 from '../../../docs-changelog/august-2026/1.0.0-rc.2.md'
 import DESKTOP_1_0_0_RC_7 from '../../../docs-changelog/august-2026/desktop-1.0.0-rc.7.md'
@@ -83,6 +85,13 @@ export const PRODUCTS = [
  * Entries without an explicit `product` are CLI releases.
  */
 const rawEntries = [
+  {
+    version: '1.0.0-rc.5',
+    monthSlug: 'september-2026',
+    monthLabel: 'September 2026',
+    permalink: '/changelog/september-2026/1.0.0-rc.5',
+    Component: V1_0_0_RC_5,
+  },
   {
     version: '1.0.0-rc.2',
     monthSlug: 'august-2026',

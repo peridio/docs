@@ -69,6 +69,27 @@
         }
       ]
     },
+    "kernel": {
+      "title": "Kernel configurations",
+      "type": "object",
+      "description": "Top-level kernel configuration. Either one configuration, which becomes the implicit 'default', or a map of named configurations that runtimes reference by name. Keys beyond the two below are accepted, because this section also carries a 'source:' fragment, 'target-<name>:' overrides and the named entries themselves. A runtime's own 'kernel:' block takes precedence over this one.",
+      "properties": {
+        "cmdline": {
+          "type": "string",
+          "description": "Complete kernel command line, replacing whatever the platform would otherwise boot with. Mutually exclusive with 'cmdline_extra'.",
+          "examples": ["console=ttyS0,115200 root=/dev/mmcblk0p2 rw"]
+        },
+        "cmdline_extra": {
+          "type": "string",
+          "description": "Kernel command line arguments appended to the platform's own line. Mutually exclusive with 'cmdline'.",
+          "examples": ["isolcpus=4-6 nohz_full=4-6", "earlycon"]
+        }
+      },
+      "dependentSchemas": {
+        "cmdline": { "properties": { "cmdline_extra": false } },
+        "cmdline_extra": { "properties": { "cmdline": false } }
+      }
+    },
     "sdk": {
       "title": "SDK Configuration",
       "$ref": "#/definitions/sdkConfig",
@@ -398,34 +419,90 @@
         },
         "kernel": {
           "title": "Kernel configuration",
-          "type": "object",
-          "description": "Kernel configuration for this runtime. Use 'package' to install a pre-built kernel RPM, or 'compile'+'install' to cross-compile and install a custom kernel.",
-          "properties": {
-            "package": {
+          "description": "Kernel configuration for this runtime. Either an inline configuration, or the name of an entry in the top-level 'kernel:' map. Takes precedence over the top-level section.",
+          "oneOf": [
+            { "$ref": "#/definitions/kernelConfig" },
+            {
               "type": "string",
-              "description": "Pre-built kernel RPM package name to install.",
-              "examples": ["avocado-kernel-jetson"]
-            },
-            "version": {
-              "type": "string",
-              "description": "Version constraint for the kernel package.",
-              "examples": ["*", "6.1.0"]
-            },
-            "compile": {
-              "type": "string",
-              "description": "References an sdk.compile section to use for kernel compilation.",
-              "examples": ["my-kernel"]
-            },
-            "install": {
-              "type": "string",
-              "description": "Path to install script relative to src_dir, run after kernel compilation with $AVOCADO_RUNTIME_BUILD_DIR set.",
-              "examples": ["kernel-install.sh"]
+              "description": "Name of an entry in the top-level 'kernel:' map.",
+              "examples": ["yocto-6-6"]
             }
-          },
-          "additionalProperties": false
+          ]
         }
       },
       "additionalProperties": true
+    },
+    "kernelConfig": {
+      "title": "Kernel configuration",
+      "type": "object",
+      "description": "A kernel configuration. Used by the top-level 'kernel:' section and by a runtime's own 'kernel:' block. Use 'package' to install a pre-built kernel RPM, or 'compile'+'install' to cross-compile and install a custom kernel. 'cmdline'/'cmdline_extra' set the kernel command line and may be used without either.",
+      "properties": {
+        "package": {
+          "type": "string",
+          "description": "Pre-built kernel RPM package name to install.",
+          "examples": ["avocado-kernel-jetson"]
+        },
+        "version": {
+          "type": "string",
+          "description": "Version constraint for the kernel package.",
+          "examples": ["*", "6.1.0"]
+        },
+        "compile": {
+          "type": "string",
+          "description": "References an sdk.compile section to use for kernel compilation.",
+          "examples": ["my-kernel"]
+        },
+        "install": {
+          "type": "string",
+          "description": "Path to install script relative to src_dir, run after kernel compilation with $AVOCADO_RUNTIME_BUILD_DIR set.",
+          "examples": ["kernel-install.sh"]
+        },
+        "image": {
+          "type": "object",
+          "description": "Optional image wrapper for the staged kernel image, in the same form the rootfs and initramfs sections use.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Wrapper type. 'kab' wraps and signs the staged kernel image with kabtool; anything else is written raw.",
+              "examples": ["kab"]
+            },
+            "args": {
+              "type": "string",
+              "description": "Arguments passed to kabtool. Built-in defaults are used when omitted."
+            },
+            "verity": {
+              "type": "boolean",
+              "description": "Whether the image is dm-verity protected. Read for extension and rootfs images; the kernel section consumes only 'type' and 'args'."
+            }
+          },
+          "additionalProperties": false
+        },
+        "cmdline": {
+          "type": "string",
+          "description": "Complete kernel command line, replacing whatever the platform would otherwise boot with. Mutually exclusive with 'cmdline_extra'.",
+          "examples": ["console=ttyS0,115200 root=/dev/mmcblk0p2 rw"]
+        },
+        "cmdline_extra": {
+          "type": "string",
+          "description": "Kernel command line arguments appended to the platform's own line. Mutually exclusive with 'cmdline'.",
+          "examples": ["isolcpus=4-6 nohz_full=4-6", "earlycon"]
+        }
+      },
+      "patternProperties": {
+        "^target-[A-Za-z0-9_.-]+$": {
+          "$ref": "#/definitions/kernelConfig",
+          "description": "Per-target override, merged over the enclosing block when building for that target."
+        },
+        "^kernel-[A-Za-z0-9_.*+-]+$": {
+          "$ref": "#/definitions/kernelConfig",
+          "description": "Per-kernel-version override, merged over the enclosing block when the resolved kernel matches the spec."
+        }
+      },
+      "dependentSchemas": {
+        "cmdline": { "properties": { "cmdline_extra": false } },
+        "cmdline_extra": { "properties": { "cmdline": false } }
+      },
+      "additionalProperties": false
     },
     "varFileMapping": {
       "title": "Var file mapping",
