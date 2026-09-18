@@ -107,7 +107,7 @@ The example repository comes with a pre-configured `avocado.yaml` that includes 
 
 ## Install dependencies
 
-The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). It never prompts; `--force` (`-f`) discards every built sysroot and reinstalls from scratch, so leave it off for normal iteration.
+The `avocado install` command pulls the SDK container and installs dependencies for the SDK, all declared extensions, and your runtime(s). It never prompts; `--force` (`-f`) clears and re-seeds every extension's sysroot, discarding its built content, so leave it off for normal iteration.
 
 #### Command
 

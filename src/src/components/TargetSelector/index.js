@@ -463,7 +463,7 @@ export default function TargetSelector() {
           <Heading as="h2">Install</Heading>
           <p>Install the SDK toolchain, extension dependencies, and runtime packages.</p>
           <pre>
-            <code>avocado install -f</code>
+            <code>avocado install</code>
           </pre>
 
           <Heading as="h2">Build</Heading>
