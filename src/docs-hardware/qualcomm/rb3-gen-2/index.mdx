@@ -127,10 +127,37 @@ Then provision the `dev` runtime with the `ufs` profile. The profile is required
 avocado provision -r dev --profile ufs
 ```
 
+### Hypervisor selection (GPU/NPU vs. virtualization)
+
+The QCS6490 boots one of two hypervisor configurations, chosen at provision
+time and written to the boot partitions. This is a hardware trade-off on this
+SoC — you get accelerators **or** guest virtual machines, not both:
+
+| `AVOCADO_HYPERVISOR` | `/dev/kvm` (guest VMs) | GPU / NPU (Adreno, Hexagon DSP) |
+| -------------------- | ---------------------- | ------------------------------- |
+| `gunyah` *(default)* | no                     | **yes**                         |
+| `kvm`                | **yes**                | no                              |
+
+Under Gunyah, TrustZone performs Peripheral Authentication (PAS) and hands the
+GPU and DSP their protected memory carveouts, so `/dev/dri` and `/dev/fastrpc`
+come up. Under KVM, Linux owns EL2 and there is no Qualcomm secure-memory
+mediation, so PAS rejects the GPU/DSP firmware (`error -22`) and those devices
+stay offline — but `/dev/kvm` works for running guest VMs.
+
+The default is Gunyah. The [KVM ivshmem example](#example-project) below needs
+`/dev/kvm`, so provision it with the `kvm` configuration:
+
+```bash title="Host machine"
+avocado provision -r dev --profile ufs --env AVOCADO_HYPERVISOR=kvm
+```
+
+The selection is a boot-partition choice; it is independent of A/B OS updates
+(both slots share it) and only changes on a reflash or an explicit re-provision.
+
 ### Run
 
 Once provisioning completes, disconnect the USB-C data cable and power-cycle the kit. It boots Avocado OS from the onboard UFS storage. The `root` user is passwordless in the `dev` runtime used by this guide, and the `avocado-ext-sshd-dev` extension in the generated project brings up SSH.
 
 ## Example project
 
-[KVM ivshmem zero-copy](https://github.com/avocado-linux/references/tree/ad0c5683ec63a32f8d89a1cb339e1c16bcd2f98a/kvm-ivshmem-zero-copy) runs two KVM guests on the RB3 Gen 2's PREEMPT_RT kernel and passes data between them through shared host memory with no copies. It exercises the RT kernel selection, the mezzanine board flow and the EDL provisioning path described above, and is a working template for an extension-per-VM layout.
+[KVM ivshmem zero-copy](https://github.com/avocado-linux/references/tree/ad0c5683ec63a32f8d89a1cb339e1c16bcd2f98a/kvm-ivshmem-zero-copy) runs two KVM guests on the RB3 Gen 2's PREEMPT_RT kernel and passes data between them through shared host memory with no copies. It exercises the RT kernel selection, the mezzanine board flow and the EDL provisioning path described above, and is a working template for an extension-per-VM layout. Provision it with `--env AVOCADO_HYPERVISOR=kvm` (see [Hypervisor selection](#hypervisor-selection-gpunpu-vs-virtualization)) so `/dev/kvm` is available.
