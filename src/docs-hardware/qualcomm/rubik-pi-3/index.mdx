@@ -87,14 +87,18 @@ SoC — you get accelerators **or** guest virtual machines, not both:
 
 | `AVOCADO_HYPERVISOR` | `/dev/kvm` (guest VMs) | GPU / NPU (Adreno, Hexagon DSP) |
 | -------------------- | ---------------------- | ------------------------------- |
-| `gunyah` *(default)* | no                     | **yes**                         |
+| `gunyah` _(default)_ | no                     | **yes**                         |
 | `kvm`                | **yes**                | no                              |
 
 Under Gunyah, TrustZone performs Peripheral Authentication (PAS) and hands the
-GPU and DSP their protected memory carveouts, so `/dev/dri` and `/dev/fastrpc`
-come up. Under KVM, Linux owns EL2 and there is no Qualcomm secure-memory
-mediation, so PAS rejects the GPU/DSP firmware (`error -22`) and those devices
-stay offline — but `/dev/kvm` works for running guest VMs.
+GPU and DSP their protected memory carveouts, so their firmware loads. Under
+KVM, Linux owns EL2 and there is no Qualcomm secure-memory mediation, so PAS
+rejects that firmware (`error -22`) and the GPU and DSP stay offline — but
+`/dev/kvm` works for running guest VMs.
+
+Gunyah is the precondition for the accelerators rather than the whole story:
+`/dev/dri` and `/dev/fastrpc` also need the board support extension to ship the
+GPU firmware and the FastRPC userspace.
 
 The default is Gunyah. To provision a board for virtualization instead, pass
 the environment variable through to the provisioning process:
