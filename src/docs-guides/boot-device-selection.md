@@ -2,7 +2,7 @@
 sidebar_position: 1.5
 title: 'Boot device selection'
 copy_markdown: true
-draft: false
+draft: true
 description: 'Choose which storage device a board boots from. Provisioning decides where an image is written; firmware decides which disk boots, and on a board with two bootable disks those are separate choices.'
 ---
 
@@ -70,6 +70,14 @@ An extension's `overlay:` is also unaffected: files you place there do reach the
 
 :::
 
+:::caution Run it from whichever OS is currently booted, not the one you just wrote
+
+`avocado-set-boot-device` changes firmware state, so it has to run on a Linux that is actually up. Building this package into a new NVMe image and provisioning it does not put the tool anywhere you can reach it yet - the board is still running whatever was already on the SD card, and that install never gains this package just because a different disk now has it. If the SD install predates `avocado-boot-device`, running the command there is `command not found` regardless of what the NVMe image contains.
+
+There is no supported way to add the package to an already-running OS without reprovisioning it. If the board has a firmware boot menu, use it to boot the new image once manually - that gets you onto an OS that has the tool, and you can run the switch command from there to make the choice permanent for subsequent boots.
+
+:::
+
 ## See what the firmware can boot
 
 Start here, always. The tool can only choose among entries the firmware has already created, so the first question is what those are:
@@ -128,6 +136,8 @@ BootNext=0003
 ```
 
 Prefer this while you are still finding out whether a disk boots at all. The asymmetry is worth internalising: a permanent boot order aimed at a disk that turns out not to boot needs somebody physically at the board with a serial console, whereas a `BootNext` that fails is undone by the power cycle that follows it.
+
+That self-healing guarantee assumes the board has already gotten past a freshly-provisioned image's very first boot. Once [meta-avocado#413](https://github.com/avocado-linux/meta-avocado/pull/413) ships, the automatic assertion described above runs during that first boot and writes a **permanent** `BootOrder` for the just-flashed medium - without `--once` - before userspace ever starts. A `--once` test issued ahead of that first boot is superseded by it regardless of what userspace does afterward, so the disk you tested is not undone by the next power cycle the way it would be otherwise. There is currently no documented way to skip that automatic assertion, so treat `--once` as reversible only on a board that has already completed a freshly-provisioned image's first boot.
 
 `--dry-run` prints the order that would be written and changes nothing.
 
