@@ -2,7 +2,7 @@
 sidebar_position: 1.5
 title: 'Boot device selection'
 copy_markdown: true
-draft: true
+draft: false
 description: 'Choose which storage device a board boots from. Provisioning decides where an image is written; firmware decides which disk boots, and on a board with two bootable disks those are separate choices.'
 ---
 
@@ -33,6 +33,16 @@ This guide covers:
 - switching the boot device, permanently or for one boot
 - what the tool refuses to do, and why
 
+:::tip Automatic on ordinary provisioning
+
+Everything on this page is the manual path, for the case in the opening scenario above. Since [meta-avocado#413](https://github.com/avocado-linux/meta-avocado/pull/413), provisioning a Jetson also writes a marker naming the just-flashed medium, and a oneshot unit asserts that medium's boot order automatically on the image's own first real boot - no manual step, no test reboot. This only covers firmware actually booting the newly-flashed image; if it boots a different, already-bootable disk instead - this page's opening scenario - the assertion unit inside the unbooted image never gets to run, and the manual command below is still how you fix it.
+
+Checked end to end on the same Orin Nano: both an SD-target and an NVMe-target provision asserted their own boot order automatically on first boot, and a forced-failure boot (an unrecognised marker value) retried cleanly on the next boot with no manual intervention.
+
+Not yet merged.
+
+:::
+
 ## Add it to the rootfs
 
 The tool ships as the `avocado-boot-device` package. Name it under `rootfs.packages`:
@@ -52,7 +62,7 @@ Then build and provision as usual. The tool lands at `/usr/sbin/avocado-set-boot
 
 :::caution Do not add it through your own extension's `packages:`
 
-On avocado-cli 1.0.0-rc.4, naming a package under `packages:` in an extension **you declare in your own `avocado.yaml`** does not put it in the image. `avocado install` resolves the package, installs it, and reports success, and the built extension image still comes out empty - 4096 bytes, holding only its own `extension-release` marker - so the tool is absent at runtime. Reproduced with a `sysext`-only extension and with one combining `sysext` and `confext`.
+As of avocado-cli 1.0.0-rc.5 (still unfixed), naming a package under `packages:` in an extension **you declare in your own `avocado.yaml`** does not put it in the image. `avocado install` resolves the package, installs it, and reports success, and the built extension image still comes out empty - 4096 bytes, holding only its own `extension-release` marker - so the tool is absent at runtime. Reproduced with a `sysext`-only extension and with one combining `sysext` and `confext`.
 
 This is narrower than it may sound, and the distinction matters if you are reading it to decide how to ship something else. An extension fetched as a package, the way a BSP extension is, installs its `packages:` correctly on the same CLI version - so the defect is in the inline path rather than in extensions generally. Tracked as [avocado-cli#283](https://github.com/avocado-linux/avocado-cli/issues/283).
 
