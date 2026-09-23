@@ -123,7 +123,7 @@ export const data: SolutionData = {
       icon: 'LockClosed',
       title: 'Hardware Security',
       description:
-        'Hardware-backed security with TrustZone, secure boot, and verified boot. LUKS encryption and dm-verity ensure data integrity.',
+        'TrustZone-backed hardware security, with secure-boot groundwork in the build. Read-only root, signature-verified updates, and LUKS encryption of the writable partition.',
     },
     {
       icon: 'Wifi',
