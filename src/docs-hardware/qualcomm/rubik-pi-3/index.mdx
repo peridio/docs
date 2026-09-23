@@ -79,6 +79,37 @@ avocado build
 avocado provision -r dev --profile ufs
 ```
 
+### Hypervisor selection (GPU/NPU vs. virtualization)
+
+The QCS6490 boots one of two hypervisor configurations, chosen at provision
+time and written to the boot partitions. This is a hardware trade-off on this
+SoC — you get accelerators **or** guest virtual machines, not both:
+
+| `AVOCADO_HYPERVISOR` | `/dev/kvm` (guest VMs) | GPU / NPU (Adreno, Hexagon DSP) |
+| -------------------- | ---------------------- | ------------------------------- |
+| `gunyah` _(default)_ | no                     | **yes**                         |
+| `kvm`                | **yes**                | no                              |
+
+Under Gunyah, TrustZone performs Peripheral Authentication (PAS) and hands the
+GPU and DSP their protected memory carveouts, so their firmware loads. Under
+KVM, Linux owns EL2 and there is no Qualcomm secure-memory mediation, so PAS
+rejects that firmware (`error -22`) and the GPU and DSP stay offline — but
+`/dev/kvm` works for running guest VMs.
+
+Gunyah is the precondition for the accelerators rather than the whole story:
+`/dev/dri` and `/dev/fastrpc` also need the board support extension to ship the
+GPU firmware and the FastRPC userspace.
+
+The default is Gunyah. To provision a board for virtualization instead, pass
+the environment variable through to the provisioning process:
+
+```bash title="Host machine"
+avocado provision -r dev --profile ufs --env AVOCADO_HYPERVISOR=kvm
+```
+
+The selection is a boot-partition choice; it is independent of A/B OS updates
+(both slots share it) and only changes on a reflash or an explicit re-provision.
+
 ### Run
 
 Once provisioning completes, disconnect the USB-C data cable, leave USB-C power connected, and power-cycle the board — it boots Avocado OS from the onboard UFS storage. Connect the Micro-USB cable for the debug UART console. The `root` user is passwordless in the `dev` runtime used by this guide.
