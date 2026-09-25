@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "prestart": "npm run sync-references && npm run sync-targets",
+    "prestart": "npm run sync-references && npm run sync-targets && npm run sync-schema",
     "start": "node scripts/dev-server.js start",
     "sync-references": "node scripts/sync-references.js",
     "sync-targets": "node scripts/sync-targets.js",
+    "sync-schema": "node scripts/sync-schema.js",
     "thumbs": "node scripts/make-thumbnails.js",
     "test": "node --test \"scripts/*.test.js\" \"scripts/thumbnails/*.test.js\" \"src/theme/BlogPostItems/*.test.js\"",
     "build-connect-api": "node scripts/build-connect-api.js && prettier --write docs-guides/avocado-connect-api",
