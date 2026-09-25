@@ -698,11 +698,7 @@
     },
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": [
-        "CompuLab IOT-GATE-iMX8PLUS",
-        "microSD card (8GB+)",
-        "SD card reader"
-      ],
+      "prerequisites": ["CompuLab IOT-GATE-iMX8PLUS", "microSD card (8GB+)", "SD card reader"],
       "options": [
         {
           "id": "sd",
