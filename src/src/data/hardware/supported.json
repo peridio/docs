@@ -57,6 +57,17 @@
       }
     },
     {
+      "name": "CompuLab IOT-GATE-iMX8PLUS",
+      "target": "ucm-imx8m-plus",
+      "board": "",
+      "url": "/hardware/compulab/iot-gate-imx8plus",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "in-progress"
+      }
+    },
+    {
       "name": "Grinn AstraSOM-1680",
       "target": "grinn-astra-1680-sbc",
       "board": "",
