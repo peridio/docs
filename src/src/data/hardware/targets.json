@@ -692,6 +692,10 @@
     },
     "category": "sd",
     "description": "The CompuLab IOT-GATE-iMX8PLUS is a fanless industrial IoT gateway built on the UCM-i.MX8M-Plus SOM, with cellular, GPS, CAN, and an optional M.2 TPM on the carrier. Builds the same ucm-imx8m-plus target as the SOM, plus a carrier extension for the gateway peripherals.",
+    "configuration": {
+      "description": "Add the gateway carrier extension so the dev runtime includes its cellular, GPS, and CAN support:",
+      "yaml": "extensions:\n  avocado-bsp-iot-gate-imx8plus:\n    source:\n      type: package\n      version: '*'\n\nruntimes:\n  dev:\n    extensions:\n      - avocado-bsp-iot-gate-imx8plus"
+    },
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
       "prerequisites": [

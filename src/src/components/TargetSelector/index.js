@@ -15,7 +15,12 @@ import styles from './styles.module.css'
 // selector; leave the build step in place, drop it when the feed goes away.
 import targets from '@site/src/data/hardware/targets.json'
 
-const targetList = Object.values(targets).sort((a, b) => a.name.localeCompare(b.name))
+// Keyed by the targets.json object key, not by `target` (the `avocado init
+// --target` value): a carrier board can reuse its SOM's build target while
+// still needing its own dropdown key, anchor, and deep-link hash.
+const targetList = Object.entries(targets)
+  .map(([id, target]) => ({ ...target, id }))
+  .sort((a, b) => a.name.localeCompare(b.name))
 
 // Avocado OS release year -> Yocto feed codename.
 const RELEASE_NAMES = { 2024: 'scarthgap', 2026: 'wrynose' }
@@ -31,12 +36,12 @@ export default function TargetSelector() {
   // hash-driven runtime behaviour lives in the useEffect below; collectAnchor
   // is just bookkeeping for the SSR pass.
   const brokenLinks = useBrokenLinks()
-  targetList.forEach((target) => brokenLinks.collectAnchor(target.target))
+  targetList.forEach((target) => brokenLinks.collectAnchor(target.id))
 
   useEffect(() => {
     const hash = window.location.hash.slice(1)
     if (hash && targets[hash]) {
-      setSelected(targets[hash])
+      setSelected({ ...targets[hash], id: hash })
     }
   }, [])
 
@@ -52,7 +57,7 @@ export default function TargetSelector() {
     setSelected(target)
     setQuery('')
     setIsOpen(false)
-    window.history.replaceState(null, '', `#${target.target}`)
+    window.history.replaceState(null, '', `#${target.id}`)
   }
 
   const t = selected
@@ -253,9 +258,9 @@ export default function TargetSelector() {
             <div className={styles.dropdown}>
               {filtered.map((target) => (
                 <button
-                  key={target.target}
+                  key={target.id}
                   className={`${styles.dropdownItem} ${
-                    selected?.target === target.target ? styles.dropdownItemActive : ''
+                    selected?.id === target.id ? styles.dropdownItemActive : ''
                   }`}
                   onMouseDown={() => handleSelect(target)}
                 >
