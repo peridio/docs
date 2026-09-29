@@ -37,7 +37,7 @@ import TestStatus from '@site/src/components/TestStatus'
 
 That's a skeleton drawn on a live camera feed — shoulders, elbows, wrists, tracked in real time. It's [MoveNet](https://www.kaggle.com/models/google/movenet) doing pose estimation, and every frame of that inference is running on the NPU baked into the i.MX 8M Plus, not the CPU. The camera is a plain USB webcam I plugged straight into the dev kit; the board serves the annotated feed back over HTTP, which is why I'm watching it in a browser pointed at the device.
 
-Here's the thing, though. "AI runs on the 8MP" was never the interesting claim — the 8MP is one of the modern classics, of course it runs. The claim worth writing down is that this exact project — same application, same config file — should move to the other NPUs across the i.MX line without me touching my app. That portability is one of the big value drivers we care about, and it's the whole reason this note exists. Today the reference is wired for the 8M Plus only; the sections below say what the other parts still need.
+Here's the thing, though. "AI runs on the 8MP" was never the interesting claim — the 8MP is one of the modern classics, of course it runs. The claim worth writing down is that this exact project — same application, same config file — should move to the other NPUs across the i.MX line without a rewrite. That portability is one of the big value drivers we care about, and it's the whole reason this note exists. Today the reference is wired for the 8M Plus only, and the app still loads the 8M Plus delegate directly; the sections below say what the other parts still need.
 
 This Field Note is the deep dive demo we did during NXP's "Engineer's Guide to Simplifying Embedded Linux Development" webinar, and it's one of our reference projects — [`imx8mp-npu-pose`](https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose) — so you can pull it apart and run it yourself.
 
@@ -167,7 +167,9 @@ default_target: 'imx8mp-frdm'
 or, without touching the file, pass it on the command line:
 
 ```bash
+avocado install -f --target imx8mp-frdm
 avocado build --target imx8mp-frdm
+avocado provision -r dev --target imx8mp-frdm
 ```
 
 Moving to the i.MX 93 takes more than the target line. The INT8 model has to be compiled with Vela for the Ethos-U65, and the app has to load it through the Ethos-U delegate, where the reference loads `libvx_delegate.so` today. Vela is in the i.MX 93 SDK, but the reference does not call it yet, and its `avocado.yaml` lists `ucm-imx8m-plus` only. The same goes for the i.MX 95's Neutron tooling. The i.MX 93 targets in the demo project's config are configured, not built end to end.
@@ -232,6 +234,6 @@ avocado build
 avocado provision -r dev # uuu-emmc on the 8MP
 ```
 
-Then add another 8MP board to `supported_targets` and change `default_target` to it (or pass `--target imx8mp-frdm`), rerun `install` / `build` / `provision`, and diff `avocado.yaml` to confirm the target line moved. The application source is untouched. The i.MX 93 needs the Vela and Ethos-U work described above before the same swap runs.
+Then add another 8MP board to `supported_targets` and change `default_target` to it (or pass `--target imx8mp-frdm` to `install`, `build` and `provision`), rerun `install` / `build` / `provision`, and diff `avocado.yaml` to confirm the target line moved. The application source is untouched. The i.MX 93 needs the Vela and Ethos-U work described above before the same swap runs.
 
 Read more at [docs.peridio.com](https://docs.peridio.com/), and see the full source for this reference at [`avocado-linux/references/imx8mp-npu-pose`](https://github.com/avocado-linux/references/tree/main/imx8mp-npu-pose).
