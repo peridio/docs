@@ -19,12 +19,7 @@ import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
 
 <TestStatus
-  targets={[
-    'imx8mp-evk',
-    'imx8mp-frdm',
-    'imx8mp-var-dart',
-    'ucm-imx8m-plus',
-  ]}
+  targets={['imx8mp-evk', 'imx8mp-frdm', 'imx8mp-var-dart', 'ucm-imx8m-plus']}
   cli="0.41.0"
   reference={{
     label: 'imx8mp-npu-pose',
@@ -181,7 +176,7 @@ The mechanism extends up the line as we add targets, and it's not a rebuild-the-
 
 ## Four commands, then it's on the board
 
-From an empty directory to a running device is the same four commands on every target:
+From an empty directory to a running device is four commands on the 8M Plus (`ucm-imx8m-plus` in the published reference):
 
 ```bash
 avocado init --reference imx8mp-npu-pose imx8mp-npu-pose  # scaffold the project
@@ -221,7 +216,7 @@ When the project's done, the same runtime goes to the field through Peridio Conn
 
 ## Issues Encountered
 
-- **Different NPUs, different results — validate per part.** Retargeting the config is not the same as validating the new NPU, and a different NPU isn't just "the same thing, faster." Operator coverage and quantization behavior vary, so re-measure accuracy and frame rate on each target instead of assuming they carry over. Portability gets you a running model on the new NPU; it doesn't get you out of validating it.
+- **Different NPUs, different results — validate per part.** Retargeting the config is not the same as validating the new NPU, and a different NPU isn't just "the same thing, faster." Operator coverage and quantization behavior vary, so re-measure accuracy and frame rate on each target instead of assuming they carry over. Even once a new NPU runs the model, that doesn't get you out of validating it.
 - **Quantization has two ways to bite.** Some models lose too much fidelity when you drop them to INT8. Others lean on activation functions or ops the NPU won't accelerate, so they convert fine and then do nothing useful on the device. The build only flags a degenerate quantization, and which ops stay on the CPU is a manual check on the device today, so plan for a round of training-and-preparing for the target, not a one-shot export.
 - **Model in, model out is still your loop.** The NPU-specific quantization lives in the reference's script today and is meant to move into a shared extension; either way, picking the source model and confirming keypoint quality is still on you. The win is that the per-board plumbing stops being your problem — not that model selection does.
 
