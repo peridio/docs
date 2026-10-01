@@ -105,7 +105,8 @@ const partI = [
         status: 'you',
         provides:
           'The build makes an SPDX inventory of each component in your image. A CVE process runs against this inventory. Continuous CVE monitoring and advisory reports for these components are a commercial feature.',
-        youAdd: 'A CVE process for your application code and your own dependencies.',
+        youAdd:
+          'A CVE process for your application code and your own dependencies. For the OS components, scan the SBOM yourself or subscribe to CVE monitoring.',
       },
     ],
   },
@@ -164,8 +165,9 @@ const partI = [
           <>
             LUKS2 encryption for the writable <code>/var</code> partition. If the target has a TPM,
             HSM, or an equivalent security module, the OS seals the key to it and enrolls it on
-            first boot. The OS also enrolls a per-device recovery keyslot that it derives from the
-            SoC UID. Confirm which path your target uses. See{' '}
+            first boot. If the target does not have one, the OS derives the key in software with
+            Argon2id. The OS also enrolls a per-device recovery keyslot that it derives from the SoC
+            UID. Confirm which path your target uses. See{' '}
             <Link to="/avocado-os/security/encryption">Hardware-Backed Encryption</Link>.
           </>
         ),
