@@ -11,7 +11,7 @@ docs-guides/references/
 src/data/hardware/generated-targets.json
 
 # MDX files with inline JSX styles that break when Prettier reformats across lines
-docs-guides/getting-started/index.mdx
+docs-learn/get-started/index.mdx
 docs-overview/avocado-connect/overview.mdx
 docs-overview/resources.mdx
 docs-hardware/raspberry-pi/raspberry-pi-zero-2-w/index.mdx
