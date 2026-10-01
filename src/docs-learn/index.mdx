@@ -1,0 +1,59 @@
+---
+title: Learn
+sidebar_label: Start here
+description: Learn Avocado OS and Avocado Connect step by step, from a first bootable image to production hardware.
+hide_table_of_contents: true
+---
+
+import LinkCardGrid, { LinkCard } from '@site/src/components/LinkCardGrid'
+
+# Start here
+
+Learn is the guided path through Avocado OS and Avocado Connect. Build a first bootable image, then work through the missions in order: each one builds on the last. Your progress is saved in this browser.
+
+<Steps eyebrow="Ready in minutes, not days" title="How Learn works">
+
+<Step title="Get started">
+
+[Install the CLI and boot your first image](/learn/get-started) on QEMU or a supported board.
+
+</Step>
+
+<Step title="Complete the missions">
+
+Ship an OTA update, reach an app remotely, then choose your hardware path.
+
+</Step>
+
+<Step title="Go deeper">
+
+Use the [tutorials](/learn/tutorials/device-heartbeat) for focused, single-topic walkthroughs.
+
+</Step>
+
+</Steps>
+
+<MissionRail />
+
+## Tutorials
+
+<LinkCardGrid columns={3}>
+  <LinkCard
+    href="/learn/tutorials/device-heartbeat"
+    title="Device heartbeat"
+    description="Report device health from a container."
+    cta="Start"
+  />
+  <LinkCard
+    href="/learn/tutorials/react-cross-compile"
+    title="React cross-compile"
+    description="Build and ship a React app to your device."
+    cta="Start"
+  />
+  <LinkCard
+    href="/learn/tutorials/rust-cross-compile"
+    title="Rust cross-compile"
+    description="Cross-compile a Rust service with the SDK."
+    cta="Start"
+  />
+</LinkCardGrid>
