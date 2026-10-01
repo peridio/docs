@@ -1,0 +1,92 @@
+---
+title: 'CompuLab IOT-GATE-iMX8PLUS with Avocado OS'
+sidebar_position: 1
+description: 'Run Avocado OS on the CompuLab IOT-GATE-iMX8PLUS industrial IoT gateway - a carrier board built on the UCM-i.MX8M-Plus SOM, with cellular, GPS, CAN, and an optional M.2 TPM.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+{/* TODO: no vendor image yet — add src/static/img/hardware/compulab/iot-gate-imx8plus.png and set image / imageAlt on HardwareHero once available. */}
+
+<HardwareHero
+  vendor="CompuLab"
+  vendorUrl="https://www.compulab.com/products/iot-gateways/iot-gate-imx8plus-industrial-arm-iot-gateway/"
+  model="CompuLab IOT-GATE-iMX8PLUS"
+  tagline="Fanless industrial IoT gateway built on the CompuLab UCM-i.MX8M-Plus, with cellular, GPS, and CAN on the carrier."
+  target="ucm-imx8m-plus"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/developer-reference/getting-started/any-target',
+    },
+    secondary: {
+      label: 'Visit CompuLab Product Page',
+      to: 'https://www.compulab.com/products/iot-gateways/iot-gate-imx8plus-industrial-arm-iot-gateway/',
+      external: true,
+    },
+  }}
+/>
+
+## Overview
+
+The CompuLab IOT-GATE-iMX8PLUS is a fanless industrial IoT gateway built as a
+carrier board for the [CompuLab UCM-i.MX8M-Plus](/hardware/compulab/ucm-imx8m-plus)
+Computer-on-Module. It is not a separate Avocado build target - Avocado OS
+builds the `ucm-imx8m-plus` machine, and a carrier extension selects the
+gateway's own device tree and brings up its carrier-specific peripherals at
+build time. For the module's own SoC, CPU, memory, and industrial
+specifications, see the [UCM-i.MX8M-Plus hardware page](/hardware/compulab/ucm-imx8m-plus) -
+they apply here unchanged; this page covers only what the gateway carrier
+adds.
+
+## Carrier-Specific Hardware
+
+| Capability     | Detail                                                       |
+| -------------- | ------------------------------------------------------------ |
+| Cellular modem | MHI-based modem, managed via ModemManager                    |
+| GNSS / GPS     | On-carrier GPS, exposed via `gpsd`                           |
+| CAN bus        | Carrier CAN interface (`flexcan`)                            |
+| TPM (optional) | M.2 discrete TPM 2.0 module - a real TPM, not an OP-TEE fTPM |
+
+For full electrical, mechanical, and environmental specifications, see
+CompuLab's own [IOT-GATE-iMX8PLUS product page](https://www.compulab.com/products/iot-gateways/iot-gate-imx8plus-industrial-arm-iot-gateway/).
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/developer-reference/getting-started/any-target)
+instructions under Getting Started. The build target is `ucm-imx8m-plus`; add
+the gateway carrier extension to bring up the peripherals above:
+
+```yaml
+default_target: ucm-imx8m-plus
+
+extensions:
+  avocado-bsp-iot-gate-imx8plus:
+    source:
+      type: package
+      version: '*'
+
+runtimes:
+  dev:
+    extensions:
+      - avocado-bsp-iot-gate-imx8plus
+```
+
+```bash
+avocado install
+avocado build
+```
+
+:::note
+
+Provisioning and boot-mode details (SD, onboard eMMC, or a non-SD-card
+programming path) depend on the gateway's own carrier connectors, which are
+not yet verified against Avocado OS on this specific board. See the
+[UCM-i.MX8M-Plus provisioning note](/hardware/compulab/ucm-imx8m-plus#getting-started)
+for the general SOM procedure, and confirm the gateway's own boot-mode
+selection in CompuLab's IOT-GATE-iMX8PLUS documentation before provisioning.
+
+:::

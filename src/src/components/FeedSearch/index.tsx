@@ -166,10 +166,19 @@ interface TargetEntry {
 
 function targetList(manifest: TargetManifest): TargetEntry[] {
   const entries = Object.values(targetsData as Record<string, { name: string; target: string }>)
-  return entries
-    .filter((t) => t && t.target && Object.prototype.hasOwnProperty.call(manifest, t.target))
-    .map((t) => ({ target: t.target, name: t.name }))
-    .sort((a, b) => a.name.localeCompare(b.name))
+  // A carrier board can share its SOM's build target (targets.json keeps them
+  // as separate hardware entries so each gets its own hardware page - see
+  // TargetSelector), but this feed is fetched and keyed by build target, so
+  // two entries sharing one target are the same feed under two labels. Keep
+  // one option per unique target rather than rendering both: distinct React
+  // keys wouldn't fix that the two options would submit the same value and
+  // return identical results.
+  const byTarget = new Map<string, TargetEntry>()
+  for (const t of entries) {
+    if (!t || !t.target || !Object.prototype.hasOwnProperty.call(manifest, t.target)) continue
+    if (!byTarget.has(t.target)) byTarget.set(t.target, { target: t.target, name: t.name })
+  }
+  return Array.from(byTarget.values()).sort((a, b) => a.name.localeCompare(b.name))
 }
 
 // Derive the displayed arch chip from a target's repo paths. Filters out the

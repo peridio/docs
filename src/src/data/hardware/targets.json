@@ -683,6 +683,42 @@
     "gettingStartedUrl": "/developer-reference/getting-started/any-target",
     "hardwareUrl": "/hardware/compulab/ucm-imx8m-plus"
   },
+  "iot-gate-imx8plus": {
+    "name": "CompuLab IOT-GATE-iMX8PLUS",
+    "target": "ucm-imx8m-plus",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
+    "category": "sd",
+    "description": "The CompuLab IOT-GATE-iMX8PLUS is a fanless industrial IoT gateway built on the UCM-i.MX8M-Plus SOM, with cellular, GPS, CAN, and an optional M.2 TPM on the carrier. Builds the same ucm-imx8m-plus target as the SOM, plus a carrier extension for the gateway peripherals.",
+    "configuration": {
+      "description": "Add the gateway carrier extension so the dev runtime includes its cellular, GPS, and CAN support:",
+      "yaml": "extensions:\n  avocado-bsp-iot-gate-imx8plus:\n    source:\n      type: package\n      version: '*'\n\nruntimes:\n  dev:\n    extensions:\n      - avocado-bsp-iot-gate-imx8plus"
+    },
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": ["CompuLab IOT-GATE-iMX8PLUS", "microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the gateway and apply power. Confirm the gateway's boot-mode selection in CompuLab's documentation first - this has not been verified against Avocado OS on this specific carrier."
+        }
+      ]
+    },
+    "serial": {
+      "baud": 115200,
+      "voltage": "3.3V",
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "hardwareUrl": "/hardware/compulab/iot-gate-imx8plus"
+  },
   "imx93-evk": {
     "name": "NXP i.MX 93 EVK",
     "target": "imx93-evk",
