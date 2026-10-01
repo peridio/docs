@@ -16,7 +16,7 @@ Along the way you'll see each step done multiple ways where multiple tools suppo
 
 ## Prerequisites
 
-- An Avocado project that builds successfully (`avocado install`, `avocado build`) — see [Getting Started](/developer-reference/getting-started/)
+- An Avocado project that builds successfully (`avocado install`, `avocado build`) — see [Getting Started](/learn/get-started)
 - The [Avocado CLI](/developer-reference/avocado-cli/installation) installed, and optionally Avocado Desktop if you prefer a GUI for upload and deployment
 
 ## Step 1: Create an Avocado Connect account
@@ -80,7 +80,7 @@ Before you can upload, you need a built runtime and a running device to update. 
 
 1. Install dependencies: `avocado install`
 2. Build the runtime: `avocado build`
-3. Provision a device — either [QEMU](/developer-reference/getting-started/qemu) or [supported hardware](/developer-reference/provisioning) (`avocado provision`). For QEMU, provisioning only creates the disk image — boot the VM afterwards with `avocado sdk run -iE vm dev`. Since the project was initialized with Connect in Step 2, the device enrolls and auto-claims into your project on first boot.
+3. Provision a device — either [QEMU](/learn/get-started/qemu) or [supported hardware](/developer-reference/provisioning) (`avocado provision`). For QEMU, provisioning only creates the disk image — boot the VM afterwards with `avocado sdk run -iE vm dev`. Since the project was initialized with Connect in Step 2, the device enrolls and auto-claims into your project on first boot.
 4. Confirm the device is online in Connect: open your project's fleet, find the device, and check that its status shows **Online**.
 
 <div className="framed-shot">

@@ -28,7 +28,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/onlogic/fr201"
   },
   "fr202": {
@@ -55,7 +55,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": null
   },
   "grinn-astra-1680-sbc": {
@@ -89,7 +89,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/grinn/astrasom-1680"
   },
   "icam-540": {
@@ -121,7 +121,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/advantech/icam-540"
   },
   "imx8mp-evk": {
@@ -154,7 +154,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/nxp/imx8mp"
   },
   "imx8mp-var-dart": {
@@ -214,7 +214,7 @@
       "command": "tio -b 115200 /dev/ttyUSB0",
       "description": "The Variscite carrier exposes a debug UART console over its onboard micro USB port — no separate TTL adapter is required. Connect the micro USB debug port to your host and open the serial device it enumerates."
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/variscite/dart-mx8m-plus"
   },
   "imx91-frdm": {
@@ -247,7 +247,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/nxp/frdm-imx-91"
   },
   "imx93-evk": {
@@ -280,7 +280,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/nxp/imx93-evk"
   },
   "imx93-frdm": {
@@ -314,7 +314,7 @@
       "command": "tio -b 115200 /dev/ttyUSB0",
       "description": "The board carries its debug console on the onboard USB-C port, so no separate TTL adapter is needed. It enumerates as two CDC-ACM devices and the Linux console is the first one. Prefer the by-id path over the ttyACM number, which moves when other USB serial devices are attached: `tio -b 115200 /dev/serial/by-id/usb-1a86_USB_Dual_Serial_*-if00`. Run `ls /dev/serial/by-id/` to see the serial number for your board."
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/frdm-imx93",
+    "gettingStartedUrl": "/learn/get-started/frdm-imx93",
     "hardwareUrl": "/hardware/nxp/frdm-imx-93"
   },
   "imx95-frdm": {
@@ -341,7 +341,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": null
   },
   "intel-x86-64-v2": {
@@ -370,7 +370,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/intel/x86-64-v2"
   },
   "intel-x86-64-v3": {
@@ -399,7 +399,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/intel/x86-64-v3"
   },
   "jetson-agx-orin-devkit": {
@@ -496,7 +496,7 @@
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/nvidia/jetson-agx-orin"
   },
   "jetson-orin-nano-devkit": {
@@ -598,7 +598,7 @@
         }
       ]
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/jetson",
+    "gettingStartedUrl": "/learn/get-started/jetson",
     "hardwareUrl": "/hardware/nvidia/jetson-orin-nano-developer-kit"
   },
   "jetson-orin-nx": {
@@ -625,7 +625,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": null
   },
   "qcm6490": {
@@ -652,7 +652,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": null
   },
   "qemuarm64": {
@@ -680,7 +680,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/qemu",
+    "gettingStartedUrl": "/learn/get-started/qemu",
     "hardwareUrl": null
   },
   "qemux86-64": {
@@ -708,7 +708,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/qemu",
+    "gettingStartedUrl": "/learn/get-started/qemu",
     "hardwareUrl": null
   },
   "raspberrypi0-2w": {
@@ -741,7 +741,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/raspberry-pi/raspberry-pi-zero-2-w"
   },
   "raspberrypi4": {
@@ -774,7 +774,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/raspberry-pi/raspberry-pi-4-model-b"
   },
   "raspberrypi5": {
@@ -823,7 +823,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/raspberry-pi",
+    "gettingStartedUrl": "/learn/get-started/raspberry-pi",
     "hardwareUrl": "/hardware/raspberry-pi/raspberry-pi-5"
   },
   "reterminal": {
@@ -852,7 +852,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/seeed/reterminal"
   },
   "reterminal-dm": {
@@ -881,7 +881,7 @@
       ]
     },
     "serial": null,
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/seeed/reterminal-dm"
   },
   "rubikpi3": {
@@ -953,7 +953,7 @@
       "command": "tio -b 115200 /dev/ttyUSB0",
       "description": "The Rubik Pi 3 exposes its debug UART over the onboard Micro-USB port (port 2) — no TTL adapter is required. Connect the Micro-USB cable to your host only after provisioning completes (leave it disconnected while flashing). The host then enumerates a USB serial device for the console."
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/qualcomm/rubik-pi-3"
   },
   "rzv2n-sr-som": {
@@ -987,7 +987,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/solidrun/hummingboard-rz-v2n-aiot"
   },
   "stm32mp257f-dk": {
@@ -1020,7 +1020,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/stmicroelectronics/stm32mp257f-dk"
   },
   "ucm-imx8m-plus": {
@@ -1055,7 +1055,7 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
-    "gettingStartedUrl": "/developer-reference/getting-started/any-target",
+    "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/compulab/ucm-imx8m-plus"
   }
 }

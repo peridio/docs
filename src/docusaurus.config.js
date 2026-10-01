@@ -26,6 +26,7 @@ const config = {
     // anything dating itself against "now" renders the same value in the static
     // HTML, after hydration, and for a visitor with JavaScript disabled.
     buildDate: new Date().toISOString().slice(0, 10),
+    connectBaseUrl: 'https://connect.peridio.com',
   },
   organizationName: 'peridio',
   projectName: 'peridio-docs',
@@ -81,6 +82,12 @@ const config = {
             from: '/developer-reference/getting-started/download',
             to: '/developer-reference/avocado-cli/installation',
           },
+          // Getting Started moved from Developer Reference into Learn.
+          { from: '/developer-reference/getting-started', to: '/learn/get-started' },
+          ...['qemu', 'raspberry-pi', 'jetson', 'any-target', 'frdm-imx93'].map((page) => ({
+            from: `/developer-reference/getting-started/${page}`,
+            to: `/learn/get-started/${page}`,
+          })),
         ],
       },
     ],
@@ -101,6 +108,16 @@ const config = {
         path: 'docs-guides',
         routeBasePath: 'developer-reference',
         sidebarPath: require.resolve('./sidebars-guides.js'),
+        breadcrumbs: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'learn',
+        path: 'docs-learn',
+        routeBasePath: 'learn',
+        sidebarPath: require.resolve('./sidebars-learn.js'),
         breadcrumbs: true,
       },
     ],
@@ -206,13 +223,19 @@ const config = {
               '^/$|^/(avocado-os|avocado-connect|avocado-desktop|faqs|policies)(/.*)?$',
           },
           {
+            to: '/learn',
+            label: 'Learn',
+            position: 'left',
+            activeBasePath: 'learn',
+          },
+          {
             to: '/hardware/support-matrix',
             label: 'Hardware',
             position: 'left',
             activeBasePath: 'hardware',
           },
           {
-            to: '/developer-reference/getting-started',
+            to: '/developer-reference/references/explore',
             label: 'Developer Reference',
             position: 'left',
             activeBasePath: 'developer-reference',
