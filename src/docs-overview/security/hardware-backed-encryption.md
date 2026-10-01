@@ -49,6 +49,150 @@ Through Avocado's extension system, different applications can maintain separate
 
 Avocado automatically detects and uses hardware cryptographic accelerators present on the target platform. Most modern SoCs include dedicated crypto engines (AES-NI on x86, ARM Crypto Extensions on ARM) that handle encryption at near-native throughput. The system falls back to optimized software implementations only when hardware acceleration is unavailable.
 
+## Enabling encrypted `/var`
+
+Encryption is off by default. An unset or `false` value leaves the plaintext
+`/var` behaviour untouched.
+
+The packages this needs are published on the **2026** release, `next` channel
+only, so a project has to select that feed as well as opting the runtime in.
+`cryptsetup-var` does not exist in the 2024 feed at all, and a 2024 project that
+sets `encrypt: true` fails during `avocado install` with an error that names no
+missing package.
+
+```yaml
+distro:
+  release: 2026
+  channel: next
+
+runtimes:
+  prod:
+    target: jetson-orin-nano
+    var:
+      encrypt: true
+      hardware: tpm2
+      recovery: var-recovery
+```
+
+### Choosing a key engine
+
+`hardware` selects which engine binds the volume, and the default is not the
+right choice for production:
+
+| Value            | Behaviour                                                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `auto` (default) | Uses whatever the machine ships and probes successfully. If no engine probes, it degrades to Argon2id and reports the degrade. |
+| `tpm2`           | Binds to the TPM, and fails closed when that engine is missing.                                                                |
+| `caam`           | Binds to the NXP CAAM, failing closed the same way.                                                                            |
+| `none`           | No hardware keyslot. Requires `recovery`.                                                                                      |
+
+On `auto`, a unit whose security module did not come up still boots, using a
+software-derived key. Setting `tpm2` turns that case into a failure instead of
+a silent downgrade to software protection.
+
+### Supported targets
+
+On Jetson the key is sealed to the OP-TEE firmware TPM. These targets declare
+the capability and have the packages published on the `2026` release, `next`
+channel:
+
+| Target             | Status                                            |
+| ------------------ | ------------------------------------------------- |
+| `jetson-orin-nano` | verified on hardware                              |
+| `jetson-orin-nx`   | capability declared, not yet verified on hardware |
+| `jetson-agx-orin`  | capability declared, not yet verified on hardware |
+| `jetson-agx-thor`  | capability declared, not yet verified on hardware |
+
+All four share the same fTPM path, so the three unverified rows are expected to
+behave identically. They are marked separately because only the Orin Nano has
+been booted and inspected end to end.
+
+Note the 2026 feed drops the `-devkit` suffix the 2024 feed used
+(`jetson-orin-nano-devkit` there vs. `jetson-orin-nano` here), so a project
+moving release also renames its target.
+
+A target whose feed does not declare the `encrypted-var` capability, or does not
+publish `cryptsetup-var`, fails closed. Either omission is enough: the initramfs
+refuses to touch the partition and `/var` does not mount, rather than silently
+staying plaintext.
+
+### What happens on first boot
+
+The flashed partition is encrypted in place, so content seeded at build time
+survives. `cryptsetup-var` runs `cryptsetup reencrypt --encrypt`, confined to
+the filesystem's own extent, rather than reformatting the partition - a
+`luksFormat` only runs on a genuinely blank partition, as the fallback for a
+device that was never seeded. The initramfs enrols a keyslot sealed to the
+security module at the same time, and creates a recovery keyslot alongside it.
+Later boots open through the sealed token, falling back to recovery if the seal
+no longer matches, which a firmware update can cause.
+
+### Operator-held recovery
+
+The default recovery keyslot derives from the device's SoC UID, which is
+readable on the device. For fleet use, hold the master yourself instead.
+
+An operator-held master fixes that, and lets the UID-derived slot be retired.
+Create it once:
+
+```console
+$ avocado signing-keys create var-recovery --algorithm hmac-sha256
+```
+
+Name that key in the runtime's `var.recovery`, then enrol a device that is
+already running:
+
+```console
+$ avocado var-key enroll prod --device root@<device-ip>
+```
+
+Nothing derived from the master enters the build. To recover a unit later, with
+the master on the bench and the unit's UID in hand:
+
+```console
+$ avocado var-key derive prod --uid <soc-uid>
+```
+
+This prints the passphrase as hex; `--raw` emits the bytes for piping into
+`cryptsetup --key-file -`.
+
+### Confirming what a device is doing
+
+A unit whose sealed token no longer matches still boots, on the recovery
+keyslot. That is deliberate, so a firmware update cannot strand a device, but it
+means a device can stop being hardware-bound without anyone noticing.
+
+Ask the device which keyslots it has and which one opened it:
+
+```console
+# avocadoctl var-key list
+device: /dev/mmcblk0p16
+slot 0: passphrase (Argon2id recovery / derived key)
+slot 1: systemd-tpm2
+```
+
+A unit that still lists a `systemd-tpm2` slot but opened without it is the case
+to catch. The same condition is logged at warning level, so it appears in
+`journalctl -p warning`:
+
+```text
+avocado-posture: /var has a TPM2 keyslot but opened with the Argon2id recovery
+key - PCR 7 no longer matches what was sealed
+```
+
+On targets that boot through U-Boot the same facts are also published into the
+U-Boot environment each boot, as `avocado_var_encrypted`, `avocado_var_unlock`,
+`avocado_var_tpm2_token`, `avocado_var_hwkey` and `avocado_var_recovery`, which
+gives a fleet a single value to query. The pair worth alerting on there is
+`avocado_var_tpm2_token=yes` with `avocado_var_unlock=argon2id`.
+
+**Jetson has no U-Boot in its boot chain**, so that path publishes nothing there
+and `fw_printenv` shows no `avocado_var_*` keys. On Jetson use `avocadoctl
+var-key list` and the journal.
+
+Treat posture as an observation for spotting drift across a fleet. It is not
+tamper-evident and is not an attestation.
+
 ## Provisioning and key management
 
 Key provisioning is integrated into the `avocado provision` workflow. During manufacturing provisioning, the CLI can:
