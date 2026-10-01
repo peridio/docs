@@ -45,3 +45,44 @@ Creating a deployment is a short form: name it, pick the runtime and cohort, and
     decoding="async"
   />
 </div>
+
+## Cohorts
+
+A cohort is a named group of devices within a project that shares a deployment target. A deployment pairs one runtime with one cohort, so only the devices in that cohort receive the update. Segment your fleet into cohorts by deployment stage, for example:
+
+- `development`: Devices on your bench during active development.
+- `beta-testers`: Early adopters who run pre-release software.
+- `production`: Your stable fleet, with tighter access and remote-access rules.
+
+Create cohorts from a project's **Overview** tab, or with `avocado connect cohorts create`. Devices join a cohort when they enroll with a claim token scoped to it (see [Claim tokens](/avocado-connect/getting-started#claim-tokens)), and you can move them between cohorts at any time.
+
+Each cohort also carries its own:
+
+- **Deployment history**: Every rollout that targeted the cohort.
+- **Access rules**: Restrict who can see and deploy to the cohort. See [Access Control](/avocado-connect/access-control).
+- **Tunnel policy**: Tighten remote-access rules for the cohort, for example shorter tunnel lifetimes on production. See [Tunnel policies](/avocado-connect/tunnels#tunnel-policies).
+
+## Staged rollouts
+
+Stage a release by deploying it to a small cohort first. Deploy the runtime to `beta-testers`, verify it there, then deploy the same runtime to `production`. Problems surface on a handful of devices instead of your whole fleet. To roll back, deploy the previous runtime version to the cohort.
+
+## Create a deployment from the CLI or API
+
+From your project directory, deploy a published runtime to a cohort. Without `--activate`, the deployment is created as a draft you can review and activate in the console:
+
+```bash
+avocado connect deploy --runtime <RUNTIME_ID> --cohort <COHORT_ID> --activate
+```
+
+Omit `--runtime` or `--cohort` to pick them interactively. Add `--tag <TAG>` to deploy only to devices with that tag.
+
+With the API, `name`, `runtime_id`, and `cohort_id` are required:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/projects/$PROJECT_ID/deployments" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"deployment": {"name": "v1.2.0-beta", "runtime_id": "<RUNTIME_ID>", "cohort_id": "<COHORT_ID>"}}'
+```
+
+A new deployment starts as a `draft`. The response includes its `id`, `status`, `rollout_percentage`, and targeting fields. See the [Deployments API](/developer-reference/avocado-connect-api/deployments) for the full object and the update, cancel, and per-device endpoints, and the [OTA updates guide](/developer-reference/ota) for an end-to-end walkthrough.

@@ -8,9 +8,11 @@ Secure remote access to deployed devices without exposing ports or managing VPNs
 
 Tunnels create encrypted, authenticated connections between your development machine and a deployed device through Avocado Connect's relay infrastructure. This means you can SSH into a device behind a NAT, firewall, or cellular connection without any inbound port configuration on the device.
 
-- **On-demand access**: Open a tunnel to any connected device from the console or CLI
+- **On-demand access**: Open a tunnel to any connected device from the console or the API
 - **Encrypted end-to-end**: Tunnel traffic is encrypted and authenticated the whole way between your machine and the device, so nothing is exposed in transit
 - **No network configuration**: Devices initiate outbound connections to Avocado Connect. No static IPs, port forwarding, or VPN infrastructure required.
+- **Any TCP service**: Reach SSH, a web UI, a debugging tool, or any other service listening on the device
+- **Temporary by default**: Tunnels expire automatically, so access never stays open by accident
 - **Audit logged**: Every tunnel session is recorded: who connected, when, and for how long
 
 For a step-by-step walkthrough — standard ports, custom ports, and a live dashboard example — see the [Remote Tunnel guide](/developer-reference/remote-tunnel).
@@ -23,3 +25,57 @@ For a step-by-step walkthrough — standard ports, custom ports, and a live dash
     decoding="async"
   />
 </div>
+
+## How tunnels work
+
+Tunnels use WireGuard. When you request a tunnel, Connect sends a command to the device over its existing control connection. The device opens an outbound WireGuard connection to the relay, and the relay routes your traffic to the port you chose. Because the device dials out, no inbound ports need to be open on it.
+
+To open a tunnel in the console, go to **Fleet**, select a device, and use the **Tunnels** panel on its detail page. Pick a standard port (SSH, HTTP, HTTPS, Cockpit) or enter a custom one.
+
+## Open a tunnel with the API
+
+Open a tunnel by device ID. `device_proxy_port` is the port on the device you want to reach, for example `22` for SSH:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/tunnels" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"device_id": "<DEVICE_ID>", "device_proxy_port": 22}'
+```
+
+A new tunnel starts in the `requested` state. Poll `GET /api/orgs/$ORG_ID/tunnels/<TUNNEL_ID>` until `state` is `established`, then connect to `relay_endpoint`:
+
+```json
+{
+  "data": {
+    "id": "0198…",
+    "state": "established",
+    "device_id": "0198…",
+    "relay_endpoint": "<host>:<port>",
+    "server_proxy_port": 51234,
+    "device_proxy_port": 22,
+    "expires_at": "2026-…",
+    "established_at": "2026-…",
+    "failure_reason": null
+  }
+}
+```
+
+Tunnels opened this way expire after one hour. Close one early with `DELETE /api/orgs/$ORG_ID/tunnels/<TUNNEL_ID>`. See the [Remote Access API](/developer-reference/avocado-connect-api/remote-access) for every endpoint.
+
+## Tunnel policies
+
+Tunnel policies set the rules every tunnel request must follow. Your organization has a default policy, and each cohort can override it:
+
+| Rule              | What it controls                                                         |
+| ----------------- | ------------------------------------------------------------------------ |
+| `max_ttl_seconds` | The longest a tunnel can stay open                                       |
+| `backoff_seconds` | How long a device waits after a tunnel closes before it can open another |
+| `max_concurrent`  | How many tunnels a device can have open at once                          |
+| `cidr_allowlist`  | Which source IP ranges can connect through the relay                     |
+| `require_reason`  | Whether a reason must be given when opening a tunnel                     |
+| `allowed_windows` | The time windows during which tunnels are allowed to open                |
+
+A cohort policy can only tighten the organization policy, never loosen it. For example, the shorter TTL and the lower concurrency limit win, and a reason is required if either side requires one. Use this to keep remote access open on bench and development cohorts while restricting it on production. Org admins set policies through the API (`PUT /api/orgs/$ORG_ID/tunnel-policy` and `PUT /api/orgs/$ORG_ID/projects/$PROJECT_ID/cohorts/$COHORT_ID/tunnel-policy`).
+
+The number of tunnels you can have open at once also depends on your plan. See [Billing](/avocado-connect/billing).
