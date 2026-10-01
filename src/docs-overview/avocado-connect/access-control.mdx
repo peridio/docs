@@ -1,0 +1,56 @@
+---
+title: 'Access Control'
+---
+
+# Access Control
+
+Access control decides who can see and work with each part of your fleet. Access is scoped to **projects** and **cohorts**, so you can let QA deploy to staging while keeping production to a smaller group of engineers.
+
+## The permission model
+
+Access is granted at two levels:
+
+- **Project access**: Who can see and manage the project's runtimes, cohorts, deployments, and settings.
+- **Cohort access**: Who can see and deploy to the devices in a specific cohort inside the project.
+
+Project access gates cohort access: a user who can't access a project can't access any of its cohorts. Both levels support grants to individual users and to [groups](/avocado-connect/device-groups), and grants are additive: a user has access if any direct grant or any group they belong to gives it to them.
+
+By default, every project and cohort is open to all members of the organization. Organization owners and admins always have access to everything, regardless of grants. To restrict a project, open it, go to **Settings**, and turn off **Organization-wide access**, then add the members or groups who should keep access. Cohorts work the same way from their own **Settings** page.
+
+## Common patterns
+
+- **Small teams**: Leave projects open to everyone, and restrict only the production cohort.
+- **Larger organizations**: Create a group per team and grant each group the projects and cohorts it works on.
+- **Least privilege**: Grant each person or group the smallest set of projects and cohorts they need.
+
+## Manage access with the API
+
+Grant access by user ID or group ID. Only organization owners and admins can change access:
+
+```bash
+# Project access
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/projects/$PROJECT_ID/access/users" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "<USER_ID>"}'
+
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/projects/$PROJECT_ID/access/groups" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"group_id": "<GROUP_ID>"}'
+
+# Cohort access
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/projects/$PROJECT_ID/cohorts/$COHORT_ID/access/users" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "<USER_ID>"}'
+
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/projects/$PROJECT_ID/cohorts/$COHORT_ID/access/groups" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"group_id": "<GROUP_ID>"}'
+```
+
+Revoke a grant with `DELETE` on `…/access/users/<USER_ID>` or `…/access/groups/<GROUP_ID>`. To turn organization-wide access on or off, update the project or cohort with `everyone_enabled`. See the [Projects & Cohorts API](/developer-reference/avocado-connect-api/projects-cohorts) for every endpoint.
+
+Organization roles (owner, admin, member) are separate from project and cohort access. See [Team](/avocado-connect/team).

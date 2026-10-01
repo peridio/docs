@@ -1,0 +1,38 @@
+---
+title: 'Groups'
+---
+
+# Groups
+
+Groups are organization-wide collections of people that you grant access to projects and cohorts in one step. Despite the name of the LaunchPad guide they replace, groups organize users, not devices: your engineering team, your QA team, or your field technicians. To group devices, use [cohorts](/avocado-connect/deployments#cohorts) and tags.
+
+- **Create named groups** and add organization members to them
+- **Grant access in bulk**: Give a group access to a project or cohort instead of adding people one by one
+- **Inherit access automatically**: A member added to a group gains everything the group can access
+- **Revoke in one place**: Remove a member from a group to take away every access it granted
+
+## Common patterns
+
+- `engineering`: Access to every project the team builds.
+- `qa`: Access to the staging cohorts it tests, but not production.
+- `field-ops`: Access to the production cohorts it supports in the field.
+
+## How it works
+
+Go to **Groups** in the console and create a group, then add members. Grant the group access from a project's or cohort's settings. Connect checks group membership on every request, so membership changes take effect immediately. Only organization owners and admins can create groups and manage their members.
+
+With the API, create a group and add a member by user ID:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/groups" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "qa", "description": "QA team"}'
+
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/groups/<GROUP_ID>/members" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "<USER_ID>"}'
+```
+
+See [Access Control](/avocado-connect/access-control) for how group grants combine with direct grants, and the [Administration API](/developer-reference/avocado-connect-api/administration) for every group endpoint.

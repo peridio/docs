@@ -1,0 +1,40 @@
+---
+title: 'Billing'
+---
+
+# Billing
+
+Billing tracks your organization's plan, usage, and subscription. Every organization starts on the free **Developer** tier, and you upgrade as your fleet grows. Each plan raises your device, tunnel, member, and claim-token limits.
+
+- **Current plan and usage**: See how many devices, members, and tunnels you're using against your plan's limits
+- **Upgrade or change plans** through the billing portal
+- **Payment methods and invoices**: Update how you pay and view your invoice history
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/settings-plans.png"
+    alt="The Plans settings: current usage against limits, with Developer, Startup, Teams, and Professional tiers and their included devices, tunnels, and users."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+## Plan limits
+
+| Plan         | Members            | Devices         | Concurrent tunnels | Claim tokens |
+| ------------ | ------------------ | --------------- | ------------------ | ------------ |
+| Developer    | 1                  | 1               | 1                  | 2            |
+| Startup      | Per purchased seat | 20              | 5                  | 10           |
+| Teams        | 2, expandable      | 100, expandable | 25                 | 10           |
+| Professional | 25                 | 500             | 25                 | 50           |
+| Enterprise   | Custom             | Custom          | Custom             | Custom       |
+
+The Developer tier is free and sized for one developer with one device. Tunnels on the Developer tier can't be extended past their initial lifetime. The Teams plan lets you add members and devices beyond what's included. Enterprise plans offer fully isolated deployments with custom limits.
+
+The **Plans** tab always shows your organization's current limits. When you reach a limit, Connect blocks the action, for example enrolling another device, until you upgrade or free up capacity. If you need more on your current plan, submit a limit increase request from **Settings → Limit Requests**.
+
+## Manage your subscription
+
+Go to **Settings → Plans** to see your current plan and usage, and to upgrade. Upgrading opens a secure checkout, and the billing portal handles payment methods, invoices, plan changes, and cancellation. Only organization owners and admins can change the subscription.
+
+The billing endpoints are `GET /api/orgs/$ORG_ID/billing` for the current plan and usage, `POST /api/orgs/$ORG_ID/billing/checkout` to start an upgrade, and `POST /api/orgs/$ORG_ID/billing/portal` to open the billing portal.

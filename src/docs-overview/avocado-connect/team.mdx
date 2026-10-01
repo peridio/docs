@@ -1,0 +1,41 @@
+---
+title: 'Team'
+---
+
+# Team
+
+Invite collaborators to your organization so they can manage devices, deploy software, and open tunnels. Each member signs in with their own account, and what they can do is set by their organization role and their project and cohort access.
+
+- **Email invitations** with secure links that expire
+- **Invitation tracking**: See which invitations are pending, accepted, or expired
+- **Revoke** a pending invitation at any time
+- **Member list**: See every member of the organization and their role
+
+## Roles
+
+Every member has one organization role:
+
+| Role     | What it allows                                                                                                                              |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `owner`  | Everything an admin can do, plus inviting owners and granting or removing the owner role. An organization always has at least one owner.    |
+| `admin`  | Manages settings, billing, members, invitations, groups, and access. Has access to every project and cohort. Can invite admins and members. |
+| `member` | Works with the projects and cohorts they have access to. See [Access Control](/avocado-connect/access-control).                             |
+
+## Invite a member
+
+Go to **Settings → Members** and use the invite form to send an email invitation. Only owners and admins can invite members.
+
+The invitee receives an email with a link to accept. If they already have an Avocado Connect account, accepting adds them to your organization. If not, they create an account as part of accepting. Either way, they land in your organization with the role you chose. Invitations expire after 24 hours by default.
+
+With the API, send an invitation with an email and an optional role (`member` by default) and group:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/invitations" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "teammate@example.com", "role": "member"}'
+```
+
+List members with `GET /api/orgs/$ORG_ID/members`, list invitations with `GET /api/orgs/$ORG_ID/invitations`, and revoke one with `DELETE /api/orgs/$ORG_ID/invitations/<INVITATION_ID>`. See the [Administration API](/developer-reference/avocado-connect-api/administration) for role changes and member removal.
+
+The number of members your organization can have depends on your plan. See [Billing](/avocado-connect/billing).
