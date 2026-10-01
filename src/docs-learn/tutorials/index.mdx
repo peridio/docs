@@ -1,0 +1,51 @@
+---
+title: Tutorials
+description: Focused, single-topic walkthroughs for building Avocado OS extensions.
+hide_table_of_contents: true
+---
+
+import LinkCardGrid, { LinkCard } from '@site/src/components/LinkCardGrid'
+
+# Tutorials
+
+Each tutorial starts from a reference project, walks through every file that matters, and ends with a change you make and rebuild. They run on QEMU, so you need no hardware.
+
+New to Avocado OS? Read [Core Concepts](/avocado-os/core-concepts) first. It explains `avocado.yaml`, runtimes, extensions, overlays, systemd services, and lifecycle hooks, which every tutorial builds on.
+
+<LinkCardGrid columns={3}>
+  <LinkCard
+    href="/learn/tutorials/device-heartbeat"
+    title="Device Heartbeat"
+    description="Build a shell-script heartbeat service with systemd, overlays, and extensions."
+    cta="Start"
+  />
+  <LinkCard
+    href="/learn/tutorials/react-cross-compile"
+    title="React Cross-Compile"
+    description="Build a React dashboard in the SDK and serve it from your device."
+    cta="Start"
+  />
+  <LinkCard
+    href="/learn/tutorials/rust-cross-compile"
+    title="Rust Cross-Compile"
+    description="Cross-compile a Rust binary and run it as a systemd service."
+    cta="Start"
+  />
+</LinkCardGrid>
+
+## Coming soon
+
+<LinkCardGrid columns={3}>
+  <LinkCard
+    href="/learn/tutorials/data-egress"
+    title="Data Egress"
+    description="Route device telemetry and logs to your external data source."
+    cta="Preview"
+  />
+  <LinkCard
+    href="/learn/tutorials/hardware-in-the-loop"
+    title="Hardware in the Loop"
+    description="Run automated test suites against physical devices in CI."
+    cta="Preview"
+  />
+</LinkCardGrid>

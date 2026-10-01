@@ -1,15 +1,275 @@
 ---
 title: Rust Cross-Compile
-description: Cross-compile a Rust service with the Avocado SDK.
-wip: true
+description: Cross-compile a Rust binary with the Avocado SDK and run it on your device as a systemd service.
 ---
+
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
 
 # Rust Cross-Compile
 
-:::caution[Work in progress]
+Build a system vitals reporter: one Rust binary that reads `/proc` and logs JSON to the systemd journal. The SDK container cross-compiles it for the target's architecture, an install script places it at `/usr/bin/ref_rust`, and systemd runs it on boot.
 
-This page is a placeholder for the Learn section. Content is being ported from the Avocado Connect LaunchPad.
+You will learn:
 
-:::
+- How the SDK provides a Rust cross-compilation toolchain for your target, with nothing installed on your host.
+- How a compile script finds the target triple and links against the target's sysroot.
+- How an install script places a compiled binary into an extension.
 
-See [cross-compilation](/developer-reference/cross-compilation) in the meantime.
+The project comes from the [`rust-vitals`](https://github.com/avocado-linux/references/tree/main/rust-vitals) reference. If you haven't built an extension before, start with [Device Heartbeat](/learn/tutorials/device-heartbeat).
+
+## Prerequisites
+
+- macOS 10.12+ or Linux (Ubuntu 22.04+, Fedora 39+)
+- 8 GB available disk space
+
+<HostPrerequisites />
+
+## Steps
+
+<Checklist id="tutorial-rust-cross-compile">
+
+<Step title="Initialize the project" id="initialize">
+
+In your terminal, create a project from the `rust-vitals` reference and install its dependencies.
+
+```bash
+# Scaffold a project from the reference
+avocado init --reference rust-vitals my-rust-app
+cd my-rust-app
+
+# Install the SDK toolchain, the Rust cross-compiler, and the device packages
+avocado install
+```
+
+This installs the Rust toolchain into the SDK (`nativesdk-rust`, `nativesdk-cargo`, and `packagegroup-rust-cross-canadian-avocado-<target>`) and the target's Rust standard library (`libstd-rs`, `libstd-rs-dev`) for linking.
+
+</Step>
+
+<Step title="Explore the project structure" id="project-structure">
+
+```text
+my-rust-app/
+├── avocado.yaml
+├── rust-compile.sh
+├── rust-install.sh
+├── overlay/
+│   └── usr/lib/systemd/system/
+│       └── ref-rust.service
+└── ref-rust/
+    ├── Cargo.toml
+    └── src/
+        └── main.rs
+```
+
+- `rust-compile.sh` and `rust-install.sh` run inside the SDK container. One builds the binary, the other places it in the extension.
+- `overlay/` holds the systemd unit that runs the binary.
+- `ref-rust/` is a Cargo project with no external dependencies.
+
+</Step>
+
+<Step title="Read the Rust extension" id="extension">
+
+The `dev` runtime lists `example-rust` alongside the development tools, SSH, and the board support package. The extension itself:
+
+```yaml title="avocado.yaml"
+extensions:
+  example-rust:
+    version: 0.1.0
+    overlay: overlay
+    enable_services:
+      - ref-rust.service
+    on_merge:
+      - systemctl restart --no-block ref-rust.service
+    on_unmerge:
+      - systemctl stop ref-rust.service
+    packages:
+      example-rust-app:
+        compile: example-rust-app
+        install: rust-install.sh
+    sdk:
+      packages:
+        nativesdk-binutils: '*'
+        nativesdk-cargo: '*'
+        nativesdk-gcc: '*'
+        nativesdk-glibc-dev: '*'
+        nativesdk-libgcc-dev: '*'
+        nativesdk-rust: '*'
+        packagegroup-rust-cross-canadian-avocado-{{ avocado.target }}: '*'
+```
+
+- `example-rust-app` names an SDK compile section, and `install: rust-install.sh` copies its output into the extension.
+- `sdk.packages` are host-side build tools in the SDK container. `nativesdk-*` packages run on the build host. The `packagegroup-rust-cross-canadian-*` group adds the compiler for the target's architecture, resolved from `{{ avocado.target }}`.
+- The binary needs no runtime packages, so there is no feed package next to `example-rust-app`.
+
+</Step>
+
+<Step title="Read the build pipeline" id="build-pipeline">
+
+The top-level `sdk` block maps the compile section to its script and adds the target's Rust standard library to the SDK's target sysroot:
+
+```yaml title="avocado.yaml"
+sdk:
+  compile:
+    example-rust-app:
+      compile: rust-compile.sh
+      packages:
+        libstd-rs: '*'
+        libstd-rs-dev: '*'
+```
+
+`rust-compile.sh` finds the Rust target triple for the current target (for example `x86_64-avocado-linux-gnu` on QEMU x86-64), writes a Cargo config that points the compiler and linker at the target sysroot, and builds a release binary:
+
+```bash title="rust-compile.sh"
+#!/bin/bash
+set -e
+
+# Find the Rust target from RUST_TARGET_PATH
+for json_file in "$RUST_TARGET_PATH"/*.json; do
+    if [ -f "$json_file" ]; then
+        json_name=$(basename "$json_file" .json)
+        if [[ "$json_name" == "${OECORE_TARGET_ARCH}-"* ]]; then
+            RUST_TARGET="$json_name"
+            break
+        fi
+    fi
+done
+
+if [ -z "$RUST_TARGET" ]; then
+    echo "Error: Could not find Rust target for $OECORE_TARGET_ARCH"
+    exit 1
+fi
+
+echo "Compiling Rust application for target: $RUST_TARGET"
+
+cd ref-rust
+
+# Clear any rustflags that might cause conflicts with our .cargo/config.toml
+unset RUSTFLAGS
+unset CARGO_BUILD_RUSTFLAGS
+# Clear target-specific rustflags for all possible targets
+for var in $(env | grep -o 'CARGO_TARGET_[A-Z0-9_]*_RUSTFLAGS'); do
+    unset "$var"
+done
+
+# Remove any existing config that might conflict
+rm -rf .cargo
+
+# Create config.toml with cross-compilation settings
+mkdir -p .cargo
+cat > .cargo/config.toml << EOF
+[target.$RUST_TARGET]
+rustflags = ["--sysroot=$SDKTARGETSYSROOT/usr", "-C", "link-arg=--sysroot=$SDKTARGETSYSROOT"]
+EOF
+
+cargo build --release --target "$RUST_TARGET"
+```
+
+`rust-install.sh` resolves the same triple, then installs the binary into the extension's sysroot. `$AVOCADO_BUILD_EXT_SYSROOT` is the root of the extension being built, so the binary lands at `/usr/bin/ref_rust` on the device:
+
+```bash title="rust-install.sh (excerpt)"
+BINARY_PATH="ref-rust/target/$RUST_TARGET/release/ref_rust"
+
+echo "Installing rust application into extension"
+install -D -m 755 "$BINARY_PATH" "$AVOCADO_BUILD_EXT_SYSROOT/usr/bin/ref_rust"
+```
+
+`ref-rust.service` runs the binary and restarts it if it exits. `SyslogIdentifier=ref-rust` tags its journal lines:
+
+```ini title="overlay/usr/lib/systemd/system/ref-rust.service"
+[Unit]
+Description=Ref Rust Application
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart=/usr/bin/ref_rust
+Restart=always
+RestartSec=5
+SyslogIdentifier=ref-rust
+
+[Install]
+WantedBy=multi-user.target
+```
+
+For more on SDK packages and compile sections, see [Cross-compilation](/developer-reference/cross-compilation).
+
+</Step>
+
+<Step title="Build and boot" id="build-and-boot">
+
+In your terminal, build the image, provision the `dev` runtime, and boot it in QEMU:
+
+```bash
+# Cross-compile the binary, install it into the extension, and assemble the runtime image
+avocado build
+
+# Create the bootable disk image for the dev runtime
+avocado provision -r dev
+
+# Boot the VM inside the SDK container
+avocado sdk run -iE vm dev
+```
+
+Log in as `root` with an empty password. To exit QEMU later, press `Ctrl+A`, then `X`.
+
+</Step>
+
+<Step title="Observe the service" id="observe">
+
+In the QEMU console, check the service and follow its output:
+
+```bash
+# Confirm the service is active
+systemctl status ref-rust
+
+# Follow the JSON output
+journalctl -u ref-rust -f
+```
+
+Every 30 seconds the journal shows a line ending in a JSON object like this one (your values differ):
+
+```text
+{"hostname":"avocado-qemux86-64","uptime":42,"mem_total_kb":977972,"mem_free_kb":821488,"load_1m":"0.12"}
+```
+
+Press `Ctrl+C` to stop following the journal.
+
+</Step>
+
+<Step title="Modify and rebuild" id="modify">
+
+Shut down the VM with `poweroff`. On your host, edit `ref-rust/src/main.rs`. For example, change the sample interval:
+
+```rust title="ref-rust/src/main.rs"
+let interval = Duration::from_secs(10);
+```
+
+Then raise the extension's `version` in `avocado.yaml`:
+
+```yaml title="avocado.yaml"
+extensions:
+  example-rust:
+    version: 0.1.1
+```
+
+The build caches each completed step and reruns it only when its inputs change. Those inputs include the extension's entry in `avocado.yaml`, its overlay, and its compile and install scripts, but not the Rust source in `ref-rust/`. Changing the version marks the extension as changed. It is also how you tell one build of your binary from the next. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps) for the details.
+
+Rebuild, reprovision, and boot:
+
+```bash
+avocado build
+avocado provision -r dev
+avocado sdk run -iE vm dev
+```
+
+Log in and run `journalctl -u ref-rust -f`. New lines now arrive every 10 seconds.
+
+</Step>
+
+</Checklist>
+
+## Next steps
+
+- Add crates such as `serde` and `serde_json` to `ref-rust/Cargo.toml`. The compile script fetches them during the build.
+- Update a running device over the air instead of reprovisioning in [Mission 1: First OTA](/learn/missions/first-ota).
+- Provision real hardware: the reference's [getting started guide](https://github.com/avocado-linux/references/blob/main/rust-vitals/getting_started.md) lists the `--profile` for each board family.

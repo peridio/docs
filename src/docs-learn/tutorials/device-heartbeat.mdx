@@ -1,13 +1,249 @@
 ---
 title: Device Heartbeat
-description: Report device health to Avocado Connect from a container.
-wip: true
+description: Build a shell-script heartbeat service and learn how extensions, overlays, and systemd services fit together.
 ---
+
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
 
 # Device Heartbeat
 
-:::caution[Work in progress]
+Build a heartbeat service that reads system vitals from `/proc` and logs them as JSON to the systemd journal. The service is a shell script, so there is no compile step. That keeps the focus on the pattern every Avocado OS project follows: declare an extension in `avocado.yaml`, rebuild, and see it running on the device.
 
-This page is a placeholder for the Learn section. Content is being ported from the Avocado Connect LaunchPad.
+You will learn:
 
-:::
+- How a local extension packages files with an **overlay** directory.
+- How `enable_services` starts a systemd service on boot.
+- How `on_merge` and `on_unmerge` hooks restart and stop the service when the extension changes.
+
+The project comes from the [`shell-heartbeat`](https://github.com/avocado-linux/references/tree/main/shell-heartbeat) reference. For background on each concept, see [Core Concepts](/avocado-os/core-concepts).
+
+## Prerequisites
+
+- macOS 10.12+ or Linux (Ubuntu 22.04+, Fedora 39+)
+- 8 GB available disk space
+
+<HostPrerequisites />
+
+If this is your first Avocado OS build, work through the [QEMU quickstart](/learn/get-started/qemu) first. This tutorial uses the same build-and-boot commands.
+
+## Steps
+
+<Checklist id="tutorial-device-heartbeat">
+
+<Step title="Initialize the project" id="initialize">
+
+In your terminal, create a project from the `shell-heartbeat` reference and install its dependencies.
+
+```bash
+# Scaffold a project from the reference
+avocado init --reference shell-heartbeat my-heartbeat
+cd my-heartbeat
+
+# Install the SDK toolchain and the packages avocado.yaml declares
+avocado install
+```
+
+`avocado install` pulls the SDK container image and installs every package into its sysroot. The first run takes a few minutes.
+
+</Step>
+
+<Step title="Explore the project structure" id="project-structure">
+
+The project mirrors how Avocado OS organizes extensions:
+
+```text
+my-heartbeat/
+├── avocado.yaml
+└── heartbeat/
+    └── overlay/
+        ├── etc/
+        │   └── heartbeat.conf
+        └── usr/
+            ├── local/bin/
+            │   └── heartbeat.sh
+            └── lib/systemd/system/
+                └── heartbeat.service
+```
+
+- `avocado.yaml` defines the device image: target, distribution, runtimes, extensions, and SDK.
+- `heartbeat/overlay/` mirrors the device's root filesystem. `overlay/usr/local/bin/heartbeat.sh` lands at `/usr/local/bin/heartbeat.sh` on the device.
+- `usr/local/bin/` holds scripts, `usr/lib/systemd/system/` holds service units, and `etc/` holds configuration read at runtime. These are standard Linux paths.
+
+</Step>
+
+<Step title="Read the runtime" id="runtime">
+
+Open `avocado.yaml`. The `runtimes` block declares named images. The `dev` runtime lists the extensions composed into one bootable image:
+
+```yaml title="avocado.yaml"
+default_target: 'qemux86-64'
+
+runtimes:
+  dev:
+    extensions:
+      - avocado-ext-dev
+      - avocado-ext-sshd-dev
+      - avocado-bsp-{{ avocado.target.board }}
+      - app
+      - heartbeat
+    packages:
+      avocado-runtime: '*'
+```
+
+`default_target` selects the hardware, here a virtual x86-64 machine. Each listed extension is an independent layer, so their order does not matter. `avocado-ext-dev` and `avocado-ext-sshd-dev` add development tools and SSH, and `avocado-bsp-*` is the board support package for the target.
+
+The file also declares `avocado-ext-connect` and `avocado-ext-tunnels`. They are not in the `dev` list, so they are not in this image. The [missions](/learn) add them when you connect the device to Avocado Connect.
+
+</Step>
+
+<Step title="Read the heartbeat extension" id="extension">
+
+Further down `avocado.yaml`, the `heartbeat` extension is defined inline:
+
+```yaml title="avocado.yaml"
+extensions:
+  heartbeat:
+    types:
+      - sysext
+      - confext
+    version: '0.1.0'
+    summary: 'Device heartbeat monitor'
+    overlay: heartbeat/overlay
+    enable_services:
+      - heartbeat.service
+    on_merge:
+      - systemctl restart --no-block heartbeat.service
+    on_unmerge:
+      - systemctl stop heartbeat.service
+```
+
+- `types` makes it both a system extension (`sysext`, files under `/usr`) and a configuration extension (`confext`, files under `/etc`). The overlay has files in both trees.
+- `overlay` points at the directory whose contents land on the device.
+- `enable_services` enables `heartbeat.service` so it starts on every boot. A device has no one to start it by hand.
+- `on_merge` restarts the service when the extension is applied, so a new version takes effect without a reboot. `on_unmerge` stops it before the extension is removed.
+
+</Step>
+
+<Step title="Read the extension files" id="extension-files">
+
+Three files make up the extension.
+
+`heartbeat.sh` reads uptime, free and total memory, and the 1-minute load average from `/proc`, prints one JSON object, and sleeps. Its output goes to stdout, which systemd captures in the journal.
+
+```sh title="heartbeat/overlay/usr/local/bin/heartbeat.sh"
+#!/bin/sh
+set -eu
+
+# Source configuration
+INTERVAL=30
+[ -f /etc/heartbeat.conf ] && . /etc/heartbeat.conf
+
+while true; do
+  uptime_secs=$(awk '{print int($1)}' /proc/uptime)
+  mem_free_kb=$(awk '/MemFree:/ {print $2}' /proc/meminfo)
+  mem_total_kb=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
+  load_1m=$(awk '{print $1}' /proc/loadavg)
+  ts=$(date +%s)
+
+  printf '{"uptime":%d,"mem_free_kb":%d,"mem_total_kb":%d,"load_1m":"%s","ts":%d}\n' \
+    "$uptime_secs" "$mem_free_kb" "$mem_total_kb" "$load_1m" "$ts"
+
+  sleep "$INTERVAL"
+done
+```
+
+`heartbeat.service` runs the script as a long-running service. `Type=simple` treats the service as started as soon as the process launches. `Restart=on-failure` restarts it if it exits with an error.
+
+```ini title="heartbeat/overlay/usr/lib/systemd/system/heartbeat.service"
+[Unit]
+Description=Device Heartbeat Monitor
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/heartbeat.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+`heartbeat.conf` sets the sample interval in seconds. The script sources it at startup.
+
+```sh title="heartbeat/overlay/etc/heartbeat.conf"
+# Heartbeat configuration
+# Interval between heartbeat samples (seconds)
+INTERVAL=30
+```
+
+</Step>
+
+<Step title="Build and boot" id="build-and-boot">
+
+In your terminal, build the image, provision the `dev` runtime, and boot it in QEMU:
+
+```bash
+# Build the extensions and assemble the runtime image
+avocado build
+
+# Create the bootable disk image for the dev runtime
+avocado provision -r dev
+
+# Boot the VM inside the SDK container
+avocado sdk run -iE vm dev
+```
+
+The QEMU console shows a login prompt. Log in as `root` with an empty password. To exit QEMU later, press `Ctrl+A`, then `X`.
+
+</Step>
+
+<Step title="Observe the heartbeat" id="observe">
+
+The service starts on boot. In the QEMU console, check its status and follow its output:
+
+```bash
+# Confirm the service is active
+systemctl status heartbeat
+
+# Follow the JSON vitals as they arrive
+journalctl -u heartbeat -f
+```
+
+`systemctl status` reports `active (running)`. Every 30 seconds the journal shows a new line ending in a JSON object like this one (your values differ):
+
+```text
+{"uptime":142,"mem_free_kb":412356,"mem_total_kb":524288,"load_1m":"0.03","ts":1740700000}
+```
+
+Press `Ctrl+C` to stop following the journal.
+
+</Step>
+
+<Step title="Change the interval and rebuild" id="modify">
+
+Shut down the VM with `poweroff`. On your host, edit `heartbeat/overlay/etc/heartbeat.conf`:
+
+```sh title="heartbeat/overlay/etc/heartbeat.conf"
+INTERVAL=10
+```
+
+Rebuild, reprovision, and boot again:
+
+```bash
+avocado build
+avocado provision -r dev
+avocado sdk run -iE vm dev
+```
+
+The build detects the changed overlay file and rebuilds only the `heartbeat` extension and the runtime. Log in and run `journalctl -u heartbeat -f` again. New lines now arrive every 10 seconds.
+
+</Step>
+
+</Checklist>
+
+## Next steps
+
+- Add fields to the JSON in `heartbeat.sh`, such as disk usage or temperature, and rebuild.
+- Ship a change to a running device without reprovisioning in [Mission 1: First OTA](/learn/missions/first-ota), which uses this reference.
+- Compile an application in the SDK in [React Cross-Compile](/learn/tutorials/react-cross-compile) or [Rust Cross-Compile](/learn/tutorials/rust-cross-compile).

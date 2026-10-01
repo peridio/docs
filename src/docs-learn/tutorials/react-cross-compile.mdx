@@ -1,15 +1,300 @@
 ---
 title: React Cross-Compile
-description: Build a React app and ship it to an Avocado OS device.
-wip: true
+description: Build a React and Express dashboard inside the Avocado SDK and run it on your device as a systemd service.
 ---
+
+import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
 
 # React Cross-Compile
 
-:::caution[Work in progress]
+Build a system monitoring dashboard: a React frontend built with Vite and Tailwind CSS, served by an Express backend that reads CPU, memory, disk, and network stats from `/proc` and `/sys`. The SDK container builds the app, an install script copies it into an extension, and systemd runs it on port 4000.
 
-This page is a placeholder for the Learn section. Content is being ported from the Avocado Connect LaunchPad.
+You will learn:
 
+- How the SDK container builds application code, so you install no Node.js toolchain on your host.
+- How `compile` and `install` scripts turn build output into extension content.
+- How to separate SDK-only packages from packages that ship on the device.
+
+The project comes from the [`react-dashboard`](https://github.com/avocado-linux/references/tree/main/react-dashboard) reference. If you haven't built an extension before, start with [Device Heartbeat](/learn/tutorials/device-heartbeat).
+
+## Prerequisites
+
+- macOS 10.12+ or Linux (Ubuntu 22.04+, Fedora 39+)
+- 8 GB available disk space
+
+<HostPrerequisites />
+
+## Steps
+
+<Checklist id="tutorial-react-cross-compile">
+
+<Step title="Initialize the project" id="initialize">
+
+In your terminal, create a project from the `react-dashboard` reference and install its dependencies.
+
+```bash
+# Scaffold a project from the reference
+avocado init --reference react-dashboard my-react-app
+cd my-react-app
+
+# Install the SDK toolchain, Node.js for the SDK, and the device packages
+avocado install
+```
+
+Besides the base toolchain, this installs `nativesdk-nodejs`, `nativesdk-nodejs-npm`, and `nativesdk-ca-certificates` into the SDK. Those are the tools the build uses.
+
+</Step>
+
+<Step title="Explore the project structure" id="project-structure">
+
+```text
+my-react-app/
+├── avocado.yaml
+├── reactjs-compile.sh
+├── reactjs-install.sh
+├── reactjs-clean.sh
+├── overlay/
+│   ├── etc/default/cog-avocado
+│   └── usr/lib/systemd/system/
+│       ├── cog.service
+│       └── ref-reactjs.service
+└── ref-reactjs/
+    ├── package.json
+    ├── server.js
+    ├── vite.config.js
+    ├── index.html
+    └── src/
+        ├── App.jsx
+        └── components/
+```
+
+- `reactjs-compile.sh`, `reactjs-install.sh`, and `reactjs-clean.sh` run inside the SDK container. They build, package, and clean the app.
+- `overlay/` holds the systemd units. `ref-reactjs.service` runs the server. `cog.service` opens the dashboard in a full-screen browser on boards with a display.
+- `ref-reactjs/` is the application source: the React frontend in `src/` and the Express backend in `server.js`.
+
+</Step>
+
+<Step title="Read the runtime" id="runtime">
+
+The `dev` runtime composes the React extension with the development tools, SSH, the WebKit browser extension, and the board support package. QEMU has no display, so the runtime overrides the list for QEMU targets and drops `avocado-ext-webkit`:
+
+```yaml title="avocado.yaml"
+runtimes:
+  dev:
+    packages:
+      avocado-runtime: '*'
+    extensions:
+      - example-reactjs
+      - avocado-ext-dev
+      - avocado-ext-sshd-dev
+      - avocado-ext-webkit
+      - avocado-bsp-{{ avocado.target.board }}
+
+    # QEMU targets: no display hardware, drop webkit/cog
+    qemux86-64:
+      extensions:
+        - example-reactjs
+        - avocado-ext-dev
+        - avocado-ext-sshd-dev
+        - avocado-bsp-{{ avocado.target.board }}
+```
+
+The reference has the same override for `qemuarm64`.
+
+</Step>
+
+<Step title="Read the React extension" id="extension">
+
+```yaml title="avocado.yaml"
+extensions:
+  example-reactjs:
+    version: 0.1.0
+    overlay: overlay
+    enable_services:
+      - ref-reactjs.service
+    on_merge:
+      - systemctl start --no-block ref-reactjs.service
+      - sh -c 'command -v cog >/dev/null 2>&1 && systemctl restart --no-block cog.service || true'
+    on_unmerge:
+      - systemctl stop ref-reactjs.service
+      - sh -c 'systemctl stop cog.service 2>/dev/null || true'
+    packages:
+      example-reactjs-app:
+        compile: example-reactjs-app
+        install: reactjs-install.sh
+      nodejs: '*'
+    sdk:
+      packages:
+        nativesdk-nodejs: '*'
+        nativesdk-nodejs-npm: '*'
+        nativesdk-ca-certificates: '*'
+```
+
+- `example-reactjs-app` is not a feed package. `compile: example-reactjs-app` names an SDK compile section (next step), and `install: reactjs-install.sh` copies its output into the extension.
+- `nodejs` is a feed package that ships on the device to run `server.js`.
+- `sdk.packages` are installed in the SDK container only. They build the app and never reach the device.
+- The `cog` hooks only act when the WebKit browser is present, so the same extension works on QEMU and on boards with a display.
+
+</Step>
+
+<Step title="Read the build pipeline" id="build-pipeline">
+
+The top-level `sdk` block maps the compile section to its scripts:
+
+```yaml title="avocado.yaml"
+sdk:
+  image: 'docker.io/avocadolinux/sdk:{{ config.distro.release }}'
+  compile:
+    example-reactjs-app:
+      compile: reactjs-compile.sh
+      clean: reactjs-clean.sh
+```
+
+`reactjs-compile.sh` runs in the SDK container. It installs the npm dependencies and builds the frontend into `ref-reactjs/dist/`:
+
+```bash title="reactjs-compile.sh"
+#!/usr/bin/env bash
+
+set -e
+
+echo "Compiling React.js application"
+cd ref-reactjs
+
+echo "Installing dependencies..."
+npm install
+
+echo "Building React frontend..."
+npm run build
+
+echo "React.js application compiled successfully"
+```
+
+`reactjs-install.sh` copies everything the server needs into the extension's sysroot. `$AVOCADO_BUILD_EXT_SYSROOT` is the root of the extension being built, so these files land in `/usr/lib/ref-reactjs/` on the device:
+
+```bash title="reactjs-install.sh"
+#!/usr/bin/env bash
+
+# AVOCADO_BUILD_EXT_SYSROOT: The sysroot of the extension being installed into
+
+set -e
+
+echo "Installing React.js application into extension"
+
+# Create the target directory
+mkdir -p "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs"
+
+# Copy the built application files
+cp -r ref-reactjs/dist "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+cp -r ref-reactjs/node_modules "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+cp ref-reactjs/package.json "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+cp ref-reactjs/server.js "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+
+echo "React.js application installed successfully"
+```
+
+`ref-reactjs.service` runs the server from that directory on port 4000. `Restart=always` restarts it if it crashes:
+
+```ini title="overlay/usr/lib/systemd/system/ref-reactjs.service"
+[Unit]
+Description=Ref React.js Application
+After=network.target
+Wants=network.target
+
+[Service]
+WorkingDirectory=/usr/lib/ref-reactjs
+ExecStart=/usr/bin/node /usr/lib/ref-reactjs/server.js
+Environment=NODE_ENV=production
+Environment=PORT=4000
+Restart=always
+RestartSec=5
+SyslogIdentifier=ref-reactjs
+
+[Install]
+WantedBy=multi-user.target
+```
+
+For the general compile model, see [Cross-compilation](/developer-reference/cross-compilation).
+
+</Step>
+
+<Step title="Build and boot" id="build-and-boot">
+
+In your terminal, build the image and provision the `dev` runtime:
+
+```bash
+# Run the compile and install scripts, then assemble the runtime image
+avocado build
+
+# Create the bootable disk image for the dev runtime
+avocado provision -r dev
+```
+
+Boot the VM and forward the dashboard port to your host:
+
+```bash
+avocado sdk run -iE vm dev --host-fwd "4000-:4000"
+```
+
+:::note Linux only
+The `--host-fwd` flag is supported on Linux only. On macOS, boot with `avocado sdk run -iE vm dev` and verify the service from the QEMU console in the next step.
 :::
 
-See [cross-compilation](/developer-reference/cross-compilation) in the meantime.
+Log in as `root` with an empty password. To exit QEMU later, press `Ctrl+A`, then `X`.
+
+</Step>
+
+<Step title="View the dashboard" id="view">
+
+In the QEMU console, confirm the service is running and check its log:
+
+```bash
+# Confirm the service is active
+systemctl status ref-reactjs
+
+# Show the service log
+journalctl -u ref-reactjs --no-pager
+```
+
+The log contains this line:
+
+```text
+React.js reference app running on http://0.0.0.0:4000
+```
+
+In your host browser, open [http://localhost:4000](http://localhost:4000). The dashboard shows CPU, memory, disk, network, and process stats that refresh live. The same data is available as JSON at `/api/stats` and `/api/processes`.
+
+</Step>
+
+<Step title="Modify and rebuild" id="modify">
+
+Shut down the VM with `poweroff`. On your host, edit the app, for example a heading in `ref-reactjs/src/App.jsx` or an endpoint in `ref-reactjs/server.js`.
+
+Then raise the extension's `version` in `avocado.yaml`:
+
+```yaml title="avocado.yaml"
+extensions:
+  example-reactjs:
+    version: 0.1.1
+```
+
+The build caches each completed step and reruns it only when its inputs change. Those inputs include the extension's entry in `avocado.yaml`, its overlay, and its compile and install scripts, but not the app source in `ref-reactjs/`. Changing the version marks the extension as changed. It is also how you tell one build of your app from the next. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps) for the details.
+
+Rebuild, reprovision, and boot:
+
+```bash
+avocado build
+avocado provision -r dev
+avocado sdk run -iE vm dev --host-fwd "4000-:4000"
+```
+
+Reload [http://localhost:4000](http://localhost:4000) to see your change.
+
+</Step>
+
+</Checklist>
+
+## Next steps
+
+- Reach this dashboard on a device anywhere through a secure tunnel in [Mission 2: Remote App](/learn/missions/remote-app).
+- Compile a native binary in [Rust Cross-Compile](/learn/tutorials/rust-cross-compile).
+- Provision real hardware: the reference's [getting started guide](https://github.com/avocado-linux/references/blob/main/react-dashboard/getting_started.md) lists the `--profile` for each board family.

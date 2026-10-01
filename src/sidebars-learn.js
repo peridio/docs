@@ -34,6 +34,7 @@ const sidebars = {
       label: 'Tutorials',
       collapsible: false,
       collapsed: false,
+      link: { type: 'doc', id: 'tutorials/index' },
       items: [
         'tutorials/device-heartbeat',
         'tutorials/react-cross-compile',
