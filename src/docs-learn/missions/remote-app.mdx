@@ -1,23 +1,103 @@
 ---
 title: 'Mission 2: Remote App'
 sidebar_label: 'Remote App'
-description: Reach an app running on your device through an Avocado Connect tunnel.
+description: Build a React app into an Avocado OS image, boot it in QEMU, and open it in your browser through an Avocado Connect tunnel.
 sidebar_position: 2
-wip: true
 ---
 
 # Mission 2: Remote App
 
 <MissionRail current="remote-app" compact />
 
-:::caution[Work in progress]
+Build a React app into an Avocado OS image, boot it on a virtual device, and reach it from your browser through an Avocado Connect tunnel. The device dials out to Connect, so you don't open any ports on the device's network.
 
-This page is a placeholder for the Learn section. Content is being ported from the Avocado Connect LaunchPad.
+This mission uses one HTTP tunnel. The [remote tunnel guide](/developer-reference/remote-tunnel) covers SSH, Cockpit, custom ports, and tunnel lifetime in depth.
 
-:::
+## What you need
 
-Run an app on your device and reach it from your laptop through a secure tunnel, without opening ports on the device's network.
+- The Avocado CLI and Docker running. If you finished [Mission 1](/learn/missions/first-ota), you're set.
+- An Avocado Connect account. Sign up for a free developer account at [connect.peridio.com/login](https://connect.peridio.com/login).
 
-Until this mission is ported, follow the [remote tunnel guide](/developer-reference/remote-tunnel).
+## Steps
+
+<Checklist id="remote-app">
+
+<Step title="Scaffold and connect the project" id="scaffold-connect">
+
+Create a project from the `react-dashboard` reference and link it to Connect. `avocado connect init` adds the Connect and tunnel extensions to the `dev` runtime and writes a claim token into the device config.
+
+```bash
+# Scaffold the React reference into my-react-app/
+avocado init my-react-app --reference react-dashboard
+cd my-react-app
+
+# Sign in (skip if you're already logged in), then link to Connect
+avocado connect auth login
+avocado connect init
+```
+
+</Step>
+
+<Step title="Build and launch" id="build-launch">
+
+Install dependencies, build the runtime, and boot it in QEMU. The build cross-compiles the React frontend inside the SDK container, so you don't need Node.js on your host.
+
+```bash
+avocado install --force
+avocado build
+avocado provision -r dev
+avocado sdk run -iE vm dev
+```
+
+The build ends with `[SUCCESS] All components built successfully!`. Log in to the QEMU console as `root` (no password). To exit QEMU later, press `Ctrl+A`, then `X`.
+
+Your device appears in **Fleet** with a green **Online** status.
+
+<OpenInConnect to="fleet">Open Fleet in Connect</OpenInConnect>
+
+</Step>
+
+<Step title="See it running" id="see-running">
+
+Confirm the React app runs as a systemd service on the device:
+
+```bash
+# In the QEMU console
+systemctl status ref-reactjs
+journalctl -u ref-reactjs --no-pager -f
+```
+
+```text
+Active: active (running)
+React.js reference app running on http://0.0.0.0:4000
+```
+
+The app listens on port `4000`. That's the port you tunnel to next.
+
+</Step>
+
+<Step title="Open a tunnel" id="open-tunnel">
+
+In Connect, open **Fleet** and select your device. In the device's **Tunnels** panel, choose **Custom**, enter port `4000`, and click **Connect**. Connect establishes a WireGuard tunnel to the device, then shows an endpoint (host and port). Copy it.
+
+The developer plan allows one active tunnel at a time. Close any other tunnel on the device first.
+
+</Step>
+
+<Step title="Access the UI" id="access-ui">
+
+Open the endpoint in your browser, for example `http://13.219.213.3:58954`. The React dashboard renders from your QEMU device, reached through the tunnel exactly as someone on the device's own network would see it.
+
+Tunnels expire automatically. Close yours early from the device's **Tunnels** panel.
+
+</Step>
+
+</Checklist>
+
+## Go further
+
+- [Remote tunnel guide](/developer-reference/remote-tunnel): SSH and Cockpit tunnels, the port shortcuts, and what each session records.
+- [Remote Access overview](/avocado-connect/tunnels): how tunnels work in Connect.
+- [`react-dashboard` reference](/developer-reference/references/react-dashboard): how the app is compiled and installed into the image.
 
 <MarkComplete id="remote-app" />

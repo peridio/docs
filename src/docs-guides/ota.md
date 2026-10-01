@@ -8,6 +8,10 @@ This guide walks through a complete over-the-air (OTA) update with Avocado OS: f
 
 Along the way you'll see each step done multiple ways where multiple tools support it: uploading a runtime from the **Avocado CLI** or **Avocado Desktop**, and creating a deployment from the **CLI**, **Desktop**, or the **Avocado Connect** console.
 
+:::tip
+New to Avocado? [Mission 1: First OTA](/learn/missions/first-ota) is a guided, step-by-step version of this flow on a QEMU virtual device, with no hardware needed.
+:::
+
 ## How an OTA works in Avocado
 
 - A **runtime** is the versioned artifact you deploy. You build it locally, then upload and publish it to your Connect project.

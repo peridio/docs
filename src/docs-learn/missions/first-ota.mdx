@@ -1,25 +1,209 @@
 ---
 title: 'Mission 1: First OTA'
 sidebar_label: 'First OTA'
-description: Ship your first over-the-air update to a device with Avocado Connect.
+description: Ship your first over-the-air update to a running QEMU device with Avocado Connect, from scaffold to a new field in the device logs.
 sidebar_position: 1
-wip: true
 ---
 
 # Mission 1: First OTA
 
 <MissionRail current="first-ota" compact />
 
-:::caution[Work in progress]
+Go from zero to a verified over-the-air (OTA) update. You scaffold a project, connect it to Avocado Connect, build and boot a virtual device, add a new metric to its heartbeat script, ship the change over the air, and watch the new field appear in the device logs without a reboot.
 
-This page is a placeholder for the Learn section. Content is being ported from the Avocado Connect LaunchPad.
+This mission is the guided path. For every way to upload and deploy (CLI, Avocado Desktop, and the Connect console) and screenshots of each screen, see the [OTA updates guide](/developer-reference/ota).
 
-:::
+## What you need
 
-Ship an over-the-air update to a running device: build a new image, upload it to Avocado Connect, and deploy it to your fleet.
+- An x86_64 or Apple Silicon host with Docker running
+- An Avocado Connect account. Sign up for a free developer account at [connect.peridio.com/login](https://connect.peridio.com/login).
 
-Until this mission is ported, follow the [OTA updates guide](/developer-reference/ota). It covers connecting a project, provisioning a device, and rolling out an update.
+No hardware is needed. The device is a QEMU virtual machine.
 
-<OpenInConnect to="fleet">Open your fleet in Connect</OpenInConnect>
+## How an OTA works in Avocado
+
+- A **runtime** is the versioned artifact you deploy. You build it locally, then upload and publish it to your Connect project.
+- A **deployment** targets a published runtime at a **cohort**, a group of devices in your project.
+- Devices verify every update against TUF signatures before installing. An extension-only change, like the one in this mission, merges live with no reboot. An update that carries a new OS image applies to the inactive A/B partition and reboots into it, with automatic rollback if the new slot fails to boot. See the [update architecture](/avocado-os/security/update-architecture) for the full rules.
+
+## Steps
+
+<Checklist id="first-ota">
+
+<Step title="Install the CLI" id="install-cli">
+
+In your terminal, install the Avocado CLI:
+
+```bash
+curl -fsSL https://connect.peridio.com/install.sh | sh
+```
+
+Run `avocado --version` to confirm the CLI is on your `PATH`.
+
+</Step>
+
+<Step title="Scaffold and connect the project" id="scaffold-connect">
+
+Create a project from the `shell-heartbeat` reference, then link it to Avocado Connect. `avocado connect auth login` opens your browser to sign in. `avocado connect init` asks you to pick an organization and project, adds the Connect extensions to the `dev` runtime, creates a claim token, and writes the device config, all in one step.
+
+```bash
+# Scaffold the heartbeat reference into my-heartbeat/
+avocado init my-heartbeat --reference shell-heartbeat
+cd my-heartbeat
+
+# Sign in, then link this project to Connect
+avocado connect auth login
+avocado connect init
+```
+
+The command finishes with a **Connect initialized** summary listing your org, project, and claim token. The device uses that token to register itself on first boot. The [`shell-heartbeat` reference page](/developer-reference/references/shell-heartbeat) explains every file in the project.
+
+</Step>
+
+<Step title="Build the runtime" id="build-runtime">
+
+Install dependencies, build all extensions, and provision a bootable disk image. For QEMU, provisioning only creates the disk image. You boot it in the next step.
+
+```bash
+avocado install --force
+avocado build
+avocado provision -r dev
+```
+
+Each command ends with a `[SUCCESS]` line.
+
+</Step>
+
+<Step title="Boot the device" id="boot-device">
+
+Launch the QEMU virtual machine, log in as `root` (no password), and follow the Connect agent's logs:
+
+```bash
+# In your terminal
+avocado sdk run -iE vm dev
+
+# In the QEMU console
+journalctl -u avocado-conn -f --no-pager
+```
+
+The device claims its token and connects to Connect over MQTT:
+
+```text
+claim successful, credentials saved
+MQTT connected
+MQTT subscribed topic=cmd/{device_id}
+```
+
+Your device now appears in **Fleet** with a green **Online** status. Keep this terminal open: you watch the update arrive here in the last step.
+
+<OpenInConnect to="fleet">Open Fleet in Connect</OpenInConnect>
+
+</Step>
+
+<Step title="Edit the heartbeat script" id="edit-script">
+
+Add disk free space to the heartbeat. Replace `heartbeat/overlay/usr/local/bin/heartbeat.sh` with this version, which adds a `disk_free_kb` field:
+
+```sh title="heartbeat/overlay/usr/local/bin/heartbeat.sh"
+#!/bin/sh
+set -eu
+
+# Source configuration
+INTERVAL=30
+[ -f /etc/heartbeat.conf ] && . /etc/heartbeat.conf
+
+while true; do
+  uptime_secs=$(awk '{print int($1)}' /proc/uptime)
+  mem_free_kb=$(awk '/MemFree:/ {print $2}' /proc/meminfo)
+  mem_total_kb=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
+  load_1m=$(awk '{print $1}' /proc/loadavg)
+  # highlight-next-line
+  disk_free_kb=$(df -k / | awk 'NR==2 {print $4}')
+  ts=$(date +%s)
+
+  # highlight-start
+  printf '{"uptime":%d,"mem_free_kb":%d,"mem_total_kb":%d,"load_1m":"%s","disk_free_kb":%d,"ts":%d}\n' \
+    "$uptime_secs" "$mem_free_kb" "$mem_total_kb" "$load_1m" "$disk_free_kb" "$ts"
+  # highlight-end
+
+  sleep "$INTERVAL"
+done
+```
+
+The file lives in the `heartbeat` extension's overlay, so the change ships as an extension update rather than a new OS image.
+
+</Step>
+
+<Step title="Build and publish the update" id="build-upload">
+
+In a second terminal on your host, rebuild the `heartbeat` extension and the runtime, then upload and publish it as version `dev-002`:
+
+```bash
+# Rebuild the changed extension, then the full runtime
+avocado build -e heartbeat
+avocado build
+
+# Upload and publish in one step
+avocado connect upload dev --version dev-002 --publish
+```
+
+```text
+[SUCCESS] Runtime dev-002 uploaded (status: draft)
+[SUCCESS] Runtime dev-002 published (status: published)
+```
+
+The runtime now appears under **Runtimes** in your Connect project with status _Published_.
+
+</Step>
+
+<Step title="Deploy the update" id="deploy">
+
+Create a deployment and activate it. The command is interactive: select the `dev-002` runtime, then the cohort your device is in.
+
+```bash
+avocado connect deploy --activate
+```
+
+```text
+[SUCCESS] Deployment 'dev-002-...' created
+  Status: active
+```
+
+Deployments target a cohort. If your device isn't in one yet, assign it on the device's **Overview** in Connect (**Assign** next to **Cohort**), then run the command again. To deploy from the console instead, open your project's **Runtimes** tab and click **Deploy** on `dev-002`.
+
+<OpenInConnect to="projects">Open Projects in Connect</OpenInConnect>
+
+</Step>
+
+<Step title="Watch the rollout" id="watch-rollout">
+
+Open the deployment in Connect and switch to the **Rollout** tab. Your device shows as **Pending** with its old runtime, then moves to **On target** once it applies the update. When every device in the cohort converges, the deployment is **Completed**.
+
+</Step>
+
+<Step title="Validate on the device" id="validate">
+
+Back in the QEMU console, the agent log shows the update arriving. Press `Ctrl+C` to stop following it, then follow the heartbeat output:
+
+```bash
+# In the QEMU console
+journalctl -u heartbeat -f --no-pager
+```
+
+```text
+{"uptime":542,"mem_free_kb":398212,"mem_total_kb":524288,"load_1m":"0.01","disk_free_kb":3841024,"ts":1740700400}
+```
+
+Look for `disk_free_kb`, the field you added. You shipped a feature to a running device without a reboot. To confirm which runtime is active, run `avocadoctl runtime list`.
+
+</Step>
+
+</Checklist>
+
+## Go further
+
+- [OTA updates guide](/developer-reference/ota): upload and deploy from Avocado Desktop or the Connect console, and target specific devices or tags.
+- [Deployments](/avocado-connect/deployments): how cohorts, runtimes, and rollouts fit together.
+- [Two boots to trust an update](/field-notes/2026/06/20/two-boots-trust-update): what A/B rollback does when a bad OS update ships.
 
 <MarkComplete id="first-ota" />

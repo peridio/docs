@@ -1,23 +1,151 @@
 ---
 title: 'Mission 3B: Jetson Vision'
 sidebar_label: 'Jetson Vision'
-description: Run a computer-vision workload on NVIDIA Jetson with Avocado OS.
+description: Run NVIDIA DeepStream natively on a Jetson Orin Nano with Avocado OS and watch annotated camera inference live through an Avocado Connect tunnel.
 sidebar_position: 4
-wip: true
 ---
 
 # Mission 3B: Jetson Vision
 
 <MissionRail current="jetson-vision" compact />
 
-:::caution[Work in progress]
+Provision Avocado OS to a Jetson Orin Nano Developer Kit and run NVIDIA DeepStream natively, with no containers. A USB camera feeds a multi-model vision pipeline, and you watch the annotated stream live in your browser through an Avocado Connect tunnel.
 
-This page is a placeholder for the Learn section. Content is being ported from the Avocado Connect LaunchPad.
+For board-level detail (serial console wiring, the recovery-mode jumper, tegraflash troubleshooting), see the [Jetson Orin Nano getting started guide](/learn/get-started/jetson).
 
-:::
+## What you need
 
-Choose Hardware, branch B: run a computer-vision workload on an NVIDIA Jetson.
+- A Linux host (Ubuntu 22.04+ or Fedora 39+). Flashing the Jetson requires Linux.
+- Docker running, the [Avocado CLI](/developer-reference/avocado-cli/installation) installed, and 16 GB of free disk space
+- A Jetson Orin Nano Developer Kit with an NVMe SSD (M.2 2280)
+- A USB UVC webcam that supports MJPEG at 720p, for example a Logitech C920 or C270
+- A USB-C data cable (host to Jetson)
+- A 3.3V USB-to-serial adapter and a jumper wire
+- An Avocado Connect account. Sign up for a free developer account at [connect.peridio.com/login](https://connect.peridio.com/login).
 
-Start from the [Jetson Orin Nano guide](/learn/get-started/jetson) to get a bootable image.
+## Steps
+
+<Checklist id="jetson-vision">
+
+<Step title="Initialize and connect" id="initialize">
+
+Scaffold a project from the `nvidia-deepstream` reference, then link it to Connect so the device registers itself on first boot. The Orin Nano is the reference's default target.
+
+```bash
+# Scaffold the DeepStream reference into nvidia-deepstream/
+avocado init --reference nvidia-deepstream nvidia-deepstream
+cd nvidia-deepstream
+
+# Sign in (skip if you're already logged in), then link to Connect
+avocado connect auth login
+avocado connect init
+```
+
+`avocado connect init` creates a claim token and writes it into the device config. The device presents that token to Connect when it first boots.
+
+</Step>
+
+<Step title="Install and build" id="build">
+
+Install dependencies and build the image. The DeepStream app, four models, and prebuilt TensorRT engines are all baked in.
+
+```bash
+avocado install --force
+avocado build
+```
+
+The first build downloads model files from NGC and PINTO mirrors, so the host needs internet access. Models are cached after that. Cross-compiling under `qemu-user-static` makes the first Jetson build noticeably slower than other targets.
+
+</Step>
+
+<Step title="Enter recovery mode and flash" id="recovery-flash">
+
+Put the Jetson into USB recovery mode, then flash the image to the NVMe SSD with the `tegraflash` profile:
+
+1. With the Jetson powered off, short the **FC REC** pin to **GND** on the carrier board's header with a jumper.
+2. Connect the USB-C cable from the Jetson to your Linux host.
+3. Apply power.
+
+Confirm the Jetson is in recovery mode, then provision:
+
+```bash
+lsusb | grep -i nvidia
+avocado provision -r dev --profile tegraflash
+```
+
+`lsusb` should list the Jetson in recovery mode:
+
+```text
+Bus 001 Device 00X: ID 0955:7020 NVIDIA Corp. APX
+```
+
+If your Linux desktop auto-mounts removable media, [disable auto-mounting](/developer-reference/linux-auto-mounting) before flashing.
+
+</Step>
+
+<Step title="Boot the device" id="first-boot">
+
+Power the Jetson off, remove the **FC REC** jumper, and disconnect the USB-C cable. Plug the camera into one of the Jetson's USB ports, keep the serial adapter connected, and apply power. Open the serial console to watch it boot:
+
+```bash
+tio -b 115200 /dev/ttyUSB0
+```
+
+Log in as `root` with an empty password. The device registers with Connect and appears in **Fleet** with a green **Online** status.
+
+<OpenInConnect to="fleet">Open Fleet in Connect</OpenInConnect>
+
+</Step>
+
+<Step title="Verify the DeepStream pipeline" id="verify-deepstream">
+
+The app runs as the `vision-app` systemd service. Check that it's running and follow its logs:
+
+```bash
+# On the device
+systemctl status vision-app
+journalctl -u vision-app -f
+```
+
+```text
+Active: active (running)
+```
+
+In the logs, each model's engine loads in turn (PeopleNet, MoveNet, YOLOX-Hand, MediaPipe Hand Landmark), then GStreamer reports frames flowing. Look for `setting pipeline to PLAYING` and `dashboard: http://0.0.0.0:8080`. Because the engines are prebuilt for the target, the pipeline plays within about 10 to 15 seconds. The dashboard only binds port `8080` once all four engines have loaded.
+
+</Step>
+
+<Step title="View live inference" id="view-stream">
+
+In Connect, open **Fleet** and select your Jetson. In the device's **Tunnels** panel, choose **Custom**, enter port `8080`, and click **Connect**. Copy the endpoint and open it in your browser.
+
+The dashboard shows the live camera stream with a box around each detected person. Use **Show skeletons**, **Show hands**, and **Show zones** to toggle the body keypoint, hand keypoint, and zone overlays (all off by default). On the tunnel endpoint, also try:
+
+- `/stream`: the raw MJPEG video
+- `/api/stats`: JSON with detections, FPS, per-zone dwell times, and line-crossing counts
+
+```json
+{
+  "fps": 18.4,
+  "detections": [{ "id": 1, "class": "person", "confidence": 0.92, "bbox": [120, 80, 280, 420] }],
+  "unique_tracks": 3,
+  "pose": { "overlay_enabled": false },
+  "analytics": { "rois": { "Center": { "current_count": 1, "avg_dwell_seconds": 7.4 } } }
+}
+```
+
+Walk in and out of the frame. The tracker keeps a stable `id` per person, and `analytics.rois.Center.current_count` rises when you step into the center zone. On the Orin Nano, expect about 15 to 25 fps at 720p with one or two people in frame.
+
+If you see no detections, run `v4l2-ctl --list-devices` on the device to confirm the camera is detected, and check that it offers an `MJPG` format. A camera that only supports `YUYV` needs a pipeline change, described in the reference's "Adapting to your camera" section.
+
+</Step>
+
+</Checklist>
+
+## Go further
+
+- [`nvidia-deepstream` reference](/developer-reference/references/nvidia-deepstream): the full pipeline, camera adaptation, and how the engines are packaged.
+- [The fastest path to AI vision on NVIDIA](/field-notes/2026/06/22/fastest-path-ai-vision-nvidia): the field note behind this reference.
+- [Remote tunnel guide](/developer-reference/remote-tunnel): SSH into the Jetson through a tunnel.
 
 <MarkComplete id="jetson-vision" />

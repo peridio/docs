@@ -1,23 +1,137 @@
 ---
 title: 'Mission 3A: Pi Gateway'
 sidebar_label: 'Pi Gateway'
-description: Turn a Raspberry Pi into an edge gateway with Avocado OS.
+description: Build Avocado OS for a Raspberry Pi 5 with a Python telemetry agent, register it with Avocado Connect, and watch live MQTT data from the device.
 sidebar_position: 3
-wip: true
 ---
 
 # Mission 3A: Pi Gateway
 
 <MissionRail current="pi-gateway" compact />
 
-:::caution[Work in progress]
+Build Avocado OS for a Raspberry Pi 5 with a Python telemetry agent, provision an SD card, boot the device, and watch live system metrics flow to an MQTT broker. This proves you can ship application code to physical hardware and observe it remotely.
 
-This page is a placeholder for the Learn section. Content is being ported from the Avocado Connect LaunchPad.
+For board-level detail (serial console wiring, USB provisioning without a card reader, power requirements), see the [Raspberry Pi 5 getting started guide](/learn/get-started/raspberry-pi).
+
+## What you need
+
+- A Raspberry Pi 5
+- A microSD card (8 GB or larger) and a card reader
+- Docker running and the [Avocado CLI](/developer-reference/avocado-cli/installation) installed
+- An Avocado Connect account. Sign up for a free developer account at [connect.peridio.com/login](https://connect.peridio.com/login).
+
+## Steps
+
+<Checklist id="pi-gateway">
+
+<Step title="Initialize and connect" id="initialize">
+
+Scaffold a project for the Raspberry Pi 5 from the `python-mqtt` reference, then link it to Connect so the device registers itself on first boot.
+
+```bash
+# Scaffold the Python telemetry reference into gateway/
+avocado init --target raspberrypi5 gateway --reference python-mqtt
+cd gateway
+
+# Sign in (skip if you're already logged in), then link to Connect
+avocado connect auth login
+avocado connect init
+```
+
+`avocado connect init` creates a claim token and writes it into the device config. The device presents that token to Connect when it first boots.
+
+</Step>
+
+<Step title="Install, build, and provision" id="build-provision">
+
+Install the SDK toolchain and dependencies, build the image with the Python app baked in, then write it to your SD card:
+
+```bash
+avocado install --force
+avocado build
+avocado provision -r dev --profile sd
+```
+
+The CLI lists the available block devices and asks you to pick the SD card. Check the device carefully: provisioning overwrites the target disk. If your Linux desktop auto-mounts removable media, [disable auto-mounting](/developer-reference/linux-auto-mounting) first.
+
+</Step>
+
+<Step title="Boot the device" id="boot-device">
+
+Insert the SD card into the Pi, connect it to your network with Ethernet, and apply power. Log in as `root` with an empty password, over a serial console or SSH:
+
+```bash
+ssh root@<device-ip>
+```
+
+The device registers with Connect on boot and appears in **Fleet** with a green **Online** status.
+
+<OpenInConnect to="fleet">Open Fleet in Connect</OpenInConnect>
+
+</Step>
+
+<Step title="Verify the telemetry agent" id="verify-telemetry">
+
+The app runs as the `app` systemd service. It publishes system metrics (uptime, memory, CPU load, temperature) every 10 seconds and makes an HTTP health check every 45 seconds.
+
+```bash
+# On the device
+systemctl status app
+journalctl -u app -f
+```
+
+```text
+app starting
+  mqtt: broker.emqx.io:1883, topic=avocado/a8f3e2b1c4d5e6f7a8b9c0d1e2f3a4b5/telemetry, interval=10s
+  http: https://httpbin.org/get, interval=45s
+Connected to broker.emqx.io:1883 (rc=Success)
+[mqtt] published: {"device": "a8f3e2b1c4d5e6f7a8b9c0d1e2f3a4b5", ...}
+```
+
+The device ID in the topic is the systemd machine ID from `/etc/machine-id`. It's generated once at first boot and stays the same across reboots and OTA updates.
+
+</Step>
+
+<Step title="View live data" id="view-data">
+
+Watch the messages arrive in the MQTTX web client, with nothing to install:
+
+1. Open [mqttx.app](https://mqttx.app/) and start the web client.
+2. Connect to `broker.emqx.io` on port `8084` over WSS (WebSocket over TLS, which browsers can open).
+3. Subscribe to `avocado/+/telemetry`. The `+` wildcard matches any machine ID, so you see your device without knowing its ID.
+
+A new JSON message arrives every 10 seconds:
+
+```json
+{
+  "device": "a8f3e2b1c4d5e6f7a8b9c0d1e2f3a4b5",
+  "kernel": "6.6.0",
+  "timestamp": 1711234567,
+  "uptime_secs": 542,
+  "mem_total_kb": 8045312,
+  "mem_free_kb": 398212,
+  "mem_available_kb": 7516192,
+  "load": [0.12, 0.08, 0.03],
+  "cpu_temp_c": 47.2
+}
+```
+
+Messages also carry disk usage, network counters, and process count when the device reports them.
+
+:::warning[Demo broker only]
+
+`broker.emqx.io` is a free public broker: anyone can subscribe to your topic. Use it for this demo only. For real deployments, point the app at a private broker and a private topic namespace. The broker and intervals are set at the top of `app/overlay/usr/local/bin/app.py`.
 
 :::
 
-Choose Hardware, branch A: build an edge gateway on a Raspberry Pi.
+</Step>
 
-Start from the [Raspberry Pi 5 guide](/learn/get-started/raspberry-pi) to get a bootable image.
+</Checklist>
+
+## Go further
+
+- [`python-mqtt` reference](/developer-reference/references/python-mqtt): how pip dependencies are bundled into a system extension, and how to change the broker.
+- [Mission 1: First OTA](/learn/missions/first-ota): ship a change to this app over the air.
+- [Mission 2: Remote App](/learn/missions/remote-app): reach a service on the Pi through a tunnel.
 
 <MarkComplete id="pi-gateway" />
