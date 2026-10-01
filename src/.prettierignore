@@ -10,6 +10,10 @@ docs-guides/references/
 # Generated at build time by scripts/sync-targets.js (JSON.stringify output)
 src/data/hardware/generated-targets.json
 
+# Synced from avocado-cli by scripts/sync-schema.js (jq output)
+schemas/avocado-config.json
+static/schemas/avocado-config.json
+
 # MDX files with inline JSX styles that break when Prettier reformats across lines
 docs-guides/getting-started/index.mdx
 docs-overview/avocado-connect/overview.mdx
