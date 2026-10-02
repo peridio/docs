@@ -77,6 +77,8 @@ const config = {
           // on prose describing the app instead of anywhere you could get it.
           // The CLI installation page is the in-docs handover point, and it links
           // on to the full artifact list on peridio.com/downloads.
+          // The OTA guide became the first Learn mission.
+          { from: '/developer-reference/ota', to: '/learn/missions/first-ota' },
           {
             from: '/developer-reference/getting-started/download',
             to: '/developer-reference/avocado-cli/installation',
