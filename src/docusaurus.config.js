@@ -97,6 +97,16 @@ const config = {
     [
       '@docusaurus/plugin-content-docs',
       {
+        id: 'learn',
+        path: 'docs-learn',
+        routeBasePath: 'learn',
+        sidebarPath: require.resolve('./sidebars-learn.js'),
+        breadcrumbs: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
         id: 'guides',
         path: 'docs-guides',
         routeBasePath: 'developer-reference',
@@ -204,6 +214,12 @@ const config = {
             position: 'left',
             activeBaseRegex:
               '^/$|^/(avocado-os|avocado-connect|avocado-desktop|faqs|policies)(/.*)?$',
+          },
+          {
+            to: '/learn',
+            label: 'Learn',
+            position: 'left',
+            activeBasePath: 'learn',
           },
           {
             to: '/hardware/support-matrix',
