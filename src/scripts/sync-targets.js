@@ -63,7 +63,7 @@ function minimalEntry(slug) {
       ],
     },
     serial: null,
-    gettingStartedUrl: '/developer-reference/getting-started/any-target',
+    gettingStartedUrl: '/learn/get-started/any-target',
     hardwareUrl: null,
   }
 }

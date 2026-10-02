@@ -1,0 +1,262 @@
+---
+title: 'Device Heartbeat'
+sidebar_position: 1
+description: 'Build a shell-based Avocado OS extension that runs as a systemd service and logs system vitals as JSON, then change it and rebuild it on a QEMU device.'
+copy_markdown: true
+---
+
+import { Steps, Step } from '@site/src/components/Learn/Steps'
+
+In this tutorial you build the heartbeat extension from the [Shell Heartbeat reference](/developer-reference/references/shell-heartbeat): a shell script, run as a systemd service, that reads system vitals from `/proc` and logs them as one JSON line every 30 seconds. It is the hello world of Avocado extension development. There is no compile step, so you can focus on how an extension is put together.
+
+You will learn:
+
+- How an extension's **overlay** directory maps files onto the device's root filesystem
+- How a **systemd unit** in the overlay turns a script into a service
+- How the extension is defined in `avocado.yaml`, including `enable_services` and the `on_merge` and `on_unmerge` hooks
+- How to change the extension, rebuild it, and check the result on a QEMU virtual device
+
+## Prerequisites
+
+- The [Avocado CLI](/developer-reference/avocado-cli/installation) installed
+- Docker running on your machine. The CLI builds inside a container.
+- No hardware. The device in this tutorial is a QEMU virtual machine. If you have not booted one before, the [QEMU guide](/learn/get-started/qemu) covers the same build, provision, and boot steps in more detail.
+
+## Step 1: Create the project
+
+Create a project from the `shell-heartbeat` reference:
+
+```bash
+avocado init --reference shell-heartbeat shell-heartbeat
+cd shell-heartbeat
+```
+
+Run every command from here on inside `shell-heartbeat`.
+
+## Step 2: Explore the overlay
+
+An extension's overlay directory mirrors the device's root filesystem. A file at `heartbeat/overlay/usr/local/bin/heartbeat.sh` in the project lands at `/usr/local/bin/heartbeat.sh` on the device.
+
+The heartbeat extension is three files:
+
+```text
+heartbeat/
+└── overlay/
+    ├── etc/
+    │   └── heartbeat.conf
+    └── usr/
+        ├── local/bin/
+        │   └── heartbeat.sh
+        └── lib/systemd/system/
+            └── heartbeat.service
+```
+
+These are standard Linux paths: `usr/local/bin/` holds executable scripts, `usr/lib/systemd/system/` holds systemd unit files, and `etc/` holds configuration read at runtime.
+
+### The script
+
+`heartbeat.sh` reads uptime, free and total memory, and the 1-minute load average from `/proc`, then prints them as a JSON object. It writes to stdout, which systemd captures in the journal.
+
+```sh title="heartbeat/overlay/usr/local/bin/heartbeat.sh"
+#!/bin/sh
+set -eu
+
+# Source configuration
+INTERVAL=30
+[ -f /etc/heartbeat.conf ] && . /etc/heartbeat.conf
+
+while true; do
+  uptime_secs=$(awk '{print int($1)}' /proc/uptime)
+  mem_free_kb=$(awk '/MemFree:/ {print $2}' /proc/meminfo)
+  mem_total_kb=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
+  load_1m=$(awk '{print $1}' /proc/loadavg)
+  ts=$(date +%s)
+
+  printf '{"uptime":%d,"mem_free_kb":%d,"mem_total_kb":%d,"load_1m":"%s","ts":%d}\n' \
+    "$uptime_secs" "$mem_free_kb" "$mem_total_kb" "$load_1m" "$ts"
+
+  sleep "$INTERVAL"
+done
+```
+
+### The configuration file
+
+The script sources `/etc/heartbeat.conf` on startup if it exists. The file sets the sample interval in seconds:
+
+```sh title="heartbeat/overlay/etc/heartbeat.conf"
+# Heartbeat configuration
+# Interval between heartbeat samples (seconds)
+INTERVAL=30
+```
+
+### The systemd unit
+
+`heartbeat.service` runs the script as a long-running service. `Type=simple` tells systemd the service is up as soon as the process starts. `Restart=on-failure` with `RestartSec=5` restarts it five seconds after it exits with an error.
+
+```ini title="heartbeat/overlay/usr/lib/systemd/system/heartbeat.service"
+[Unit]
+Description=Device Heartbeat Monitor
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/heartbeat.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Step 3: Read the extension definition
+
+Open `avocado.yaml`. Two parts of it make the overlay files into a running service.
+
+The `dev` runtime lists the extensions that compose the bootable image. `heartbeat` is one of them:
+
+```yaml title="avocado.yaml"
+runtimes:
+  dev:
+    extensions:
+      - avocado-ext-dev
+      - avocado-ext-sshd-dev
+      - avocado-bsp-{{ avocado.target.board }}
+      - app
+      - heartbeat
+    packages:
+      avocado-runtime: '*'
+```
+
+The `heartbeat` entry under `extensions` defines the extension itself:
+
+```yaml title="avocado.yaml"
+extensions:
+  heartbeat:
+    types:
+      - sysext
+      - confext
+    version: '0.1.0'
+    summary: 'Device heartbeat monitor'
+    overlay: heartbeat/overlay
+    enable_services:
+      - heartbeat.service
+    on_merge:
+      - systemctl restart --no-block heartbeat.service
+    on_unmerge:
+      - systemctl stop heartbeat.service
+```
+
+Each field has one job:
+
+- `types`: a `sysext` (system extension) provides system-level files such as the script and the unit under `/usr`. A `confext` (configuration extension) provides configuration files such as `/etc/heartbeat.conf`. The heartbeat extension carries files of both kinds, so it is both.
+- `version`: the extension's version.
+- `overlay`: the directory, relative to the project, whose files are overlaid onto the root filesystem.
+- `enable_services`: the systemd services to enable when the extension is active. The service must be available in the extension or the base system. Here it ships in the overlay.
+- `on_merge`: commands that run when the extension is merged onto the system. Restarting the service here means a new version of the extension takes effect without a reboot.
+- `on_unmerge`: commands that run when the extension is removed. Here they stop the service.
+
+For every field, see the [config schema](/developer-reference/avocado-cli/config-schema).
+
+## Step 4: Build and boot
+
+Install the SDK toolchain, extension dependencies, and runtime packages, then build:
+
+```bash
+avocado install
+avocado build
+```
+
+The heartbeat extension is built entirely from its overlay files.
+
+Create the bootable disk image for the `dev` runtime, then boot it:
+
+```bash
+avocado provision -r dev
+avocado sdk run -iE vm dev
+```
+
+Log in as `root` with an empty password. The `dev` runtime sets no root password. Never use it in production.
+
+## Step 5: Observe the heartbeat
+
+The service starts on boot. In the VM, check that it is running:
+
+```bash
+systemctl status heartbeat
+```
+
+The output includes `Active: active (running)`.
+
+Watch the readings stream in:
+
+```bash
+journalctl -u heartbeat -f
+```
+
+Each line carries one JSON reading, like this one:
+
+```json
+{
+  "uptime": 142,
+  "mem_free_kb": 412356,
+  "mem_total_kb": 524288,
+  "load_1m": "0.03",
+  "ts": 1740700000
+}
+```
+
+The numbers depend on your VM. A new line appears every 30 seconds. Press `Ctrl+C` to stop watching.
+
+## Step 6: Change the interval and rebuild
+
+Shut down the VM:
+
+```bash
+poweroff
+```
+
+On your machine, edit `heartbeat/overlay/etc/heartbeat.conf` to sample every 10 seconds:
+
+```sh title="heartbeat/overlay/etc/heartbeat.conf"
+# Heartbeat configuration
+# Interval between heartbeat samples (seconds)
+INTERVAL=10
+```
+
+After any change to overlay files, rebuild and reprovision, then boot again:
+
+```bash
+avocado build
+avocado provision -r dev
+avocado sdk run -iE vm dev
+```
+
+Log in as `root` and watch the journal again:
+
+```bash
+journalctl -u heartbeat -f
+```
+
+New lines now arrive every 10 seconds.
+
+To extend the vitals collected, edit `heartbeat/overlay/usr/local/bin/heartbeat.sh` to add fields to the JSON output, such as disk usage, network traffic, or temperature. Rebuild and reprovision the same way.
+
+## Verify it works
+
+<Steps id="device-heartbeat">
+  <Step id="service-running" title="Service is running">
+    `systemctl status heartbeat` in the VM shows `Active: active (running)`.
+  </Step>
+  <Step id="json-readings" title="Readings appear in the journal">
+    `journalctl -u heartbeat -f` shows JSON lines with `uptime`, `mem_free_kb`, `mem_total_kb`,
+    `load_1m`, and `ts`.
+  </Step>
+  <Step id="interval-changed" title="New interval took effect">
+    After rebuilding with `INTERVAL=10`, a new line appears every 10 seconds.
+  </Step>
+</Steps>
+
+## Next steps
+
+- Ship a change to the heartbeat over the air, without reprovisioning, in the [First OTA](/learn/missions/first-ota) mission.
+- Read the [Shell Heartbeat reference](/developer-reference/references/shell-heartbeat) for provisioning the same project on hardware targets.
