@@ -7,6 +7,7 @@ description: 'Hardware compatibility matrix for Peridio platform - supported pro
 
 import SupportMatrix from '@site/src/components/SupportMatrix';
 import UnderEvaluationMatrix from '@site/src/components/UnderEvaluationMatrix';
+import DevKitMatcher from '@site/src/components/DevKitMatcher';
 
 Peridio supports a wide range of hardware platforms for IoT device management and OTA updates. Our platform integrates seamlessly with various processors, development boards, and production-ready systems.
 
@@ -17,6 +18,12 @@ Peridio supports a wide range of hardware platforms for IoT device management an
 - **Target** is the SoC/platform; **Board** is a specific carrier or variant on that target. One target can back several boards — see [CLI configuration](/developer-reference/avocado-cli/configuration#default-target-and-board) for how to set them.
 
 **RB3 Gen 2 validation:** All three kits have published packages on the 2026 `next` feed. Only the Vision Kit is validated on hardware; the core and Industrial kits are not yet hardware-validated. See [kit status](/hardware/qualcomm/rb3-gen-2#kits-and-board-names) for details.
+
+## Develop on a kit, ship on production hardware
+
+Pick your production hardware to find the development kit with the same silicon, or pick your kit to see where it leads. See [Dev Kit to Production](/learn/dev-kit-to-production) for how the move works.
+
+<DevKitMatcher />
 
 ## Additional Hardware Under Evaluation
 

@@ -1,0 +1,96 @@
+{
+  "devKits": {
+    "jetson-orin-nano": {
+      "name": "NVIDIA Jetson Orin Nano Developer Kit",
+      "soc": "NVIDIA Jetson Orin Nano",
+      "hardwareUrl": "/hardware/nvidia/jetson-orin-nano-developer-kit",
+      "getStartedUrl": "/learn/get-started/jetson"
+    },
+    "jetson-agx-orin": {
+      "name": "NVIDIA Jetson AGX Orin Developer Kit",
+      "soc": "NVIDIA Jetson AGX Orin",
+      "hardwareUrl": "/hardware/nvidia/jetson-agx-orin",
+      "getStartedUrl": "/learn/get-started/any-target#jetson-agx-orin-devkit"
+    },
+    "imx8mp-evk": {
+      "name": "NXP i.MX 8M Plus EVK",
+      "soc": "NXP i.MX 8M Plus",
+      "hardwareUrl": "/hardware/nxp/imx8mp",
+      "getStartedUrl": "/learn/get-started/any-target#imx8mp-evk"
+    },
+    "imx93-frdm": {
+      "name": "NXP FRDM i.MX 93",
+      "soc": "NXP i.MX 93",
+      "hardwareUrl": "/hardware/nxp/frdm-imx-93",
+      "getStartedUrl": "/learn/get-started/frdm-imx93"
+    },
+    "raspberry-pi-4": {
+      "name": "Raspberry Pi 4 Model B",
+      "soc": "Broadcom BCM2711",
+      "hardwareUrl": "/hardware/raspberry-pi/raspberry-pi-4-model-b",
+      "getStartedUrl": "/learn/get-started/any-target#raspberrypi4"
+    },
+    "raspberry-pi-5": {
+      "name": "Raspberry Pi 5",
+      "soc": "Broadcom BCM2712",
+      "hardwareUrl": "/hardware/raspberry-pi/raspberry-pi-5",
+      "getStartedUrl": "/learn/get-started/raspberry-pi"
+    }
+  },
+  "production": {
+    "advantech-icam-540": {
+      "name": "Advantech ICAM-540",
+      "soc": "NVIDIA Jetson Orin NX",
+      "hardwareUrl": "/hardware/advantech/icam-540",
+      "underEvaluation": false,
+      "recommended": "jetson-orin-nano",
+      "compatible": [],
+      "why": "The ICAM-540 runs an Orin NX module, the same Jetson Orin family as the Orin Nano Developer Kit, so what you build on the kit carries over."
+    },
+    "advantech-mic-715-ox": {
+      "name": "Advantech MIC-715-OX",
+      "soc": "NVIDIA Jetson Orin NX",
+      "hardwareUrl": "/hardware/under-evaluation/mic-715-ox",
+      "underEvaluation": true,
+      "recommended": "jetson-orin-nano",
+      "compatible": [],
+      "why": "The MIC-715-OX runs an Orin NX module, the same Jetson Orin family as the Orin Nano Developer Kit."
+    },
+    "advantech-mic-733-ao": {
+      "name": "Advantech MIC-733-AO",
+      "soc": "NVIDIA Jetson AGX Orin",
+      "hardwareUrl": "/hardware/advantech/mic-733-ao",
+      "underEvaluation": false,
+      "recommended": "jetson-agx-orin",
+      "compatible": ["jetson-orin-nano"],
+      "why": "The MIC-733-AO runs Jetson AGX Orin, the same module as the AGX Orin Developer Kit. The smaller Orin Nano kit shares the Orin architecture if you start there."
+    },
+    "advantech-tpc-115w": {
+      "name": "Advantech TPC-115W",
+      "soc": "NXP i.MX 8M Mini",
+      "hardwareUrl": "/hardware/under-evaluation/tpc-115w",
+      "underEvaluation": true,
+      "recommended": "imx8mp-evk",
+      "compatible": [],
+      "why": "The TPC-115W runs NXP i.MX 8M Mini. The i.MX 8M Plus EVK is the closest supported i.MX 8M kit."
+    },
+    "onlogic-fr201": {
+      "name": "OnLogic FR201",
+      "soc": "Raspberry Pi CM4 (Broadcom BCM2711)",
+      "hardwareUrl": "/hardware/onlogic/fr201",
+      "underEvaluation": false,
+      "recommended": "raspberry-pi-4",
+      "compatible": ["raspberry-pi-5"],
+      "why": "The FR201 is built on a Raspberry Pi Compute Module 4, the same BCM2711 as the Raspberry Pi 4. A Raspberry Pi 5 also works for early development."
+    },
+    "seeed-reterminal": {
+      "name": "Seeed reTerminal",
+      "soc": "Raspberry Pi CM4 (Broadcom BCM2711)",
+      "hardwareUrl": "/hardware/seeed/reterminal",
+      "underEvaluation": false,
+      "recommended": "raspberry-pi-4",
+      "compatible": ["raspberry-pi-5"],
+      "why": "The reTerminal is built on a Raspberry Pi Compute Module 4, the same BCM2711 as the Raspberry Pi 4. A Raspberry Pi 5 also works for early development."
+    }
+  }
+}
