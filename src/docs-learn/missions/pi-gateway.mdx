@@ -2,16 +2,206 @@
 title: 'Pi Gateway'
 sidebar_position: 3
 description: 'Build a Python telemetry agent on Raspberry Pi 5, publish sensor data over MQTT, and view it live.'
+copy_markdown: true
 ---
 
+import { Steps, Step } from '@site/src/components/Learn/Steps'
 import MarkComplete from '@site/src/components/Learn/MarkComplete'
+import OpenInConnect from '@site/src/components/Learn/OpenInConnect'
 
-Build a Python telemetry agent on Raspberry Pi 5, publish sensor data over MQTT, and view it live.
+In this mission you build Avocado OS for a Raspberry Pi 5 with a Python telemetry agent baked in, write it to an SD card, and boot the board. The device registers with Avocado Connect on first boot, and the agent publishes JSON telemetry over MQTT every 10 seconds. You then subscribe to the broker from your own machine and watch the readings arrive.
 
-:::info[Coming soon]
+The agent comes from the [Python MQTT Telemetry](/developer-reference/references/python-mqtt) reference. It runs as a systemd service and reads:
 
-This mission is moving here from Avocado Connect's LaunchPad. Until then, see the [Raspberry Pi 5](/hardware/raspberry-pi/raspberry-pi-5) page to get the board running.
+- Uptime, memory, and CPU load average
+- CPU temperature from the board's thermal sensor
+- Free space on `/var`, network byte counters, and the process count
+
+It identifies itself with the device's systemd machine ID (`/etc/machine-id`), which is unique per device and stable across reboots and OTA updates. It also makes an HTTP health check request every 45 seconds.
+
+## Prerequisites
+
+- You have completed [First OTA](/learn/missions/first-ota) and [Remote App](/learn/missions/remote-app), so the Avocado CLI is installed and you have an Avocado Connect account
+- A Raspberry Pi 5 and a USB-C power supply for it
+- A microSD card (8 GB or larger) and an SD card reader for your host
+- An Ethernet connection for the Pi with internet access, so it can reach Avocado Connect and the MQTT broker
+- Optional: a 3.3 V USB serial adapter to watch the board boot (see [Serial console](/developer-reference/getting-started/raspberry-pi#serial-console-optional))
+
+For background on the board, see the [Raspberry Pi 5](/hardware/raspberry-pi/raspberry-pi-5) hardware page.
+
+## Step 1: Initialize the project from the reference
+
+Create a project for the `raspberrypi5` target from the `python-mqtt` reference.
+
+```bash
+avocado init --target raspberrypi5 --reference python-mqtt gateway
+cd gateway
+```
+
+The project's `avocado.yaml` defines a `dev` runtime with an `app` extension. That extension bundles the Python app, the `paho-mqtt` and `requests` libraries, and an `app.service` unit that starts on boot.
+
+## Step 2: Connect the project to Avocado Connect
+
+Log in if you are not already, then link the project to your organization and project.
+
+```bash
+avocado connect auth login
+avocado connect init
+```
+
+`avocado connect init` prompts for the organization, project, and cohort, then writes the Connect settings into `avocado.yaml`. These include the Connect extensions for the `dev` runtime and a claim token. On first boot, the device uses that claim token to register itself with Avocado Connect.
+
+To check which account you are logged in as, run `avocado connect auth status`.
+
+## Step 3: Install and build
+
+Install the SDK toolchain, extension dependencies, and runtime packages, then build the system image.
+
+```bash
+avocado install
+avocado build
+```
+
+During the build, the reference's `app-compile.sh` runs `uv pip install` inside the SDK container to fetch `paho-mqtt` and `requests`. Then `app-install.sh` copies them into the extension at `/usr/lib/app/packages/`.
+
+## Step 4: Provision the SD card
+
+Insert the microSD card into the reader on your host, then write the `dev` runtime to it with the `sd` profile.
+
+```bash
+avocado provision -r dev --profile sd
+```
+
+The CLI lists the available block devices and prompts you to select the target. Check that you pick the SD card, because this operation overwrites the selected disk.
+
+:::note[Provisioning on a Linux host]
+
+If your Linux desktop auto-mounts removable media, disable it first. See [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
 
 :::
+
+To flash the Pi's storage in place over USB instead of using a card reader, follow [Provision](/developer-reference/getting-started/raspberry-pi#provision) in the Raspberry Pi 5 getting-started guide and use `--profile usb`.
+
+## Step 5: Boot the Pi and confirm it registered
+
+1. Insert the SD card into the Raspberry Pi 5.
+2. Connect Ethernet.
+3. Apply power.
+
+The device boots, claims itself with the token from Step 2, and appears in your project's fleet. Open the fleet in Avocado Connect and check that the device's status shows **Online**.
+
+<OpenInConnect to="fleet">Open Fleet</OpenInConnect>
+
+## Step 6: Log in to the device
+
+Log in as `root` with an empty password, either on the serial console or over SSH. The `dev` runtime includes an SSH server with passwordless root login for development.
+
+```bash
+ssh root@<device-ip>
+```
+
+Replace `<device-ip>` with the address your network assigned to the Pi. If the Pi is not on your local network, open an SSH tunnel to port `22` from Avocado Connect, as in [Remote Tunnel](/developer-reference/remote-tunnel).
+
+## Step 7: Verify the telemetry agent
+
+On the device, check that the `app` service is running.
+
+```bash
+systemctl status app
+```
+
+Look for this line in the output:
+
+```text
+Active: active (running)
+```
+
+Then follow the service logs.
+
+```bash
+journalctl -u app -f
+```
+
+The agent prints its configuration when it starts, then one line for each message it publishes:
+
+```text
+app starting
+  mqtt: broker.emqx.io:1883, topic=avocado/<machine-id>/telemetry, interval=10s
+  http: https://httpbin.org/get, interval=45s
+Connected to broker.emqx.io:1883 (rc=Success)
+[mqtt] published: {"device": "<machine-id>", "kernel": "...", "timestamp": ..., "uptime_secs": ..., ...}
+[http] status=200 elapsed=...s
+```
+
+A new `[mqtt] published` line appears every 10 seconds, and an `[http]` line appears every 45 seconds. Press `Ctrl+C` to stop following the logs.
+
+Note the topic from the `mqtt:` line, or print the machine ID directly. You need it in the next step.
+
+```bash
+cat /etc/machine-id
+```
+
+## Step 8: View the data live
+
+The agent publishes to the public EMQX broker at `broker.emqx.io`. Each message goes to the topic `avocado/<machine-id>/telemetry`.
+
+:::warning[Public broker]
+
+`broker.emqx.io` is a free public broker. Anyone can subscribe to any topic on it, including your device's telemetry. Use it only for this demo. For a real deployment, point `BROKER` in `app/overlay/usr/local/bin/app.py` at a private broker, and use a private topic namespace.
+
+:::
+
+Subscribe from your host in one of these ways.
+
+**MQTTX web client.** No install is needed.
+
+1. Open the [MQTTX web client](https://mqttx.app/web-client).
+2. Create a connection to host `broker.emqx.io` on port `8084`, path `/mqtt`, using WebSocket Secure (`wss://`). Browsers can't open the plain TCP port `1883` the device publishes on, so the web client connects over WebSocket instead.
+3. Subscribe to `avocado/<machine-id>/telemetry`, using the machine ID from Step 7.
+
+**Command line.** If you have the Mosquitto clients installed, subscribe over TCP port `1883`, the port the agent publishes on:
+
+```bash
+mosquitto_sub -h broker.emqx.io -p 1883 -t 'avocado/<machine-id>/telemetry'
+```
+
+A new JSON message arrives every 10 seconds. Fields that the device cannot read are left out, so the exact set can vary. A message looks like this, with values from your device in place of these examples:
+
+```json
+{
+  "device": "a8f3e2b1c4d5e6f7a8b9c0d1e2f3a4b5",
+  "kernel": "...",
+  "timestamp": 1711234567,
+  "uptime_secs": 542,
+  "mem_total_kb": 8045312,
+  "mem_free_kb": 398212,
+  "mem_available_kb": 7012345,
+  "load": { "1m": 0.12, "5m": 0.08, "15m": 0.03 },
+  "cpu_temp_c": 47.2,
+  "disk_var": { "total_mb": 1024, "free_mb": 980 },
+  "process_count": 112
+}
+```
+
+To watch every device running this reference at once, subscribe to `avocado/+/telemetry`. The `+` wildcard matches any machine ID. Because the broker is public, that includes devices that are not yours.
+
+## Verify
+
+<Steps id="pi-gateway">
+  <Step id="device-online" title="See the Pi online in your fleet">
+    The device shows **Online** in your project's fleet in Avocado Connect.
+  </Step>
+  <Step id="service-running" title="Confirm the app service is running">
+    `systemctl status app` reports `active (running)` on the device.
+  </Step>
+  <Step id="telemetry-live" title="Receive telemetry from your device">
+    Messages arrive on `avocado/<machine-id>/telemetry` every 10 seconds.
+  </Step>
+</Steps>
+
+## Next steps
+
+- Change the broker, publish interval, or payload in `app/overlay/usr/local/bin/app.py`. The [Python MQTT Telemetry](/developer-reference/references/python-mqtt#customize) reference covers each option.
+- Ship your change to the Pi over the air with `avocado connect upload` and `avocado connect deploy`, as in [First OTA](/learn/missions/first-ota).
 
 <MarkComplete mission="pi-gateway" />
