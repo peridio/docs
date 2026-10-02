@@ -2,12 +2,12 @@
 title: 'Secure Boot'
 slug: /avocado-os/security/secure-boot
 sidebar_position: 0
-description: 'Hardware root of trust and cryptographic boot chain verification in Avocado OS — configured out of the box across NVIDIA, NXP, Raspberry Pi, and more.'
+description: 'Hardware root of trust and cryptographic boot chain verification in Avocado OS, behind one unified interface across the NVIDIA and NXP targets that declare it.'
 ---
 
 # Secure Boot
 
-Hardware root of trust configured out of the box.
+Hardware root of trust, behind one interface regardless of the silicon underneath - where a target declares the capability. Not every board does; see [Security features](/developer-reference/security) for the current board matrix.
 
 :::tip Enabling it
 See [Boot signing](/developer-reference/security/boot-signing) in the developer reference for the `signing.fit_key` workflow, making the bootloader enforce your key, and AHAB on i.MX 9.
@@ -52,7 +52,9 @@ This means an OEM can control core system signing while enabling hardware partne
 
 ### Fuse provisioning
 
-For silicon vendors that use one-time programmable (OTP) fuses to establish the hardware root of trust, Avocado's provisioning toolchain handles fuse programming as part of the manufacturing flow. The `avocado provision` command manages this alongside image flashing — one step, not a separate manual procedure.
+For silicon vendors that use one-time programmable (OTP) fuses to establish the hardware root of trust, fusing is a deliberate step on the manufacturing side, separate from building and from flashing an image. `avocado provision` flashes the image; it does not program fuses.
+
+Fusing is irreversible, and a signed image boots on an open part without being checked, so the order matters: boot the signed image, confirm it reports no authentication events, and only then burn the fuses. [Boot signing](/developer-reference/security/boot-signing) walks through that sequence for AHAB on i.MX 9.
 
 ## Security from day one
 

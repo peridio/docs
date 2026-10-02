@@ -190,15 +190,18 @@ initramfs:
     avocado-pkg-initramfs: '*'
 ```
 
-| Field        | Default    | Description                                                |
-| ------------ | ---------- | ---------------------------------------------------------- |
-| `filesystem` | `cpio.zst` | Image format: `cpio`, `cpio.zst`, `cpio.lz4`, or `cpio.gz` |
-| `overlay`    |            | Path or object — see [Overlay](#overlay) below             |
-| `packages`   |            | Map of package names to version constraints                |
+| Field        | Default    | Description                                                                       |
+| ------------ | ---------- | --------------------------------------------------------------------------------- |
+| `filesystem` | `cpio.zst` | Image format: `cpio`, `cpio.zst`, `cpio.lz4`, or `cpio.gz`                        |
+| `overlay`    |            | Path or object — see [Overlay](#overlay) below                                    |
+| `packages`   |            | Map of package names to version constraints                                       |
+| `image`      |            | Wrapper options (`type`, `args` only) — see [Image options](#image-options) below |
 
 ## Image options
 
 The `image` block is accepted on `rootfs`, on `initramfs`, and on each extension. It configures how the produced filesystem image is wrapped and protected.
+
+Not every field applies everywhere. `type` and `args` are read for all three. `verity` is read for `rootfs` and for extensions only; the `initramfs` build does not consult it.
 
 ```yaml
 rootfs:
