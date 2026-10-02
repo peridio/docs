@@ -1,0 +1,50 @@
+---
+title: 'Groups'
+description: 'Organize the people in your organization into groups and grant each group access to projects and cohorts in one step.'
+---
+
+# Groups
+
+Groups are organization-wide collections of people that you grant access to projects and cohorts in one step. They organize people, not devices: your engineering team, your QA team, or your field technicians. To group devices, use [cohorts](/avocado-connect/deployments#cohorts) and tags.
+
+- **Create named groups** and add organization members to them
+- **Grant access in bulk**: Give a group access to a project or cohort instead of adding people one by one
+- **Inherit access automatically**: A member added to a group gains everything the group can access
+- **Revoke in one place**: Remove a member from a group to take away every access it granted
+
+## Common patterns
+
+- `engineering`: Access to every project the team builds.
+- `qa`: Access to the staging cohorts it tests, but not production.
+- `field-ops`: Access to the production cohorts it supports in the field.
+
+## How it works
+
+Go to **Groups** in the console, click **Create Group**, and give the group a name (up to 100 characters) and an optional description. Open the group and use **Add Member** to add people who are already members of your organization.
+
+To grant the group access, open a project's or cohort's settings and turn off **Organization-wide access**. The **User & Group Access** section then appears, where **Add Group** gives the group access. While organization-wide access is on, everyone with access to the project can already reach it, so group grants have no effect. Cohort access also requires access to the cohort's project.
+
+Connect checks group membership on every request, so membership changes take effect immediately. Owners and admins can reach every project and cohort without a group. Only they can create groups, manage members, and grant group access.
+
+With the API, create a group and add a member by user ID:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/groups" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "qa", "description": "QA team"}'
+
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/groups/<GROUP_ID>/members" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "<USER_ID>"}'
+
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/projects/<PROJECT_ID>/access/groups" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"group_id": "<GROUP_ID>"}'
+```
+
+Grant a group access to a cohort the same way, at `/api/orgs/$ORG_ID/projects/<PROJECT_ID>/cohorts/<COHORT_ID>/access/groups`.
+
+See [Access Control](/avocado-connect/access-control) for how group grants combine with direct grants, and the [Administration API](/developer-reference/avocado-connect-api/administration) for every group endpoint.

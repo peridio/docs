@@ -1,0 +1,62 @@
+---
+title: 'API Tokens'
+description: 'Create, scope, and revoke the API tokens that scripts, CI/CD pipelines, and the Avocado CLI use to call the Avocado Connect API.'
+---
+
+# API Tokens
+
+API tokens let you call the Avocado Connect API without a browser session. Use them in CI/CD pipelines, scripts, and integrations, anywhere a program needs to act on your fleet. Every request authenticates with an `Authorization: Bearer <token>` header.
+
+- **Acts as you**: A token carries the permissions of the user who created it, so it can't do anything you can't
+- **Personal or organization-scoped**: A personal token works in every organization you belong to. An organization-scoped token works only in the organization it was created for.
+- **Named and revocable**: Give each token a descriptive name, and revoke any token individually at any time
+- **Optional expiry**: Set an expiration date through the API so a token stops working on its own
+
+## Common uses
+
+- **CI/CD**: Upload a runtime after each build with `avocado connect upload`.
+- **CLI on a headless machine**: Sign the `avocado` CLI in with `avocado connect auth login --token <TOKEN>` instead of a browser login.
+- **Monitoring scripts**: Check device status across your fleet on a schedule.
+
+## Create a token
+
+In the console, go to **Settings → API Keys** and select **Create API key**. Keys created there are scoped to the current organization. Copy the key when it appears: the value is shown only once. Tokens start with `avo_`.
+
+`avocado connect auth login` also creates a token for the CLI and stores it in your CLI profile. Once you have a token, you can create more through the API. The request body takes a `name`, and optionally `expires_at`:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/me/api-tokens" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "ci-pipeline"}'
+```
+
+The new token's value is in `data.token.token`:
+
+```json
+{
+  "data": {
+    "token": {
+      "id": "0198…",
+      "name": "ci-pipeline",
+      "organization_id": null,
+      "last_used_at": null,
+      "expires_at": null,
+      "created_at": "2026-…",
+      "token": "avo_…"
+    }
+  }
+}
+```
+
+To create an organization-scoped token, send the same body to `POST /api/orgs/$ORG_ID/api-tokens`. List your tokens with `GET /api/me/api-tokens` and revoke one with `DELETE /api/me/api-tokens/<TOKEN_ID>`. See [Authentication & Tokens](/developer-reference/avocado-connect-api/authentication-tokens) for every endpoint.
+
+Any member can manage their own organization-scoped tokens. Owners and admins can see and revoke every organization-scoped token in the organization, under **Settings → API Keys** or with `GET` and `DELETE` on `/api/orgs/$ORG_ID/api-tokens`. When a member leaves the organization, their organization-scoped tokens are revoked.
+
+## Security practices
+
+- Never commit a token to source control.
+- Store tokens in your CI/CD system's secret manager.
+- Create a separate token for each integration, so you can revoke one without breaking the others.
+- Prefer organization-scoped tokens for automation that only needs one organization.
+- Set an expiry, rotate tokens periodically, and revoke tokens you no longer use.

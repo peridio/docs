@@ -1,5 +1,6 @@
 ---
 title: 'Remote Access'
+description: 'Open secure, temporary WireGuard tunnels to devices in your fleet for SSH, web UIs, and any other TCP service, with no inbound network configuration.'
 ---
 
 # Remote Access
@@ -8,9 +9,11 @@ Secure remote access to deployed devices without exposing ports or managing VPNs
 
 Tunnels create encrypted, authenticated connections between your development machine and a deployed device through Avocado Connect's relay infrastructure. This means you can SSH into a device behind a NAT, firewall, or cellular connection without any inbound port configuration on the device.
 
-- **On-demand access**: Open a tunnel to any connected device from the console or CLI
-- **Encrypted end-to-end**: Tunnel traffic is encrypted and authenticated the whole way between your machine and the device, so nothing is exposed in transit
+- **On-demand access**: Open a tunnel to any connected device from the console or the API
+- **Encrypted transport**: The device reaches the relay over an authenticated WireGuard connection
 - **No network configuration**: Devices initiate outbound connections to Avocado Connect. No static IPs, port forwarding, or VPN infrastructure required.
+- **Any TCP service**: Reach SSH, a web UI, a debugging tool, or any other service listening on the device
+- **Temporary by default**: Tunnels expire automatically, so access never stays open by accident
 - **Audit logged**: Every tunnel session is recorded: who connected, when, and for how long
 
 For a step-by-step walkthrough — standard ports, custom ports, and a live dashboard example — see the [Remote Tunnel guide](/developer-reference/remote-tunnel).
@@ -23,3 +26,67 @@ For a step-by-step walkthrough — standard ports, custom ports, and a live dash
     decoding="async"
   />
 </div>
+
+## How tunnels work
+
+Tunnels use WireGuard. When you request a tunnel, Connect sends a command to the device over its existing control connection. The device opens an outbound WireGuard connection to the relay, and the relay routes your traffic to the port you chose. Because the device dials out, no inbound ports need to be open on it.
+
+Connect only opens a tunnel to a device that is online and reports itself as tunnel capable. The device's runtime must include the `avocado-ext-connect` and `avocado-ext-tunnels` extensions, plus whatever service you want to reach, such as an SSH server for port `22`. To turn remote access off for a runtime, remove `avocado-ext-tunnels` from its `avocado.yaml`.
+
+To open a tunnel in the console, go to **Fleet**, select a device, and use the **Tunnels** panel on its detail page. Pick a standard port (SSH, HTTP, HTTPS, Cockpit) or choose **Custom** and enter a port.
+
+## Open a tunnel with the API
+
+Open a tunnel by device ID. `device_proxy_port` is the port on the device you want to reach, for example `22` for SSH. If you leave it out, Connect uses `9090` (Cockpit). Org owners and admins can open a tunnel to any device; other members need access to the device's cohort.
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/tunnels" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"device_id": "<DEVICE_ID>", "device_proxy_port": 22}'
+```
+
+A new tunnel starts in the `requested` state and moves through `device_ack` and `establishing`. Poll `GET /api/orgs/$ORG_ID/tunnels/<TUNNEL_ID>` until `state` is `established`, then connect to `relay_endpoint`, which stays `null` until the relay assigns a port. A tunnel that ends is `closed`, `expired`, `cancelled`, or `failed`, with the cause in `failure_reason`:
+
+```json
+{
+  "data": {
+    "id": "0198…",
+    "state": "established",
+    "device_id": "0198…",
+    "relay_endpoint": "<host>:<port>",
+    "server_proxy_port": 51234,
+    "device_proxy_port": 22,
+    "expires_at": "2026-…",
+    "established_at": "2026-…",
+    "failure_reason": null
+  }
+}
+```
+
+Tunnels opened this way expire after one hour, the longest any tunnel can stay open. List a device's active tunnels with `GET /api/orgs/$ORG_ID/devices/<DEVICE_ID>/tunnels`, and close one early with `DELETE /api/orgs/$ORG_ID/tunnels/<TUNNEL_ID>`. See the [Remote Access API](/developer-reference/avocado-connect-api/remote-access) for every endpoint.
+
+## Tunnel policies
+
+Tunnel policies set the rules every tunnel request must follow. Your organization has a default policy, and each cohort can override it:
+
+| Rule              | What it controls                                                         |
+| ----------------- | ------------------------------------------------------------------------ |
+| `max_ttl_seconds` | How long a tunnel stays open when the request sets no expiry             |
+| `backoff_seconds` | How long a device waits after a tunnel closes before it can open another |
+| `max_concurrent`  | How many tunnels a device can have open at once                          |
+| `cidr_allowlist`  | Which source IP ranges can connect through the relay                     |
+| `require_reason`  | Whether a reason must be given when opening a tunnel                     |
+| `allowed_windows` | Time windows for opening tunnels (not enforced yet, see below)           |
+
+A cohort policy can only tighten the organization policy, never loosen it. The shorter TTL, the longer backoff, and the lower concurrency limit win, a reason is required if either side requires one, and a cohort's CIDR allowlist replaces the organization's. A cohort field left unset inherits the organization value. Use this to keep remote access open on bench and development cohorts while restricting it on production.
+
+Keep in mind:
+
+- `max_concurrent` accepts 1 to 10. `max_ttl_seconds` and `backoff_seconds` accept up to 86400, but no tunnel stays open longer than one hour.
+- Time windows are not enforced yet. Setting any `allowed_windows` entry blocks every tunnel request it applies to, so leave it empty.
+- `POST /api/orgs/$ORG_ID/tunnels` does not take a reason, so it is rejected while `require_reason` is on.
+
+Any member can read the policies. Org owners and admins change them through the API, sending the fields inside a `tunnel_policy` object to `PUT /api/orgs/$ORG_ID/tunnel-policy` or `PUT /api/orgs/$ORG_ID/projects/$PROJECT_ID/cohorts/$COHORT_ID/tunnel-policy`. `DELETE` on the cohort path clears its overrides.
+
+The number of tunnels your organization can have open at once also depends on your plan. See [Billing](/avocado-connect/billing).
