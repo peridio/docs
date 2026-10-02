@@ -47,6 +47,7 @@ const sidebars = {
         },
       ],
     },
+    'dev-kit-to-production',
   ],
 }
 

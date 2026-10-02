@@ -1,0 +1,15 @@
+---
+title: Dev Kit to Production
+description: Find the development kit that matches your production hardware, or the production hardware your dev kit prepares you for.
+hide_table_of_contents: true
+---
+
+import DevKitMatcher from '@site/src/components/DevKitMatcher'
+
+Production devices are often hard to get early, or awkward to develop on. Start on a development kit with the same silicon, then move to the production device once your runtime works. Your `avocado.yaml`, extensions and pipeline carry over. You change the target and provision the new hardware.
+
+Pick the hardware you ship on to see which kit to develop on, or pick the kit you have to see where it leads. Your selection is saved in the URL, so you can share a match as a link.
+
+<DevKitMatcher />
+
+Pairings follow the system-on-chip: a kit is **Recommended** when it runs the same SoC family as the production device, and **Also works** when it's a reasonable place to start before you switch. For every board and its support status, see the [support matrix](/hardware/support-matrix).
