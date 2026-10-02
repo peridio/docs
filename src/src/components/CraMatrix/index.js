@@ -104,7 +104,7 @@ const partI = [
         quote: 'made available on the market without known exploitable vulnerabilities',
         status: 'you',
         provides:
-          'The build makes an SPDX inventory of each component in your image. A CVE process runs against this inventory. Continuous CVE monitoring and advisory reports for these components are a commercial feature.',
+          'The build makes an SPDX inventory of each component in your image. A CVE process runs against this inventory. Continuous CVE monitoring and advisory reports for these components are a commercial feature. The open-source build does not block a release on a CVE scan.',
         youAdd:
           'A CVE process for your application code and your own dependencies. For the OS components, scan the SBOM yourself or subscribe to CVE monitoring.',
       },
@@ -118,7 +118,7 @@ const partI = [
         req: 'Secure by default configuration',
         quote:
           'made available on the market with a secure by default configuration… including the possibility to reset the product to its original state',
-        status: 'os',
+        status: 'cfg',
         where: (
           <>
             You control the full device configuration in <code>avocado.yaml</code>. You can disable
@@ -137,7 +137,10 @@ const partI = [
           <>
             TUF-verified updates (Ed25519), A/B partitions with automatic rollback, PKCS#11
             hardware-backed signing, and delta compression. Fleet delivery runs through{' '}
-            <Link to="/avocado-connect/overview">Avocado Connect</Link>.
+            <Link to="/avocado-connect/overview">Avocado Connect</Link>. You configure Connect and
+            you activate each deployment. As a result, you set the policy for automatic updates and
+            for what an opt-out means for your users. See{' '}
+            <Link to="/avocado-os/security/update-architecture">Atomic Update Architecture</Link>.
           </>
         ),
       },
@@ -163,11 +166,11 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            LUKS2 encryption for the writable <code>/var</code> partition. If the target has a TPM,
-            HSM, or an equivalent security module, the OS seals the key to it and enrolls it on
-            first boot. If the target does not have one, the OS derives the key in software with
-            Argon2id. The OS also enrolls a per-device recovery keyslot that it derives from the SoC
-            UID. Confirm which path your target uses. See{' '}
+            LUKS2 encryption for the writable <code>/var</code> partition. If the target has a TPM
+            or an equivalent security module, the OS seals the key to it and enrolls it on first
+            boot. If the target does not have one, the OS derives the key in software with Argon2id.
+            The OS also enrolls a per-device recovery keyslot that it derives from the SoC UID.
+            Confirm which path your target uses. See{' '}
             <Link to="/avocado-os/security/encryption">Hardware-Backed Encryption</Link>.
           </>
         ),
