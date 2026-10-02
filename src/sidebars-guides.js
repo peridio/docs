@@ -34,7 +34,8 @@ const sidebars = {
         'hardware-in-the-loop',
         'container-dev-mode',
         'sideloading',
-        'ota',
+        // The OTA guide moved to Learn; keep it findable from here.
+        { type: 'link', label: 'OTA Updates', href: '/learn/missions/first-ota' },
         'remote-tunnel',
         'package-feeds',
         'feed-search',

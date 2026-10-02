@@ -2,16 +2,227 @@
 title: 'Jetson Vision'
 sidebar_position: 4
 description: 'Run NVIDIA DeepStream natively on a Jetson Orin Nano, then watch live people detection from a USB camera through an Avocado Connect tunnel.'
+copy_markdown: true
 ---
 
+import { Steps, Step } from '@site/src/components/Learn/Steps'
 import MarkComplete from '@site/src/components/Learn/MarkComplete'
+import OpenInConnect from '@site/src/components/Learn/OpenInConnect'
 
-Run NVIDIA DeepStream natively on a Jetson Orin Nano, then watch live people detection from a USB camera through an Avocado Connect tunnel.
+In this mission you build Avocado OS for a Jetson Orin Nano Developer Kit with NVIDIA DeepStream 9.1 baked in, flash it to the board's NVMe SSD over USB, and boot it with a USB camera attached. DeepStream runs natively from Avocado extensions, with no containers. The device registers with Avocado Connect on first boot, and you open a remote tunnel to watch the annotated camera stream live in your browser.
 
-:::info[Coming soon]
+The pipeline comes from the [NVIDIA DeepStream](/developer-reference/references/nvidia-deepstream) reference. A GStreamer pipeline reads frames from the camera and runs four models on them:
 
-This mission is moving here from Avocado Connect's LaunchPad. Until then, see the [Jetson Orin Nano Developer Kit](/hardware/nvidia/jetson-orin-nano-developer-kit) page to get the board running.
+- PeopleNet detects people, and the NvDCF tracker gives each person a stable ID across frames
+- MoveNet extracts a 17-point body skeleton for each person
+- YOLOX-Body-Head-Hand finds hands, and MediaPipe Hand Landmark adds 21 finger keypoints per hand
+- `nvdsanalytics` counts entries into a center zone and times how long each person stays there
+
+The device draws every overlay into the video itself, then serves the result as an MJPEG stream with a web dashboard and a JSON stats endpoint on port `8080`.
+
+## Prerequisites
+
+- You have completed [First OTA](/learn/missions/first-ota) and [Remote App](/learn/missions/remote-app), so the Avocado CLI is installed and you have an Avocado Connect account
+- A host that meets the prerequisites in the [Jetson Orin Nano getting-started guide](/developer-reference/getting-started/jetson#prerequisites), with internet access (the first build downloads any model files missing from the project)
+- An NVIDIA Jetson Orin Nano Developer Kit with an M.2 2280 NVMe SSD installed, and its power supply
+- A USB-C cable from your host to the Jetson, for provisioning
+- A jumper to short the `FC REC` pin to `GND` for recovery mode
+- A UVC USB camera that streams MJPEG, such as a Logitech C920 or C270
+- An Ethernet connection for the Jetson with internet access, so it can reach Avocado Connect
+- Optional: a 3.3 V USB serial adapter to watch the board boot (see [Serial console](/developer-reference/getting-started/jetson#serial-console-optional))
+
+For background on the board, see the [Jetson Orin Nano Developer Kit](/hardware/nvidia/jetson-orin-nano-developer-kit) hardware page.
+
+## Step 1: Initialize the project from the reference
+
+Create a project from the `nvidia-deepstream` reference. The reference's default target is the Jetson Orin Nano, so no `--target` flag is needed.
+
+```bash
+avocado init --reference nvidia-deepstream nvidia-deepstream
+cd nvidia-deepstream
+```
+
+:::warning[Rename the prebuilt engines folder]
+
+The reference's target is now named `jetson-orin-nano`, but its prebuilt TensorRT engines still sit in a folder named for the old target, `jetson-orin-nano-devkit`. The build only stages engines from the folder that matches the target, so rename it before you build. Without engines, `vision-app` can't start on the device.
+
+```bash
+mv prebuilt-engines/jetson-orin-nano-devkit prebuilt-engines/jetson-orin-nano
+```
+
+You can skip this step once the reference ships the renamed folder. If `prebuilt-engines/jetson-orin-nano` already exists, the reference has been fixed.
 
 :::
+
+The project's `avocado.yaml` defines a `dev` runtime that composes five extensions. `vision-runtime` carries DeepStream, CUDA, TensorRT, GStreamer, and Python. `vision-models`, `vision-engines`, and `vision-config` hold the model weights, the prebuilt TensorRT engines, and the pipeline configs. `vision-app` holds the application and its `vision-app.service` unit, which starts on boot. Splitting the pipeline this way means a later OTA re-ships only the layer you changed.
+
+## Step 2: Connect the project to Avocado Connect
+
+Log in if you are not already, then link the project to your organization and project.
+
+```bash
+avocado connect auth login
+avocado connect init
+```
+
+`avocado connect init` prompts for the organization, project, and cohort, then writes the Connect settings into `avocado.yaml`. These include the Connect and tunnel extensions for the `dev` runtime and a claim token. On first boot, the device uses that claim token to register itself with Avocado Connect.
+
+## Step 3: Install and build
+
+Install the SDK toolchain, extension dependencies, and runtime packages, then build the system image.
+
+```bash
+avocado install
+avocado build
+```
+
+During the build, the reference's `models-compile.sh` downloads any of the four ONNX models that are missing from the project, from NGC and PINTO mirrors. The models are cached after the first build. `engines-compile.sh` then stages the prebuilt TensorRT engines for the build target into the `vision-engines` extension, so the device never compiles an engine itself.
+
+Watch the build output for the engine staging step. It prints `Staging prebuilt TensorRT engines for target: jetson-orin-nano`. If it prints `WARNING: no prebuilt engines directory for target` instead, the folder from Step 1 is missing or misnamed, and the DeepStream service can't start on the device.
+
+## Step 4: Flash the Jetson
+
+Put the Jetson into USB recovery mode:
+
+1. With the device powered off, short the **FC REC** pin to **GND** with a jumper.
+2. Connect the USB-C cable from the Jetson to your host.
+3. Apply power to the Jetson.
+
+Confirm the host sees the Jetson in recovery mode:
+
+```bash
+lsusb | grep -i nvidia
+```
+
+Look for an entry containing `NVIDIA Corp. APX`. Then flash the `dev` runtime with the `tegraflash` profile, which writes it to the NVMe SSD.
+
+```bash
+avocado provision -r dev --profile tegraflash
+```
+
+When provisioning completes, the CLI prints:
+
+```text
+[SUCCESS] Successfully provisioned runtime 'dev'
+```
+
+For the wiring and the full provisioning output, see [Boot into recovery mode](/developer-reference/getting-started/jetson#boot-into-recovery-mode) in the Jetson Orin Nano getting-started guide.
+
+## Step 5: Boot the Jetson and confirm it registered
+
+1. Remove power from the Jetson.
+2. Remove the jumper shorting **FC REC** to **GND**, and disconnect the USB-C cable.
+3. Plug the USB camera into one of the Jetson's USB ports. The defaults assume MJPEG at 1280×720, 30 fps.
+4. If you attached a serial console adapter, leave it connected.
+5. Apply power.
+
+To watch the boot, open the serial console:
+
+```bash
+tio -b 115200 /dev/ttyUSB0
+```
+
+Replace `/dev/ttyUSB0` with the device path for your adapter. Log in as `root` with an empty password.
+
+Once the device boots, open your fleet in Avocado Connect. The Jetson shows **Online**.
+
+<OpenInConnect to="fleet">Open Fleet</OpenInConnect>
+
+## Step 6: Verify the DeepStream pipeline
+
+From a shell on the device, confirm the DeepStream service is running.
+
+```bash
+systemctl status vision-app
+```
+
+The status reports `Active: active (running)`.
+
+If you are not using a serial console, open an SSH tunnel to port `22` as in [Remote Tunnel](/developer-reference/remote-tunnel), then close it before Step 7. The developer plan allows one active tunnel at a time.
+
+Follow the service logs to watch the pipeline start:
+
+```bash
+journalctl -u vision-app -f
+```
+
+nvinfer loads a prebuilt engine for each model in turn, and the pipeline reaches the PLAYING state in about 10 to 15 seconds. Look for these lines:
+
+```text
+setting pipeline to PLAYING
+dashboard:        http://0.0.0.0:8080
+```
+
+The web server binds port `8080` only after all four engines have loaded. On an Orin Nano at 720p, expect about 15 to 25 fps with one or two people in frame.
+
+## Step 7: View live inference
+
+Open a tunnel from Avocado Connect to port `8080` on the device:
+
+1. Open the Jetson's device page in Avocado Connect.
+2. In the **Tunnels** panel, choose **Custom**, enter `8080`, and click **Connect**.
+3. Once the tunnel is established, copy the endpoint (host and port) it shows.
+4. Open `http://<endpoint>` in your browser.
+
+The dashboard shows the live camera stream with a bounding box and tracker ID around each detected person, plus a stats panel. Overlays for skeletons, hands, and zones default to off. Turn them on with the **Show skeletons**, **Show hands**, and **Show zones** buttons. Each one takes effect on the next frame, with no service restart.
+
+The same tunnel also serves:
+
+| Path         | What it returns                                                   |
+| ------------ | ----------------------------------------------------------------- |
+| `/stream`    | The raw annotated MJPEG stream                                    |
+| `/api/stats` | JSON with pipeline FPS, tracked objects, and ROI dwell statistics |
+
+Fetch the stats from your host:
+
+```bash
+curl http://<endpoint>/api/stats
+```
+
+The response includes these fields:
+
+- `pipeline.fps`: the end-to-end frame rate
+- `detector.unique_tracks`: the number of distinct people tracked since the service started
+- `objects`: each object in the current frame, with its `label`, `confidence`, `tracker_id`, and `box`
+- `analytics.rois.Center`: the `current_count` of people in the center zone, plus `total_entries` and `avg_dwell_seconds`
+
+Walk in and out of the camera's view. The tracker keeps a stable `tracker_id` for each person while they stay visible, and `analytics.rois.Center.current_count` rises when you step into the center of the frame.
+
+:::tip[No detections]
+
+If the stream shows no detections, confirm the camera is enumerated on the device and advertises an `MJPG` format:
+
+```bash
+v4l2-ctl --list-devices
+v4l2-ctl --device /dev/video0 --list-formats-ext
+```
+
+A camera that supports only `YUYV` cannot negotiate with the default pipeline. See [Adapting to your camera](/developer-reference/references/nvidia-deepstream#adapting-to-your-camera) for how to override the camera device and resolution, or switch the pipeline to a raw format.
+
+:::
+
+## Verify
+
+<Steps id="jetson-vision">
+  <Step id="device-online" title="See the Jetson online in your fleet">
+    The device shows **Online** in your project's fleet in Avocado Connect.
+  </Step>
+  <Step id="service-running" title="Confirm the DeepStream service is running">
+    `systemctl status vision-app` reports `active (running)` on the device.
+  </Step>
+  <Step id="pipeline-playing" title="Confirm the pipeline is playing">
+    `journalctl -u vision-app` shows `setting pipeline to PLAYING` and the dashboard address on port
+    `8080`.
+  </Step>
+  <Step id="stream-live" title="Watch live detection through a tunnel">
+    The dashboard opens through a tunnel to port `8080`, and people in front of the camera get
+    bounding boxes with tracker IDs.
+  </Step>
+</Steps>
+
+## Next steps
+
+- Tune detection thresholds, zones, or the tracker in the [NVIDIA DeepStream](/developer-reference/references/nvidia-deepstream#customize) reference.
+- Ship a change to the Jetson over the air with `avocado connect upload` and `avocado connect deploy`, as in [First OTA](/learn/missions/first-ota). Because the pipeline is split into five extensions, a change to the app or its configs re-ships kilobytes rather than the DeepStream runtime.
 
 <MarkComplete mission="jetson-vision" />
