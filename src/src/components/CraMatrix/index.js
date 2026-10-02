@@ -21,10 +21,10 @@ function Pill({ status }) {
 }
 
 const LEGEND_TEXT = {
-  os: 'OS default — handled by Avocado OS',
-  cfg: 'Configurable — supported in the OS, you set the policy',
-  you: 'You complete — manufacturer obligation',
-  shared: 'Avocado + you — our artifact, folded into your document',
+  os: 'OS default: Avocado OS supplies it',
+  cfg: 'Configurable: the OS supports it, you set the policy',
+  you: 'You complete: manufacturer obligation',
+  shared: 'Avocado + you: our artifact goes into your document',
 }
 
 /* Each table renders the subset of statuses its own rows use, so a reader never
@@ -94,9 +94,9 @@ const partI = [
           'designed, developed and produced in such a way that they ensure an appropriate level of cybersecurity based on the risks',
         status: 'you',
         provides:
-          'Architectural risk reduction — immutable rootfs, verified boot, signed updates — plus this mapping covering the OS portion.',
+          'Lower architectural risk from the immutable rootfs, verified boot, and signed updates. This mapping covers the OS part.',
         youAdd:
-          'Your product-specific risk assessment under Article 13(2), incorporating the OS evidence above.',
+          'Your risk assessment for your product under Article 13(2). Include the OS evidence from this row.',
       },
       {
         cite: 'Annex I (2)',
@@ -104,27 +104,26 @@ const partI = [
         quote: 'made available on the market without known exploitable vulnerabilities',
         status: 'you',
         provides:
-          'The build emits an SPDX inventory of every component in your image, which is what any CVE process has to run against. Continuous CVE monitoring and advisory reporting across those components is a commercial feature; the open-source build does not gate a release on a CVE scan.',
+          'The build makes an SPDX inventory of each component in your image. A CVE process runs against this inventory. Continuous CVE monitoring and advisory reports for these components are a commercial feature. The open-source build does not block a release on a CVE scan.',
         youAdd:
-          'A CVE process covering your application code and your own dependencies, and a decision on whether to scan the SBOM yourself or subscribe to monitoring.',
+          'A CVE process for your application code and your own dependencies. For the OS components, scan the SBOM yourself or subscribe to CVE monitoring.',
       },
     ],
   },
   {
-    category: 'Point (3) — risk-dependent sub-items applied per the Article 13(2) risk assessment',
+    category: 'Point (3): risk-dependent sub-items, applied per the Article 13(2) risk assessment',
     rows: [
       {
         cite: 'Annex I (3)(a)',
         req: 'Secure by default configuration',
         quote:
           'made available on the market with a secure by default configuration… including the possibility to reset the product to its original state',
-        status: 'os',
+        status: 'cfg',
         where: (
           <>
-            The base image ships no listening network services — SSH, fleet management, and remote
-            access are all opt-in extensions. Root login is locked, the rootfs is read-only EROFS,
-            and factory reset is an A/B re-provision. See{' '}
-            <Link to="/avocado-os/security/filesystem-integrity">Filesystem Integrity</Link>.
+            You control the full device configuration in <code>avocado.yaml</code>. You can disable
+            each network service. Factory reset is an A/B re-provision. See{' '}
+            <Link to="/developer-reference/avocado-cli/configuration">Configuration</Link>.
           </>
         ),
       },
@@ -138,9 +137,9 @@ const partI = [
           <>
             TUF-verified updates (Ed25519), A/B partitions with automatic rollback, PKCS#11
             hardware-backed signing, and delta compression. Fleet delivery runs through{' '}
-            <Link to="/avocado-connect/overview">Avocado Connect</Link>, which you configure and
-            from which you activate each deployment — so whether updates are automatic, and what
-            opting out means for your users, is your policy rather than a default. See{' '}
+            <Link to="/avocado-connect/overview">Avocado Connect</Link>. You configure Connect and
+            you activate each deployment. As a result, you set the policy for automatic updates and
+            for what an opt-out means for your users. See{' '}
             <Link to="/avocado-os/security/update-architecture">Atomic Update Architecture</Link>.
           </>
         ),
@@ -153,9 +152,9 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            Key-only SSH, account lockout, and password policy are all configurable in your build.
-            The SSH server itself is an extension you opt into, so a runtime that needs no remote
-            login ships without one.
+            You can configure key-only SSH, account lockout, and password policy in your build. The
+            SSH server is an opt-in extension. A runtime that does not need remote login ships
+            without it.
           </>
         ),
       },
@@ -167,11 +166,11 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            LUKS2 encryption for the writable <code>/var</code> partition. Where the target carries
-            a TPM2 or equivalent security module the key is sealed to it and enrolled on first boot;
-            where it does not, software key derivation is the fallback. A per-device recovery
-            keyslot derived from the SoC UID is enrolled alongside it. Confirm which path your
-            target takes. See{' '}
+            LUKS2 encryption for the writable <code>/var</code> partition. If the target has a TPM
+            or an equivalent security module, the OS seals the key to it and enrolls it on first
+            boot. If the target does not have one, the OS derives the key in software with Argon2id.
+            The OS also enrolls a per-device recovery keyslot that it derives from the SoC UID.
+            Confirm which path your target uses. See{' '}
             <Link to="/avocado-os/security/encryption">Hardware-Backed Encryption</Link>.
           </>
         ),
@@ -184,10 +183,11 @@ const partI = [
         status: 'os',
         where: (
           <>
-            A read-only EROFS rootfs nothing at runtime can modify, SHA-256 verification of every
-            extension before it is merged, and BTRFS checksums on <code>/var</code>. Corruption
-            surfaces in the systemd journal. A signed boot chain, with vendor key fuses burned at
-            provisioning, is available per target rather than everywhere — confirm it for yours. See{' '}
+            A read-only EROFS rootfs that no process can change at runtime. The OS verifies the
+            SHA-256 of each extension before it merges the extension, and BTRFS checksums protect{' '}
+            <code>/var</code>. Corruption events show in the systemd journal. A signed boot chain,
+            with vendor key fuses burned at provisioning, is available on some targets only. Confirm
+            it for your target. See{' '}
             <Link to="/avocado-os/security/filesystem-integrity">Filesystem Integrity</Link> and{' '}
             <Link to="/avocado-os/security/secure-boot">Secure Boot</Link>.
           </>
@@ -200,7 +200,7 @@ const partI = [
           'process only data… that are adequate, relevant and limited to what is necessary in relation to the intended purpose',
         status: 'os',
         where:
-          'Minimal base image, no telemetry by default, per-extension isolation. Fleet management is opt-in.',
+          'Minimal base image, no telemetry by default, and isolation per extension. Fleet management is opt-in.',
       },
       {
         cite: 'Annex I (3)(g)',
@@ -210,9 +210,9 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            A/B rollback, cgroup v2, and a power-loss-safe filesystem stack are defaults. Per-
-            service resource limits, kernel network tuning, and firewall policy are all configurable
-            in your build.
+            A/B rollback, cgroup v2, and a filesystem stack that is safe from power loss are
+            defaults. You can configure resource limits per service, kernel network tuning, and
+            firewall policy in your build.
           </>
         ),
       },
@@ -224,9 +224,9 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            The base image runs nothing that can be recruited as an amplification vector, and
-            forwards no traffic it was not configured to forward. Kernel network hardening and
-            egress firewall policy are configurable in your build.
+            The base image runs no service that an attacker can use for amplification. It forwards
+            only the traffic that you configure it to forward. You can configure kernel network
+            hardening and egress firewall policy in your build.
           </>
         ),
       },
@@ -238,9 +238,9 @@ const partI = [
         status: 'os',
         where: (
           <>
-            You start from an image with nothing in it and add only what you declare. There is no
-            distribution default set to audit away: every service, interface, and tool on the device
-            is an extension you named in <code>avocado.yaml</code>.
+            You start from an empty image and add only what you declare. There is no set of
+            distribution defaults to audit and remove. Each service, interface, and tool on the
+            device is an extension that you listed in <code>avocado.yaml</code>.
           </>
         ),
       },
@@ -252,10 +252,10 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            This is about containing an exploit, not tracking CVEs — Annex I (2) covers that. Every
-            package in the distribution is compiled with the toolchain hardening flags on (stack
-            protector, FORTIFY_SOURCE, PIE, RELRO), the rootfs an exploit lands in is read-only, and
-            the control plane is written in Rust. Per-service systemd sandboxing is configurable in
+            This requirement is about the containment of an exploit. Annex I (2) covers CVE
+            tracking. Each package in the distribution compiles with the toolchain hardening flags
+            on (stack protector, FORTIFY_SOURCE, PIE, RELRO). The rootfs is read-only, and the
+            control plane is written in Rust. You can configure systemd sandboxing per service in
             your build.
           </>
         ),
@@ -268,9 +268,9 @@ const partI = [
         status: 'cfg',
         where: (
           <>
-            The systemd journal is there out of the box, capturing boot, service, authentication,
-            and integrity events; persistence, sealing, and size limits are configurable. The Linux
-            audit daemon is available as a package when you need a rule-driven audit trail on top.
+            The systemd journal is on by default. It records boot, service, authentication, and
+            integrity events. You can configure persistence, sealing, and size limits. If you need a
+            rule-driven audit trail, the Linux audit daemon is available as a package.
           </>
         ),
       },
@@ -281,7 +281,7 @@ const partI = [
           'provide the possibility for users to securely and easily remove on a permanent basis all data and settings and, where such data can be transferred to other products or systems, ensure that this is done in a secure manner',
         status: 'os',
         where:
-          'Factory reset via A/B re-provisioning, ephemeral overlay layers, LUKS cryptographic erase for encrypted partitions.',
+          'Factory reset through A/B re-provisioning, ephemeral overlay layers, and LUKS cryptographic erase for encrypted partitions.',
       },
     ],
   },
@@ -297,8 +297,8 @@ const partII = [
           'identify and document vulnerabilities and components… including by drawing up a software bill of materials in a commonly used and machine-readable format covering at the very least the top-level dependencies',
         status: 'you',
         provides:
-          'SPDX generation is on by default in the distribution build, and `avocado sbom` emits an SPDX 3.0.1 document for exactly what your project installed.',
-        youAdd: "Your application's SBOM, merged with ours into the combined product SBOM.",
+          'SPDX generation is on by default in the distribution build. `avocado sbom` makes an SPDX 3.0.1 document for exactly the packages that your project installed.',
+        youAdd: 'The SBOM for your application, merged with ours into one product SBOM.',
       },
       {
         cite: 'Part II (2)',
@@ -307,9 +307,9 @@ const partII = [
           'address and remediate vulnerabilities without delay, including by providing security updates; where technically feasible, new security updates shall be provided separately from functionality updates',
         status: 'you',
         provides:
-          'Security updates for the OS components, and extension-level granularity so a security update can ship without carrying a functional change alongside it.',
+          'Security updates for the OS components. Updates are per extension, so a security update can ship without a functional change.',
         youAdd:
-          'The remediation process for your product — triage, prioritisation, and shipping the fix without delay. A distribution mechanism is not the same as a process that uses it.',
+          'The remediation process for your product: triage, priority, and a fix that ships without delay. The OS supplies the distribution mechanism, and you supply the process that uses it.',
       },
       {
         cite: 'Part II (3)',
@@ -317,9 +317,9 @@ const partII = [
         quote:
           'apply effective and regular tests and reviews of the security of the product with digital elements',
         status: 'you',
-        provides: 'Documented test suites that run in CI, plus hardware-backed testing automation.',
+        provides: 'Documented test suites that run in CI, and automated tests on hardware.',
         youAdd:
-          "Your application's security testing — penetration testing, fuzzing, dependency audit — on the cadence you commit to.",
+          'Security tests for your application, such as penetration tests, fuzzing, and dependency audits, on the schedule that you commit to.',
       },
       {
         cite: 'Part II (4)',
@@ -328,9 +328,9 @@ const partII = [
           'publicly disclose information about fixed vulnerabilities, including a description of the vulnerabilities, information allowing users to identify the product… affected, the impacts… their severity and information helping users to remediate',
         status: 'you',
         provides:
-          'Security fixes are called out in the release changelog, naming the upstream advisory each one resolves. Structured advisories — severity, affected versions, remediation guidance — come with the commercial CVE monitoring feature.',
+          'The release changelog lists each security fix and the upstream advisory that it resolves. Structured advisories (severity, affected versions, remediation guidance) are part of the commercial CVE monitoring feature.',
         youAdd:
-          "Your product's advisories for application-level vulnerabilities; reference ours for OS components.",
+          'Advisories for the vulnerabilities in your application. For OS components, refer to our advisories.',
       },
       {
         cite: 'Part II (5)',
@@ -360,8 +360,9 @@ const partII = [
         status: 'os',
         where: (
           <>
-            TUF metadata chain (timestamp → snapshot → targets) verified by <code>avocadoctl</code>,
-            Ed25519 signatures, PKCS#11 hardware signing, and A/B rollback on verification failure.
+            TUF metadata chain (timestamp → snapshot → targets) that <code>avocadoctl</code>{' '}
+            verifies, Ed25519 signatures, PKCS#11 hardware signing, and A/B rollback if verification
+            fails.
           </>
         ),
       },
@@ -372,7 +373,7 @@ const partII = [
           'where security patches or updates are available… they are disseminated without delay and free of charge, accompanied by advisory messages providing users with the relevant information',
         status: 'cfg',
         where:
-          'The OS gives you a signed distribution channel, and the security content of each release is documented in the changelog. Whether your updates reach your users without delay and free of charge depends on the deployments you activate and the terms you set — that half is yours.',
+          'The OS gives you a signed distribution channel, and the changelog documents the security content of each release. You control if your updates get to your users without delay and free of charge. This depends on the deployments that you activate and the terms that you set.',
       },
     ],
   },
@@ -401,52 +402,52 @@ const annexVII = [
       {
         item: 'Design, development, and production information',
         status: 'shared',
-        notes: 'Cite the Avocado OS architecture; add your product-specific design.',
+        notes: 'Refer to the Avocado OS architecture, and add the design of your product.',
       },
       {
         item: 'Cybersecurity risk assessment (Article 13(2))',
         status: 'you',
         notes:
-          'Yours to author. It determines which Annex I (3)(a)–(l) items apply to your product.',
+          'You write it. It determines which Annex I (3)(a) to (l) items apply to your product.',
       },
       {
         item: 'List of essential cybersecurity requirements applied (Annex I)',
         status: 'shared',
-        notes: 'Use this page as supporting evidence for the OS portion.',
+        notes: 'Use this page as evidence for the OS part.',
       },
       {
         item: 'Harmonised standards or certification schemes applied',
         status: 'you',
         notes:
-          'Cite the standards your conformity rests on. As EU harmonised CRA standards publish, they reference these requirements.',
+          'Cite the standards that your conformity relies on. When the EU publishes harmonised CRA standards, they will refer to these requirements.',
       },
       {
         item: 'Conformity assessment results',
         status: 'you',
-        notes: 'Module A internal control report, or higher, produced as part of your assessment.',
+        notes: 'The Module A internal control report, or a higher module, from your assessment.',
       },
       {
         item: 'EU Declaration of Conformity (Annex V)',
         status: 'you',
         notes:
-          'Your signed declaration identifying the product, the applicable requirements, and the assessment route.',
+          'Your signed declaration. It identifies the product, the requirements that apply, and the assessment route.',
       },
       {
         item: 'Vulnerability handling process description (Annex I Part II)',
         status: 'you',
         notes:
-          'Your CVD policy, security contact, and response process. Manufacturer-owned end to end.',
+          'Your CVD policy, security contact, and response process. The manufacturer owns all of it.',
       },
       {
         item: 'Software Bill of Materials',
         status: 'shared',
-        notes: 'The SPDX SBOM for Avocado OS merged with your application SBOM.',
+        notes: 'The SPDX SBOM for Avocado OS, merged with your application SBOM.',
       },
       {
         item: 'Information on the defined support period (Article 13(8))',
         status: 'you',
         notes:
-          'Your support period. Recital 61 indicates an expectation of at least five years unless the expected product lifetime is shorter; align it with the Avocado OS release support commitment.',
+          'Your support period. Recital 61 expects at least five years, unless the expected product lifetime is shorter. Align it with the support commitment for Avocado OS releases.',
       },
     ],
   },
@@ -464,28 +465,28 @@ const milestones = [
     when: '10 December 2024',
     what: 'Entry into force',
     detail:
-      'Twenty days after publication in the Official Journal. The clock starts on the phased application below.',
+      'Twenty days after publication in the Official Journal. The phased dates that follow count from this date.',
   },
   {
     date: '2026-06-11',
     when: '11 June 2026',
     what: 'Notified bodies framework (Chapter IV)',
     detail:
-      'Notified body designation and operation apply. Relevant only if your conformity route requires a notified body.',
+      'The rules for the designation and operation of notified bodies apply. This matters only if your conformity route needs a notified body.',
   },
   {
     date: '2026-09-11',
     when: '11 September 2026',
     what: 'Article 14 reporting',
     detail:
-      'Actively exploited vulnerabilities and severe incidents must be notified on the cadence below. The capability to do that — triage, on-call, and reporting templates — needs to be in place from this date.',
+      'You must report actively exploited vulnerabilities and severe incidents on the schedule in the Article 14 section. From this date, you need triage, an on-call rotation, and report templates.',
   },
   {
     date: '2027-12-11',
     when: '11 December 2027',
     what: 'Full application',
     detail:
-      'All Annex I requirements enforceable. Conformity assessment complete and CE marking affixed before the product is placed on the EU market.',
+      'All Annex I requirements are enforceable. Before you place a product on the EU market, complete the conformity assessment and put the CE marking on it.',
   },
 ]
 
