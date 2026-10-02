@@ -72,7 +72,7 @@ runtimes:
 
 A signed FIT that the bootloader does not require is only half the feature, so this defaults to **true** whenever `fit_key` is set. The build re-packs the feed's bootloader with your public key in the control DTB, using the tooling the feed ships (`imx-boot-tools/rekey-imx-boot.sh` on i.MX 8M), so provisioning writes a bootloader closed to the project key from the very first flash.
 
-Set it to `false` when the distro's own key is the one being enforced — a feed built with the `verified-boot` feature, below.
+Set it to `false` only to keep the feed's own bootloader. The key you sign the FIT with has to be the key the bootloader enforces, so on a feed built with the `verified-boot` feature (below), where the bootloader enforces the distro's key, a FIT signed with your own `fit_key` will not boot unless the bootloader is replaced.
 
 ### Bootloader updates over OTA (i.MX 8M eMMC)
 

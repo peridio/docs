@@ -147,15 +147,15 @@ runtimes:
       fit_key_in_bootloader: true # default when fit_key is set
 ```
 
-| Field                   | Default                      | Description                                                                                                                     |
-| ----------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `key`                   |                              | Signing key for the runtime's TUF metadata. Required for Level 2 (user-controlled root)                                         |
-| `content_key`           | `key`                        | Separate key for delegated-targets metadata only                                                                                |
-| `checksum_algorithm`    | `sha256`                     | `sha256` or `blake3`                                                                                                            |
-| `server_key`            |                              | Connect server's TUF signing public key (hex); overrides `connect.server_key`                                                   |
-| `fit_key`               |                              | RSA PEM key that signs this runtime's boot FIT. Required when `rootfs.image.verity` is on, since the root hash rides in the FIT |
-| `fit_unsigned`          | `false`                      | Build the boot FIT unsigned. Mutually exclusive with `fit_key`                                                                  |
-| `fit_key_in_bootloader` | `true` when `fit_key` is set | Also re-pack the feed's bootloader so U-Boot enforces `fit_key`. Set `false` to keep the distro bootloader                      |
+| Field                   | Default                      | Description                                                                                                                        |
+| ----------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `key`                   |                              | Signing key for the runtime's TUF metadata. Required for Level 2 (user-controlled root)                                            |
+| `content_key`           | `key`                        | Separate key for delegated-targets metadata only                                                                                   |
+| `checksum_algorithm`    | `sha256`                     | `sha256` or `blake3`                                                                                                               |
+| `server_key`            |                              | Connect server's TUF signing public key (hex); overrides `connect.server_key`                                                      |
+| `fit_key`               |                              | RSA PEM key that signs this runtime's boot FIT. A verity rootfs needs this or `fit_unsigned`, since the root hash rides in the FIT |
+| `fit_unsigned`          | `false`                      | Build the boot FIT unsigned. Mutually exclusive with `fit_key`                                                                     |
+| `fit_key_in_bootloader` | `true` when `fit_key` is set | Also re-pack the feed's bootloader so U-Boot enforces `fit_key`. Set `false` to keep the distro bootloader                         |
 
 `fit_key` replaces the `AVOCADO_FIT_KEY_DIR` environment variable and `fit_unsigned` replaces `AVOCADO_FIT_UNSIGNED`; neither variable is read any more. See [Boot signing](/developer-reference/security/boot-signing).
 

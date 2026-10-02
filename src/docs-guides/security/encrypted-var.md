@@ -70,7 +70,7 @@ The hardware blob is stored in the LUKS2 header as an `avocado-hwkey` token — 
 
 ## Operator recovery key
 
-Every keyslot above is bound to the device: a dead SoC takes `/var` with it. `var.recovery` names a **master secret** you hold, from which each unit's passphrase is derived. Nothing derived from the master enters a build, and nothing but the resulting keyslot is on the device.
+Every keyslot described so far is bound to the device: if the SoC dies, `/var` dies with it. `var.recovery` is the exception. It names a **master secret** you hold, from which each unit's passphrase is derived. Nothing derived from the master enters a build, and nothing but the resulting keyslot is on the device.
 
 ### 1. Create the master
 
