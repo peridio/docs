@@ -1,0 +1,24 @@
+---
+title: Tutorials
+description: Focused tutorials on how Avocado extensions are built, from a shell service to cross-compiled React and Rust applications.
+sidebar_position: 0
+---
+
+Missions take you through a whole workflow, from build to over-the-air update. Tutorials go deeper on one part of it: how an extension is put together, and how application code is compiled for your device.
+
+Each tutorial runs on QEMU, so you don't need hardware. If you haven't built an image yet, start with [Get Started](/learn/get-started).
+
+## Tutorials
+
+- [Device Heartbeat](/learn/tutorials/device-heartbeat): build a shell-based systemd service as an extension. This is the hello world of Avocado extension development.
+- [React cross-compile](/learn/tutorials/react-cross-compile): compile a React and Node.js app inside the Avocado SDK container and package it as an extension.
+- [Rust cross-compile](/learn/tutorials/rust-cross-compile): cross-compile a Rust binary for your target and run it as a service.
+
+## Related guides
+
+- [Hardware in the loop](/developer-reference/hardware-in-the-loop): mount extensions over NFS into a running device, so you can iterate without rebuilding or reflashing.
+- [Remote Tunnel](/developer-reference/remote-tunnel): reach SSH or a web UI on a device through Avocado Connect. The [Remote App](/learn/missions/remote-app) mission puts it to work.
+
+## Coming soon
+
+- **Data Egress**: send device data to your own cloud services.

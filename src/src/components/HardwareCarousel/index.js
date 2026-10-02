@@ -9,21 +9,21 @@ const slides = [
     target: 'ICAM-540',
     image: '/img/Advantech_icam540.jpg',
     overviewLink: '/solutions/advantech/icam-540',
-    getStartedLink: '/developer-reference/getting-started',
+    getStartedLink: '/learn/get-started',
   },
   {
     vendor: 'OnLogic',
     target: 'FR201',
     image: '/img/OnLogic_FR201.jpg',
     overviewLink: '/solutions/onlogic/fr201',
-    getStartedLink: '/developer-reference/getting-started',
+    getStartedLink: '/learn/get-started',
   },
   {
     vendor: 'Seeed',
     target: 'reTerminal',
     image: '/img/Seeed_Reterminal.jpg',
     overviewLink: '/solutions/seeed/reterminal',
-    getStartedLink: '/developer-reference/getting-started',
+    getStartedLink: '/learn/get-started',
   },
 ]
 
