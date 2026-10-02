@@ -1,0 +1,18 @@
+import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
+
+## Security features
+
+The published Jetson feed builds encrypted `/var` for every Jetson target; it is opted into per runtime in `avocado.yaml`, with no distro rebuild.
+
+<SecurityCapabilities profile="jetson" />
+
+```yaml title="avocado.yaml"
+runtimes:
+  prod:
+    var:
+      encrypt: true
+      hardware: tpm2
+      recovery: fleet-var-master
+```
+
+The first boot encrypts the flashed `/var` in place, so seeded content - subvolumes, `var_files`, primed Docker images - survives. See [Encrypted /var](/developer-reference/security/encrypted-var).
