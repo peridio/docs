@@ -128,16 +128,24 @@ avocadoctl var-key remove --yes  # drop the recovery keyslot
 Encryption posture is published into the device's U-Boot environment block, so read it with `fw_printenv`:
 
 ```bash title="Target device"
-fw_printenv avocado_var_encrypted avocado_var_hwkey avocado_var_recovery
+fw_printenv avocado_var_encrypted avocado_var_unlock avocado_var_tpm2_token avocado_var_hwkey avocado_var_recovery
 ```
 
-| Key                     | Meaning                                                                 |
-| ----------------------- | ----------------------------------------------------------------------- |
-| `avocado_var_encrypted` | Whether `/var` came up as a LUKS container this boot                    |
-| `avocado_var_hwkey`     | Name of the hardware backend in use, or `no`                            |
-| `avocado_var_recovery`  | `key` (operator slot enrolled) or `soc-uid` (still on the derived slot) |
+| Key                       | Meaning                                                                 |
+| ------------------------- | ----------------------------------------------------------------------- |
+| `avocado_var_encrypted`   | Whether `/var` came up as a LUKS container this boot                    |
+| `avocado_var_unlock`      | How the keyslot was opened this boot (e.g. `tpm2`, `argon2id`)          |
+| `avocado_var_tpm2_token`  | Whether a TPM2 keyslot exists, independent of which one actually opened |
+| `avocado_var_hwkey`       | Name of the hardware backend in use, or `no`                            |
+| `avocado_var_recovery`    | `key` (operator slot enrolled) or `soc-uid` (still on the derived slot) |
 
 These are facts the initramfs observed that userspace cannot reconstruct. They are written only when a value **changes**, since the backing store is a U-Boot environment block and re-writing on every boot would be flash wear for no new information — a change is also the interesting event, being the first enrollment or the day a device silently dropped to the recovery slot. A device that has a hardware keyslot but opened without it is called out explicitly, so a fleet-wide degrade is visible rather than silent.
+
+:::warning imx93-frdm with `verified-boot`
+
+On `avocado-imx93-frdm` built with the `verified-boot` feature, U-Boot's env permit list does not yet carry `avocado_var_unlock`, `avocado_var_tpm2_token`, or `avocado_var_encrypted`. A key absent from that list is silently discarded on the next OTA slot switch rather than merely ignored, so those three keys do not survive past the first update on this specific board/feature combination. `avocado_var_hwkey` and `avocado_var_recovery` are unaffected everywhere.
+
+:::
 
 On an image built without `/var` encryption the reporter is a no-op and publishes nothing.
 
