@@ -1,0 +1,46 @@
+---
+title: 'Team'
+description: 'Invite collaborators to your Avocado Connect organization and assign their organization roles.'
+---
+
+# Team
+
+Invite collaborators to your organization so they can work with your devices, deployments, and tunnels. Each member signs in with their own account, and what they can do is set by their organization role and their project and cohort access.
+
+- **Email invitations** with secure links that expire
+- **Invitation tracking**: See which invitations are pending, accepted, or expired
+- **Revoke** a pending invitation at any time
+- **Member list**: See every member of the organization, and change their roles
+
+## Roles
+
+Every member has one organization role:
+
+| Role     | What it allows                                                                                                                                                                                   |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `owner`  | Everything an admin can do, plus inviting owners and granting or removing the owner role. An organization always keeps at least one owner.                                                       |
+| `admin`  | Creates and changes projects, cohorts, runtimes, deployments, devices, and tunnels. Manages members, invitations, groups, access, webhooks, and billing. Has access to every project and cohort. |
+| `member` | Views the projects and cohorts they have access to, and opens tunnels to devices in those cohorts. See [Access Control](/avocado-connect/access-control).                                        |
+
+Admins can invite admins and members. Only owners can invite owners. You can't change your own role or remove yourself from the organization.
+
+## Invite a member
+
+Go to **Settings → Members** and use the **Send an invitation** form. Enter the invitee's email, pick a role, and optionally pick a group to add them to. Only owners and admins see the **Members** tab.
+
+The invitee receives an email with a link to accept. If they already have an Avocado Connect account, accepting adds them to your organization. If not, they create an account as part of accepting. Either way, they land in your organization with the role you chose, and in the group if you picked one. Invitations expire after 24 hours by default. If the email can't be delivered, the console shows the invite link so you can share it with the invitee yourself.
+
+With the API, send an invitation with an `email` and an optional `role` (`member` by default) and `group_id`:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/invitations" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "teammate@example.com", "role": "member"}'
+```
+
+List members with `GET /api/orgs/$ORG_ID/members`, list invitations with `GET /api/orgs/$ORG_ID/invitations`, and revoke one with `DELETE /api/orgs/$ORG_ID/invitations/<INVITATION_ID>`. See the [Administration API](/developer-reference/avocado-connect-api/administration) for role changes and member removal.
+
+Removing a member also removes them from the organization's groups and revokes their API tokens scoped to the organization.
+
+The number of members your organization can have depends on your plan. See [Billing](/avocado-connect/billing).

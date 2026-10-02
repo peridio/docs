@@ -1,0 +1,68 @@
+---
+title: 'Runtimes'
+description: 'Upload, publish, and deprecate the versioned runtimes you build with the Avocado CLI and deploy with Avocado Connect.'
+---
+
+# Runtimes
+
+A runtime is the versioned software artifact you deploy. You build it locally from your `avocado.yaml` project with the Avocado CLI, upload it to a project in Avocado Connect, and deploy it to cohorts. Each runtime bundles your extensions, overlays, and services into one signed image, so what you tested on the bench is exactly what ships to the field.
+
+<div className="framed-shot">
+  <img
+    src="/img/avocado-connect/runtimes.png"
+    alt="The Runtimes tab: published software versions with their status, target cohorts, and deploy or deprecate actions."
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+## Runtime lifecycle
+
+Every runtime has a status that tracks where it is in its lifecycle:
+
+| Status            | Meaning                                                                        |
+| ----------------- | ------------------------------------------------------------------------------ |
+| `awaiting_upload` | The runtime record exists, but its artifacts haven't finished uploading.       |
+| `draft`           | The upload is complete. Review it before you make it available for deployment. |
+| `published`       | The runtime is available to deploy to cohorts.                                 |
+| `deprecated`      | The runtime is retired. The console no longer offers it for new deployments.   |
+
+Each runtime records its extensions, build metadata, and checksums. A published runtime is immutable: to change what ships, upload a new version rather than editing an existing one. Status only moves forward, from `draft` to `published` to `deprecated`, and you can delete a runtime only while it's still a draft.
+
+## Upload a runtime
+
+Build your runtime, link the project to Connect once, then upload it. `dev` is the runtime name from your `avocado.yaml`.
+
+```bash
+# Sign in and link this project to a Connect organization and project
+avocado connect auth login
+avocado connect init
+
+# Build the runtime, then upload and publish it in one step
+avocado build
+avocado connect upload dev --version 1.2.0 --publish
+```
+
+Without `--publish`, the upload lands as a `draft`. Publish it later from **Project → Runtimes** in the console. `avocado connect init` writes `connect.org` and `connect.project` to `avocado.yaml`. To target a different project, pass `--project <PROJECT_ID>`.
+
+To deploy right after the upload, add `--deploy-cohort <COHORT_ID>` (and `--deploy-activate` to skip the draft deployment). See [Deployments](/avocado-connect/deployments).
+
+## List runtimes
+
+List the runtimes uploaded to the project:
+
+```bash
+avocado connect runtimes list
+```
+
+`avocado runtime list` (without `connect`) is a different command: it lists the runtimes defined locally in `avocado.yaml`, not the ones uploaded to Connect.
+
+## Signing
+
+Every runtime is signed with your organization's keys using The Update Framework (TUF), and devices verify the signature before they install anything. Connect sets up signing when your organization is created. See [Code Signing](/avocado-connect/code-signing).
+
+## Learn more
+
+- [First OTA mission](/learn/missions/first-ota): Link a project, upload a runtime, and deploy it end to end.
+- [Runtimes API](/developer-reference/avocado-connect-api/runtimes): Endpoints for listing, creating, and updating runtimes.
+- [`avocado connect upload`](/developer-reference/avocado-cli/commands#avocado-connect-upload) in the CLI reference.
