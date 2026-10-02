@@ -157,7 +157,7 @@ runtimes:
 | `fit_unsigned`          | `false`                      | Build the boot FIT unsigned. Mutually exclusive with `fit_key`                                                                  |
 | `fit_key_in_bootloader` | `true` when `fit_key` is set | Also re-pack the feed's bootloader so U-Boot enforces `fit_key`. Set `false` to keep the distro bootloader                      |
 
-`fit_key` replaces the `AVOCADO_FIT_KEY_DIR` and `AVOCADO_FIT_UNSIGNED` environment variables, which are no longer read. See [Boot signing](/developer-reference/security/boot-signing).
+`fit_key` replaces the `AVOCADO_FIT_KEY_DIR` environment variable and `fit_unsigned` replaces `AVOCADO_FIT_UNSIGNED`; neither variable is read any more. See [Boot signing](/developer-reference/security/boot-signing).
 
 ## Rootfs configuration
 
@@ -216,11 +216,11 @@ extensions:
       verity: true
 ```
 
-| Field    | Default | Description                                                                                                                |
-| -------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `type`   | `raw`   | `kab` wraps the produced image with `kabtool`; `raw` (or absent) keeps the raw artifact                                    |
-| `args`   |         | Extra arguments passed to `kabtool` when `type: kab`                                                                       |
-| `verity` | `false` | Produce a dm-verity hash tree and root hash for this image — see [Filesystem verity](/developer-reference/security/verity) |
+| Field    | Default | Description                                                                                                                                                                                                  |
+| -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`   | `raw`   | `kab` wraps the produced image with `kabtool`; `raw` (or absent) keeps the raw artifact                                                                                                                      |
+| `args`   |         | Extra arguments passed to `kabtool` when `type: kab`                                                                                                                                                         |
+| `verity` | `false` | Produce a dm-verity hash tree and root hash for this image. Read for `rootfs` and extensions only; the `initramfs` build does not consult it — see [Filesystem verity](/developer-reference/security/verity) |
 
 `verity` is a strict boolean: `"true"`, `1` and `yes` are rejected rather than coerced, because a security opt-in should not be decided by a value that only looks true.
 

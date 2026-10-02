@@ -436,7 +436,7 @@ avocadoctl var-key remove --yes
 | `--yes` | Required. Confirms the recovery slot is to be removed |
 
 :::warning
-Once a recovery token exists, the initrd retires the SoC-UID-derived keyslot — the one key anyone who can read the SoC UID could reproduce. Removing the recovery slot after that leaves only the hardware-bound keyslot, so a failed key store takes `/var` with it.
+Once a recovery token exists, the initrd retires the SoC-UID-derived keyslot — the one key anyone who can read the SoC UID could reproduce. Removing the recovery slot after that leaves only the hardware-bound keyslot, if the runtime has one, so a failed key store takes `/var` with it. With `var.hardware: none` there is no hardware-bound keyslot, and removing the recovery slot leaves `/var` with nothing to open it.
 :::
 
 ---

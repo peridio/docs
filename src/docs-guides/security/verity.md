@@ -7,7 +7,7 @@ description: 'Enable dm-verity on the Avocado OS root filesystem and on extensio
 
 dm-verity gives a read-only filesystem a Merkle hash tree and a single root hash. Every block is verified as it is read; a modified image cannot be mounted, and tampering after the fact is caught at read time rather than at install time.
 
-Avocado OS applies it to the two read-only image kinds: the root filesystem and extension images. It is not a declared machine capability — every i.MX kernel carries `dm-verity.cfg`, every i.MX stone manifest carries per-slot hash partitions, and the U-Boot environment reads a root hash out of the boot FIT when one is present. A FIT without a root hash boots a plain rootfs. The choice is entirely yours.
+Avocado OS applies it to the two read-only image kinds: the root filesystem and extension images. It is not a declared machine capability — every i.MX kernel carries `dm-verity.cfg`, every i.MX stone manifest carries per-slot hash partitions, and the U-Boot environment reads a root hash out of the boot FIT when one is present. A FIT without a root hash boots a plain rootfs. Extension verity is available on every target. Rootfs verity depends on the machine, because the root hash travels in the boot FIT, so it works only on targets that boot one; see the requirements below.
 
 ## Enable it
 

@@ -15,6 +15,8 @@ See [Boot signing](/developer-reference/security/boot-signing) in the developer 
 
 Secure boot establishes a cryptographic chain of trust beginning at the silicon and extending through the bootloader and kernel: each stage verifies the next before transferring control, and if any stage fails verification the system refuses to boot — protecting against both malicious tampering and unintentional corruption.
 
+That is what the chain does once it is closed, not what a published feed does by default. Until you sign the boot FIT and have the bootloader enforce your key, the distro bootloader does not enforce it. [Boot signing](/developer-reference/security/boot-signing) covers each link.
+
 The chain can be carried further, to the root filesystem and to individual system extensions, with dm-verity. That is an opt-in per image (`image.verity`) rather than something enabled by default, and for the rootfs it currently depends on the target being able to carry the root hash in a signed boot image. See [Filesystem Integrity](filesystem-integrity) for what applies where.
 
 The challenge is that every silicon vendor has a different mechanism for establishing a root of trust, different fuse provisioning procedures, and different signing toolchains. Avocado abstracts this behind a unified interface that works the same way regardless of the underlying hardware.

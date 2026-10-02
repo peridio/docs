@@ -2,12 +2,12 @@
 title: 'Encrypted /var'
 sidebar_position: 1
 copy_markdown: true
-description: 'Enable LUKS2 encryption of the Avocado OS var partition with a hardware-bound key, choose the key engine with var.hardware, and hold an operator recovery key with var.recovery and avocado var-key.'
+description: 'Enable LUKS2 encryption of the Avocado OS var partition, bound to the hardware key store where the board has one, choose the key engine with var.hardware, and hold an operator recovery key with var.recovery and avocado var-key.'
 ---
 
-`/var` is the only writable partition on an Avocado OS device: extensions, application data, Docker layers, and device state all live there. `runtimes.<name>.var.encrypt` turns it into a LUKS2 container whose key is bound to the device's hardware key store.
+`/var` is the only writable partition on an Avocado OS device: extensions, application data, Docker layers, and device state all live there. `runtimes.<name>.var.encrypt` turns it into a LUKS2 container. Where the board has a hardware key store the key is bound to it; `var.hardware` chooses the engine, and `auto` falls back to a derived key where none works (see [Choosing the key engine](#choosing-the-key-engine)).
 
-The root filesystem is not encrypted — its contents are the OS, which is public. It gets [dm-verity](/developer-reference/security/verity) instead, where integrity is what matters.
+The root filesystem is not encrypted — its contents are the OS, which is public. What matters there is integrity, which [dm-verity](/developer-reference/security/verity) provides when you opt in with `rootfs.image.verity`, on targets that can carry the root hash in a boot FIT.
 
 ## Enable it
 
@@ -28,7 +28,7 @@ That is the whole opt-in. The CLI does the rest:
 - adds `cryptsetup-var` to the initramfs package set and `cryptsetup-var-udev` to the rootfs package set,
 - writes an `/etc/avocado/var-encrypt` marker into _this runtime's_ initramfs.
 
-`cryptsetup-var.service` is conditioned on that marker, so a feed image or a runtime that did not opt in always boots a plaintext `/var`. With the marker, the first boot **encrypts the flashed var image in place** — seeded content (subvolumes, `var_files`, primed Docker images) survives — and later boots open it as `/dev/mapper/var`.
+`cryptsetup-var.service` is conditioned on that marker, so a feed image or a runtime that did not opt in never encrypts `/var`: a partition that is still plaintext stays plaintext, and one that is already LUKS stays LUKS (see the note below). With the marker, the first boot **encrypts the flashed var image in place** — seeded content (subvolumes, `var_files`, primed Docker images) survives — and later boots open it as `/dev/mapper/var`.
 
 Leaving `var.encrypt` unset produces a byte-identical image to before.
 
@@ -125,11 +125,13 @@ avocadoctl var-key enroll        # passphrase on stdin, or --key-file
 avocadoctl var-key remove --yes  # drop the recovery keyslot
 ```
 
-Encryption posture is published into the device's U-Boot environment block, so read it with `fw_printenv`:
+On machines that boot U-Boot, encryption posture is published into the device's U-Boot environment block, so read it with `fw_printenv`:
 
 ```bash title="Target device"
 fw_printenv avocado_var_encrypted avocado_var_unlock avocado_var_tpm2_token avocado_var_hwkey avocado_var_recovery
 ```
+
+Jetson boots the NVIDIA chain and has no U-Boot environment to publish into, so the keys below are not available there. Use `avocadoctl var-key list` and the journal instead.
 
 | Key                      | Meaning                                                                 |
 | ------------------------ | ----------------------------------------------------------------------- |

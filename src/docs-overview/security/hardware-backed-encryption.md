@@ -2,7 +2,7 @@
 title: 'Hardware-Backed Encryption'
 slug: /avocado-os/security/encryption
 sidebar_position: 2
-description: 'LUKS full-disk encryption with TPM, TEE, and secure enclave integration in Avocado OS — data at rest protection standard.'
+description: 'LUKS2 encryption of the writable /var partition with TPM, TEE, and secure enclave key binding in Avocado OS — data at rest protection standard.'
 ---
 
 # Hardware-Backed Encryption
@@ -21,7 +21,7 @@ Where the keys live matters as much as the encryption itself. A LUKS volume whos
 
 ### LUKS encryption
 
-Avocado uses LUKS2 with AES-256-XTS for full-disk encryption of writable partitions. The BTRFS `/var` partition — which holds extensions, application data, and device state — is encrypted at the block level. The immutable root filesystem uses dm-verity for integrity (not encryption), since its contents are public (the OS itself) and integrity matters more than confidentiality.
+Avocado uses LUKS2 with AES-256-XTS to encrypt the writable `/var` partition. That BTRFS partition — which holds extensions, application data, and device state — is encrypted at the block level. The immutable root filesystem is not encrypted, since its contents are public (the OS itself) and integrity matters more than confidentiality; dm-verity provides that integrity when you opt in with `rootfs.image.verity`.
 
 ### Hardware key storage
 
