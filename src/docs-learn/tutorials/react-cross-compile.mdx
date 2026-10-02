@@ -1,0 +1,287 @@
+---
+title: 'React cross-compile'
+sidebar_position: 2
+description: 'See how the Avocado SDK container compiles a React + Express app, packages it as an extension, and how to iterate on it in QEMU.'
+copy_markdown: true
+---
+
+import { Steps, Step } from '@site/src/components/Learn/Steps'
+
+This tutorial follows a Node.js application through the Avocado build. You start from the [React Dashboard reference](/developer-reference/references/react-dashboard), a React + Vite frontend served by an Express server on port `4000`. You will see where the compile and install hooks are declared, run them inside the SDK container, find the artifacts they produce, and then change the app and rebuild it.
+
+You will learn how to:
+
+- Read the `avocado.yaml` sections that connect an extension to an SDK compile step
+- Run a compile section by itself in the SDK container
+- Trace build artifacts from your project directory into the extension and onto the device
+- Change the app source and ship the change to a QEMU device
+
+The [Remote App](/learn/missions/remote-app) mission builds the same reference and opens it through an Avocado Connect tunnel. This tutorial covers the build itself.
+
+## Prerequisites
+
+- The [Avocado CLI](/developer-reference/avocado-cli/installation) installed
+- Docker installed and running
+- You booted a device in QEMU at least once, as in [QEMU](/learn/get-started/qemu)
+
+## Step 1: Create the project
+
+Initialize a project from the `react-dashboard` reference. The app source lives in `ref-reactjs/`, next to the scripts that build it and the `overlay/` directory that holds its systemd unit.
+
+```bash
+# Create my-react-app/ from the react-dashboard reference
+avocado init --reference react-dashboard my-react-app
+cd my-react-app
+```
+
+The files that matter for the build are:
+
+```
+my-react-app/
+├── avocado.yaml
+├── reactjs-compile.sh
+├── reactjs-install.sh
+├── reactjs-clean.sh
+├── overlay/
+│   └── usr/lib/systemd/system/
+│       └── ref-reactjs.service
+└── ref-reactjs/
+    ├── package.json
+    ├── server.js
+    ├── vite.config.js
+    └── src/
+        └── App.jsx
+```
+
+## Step 2: Read the build wiring
+
+Open `avocado.yaml`. Three sections work together to turn `ref-reactjs/` into an extension. Together they show the core pattern for any compiled app: an extension package points at an SDK compile section, and the SDK compile section points at your scripts.
+
+The `example-reactjs` extension declares a package that the SDK builds for it, and lists the tools that need to be in the SDK to do so:
+
+```yaml title="avocado.yaml"
+extensions:
+  example-reactjs:
+    version: 0.1.0
+    overlay: overlay
+    enable_services:
+      - ref-reactjs.service
+    packages:
+      example-reactjs-app:
+        compile: example-reactjs-app # name of an sdk.compile section
+        install: reactjs-install.sh # copies the build output into the extension
+      nodejs: '*' # Node.js runtime on the device
+    sdk:
+      packages:
+        nativesdk-nodejs: '*' # Node.js inside the SDK container
+        nativesdk-nodejs-npm: '*'
+        nativesdk-ca-certificates: '*'
+```
+
+The top-level `sdk` section names the container image and maps the `example-reactjs-app` compile section to its scripts:
+
+```yaml title="avocado.yaml"
+sdk:
+  image: 'docker.io/avocadolinux/sdk:{{ config.distro.release }}'
+  container_args:
+    - --privileged
+    - --network=host
+    - -v /dev:/dev
+    - -v /sys:/sys
+  compile:
+    example-reactjs-app:
+      compile: reactjs-compile.sh
+      clean: reactjs-clean.sh
+  packages:
+    avocado-sdk-toolchain: '*'
+```
+
+The two Node.js packages do different jobs. `nativesdk-nodejs` and `nativesdk-nodejs-npm` run inside the SDK container during the build. `nodejs` is installed into the extension and runs the server on the device. See [Cross-compilation](/developer-reference/cross-compilation) for how SDK packages and target packages are separated.
+
+The scripts themselves are short. `reactjs-compile.sh` runs in `ref-reactjs/`:
+
+```bash title="reactjs-compile.sh"
+echo "Compiling React.js application"
+cd ref-reactjs
+
+echo "Installing dependencies..."
+npm install
+
+echo "Building React frontend..."
+npm run build
+
+echo "React.js application compiled successfully"
+```
+
+`reactjs-install.sh` copies the result into `$AVOCADO_BUILD_EXT_SYSROOT`, the directory that becomes the extension's file tree:
+
+```bash title="reactjs-install.sh"
+mkdir -p "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs"
+
+cp -r ref-reactjs/dist "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+cp -r ref-reactjs/node_modules "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+cp ref-reactjs/package.json "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+cp ref-reactjs/server.js "$AVOCADO_BUILD_EXT_SYSROOT/usr/lib/ref-reactjs/"
+```
+
+The `ref-reactjs.service` unit in the overlay starts `/usr/bin/node /usr/lib/ref-reactjs/server.js` with `PORT=4000`, so it runs exactly what the install script placed.
+
+:::note
+
+The Vite bundle and Express server are JavaScript, so their output does not depend on the target architecture. What the SDK guarantees is a consistent build environment: the same Node.js and npm, on every developer machine and in CI. A dependency with native code would need the target toolchain that `avocado-sdk-toolchain` provides.
+
+:::
+
+## Step 3: Install the SDK
+
+Install the SDK container, the SDK packages from Step 2, and the extension and runtime dependencies.
+
+```bash
+# Install the SDK toolchain, extension dependencies, and runtime packages
+avocado install -f
+```
+
+## Step 4: Run the compile step alone
+
+Run only the `example-reactjs-app` compile section. This runs `reactjs-compile.sh` inside the SDK container without building extensions or images, which is the fastest way to see whether your app compiles.
+
+```bash
+# Run reactjs-compile.sh in the SDK container
+avocado sdk compile example-reactjs-app
+```
+
+The script's last line of output is:
+
+```
+React.js application compiled successfully
+```
+
+If the progress display hides the script's own output, add `--no-tui` to see it line by line.
+
+Your project directory is mounted into the container, so the build output lands next to your source on the host. List it:
+
+```bash
+# Vite's production bundle
+ls ref-reactjs/dist
+
+# Dependencies npm installed inside the container
+ls ref-reactjs/node_modules
+```
+
+`ref-reactjs/dist/` holds the bundled frontend, including `index.html`. The reference's `.gitignore` excludes both `dist/` and `node_modules/`, because they are build output.
+
+## Step 5: Build the extension and runtime
+
+Build everything. `avocado build` runs the compile step, then runs `reactjs-install.sh` to copy the four items into the extension at `/usr/lib/ref-reactjs/`, adds the overlay, and assembles the `dev` runtime image.
+
+```bash
+# Compile, install into the extension, and build the runtime image
+avocado build
+```
+
+When the build finishes, the CLI prints:
+
+```
+[SUCCESS] All components built successfully!
+```
+
+## Step 6: Boot and find the artifacts on the device
+
+Provision the image and boot it. On Linux, forward port `4000` so you can open the dashboard from your host browser.
+
+```bash
+# Create the bootable disk image
+avocado provision -r dev
+
+# Boot in QEMU and forward host port 4000 to the device
+avocado sdk run -iE vm dev --host-fwd "4000-:4000"
+```
+
+:::note Linux only
+
+`--host-fwd` is supported on Linux only. On macOS, boot with `avocado sdk run -iE vm dev` and reach port `4000` through a tunnel, as in [Remote App](/learn/missions/remote-app).
+
+:::
+
+Log in as `root` with an empty password. Check that the files from the install script are on the device:
+
+```bash
+# The app directory the install script populated
+ls /usr/lib/ref-reactjs
+```
+
+The directory holds `dist`, `node_modules`, `package.json` and `server.js`. Confirm the service runs them:
+
+```bash
+# Show the app's logs (press Ctrl+C to stop following)
+journalctl -u ref-reactjs --no-pager -f
+```
+
+```
+React.js reference app running on http://0.0.0.0:4000
+```
+
+On Linux, open [http://localhost:4000](http://localhost:4000). The dashboard header reads **Avocado System Monitor**.
+
+## Step 7: Change the app and rebuild
+
+Make a visible change on your host, then rebuild and reboot. This is the loop you repeat while developing: edit, compile, build, provision, boot.
+
+In `ref-reactjs/src/App.jsx`, find the header and change the title text:
+
+```jsx title="ref-reactjs/src/App.jsx"
+<h1 className="text-xl font-semibold text-white">
+  {/* highlight-next-line */}
+  Avocado <span className="text-avocado-500">Fleet Monitor</span>
+</h1>
+```
+
+Shut down the device by running `poweroff` in the QEMU console. Then rebuild and boot again on your host:
+
+```bash
+# Recompile the app, then rebuild the extension and runtime
+avocado sdk compile example-reactjs-app
+avocado build
+
+# Recreate the disk image and boot it
+avocado provision -r dev
+avocado sdk run -iE vm dev --host-fwd "4000-:4000"
+```
+
+Reload [http://localhost:4000](http://localhost:4000). The header reads **Avocado Fleet Monitor**.
+
+Running the compile step yourself makes sure the new source is compiled before the extension is repackaged. To start from a clean slate, run the compile section's clean script:
+
+```bash
+# Run reactjs-clean.sh: removes dist/, node_modules/ and package-lock.json
+avocado sdk clean example-reactjs-app
+```
+
+`reactjs-clean.sh` also deletes `ref-reactjs/package-lock.json`, so the next `npm install` resolves dependency versions again. Restore the file from version control if you want the pinned versions.
+
+Server changes follow the same loop. Edit `ref-reactjs/server.js` to add an API route, and dependencies you add to `ref-reactjs/package.json` are installed by `npm install` during the next compile.
+
+## Verify it works
+
+<Steps id="react-cross-compile">
+  <Step id="compile-output" title="Compile output is on the host">
+    After `avocado sdk compile example-reactjs-app`, `ref-reactjs/dist/index.html` exists in your
+    project.
+  </Step>
+  <Step id="artifacts-on-device" title="Artifacts are on the device">
+    `ls /usr/lib/ref-reactjs` on the device lists `dist`, `node_modules`, `package.json` and
+    `server.js`.
+  </Step>
+  <Step id="service-listening" title="Service is listening">
+    `journalctl -u ref-reactjs` shows `React.js reference app running on http://0.0.0.0:4000`.
+  </Step>
+  <Step id="change-shipped" title="Your change is on the device">
+    After the rebuild, the dashboard header reads **Avocado Fleet Monitor**.
+  </Step>
+</Steps>
+
+## Next steps
+
+- Open the dashboard from anywhere through an Avocado Connect tunnel in [Remote App](/learn/missions/remote-app).
+- Read [Cross-compilation](/developer-reference/cross-compilation) for toolchains, target sysroot packages and the SDK environment variables your scripts can use.
+- See the [React Dashboard reference](/developer-reference/references/react-dashboard) for provisioning the same app to hardware targets.

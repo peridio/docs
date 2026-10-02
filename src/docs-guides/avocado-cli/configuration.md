@@ -115,7 +115,7 @@ To override per command without editing config:
 avocado build --target imx8mp-var-dart --target-board variscite-sonata
 ```
 
-The per-target [Getting Started](/developer-reference/getting-started/any-target) page and the target's [hardware page](/hardware/support-matrix) call out when a board is required and which value to use.
+The per-target [Getting Started](/learn/get-started/any-target) page and the target's [hardware page](/hardware/support-matrix) call out when a board is required and which value to use.
 
 ## Connect configuration
 

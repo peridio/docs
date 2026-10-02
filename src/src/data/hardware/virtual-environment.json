@@ -5,7 +5,7 @@
       "name": "QEMU ARM",
       "target": "qemuarm64",
       "board": "",
-      "url": "/developer-reference/getting-started/qemu",
+      "url": "/learn/get-started/qemu",
       "external": false,
       "lts": { "2024": "supported", "2026": "supported" }
     },
@@ -13,7 +13,7 @@
       "name": "QEMU x86-64",
       "target": "qemux86-64",
       "board": "",
-      "url": "/developer-reference/getting-started/qemu",
+      "url": "/learn/get-started/qemu",
       "external": false,
       "lts": { "2024": "supported", "2026": "supported" }
     }

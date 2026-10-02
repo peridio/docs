@@ -38,7 +38,7 @@ import HardwareHero from '@site/src/components/HardwareHero'
   ctas={{
     primary: {
       label: 'Get Started',
-      to: '/developer-reference/getting-started/any-target',
+      to: '/learn/get-started/any-target',
     },
     secondary: {
       label: 'Download Product Brief',
@@ -73,7 +73,7 @@ Both CTA slots are optional. Missing slots simply do not render, so vendor pages
 
 For partner hardware pages, the recommended slot mapping is:
 
-- **Primary — Get Started** → `/developer-reference/getting-started/<target>` (or `/any-target`).
+- **Primary — Get Started** → `/learn/get-started/<target>` (or `/any-target`).
 - **Secondary — Download Product Brief** → hosted PDF/one-pager.
 
 The manufacturer's product page is wired through `vendorUrl` (not a CTA slot) — the vendor name itself becomes the link.
