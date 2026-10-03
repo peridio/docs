@@ -96,6 +96,36 @@ Yocto-based Linux with real-time patches. Pre-integrated industrial protocols an
 
 Monitor both application and real-time cores. Track AI inference performance and system health metrics.
 
+## Security features
+
+The published i.MX 93 feed builds every security capability this SoC can deliver; each one is opted into per runtime in `avocado.yaml`, with no distro rebuild.
+
+| Capability           | Status on `imx93-frdm`                                                                |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| Encrypted `/var`     | Built. Key derived from the SoC UID today; the EdgeLock (ELE) backend is pending      |
+| Signed boot FIT      | Built. U-Boot re-packed with your key, and a saved-environment permit list            |
+| dm-verity rootfs     | Built. Root hash carried in the signed FIT                                            |
+| dm-verity extensions | Built                                                                                 |
+| AHAB boot container  | Built as a feed feature: EdgeLock authenticates SPL, ATF and U-Boot against SRK fuses |
+
+```yaml title="avocado.yaml"
+rootfs:
+  image:
+    verity: true
+
+runtimes:
+  prod:
+    var:
+      encrypt: true
+      recovery: fleet-var-master
+    signing:
+      fit_key: product-fit
+```
+
+AHAB is applied when the feed is built rather than from `avocado.yaml`, because it signs the boot container the ROM loads. Signing does not close the part — an OPEN device boots a signed image without checking it, which is the window to validate in before burning SRK fuses. See [Boot signing](/developer-reference/security/boot-signing#ahab-signing-the-imx-9-boot-container).
+
+`imx91-frdm` carries the AHAB wiring too; it does not declare encrypted `/var` or verified boot yet.
+
 ## Getting Started
 
 The [NXP FRDM i.MX 93 guide](/developer-reference/getting-started/frdm-imx93) walks through the whole path for this board: prerequisites, the serial console, building, provisioning to an SD card, first boot, and running your own container so that it comes back after a power cycle.

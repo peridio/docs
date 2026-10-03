@@ -2809,6 +2809,8 @@ Options:
 
 ```
 
+See [Boot signing](/developer-reference/security/boot-signing) for the workflow this key is used by.
+
 ---
 
 ### `avocado signing-keys list`
@@ -2854,6 +2856,8 @@ Options:
 ---
 
 ## Var Key Commands
+
+Operator-held recovery key for an encrypted `/var`. See [Encrypted /var](/developer-reference/security/encrypted-var) for the full workflow.
 
 ### `avocado var-key`
 
@@ -3403,6 +3407,8 @@ Options:
 
 ## Container Commands
 
+Container Dev Mode: a layer-aware hot-reload loop for a container running on a device.
+
 ### `avocado container`
 
 ```
@@ -3595,6 +3601,8 @@ Options:
 ---
 
 ## VM Commands
+
+The local helper VM used on macOS and Windows development hosts.
 
 ### `avocado vm`
 
