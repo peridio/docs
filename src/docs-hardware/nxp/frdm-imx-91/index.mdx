@@ -6,6 +6,7 @@ hide_title: true
 ---
 
 import HardwareHero from '@site/src/components/HardwareHero'
+import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
 
 <HardwareHero
   vendor="NXP"
@@ -100,13 +101,7 @@ Hardware-in-the-loop development with Avocado OS. Edit code locally, test on har
 
 ## Security features
 
-| Capability           | Status on `imx91-frdm`                                                                    |
-| -------------------- | ----------------------------------------------------------------------------------------- |
-| AHAB boot container  | Built as a feed feature: EdgeLock authenticates SPL, ATF and U-Boot against SRK fuses     |
-| dm-verity extensions | Built. `extensions.<name>.image.verity` is carried in the runtime manifest                |
-| Encrypted `/var`     | Not declared yet — the machine does not list `encrypted-var` in its capabilities          |
-| Signed boot FIT      | Not declared yet — this board boots with `booti`, so there is no FIT to sign              |
-| Rootfs dm-verity     | Hash partitions are staged in the stone manifest, but need the FIT to carry the root hash |
+<SecurityCapabilities machine="imx91-frdm" />
 
 AHAB is applied when the feed is built rather than from `avocado.yaml`, because it signs the boot container the ROM loads. Signing does not close the part — an OPEN device boots a signed image without checking it, which is the window to validate in before burning SRK fuses. See [Boot signing](/developer-reference/security/boot-signing#ahab-signing-the-imx-9-boot-container).
 

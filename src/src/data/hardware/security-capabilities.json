@@ -1,0 +1,159 @@
+{
+  "asOf": "2026-10-02",
+  "feed": "2026 (wrynose)",
+  "profiles": {
+    "imx8mp-evk": {
+      "machines": ["imx8mp-evk"],
+      "declared": "encrypted-var verified-boot",
+      "note": "CAAM-backed key",
+      "encryptedVar": {
+        "status": "yes",
+        "detail": "Built. Key bound to a CAAM black key, stored in the LUKS2 header"
+      },
+      "signedBootFit": {
+        "status": "yes",
+        "detail": "Built. U-Boot re-packed with your key, so the first flash enforces it"
+      },
+      "rootfsVerity": {
+        "status": "yes",
+        "detail": "Built. Root hash carried in the signed FIT"
+      },
+      "extensionVerity": { "status": "yes", "detail": "Built" },
+      "other": [
+        {
+          "label": "Bootloader OTA (eMMC)",
+          "detail": "Built. `boot0`/`boot1` coupled to the OS slots, with rollback"
+        }
+      ]
+    },
+    "imx93-frdm": {
+      "machines": ["imx93-frdm"],
+      "declared": "encrypted-var verified-boot",
+      "note": "plus `ftpm tpm2` with OP-TEE; AHAB available",
+      "encryptedVar": {
+        "status": "yes",
+        "detail": "Built. Key derived from the SoC UID today; the EdgeLock (ELE) backend is pending"
+      },
+      "signedBootFit": {
+        "status": "yes",
+        "detail": "Built. U-Boot re-packed with your key, and a saved-environment permit list"
+      },
+      "rootfsVerity": {
+        "status": "yes",
+        "detail": "Built. Root hash carried in the signed FIT"
+      },
+      "extensionVerity": { "status": "yes", "detail": "Built" },
+      "other": [
+        {
+          "label": "AHAB boot container",
+          "detail": "Built as a feed feature: EdgeLock authenticates SPL, ATF and U-Boot against SRK fuses"
+        }
+      ]
+    },
+    "imx91-frdm": {
+      "machines": ["imx91-frdm"],
+      "declared": null,
+      "note": "AHAB boot-container signing only",
+      "encryptedVar": {
+        "status": "not-declared",
+        "detail": "Not declared yet - the machine does not list `encrypted-var` in its capabilities"
+      },
+      "signedBootFit": {
+        "status": "no",
+        "detail": "Not declared yet - this board boots with `booti`, so there is no FIT to sign"
+      },
+      "rootfsVerity": {
+        "status": "staged",
+        "summary": "hash partitions staged, no FIT",
+        "detail": "Hash partitions are staged in the stone manifest, but need the FIT to carry the root hash"
+      },
+      "extensionVerity": {
+        "status": "yes",
+        "detail": "Built. `extensions.<name>.image.verity` is carried in the runtime manifest"
+      },
+      "other": [
+        {
+          "label": "AHAB boot container",
+          "detail": "Built as a feed feature: EdgeLock authenticates SPL, ATF and U-Boot against SRK fuses"
+        }
+      ]
+    },
+    "imx-booti": {
+      "machines": ["imx93-evk", "imx95-frdm", "imx8mp-var-dart", "ucm-imx8m-plus"],
+      "declared": null,
+      "note": "`booti` boot flow",
+      "encryptedVar": { "status": "not-declared" },
+      "signedBootFit": { "status": "no" },
+      "rootfsVerity": {
+        "status": "staged",
+        "summary": "hash partitions staged, no FIT"
+      },
+      "extensionVerity": { "status": "yes" }
+    },
+    "jetson": {
+      "label": "jetson-*",
+      "machines": ["jetson-agx-orin", "jetson-agx-thor", "jetson-orin-nano", "jetson-orin-nx"],
+      "declared": "encrypted-var ftpm tpm2",
+      "note": "key sealed to the OP-TEE fTPM",
+      "encryptedVar": {
+        "status": "yes",
+        "detail": "Built. LUKS2 key sealed to the OP-TEE fTPM against PCR 7, with an Argon2id fallback"
+      },
+      "signedBootFit": {
+        "status": "n/a",
+        "summary": "n/a - NVIDIA boot chain, no U-Boot FIT",
+        "detail": "Not applicable - Jetson boots the NVIDIA chain, not a U-Boot FIT"
+      },
+      "rootfsVerity": {
+        "status": "n/a",
+        "summary": "n/a - no boot FIT to carry the root hash",
+        "detail": "Not available - Jetson has no U-Boot FIT to carry the root hash, and the stone manifests carry no per-slot hash partitions"
+      },
+      "extensionVerity": {
+        "status": "yes",
+        "detail": "Built. `extensions.<name>.image.verity` is manifest-carried, so it works here too"
+      },
+      "other": [
+        {
+          "label": "Recovery key",
+          "detail": "Built. Operator-held master, per-unit passphrase enrolled with `avocado var-key enroll`"
+        }
+      ]
+    },
+    "qemuarm64": {
+      "machines": ["qemuarm64"],
+      "declared": "encrypted-var ftpm tpm2",
+      "encryptedVar": { "status": "yes" },
+      "signedBootFit": { "status": "no" },
+      "rootfsVerity": { "status": "no" },
+      "extensionVerity": { "status": "yes" }
+    },
+    "qemux86-64": {
+      "machines": ["qemux86-64"],
+      "declared": "encrypted-var tpm2",
+      "encryptedVar": { "status": "yes" },
+      "signedBootFit": { "status": "no" },
+      "rootfsVerity": { "status": "no" },
+      "extensionVerity": { "status": "yes" }
+    },
+    "intel-x86-64": {
+      "label": "intel-x86-64-v2/v3/v4",
+      "machines": ["intel-x86-64-v2", "intel-x86-64-v3", "intel-x86-64-v4"],
+      "declared": "tpm2",
+      "encryptedVar": { "status": "not-declared" },
+      "signedBootFit": { "status": "no" },
+      "rootfsVerity": { "status": "no" },
+      "extensionVerity": { "status": "yes" }
+    },
+    "raspberrypi": {
+      "label": "raspberrypi*",
+      "machines": ["raspberrypi0-2w", "raspberrypi4", "raspberrypi5"],
+      "declared": "",
+      "note": "MBR layout, no dm-crypt kernel fragment yet",
+      "encryptedVar": { "status": "no" },
+      "signedBootFit": { "status": "no" },
+      "rootfsVerity": { "status": "no" },
+      "extensionVerity": { "status": "yes" }
+    }
+  }
+}

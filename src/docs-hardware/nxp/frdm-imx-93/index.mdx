@@ -6,6 +6,7 @@ hide_title: true
 ---
 
 import HardwareHero from '@site/src/components/HardwareHero'
+import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
 
 <HardwareHero
   vendor="NXP"
@@ -100,13 +101,7 @@ Monitor both application and real-time cores. Track AI inference performance and
 
 The published i.MX 93 feed builds every security capability this SoC can deliver; each one is opted into per runtime in `avocado.yaml`, with no distro rebuild.
 
-| Capability           | Status on `imx93-frdm`                                                                |
-| -------------------- | ------------------------------------------------------------------------------------- |
-| Encrypted `/var`     | Built. Key derived from the SoC UID today; the EdgeLock (ELE) backend is pending      |
-| Signed boot FIT      | Built. U-Boot re-packed with your key, and a saved-environment permit list            |
-| dm-verity rootfs     | Built. Root hash carried in the signed FIT                                            |
-| dm-verity extensions | Built                                                                                 |
-| AHAB boot container  | Built as a feed feature: EdgeLock authenticates SPL, ATF and U-Boot against SRK fuses |
+<SecurityCapabilities machine="imx93-frdm" />
 
 ```yaml title="avocado.yaml"
 rootfs:

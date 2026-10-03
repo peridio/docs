@@ -5,6 +5,8 @@ copy_markdown: true
 description: 'How Avocado OS splits security features between the feed that builds them and the runtime that opts in: encrypted /var, dm-verity, and signed boot, enabled from avocado.yaml.'
 ---
 
+import SecurityMatrix from '@site/src/components/SecurityMatrix'
+
 Avocado OS splits every security feature into two decisions, made by two different parties:
 
 | Decision                              | Who makes it    | Where                                                 |
@@ -41,17 +43,7 @@ cat /etc/avocado-security-capabilities
 
 Current state of the published 2026 (wrynose) feed. This table is a snapshot of each machine's `AVOCADO_SECURITY_CAPABILITIES` declaration in its `meta-avocado` machine conf; if the two ever disagree, the conf is authoritative. In the verity and boot FIT columns, `n/a` means the platform has no such mechanism, and `no` means the machine does not build or declare it today.
 
-| Target                                                  | Encrypted `/var` | Signed boot FIT                        | Rootfs verity                            | Declared capabilities                                                        |
-| ------------------------------------------------------- | ---------------- | -------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------- |
-| `imx8mp-evk`                                            | yes              | yes                                    | yes                                      | `encrypted-var verified-boot` — CAAM-backed key                              |
-| `imx93-frdm`                                            | yes              | yes                                    | yes                                      | `encrypted-var verified-boot` (plus `ftpm tpm2` with OP-TEE); AHAB available |
-| `imx91-frdm`                                            | not yet declared | no                                     | hash partitions staged, no FIT           | AHAB boot-container signing only                                             |
-| `imx93-evk`, `imx95-frdm`, `var-dart`, `ucm-imx8m-plus` | not yet declared | no                                     | hash partitions staged, no FIT           | `booti` boot flow                                                            |
-| `jetson-*`                                              | yes              | n/a — NVIDIA boot chain, no U-Boot FIT | n/a — no boot FIT to carry the root hash | `encrypted-var ftpm tpm2` — key sealed to the OP-TEE fTPM                    |
-| `qemuarm64`                                             | yes              | no                                     | no                                       | `encrypted-var ftpm tpm2`                                                    |
-| `qemux86-64`                                            | yes              | no                                     | no                                       | `encrypted-var tpm2`                                                         |
-| `intel-x86-64-v2/v3/v4`                                 | not yet declared | no                                     | no                                       | `tpm2`                                                                       |
-| `raspberrypi*`                                          | no               | no                                     | no                                       | `""` — MBR layout, no dm-crypt kernel fragment yet                           |
+<SecurityMatrix />
 
 **Extension** dm-verity is not in this table because it does not depend on the machine: it is carried in the runtime manifest and applied by avocadoctl, so `extensions.<name>.image.verity` works on every target running avocadoctl 0.11.0 or newer. Only _rootfs_ verity needs the boot FIT and the per-slot hash partitions above.
 

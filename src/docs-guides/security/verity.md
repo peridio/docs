@@ -54,7 +54,7 @@ The rootfs tree is written as a standalone image, not appended, because systemd'
   signing.fit_unsigned: true if this machine's U-Boot enforces no key.
   ```
 
-  The other i.MX stone manifests (`imx93-evk`, `imx91-frdm`, `imx95-frdm`, `var-dart`, `ucm-imx8m-plus`) already stage the hash partitions, but boot with `booti` rather than a FIT, so there is nothing to carry the root hash yet.
+  The other i.MX stone manifests (`imx93-evk`, `imx91-frdm`, `imx95-frdm`, `imx8mp-var-dart`, `ucm-imx8m-plus`) already stage the hash partitions, but boot with `booti` rather than a FIT, so there is nothing to carry the root hash yet.
 
 - For **extension** verity: avocadoctl 0.11.0 or newer on the device — it passes `--root-hash` to its single dissect call. This is machine-agnostic, so extension verity works on targets that have no rootfs verity path, Jetson included. Older avocadoctl builds mount an extension unverified without complaining.
 

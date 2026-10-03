@@ -6,6 +6,7 @@ hide_title: true
 ---
 
 import HardwareHero from '@site/src/components/HardwareHero'
+import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
 
 <HardwareHero
   vendor="NXP"
@@ -105,13 +106,7 @@ Time-sensitive networking with dual Gigabit Ethernet supports deterministic cont
 
 The published i.MX 8M Plus feed builds every security capability this SoC can deliver; each one is opted into per runtime in `avocado.yaml`, with no distro rebuild.
 
-| Capability            | Status on `imx8mp-evk`                                                |
-| --------------------- | --------------------------------------------------------------------- |
-| Encrypted `/var`      | Built. Key bound to a CAAM black key, stored in the LUKS2 header      |
-| Signed boot FIT       | Built. U-Boot re-packed with your key, so the first flash enforces it |
-| dm-verity rootfs      | Built. Root hash carried in the signed FIT                            |
-| dm-verity extensions  | Built                                                                 |
-| Bootloader OTA (eMMC) | Built. `boot0`/`boot1` coupled to the OS slots, with rollback         |
+<SecurityCapabilities machine="imx8mp-evk" />
 
 ```yaml title="avocado.yaml"
 rootfs:
