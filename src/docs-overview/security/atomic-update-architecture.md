@@ -33,7 +33,7 @@ At any given time, one slot is active and one is inactive. Updates are written e
 ### Update flow
 
 1. **Download** — The update payload is downloaded and written to the inactive slot. The active system continues running normally throughout.
-2. **Verify** — Cryptographic signatures are validated against the signing keys provisioned on the device. The dm-verity hash tree is verified for the new root filesystem.
+2. **Verify** — Cryptographic signatures are validated against the signing keys provisioned on the device. dm-verity is not checked here: when the rootfs opts in with `rootfs.image.verity`, each block is verified as it is read after boot (see [Filesystem verity](/developer-reference/security/verity)).
 3. **Commit** — The bootloader is atomically updated to point to the new slot on next boot. This is a single flag flip — not a gradual migration.
 4. **Reboot** — The device boots into the new slot. The bootloader marks it as "pending verification."
 5. **Health check** — The new system runs self-diagnostics. If the system is healthy, the slot is marked as "good." If not, the next reboot automatically falls back to the previous slot.

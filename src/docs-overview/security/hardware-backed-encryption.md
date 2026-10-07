@@ -13,7 +13,7 @@ Data at rest protection standard.
 See [Encrypted /var](/developer-reference/security/encrypted-var) in the developer reference for the `var.encrypt` opt-in, choosing the key engine with `var.hardware`, and holding an operator recovery key.
 :::
 
-Avocado OS implements LUKS (Linux Unified Key Setup) encryption to protect sensitive data on deployed devices. When hardware security modules are available — TPMs, TrustZone TEEs, or secure enclaves — Avocado uses them to seal encryption keys so they never exist in accessible memory. For devices without dedicated security hardware, the platform provides software-based key derivation that still delivers meaningful protection.
+Avocado OS implements LUKS (Linux Unified Key Setup) encryption to protect sensitive data on deployed devices. When hardware security modules are available — TPMs, TrustZone TEEs, or secure enclaves — Avocado uses them to bind a `/var` keyslot to the device. For devices without dedicated security hardware, the platform derives the key in software. Either way, every time `/var` is opened its volume key is linked into root's user keyring so `avocadoctl var-key` can change keyslots (see [Encrypted /var](/developer-reference/security/encrypted-var#how-the-keyslot-change-is-authorized)).
 
 Where the keys live matters as much as the encryption itself. A LUKS volume whose key is stored in a plaintext file on the same disk provides no real protection. Hardware-backed key storage ensures that encryption keys are bound to specific hardware and cannot be extracted, even with physical access to the storage media.
 
@@ -31,23 +31,13 @@ When the target hardware provides a security module, Avocado uses it:
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | TPM 2.0                                                 | Key sealed to TPM PCR state — only released when boot chain is in a known-good state |
 | ARM TrustZone TEE                                       | Key stored in secure world, inaccessible from normal world OS                        |
-| Secure enclave (e.g., NXP CAAM, NVIDIA security engine) | Key derived from hardware-unique secrets, never leaves the enclave                   |
-| Crypto authentication co-processor                      | Key sealed to device-specific identity                                               |
+| Secure enclave (NXP CAAM, i.MX 8M)                      | Keyslot passphrase derived from a CAAM black key stored in the LUKS2 header          |
 
-The key point: encryption keys are bound to the hardware. Removing the storage media and mounting it on another device won't decrypt the data. The key only exists inside the security module on the original device.
+The hardware keyslot is bound to the device it was enrolled on. It is not the only keyslot: every platform also enrolls an Argon2id key derived from the SoC UID, which anyone who can read the UID can reproduce. Enrolling an operator recovery key with `avocado var-key enroll` lets the initramfs retire that keyslot; until it does, treat the media as readable by someone who also has the UID. See the [per-platform table](/developer-reference/security/encrypted-var#what-binds-the-key-on-each-platform).
 
 ### Software fallback
 
-Not every embedded platform has a dedicated security module. For these devices, Avocado supports split-knowledge key derivation using Argon2id — a memory-hard key derivation function that combines multiple device-specific inputs (hardware serial numbers, provisioned secrets, boot state) to derive the encryption key. This makes brute-force extraction significantly harder than a simple passphrase, even without hardware protection.
-
-### Per-application encryption domains
-
-Through Avocado's extension system, different applications can maintain separate encryption domains. A system extension containing an AI model can encrypt its model weights with application-specific keys, separate from the system-level encryption. This multi-layered approach means:
-
-- Sensitive application data is encrypted with application-specific keys
-- System data uses system-level encryption
-- Compromise of one domain doesn't expose the other
-- Extensions can be encrypted independently of each other
+Not every embedded platform has a dedicated security module. For these devices, Avocado derives the key with Argon2id, a memory-hard key derivation function, from a single input: the SoC UID (the device tree `serial-number`, then `soc0/serial_number`). That binds the key to the unit but does not keep it secret from anyone who can read the UID, which is why the [operator recovery key](/developer-reference/security/encrypted-var#operator-recovery-key) exists.
 
 ### Hardware-accelerated cryptography
 
@@ -55,11 +45,4 @@ Avocado automatically detects and uses hardware cryptographic accelerators prese
 
 ## Provisioning and key management
 
-Key provisioning is integrated into the `avocado provision` workflow. During manufacturing provisioning, the CLI can:
-
-- Generate and seal device-unique encryption keys
-- Program keys into hardware security modules
-- Establish key hierarchies for multi-tenant or multi-domain encryption
-- Record key metadata for fleet-level key management
-
-This happens as part of the standard provisioning flow — not as a separate manual step on the manufacturing line.
+`avocado provision` flashes the image; it does not create or program the `/var` key. With `var.encrypt` on, the device's first boot encrypts the flashed `/var` in place and enrolls the hardware keyslot where the board has one. An operator-held recovery key is added per unit afterwards with `avocado var-key enroll`, derived from a master secret that never enters a build. See [Encrypted /var](/developer-reference/security/encrypted-var).

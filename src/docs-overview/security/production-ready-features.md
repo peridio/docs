@@ -87,7 +87,7 @@ Common Criteria evaluations assess products against a defined set of security fu
 - **Audit** — Security-relevant events must be logged, and logs must be protected from tampering. The OS must record boot events, authentication attempts, configuration changes, and integrity verification results.
 - **Self-protection** — The OS must protect its own integrity. Runtime modification of system code or security policy must be prevented.
 
-**How Avocado addresses this:** Extension isolation enforces security domain separation structurally — each extension is an independent overlay that cannot modify the core OS or other extensions. Secure boot establishes the trusted boot chain from silicon through application code. The read-only root filesystem provides self-protection — there is no mechanism to modify system code at runtime, even with root access. Systemd journal logging captures boot and runtime events with tamper-evident properties when combined with the immutable root.
+**How Avocado addresses this:** Secure boot establishes the trusted boot chain from silicon through application code. The read-only root filesystem provides self-protection: the root image itself cannot be written. System extensions are merged into the same `/usr` and `/opt` overlay as the base OS rather than into separate security domains, and by default that overlay has an ephemeral writable layer that a reboot discards (see [Testing a binary without an RPM](/developer-reference/avocadoctl/development#testing-a-binary-without-an-rpm)). Systemd journal logging captures boot and runtime events.
 
 #### FIPS 140-3
 
@@ -110,17 +110,17 @@ These data protection regulations apply when embedded devices process personal d
 - **Data minimization** — The system should only store the personal data necessary for its function. The OS architecture should support selective encryption and data lifecycle management.
 - **Right to erasure** — For GDPR, the system must be able to cryptographically erase personal data on request. This means the OS must support secure key destruction, which effectively renders the encrypted data unrecoverable.
 
-**How Avocado addresses this:** LUKS encryption provides data at rest protection for the writable var partition where application data lives. Per-application encryption domains through the extension system support data minimization — different data classes can be encrypted with different keys. Secure key destruction via the hardware security module enables cryptographic erasure for right-to-erasure requests. Extension isolation provides structural access control boundaries between application components. Systemd journal logging provides audit trail capabilities.
+**How Avocado addresses this:** LUKS encryption provides data at rest protection for the writable var partition where application data lives. That is one volume key for all of `/var`; there are no per-application encryption domains or per-extension keys. Systemd journal logging provides audit trail capabilities.
 
 ## Runtime security
 
 ### Immutable system core
 
-The read-only root filesystem prevents runtime modification of system binaries, libraries, and configuration. Even with root access in production mode, the SquashFS root cannot be written to. Combined with dm-verity, this ensures that the system running in the field is exactly the system that was built and signed.
+The read-only root filesystem prevents persistent runtime modification of system binaries, libraries, and configuration. Even with root access in production mode, the EROFS root image cannot be written to. Once system extensions are merged, `/usr` is an overlay whose default writable layer is a tmpfs, so a write there lands in memory and is gone after a reboot (see [Testing a binary without an RPM](/developer-reference/avocadoctl/development#testing-a-binary-without-an-rpm)). With dm-verity enabled through `rootfs.image.verity`, every block of the root image is also verified as it is read (see [Filesystem verity](/developer-reference/security/verity)).
 
-### Extension isolation
+### Extension integrity
 
-System extensions overlay onto the immutable root but maintain clear boundaries. Each extension is independently signed, independently verified, and independently updatable. A compromised application extension cannot modify the core OS or other extensions — the overlay architecture enforces this structurally, not just by policy.
+System extensions overlay onto the immutable root and are updated independently. An extension built with `image.verity` is verified at read time against the root hash in the runtime manifest (see [Filesystem verity](/developer-reference/security/verity)). The overlay does not isolate extensions from each other or from the core OS: they are merged into the same `/usr` and `/opt` tree.
 
 ### Recovery mode
 
