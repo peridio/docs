@@ -120,7 +120,7 @@ The read-only root filesystem prevents persistent runtime modification of system
 
 ### Extension integrity
 
-System extensions overlay onto the immutable root and are updated independently. An extension built with `image.verity` is verified at read time against the root hash in the runtime manifest (see [Filesystem verity](/developer-reference/security/verity)). The overlay does not isolate extensions from each other or from the core OS: they are merged into the same `/usr` and `/opt` tree.
+System extensions overlay onto the immutable root and are updated independently. An extension built with `image.verity` is verified at read time against the root hash in the runtime manifest, which requires avocadoctl 0.11.0 or newer on the device: older versions mount a verity extension unverified without any warning (see [Filesystem verity](/developer-reference/security/verity)). The overlay does not isolate extensions from each other or from the core OS: they are merged into the same `/usr` and `/opt` tree.
 
 ### Recovery mode
 
