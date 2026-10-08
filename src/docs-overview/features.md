@@ -84,14 +84,14 @@ Systemd extensions give you the same dependency declaration benefit without the 
 
 ## Immutable System Architecture
 
-The base system is read-only. Everything below the line is immutable SquashFS. Everything above it is your space to work in. A/B slots protect every layer.
+The base system is read-only. Everything below the line is immutable EROFS. Everything above it is your space to work in. A/B slots protect every layer.
 
 ```text
 ┌─────────────────────────────────────────────┐
 │  /var  ·  BTRFS  ·  read-write              │  Your data, state, logs
 │  Extensions, app data, sub-volumes          │
 ├─────────────────────────────────────────────┤
-│  Extensions  ·  SquashFS  ·  read-only      │  Apps, configs, kernel modules
+│  Extensions  ·  EROFS  ·  read-only         │  Apps, configs, kernel modules
 ├──────────────────────┬──────────────────────┤
 │  Avocado Linux (A)   │  Avocado Linux (B)   │  Immutable base OS
 ├──────────────────────┼──────────────────────┤
