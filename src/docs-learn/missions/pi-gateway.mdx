@@ -69,7 +69,7 @@ During the build, the reference's `app-compile.sh` runs `uv pip install` inside 
 Insert the microSD card into the reader on your host, then write the `dev` runtime to it with the `sd` profile.
 
 ```bash
-avocado provision -r dev --profile sd
+avocado provision dev --profile sd
 ```
 
 The CLI lists the available block devices and prompts you to select the target. Check that you pick the SD card, because this operation overwrites the selected disk.
