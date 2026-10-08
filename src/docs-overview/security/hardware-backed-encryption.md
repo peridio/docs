@@ -27,11 +27,11 @@ Avocado uses LUKS2 with AES-256-XTS to encrypt the writable `/var` partition. Th
 
 When the target hardware provides a security module, Avocado uses it:
 
-| Hardware                                                | Key storage mechanism                                                                |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| TPM 2.0                                                 | Key sealed to TPM PCR state — only released when boot chain is in a known-good state |
-| ARM TrustZone TEE                                       | Key stored in secure world, inaccessible from normal world OS                        |
-| Secure enclave (NXP CAAM, i.MX 8M)                      | Keyslot passphrase derived from a CAAM black key stored in the LUKS2 header          |
+| Hardware                           | Key storage mechanism                                                                |
+| ---------------------------------- | ------------------------------------------------------------------------------------ |
+| TPM 2.0                            | Key sealed to TPM PCR state — only released when boot chain is in a known-good state |
+| ARM TrustZone TEE                  | Key stored in secure world, inaccessible from normal world OS                        |
+| Secure enclave (NXP CAAM, i.MX 8M) | Keyslot passphrase derived from a CAAM black key stored in the LUKS2 header          |
 
 The hardware keyslot is bound to the device it was enrolled on. It is not the only keyslot: every platform also enrolls an Argon2id key derived from the SoC UID, which anyone who can read the UID can reproduce. Enrolling an operator recovery key with `avocado var-key enroll` lets the initramfs retire that keyslot; until it does, treat the media as readable by someone who also has the UID. See the [per-platform table](/developer-reference/security/encrypted-var#what-binds-the-key-on-each-platform).
 
