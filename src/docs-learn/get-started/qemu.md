@@ -64,7 +64,7 @@ avocado build
 Provision creates the bootable disk image for the `dev` runtime. Because QEMU is virtual, the provisioning artifacts are written to disk on your development machine rather than flashed to hardware.
 
 ```bash
-avocado provision -r dev
+avocado provision dev
 ```
 
 ## Run

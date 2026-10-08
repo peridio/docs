@@ -138,7 +138,7 @@ Install the SDK container, the SDK packages from Step 2, and the extension and r
 
 ```bash
 # Install the SDK toolchain, extension dependencies, and runtime packages
-avocado install -f
+avocado install
 ```
 
 ## Step 4: Run the compile step alone
@@ -191,7 +191,7 @@ Provision the image and boot it. On Linux, forward port `4000` so you can open t
 
 ```bash
 # Create the bootable disk image
-avocado provision -r dev
+avocado provision dev
 
 # Boot in QEMU and forward host port 4000 to the device
 avocado sdk run -iE vm dev --host-fwd "4000-:4000"
@@ -244,7 +244,7 @@ avocado sdk compile example-reactjs-app
 avocado build
 
 # Recreate the disk image and boot it
-avocado provision -r dev
+avocado provision dev
 avocado sdk run -iE vm dev --host-fwd "4000-:4000"
 ```
 
