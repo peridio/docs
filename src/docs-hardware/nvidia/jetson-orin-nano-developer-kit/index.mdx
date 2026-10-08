@@ -108,4 +108,21 @@ Reuse Avocado OS layers across ARM/NPU SoCs (Qualcomm Rubik Pi 3, MediaTek Genio
 
 ### Init, Install, & Build
 
-Follow the [Jetson Orin Nano Getting Started](/learn/get-started/jetson) guide to begin. This target is `jetson-orin-nano-devkit`.
+Follow the [Jetson Orin Nano Getting Started](/learn/get-started/jetson) guide to begin. This target is `jetson-orin-nano-devkit`. The provisioning specifics are below.
+
+### Provision
+
+The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container. You need an NVMe SSD (M.2 2280 form factor) installed in the developer kit and a USB-C cable from your host to the Jetson's USB-C port.
+
+Put the board into USB recovery mode before provisioning. With the device powered off, short the **FC REC** pin to **GND** with a jumper, connect the USB-C cable, and apply power. Running `lsusb` on the host shows an entry containing `NVIDIA Corp. APX` when the device is in recovery mode. See [Boot into recovery mode](/learn/get-started/jetson#boot-into-recovery-mode) for details.
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile tegraflash
+```
+
+### Run
+
+After provisioning completes, remove power from the Jetson, remove the jumper shorting **FC REC** to **GND**, remove the USB-C cable, and apply power.
+
+The device will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
