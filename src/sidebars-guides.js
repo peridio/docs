@@ -5,19 +5,6 @@ const sidebars = {
   guides: [
     {
       type: 'category',
-      label: 'Getting Started',
-      collapsible: false,
-      collapsed: false,
-      items: [
-        'getting-started/index',
-        'getting-started/qemu',
-        'getting-started/raspberry-pi',
-        'getting-started/jetson',
-        'getting-started/any-target',
-      ],
-    },
-    {
-      type: 'category',
       label: 'References',
       collapsible: false,
       collapsed: false,

@@ -165,7 +165,7 @@ To inspect what was produced, `avocado save` exports the build state - the archi
 avocado save -o build-state.tar.zst
 ```
 
-Then flash the board. Provisioning is not specific to overlays, so follow [Getting started: Jetson](./getting-started/jetson) for the procedure - put the board in recovery mode and run `avocado provision -r dev --profile tegraflash`.
+Then flash the board. Provisioning is not specific to overlays, so follow [Getting started: Jetson](/learn/get-started/jetson) for the procedure - put the board in recovery mode and run `avocado provision -r dev --profile tegraflash`.
 
 :::note how these results were produced
 Every result on this page came from running the board's `stone-provision-tegraflash.sh` directly on the host, driving it with `AVOCADO_STONE_MANIFEST`, `AVOCADO_STONE_DATA_DIR` and `AVOCADO_PROVISION_PROFILE`, rather than through `avocado provision`. Both paths flash the same artifacts, and the overlay is merged into the DTB at build time either way, so nothing on this page depends on which one you use. It is recorded because it is the difference between what was verified and what is documented.

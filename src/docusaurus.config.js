@@ -77,6 +77,12 @@ const config = {
           // on prose describing the app instead of anywhere you could get it.
           // The CLI installation page is the in-docs handover point, and it links
           // on to the full artifact list on peridio.com/downloads.
+          // Get Started moved from Developer Reference to Learn.
+          { from: '/developer-reference/getting-started', to: '/learn/get-started' },
+          ...['qemu', 'raspberry-pi', 'jetson', 'any-target', 'frdm-imx93'].map((page) => ({
+            from: `/developer-reference/getting-started/${page}`,
+            to: `/learn/get-started/${page}`,
+          })),
           // The OTA guide became the first Learn mission.
           { from: '/developer-reference/ota', to: '/learn/missions/first-ota' },
           {
@@ -230,7 +236,7 @@ const config = {
             activeBasePath: 'hardware',
           },
           {
-            to: '/developer-reference/getting-started',
+            to: '/developer-reference/avocado-cli/overview',
             label: 'Developer Reference',
             position: 'left',
             activeBasePath: 'developer-reference',

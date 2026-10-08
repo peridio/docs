@@ -34,7 +34,7 @@ Our engineering team reviews requests regularly when planning future platform su
 
 In the meantime, you don't need supported hardware to start exploring. You can run Avocado OS right now in an emulator with QEMU — no board required. It's the fastest way to experience the workflow, build a runtime, and get a real feel for the platform while we work on your target.
 
-Head over to [Getting Started with QEMU](/developer-reference/getting-started/qemu) to spin up Avocado OS in minutes.
+Head over to [Getting Started with QEMU](/learn/get-started/qemu) to spin up Avocado OS in minutes.
 
 ## Custom hardware
 
