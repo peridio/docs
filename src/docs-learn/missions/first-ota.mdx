@@ -141,7 +141,7 @@ The numbers depend on your VM. Only the field names matter here.
 
 ## Step 5: Make a change and upload it
 
-Add a new metric, free disk space, to the heartbeat script. In `heartbeat/overlay/usr/local/bin/heartbeat.sh`, read the free space on `/` and add it to the JSON line:
+Add a new metric, free disk space, to the heartbeat script. In `heartbeat/overlay/usr/local/bin/heartbeat.sh`, read the free space on `/var` and add it to the JSON line. The root filesystem is a read-only image, so `/var`, the writable data partition, is the one that changes:
 
 ```sh title="heartbeat/overlay/usr/local/bin/heartbeat.sh"
 #!/bin/sh
@@ -157,7 +157,7 @@ while true; do
   mem_total_kb=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
   load_1m=$(awk '{print $1}' /proc/loadavg)
   # highlight-next-line
-  disk_free_kb=$(df -k / | awk 'NR==2 {print $4}')
+  disk_free_kb=$(df -k /var | awk 'NR==2 {print $4}')
   ts=$(date +%s)
 
   # highlight-start
@@ -226,7 +226,7 @@ avocado build
 
 ## Step 6: Create a deployment
 
-Deployments target a cohort, so before creating one, make sure your device is assigned to a cohort: on the device's **Overview** in Connect, use **Assign** next to **Cohort**, pick the cohort, and **Save**.
+Deployments target a cohort. The device usually has one already, because `avocado connect init` assigns the project's default cohort. Check the **Cohort** field on the device's **Overview** in Connect. If it's empty, use **Assign** next to **Cohort**, pick the cohort, and **Save**.
 
 <div className="framed-shot">
   <img
@@ -239,7 +239,7 @@ Deployments target a cohort, so before creating one, make sure your device is as
 
 ### Option A: Avocado CLI
 
-- Run `avocado connect deploy --activate`. The command is interactive: first, select the published runtime version to deploy.
+- Run `avocado connect deploy --activate`. If the project has more than one published runtime, the command asks which version to deploy. With only one, it picks that one and skips the prompt.
 
 <div className="framed-shot">
   <img
@@ -250,7 +250,7 @@ Deployments target a cohort, so before creating one, make sure your device is as
   />
 </div>
 
-- Next, select the cohort to target.
+- If there's more than one cohort, it then asks which cohort to target. With only one, it skips this prompt too.
 
 <div className="framed-shot">
   <img
@@ -340,7 +340,7 @@ Go back to the VM terminal that is following the heartbeat log. Once the device 
   "mem_free_kb": 397980,
   "mem_total_kb": 524288,
   "load_1m": "0.02",
-  "disk_free_kb": 3841024,
+  "disk_free_kb": 276480,
   "ts": 1740700500
 }
 ```
