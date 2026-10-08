@@ -171,7 +171,7 @@ The heartbeat extension is built entirely from its overlay files.
 Create the bootable disk image for the `dev` runtime, then boot it:
 
 ```bash
-avocado provision -r dev
+avocado provision dev
 avocado sdk run -iE vm dev
 ```
 
@@ -227,7 +227,7 @@ After any change to overlay files, rebuild and reprovision, then boot again:
 
 ```bash
 avocado build
-avocado provision -r dev
+avocado provision dev
 avocado sdk run -iE vm dev
 ```
 

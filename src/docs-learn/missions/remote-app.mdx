@@ -77,7 +77,7 @@ Install the SDK and extension dependencies, then build. The build runs `reactjs-
 
 ```bash
 # Install the SDK toolchain, extension dependencies, and runtime packages
-avocado install -f
+avocado install
 
 # Build the extensions (cross-compiles the React app) and the runtime image
 avocado build
@@ -95,7 +95,7 @@ Provision a bootable disk image for the `dev` runtime and boot it in QEMU.
 
 ```bash
 # Create the bootable disk image
-avocado provision -r dev
+avocado provision dev
 
 # Boot the image in a QEMU virtual machine
 avocado sdk run -iE vm dev

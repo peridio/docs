@@ -97,7 +97,7 @@ lsusb | grep -i nvidia
 Look for an entry containing `NVIDIA Corp. APX`. Then flash the `dev` runtime with the `tegraflash` profile, which writes it to the NVMe SSD.
 
 ```bash
-avocado provision -r dev --profile tegraflash
+avocado provision dev --profile tegraflash
 ```
 
 When provisioning completes, the CLI prints:
