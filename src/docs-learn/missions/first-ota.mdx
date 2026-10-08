@@ -97,13 +97,13 @@ Install the dependencies, build the runtime, and provision a QEMU disk image:
 
 ```bash
 # Install the SDK toolchain, extension dependencies, and runtime packages
-avocado install -f
+avocado install
 
 # Build the extensions and assemble the runtime
 avocado build
 
 # Create the bootable disk image for the dev runtime
-avocado provision -r dev
+avocado provision dev
 ```
 
 Boot the virtual device:
