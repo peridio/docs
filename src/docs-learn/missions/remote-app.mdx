@@ -103,6 +103,10 @@ avocado sdk run -iE vm dev
 
 Log in as `root` with an empty password. The device claims itself with the token from Step 2.
 
+:::note[Reusing a QEMU device]
+Every QEMU VM reports the same hardware ID. If you already claimed a QEMU device in your organization, for example in [First OTA](/learn/missions/first-ota), Connect treats this one as that device coming back and holds it as a reclaim request. Approve the request from the banner on the device page or under **Settings → Reclaim requests**, and the device comes online.
+:::
+
 <OpenInConnect to="fleet">Open Fleet</OpenInConnect>
 
 On the **Fleet** page, your new device appears with the status **Online**.
