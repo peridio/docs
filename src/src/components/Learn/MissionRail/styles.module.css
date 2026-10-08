@@ -56,7 +56,11 @@
 }
 
 .step_complete::before {
-  border-left-color: var(--ifm-color-success-light);
+  border-left-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 35%,
+    var(--ifm-color-emphasis-300)
+  );
 }
 
 .stepLast {
@@ -88,8 +92,8 @@
 }
 
 .marker_complete {
-  border-color: var(--ifm-color-success);
-  color: var(--ifm-color-success);
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 55%, var(--ifm-color-emphasis-300));
+  color: color-mix(in srgb, var(--ifm-color-primary) 70%, var(--ifm-color-content-secondary));
 }
 
 .body {
@@ -121,7 +125,7 @@
 }
 
 .status_complete {
-  color: var(--ifm-color-success);
+  color: color-mix(in srgb, var(--ifm-color-primary) 70%, var(--ifm-color-content-secondary));
 }
 
 .description {
@@ -157,7 +161,7 @@
 }
 
 .pathComplete {
-  border-color: var(--ifm-color-success-light);
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 35%, var(--ifm-color-emphasis-300));
 }
 
 .pathTitle {
