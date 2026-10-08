@@ -71,7 +71,7 @@ If your Linux desktop auto-mounts removable media, disable it first — see [Lin
 Insert your SD card into a reader on your host, then run the `sd` profile, which writes the image directly to the SD card:
 
 ```bash
-avocado provision -r dev --profile sd
+avocado provision dev --profile sd
 ```
 
 ### Option B — USB (no card reader)
@@ -94,7 +94,7 @@ Use a **data-capable** USB-C cable and a host port that can source adequate curr
 4. The Pi boots into USB device mode and your host detects it as a USB mass storage device. Provision with the `usb` profile:
 
 ```bash
-avocado provision -r dev --profile usb
+avocado provision dev --profile usb
 ```
 
 In either case, the CLI detects the available block devices and prompts you to select the target. Verify you select the correct device — this operation overwrites the target disk.
