@@ -2,16 +2,184 @@
 title: 'Remote App'
 sidebar_position: 2
 description: 'Cross-compile a React app, deploy it to your device, and open its UI through a remote tunnel.'
+copy_markdown: true
 ---
 
+import { Steps, Step } from '@site/src/components/Learn/Steps'
 import MarkComplete from '@site/src/components/Learn/MarkComplete'
+import OpenInConnect from '@site/src/components/Learn/OpenInConnect'
 
-Cross-compile a React app, deploy it to your device, and open its UI through a remote tunnel.
+In this mission you build the [React Dashboard reference](/developer-reference/references/react-dashboard), boot it on a QEMU device, and open its web UI from your browser through an Avocado Connect remote tunnel. The app is a React + Vite frontend served by an Express server that reports live system metrics from the device.
 
-:::info[Coming soon]
+You will learn how to:
 
-This mission is moving here from Avocado Connect's LaunchPad. Until then, see [Remote Tunnel](/developer-reference/remote-tunnel) for reaching a web UI on a device.
+- Cross-compile a Node.js application inside the Avocado SDK container and package it as an extension
+- Confirm that an application runs as a systemd service on the device
+- Open a tunnel to a custom port and reach a device's web UI from anywhere
+
+## Prerequisites
+
+- You completed [First OTA](/learn/missions/first-ota): the Avocado CLI is installed, Docker is running, and you have an Avocado Connect account
+- About 30 minutes, most of it spent on the first build
+
+If the QEMU device from First OTA is still running, run `poweroff` in its console before you start. This mission boots a new device from a new project.
+
+## Step 1: Create the project
+
+Initialize a new project from the `react-dashboard` reference and enter its directory. The reference contains the React source in `ref-reactjs/`, the build scripts that compile it, and the systemd unit that starts it on boot.
+
+```bash
+# Create my-react-app/ from the react-dashboard reference
+avocado init --reference react-dashboard my-react-app
+cd my-react-app
+```
+
+## Step 2: Connect the project
+
+Log in to Avocado Connect and link the project to it. `avocado connect init` writes your organization, project and claim token into `avocado.yaml`, and adds the Connect extensions (`avocado-ext-connect-config`, `avocado-ext-connect` and `avocado-ext-tunnels`) to the `dev` runtime so the device can enroll and accept tunnels.
+
+```bash
+# Authenticate in the browser (skip if you are already logged in)
+avocado connect auth login
+
+# Link the project, create a claim token, and add the Connect extensions
+avocado connect init
+```
+
+### Add the Connect extensions to the QEMU target
+
+The `react-dashboard` reference gives QEMU targets their own extension list, because QEMU has no display and skips the kiosk browser. A target list replaces the main `dev` list rather than adding to it, so the extensions `avocado connect init` just added don't reach a QEMU image yet. Without them the device can't enroll or accept tunnels.
+
+In `avocado.yaml`, add the three Connect extensions to the `qemux86-64` list under `runtimes.dev` (and to `qemuarm64` if you build for Arm):
+
+```yaml title="avocado.yaml"
+runtimes:
+  dev:
+    # ...
+    qemux86-64:
+      extensions:
+        - example-reactjs
+        - avocado-ext-dev
+        - avocado-ext-sshd-dev
+        - avocado-bsp-{{ avocado.target.board }}
+        # highlight-start
+        - avocado-ext-connect-config
+        - avocado-ext-connect
+        - avocado-ext-tunnels
+        # highlight-end
+```
+
+Keep `avocado-ext-connect-config` before `avocado-ext-connect`, the same order `avocado connect init` uses in the main list.
+
+## Step 3: Build the runtime
+
+Install the SDK and extension dependencies, then build. The build runs `reactjs-compile.sh` inside the SDK container, which runs `npm install` and `npm run build` to produce the optimized frontend. `reactjs-install.sh` then copies the app into the extension at `/usr/lib/ref-reactjs/`.
+
+```bash
+# Install the SDK toolchain, extension dependencies, and runtime packages
+avocado install
+
+# Build the extensions (cross-compiles the React app) and the runtime image
+avocado build
+```
+
+When the build finishes, the CLI prints:
+
+```
+[SUCCESS] All components built successfully!
+```
+
+## Step 4: Provision and boot the device
+
+Provision a bootable disk image for the `dev` runtime and boot it in QEMU.
+
+```bash
+# Create the bootable disk image
+avocado provision dev
+
+# Boot the image in a QEMU virtual machine
+avocado sdk run -iE vm dev
+```
+
+Log in as `root` with an empty password. The device claims itself with the token from Step 2.
+
+:::note[Reusing a QEMU device]
+Every QEMU VM reports the same hardware ID. If you already claimed a QEMU device in your organization, for example in [First OTA](/learn/missions/first-ota), Connect treats this one as that device coming back and holds it as a reclaim request. Approve the request from the banner on the device page or under **Settings → Reclaim requests**, and the device comes online.
+:::
+
+<OpenInConnect to="fleet">Open Fleet</OpenInConnect>
+
+On the **Fleet** page, your new device appears with the status **Online**.
+
+## Step 5: Check the app on the device
+
+In the QEMU console, confirm that the React app runs as the `ref-reactjs` systemd service.
+
+```bash
+# Check the service status
+systemctl status ref-reactjs
+```
+
+The output includes:
+
+```
+Active: active (running)
+```
+
+Read the service logs to see which port the server listens on:
+
+```bash
+# Show the app's logs (press Ctrl+C to stop following)
+journalctl -u ref-reactjs --no-pager -f
+```
+
+```
+React.js reference app running on http://0.0.0.0:4000
+```
+
+The server listens on port `4000` on every interface. Next, you reach that port from your browser without forwarding it.
+
+## Step 6: Open a tunnel to port 4000
+
+Open your device in Avocado Connect. In the **Tunnels** panel on the device detail page, choose **Custom**, enter `4000`, and click **Connect**. Connect establishes a WireGuard tunnel to the device. The device dials out, so this works behind NAT or a firewall.
+
+When the tunnel is established, the panel shows an endpoint (a host and port, for example `13.219.213.3:58954`). Copy it.
+
+:::note
+
+The developer plan allows one active tunnel at a time. If another tunnel is open, close it first. See [Remote Tunnel](/developer-reference/remote-tunnel) for screenshots of each stage.
 
 :::
+
+## Step 7: Open the UI
+
+Open `http://<endpoint>` in your browser, using the endpoint you copied. The React dashboard loads from the QEMU device through the tunnel, the same way it would for someone on the device's own network.
+
+The dashboard shows CPU usage with a per-core breakdown, memory, disk, load average, uptime, network interface traffic, and the top processes by memory. Temperature appears on hardware only.
+
+When you are done, click **Close** next to the tunnel. Tunnels also expire on their own after their time-to-live.
+
+## Verify it works
+
+<Steps id="remote-app">
+  <Step id="service-running" title="Service is running">
+    `systemctl status ref-reactjs` on the device shows `Active: active (running)`.
+  </Step>
+  <Step id="device-online" title="Device is online">
+    Your device shows **Online** on the **Fleet** page in Avocado Connect.
+  </Step>
+  <Step id="tunnel-established" title="Tunnel is established">
+    The device's **Tunnels** panel shows an established tunnel on port `4000` with an endpoint.
+  </Step>
+  <Step id="dashboard-loads" title="Dashboard loads through the tunnel">
+    The tunnel endpoint opens the React dashboard in your browser, with live CPU and memory values.
+  </Step>
+</Steps>
+
+## Next steps
+
+- Change the app: edit `ref-reactjs/src/App.jsx` or `ref-reactjs/server.js`, then rebuild and ship it to the device with `avocado connect upload` and `avocado connect deploy`, as in First OTA.
+- Open an SSH tunnel on port `22` for a remote shell. The reference includes `avocado-ext-sshd-dev`.
+- Read [Remote Access](/avocado-connect/tunnels) for how tunnels are brokered and audited.
 
 <MarkComplete mission="remote-app" />
