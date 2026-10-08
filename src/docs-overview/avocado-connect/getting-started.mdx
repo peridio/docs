@@ -1,48 +1,31 @@
 ---
 title: 'Getting Started'
+description: 'Connect an Avocado OS device to Avocado Connect with a claim token and create claim tokens for production runs.'
 ---
 
 # Getting Started
 
-Avocado Connect works with any Avocado OS device. The connection is established during provisioning: when you run `avocado provision`, the device is enrolled with a unique identity certificate and starts reporting to Avocado Connect automatically. Enrollment authenticates against a claim token (created in the console or with `avocado connect init`), so the device joins the right organization the moment it comes online.
+Avocado Connect works with any Avocado OS device. A device connects through a claim token: run `avocado connect init` in your project to link it to Connect and write a claim token into the device configuration, then build and provision the image. On first boot, the device presents the token, receives its credentials, and starts reporting to Avocado Connect in the right organization and cohort.
 
 ---
 
 ## Provision and enroll
 
-1. **Provision your device**: Create a claim token in the console or run `avocado connect init`, then run `avocado provision`. Provisioning flashes the image, provisions keys, and enrolls the device against your claim token in one pass.
-2. **Access the console**: Open the web console for fleet visibility, update management, and remote access to every enrolled device.
-3. **Deploy your first update**: Push an extension update to a single device to verify the pipeline end to end before you roll out to the fleet.
+1. **Link your project**: Sign in with `avocado connect auth login`, then run `avocado connect init` to pick the organization, project, and cohort. It creates a claim token and writes it into your project's device configuration.
+2. **Build and provision your device**: Run `avocado build`, then `avocado provision`. When the device first boots, it claims itself with the token and appears in **Fleet**.
+3. **Deploy your first update**: Upload a runtime and deploy it to the device's cohort to verify the pipeline end to end before you roll out to the fleet. See [Runtimes](/avocado-connect/runtimes) and [Deployments](/avocado-connect/deployments).
 
 ---
 
-## Launchpad
+## Learn by doing
 
-Launchpad is your guided onboarding: a mission sequence that walks you from zero to a working fleet workflow. Pick a starting point and follow the missions in order (**First OTA**, **Remote App**, and **Choose Hardware**), each one a hands-on step that proves out a core capability.
+For a guided walkthrough, start with [Learn](/learn). The [First OTA mission](/learn/missions/first-ota) takes you from a new project to an over-the-air update on a device connected to Avocado Connect.
 
-Launchpad is for getting started, not for day-to-day monitoring. Your organization overview and recent activity live on the **Dashboard**, which becomes your home base once you're up and running.
+---
 
-<div className="framed-shot">
-  <img
-    src="/img/avocado-connect/launchpad.png"
-    alt="Launchpad: pick a starting point, choose your hardware, and follow a guided mission sequence from your first OTA to a remote app."
-    loading="lazy"
-    decoding="async"
-  />
-</div>
+## Claim tokens
 
-Beyond the mission sequence, the **Workflows** tab collects end-to-end recipes, from exploring core concepts to cross-compiling a React or Rust app and pushing an over-the-air update, with more (data egress, hardware-in-the-loop) on the way.
-
-<div className="framed-shot">
-  <img
-    src="/img/avocado-connect/launchpad-workflows.png"
-    alt="Launchpad Workflows: a gallery of guided recipes covering core concepts, cross-compilation, and OTA updates, with more workflows coming soon."
-    loading="lazy"
-    decoding="async"
-  />
-</div>
-
-Claim tokens authorize new devices to enroll into a project. Create them under **Provisioning**, scope each to a cohort, and cap how many devices a token can claim, then use it with `avocado connect init` or `avocado provision`.
+Claim tokens authorize new devices to enroll into a project. Create them on a project's or cohort's **Provisioning** tab, scope each to a cohort, and cap how many devices a token can claim. `avocado connect init` also creates one for you.
 
 <div className="framed-shot">
   <img
@@ -52,3 +35,39 @@ Claim tokens authorize new devices to enroll into a project. Create them under *
     decoding="async"
   />
 </div>
+
+A claim token is a code the device presents on first boot to prove it belongs to your organization. Connect verifies the token, creates the device record, issues the device its credentials, and places it in the token's cohort, with no manual approval step. If a device that's already enrolled claims again, Connect files a reclaim request that an admin approves or denies. Each token tracks how many times it has been used and which devices it claimed, and you can delete a token at any time to revoke it.
+
+### Create a claim token
+
+In the console, open a project, go to the **Provisioning** tab, and click **Create Claim Token**. Copy the token when it appears: it is shown only once.
+
+From the CLI, sign in first, then create the token:
+
+```bash
+avocado connect auth login
+
+# Create a token that up to 10 devices can use
+avocado connect claim-tokens create --name production-batch-1 --max-uses 10
+```
+
+The CLI prompts for the project and cohort; pass `--project <PROJECT_ID>` and `--cohort <COHORT_ID>` to skip the prompts. Tokens expire after 24 hours by default. Omit `--max-uses` for unlimited uses, pass `--no-expiration` to keep the token valid indefinitely, and add `--tag <TAG>` to tag every device that enrolls with it. List and delete tokens with `avocado connect claim-tokens list` and `avocado connect claim-tokens delete --id <TOKEN_ID>`.
+
+With the API, claim tokens are created at the organization level and scoped by `cohort_id`. Without a `cohort_id`, the token uses your organization's default cohort:
+
+```bash
+curl -X POST "https://connect.peridio.com/api/orgs/$ORG_ID/claim_tokens" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"claim_token": {"name": "production-batch-1", "cohort_id": "<COHORT_ID>", "max_uses": 10}}'
+```
+
+The response includes the raw `token` and the `claim_url` devices use to enroll. List a project's tokens with `GET /api/orgs/$ORG_ID/projects/$PROJECT_ID/claim_tokens`. See the [Provisioning API](/developer-reference/avocado-connect-api/provisioning) for every field.
+
+Devices redeem the token by calling `POST /api/device/claim` on first boot. The Avocado agent does this automatically; you don't need to call it yourself.
+
+### Provision devices in manufacturing
+
+`avocado connect init` writes the claim token to `overlay/etc/avocado-conn/config.toml` in your project (the overlay of the `avocado-ext-connect-config` extension), so every device provisioned from that build enrolls itself on first boot. The token it creates has no use limit and doesn't expire. For a production run, create a token for the batch instead, sized with `--max-uses` and tagged with `--tag`, and set it as `claim_token` in that file before you build. Devices land in the right cohort, with the right tags, without anyone touching them.
+
+See [Provisioning](/developer-reference/provisioning) for provisioning profiles and how to flash devices reliably.
