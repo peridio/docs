@@ -1,0 +1,72 @@
+/*
+ * Self-hosted variable fonts, Latin subset only.
+ *
+ * The packages' own stylesheets declare every subset (Cyrillic, Greek,
+ * Vietnamese, ...) and the bundler inlines the small ones into the global
+ * stylesheet as base64, so the faces are declared here by hand. One variable
+ * file per family covers every weight the site uses: Inter is a single 48 KB
+ * request instead of four static weights. Spline Sans and Space Grotesk stay
+ * static (see docusaurus.config.js) because their variable files are larger
+ * than the weights actually used.
+ */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2")
+    format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2")
+    format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2")
+    format("woff2-variations");
+}
+
+/*
+ * Metric-matched fallbacks. With font-display: swap, text paints first in the
+ * fallback and reflows when the web font arrives. Sizing local Arial to each
+ * web font's metrics makes that swap land in place. Values come from the woff2
+ * files above via @capsizecss (createFontStack against Arial); recompute them
+ * if a font file changes. Where Arial is missing (most Android), local() fails
+ * and the stack moves on to sans-serif as before.
+ */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("ArialMT");
+  ascent-override: 90.4365%;
+  descent-override: 22.518%;
+  line-gap-override: 0%;
+  size-adjust: 107.1194%;
+}
+
+@font-face {
+  font-family: "Spline Sans Fallback";
+  src: local("Arial"), local("ArialMT");
+  ascent-override: 95.0286%;
+  descent-override: 23.3256%;
+  line-gap-override: 0%;
+  size-adjust: 101.3906%;
+}
+
+@font-face {
+  font-family: "Geist Fallback";
+  src: local("Arial"), local("ArialMT");
+  ascent-override: 95.9379%;
+  descent-override: 28.1609%;
+  line-gap-override: 0%;
+  size-adjust: 104.7553%;
+}

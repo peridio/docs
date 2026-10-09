@@ -7,6 +7,11 @@ hide_title: true
 
 import Link from '@docusaurus/Link'
 import TileGrid from '@site/src/components/TileGrid'
+import {
+  HiOutlineChatBubbleLeftRight,
+  HiOutlineLifebuoy,
+  HiOutlineBookOpen,
+} from 'react-icons/hi2'
 import styles from '@site/src/css/resources.module.css'
 
 <div className={styles.hero}>
@@ -161,31 +166,19 @@ import styles from '@site/src/css/resources.module.css'
       title: 'Community',
       description: "Join the Discord to ask questions and share what you're building.",
       to: 'https://www.peridio.com/join-our-discord',
-      icon: (
-        <span className="material-symbols-outlined" style={{ fontSize: '28px' }}>
-          forum
-        </span>
-      ),
+      icon: <HiOutlineChatBubbleLeftRight size={32} strokeWidth={1.5} aria-hidden="true" />,
     },
     {
       title: 'Contact Support',
       description: 'Get in touch with the Peridio team for enterprise support.',
       to: 'https://www.peridio.com/contact',
-      icon: (
-        <span className="material-symbols-outlined" style={{ fontSize: '28px' }}>
-          support_agent
-        </span>
-      ),
+      icon: <HiOutlineLifebuoy size={32} strokeWidth={1.5} aria-hidden="true" />,
     },
     {
       title: 'Getting Started Guide',
       description: 'Walk through creating an account and deploying your first update.',
       to: '/developer-reference/getting-started',
-      icon: (
-        <span className="material-symbols-outlined" style={{ fontSize: '28px' }}>
-          menu_book
-        </span>
-      ),
+      icon: <HiOutlineBookOpen size={32} strokeWidth={1.5} aria-hidden="true" />,
     },
   ]}
 />

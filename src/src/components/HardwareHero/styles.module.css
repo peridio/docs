@@ -74,7 +74,7 @@
   align-items: baseline;
   gap: 0.5rem 0.75rem;
   margin: 0;
-  font-family: "Spline Sans", sans-serif;
+  font-family: "Spline Sans", "Spline Sans Fallback", sans-serif;
   line-height: 1;
 }
 
@@ -170,7 +170,7 @@
 }
 
 .statValue {
-  font-family: "Spline Sans", sans-serif;
+  font-family: "Spline Sans", "Spline Sans Fallback", sans-serif;
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--color-text-primary);

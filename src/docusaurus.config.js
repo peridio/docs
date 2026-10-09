@@ -162,7 +162,21 @@ const config = {
           sidebarPath: require.resolve('./sidebars-overview.js'),
         },
         theme: {
-          customCss: [require.resolve('./src/css/custom.css')],
+          // Self-hosted fonts (same origin, font-display: swap, latin subset
+          // fetched on demand). Google Fonts stylesheets were render-blocking
+          // on every page. Weights match what the stylesheets use.
+          customCss: [
+            require.resolve('@fontsource/spline-sans/latin-400.css'),
+            require.resolve('@fontsource/spline-sans/latin-500.css'),
+            require.resolve('@fontsource/spline-sans/latin-600.css'),
+            require.resolve('@fontsource/spline-sans/latin-700.css'),
+            require.resolve('@fontsource/space-grotesk/latin-400.css'),
+            require.resolve('@fontsource/space-grotesk/latin-500.css'),
+            require.resolve('@fontsource/space-grotesk/latin-600.css'),
+            require.resolve('@fontsource/space-grotesk/latin-700.css'),
+            require.resolve('./src/css/fonts.css'),
+            require.resolve('./src/css/custom.css'),
+          ],
         },
       },
     ],
@@ -300,42 +314,6 @@ const config = {
           };
         }
       `,
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
-        crossorigin: 'true',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Space+Grotesk:wght@300..700&family=Spline+Sans:wght@300..700&display=swap',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&display=swap',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
-      },
     },
     {
       tagName: 'script',

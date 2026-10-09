@@ -13,7 +13,7 @@
    (_primitives.css → _semantics.css → _theme-*.css) */
 :root {
   --ifm-navbar-height: 5rem;
-  --ifm-font-family-base: "Inter", sans-serif;
+  --ifm-font-family-base: "Inter", "Inter Fallback", sans-serif;
 }
 
 /* Desktop navbar is two rows (logo + tabs) with height: auto, so the
@@ -61,15 +61,14 @@ main {
   margin-top: 0 !important;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
-
 @font-face {
   font-family: "Avenir";
   src: url("/font/avenir-regular.otf");
+  font-display: swap;
 }
 
 html {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Inter Fallback", sans-serif;
   /* Always reserve the vertical scrollbar's gutter so the viewport width never
      changes when content grows/shrinks (e.g. Field Notes cards + images loading
      in). Without this, the centered `.navbar__inner` shifts sideways every time
@@ -104,7 +103,7 @@ html {
 
 h2,
 .schema-container h2 {
-  font-family: "Spline Sans", sans-serif;
+  font-family: "Spline Sans", "Spline Sans Fallback", sans-serif;
   font-weight: 400;
 }
 
@@ -1189,7 +1188,7 @@ html[data-theme="dark"] .plugin-id-field-notes {
 .plugin-id-field-notes h6,
 .plugin-id-field-notes p,
 .plugin-id-field-notes li {
-  font-family: "Geist", "Inter", sans-serif;
+  font-family: "Geist", "Geist Fallback", sans-serif;
 }
 
 .plugin-id-field-notes code,
