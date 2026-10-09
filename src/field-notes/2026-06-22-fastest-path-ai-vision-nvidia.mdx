@@ -5,12 +5,13 @@ date: 2026-06-22
 authors: [nsinas]
 tags: [nvidia, jetson, deepstream, tensorrt, computer-vision]
 category: 'NVIDIA'
-image: /img/field-notes/2026-06-22-fastest-path-ai-vision-nvidia-thumb.gif
+image: /img/field-notes/2026-06-22-fastest-path-ai-vision-nvidia-thumb.webp
 image_source: local:deepstream-demo.gif
 ---
 
 import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
+import AutoplayVideo from '@site/src/components/AutoplayVideo'
 
 <TestStatus
   targets={['jetson-orin-nano-devkit']}
@@ -61,7 +62,13 @@ The ~9-minute download is the only variable — it scales with your internet con
 
 After the flash, the board reboots straight into the pipeline — open `http://<device-ip>:8080` and you're looking at the live feed. Toggle the Center zone to count people walking into it; flip on the skeleton, pose, and hand overlays to watch keypoints track across the room, all on the GPU. ([Testing the reference](#testing-the-reference) has the health checks.)
 
-![A person moves across the frame while the DeepStream pipeline holds a stable tracker ID and overlays the body skeleton and per-finger hand keypoints in real time, with the zone counter incrementing as they enter the Center ROI.](/img/field-notes/deepstream-demo.gif)
+<AutoplayVideo
+  src="/img/field-notes/deepstream-demo.mp4"
+  poster="/img/field-notes/deepstream-demo-poster.jpg"
+  width={988}
+  height={720}
+  label="A person moves across the frame while the DeepStream pipeline holds a stable tracker ID and overlays the body skeleton and per-finger hand keypoints in real time, with the zone counter incrementing as they enter the Center ROI."
+/>
 
 _The live dashboard on a Jetson Orin Nano: pose and hand tracking on, tracker IDs stable across the frame, and the zone counter incrementing — all rendered on the GPU._
 

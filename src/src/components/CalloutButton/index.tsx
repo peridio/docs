@@ -37,7 +37,7 @@ export default function CalloutButton({ label, cta, href }: CalloutButtonProps) 
         style={{
           display: 'inline-flex',
           alignItems: 'center',
-          background: 'var(--ifm-color-primary)',
+          background: 'var(--color-accent-solid)',
           color: '#fff',
           padding: '0.45rem 1rem',
           borderRadius: '6px',

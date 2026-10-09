@@ -22,6 +22,7 @@ const {
 const { loadConfig, resolvePreset, buildArgs, presetHash } = require('./thumbnails/recipe')
 const { readLock, writeLock, sha256File, isCurrent } = require('./thumbnails/lock')
 const { isAnimated, prepareStill, prepareFrames } = require('./thumbnails/prepare')
+const { toAnimatedWebp, webpOptionsHash } = require('./thumbnails/webp')
 
 const SRC = path.resolve(__dirname, '..')
 const NOTES_DIR = path.join(SRC, 'field-notes')
@@ -107,13 +108,17 @@ async function processNote(noteFile, config, lock, flags) {
     presetName: frontMatter.image_preset,
     animated,
   })
-  const ext = animated ? 'gif' : 'png'
+  // didder renders animations as GIF; they are re-encoded to lossless WebP below.
+  const ext = animated ? 'webp' : 'png'
   // One asset per entry in `sizes`, so adding a width is a one-line edit to
   // presets.json. Every kind is a lock key too, which is what makes a new size
   // mark all notes stale on the next plain run instead of needing --force.
   const outputs = Object.fromEntries(
     Object.keys(config.sizes).map((kind) => [kind, path.join(IMG_ROOT, `${slug}-${kind}.${ext}`)])
   )
+  // Animated notes also get a still poster at hero width: the featured slot
+  // paints it immediately and swaps to the animation once that has loaded.
+  if (animated) outputs.poster = path.join(IMG_ROOT, `${slug}-poster.png`)
 
   const expected = {
     source: frontMatter.image_source,
@@ -121,6 +126,7 @@ async function processNote(noteFile, config, lock, flags) {
     preset: presetName,
     presetSha256: presetHash(preset),
     didderVersion: config.didderVersion,
+    webpSha256: animated ? webpOptionsHash() : undefined,
     outputs,
   }
   // `image` is ours to maintain: its extension depends on whether the source
@@ -136,34 +142,58 @@ async function processNote(noteFile, config, lock, flags) {
   if (flags.check) return { slug, status: 'stale' }
 
   const work = fs.mkdtempSync(path.join(os.tmpdir(), `thumb-work-${slug}-`))
-  const prep = { aspect: config.aspect, edgeCap: config.sourceEdgeCap, sharpen: config.sharpen }
-  let input
   let frames = null
-  if (animated) {
-    const dir = path.join(work, 'frames')
-    frames = await prepareFrames(sourceFile, dir, {
-      ...prep,
-      frameStride: config.animation.frameStride,
-    })
-    input = path.join(dir, '*.png')
-  } else {
-    input = path.join(work, 'prepared.png')
-    await prepareStill(sourceFile, input, prep)
-  }
+  try {
+    const prep = { aspect: config.aspect, edgeCap: config.sourceEdgeCap, sharpen: config.sharpen }
+    let input
+    if (animated) {
+      const dir = path.join(work, 'frames')
+      frames = await prepareFrames(sourceFile, dir, {
+        ...prep,
+        frameStride: config.animation.frameStride,
+      })
+      input = path.join(dir, '*.png')
+    } else {
+      input = path.join(work, 'prepared.png')
+      await prepareStill(sourceFile, input, prep)
+    }
 
-  const fps = animated ? config.animation.fps : undefined
-  for (const [kind, output] of Object.entries(outputs)) {
-    const args = buildArgs({
-      input,
-      output,
-      width: config.sizes[kind],
-      dotSize: config.dotSize,
-      preset,
-      fps,
-    })
-    execFileSync(DIDDER, args, { stdio: 'pipe' })
+    const fps = animated ? config.animation.fps : undefined
+    for (const [kind, output] of Object.entries(outputs)) {
+      if (kind === 'poster') {
+        const framesDir = path.dirname(input)
+        const firstFrame = fs
+          .readdirSync(framesDir)
+          .filter((f) => f.endsWith('.png'))
+          .sort()[0]
+        const args = buildArgs({
+          input: path.join(framesDir, firstFrame),
+          output,
+          width: config.sizes.hero,
+          dotSize: config.dotSize,
+          preset,
+        })
+        execFileSync(DIDDER, args, { stdio: 'pipe' })
+        continue
+      }
+      // Animated: didder writes a GIF into the work dir, which becomes the WebP.
+      const target = animated ? path.join(work, `${kind}.gif`) : output
+      const args = buildArgs({
+        input,
+        output: target,
+        width: config.sizes[kind],
+        dotSize: config.dotSize,
+        preset,
+        fps,
+      })
+      execFileSync(DIDDER, args, { stdio: 'pipe' })
+      if (animated) {
+        await toAnimatedWebp(target, output)
+      }
+    }
+  } finally {
+    fs.rmSync(work, { recursive: true, force: true })
   }
-  fs.rmSync(work, { recursive: true, force: true })
 
   const entry = {
     source: expected.source,
@@ -174,6 +204,7 @@ async function processNote(noteFile, config, lock, flags) {
     animated,
     ext,
   }
+  if (expected.webpSha256) entry.webpSha256 = expected.webpSha256
   if (frames) entry.frames = { kept: frames.kept, total: frames.total, fps: config.animation.fps }
   const explicitCredit = frontMatter.image_credit
     ? { name: frontMatter.image_credit, url: frontMatter.image_credit_url ?? null }

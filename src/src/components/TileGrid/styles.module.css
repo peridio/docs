@@ -39,11 +39,17 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: var(--tile-bg);
+  background-image: var(--tile-bg-light);
   background-size: 200px auto;
   background-position: center;
   background-repeat: repeat;
   filter: grayscale(1);
+}
+
+/* Picked here rather than in React: data-theme is set before first paint, so
+   dark-mode readers never see the light pattern while the page hydrates. */
+:global([data-theme="dark"]) .tileTop::before {
+  background-image: var(--tile-bg-dark);
 }
 
 .tileTopFade {
@@ -75,6 +81,8 @@
 }
 
 .tileTitle {
+  /* Titles can be h2 or h3; keep Inter rather than the global h2 face. */
+  font-family: var(--ifm-font-family-base);
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 0.5rem;

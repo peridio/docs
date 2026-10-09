@@ -3,7 +3,7 @@
 // It does four jobs at once: skip work whose inputs have not changed, make a run
 // reproducible, hold the photographer attribution Unsplash's API terms require,
 // and record which extension each note's assets carry so the theme can build a
-// src for either a PNG or an animated GIF.
+// src for either a PNG or an animated WebP.
 const crypto = require('node:crypto')
 const fs = require('node:fs')
 
@@ -41,7 +41,9 @@ function isCurrent(entry, expected) {
     entry.sourceSha256 === expected.sourceSha256 &&
     entry.preset === expected.preset &&
     entry.presetSha256 === expected.presetSha256 &&
-    entry.didderVersion === expected.didderVersion
+    entry.didderVersion === expected.didderVersion &&
+    // only animated notes are re-encoded to WebP; stills carry neither side
+    entry.webpSha256 === expected.webpSha256
   if (!inputsMatch) return false
   return Object.entries(expected.outputs).every(([kind, file]) => {
     if (!fs.existsSync(file)) return false

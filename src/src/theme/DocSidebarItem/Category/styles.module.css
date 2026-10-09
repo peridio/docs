@@ -53,3 +53,10 @@
 .categoryCaretButton::before {
   display: none !important;
 }
+
+/* Section label (non-collapsible category with no page): not interactive. */
+.categoryLabelOnly,
+.categoryLabelOnly:hover {
+  cursor: default;
+  background: none;
+}

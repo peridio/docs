@@ -13,7 +13,7 @@ export default function PathComparison() {
       <div className={styles.pathRow}>
         <div className={styles.pathBlock}>
           <div className={styles.pathBlockHeader}>
-            <Heading as="h4">
+            <Heading as="h3">
               The Ubuntu / Debian Path <span className={styles.subtitle}>Ship fast</span>
             </Heading>
           </div>
@@ -40,7 +40,7 @@ export default function PathComparison() {
 
         <div className={styles.pathBlock}>
           <div className={styles.pathBlockHeader}>
-            <Heading as="h4">
+            <Heading as="h3">
               The Yocto / Buildroot Path <span className={styles.subtitle}>Ship safe</span>
             </Heading>
           </div>
@@ -70,7 +70,7 @@ export default function PathComparison() {
 
       <div className={styles.resolutionBlock}>
         <div className={styles.resolutionHeader}>
-          <Heading as="h4">
+          <Heading as="h3">
             Avocado OS{' '}
             <span className={styles.subtitle}>
               Yocto&apos;s production guarantees. Ubuntu&apos;s developer experience.
@@ -101,7 +101,7 @@ export function PathComparisonCards() {
     <div className={styles.pathGrid}>
       <div className={styles.pathCard}>
         <div className={clsx(styles.pathHeader, styles.muted)}>
-          <Heading as="h4">Ubuntu / Debian</Heading>
+          <Heading as="h3">Ubuntu / Debian</Heading>
         </div>
         <div className={styles.pathBody}>
           <div>
@@ -126,7 +126,7 @@ export function PathComparisonCards() {
 
       <div className={styles.pathCard}>
         <div className={clsx(styles.pathHeader, styles.muted)}>
-          <Heading as="h4">Yocto / Buildroot</Heading>
+          <Heading as="h3">Yocto / Buildroot</Heading>
         </div>
         <div className={styles.pathBody}>
           <div>
@@ -151,7 +151,7 @@ export function PathComparisonCards() {
 
       <div className={clsx(styles.pathCard, styles.highlight)}>
         <div className={clsx(styles.pathHeader, styles.primary)}>
-          <Heading as="h4">Avocado OS</Heading>
+          <Heading as="h3">Avocado OS</Heading>
         </div>
         <div className={styles.pathBody}>
           <div>

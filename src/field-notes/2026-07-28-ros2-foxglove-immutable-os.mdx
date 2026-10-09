@@ -7,7 +7,7 @@ authors: [nsinas]
 tags: [ros2, foxglove, robotics, container, imx95-frdm, raspberrypi5]
 category: 'Robotics'
 featured: false
-image: /img/field-notes/2026-07-28-ros2-foxglove-immutable-os-thumb.gif
+image: /img/field-notes/2026-07-28-ros2-foxglove-immutable-os-thumb.webp
 image_source: local:robot.gif
 # --- internal drafting fields (not rendered) ---
 tested_against: 'Avocado CLI 1.0.0-rc1, targets imx95-frdm + raspberrypi5, UFACTORY Lite 6 (real hardware), reference ros2-ufactory-lite6'
@@ -18,6 +18,7 @@ promote_to_track: ''
 
 import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
+import AutoplayVideo from '@site/src/components/AutoplayVideo'
 
 <TestStatus
   targets={['imx95-frdm', 'raspberrypi5']}
@@ -39,10 +40,12 @@ import TestStatus from '@site/src/components/TestStatus'
     margin: '0.25rem 1.75rem 1rem 0',
   }}
 >
-  <img
-    src="/img/field-notes/robot.gif"
-    alt="A UFACTORY Lite 6 arm moves while a Foxglove browser panel shows the live robot model and joint-state plots from the device."
-    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+  <AutoplayVideo
+    src="/img/field-notes/robot.mp4"
+    poster="/img/field-notes/robot-poster.jpg"
+    width={500}
+    height={888}
+    label="A UFACTORY Lite 6 arm moves while a Foxglove browser panel shows the live robot model and joint-state plots from the device."
   />
   <figcaption
     style={{
@@ -197,13 +200,29 @@ As you can see below, I gave it a simple prompt to create a new movement, and gi
 >
   <img
     src="/img/field-notes/robot-arm-prompt.png"
+    width={864}
+    height={1172}
     alt="The prompt given to the Avocado Desktop Agent to author a new arm movement."
-    style={{ flex: '1 1 280px', minWidth: 0, maxWidth: '100%', borderRadius: '8px' }}
+    style={{
+      flex: '1 1 280px',
+      minWidth: 0,
+      maxWidth: '100%',
+      height: 'auto',
+      borderRadius: '8px',
+    }}
   />
   <img
     src="/img/field-notes/robot-arm-movement.png"
+    width={872}
+    height={1574}
     alt="The Avocado Desktop Agent building, deploying, and driving the arm through the new movement over SSH."
-    style={{ flex: '1 1 280px', minWidth: 0, maxWidth: '100%', borderRadius: '8px' }}
+    style={{
+      flex: '1 1 280px',
+      minWidth: 0,
+      maxWidth: '100%',
+      height: 'auto',
+      borderRadius: '8px',
+    }}
   />
 </div>
 
@@ -216,11 +235,15 @@ As you can see below, I gave it a simple prompt to create a new movement, and gi
   <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
     <img
       src="/img/field-notes/robot-arm-foxglove-dashboard.png"
+      width={2210}
+      height={1362}
       alt="The Foxglove dashboard, with Open connection in the top toolbar and recent ws:// device connections listed."
       style={{ flex: '1 1 0', minWidth: 0, maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
     />
     <img
       src="/img/field-notes/foxglove-open-connection.png"
+      width={1796}
+      height={1024}
       alt="Foxglove's Open a new connection dialog, set to Foxglove WebSocket with a ws://device-ip:8765 URL."
       style={{ flex: '1 1 0', minWidth: 0, maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
     />
@@ -228,6 +251,8 @@ As you can see below, I gave it a simple prompt to create a new movement, and gi
 
   <img
     src="/img/field-notes/foxglove.png"
+    width={1882}
+    height={1444}
     alt="Foxglove Studio in the browser showing the live UFACTORY Lite 6 robot model and joint-state plots streaming from the device."
     style={{ width: '50%', height: 'auto', borderRadius: '8px' }}
   />

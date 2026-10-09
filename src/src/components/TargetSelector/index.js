@@ -7,6 +7,7 @@ import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
 import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
 import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
+import AutoplayVideo from '../AutoplayVideo'
 import styles from './styles.module.css'
 // Hardcoded list: sourced from the hand-maintained targets.json, not the live
 // feed. The feed is single-release (2024), so it can't represent which release
@@ -425,7 +426,18 @@ export default function TargetSelector() {
                   </ul>
                 </>
               )}
-              {t.serial.image && (
+              {t.serial.image && t.serial.image.src.endsWith('.mp4') && (
+                <div style={{ margin: '1rem 0' }}>
+                  <AutoplayVideo
+                    src={t.serial.image.src}
+                    poster={t.serial.image.poster}
+                    width={t.serial.image.width}
+                    height={t.serial.image.height}
+                    label={t.serial.image.alt}
+                  />
+                </div>
+              )}
+              {t.serial.image && !t.serial.image.src.endsWith('.mp4') && (
                 <img
                   src={t.serial.image.src}
                   alt={t.serial.image.alt}

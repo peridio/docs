@@ -6,6 +6,7 @@ const { describe, it } = require('node:test')
 const dir = __dirname
 const js = fs.readFileSync(path.join(dir, 'index.js'), 'utf8')
 const css = fs.readFileSync(path.join(dir, 'styles.module.css'), 'utf8')
+const variants = fs.readFileSync(path.join(dir, 'variants.js'), 'utf8')
 
 describe('Field Notes gasketed chassis', () => {
   it('wraps the CRT screen in a gasket with two decorative pips', () => {
@@ -80,8 +81,8 @@ describe('Field Notes responsive tiles', () => {
   })
 
   it('derives every asset variant from the thumb path rather than plumbing each one', () => {
-    assert.match(js, /-thumb\./)
-    assert.doesNotMatch(js, /image\.replace\('-thumb\.', '-hero\.'\)/)
+    assert.match(variants, /-thumb\./)
+    assert.doesNotMatch(js + variants, /image\.replace\('-thumb\.', '-hero\.'\)/)
   })
 
   it('breaks the row grid to one column at the same width the srcset switches on', () => {
@@ -96,5 +97,33 @@ describe('Field Notes responsive tiles', () => {
     const mobile = css.slice(css.indexOf('@media (max-width: 768px)'))
     assert.match(mobile, /\.featuredThumb\s*\{[^}]*width:\s*100%/)
     assert.match(mobile, /\.featuredThumb\s*\{[^}]*max-width:\s*100%/)
+  })
+})
+
+describe('Field Notes hero', () => {
+  it('renders the poster first and swaps to the animation only after it loads', () => {
+    assert.match(js, /variantSrc\(image, 'poster'\)/)
+    assert.match(js, /new Image\(\)/)
+  })
+  it('derives poster and webp variants from the thumb path', () => {
+    assert.match(variants, /replace\('-thumb\.', `-\$\{kind\}\.`\)/)
+    assert.match(variants, /-poster\.png/)
+  })
+})
+
+describe('Field Notes hero loading', () => {
+  it('loads the featured image eagerly at high priority (it is the LCP element)', () => {
+    assert.match(js, /loading=\{variant === 'hero' \? 'eager' : 'lazy'\}/)
+    assert.match(js, /fetchPriority=\{variant === 'hero' \? 'high' : undefined\}/)
+  })
+})
+
+describe('Field Notes hero animation budget', () => {
+  it('swaps to the smaller tile animation on narrow screens', () => {
+    assert.match(js, /matchMedia\('\(max-width: 768px\)'\)\.matches \? 'tile' : 'hero'/)
+  })
+  it('keeps the still poster when the reader asked for less data or less motion', () => {
+    assert.match(js, /navigator\.connection\?\.saveData/)
+    assert.match(js, /prefers-reduced-motion: reduce/)
   })
 })

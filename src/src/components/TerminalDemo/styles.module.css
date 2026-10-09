@@ -33,7 +33,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: #888;
+  color: #a0a0a0;
   font-size: 0.78rem;
 }
 
@@ -47,7 +47,7 @@
 }
 
 .promptLine {
-  color: var(--ifm-color-primary);
+  color: var(--color-accent-link);
 }
 
 .outputLine {
