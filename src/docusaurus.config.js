@@ -5,6 +5,13 @@ const { themes } = require('prism-react-renderer')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
+  // SWC/Lightning CSS/Rspack build pipeline (@docusaurus/faster).
+  future: {
+    // Required by faster.ssgWorkerThreads; only drops the legacy data-rh
+    // post-build attribute handling. The other v4 flags stay off.
+    v4: { removeLegacyPostBuildHeadAttribute: true },
+    faster: true,
+  },
   title: 'Docs',
   url: 'https://docs.peridio.com',
   baseUrl: '/',
@@ -112,6 +119,8 @@ const config = {
         routeBasePath: 'changelog',
         sidebarPath: require.resolve('./sidebars-changelog.js'),
         breadcrumbs: true,
+        // Only changelog pages carry the infinite-scroll feed and its entries.
+        docItemComponent: '@site/src/components/ChangelogDocItem',
       },
     ],
     [
@@ -206,6 +215,11 @@ const config = {
           alt: 'Peridio Logo',
           src: 'img/peridio-docs-logo.svg',
           srcDark: 'img/peridio-docs-logo-dark.svg',
+          // Intrinsic size reserves the box before the SVG arrives (the logo
+          // popping in caused a 0.2 layout shift on the changelog). 134x20 SVG
+          // at 25px tall.
+          width: 168,
+          height: 25,
           style: {
             height: '25px',
             marginTop: '3px',
@@ -292,29 +306,9 @@ const config = {
         ],
       },
     }),
+  // Site colour theme: 'peridio' (purple, default), 'avocado' (green), 'alt'
+  // (blue). To switch, set data-site-theme on <html> (see src/css/tokens).
   headTags: [
-    {
-      tagName: 'script',
-      attributes: {},
-      innerHTML: `
-        // Set the active site theme
-        // Options: 'peridio' (purple, default), 'avocado' (green), 'alt' (blue)
-        // To switch: change the value below and rebuild
-        // document.documentElement.setAttribute('data-site-theme', 'avocado');
-      `,
-    },
-    {
-      tagName: 'script',
-      attributes: {},
-      innerHTML: `
-        // Early gtag stub to prevent errors in development
-        if (typeof window !== 'undefined' && !window.gtag) {
-          window.gtag = function() {
-            console.warn('[DEV] gtag called but not loaded in development:', Array.from(arguments));
-          };
-        }
-      `,
-    },
     {
       tagName: 'script',
       attributes: {

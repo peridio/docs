@@ -42,3 +42,16 @@ describe('web fonts', () => {
     assert.match(custom, /font-family: "Avenir";[\s\S]*?font-display: swap/)
   })
 })
+
+describe('navbar logo', () => {
+  it('declares width and height so the navbar does not shift when it loads', () => {
+    assert.match(config, /logo:\s*\{[\s\S]*?width:\s*168,[\s\S]*?height:\s*25,/)
+  })
+})
+
+describe('head scripts', () => {
+  it('ships no comment-only or dev-only inline scripts', () => {
+    assert.doesNotMatch(config, /\/\/ Set the active site theme/)
+    assert.doesNotMatch(config, /Early gtag stub/)
+  })
+})

@@ -10,7 +10,7 @@
     "sync-targets": "node scripts/sync-targets.js",
     "sync-schema": "node scripts/sync-schema.js",
     "thumbs": "node scripts/make-thumbnails.js",
-    "test": "node --test \"scripts/*.test.js\" \"scripts/thumbnails/*.test.js\" \"src/theme/BlogPostItems/*.test.js\" \"src/components/**/*.test.js\"",
+    "test": "node --test \"scripts/*.test.js\" \"scripts/thumbnails/*.test.js\" \"src/theme/**/*.test.js\" \"src/components/**/*.test.js\"",
     "build-connect-api": "node scripts/build-connect-api.js && prettier --write docs-guides/avocado-connect-api",
     "build": "bash scripts/build.sh",
     "swizzle": "docusaurus swizzle",
@@ -28,6 +28,7 @@
   "dependencies": {
     "@algolia/client-search": ">= 4.9.1 < 6",
     "@docusaurus/core": "^3.10.1",
+    "@docusaurus/faster": "^3.10.1",
     "@docusaurus/plugin-client-redirects": "^3.10.1",
     "@docusaurus/preset-classic": "^3.10.1",
     "@docusaurus/theme-common": "^3.10.1",
