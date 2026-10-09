@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import Head from '@docusaurus/Head'
 import Heading from '@theme/Heading'
 import { entries, PRODUCTS } from './changelogEntries'
 import styles from './styles.module.css'
@@ -216,15 +217,11 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
     }
   }, [activePermalink])
 
-  // Sync URL, document title, and active link on every entry change
+  // Sync URL and active link on every entry change (the title is rendered via <Head>)
   useEffect(() => {
     const query = product === 'all' ? '' : `?product=${product}`
     if (activePermalink + query !== window.location.pathname + window.location.search) {
       window.history.replaceState(null, '', activePermalink + query)
-    }
-    const activeEntry = entries.find((e) => e.permalink === activePermalink)
-    if (activeEntry) {
-      document.title = `${productLabel[activeEntry.product]}: ${activeEntry.version} | Changelog`
     }
 
     const sidebar = document.querySelector('[class*="docSidebarContainer"]')
@@ -312,8 +309,20 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
 
   const displayed = subsequentEntries.slice(0, visibleCount)
 
+  // Rendered rather than assigned to document.title, so the server HTML, the
+  // first client paint and every scroll update agree on one format.
+  const activeEntry = entries.find((e) => e.permalink === activePermalink)
+  const activeTitle = activeEntry
+    ? `${productLabel[activeEntry.product]}: ${activeEntry.version} | Changelog`
+    : null
+
   return (
     <div className="row">
+      {activeTitle && (
+        <Head>
+          <title>{activeTitle}</title>
+        </Head>
+      )}
       <div className="col">
         <div className={styles.productTabs} role="group" aria-label="Filter by product">
           {PRODUCTS.map((p) => (

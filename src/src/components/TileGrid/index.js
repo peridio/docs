@@ -21,7 +21,7 @@ function usePatternIndices(count) {
   }, [count])
 }
 
-function Tile({ title, description, to, icon, external, patternIndex }) {
+function Tile({ title, description, to, icon, external, patternIndex, headingLevel }) {
   const { colorMode } = useColorMode()
   const prefix = colorMode === 'dark' ? 'dark' : 'light'
   const bgUrl = `/img/pcb/${prefix}-${patternIndex}.svg`
@@ -37,7 +37,7 @@ function Tile({ title, description, to, icon, external, patternIndex }) {
         <div className={styles.tileIcon}>{icon}</div>
       </div>
       <div className={styles.tileBottom}>
-        <Heading as="h3" className={styles.tileTitle}>
+        <Heading as={headingLevel} className={styles.tileTitle}>
           {title}
         </Heading>
         <p className={styles.tileDescription}>{description}</p>
@@ -46,7 +46,8 @@ function Tile({ title, description, to, icon, external, patternIndex }) {
   )
 }
 
-export default function TileGrid({ tiles, columns = 3, center = false }) {
+// headingLevel: use 'h2' when the grid sits directly under the page h1.
+export default function TileGrid({ tiles, columns = 3, center = false, headingLevel = 'h3' }) {
   const maxWidth = columns * 240 + (columns - 1) * 16
   const patterns = usePatternIndices(tiles.length)
 
@@ -61,7 +62,7 @@ export default function TileGrid({ tiles, columns = 3, center = false }) {
       }}
     >
       {tiles.map((tile, i) => (
-        <Tile key={tile.title} {...tile} patternIndex={patterns[i]} />
+        <Tile key={tile.title} {...tile} patternIndex={patterns[i]} headingLevel={headingLevel} />
       ))}
     </div>
   )

@@ -40,8 +40,8 @@
 
 .productTabActive,
 .productTabActive:hover {
-  background: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary);
+  background: var(--color-accent-solid);
+  border-color: var(--color-accent-solid);
   color: var(--ifm-color-white);
 }
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import DocItem from '@theme/DocItem'
+import { PageMetadata } from '@docusaurus/theme-common'
 import ChangelogInfiniteScroll from '../ChangelogInfiniteScroll'
 
 // Root component for the changelog docs plugin only (docItemComponent in
@@ -11,9 +12,17 @@ import ChangelogInfiniteScroll from '../ChangelogInfiniteScroll'
 // through the plain DocItem lets the redirect fire with the right title and
 // sidebar highlight instead of being swallowed by the infinite-scroll feed.
 export default function ChangelogDocItem(props) {
-  const permalink = props.content.metadata.permalink
-  if (permalink === '/changelog/' || permalink === '/changelog/latest') {
+  const { metadata } = props.content
+  if (metadata.permalink === '/changelog/' || metadata.permalink === '/changelog/latest') {
     return <DocItem {...props} />
   }
-  return <ChangelogInfiniteScroll initialContent={props.content} />
+  // The feed replaces the theme's DocItem, so the entry's head tags have to be
+  // emitted here; without this every entry was served with no description. The
+  // title belongs to the feed, which follows the entry being read.
+  return (
+    <>
+      <PageMetadata description={metadata.description} />
+      <ChangelogInfiniteScroll initialContent={props.content} />
+    </>
+  )
 }
