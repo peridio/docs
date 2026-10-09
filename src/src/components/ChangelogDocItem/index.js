@@ -2,6 +2,7 @@ import React from 'react'
 import DocItem from '@theme/DocItem'
 import { PageMetadata } from '@docusaurus/theme-common'
 import ChangelogInfiniteScroll from '../ChangelogInfiniteScroll'
+import styles from './styles.module.css'
 
 // Root component for the changelog docs plugin only (docItemComponent in
 // docusaurus.config.js). Keeping it out of the global @theme/DocItem wrapper
@@ -13,7 +14,14 @@ import ChangelogInfiniteScroll from '../ChangelogInfiniteScroll'
 // sidebar highlight instead of being swallowed by the infinite-scroll feed.
 export default function ChangelogDocItem(props) {
   const { metadata } = props.content
-  if (metadata.permalink === '/changelog/' || metadata.permalink === '/changelog/latest') {
+  if (metadata.permalink === '/changelog/latest') {
+    return (
+      <div className={styles.redirecting}>
+        <DocItem {...props} />
+      </div>
+    )
+  }
+  if (metadata.permalink === '/changelog/') {
     return <DocItem {...props} />
   }
   // The feed replaces the theme's DocItem, so the entry's head tags have to be

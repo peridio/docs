@@ -1,13 +1,14 @@
 import React from 'react'
 import clsx from 'clsx'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import { PageMetadata, HtmlClassNameProvider, ThemeClassNames } from '@docusaurus/theme-common'
+import { PageMetadata, ThemeClassNames } from '@docusaurus/theme-common'
 import BlogLayout from '@theme/BlogLayout'
 import BlogListPaginator from '@theme/BlogListPaginator'
 import SearchMetadata from '@theme/SearchMetadata'
 import BlogPostItems from '@theme/BlogPostItems'
 import BlogListPageStructuredData from '@theme/BlogListPage/StructuredData'
 import Heading from '@theme/Heading'
+import PluginHtmlClassFirst from '@site/src/components/PluginHtmlClassFirst'
 import styles from './styles.module.css'
 
 function BlogListPageMetadata(props) {
@@ -52,12 +53,12 @@ function BlogListPageContent(props) {
 
 export default function BlogListPage(props) {
   return (
-    <HtmlClassNameProvider
+    <PluginHtmlClassFirst
       className={clsx(ThemeClassNames.wrapper.blogPages, ThemeClassNames.page.blogListPage)}
     >
       <BlogListPageMetadata {...props} />
       <BlogListPageStructuredData {...props} />
       <BlogListPageContent {...props} />
-    </HtmlClassNameProvider>
+    </PluginHtmlClassFirst>
   )
 }

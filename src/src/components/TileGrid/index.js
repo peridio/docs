@@ -1,30 +1,14 @@
 import React, { useMemo } from 'react'
-import { useColorMode } from '@docusaurus/theme-common'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import styles from './styles.module.css'
-
-const PATTERN_COUNT = 10
-
-function usePatternIndices(count) {
-  return useMemo(() => {
-    const indices = []
-    const available = Array.from({ length: PATTERN_COUNT }, (_, i) => i + 1)
-    for (let i = 0; i < count; i++) {
-      if (available.length === 0) {
-        for (let j = 1; j <= PATTERN_COUNT; j++) available.push(j)
-      }
-      const pick = Math.floor(Math.random() * available.length)
-      indices.push(available.splice(pick, 1)[0])
-    }
-    return indices
-  }, [count])
-}
+import { patternIndices } from './patterns'
 
 function Tile({ title, description, to, icon, external, patternIndex, headingLevel }) {
-  const { colorMode } = useColorMode()
-  const prefix = colorMode === 'dark' ? 'dark' : 'light'
-  const bgUrl = `/img/pcb/${prefix}-${patternIndex}.svg`
+  const patternStyle = {
+    '--tile-bg-light': `url("/img/pcb/light-${patternIndex}.svg")`,
+    '--tile-bg-dark': `url("/img/pcb/dark-${patternIndex}.svg")`,
+  }
 
   const isExternal = external || (typeof to === 'string' && to.startsWith('http'))
   const Component = isExternal ? 'a' : Link
@@ -32,7 +16,7 @@ function Tile({ title, description, to, icon, external, patternIndex, headingLev
 
   return (
     <Component className={styles.tile} {...props}>
-      <div className={styles.tileTop} style={{ '--tile-bg': `url("${bgUrl}")` }}>
+      <div className={styles.tileTop} style={patternStyle}>
         <div className={styles.tileTopFade} />
         <div className={styles.tileIcon}>{icon}</div>
       </div>
@@ -49,7 +33,10 @@ function Tile({ title, description, to, icon, external, patternIndex, headingLev
 // headingLevel: use 'h2' when the grid sits directly under the page h1.
 export default function TileGrid({ tiles, columns = 3, center = false, headingLevel = 'h3' }) {
   const maxWidth = columns * 240 + (columns - 1) * 16
-  const patterns = usePatternIndices(tiles.length)
+  const patterns = useMemo(
+    () => patternIndices(tiles.length, tiles.map((t) => t.title).join('|')),
+    [tiles]
+  )
 
   return (
     <div

@@ -2,6 +2,12 @@
   padding-bottom: 4rem;
 }
 
+/* While entries are still being appended, keep the footer below the fold. A
+   short first entry otherwise leaves it on screen, and each append shifts it. */
+.feedPending {
+  min-height: 100vh;
+}
+
 .productTabs {
   position: sticky;
   top: var(--ifm-navbar-height);

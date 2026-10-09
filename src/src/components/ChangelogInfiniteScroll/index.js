@@ -337,7 +337,9 @@ export default function ChangelogInfiniteScroll({ initialContent }) {
             </button>
           ))}
         </div>
-        <div className={styles.feed}>
+        <div
+          className={`${styles.feed} ${visibleCount < subsequentEntries.length ? styles.feedPending : ''}`}
+        >
           {displayed.map((entry, i) => {
             const isNewMonth = i === 0 || entry.monthSlug !== displayed[i - 1].monthSlug
 
