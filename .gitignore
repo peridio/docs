@@ -39,3 +39,6 @@ docs/superpowers/
 src/docs-guides/references/
 src/.cache-references/
 src/static/generated/
+
+# Local Lighthouse reports
+src/.lighthouse*/
