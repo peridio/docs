@@ -8,6 +8,7 @@ import SearchMetadata from '@theme/SearchMetadata'
 import BlogPostItems from '@theme/BlogPostItems'
 import BlogListPageStructuredData from '@theme/BlogListPage/StructuredData'
 import Heading from '@theme/Heading'
+import GeistPreload from '@site/src/components/GeistPreload'
 import PluginHtmlClassFirst from '@site/src/components/PluginHtmlClassFirst'
 import styles from './styles.module.css'
 
@@ -23,6 +24,7 @@ function BlogListPageMetadata(props) {
     <>
       <PageMetadata title={title} description={blogDescription} />
       <SearchMetadata tag="blog_posts_list" />
+      <GeistPreload />
     </>
   )
 }

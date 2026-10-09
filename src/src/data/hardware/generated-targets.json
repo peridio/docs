@@ -567,7 +567,10 @@
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0",
       "image": {
-        "src": "/img/jetson-orin-nano-devkit-serial-console.gif",
+        "src": "/img/jetson-orin-nano-devkit-serial-console.mp4",
+        "poster": "/img/jetson-orin-nano-devkit-serial-console-poster.jpg",
+        "width": 1328,
+        "height": 982,
         "alt": "Jetson Orin Nano DevKit Serial Console"
       },
       "gpio": [

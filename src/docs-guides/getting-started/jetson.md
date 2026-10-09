@@ -4,6 +4,7 @@ description: Getting started with Avocado OS on NVIDIA Jetson Orin Nano.
 sidebar_position: 3
 ---
 
+import AutoplayVideo from '@site/src/components/AutoplayVideo'
 import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
 import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
 
@@ -33,7 +34,13 @@ If you want a serial console, connect a TTY serial console USB adapter (for exam
 
 (The recovery-mode jumper — shorting `FC REC` to `GND` — is covered separately under [Boot into recovery mode](#boot-into-recovery-mode) and is required whether or not you attach a serial console.)
 
-![Jetson Orin Nano DevKit Serial Console](/img/jetson-orin-nano-devkit-serial-console.gif)
+<AutoplayVideo
+  src="/img/jetson-orin-nano-devkit-serial-console.mp4"
+  poster="/img/jetson-orin-nano-devkit-serial-console-poster.jpg"
+  width={1328}
+  height={982}
+  label="Jetson Orin Nano DevKit Serial Console"
+/>
 
 Open a serial terminal:
 

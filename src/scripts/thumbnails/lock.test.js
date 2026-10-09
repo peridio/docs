@@ -46,6 +46,7 @@ test('isCurrent is true only when every recorded input matches', () => {
   assert.equal(isCurrent(entry, { ...expected, presetSha256: 'zzz' }), false)
   assert.equal(isCurrent(entry, { ...expected, preset: 'grain-violet' }), false)
   assert.equal(isCurrent(entry, { ...expected, didderVersion: '1.4.0' }), false)
+  assert.equal(isCurrent(entry, { ...expected, webpSha256: 'ccc' }), false)
   assert.equal(isCurrent(undefined, expected), false)
 })
 
@@ -70,4 +71,18 @@ test('isCurrent is false for a legacy entry with no recorded output hashes', () 
   const out = path.join(tmp(), 'out.png')
   fs.writeFileSync(out, 'x')
   assert.equal(isCurrent(ENTRY, { ...ENTRY, outputs: { thumb: out } }), false)
+})
+
+test('isCurrent is false when an animated entry was encoded with other WebP settings', () => {
+  const out = path.join(tmp(), 'out.webp')
+  fs.writeFileSync(out, 'x')
+  const entry = { ...ENTRY, webpSha256: 'old', outputs: { thumb: sha256File(out) } }
+  const expected = { ...ENTRY, outputs: { thumb: out } }
+  assert.equal(isCurrent(entry, { ...expected, webpSha256: 'old' }), true)
+  assert.equal(isCurrent(entry, { ...expected, webpSha256: 'new' }), false)
+  // an animated entry written before the settings were recorded is stale too
+  assert.equal(
+    isCurrent({ ...entry, webpSha256: undefined }, { ...expected, webpSha256: 'new' }),
+    false
+  )
 })
