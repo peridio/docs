@@ -7,6 +7,11 @@ The published Jetson feed builds encrypted `/var` for every Jetson target; it is
 <SecurityCapabilities profile="jetson" />
 
 ```yaml title="avocado.yaml"
+initramfs:
+  packages:
+    avocado-pkg-initramfs: '*'
+    optee-ftpm-init: '*'
+
 runtimes:
   prod:
     var:
@@ -14,5 +19,7 @@ runtimes:
       hardware: tpm2
       recovery: fleet-var-master
 ```
+
+The OP-TEE fTPM that `hardware: tpm2` binds to is opt-in on Jetson: the machine definitions do not install it by default. Without `optee-ftpm-init` in `initramfs.packages` the initramfs has no TEE supplicant and no persistent fTPM store, so `tpm2` fails closed and `auto` falls back to the Argon2id key. With it, the store is formatted on the first boot and the TPM keeps its identity across reboots. That was checked on a Jetson AGX Orin: the endorsement key and the storage root key were the same after a reboot, and the lockout counter stayed at 0. Sealing `/var` to the fTPM, and a power cycle while the store is in use, were not part of that check.
 
 The first boot encrypts the flashed `/var` in place, so seeded content - subvolumes, `var_files`, primed Docker images - survives. See [Encrypted /var](/developer-reference/security/encrypted-var).

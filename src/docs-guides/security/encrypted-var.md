@@ -66,6 +66,8 @@ An explicit choice rides in the initramfs as `/etc/avocado/var-hardware`, next t
 | Jetson    | Argon2id key, plus a TPM2 keyslot sealed to the OP-TEE fTPM (PCR 7) | TPM2 token, Argon2id fallback              |
 | qemu, x86 | Argon2id, plus swtpm/TPM 2.0 where present                          | as Jetson                                  |
 
+On Jetson the OP-TEE fTPM is opt-in: the runtime has to name `optee-ftpm-init` in `initramfs.packages`, as shown on the Jetson hardware pages. Without it there is no fTPM to bind to.
+
 The hardware blob is stored in the LUKS2 header as an `avocado-hwkey` token — no extra partition, and it travels with the container.
 
 ## Operator recovery key
