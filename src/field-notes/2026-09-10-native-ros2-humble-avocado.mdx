@@ -6,7 +6,7 @@ draft: false
 authors: [goatracer]
 tags: [ros2, robotics, jetson-orin-nano-devkit, cross-compilation, extensions]
 category: 'Robotics'
-image: /img/field-notes/2026-09-10-native-ros2-humble-avocado-thumb.gif
+image: /img/field-notes/2026-09-10-native-ros2-humble-avocado-thumb.webp
 image_source: local:2026-09-10-native-ros2-humble-avocado/goat.gif
 featured: true
 # --- internal drafting fields (not rendered) ---
@@ -18,6 +18,7 @@ promote_to_track: ''
 
 import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
+import AutoplayVideo from '@site/src/components/AutoplayVideo'
 
 <TestStatus
   targets={['jetson-orin-nano-devkit']}
@@ -39,10 +40,12 @@ This guest field note comes from the GOAT Racer team and documents our experienc
 {/* truncate */}
 
 <figure style={{ margin: '0 0 2rem' }}>
-  <img
-    src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/goat.gif"
-    alt="Two autonomous GOAT Racer rovers, Lookahead-v0 and Lookahead-v1, race a taped course with a live leaderboard, throttle and steering traces, speed, and lap distance."
-    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+  <AutoplayVideo
+    src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/goat.mp4"
+    poster="/img/field-notes/2026-09-10-native-ros2-humble-avocado/goat-poster.jpg"
+    width={640}
+    height={360}
+    label="Two autonomous GOAT Racer rovers, Lookahead-v0 and Lookahead-v1, race a taped course with a live leaderboard, throttle and steering traces, speed, and lap distance."
   />
 </figure>
 
@@ -156,8 +159,10 @@ After provisioning wrote the NVMe layout, Avocado booted with the `ros-humble`, 
 <figure style={{ margin: '0 0 2rem' }}>
   <img
     src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/uart-01-services-active.png"
+    width={2046}
+    height={1151}
     alt="UART capture showing the aarch64 Jetson running ROS 2 Humble with both application services active."
-    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+    style={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }}
   />
   <figcaption
     style={{
@@ -183,8 +188,10 @@ The second capture shows `data: hello from Avocado 1100` alongside subscriber me
 <figure style={{ margin: '0 0 2rem' }}>
   <img
     src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/uart-02-topic-echo.png"
+    width={2046}
+    height={1151}
     alt="Serial session showing one live topic read and four successive subscriber messages."
-    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+    style={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }}
   />
   <figcaption
     style={{
@@ -209,8 +216,10 @@ The LiDAR application follows the same path as the example nodes: cross-compile 
 <figure style={{ margin: '0 0 2rem' }}>
   <img
     src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/lidar-01-unmasked.png"
+    width={2046}
+    height={1117}
     alt="RViz showing an unmasked LiDAR scan with a full view around the sensor."
-    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+    style={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }}
   />
   <figcaption
     style={{
@@ -231,8 +240,10 @@ For the vehicle application, we then limit the output to the robot-forward 180-d
 <figure style={{ margin: '0 0 2rem' }}>
   <img
     src="/img/field-notes/2026-09-10-native-ros2-humble-avocado/lidar-02-masked-180.png"
+    width={2046}
+    height={1154}
     alt="RViz showing T4YLOR's live scan limited to the robot-forward 180-degree field of view, with a yellow arc marking the boundary."
-    style={{ width: '100%', borderRadius: '8px', display: 'block' }}
+    style={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }}
   />
   <figcaption
     style={{

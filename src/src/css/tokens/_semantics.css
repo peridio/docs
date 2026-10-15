@@ -31,6 +31,8 @@
   /* Accent / interactive */
   --color-accent-primary: var(--color-brand-700);
   --color-accent-primary-hover: var(--color-brand-800);
+  /* Solid fills under white text (buttons, active tabs, step badges). */
+  --color-accent-solid: var(--color-brand-700);
   --color-accent-link: var(--color-brand-700);
   --color-accent-button: var(--color-brand-600);
   --color-accent-button-hover: var(--color-brand-800);
@@ -99,6 +101,7 @@
 
   /* ---- Infima bridge ---- */
   --ifm-color-primary: var(--color-accent-primary);
+  --ifm-menu-color-active: var(--color-accent-link);
   --ifm-color-primary-dark: #2d1ed5;
   --ifm-color-primary-darker: #2919c9;
   --ifm-color-primary-darkest: #2215a5;
@@ -136,6 +139,8 @@ html[data-theme="dark"] {
   /* Accent / interactive */
   --color-accent-primary: var(--color-brand-400);
   --color-accent-primary-hover: var(--color-brand-300);
+  /* brand-500 (#6b5cf7) gives white text 4.67:1; brand-400 is 3.91:1 */
+  --color-accent-solid: var(--color-brand-500);
   /* brand-300 (#9d93f5) clears WCAG AA 4.5:1 on the dark body bg; brand-400 is 4.44:1 */
   --color-accent-link: var(--color-brand-300);
   --color-accent-button: var(--color-brand-600);
@@ -200,6 +205,7 @@ html[data-theme="dark"] {
 
   /* ---- Infima bridge (dark) ---- */
   --ifm-color-primary: var(--color-accent-primary);
+  --ifm-menu-color-active: var(--color-accent-link);
   --ifm-link-color: var(--color-accent-link);
   --ifm-color-content-secondary: var(--color-text-secondary);
   --ifm-color-content-inverse: var(--color-neutral-0);

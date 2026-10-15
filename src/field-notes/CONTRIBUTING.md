@@ -39,7 +39,7 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 | `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                                                                                             |
 | `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                                                                                                 |
 | `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag                                                                             |
-| `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`, or `-thumb.gif` from an animated source) — written by `make thumbs`, not by hand  |
+| `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`, or `-thumb.webp` from an animated source) — written by `make thumbs`, not by hand |
 | `image_source`     | no       | **no**   | Where `make thumbs` gets the art: `local:<path>`, `unsplash:<photo-id>` or `url:<link>`. Build input only — the theme renders `image`, never this |
 | `image_preset`     | no       | **no**   | Override the dither preset for one note; omit — one preset serves every note                                                                      |
 | `featured`         | no       | yes      | `true` pins the note to the large hero slot on the index                                                                                          |
@@ -88,12 +88,12 @@ The masthead — the "FIELD NOTES" eyebrow, title, date, **tag pills**, and the 
 
 - **Images** — drop them in `static/img/field-notes/` and reference as `/img/field-notes/<name>`. Any image in the body is **click-to-zoom** automatically.
 
-- **Index thumbnails are generated — don't hand-make them.** Point `image_source` at your art and run `./scripts/thumbnails.sh` (or `make thumbs`). It writes a dithered **16:9** set at three widths — `<slug>-thumb.png` (400px, the index rows), `<slug>-tile.png` (800px, what the browser picks once the grid collapses to one column) and `<slug>-hero.png` (1152px, the featured slot) — sets `image` to the thumb for you, and records what it did in `thumbnails.lock.json`. The theme derives the other two from `image`, so you only ever set that one. Animated sources emit `.gif` at every width instead of `.png`. Commit the generated files with the note.
+- **Index thumbnails are generated — don't hand-make them.** Point `image_source` at your art and run `./scripts/thumbnails.sh` (or `make thumbs`). It writes a dithered **16:9** set at three widths — `<slug>-thumb.png` (400px, the index rows), `<slug>-tile.png` (800px, what the browser picks once the grid collapses to one column) and `<slug>-hero.png` (1152px, the featured slot) — sets `image` to the thumb for you, and records what it did in `thumbnails.lock.json`. The theme derives the other two from `image`, so you only ever set that one. Animated sources emit animated `.webp` at every width instead of `.png`, plus a still `<slug>-poster.png` that the featured slot shows until the animation has loaded. Commit the generated files with the note.
   - `local:<file>` — a capture you already committed under `static/img/field-notes/`. Subdirectories are fine (`local:imx8mp-npu-pose/02-demo-layout.jpg`).
   - `unsplash:<photo-id>` — needs `UNSPLASH_ACCESS_KEY` in your environment. The photographer credit is fetched and recorded automatically, which is what Unsplash's API terms require.
   - `url:<link>` — no API key needed, but set `image_credit` and `image_credit_url` by hand.
 
-  **Animated sources stay animated.** A GIF in gives a dithered GIF out, at every second frame and 7.5 fps. Your original file is never modified — it stays committed and keeps serving the note body in full colour; only the index tile is derived from it.
+  **Animated sources stay animated.** A GIF in gives a dithered animated WebP out (lossless, about half the size of the equivalent GIF), at every second frame and 7.5 fps. Your original file is never modified and stays committed as the thumbnail source; only the index tile is derived from it. To show the animation in the note body, convert it to video and embed it with `<AutoplayVideo>` rather than the GIF, which is often several megabytes.
 
   The look is one recipe for every note, defined in `src/scripts/thumbnails/presets.json`. To retune it, edit that file and run `make thumbs` again — the run is idempotent, so unchanged notes are skipped. `npm --prefix src run thumbs -- --check` reports drift without writing anything.
 

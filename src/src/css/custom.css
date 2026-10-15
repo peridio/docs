@@ -13,7 +13,7 @@
    (_primitives.css → _semantics.css → _theme-*.css) */
 :root {
   --ifm-navbar-height: 5rem;
-  --ifm-font-family-base: "Inter", sans-serif;
+  --ifm-font-family-base: "Inter", "Inter Fallback", sans-serif;
 }
 
 /* Desktop navbar is two rows (logo + tabs) with height: auto, so the
@@ -61,15 +61,14 @@ main {
   margin-top: 0 !important;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
-
 @font-face {
   font-family: "Avenir";
   src: url("/font/avenir-regular.otf");
+  font-display: swap;
 }
 
 html {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Inter Fallback", sans-serif;
   /* Always reserve the vertical scrollbar's gutter so the viewport width never
      changes when content grows/shrinks (e.g. Field Notes cards + images loading
      in). Without this, the centered `.navbar__inner` shifts sideways every time
@@ -85,6 +84,23 @@ html {
 .theme-doc-markdown a:hover {
   text-decoration-style: solid;
   text-decoration-color: #fff;
+}
+
+/* Prose links are underlined so they don't rely on colour alone (WCAG 1.4.1,
+   Lighthouse link-in-text-block). Scoped to text blocks so cards, tiles and
+   buttons built from <a> keep their own styling. :where() keeps the scope at
+   zero specificity, so a component can drop the underline with one class. */
+:where(.theme-doc-markdown, #__blog-post-container) :where(p, li, td) > a:not([class*="button"]) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+:where(.theme-doc-markdown, #__blog-post-container)
+  :where(p, li, td)
+  > a:not([class*="button"]):hover {
+  text-decoration-color: currentColor;
 }
 
 /* "Request New Hardware Support" page — make in-content links obviously purple.
@@ -104,7 +120,7 @@ html {
 
 h2,
 .schema-container h2 {
-  font-family: "Spline Sans", sans-serif;
+  font-family: "Spline Sans", "Spline Sans Fallback", sans-serif;
   font-weight: 400;
 }
 
@@ -302,7 +318,7 @@ html[data-theme="dark"] .navbar {
 }
 
 .navbar__items:not(.navbar__items--right) > .navbar__link--active {
-  color: var(--ifm-color-primary);
+  color: var(--color-accent-link);
   border-bottom-color: var(--ifm-color-primary);
 }
 
@@ -530,7 +546,7 @@ button[title="Collapse sidebar"],
   > .menu__list-item
   > .menu__list-item-collapsible
   > .menu__link--active[aria-current="page"] {
-  color: var(--ifm-color-primary) !important;
+  color: var(--color-accent-link) !important;
   background-color: rgba(52, 36, 238, 0.06) !important;
   border-left: 3px solid var(--ifm-color-primary) !important;
   padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px) !important;
@@ -622,7 +638,7 @@ html[data-theme="dark"] .menu__list .menu__list .menu__list-item-collapsible .me
 /* Active sidebar items — primary color with left border */
 .menu__link--active:not(.menu__link--sublist) {
   font-weight: 500 !important;
-  color: var(--ifm-color-primary) !important;
+  color: var(--color-accent-link) !important;
   border-left: 3px solid var(--ifm-color-primary);
   padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
   background-color: rgba(52, 36, 238, 0.06);
@@ -1189,7 +1205,7 @@ html[data-theme="dark"] .plugin-id-field-notes {
 .plugin-id-field-notes h6,
 .plugin-id-field-notes p,
 .plugin-id-field-notes li {
-  font-family: "Geist", "Inter", sans-serif;
+  font-family: "Geist", "Geist Fallback", sans-serif;
 }
 
 .plugin-id-field-notes code,
@@ -1443,4 +1459,16 @@ html[data-theme="dark"] .plugin-id-field-notes {
 
 .img-lightbox-lock {
   overflow: hidden;
+}
+
+/* The oneDark prism theme sets comments to #5c6370 (2.3:1 on its #282c34
+   background) as an inline style, hence !important. */
+[data-theme="dark"] .prism-code .token.comment {
+  color: #969ca8 !important;
+}
+
+/* Active table-of-contents entry: brand-400 is 4.43:1 on the dark body;
+   the link accent (brand-300 in dark) clears 4.5:1. */
+.table-of-contents__link--active {
+  color: var(--color-accent-link);
 }

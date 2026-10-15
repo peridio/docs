@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import { BlogPostProvider } from '@docusaurus/plugin-content-blog/client'
 import { createViewportFocus } from './viewportFocus'
+import { variantSrc } from './variants'
 import styles from './styles.module.css'
 
 // Every card shares one controller, so the feed costs one scroll listener and one
@@ -95,15 +96,6 @@ function Eyebrow({ post, isFeatured }) {
   )
 }
 
-// `make thumbs` writes one asset per entry in presets.json `sizes`: <slug>-thumb
-// (400) for the row tiles, <slug>-tile (800) for those same tiles once mobile
-// stretches them, and <slug>-hero (1152) for the featured slot. Front matter
-// points at the thumb, so the others are derived from it rather than plumbed
-// through separately.
-function variantSrc(image, kind) {
-  return image && kind !== 'thumb' ? image.replace('-thumb.', `-${kind}.`) : image
-}
-
 // The dither is baked into the file, so any browser rescale mushes the dots. The
 // desktop row column is 218px of chassis around a ~200px screen, which resolves
 // the 400w thumb 1:1 on a retina display. Below 768px the grid collapses to one
@@ -114,7 +106,30 @@ const ROW_SIZES = '(max-width: 768px) 100vw, 200px'
 
 function Thumb({ post, className, variant = 'thumb' }) {
   const { image, image_alt: imageAlt } = post.frontMatter
-  const src = variantSrc(image, variant)
+  const animated = Boolean(image && image.endsWith('.webp'))
+  const target = variantSrc(image, variant)
+  const deferAnimation = variant === 'hero' && animated
+  // Hero of an animated note: paint the still poster immediately and swap in
+  // the animation once it has fully downloaded, so the largest paint is a small
+  // PNG rather than a multi-megabyte animation. Phones get the 800px tile
+  // animation instead of the 1152px hero, and readers who asked for less data
+  // or less motion keep the poster.
+  const [animatedSrc, setAnimatedSrc] = useState(null)
+  const src = deferAnimation ? (animatedSrc ?? variantSrc(image, 'poster')) : target
+  useEffect(() => {
+    setAnimatedSrc(null)
+    if (!deferAnimation) return undefined
+    if (navigator.connection?.saveData) return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    const kind = window.matchMedia('(max-width: 768px)').matches ? 'tile' : 'hero'
+    const next = variantSrc(image, kind)
+    const loader = new Image()
+    loader.onload = () => setAnimatedSrc(next)
+    loader.src = next
+    return () => {
+      loader.onload = null
+    }
+  }, [deferAnimation, image])
   const srcSet =
     variant === 'thumb' && image ? `${image} 400w, ${variantSrc(image, 'tile')} 800w` : undefined
   return (
@@ -125,13 +140,20 @@ function Thumb({ post, className, variant = 'thumb' }) {
     >
       <span className={styles.gasket}>
         <span className={styles.screen} data-fn-screen="">
-          {src ? (
+          {src && variant === 'thumb' && animated ? (
+            // Safari before 14 can't decode WebP; it takes the still poster.
+            <picture>
+              <source type="image/webp" srcSet={srcSet} sizes={ROW_SIZES} />
+              <img src={variantSrc(image, 'poster')} alt={imageAlt || ''} loading="lazy" />
+            </picture>
+          ) : src ? (
             <img
               src={src}
               srcSet={srcSet}
               sizes={srcSet ? ROW_SIZES : undefined}
               alt={imageAlt || ''}
-              loading="lazy"
+              loading={variant === 'hero' ? 'eager' : 'lazy'}
+              fetchPriority={variant === 'hero' ? 'high' : undefined}
             />
           ) : (
             <span className={styles.thumbPlaceholder} />

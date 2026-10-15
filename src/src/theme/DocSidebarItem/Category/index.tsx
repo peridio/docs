@@ -9,9 +9,12 @@
  *     `HiOutlineChevronRight` so the chevron matches the rest of the site UI.
  *   - Auto-expand the active sidebar category on navigation (see
  *     `useAutoExpandActiveCategory`) instead of only expanding on click.
+ *   - Render a non-collapsible category with no page of its own as a <span>
+ *     label. Upstream emits an <a> with no href, which fails Lighthouse's
+ *     crawlable-anchors audit on every docs page.
  *
  * Upgrade path: when bumping `@docusaurus/core`, diff the upstream file for
- * this component against 3.10.0 and re-apply the two changes above. If a
+ * this component against 3.10.0 and re-apply the three changes above. If a
  * lighter CSS-only approach (overriding the caret pseudo + a thin wrapper
  * for auto-expand) becomes feasible, prefer that over carrying this fork.
  */
@@ -231,30 +234,40 @@ function DocSidebarItemCategoryCollapsible({
           'menu__list-item-collapsible--active': isCurrentPage,
         })}
       >
-        <Link
-          className={clsx(styles.categoryLink, 'menu__link', {
-            'menu__link--sublist': collapsible,
-            'menu__link--sublist-caret': !href && collapsible,
-            'menu__link--active': isActive,
-            [styles.categoryLinkWithHeroChevron]: showHeroChevron && !href,
-          })}
-          onClick={handleItemClick}
-          aria-current={isCurrentPage ? 'page' : undefined}
-          role={collapsible && !href ? 'button' : undefined}
-          aria-expanded={collapsible && !href ? !collapsed : undefined}
-          href={collapsible ? (hrefWithSSRFallback ?? '#') : hrefWithSSRFallback}
-          {...props}
-        >
-          <CategoryLinkLabel label={label} />
-          {showHeroChevron && !href && (
-            <HiOutlineChevronRight
-              className={clsx(styles.categoryChevron, {
-                [styles.categoryChevronExpanded]: !collapsed,
-              })}
-              aria-hidden="true"
-            />
-          )}
-        </Link>
+        {!collapsible && !hrefWithSSRFallback ? (
+          <span
+            className={clsx(styles.categoryLink, styles.categoryLabelOnly, 'menu__link', {
+              'menu__link--active': isActive,
+            })}
+          >
+            <CategoryLinkLabel label={label} />
+          </span>
+        ) : (
+          <Link
+            className={clsx(styles.categoryLink, 'menu__link', {
+              'menu__link--sublist': collapsible,
+              'menu__link--sublist-caret': !href && collapsible,
+              'menu__link--active': isActive,
+              [styles.categoryLinkWithHeroChevron]: showHeroChevron && !href,
+            })}
+            onClick={handleItemClick}
+            aria-current={isCurrentPage ? 'page' : undefined}
+            role={collapsible && !href ? 'button' : undefined}
+            aria-expanded={collapsible && !href ? !collapsed : undefined}
+            href={collapsible ? (hrefWithSSRFallback ?? '#') : hrefWithSSRFallback}
+            {...props}
+          >
+            <CategoryLinkLabel label={label} />
+            {showHeroChevron && !href && (
+              <HiOutlineChevronRight
+                className={clsx(styles.categoryChevron, {
+                  [styles.categoryChevronExpanded]: !collapsed,
+                })}
+                aria-hidden="true"
+              />
+            )}
+          </Link>
+        )}
         {href && collapsible && (
           <CollapseButton
             collapsed={collapsed}

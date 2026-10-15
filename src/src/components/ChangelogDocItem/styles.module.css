@@ -1,0 +1,5 @@
+/* /changelog/latest paints for a moment before its redirect fires. Keeping the
+   footer below the fold means the swap to the feed doesn't shift it. */
+.redirecting {
+  min-height: 100vh;
+}

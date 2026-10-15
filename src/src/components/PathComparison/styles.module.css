@@ -24,7 +24,7 @@
   text-align: center;
 }
 
-.pathHeader h4 {
+.pathHeader h3 {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 700;
@@ -35,11 +35,11 @@
 }
 
 .pathHeader.primary {
-  background: var(--ifm-color-primary);
-  border-bottom-color: var(--ifm-color-primary);
+  background: var(--color-accent-solid);
+  border-bottom-color: var(--color-accent-solid);
 }
 
-.pathHeader.primary h4 {
+.pathHeader.primary h3 {
   color: #fff;
 }
 
@@ -131,7 +131,7 @@
   gap: 0.5rem;
 }
 
-.pathBlockHeader h4 {
+.pathBlockHeader h3 {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 700;
@@ -173,13 +173,13 @@
 
 .resolutionHeader {
   padding: 0.75rem 1.25rem;
-  background: var(--ifm-color-primary);
+  background: var(--color-accent-solid);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.resolutionHeader h4 {
+.resolutionHeader h3 {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 700;
