@@ -573,9 +573,13 @@ function FeedSearchInner({
         {state.kind === 'idle' && (
           <div className={styles.empty}>
             <div className={styles.emptyTitle}>
-              {droppedTarget
-                ? `${droppedTarget} is not in the ${release}/${channel} feed. Pick a different target.`
-                : 'Pick a target to start searching'}
+              {manifestState.kind === 'loading'
+                ? `Loading the ${release}/${channel} feed…`
+                : manifestState.kind === 'error'
+                  ? `Could not load the ${release}/${channel} feed: ${manifestState.message}`
+                  : droppedTarget
+                    ? `${droppedTarget} is not in the ${release}/${channel} feed. Pick a different target.`
+                    : 'Pick a target to start searching'}
             </div>
             <p>
               Live results from <code>repo.avocadolinux.org</code>
