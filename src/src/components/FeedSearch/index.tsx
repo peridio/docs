@@ -170,6 +170,24 @@ interface TargetEntry {
   name: string
 }
 
+// Build targets that have a different ID in some feeds. The hardware catalog
+// uses the 2024 ID. The 2026 feeds publish the shorter ID.
+const TARGET_ALIASES: [string, string][] = [
+  ['jetson-agx-orin-devkit', 'jetson-agx-orin'],
+  ['jetson-orin-nano-devkit', 'jetson-orin-nano'],
+]
+
+// Return the ID that this manifest publishes for a target, or null if the
+// manifest does not publish the target under either ID.
+function resolveTarget(manifest: TargetManifest, target: string): string | null {
+  if (Object.prototype.hasOwnProperty.call(manifest, target)) return target
+  for (const [a, b] of TARGET_ALIASES) {
+    const other = target === a ? b : target === b ? a : null
+    if (other && Object.prototype.hasOwnProperty.call(manifest, other)) return other
+  }
+  return null
+}
+
 function targetList(manifest: TargetManifest): TargetEntry[] {
   const entries = Object.values(targetsData as Record<string, { name: string; target: string }>)
   // A carrier board can share its SOM's build target (targets.json keeps them
@@ -181,8 +199,9 @@ function targetList(manifest: TargetManifest): TargetEntry[] {
   // return identical results.
   const byTarget = new Map<string, TargetEntry>()
   for (const t of entries) {
-    if (!t || !t.target || !Object.prototype.hasOwnProperty.call(manifest, t.target)) continue
-    if (!byTarget.has(t.target)) byTarget.set(t.target, { target: t.target, name: t.name })
+    const target = t?.target ? resolveTarget(manifest, t.target) : null
+    if (!target) continue
+    if (!byTarget.has(target)) byTarget.set(target, { target, name: t.name })
   }
   return Array.from(byTarget.values()).sort((a, b) => a.name.localeCompare(b.name))
 }
@@ -294,7 +313,8 @@ function FeedSearchInner({
 
   // Drop a target that the loaded manifest does not know about (a stale or
   // hand-edited link, or a target that the new release or channel does not
-  // publish). Restore it when a later feed has it again. Otherwise the controlled <select> sits
+  // publish). Restore it when a later feed has it again. A target that the
+  // new feed publishes under its other ID switches to that ID. Otherwise the controlled <select> sits
   // on a value with no matching <option> and the fetch effect surfaces a
   // misleading "No repos published for this target yet" for what's really an
   // invalid value. Resetting also lets the URL-sync effect strip the bad
@@ -302,12 +322,21 @@ function FeedSearchInner({
   useEffect(() => {
     if (manifestState.kind !== 'ready') return
     const manifest = manifestState.manifest
-    if (target && !manifest[target]) {
-      setDroppedTarget(target)
-      setTarget('')
-    } else if (!target && droppedTarget && manifest[droppedTarget]) {
-      setTarget(droppedTarget)
-      setDroppedTarget('')
+    if (target) {
+      const resolved = resolveTarget(manifest, target)
+      if (resolved === target) return
+      if (resolved) {
+        setTarget(resolved)
+      } else {
+        setDroppedTarget(target)
+        setTarget('')
+      }
+    } else if (droppedTarget) {
+      const resolved = resolveTarget(manifest, droppedTarget)
+      if (resolved) {
+        setTarget(resolved)
+        setDroppedTarget('')
+      }
     }
   }, [manifestState, target, droppedTarget])
 
