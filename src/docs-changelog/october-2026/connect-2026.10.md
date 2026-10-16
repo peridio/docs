@@ -1,13 +1,14 @@
 ---
 title: 'Connect: 2026.10'
-description: 'Avocado Connect highlights for October 2026 — learning moves to Docs Learn, Fleet becomes the landing page, the Dashboard and LaunchPad are retired, and a first-device card greets new orgs.'
+description: 'Avocado Connect highlights for October 2026 — the LaunchPad guides move to the docs, Fleet becomes the landing page, the Dashboard and LaunchPad are retired, and a first-device card greets new orgs.'
 ---
 
-- **Learn is the new home for learning Avocado** — the guided missions,
-  tutorials, Platform guides and the dev-kit-to-production matcher that lived in
-  Connect's LaunchPad are now in [Docs Learn](/learn), where they can be searched
-  and linked publicly. Mission progress is kept in your browser. Old
-  `/orgs/<org>/launchpad/...` links redirect to the matching Docs page.
+- **LaunchPad's guides move to the docs** — the guided missions, tutorials and
+  the dev-kit-to-production matcher are now in [Docs Learn](/learn), and the
+  Platform guides are under [Avocado Connect](/avocado-connect/overview) in the
+  Product Docs, where they can be searched and linked publicly. Mission progress
+  is kept in your browser. Old `/orgs/<org>/launchpad/...` links redirect to the
+  matching Docs page.
 - **Fleet is the landing page** — signing in, switching orgs, creating an org and
   accepting an invite all land on Fleet. The Dashboard is retired; its activity
   chart is on Fleet and its usage meters are under Settings → Billing.
