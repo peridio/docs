@@ -203,7 +203,7 @@ permissions:
 
 That is enough to log in on the serial console. If you started from `avocado init` you have it already; if you hand-wrote your `avocado.yaml`, this is the piece to add. **Verified on a Jetson Orin Nano**: with this profile the flashed rootfs carries `root::` and the console gives a root prompt.
 
-For a shell over the network instead, add the SSH extension and your own public key. The extension configures sshd to read `/var/lib/ssh/authorized_keys`; `var_files` is what puts a key there, and neither half is useful alone:
+For a shell over the network instead, add the SSH extension and your own public key. The root filesystem is read-only, so `~/.ssh/authorized_keys` can't be written for root; the SSH extensions (`avocado-ext-sshd`, `avocado-ext-sshd-dev`, 0.1.1 and later) also read `/var/lib/ssh/authorized_keys.d/<user>`, on the writable `/var`. `var_files` is what puts a key there, and neither half is useful alone. Name the key file for the user it logs in, here `files/root`:
 
 ```yaml
 runtimes:
@@ -212,13 +212,15 @@ runtimes:
       - avocado-ext-sshd-dev
       - avocado-bsp-{{ avocado.target.board }} # NIC driver lives here
     var_files:
-      - source: 'files/authorized_keys'
-        dest: 'lib/ssh/'
+      - source: 'files/root'
+        dest: 'lib/ssh/authorized_keys.d/'
 ```
 
 Do not drop the BSP extension to slim a test project. On a Jetson Orin Nano it carries `kernel-module-realtek`, and without it the board boots with no ethernet interface at all - so there is nothing to SSH to, and the cause looks nothing like a missing extension.
 
-**Verified on a Jetson Orin Nano**: the key lands root-owned at `/var/lib/ssh/authorized_keys` mode `0644`, which is what `StrictModes` requires, and `ssh -o BatchMode=yes root@<board>` connects. `BatchMode` refuses password and keyboard-interactive auth, so a connection under it is proof the key itself was accepted rather than a password prompt quietly succeeding behind it.
+The key file must be owned by root (or the user) and not group- or world-writable, which is what `StrictModes` requires. Per-user files mean one account's keys never open another.
+
+**Verified on a Jetson AGX Orin (2026 feed)**: with `avocado-ext-sshd-dev` 0.1.1, `sshd -T` reports `authorizedkeysfile .ssh/authorized_keys /var/lib/ssh/authorized_keys.d/%u`, and a key in `/var/lib/ssh/authorized_keys.d/root` logs in on an sshd with password and empty-password authentication off (`Accepted publickey`), while a client without the key is refused. Don't take a successful `ssh` against `avocado-ext-sshd-dev` alone as proof the key works: that extension permits empty passwords, so the login succeeds before the key is even tried. Check sshd's log for `Accepted publickey`.
 
 Expect the host key to change on every reflash. Host keys are generated on first boot rather than shipped, so the entry your client recorded for that address is stale the moment you reflash, and SSH reports it as a possible man-in-the-middle rather than as a new board. Replace the recorded entry instead of adding to it - an append leaves the old key in place and the failure persists.
 
