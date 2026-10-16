@@ -24,7 +24,7 @@ const sidebars = {
         'avocado-connect/deployments',
         'avocado-connect/tunnels',
         'avocado-connect/code-signing',
-        'avocado-connect/device-groups',
+        'avocado-connect/groups',
         'avocado-connect/access-control',
         'avocado-connect/team',
         'avocado-connect/api-tokens',

@@ -240,8 +240,7 @@ Shut down the device by running `poweroff` in the QEMU console. Then rebuild and
 
 ```bash
 # Recompile the app, then rebuild the extension and runtime
-avocado sdk compile example-reactjs-app
-avocado build
+avocado --no-stamps build
 
 # Recreate the disk image and boot it
 avocado provision dev
@@ -250,7 +249,9 @@ avocado sdk run -iE vm dev --host-fwd "4000-:4000"
 
 Reload [http://localhost:4000](http://localhost:4000). The header reads **Avocado Fleet Monitor**.
 
-Running the compile step yourself makes sure the new source is compiled before the extension is repackaged. To start from a clean slate, run the compile section's clean script:
+`--no-stamps` matters here. `avocado build` skips an extension whose build inputs have not changed, and those inputs are `avocado.yaml`, the overlay, and the compile and install scripts, not the files under `ref-reactjs/`. Without the flag, the build reports `example-reactjs` as up to date and the image keeps the old app. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps) for how the skip works.
+
+To start from a clean slate, run the compile section's clean script:
 
 ```bash
 # Run reactjs-clean.sh: removes dist/, node_modules/ and package-lock.json

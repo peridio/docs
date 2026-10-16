@@ -3,6 +3,7 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   guides: [
+    'index',
     {
       type: 'category',
       label: 'References',

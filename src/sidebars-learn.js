@@ -39,12 +39,6 @@ const sidebars = {
         'tutorials/device-heartbeat',
         'tutorials/react-cross-compile',
         'tutorials/rust-cross-compile',
-        {
-          type: 'link',
-          label: 'Data Egress',
-          href: '/learn/tutorials#coming-soon',
-          customProps: { inDevelopment: true },
-        },
       ],
     },
     'dev-kit-to-production',

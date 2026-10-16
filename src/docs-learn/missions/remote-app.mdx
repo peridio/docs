@@ -36,7 +36,7 @@ cd my-react-app
 
 ## Step 2: Connect the project
 
-Log in to Avocado Connect and link the project to it. `avocado connect init` writes your organization, project and claim token into `avocado.yaml`, and adds the Connect extensions (`avocado-ext-connect-config`, `avocado-ext-connect` and `avocado-ext-tunnels`) to the `dev` runtime so the device can enroll and accept tunnels.
+Log in to Avocado Connect and link the project to it. `avocado connect init` writes your organization and project into `avocado.yaml`, and adds the Connect extensions (`avocado-ext-connect-config`, `avocado-ext-connect` and `avocado-ext-tunnels`) to the `dev` runtime so the device can enroll and accept tunnels. It also creates a claim token and writes it to the device config at `overlay/etc/avocado-conn/config.toml`.
 
 ```bash
 # Authenticate in the browser (skip if you are already logged in)
@@ -45,6 +45,12 @@ avocado connect auth login
 # Link the project, create a claim token, and add the Connect extensions
 avocado connect init
 ```
+
+:::note[The claim token also ships in the app extension]
+
+In this reference, the app extension `example-reactjs` also uses the top-level `overlay/` directory as its overlay. So `overlay/etc/avocado-conn/config.toml`, with the claim token in it, is packaged into `example-reactjs` too, and every app update you ship over the air carries the token. That's fine for this mission. In your own projects, give the app extension its own overlay directory.
+
+:::
 
 ### Add the Connect extensions to the QEMU target
 

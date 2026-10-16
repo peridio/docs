@@ -51,6 +51,12 @@ The new token's value is in `data.token.token`:
 
 To create an organization-scoped token, send the same body to `POST /api/orgs/$ORG_ID/api-tokens`. List your tokens with `GET /api/me/api-tokens` and revoke one with `DELETE /api/me/api-tokens/<TOKEN_ID>`. See [Authentication & Tokens](/developer-reference/avocado-connect-api/authentication-tokens) for every endpoint.
 
+:::note
+
+The API reference currently shows the new token in `data.raw_token`. Both create endpoints return it in `data.token.token`, as shown above.
+
+:::
+
 Any member can manage their own organization-scoped tokens. Owners and admins can see and revoke every organization-scoped token in the organization, under **Settings → API Keys** or with `GET` and `DELETE` on `/api/orgs/$ORG_ID/api-tokens`. When a member leaves the organization, their organization-scoped tokens are revoked.
 
 ## Security practices
