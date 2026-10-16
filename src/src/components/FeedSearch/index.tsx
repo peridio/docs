@@ -13,6 +13,12 @@ import styles from './styles.module.css'
 
 const DEFAULT_RELEASE = '2024'
 const DEFAULT_CHANNEL = 'edge'
+// Release lines and channels published at repo.avocadolinux.org.
+const RELEASES = [
+  { value: '2024', label: '2024 (scarthgap)' },
+  { value: '2026', label: '2026 (wrynose)' },
+]
+const CHANNELS = ['edge', 'next']
 const MAX_RESULTS = 100
 const SUGGESTIONS = ['openssh', 'curl', 'python3', 'gstreamer', 'nginx', 'sqlite']
 const COPY_FLASH_MS = 1800
@@ -164,6 +170,24 @@ interface TargetEntry {
   name: string
 }
 
+// Build targets that have a different ID in some feeds. The hardware catalog
+// uses the 2024 ID. The 2026 feeds publish the shorter ID.
+const TARGET_ALIASES: [string, string][] = [
+  ['jetson-agx-orin-devkit', 'jetson-agx-orin'],
+  ['jetson-orin-nano-devkit', 'jetson-orin-nano'],
+]
+
+// Return the ID that this manifest publishes for a target, or null if the
+// manifest does not publish the target under either ID.
+function resolveTarget(manifest: TargetManifest, target: string): string | null {
+  if (Object.prototype.hasOwnProperty.call(manifest, target)) return target
+  for (const [a, b] of TARGET_ALIASES) {
+    const other = target === a ? b : target === b ? a : null
+    if (other && Object.prototype.hasOwnProperty.call(manifest, other)) return other
+  }
+  return null
+}
+
 function targetList(manifest: TargetManifest): TargetEntry[] {
   const entries = Object.values(targetsData as Record<string, { name: string; target: string }>)
   // A carrier board can share its SOM's build target (targets.json keeps them
@@ -175,8 +199,9 @@ function targetList(manifest: TargetManifest): TargetEntry[] {
   // return identical results.
   const byTarget = new Map<string, TargetEntry>()
   for (const t of entries) {
-    if (!t || !t.target || !Object.prototype.hasOwnProperty.call(manifest, t.target)) continue
-    if (!byTarget.has(t.target)) byTarget.set(t.target, { target: t.target, name: t.name })
+    const target = t?.target ? resolveTarget(manifest, t.target) : null
+    if (!target) continue
+    if (!byTarget.has(target)) byTarget.set(target, { target, name: t.name })
   }
   return Array.from(byTarget.values()).sort((a, b) => a.name.localeCompare(b.name))
 }
@@ -212,10 +237,27 @@ function readUrlParam(name: string): string {
   return new URLSearchParams(window.location.search).get(name) ?? ''
 }
 
-function FeedSearchInner({ release, channel }: { release: string; channel: string }) {
+function FeedSearchInner({
+  defaultRelease,
+  defaultChannel,
+}: {
+  defaultRelease: string
+  defaultChannel: string
+}) {
+  const [release, setRelease] = useState<string>(() => {
+    const fromUrl = readUrlParam('release')
+    return RELEASES.some((r) => r.value === fromUrl) ? fromUrl : defaultRelease
+  })
+  const [channel, setChannel] = useState<string>(() => {
+    const fromUrl = readUrlParam('channel')
+    return CHANNELS.includes(fromUrl) ? fromUrl : defaultChannel
+  })
   const [manifestState, setManifestState] = useState<ManifestState>({ kind: 'loading' })
   const [target, setTarget] = useState<string>(() => readUrlParam('target'))
   const [query, setQuery] = useState<string>(() => readUrlParam('q'))
+  // The last target that the current feed does not publish. We keep it so
+  // that the target comes back when the user selects a feed that has it.
+  const [droppedTarget, setDroppedTarget] = useState<string>('')
   const [state, setState] = useState<LoadState>({ kind: 'idle' })
   // Bumped by the Retry button to force the per-target fetch effect to re-run
   // after the cache entry has been cleared.
@@ -235,6 +277,10 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
   // the URL stays clean when state is reset.
   useEffect(() => {
     const url = new URL(window.location.href)
+    if (release !== defaultRelease) url.searchParams.set('release', release)
+    else url.searchParams.delete('release')
+    if (channel !== defaultChannel) url.searchParams.set('channel', channel)
+    else url.searchParams.delete('channel')
     if (target) url.searchParams.set('target', target)
     else url.searchParams.delete('target')
     const trimmed = query.trim()
@@ -244,11 +290,12 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
     if (next !== window.location.href) {
       window.history.replaceState(null, '', next)
     }
-  }, [target, query])
+  }, [release, channel, defaultRelease, defaultChannel, target, query])
 
-  // Fetch the per-target repo manifest once on mount.
+  // Fetch the per-target repo manifest whenever the release or channel changes.
   useEffect(() => {
     const controller = new AbortController()
+    setManifestState({ kind: 'loading' })
     fetchTargetManifest(release, channel, controller.signal)
       .then((manifest) => {
         if (controller.signal.aborted) return
@@ -264,17 +311,34 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
     return () => controller.abort()
   }, [release, channel])
 
-  // Drop a target restored from the URL that the loaded manifest doesn't know
-  // about (stale or hand-edited link). Otherwise the controlled <select> sits
+  // Drop a target that the loaded manifest does not know about (a stale or
+  // hand-edited link, or a target that the new release or channel does not
+  // publish). Restore it when a later feed has it again. A target that the
+  // new feed publishes under its other ID switches to that ID. Otherwise the controlled <select> sits
   // on a value with no matching <option> and the fetch effect surfaces a
   // misleading "No repos published for this target yet" for what's really an
   // invalid value. Resetting also lets the URL-sync effect strip the bad
   // `?target=` from the address bar.
   useEffect(() => {
-    if (manifestState.kind === 'ready' && target && !manifestState.manifest[target]) {
-      setTarget('')
+    if (manifestState.kind !== 'ready') return
+    const manifest = manifestState.manifest
+    if (target) {
+      const resolved = resolveTarget(manifest, target)
+      if (resolved === target) return
+      if (resolved) {
+        setTarget(resolved)
+      } else {
+        setDroppedTarget(target)
+        setTarget('')
+      }
+    } else if (droppedTarget) {
+      const resolved = resolveTarget(manifest, droppedTarget)
+      if (resolved) {
+        setTarget(resolved)
+        setDroppedTarget('')
+      }
     }
-  }, [manifestState, target])
+  }, [manifestState, target, droppedTarget])
 
   const targets = useMemo<TargetEntry[]>(
     () => (manifestState.kind === 'ready' ? targetList(manifestState.manifest) : []),
@@ -334,7 +398,14 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
       setState({ kind: 'idle' })
       return
     }
-    if (manifestState.kind !== 'ready') return
+    if (manifestState.kind === 'loading') {
+      setState({ kind: 'loading', target })
+      return
+    }
+    if (manifestState.kind === 'error') {
+      setState({ kind: 'error', target, message: manifestState.message })
+      return
+    }
     const paths = manifestState.manifest[target]
     if (!paths || paths.length === 0) {
       setState({
@@ -346,7 +417,7 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
     }
     // Cache key includes release+channel: different feeds produce different
     // package lists for the same target, and these can change at runtime via
-    // the <FeedSearch /> props.
+    // the release and channel selectors.
     const cacheKey = `${release}/${channel}/${target}`
     const cached = cache.current.get(cacheKey)
     if (cached) {
@@ -406,6 +477,40 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
       >
         <div className={styles.controls}>
           <div className={styles.field}>
+            <label className={styles.label} htmlFor="feed-search-release">
+              Release
+            </label>
+            <select
+              id="feed-search-release"
+              className={styles.select}
+              value={release}
+              onChange={(e) => setRelease(e.target.value)}
+            >
+              {RELEASES.map((r) => (
+                <option key={r.value} value={r.value}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="feed-search-channel">
+              Channel
+            </label>
+            <select
+              id="feed-search-channel"
+              className={styles.select}
+              value={channel}
+              onChange={(e) => setChannel(e.target.value)}
+            >
+              {CHANNELS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
             <label className={styles.label} htmlFor="feed-search-target">
               Target
             </label>
@@ -413,7 +518,10 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
               id="feed-search-target"
               className={styles.select}
               value={target}
-              onChange={(e) => setTarget(e.target.value)}
+              onChange={(e) => {
+                setTarget(e.target.value)
+                setDroppedTarget('')
+              }}
               disabled={manifestState.kind !== 'ready' || targets.length === 0}
             >
               <option value="">
@@ -430,7 +538,7 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
               ))}
             </select>
           </div>
-          <div className={styles.field}>
+          <div className={`${styles.field} ${styles.fieldFullRow}`}>
             <label className={styles.label} htmlFor="feed-search-query">
               Search packages
             </label>
@@ -493,7 +601,15 @@ function FeedSearchInner({ release, channel }: { release: string; channel: strin
       <div className={styles.body}>
         {state.kind === 'idle' && (
           <div className={styles.empty}>
-            <div className={styles.emptyTitle}>Pick a target to start searching</div>
+            <div className={styles.emptyTitle}>
+              {manifestState.kind === 'loading'
+                ? `Loading the ${release}/${channel} feed…`
+                : manifestState.kind === 'error'
+                  ? `Could not load the ${release}/${channel} feed: ${manifestState.message}`
+                  : droppedTarget
+                    ? `${droppedTarget} is not in the ${release}/${channel} feed. Pick a different target.`
+                    : 'Pick a target to start searching'}
+            </div>
             <p>
               Live results from <code>repo.avocadolinux.org</code>
               <br />
@@ -836,7 +952,7 @@ export default function FeedSearch({
 } = {}) {
   return (
     <BrowserOnly fallback={<div className={styles.empty}>Loading search…</div>}>
-      {() => <FeedSearchInner release={release} channel={channel} />}
+      {() => <FeedSearchInner defaultRelease={release} defaultChannel={channel} />}
     </BrowserOnly>
   )
 }
