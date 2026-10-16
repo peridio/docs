@@ -39,6 +39,10 @@ a.card:hover {
   margin-bottom: 1rem;
 }
 
+.icon:empty {
+  display: none;
+}
+
 .card h3 {
   font-size: 1.1rem;
   font-weight: 700;

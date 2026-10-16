@@ -72,7 +72,7 @@ Tunnel policies set the rules every tunnel request must follow. Your organizatio
 
 | Rule              | What it controls                                                         |
 | ----------------- | ------------------------------------------------------------------------ |
-| `max_ttl_seconds` | How long a tunnel stays open when the request sets no expiry             |
+| `max_ttl_seconds` | How long a tunnel stays open when the request sets no expiry (see below) |
 | `backoff_seconds` | How long a device waits after a tunnel closes before it can open another |
 | `max_concurrent`  | How many tunnels a device can have open at once                          |
 | `cidr_allowlist`  | Which source IP ranges can connect through the relay                     |
@@ -83,7 +83,8 @@ A cohort policy can only tighten the organization policy, never loosen it. The s
 
 Keep in mind:
 
-- `max_concurrent` accepts 1 to 10. `max_ttl_seconds` and `backoff_seconds` accept up to 86400, but no tunnel stays open longer than one hour.
+- `max_concurrent` accepts 1 to 10. `max_ttl_seconds` and `backoff_seconds` accept up to 86400, but no tunnel stays open longer than one hour, and a request whose expiry falls later is rejected.
+- `max_ttl_seconds` only applies to tunnels opened with `POST /api/orgs/$ORG_ID/projects/$PROJECT_ID/cohorts/$COHORT_ID/tunnels` that don't send an `expires_at`. Tunnels opened from **Fleet** or with `POST /api/orgs/$ORG_ID/tunnels` always last one hour, whatever the policy says.
 - Time windows are not enforced yet. Setting any `allowed_windows` entry blocks every tunnel request it applies to, so leave it empty.
 - `POST /api/orgs/$ORG_ID/tunnels` does not take a reason, so it is rejected while `require_reason` is on.
 

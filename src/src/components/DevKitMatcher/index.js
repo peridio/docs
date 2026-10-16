@@ -4,12 +4,16 @@ import useBrokenLinks from '@docusaurus/useBrokenLinks'
 import clsx from 'clsx'
 import Heading from '@theme/Heading'
 import data from '@site/src/data/hardware/dev-kit-matcher.json'
+import targets from '@site/src/data/hardware/targets.json'
+import { matcherLinks, resolveMatcher } from './resolve'
 import styles from './styles.module.css'
 
 // Ported from Avocado Connect's LaunchPad hardware picker. Pairings are by SoC
 // family: each production device lists the dev kit that runs the same (or the
 // closest supported) silicon, plus any kits that also work for early work.
-const { devKits, production } = data
+// Labels and page URLs come from targets.json (see resolve.js).
+const { devKits, production } = resolveMatcher(data, targets)
+const resultLinks = matcherLinks({ devKits, production })
 
 const PRODUCTION_PREFIX = 'production-'
 const DEV_KIT_PREFIX = 'dev-kit-'
@@ -124,6 +128,9 @@ export default function DevKitMatcher() {
   const brokenLinks = useBrokenLinks()
   Object.keys(production).forEach((id) => brokenLinks.collectAnchor(PRODUCTION_PREFIX + id))
   Object.keys(devKits).forEach((id) => brokenLinks.collectAnchor(DEV_KIT_PREFIX + id))
+  // Results only render after a click, so their <Link>s never run during SSR.
+  // Register every URL they can show so onBrokenLinks/onBrokenAnchors see them.
+  resultLinks.forEach((url) => brokenLinks.collectLink(url))
 
   useEffect(() => {
     setSelected(parseHash(window.location.hash.slice(1)))

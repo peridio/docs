@@ -51,7 +51,7 @@ avocado connect auth login
 avocado connect claim-tokens create --name production-batch-1 --max-uses 10
 ```
 
-The CLI prompts for the project and cohort; pass `--project <PROJECT_ID>` and `--cohort <COHORT_ID>` to skip the prompts. Tokens expire after 24 hours by default. Omit `--max-uses` for unlimited uses, pass `--no-expiration` to keep the token valid indefinitely, and add `--tag <TAG>` to tag every device that enrolls with it. List and delete tokens with `avocado connect claim-tokens list` and `avocado connect claim-tokens delete --id <TOKEN_ID>`.
+The CLI prompts for the project and cohort; pass `--project <PROJECT_ID>` and `--cohort <COHORT_ID>` to skip the prompts. Tokens expire after one year by default, the Avocado Connect server's default, whether you create them from the console, the CLI, or the API. Omit `--max-uses` for unlimited uses, pass `--no-expiration` to keep the token valid indefinitely, and add `--tag <TAG>` to tag every device that enrolls with it. List and delete tokens with `avocado connect claim-tokens list` and `avocado connect claim-tokens delete --id <TOKEN_ID>`.
 
 With the API, claim tokens are created at the organization level and scoped by `cohort_id`. Without a `cohort_id`, the token uses your organization's default cohort:
 
