@@ -10,7 +10,7 @@
     "sync-targets": "node scripts/sync-targets.js",
     "sync-schema": "node scripts/sync-schema.js",
     "thumbs": "node scripts/make-thumbnails.js",
-    "test": "node --test \"scripts/*.test.js\" \"scripts/thumbnails/*.test.js\" \"src/theme/BlogPostItems/*.test.js\"",
+    "test": "node --test \"scripts/*.test.js\" \"scripts/thumbnails/*.test.js\" \"src/theme/BlogPostItems/*.test.js\" \"src/components/Learn/*.test.js\"",
     "build-connect-api": "node scripts/build-connect-api.js && prettier --write docs-guides/avocado-connect-api",
     "build": "bash scripts/build.sh",
     "swizzle": "docusaurus swizzle",
