@@ -195,14 +195,8 @@ journalctl -u heartbeat -f
 
 Each line carries one JSON reading, like this one:
 
-```json
-{
-  "uptime": 142,
-  "mem_free_kb": 412356,
-  "mem_total_kb": 524288,
-  "load_1m": "0.03",
-  "ts": 1740700000
-}
+```text
+{"uptime":142,"mem_free_kb":412356,"mem_total_kb":524288,"load_1m":"0.03","ts":1740700000}
 ```
 
 The numbers depend on your VM. A new line appears every 30 seconds. Press `Ctrl+C` to stop watching.

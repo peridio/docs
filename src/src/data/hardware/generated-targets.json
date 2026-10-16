@@ -2,6 +2,10 @@
   "fr201": {
     "name": "OnLogic FR201",
     "target": "fr201",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "usb",
     "provisioning": {
       "hostOs": [
@@ -61,6 +65,10 @@
   "grinn-astra-1680-sbc": {
     "name": "Grinn AstraSOM-1680",
     "target": "grinn-astra-1680-sbc",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -95,6 +103,10 @@
   "icam-540": {
     "name": "Advantech ICAM-540",
     "target": "icam-540",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "other",
     "provisioning": {
       "hostOs": [
@@ -127,6 +139,10 @@
   "imx8mp-evk": {
     "name": "NXP i.MX 8M Plus EVK",
     "target": "imx8mp-evk",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -160,6 +176,10 @@
   "imx8mp-var-dart": {
     "name": "Variscite DART-MX8M-PLUS",
     "target": "imx8mp-var-dart",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "board": "variscite-sonata",
     "category": "sd",
     "description": "The Variscite DART-MX8M-PLUS is an industrial i.MX 8M Plus SoM. It provisions to an SD card or to onboard eMMC over USB (UUU), selected with the carrier's SW7 boot switch.",
@@ -220,6 +240,10 @@
   "imx91-frdm": {
     "name": "NXP FRDM i.MX 91",
     "target": "imx91-frdm",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -253,6 +277,10 @@
   "imx93-evk": {
     "name": "NXP i.MX 93 EVK",
     "target": "imx93-evk",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -286,6 +314,10 @@
   "imx93-frdm": {
     "name": "NXP FRDM i.MX 93",
     "target": "imx93-frdm",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -347,6 +379,10 @@
   "intel-x86-64-v2": {
     "name": "Intel x86-64-v2",
     "target": "intel-x86-64-v2",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "usb",
     "provisioning": {
       "hostOs": [
@@ -376,6 +412,10 @@
   "intel-x86-64-v3": {
     "name": "Intel x86-64-v3",
     "target": "intel-x86-64-v3",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "usb",
     "provisioning": {
       "hostOs": [
@@ -402,9 +442,56 @@
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/intel/x86-64-v3"
   },
+  "iot-gate-imx8plus": {
+    "name": "CompuLab IOT-GATE-iMX8PLUS",
+    "target": "ucm-imx8m-plus",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
+    "category": "sd",
+    "description": "The CompuLab IOT-GATE-iMX8PLUS is a fanless industrial IoT gateway built on the UCM-i.MX8M-Plus SOM, with cellular, GPS, CAN, and an optional M.2 TPM on the carrier. Builds the same ucm-imx8m-plus target as the SOM, plus a carrier extension for the gateway peripherals.",
+    "configuration": {
+      "description": "Add the gateway carrier extension so the dev runtime includes its cellular, GPS, and CAN support:",
+      "yaml": "extensions:\n  avocado-bsp-iot-gate-imx8plus:\n    source:\n      type: package\n      version: '*'\n\nruntimes:\n  dev:\n    extensions:\n      - avocado-bsp-iot-gate-imx8plus"
+    },
+    "provisioning": {
+      "hostOs": [
+        "macOS",
+        "Linux"
+      ],
+      "prerequisites": [
+        "CompuLab IOT-GATE-iMX8PLUS",
+        "microSD card (8GB+)",
+        "SD card reader"
+      ],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the gateway and apply power. Confirm the gateway's boot-mode selection in CompuLab's documentation first - this has not been verified against Avocado OS on this specific carrier."
+        }
+      ]
+    },
+    "serial": {
+      "baud": 115200,
+      "voltage": "3.3V",
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/learn/get-started/any-target",
+    "hardwareUrl": "/hardware/compulab/iot-gate-imx8plus"
+  },
   "jetson-agx-orin-devkit": {
     "name": "NVIDIA Jetson AGX Orin",
     "target": "jetson-agx-orin-devkit",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
     "provisioning": {
@@ -499,9 +586,92 @@
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/nvidia/jetson-agx-orin"
   },
+  "jetson-agx-thor": {
+    "name": "NVIDIA Jetson AGX Thor",
+    "target": "jetson-agx-thor",
+    "releases": {
+      "2026": "supported"
+    },
+    "category": "tegraflash",
+    "description": "The Jetson AGX Thor is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
+    "provisioning": {
+      "hostOs": [
+        "macOS",
+        "Linux"
+      ],
+      "prerequisites": [
+        "NVIDIA Jetson AGX Thor Developer Kit",
+        "Included USB-C power supply",
+        "USB-C cable (host to Jetson, for flashing)",
+        "USB-C cable (host to Jetson, for the debug console) — optional",
+        "16 GB available disk space"
+      ],
+      "options": [
+        {
+          "id": "tegraflash",
+          "label": "USB recovery (tegraflash)",
+          "profile": "tegraflash",
+          "media": "NVMe SSD (M.2 2280)",
+          "autoMount": false,
+          "command": "avocado provision -r dev --profile tegraflash",
+          "description": "Provision the dev runtime using the tegraflash profile. This builds the system image and flashes it to the Jetson over USB.",
+          "recoveryMode": {
+            "reference": {
+              "label": "NVIDIA Jetson AGX Thor Developer Kit hardware layout",
+              "url": "https://docs.nvidia.com/jetson/agx-thor-devkit/user-guide/latest/hardware_layout.html"
+            },
+            "steps": [
+              {
+                "text": "Connect the included USB-C power supply to the power USB-C port (callout 5b) on the I/O side. During external flashing the Jetson is powered over USB-C PD.",
+                "images": [
+                  {
+                    "src": "/img/jetson-agx-thor-devkit/io-layout.png",
+                    "alt": "Jetson AGX Thor I/O side: power USB-C (5b), flashing USB-C (5a), and debug USB-C (8)"
+                  }
+                ]
+              },
+              {
+                "text": "Connect a USB-C cable from your host to the flashing USB-C port (callout 5a) — the port that supports Force Recovery Mode."
+              },
+              {
+                "text": "Put the device into Force Recovery Mode: press and hold both the Force Recovery button (12) and the Reset button (13) for 3 seconds.",
+                "images": [
+                  {
+                    "src": "/img/jetson-agx-thor-devkit/buttons.png",
+                    "alt": "Jetson AGX Thor buttons: Power (11), Force Recovery (12), Reset (13)"
+                  }
+                ]
+              },
+              {
+                "text": "Release the Reset button (13) only, keeping the Force Recovery button (12) held. After a further 3 seconds, release the Force Recovery button (12)."
+              }
+            ]
+          },
+          "bootSteps": [
+            "Disconnect the flashing USB-C cable from port 5a",
+            "Power-cycle the device by unplugging and reconnecting the USB-C power supply at port 5b",
+            "For console access, keep the debug USB-C cable connected to port 8"
+          ],
+          "bootNote": "The device will boot with the provisioned system. The root user has an empty password — log in over the serial console (if connected) or via SSH once the device is on the network."
+        }
+      ]
+    },
+    "serial": {
+      "onboard": true,
+      "description": "The Jetson AGX Thor exposes its UART debug console over a dedicated USB-C port (callout 8), located behind the lid cover on the I/O side. Connect a USB-C cable from that port to your host — no separate serial adapter is required. The host enumerates a serial device for the console.",
+      "baud": 115200,
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/learn/get-started/any-target",
+    "hardwareUrl": "/hardware/nvidia/jetson-agx-thor"
+  },
   "jetson-orin-nano-devkit": {
     "name": "NVIDIA Jetson Orin Nano",
     "target": "jetson-orin-nano-devkit",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
     "provisioning": {
@@ -658,6 +828,9 @@
   "qemuarm64": {
     "name": "QEMU ARM64",
     "target": "qemuarm64",
+    "releases": {
+      "2024": "supported"
+    },
     "category": "virtual",
     "provisioning": {
       "hostOs": [
@@ -686,6 +859,9 @@
   "qemux86-64": {
     "name": "QEMU x86-64",
     "target": "qemux86-64",
+    "releases": {
+      "2024": "supported"
+    },
     "category": "virtual",
     "provisioning": {
       "hostOs": [
@@ -714,6 +890,10 @@
   "raspberrypi0-2w": {
     "name": "Raspberry Pi Zero 2 W",
     "target": "raspberrypi0-2w",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -747,6 +927,10 @@
   "raspberrypi4": {
     "name": "Raspberry Pi 4 Model B",
     "target": "raspberrypi4",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -780,6 +964,10 @@
   "raspberrypi5": {
     "name": "Raspberry Pi 5",
     "target": "raspberrypi5",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -826,9 +1014,72 @@
     "gettingStartedUrl": "/learn/get-started/raspberry-pi",
     "hardwareUrl": "/hardware/raspberry-pi/raspberry-pi-5"
   },
+  "rb3gen2": {
+    "name": "Qualcomm RB3 Gen 2",
+    "target": "rb3gen2",
+    "releases": {
+      "2026": "supported"
+    },
+    "category": "physical",
+    "description": "The RB3 Gen 2 is provisioned by flashing the kit's onboard UFS storage over USB while the SoC is in Qualcomm EDL (Emergency Download) mode. One target backs the core kit and both mezzanines. The Vision Kit is validated on hardware; core and Industrial Kit packages are published but not yet hardware-validated.",
+    "configuration": {
+      "description": "After initializing, update these settings in avocado.yaml before installing. Use rb3gen2-vision for the Vision Kit or rb3gen2-industrial for the Industrial Kit; omit default_target_board for the core kit. All three use the 2026 next feed.",
+      "yaml": "default_target: rb3gen2\ndefault_target_board: rb3gen2-vision # or rb3gen2-industrial; omit for the core kit\n\ndistro:\n  release: 2026\n  channel: next"
+    },
+    "provisioning": {
+      "hostOs": [
+        "macOS",
+        "Linux"
+      ],
+      "prerequisites": [
+        "Qualcomm RB3 Gen 2 Development Kit (core kit, Vision Kit or Industrial Kit) with its power supply",
+        "USB-C data cable from the kit's USB-C port to your host for flashing"
+      ],
+      "options": [
+        {
+          "id": "ufs",
+          "label": "UFS (EDL)",
+          "profile": "ufs",
+          "media": "Onboard UFS storage (flashed over USB)",
+          "autoMount": false,
+          "command": "avocado provision -r dev --profile ufs",
+          "description": "Provision the dev runtime to the kit's onboard UFS storage. The system image is flashed over the USB-C data connection while the SoC is in EDL mode. The ufs profile is required: it mounts the host's USB bus into the provisioning container.",
+          "steps": [
+            {
+              "type": "text",
+              "content": "Provisioning flashes the runtime to UFS over USB. When it completes you'll see:"
+            },
+            {
+              "type": "code",
+              "content": "[SUCCESS] Successfully provisioned runtime 'dev'"
+            }
+          ],
+          "recoveryMode": {
+            "reference": {
+              "url": "https://www.qualcomm.com/developer/hardware/rb3-gen-2-development-kit",
+              "label": "Qualcomm RB3 Gen 2 Development Kit"
+            },
+            "steps": [
+              "With the USB-C data cable connected to your host, put the kit into Qualcomm EDL mode following the RB3 Gen 2 documentation linked above."
+            ],
+            "verifyCommand": "lsusb",
+            "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode). 05c6:900e is the SoC's dload/ramdump mode, not EDL — power-cycle the board into EDL again if you see it."
+          },
+          "bootInstructions": "Disconnect the USB-C data cable and power-cycle the kit. It boots Avocado OS from the onboard UFS storage.",
+          "bootNote": "The root user is passwordless in the dev runtime, and the avocado-ext-sshd-dev extension in the generated project brings up SSH."
+        }
+      ]
+    },
+    "gettingStartedUrl": "/learn/get-started/any-target",
+    "hardwareUrl": "/hardware/qualcomm/rb3-gen-2"
+  },
   "reterminal": {
     "name": "Seeed reTerminal",
     "target": "reterminal",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -858,6 +1109,10 @@
   "reterminal-dm": {
     "name": "Seeed reTerminal DM",
     "target": "reterminal-dm",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -887,6 +1142,10 @@
   "rubikpi3": {
     "name": "Thundercomm Rubik Pi 3",
     "target": "rubikpi3",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "physical",
     "description": "The Rubik Pi 3 is provisioned by flashing the board's onboard UFS storage over USB while the device is in Qualcomm EDL (Emergency Download) mode.",
     "images": [
@@ -959,6 +1218,10 @@
   "rzv2n-sr-som": {
     "name": "SolidRun HummingBoard RZ/V2N AIOT",
     "target": "rzv2n-sr-som",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -993,6 +1256,10 @@
   "stm32mp257f-dk": {
     "name": "STMicroelectronics STM32MP257F-DK",
     "target": "stm32mp257f-dk",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "provisioning": {
       "hostOs": [
@@ -1026,6 +1293,10 @@
   "ucm-imx8m-plus": {
     "name": "CompuLab UCM-i.MX8M-Plus",
     "target": "ucm-imx8m-plus",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
     "category": "sd",
     "description": "The CompuLab UCM-i.MX8M-Plus is an ultra-compact (28 x 38 mm) i.MX 8M Plus Computer-on-Module for space- and power-constrained edge-AI designs.",
     "provisioning": {

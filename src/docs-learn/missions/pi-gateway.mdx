@@ -49,7 +49,7 @@ avocado connect auth login
 avocado connect init
 ```
 
-`avocado connect init` prompts for the organization, project, and cohort, then writes the Connect settings into `avocado.yaml`. These include the Connect extensions for the `dev` runtime and a claim token. On first boot, the device uses that claim token to register itself with Avocado Connect.
+`avocado connect init` prompts for the organization, project, and cohort, then writes the Connect settings into `avocado.yaml`, including the Connect extensions for the `dev` runtime. It also creates a claim token and writes it to the device config at `overlay/etc/avocado-conn/config.toml`. On first boot, the device uses that claim token to register itself with Avocado Connect.
 
 To check which account you are logged in as, run `avocado connect auth status`.
 
