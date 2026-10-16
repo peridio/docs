@@ -1,0 +1,32 @@
+---
+title: Learn Avocado
+slug: /
+description: Learn Avocado OS and Avocado Connect step by step, from installing the CLI to shipping over-the-air updates to real hardware.
+hide_table_of_contents: true
+---
+
+import MissionRail from '@site/src/components/Learn/MissionRail'
+import { Steps, Step } from '@site/src/components/Learn/Steps'
+
+Learn takes you from an empty machine to a device running your code and taking over-the-air updates. Work through the missions in order. Each one builds on the last, and ends with a real result you can see on a device.
+
+Your progress is saved in this browser, so you can come back and pick up where you left off.
+
+<MissionRail />
+
+## Before you start
+
+<Steps id="before-you-start">
+  <Step id="install-cli" title="Install the Avocado CLI">
+    The CLI builds, provisions, and publishes everything in these missions. Follow [CLI
+    installation](/developer-reference/avocado-cli/installation).
+  </Step>
+  <Step id="connect-account" title="Create an Avocado Connect account">
+    Missions that update or reach a device use Avocado Connect. Sign up at
+    [connect.peridio.com](https://connect.peridio.com).
+  </Step>
+  <Step id="pick-target" title="Pick a target">
+    No hardware yet? Start with QEMU, a virtual device that runs on your machine. See [Getting
+    Started](/developer-reference/getting-started) for every supported target.
+  </Step>
+</Steps>

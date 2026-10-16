@@ -1,0 +1,56 @@
+.steps {
+  list-style: none;
+  counter-reset: learn-step;
+  margin: 1.5rem 0;
+  padding: 0;
+}
+
+.step {
+  counter-increment: learn-step;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+.checked {
+  border-color: var(--ifm-color-success-light);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--ifm-color-success);
+  cursor: pointer;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.title::before {
+  content: counter(learn-step) ". ";
+  color: var(--ifm-color-content-secondary);
+}
+
+.checked .title {
+  color: var(--ifm-color-content-secondary);
+}
+
+.content {
+  margin-top: 0.5rem;
+  padding-left: 1.85rem;
+}
+
+.content > :last-child {
+  margin-bottom: 0;
+}
