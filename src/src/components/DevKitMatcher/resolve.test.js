@@ -12,8 +12,8 @@ const targets = require('../../data/hardware/targets.json')
 // script we can evaluate.
 const source = fs.readFileSync(path.join(__dirname, 'resolve.js'), 'utf8')
 assert.doesNotMatch(source, /^\s*import\s/m, 'the shim below needs an import-free module')
-const { resolveMatcher } = vm.runInNewContext(
-  `${source.replace(/^export /gm, '')};({ resolveMatcher })`
+const { resolveMatcher, matcherLinks } = vm.runInNewContext(
+  `${source.replace(/^export /gm, '')};({ resolveMatcher, matcherLinks })`
 )
 
 describe('dev-kit-matcher.json', () => {
@@ -38,6 +38,21 @@ describe('dev-kit-matcher.json', () => {
     }
     for (const device of Object.values(production)) {
       assert.ok(device.name && device.hardwareUrl, JSON.stringify(device))
+    }
+  })
+
+  // The component hands these to the build's broken-link checker, so every
+  // URL a result can render has to be in the list.
+  it('lists every result URL for the broken-link checker', () => {
+    const resolved = resolveMatcher(data, targets)
+    const links = new Set(matcherLinks(resolved))
+    const urls = [
+      ...Object.values(resolved.devKits).flatMap((kit) => [kit.hardwareUrl, kit.getStartedUrl]),
+      ...Object.values(resolved.production).map((device) => device.hardwareUrl),
+    ]
+    for (const url of urls) {
+      assert.match(url, /^\/[a-z]/, `${url} is not an internal URL`)
+      assert.ok(links.has(url), `${url} is not collected`)
     }
   })
 })

@@ -57,3 +57,14 @@ export function resolveMatcher(data, targets) {
 
   return { devKits, production }
 }
+
+// Every internal URL the matcher can render once a selection is made.
+export function matcherLinks({ devKits, production }) {
+  const links = new Set(['/hardware/support-matrix'])
+  for (const kit of Object.values(devKits)) {
+    links.add(kit.hardwareUrl)
+    links.add(kit.getStartedUrl)
+  }
+  for (const device of Object.values(production)) links.add(device.hardwareUrl)
+  return [...links]
+}
