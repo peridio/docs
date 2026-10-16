@@ -20,6 +20,15 @@
     }
   },
   "production": {
+    "jetson-orin-nx": {
+      "name": "NVIDIA Jetson Orin NX",
+      "hardwareUrl": "/hardware/nvidia/jetson-orin-nx",
+      "soc": "NVIDIA Jetson Orin NX",
+      "underEvaluation": false,
+      "recommended": "jetson-orin-nano-devkit",
+      "compatible": [],
+      "why": "The Orin NX module is pin-compatible with the Orin Nano and shares its Jetson Orin architecture, so what you build on the Orin Nano Developer Kit carries over."
+    },
     "advantech-icam-540": {
       "target": "icam-540",
       "soc": "NVIDIA Jetson Orin NX",
@@ -27,6 +36,15 @@
       "recommended": "jetson-orin-nano-devkit",
       "compatible": [],
       "why": "The ICAM-540 runs an Orin NX module, the same Jetson Orin family as the Orin Nano Developer Kit, so what you build on the kit carries over."
+    },
+    "advantech-mic-712-ox": {
+      "name": "Advantech MIC-712-OX",
+      "hardwareUrl": "/hardware/advantech/mic-712-ox",
+      "soc": "NVIDIA Jetson Orin NX",
+      "underEvaluation": false,
+      "recommended": "jetson-orin-nano-devkit",
+      "compatible": [],
+      "why": "The MIC-712-OX runs an Orin NX module, the same Jetson Orin family as the Orin Nano Developer Kit, so what you build on the kit carries over."
     },
     "advantech-mic-715-ox": {
       "name": "Advantech MIC-715-OX",
@@ -37,6 +55,42 @@
       "compatible": [],
       "why": "The MIC-715-OX runs an Orin NX module, the same Jetson Orin family as the Orin Nano Developer Kit."
     },
+    "asus-pe1100n": {
+      "name": "ASUS IoT PE1100N",
+      "hardwareUrl": "/hardware/under-evaluation/asus-pe1100n",
+      "soc": "NVIDIA Jetson Orin NX / Orin Nano",
+      "underEvaluation": true,
+      "recommended": "jetson-orin-nano-devkit",
+      "compatible": [],
+      "why": "The PE1100N takes an Orin NX or Orin Nano module. With an Orin Nano it runs the same module as the Orin Nano Developer Kit, and the Orin NX is pin-compatible with it."
+    },
+    "compulab-edgeai-orn": {
+      "name": "CompuLab EdgeAI-ORN",
+      "hardwareUrl": "/hardware/under-evaluation/compulab-edgeai-orn",
+      "soc": "NVIDIA Jetson Orin NX / Orin Nano",
+      "underEvaluation": true,
+      "recommended": "jetson-orin-nano-devkit",
+      "compatible": [],
+      "why": "The EdgeAI-ORN takes an Orin NX or Orin Nano module. With an Orin Nano it runs the same module as the Orin Nano Developer Kit, and the Orin NX is pin-compatible with it."
+    },
+    "connect-tech-rudi": {
+      "name": "Connect Tech Rudi",
+      "hardwareUrl": "/hardware/under-evaluation/connect-tech-rudi",
+      "soc": "NVIDIA Jetson Orin NX",
+      "underEvaluation": true,
+      "recommended": "jetson-orin-nano-devkit",
+      "compatible": [],
+      "why": "The Rudi-NX runs an Orin NX module, the same Jetson Orin family as the Orin Nano Developer Kit."
+    },
+    "lanner-eai-i132": {
+      "name": "Lanner EAI-I132",
+      "hardwareUrl": "/hardware/under-evaluation/eai-i132",
+      "soc": "NVIDIA Jetson Orin NX / Orin Nano",
+      "underEvaluation": true,
+      "recommended": "jetson-orin-nano-devkit",
+      "compatible": [],
+      "why": "The EAI-I132 takes an Orin NX or Orin Nano module. With an Orin Nano it runs the same module as the Orin Nano Developer Kit, and the Orin NX is pin-compatible with it."
+    },
     "advantech-mic-733-ao": {
       "name": "Advantech MIC-733-AO",
       "hardwareUrl": "/hardware/advantech/mic-733-ao",
@@ -46,14 +100,22 @@
       "compatible": ["jetson-orin-nano-devkit"],
       "why": "The MIC-733-AO runs Jetson AGX Orin, the same module as the AGX Orin Developer Kit. The smaller Orin Nano kit shares the Orin architecture if you start there."
     },
-    "advantech-tpc-115w": {
-      "name": "Advantech TPC-115W",
-      "hardwareUrl": "/hardware/under-evaluation/tpc-115w",
-      "soc": "NXP i.MX 8M Mini",
+    "connect-tech-rogue": {
+      "name": "Connect Tech Rogue Carrier",
+      "hardwareUrl": "/hardware/under-evaluation/connect-tech-rogue",
+      "soc": "NVIDIA Jetson AGX Orin",
       "underEvaluation": true,
+      "recommended": "jetson-agx-orin-devkit",
+      "compatible": ["jetson-orin-nano-devkit"],
+      "why": "The Rogue Carrier runs Jetson AGX Orin, the same module as the AGX Orin Developer Kit. The smaller Orin Nano kit shares the Orin architecture if you start there."
+    },
+    "compulab-ucm-imx8m-plus": {
+      "target": "ucm-imx8m-plus",
+      "soc": "NXP i.MX 8M Plus",
+      "underEvaluation": false,
       "recommended": "imx8mp-evk",
       "compatible": [],
-      "why": "The TPC-115W runs NXP i.MX 8M Mini. The i.MX 8M Plus EVK is the closest supported i.MX 8M kit."
+      "why": "The UCM-i.MX8M-Plus runs the same NXP i.MX 8M Plus as the EVK, so what you build on the kit carries over."
     },
     "compulab-iot-gate-imx8plus": {
       "target": "iot-gate-imx8plus",
@@ -62,6 +124,32 @@
       "recommended": "imx8mp-evk",
       "compatible": [],
       "why": "The IOT-GATE-iMX8PLUS is built on the CompuLab UCM-i.MX8M-Plus module, the same i.MX 8M Plus as the EVK, so what you build on the kit carries over. Add the gateway's carrier extension when you switch."
+    },
+    "variscite-dart-mx8m-plus": {
+      "target": "imx8mp-var-dart",
+      "soc": "NXP i.MX 8M Plus",
+      "underEvaluation": false,
+      "recommended": "imx8mp-evk",
+      "compatible": [],
+      "why": "The DART-MX8M-PLUS runs the same NXP i.MX 8M Plus as the EVK, so what you build on the kit carries over."
+    },
+    "technexion-axon-imx8m-plus": {
+      "name": "TechNexion AXON-IMX8M-PLUS",
+      "hardwareUrl": "/hardware/under-evaluation/axon-imx8m-plus",
+      "soc": "NXP i.MX 8M Plus",
+      "underEvaluation": true,
+      "recommended": "imx8mp-evk",
+      "compatible": [],
+      "why": "The AXON-IMX8M-PLUS runs the same NXP i.MX 8M Plus as the EVK."
+    },
+    "advantech-tpc-115w": {
+      "name": "Advantech TPC-115W",
+      "hardwareUrl": "/hardware/under-evaluation/tpc-115w",
+      "soc": "NXP i.MX 8M Mini",
+      "underEvaluation": true,
+      "recommended": "imx8mp-evk",
+      "compatible": [],
+      "why": "The TPC-115W runs NXP i.MX 8M Mini. The i.MX 8M Plus EVK is the closest supported i.MX 8M kit."
     },
     "onlogic-fr201": {
       "target": "fr201",
@@ -78,6 +166,14 @@
       "recommended": "raspberrypi4",
       "compatible": ["raspberrypi5"],
       "why": "The reTerminal is built on a Raspberry Pi Compute Module 4, the same BCM2711 as the Raspberry Pi 4. A Raspberry Pi 5 also works for early development."
+    },
+    "seeed-reterminal-dm": {
+      "target": "reterminal-dm",
+      "soc": "Raspberry Pi CM4 (Broadcom BCM2711)",
+      "underEvaluation": false,
+      "recommended": "raspberrypi4",
+      "compatible": ["raspberrypi5"],
+      "why": "The reTerminal DM is built on a Raspberry Pi Compute Module 4, the same BCM2711 as the Raspberry Pi 4. A Raspberry Pi 5 also works for early development."
     }
   }
 }
