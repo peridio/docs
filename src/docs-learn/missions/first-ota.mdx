@@ -25,6 +25,12 @@ Along the way you'll see each step done multiple ways where multiple tools suppo
 - Docker running on your machine. The CLI builds inside a container.
 - No hardware. The device in this mission is a QEMU virtual machine. To use a board instead, see [Getting Started](/developer-reference/getting-started) for provisioning it, then follow the same steps.
 
+:::info[Came from the Fleet card?]
+
+The **Try it on a QEMU virtual device** card on the Fleet page in Avocado Connect builds the `qemu-quickstart` project. That project has no `heartbeat` extension, so you can't make the Step 5 change in it. Run `poweroff` in that VM's console, then start at Step 1 here. You already have an account and are logged in, so skip Step 2 and `avocado connect auth login` in Step 3. In Step 4, expect Connect to hold the new VM as a reclaim request.
+
+:::
+
 ## Step 1: Create the project
 
 Create a project from the `shell-heartbeat` reference. Its `heartbeat` extension is a shell script, run as a systemd service, that logs system vitals as JSON every 30 seconds. That makes it a good first thing to update: you can see the change land in the device's logs.
@@ -113,6 +119,12 @@ avocado sdk run -iE vm dev
 ```
 
 Log in as `root`. The `dev` runtime has no root password. Because the project was linked to Connect in Step 3, the device enrolls and claims itself into your project on first boot.
+
+:::note[Reusing a QEMU device]
+
+Every QEMU VM reports the same hardware ID. If you already claimed a QEMU device in your organization, for example from the Fleet card, Connect treats this one as that device coming back and holds it as a reclaim request, so it doesn't show **Online** yet. Approve the request from the banner on the device page or under **Settings → Reclaim requests**, and the device comes online.
+
+:::
 
 Confirm the device is online in Connect: open your project's fleet, find the device, and check that its status shows **Online**.
 
