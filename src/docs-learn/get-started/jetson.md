@@ -89,7 +89,7 @@ avocado build
 Provision the `dev` runtime using the `tegraflash` profile. This builds the system image and flashes it to the Jetson over USB.
 
 ```bash
-avocado provision -r dev --profile tegraflash
+avocado provision dev --profile tegraflash
 ```
 
 The procedure advances through several steps:

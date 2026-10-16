@@ -1,0 +1,139 @@
+.matcher {
+  box-shadow: inset 0 0 0 1px var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.columnTitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ifm-color-content-secondary);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-content);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.option:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.option_selected {
+  border-color: var(--ifm-color-primary);
+  box-shadow: inset 0 0 0 1px var(--ifm-color-primary);
+}
+
+.option_recommended {
+  border-color: var(--ifm-color-success);
+}
+
+.option_compatible {
+  border-style: dashed;
+  border-color: var(--ifm-color-success-light);
+}
+
+.optionName {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.optionSoc {
+  font-size: 0.8rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.optionBadge {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ifm-color-success);
+}
+
+.hint {
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.result {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.resultEyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.evaluation {
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.resultTitle {
+  margin: 0.35rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.resultText {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.alternatives {
+  margin: 0.75rem 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+}
+
+.alternatives li {
+  margin-bottom: 0.35rem;
+}

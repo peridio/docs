@@ -3,19 +3,7 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   guides: [
-    {
-      type: 'category',
-      label: 'Getting Started',
-      collapsible: false,
-      collapsed: false,
-      items: [
-        'getting-started/index',
-        'getting-started/qemu',
-        'getting-started/raspberry-pi',
-        'getting-started/jetson',
-        'getting-started/any-target',
-      ],
-    },
+    'index',
     {
       type: 'category',
       label: 'References',
@@ -34,7 +22,8 @@ const sidebars = {
         'hardware-in-the-loop',
         'container-dev-mode',
         'sideloading',
-        'ota',
+        // The OTA guide moved to Learn; keep it findable from here.
+        { type: 'link', label: 'OTA Updates', href: '/learn/missions/first-ota' },
         'remote-tunnel',
         'package-feeds',
         'feed-search',

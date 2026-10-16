@@ -15,7 +15,7 @@
 }
 
 .checked {
-  border-color: var(--ifm-color-success-light);
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 35%, var(--ifm-color-emphasis-300));
 }
 
 .label {
@@ -29,7 +29,7 @@
   flex-shrink: 0;
   width: 1.1rem;
   height: 1.1rem;
-  accent-color: var(--ifm-color-success);
+  accent-color: var(--ifm-color-primary);
   cursor: pointer;
 }
 

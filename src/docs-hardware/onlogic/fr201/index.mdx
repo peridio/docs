@@ -26,7 +26,7 @@ import HardwareHero from '@site/src/components/HardwareHero'
   ctas={{
     primary: {
       label: 'Get Started',
-      to: '/developer-reference/getting-started/any-target',
+      to: '/learn/get-started/any-target',
     },
   }}
 />
@@ -100,11 +100,15 @@ Thermal management optimizations for fanless operation. Automatic resource alloc
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/developer-reference/getting-started/any-target) instructions under Getting Started to begin. This target is `fr201`. The provisioning specifics are below.
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `fr201`. The provisioning specifics are below.
 
 ### Provision
 
 Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+:::note Provisioning on a Linux host
+If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+:::
 
 ```bash title="Host machine"
 avocado build
