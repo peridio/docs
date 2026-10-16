@@ -130,7 +130,15 @@ Once the device boots, open your fleet in Avocado Connect. The Jetson shows **On
 
 ## Step 6: Verify the DeepStream pipeline
 
-From a shell on the device, confirm the DeepStream service is running.
+Open a shell on the device, on the serial console or over SSH. The `dev` runtime includes an SSH server with passwordless root login for development:
+
+```bash
+ssh root@<device-ip>
+```
+
+Replace `<device-ip>` with the address your network assigned to the Jetson. If the Jetson is not on your local network, open an SSH tunnel to port `22` from Avocado Connect, as in [Remote Tunnel](/developer-reference/remote-tunnel), and close it before Step 7. The developer plan allows one active tunnel at a time.
+
+Confirm the DeepStream service is running.
 
 ```bash
 systemctl status vision-app
@@ -138,18 +146,16 @@ systemctl status vision-app
 
 The status reports `Active: active (running)`.
 
-If you are not using a serial console, open an SSH tunnel to port `22` as in [Remote Tunnel](/developer-reference/remote-tunnel), then close it before Step 7. The developer plan allows one active tunnel at a time.
-
 Follow the service logs to watch the pipeline start:
 
 ```bash
 journalctl -u vision-app -f
 ```
 
-nvinfer loads a prebuilt engine for each model in turn, and the pipeline reaches the PLAYING state in about 10 to 15 seconds. Look for these lines:
+nvinfer loads a prebuilt engine for each model in turn, and the pipeline reaches the PLAYING state in about 10 to 15 seconds. Look for these two lines. They aren't next to each other in the log, and the first one continues past what's shown here:
 
 ```text
-setting pipeline to PLAYING
+setting pipeline to PLAYING ...
 dashboard:        http://0.0.0.0:8080
 ```
 
