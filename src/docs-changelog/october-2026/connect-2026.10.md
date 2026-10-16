@@ -15,9 +15,11 @@ description: 'Avocado Connect highlights for October 2026 — the LaunchPad guid
 - **First-device card** — an org with no devices sees the commands to bring up a
   QEMU device and a live status that flips as the device claims and comes
   online, with a link to the [First OTA mission](/learn/missions/first-ota).
-- **Learn ↗ in the sidebar, and `/go/` deep links** — Docs can send you to
-  `connect.peridio.com/go/fleet` or `/go/settings/api-keys` and Connect resolves
-  your current org, going through login first if needed.
+- **A sidebar card points to Learn** — until the end of November, a dismissible
+  card in the sidebar links to Docs Learn; the Documentation link stays.
+- **`/go/` deep links** — Docs can send you to `connect.peridio.com/go/fleet` or
+  `/go/settings/api-keys` and Connect resolves your current org, going through
+  login first if needed.
 - **Intake moved into onboarding** — the short questionnaire now appears right
   after your first org is created, at `/onboarding/intake`, with a _Finish
   onboarding_ entry in the user menu to come back to it.
