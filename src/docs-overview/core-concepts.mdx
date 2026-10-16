@@ -5,7 +5,7 @@ sidebar_position: 2
 description: 'Key concepts in Avocado OS - avocado.yaml, runtimes, extensions, packages, overlays, systemd integration, and lifecycle hooks.'
 ---
 
-Avocado OS is built around a few core concepts that work together to deliver a composable, immutable embedded Linux platform. This page introduces each concept and how they relate.
+Avocado OS is built around a few core concepts that work together to deliver a composable, immutable embedded Linux platform. This page introduces each concept and how they relate. To see them all in one working project, follow the [Device Heartbeat tutorial](/learn/tutorials/device-heartbeat).
 
 ```text
 // highlight-removed-start
@@ -126,6 +126,17 @@ A `dev` runtime includes SSH access and debugging tools so engineers can iterate
 
 Switch between runtimes with one command. The same extensions, different compositions. Every runtime produces a deployable image that's deterministic and reproducible.
 
+A runtime's `packages` block sets the version of the base OS it builds on. `'*'` selects the latest available, or you can pin a specific version:
+
+```yaml
+runtimes:
+  dev:
+    packages:
+      avocado-runtime: '*' # ◀ base OS version
+```
+
+Each extension is an independent layer. When two extensions ship the same file, the one listed earlier in `extensions` wins.
+
 ---
 
 ## Extensions
@@ -181,6 +192,10 @@ extensions:
       tcpdump: '*'
 ```
 
+### Local and pre-built extensions
+
+An extension with no `source` is a **local extension**: its packages, overlay files, services, and hooks are all defined in your project, like `my-app` above. A **pre-built extension** such as `avocado-ext-dev` is fetched by name, so you only reference it. The base OS image stays immutable either way. Extensions are how you layer functionality on top.
+
 ### External extension sources
 
 Extensions can be sourced from the Avocado package repository, git repositories, or local paths:
@@ -228,6 +243,8 @@ extensions:
         nativesdk-rust: '*'
         nativesdk-go: '*'
 ```
+
+Packages are scoped to the extension that declares them. Remove the extension from a runtime and its packages go with it.
 
 ### Package feeds
 
@@ -278,6 +295,8 @@ overlays/my-app/
 
 Files under `usr/` become part of the sysext image. Files under `etc/` become part of the confext image. This is how you bring your own compiled binaries, scripts, models, or any file that isn't covered by a package.
 
+Use standard Linux paths: `usr/bin/` or `usr/local/bin/` for executables and scripts, `usr/lib/systemd/system/` for service units shipped with the application, and `etc/` for configuration read at runtime.
+
 ---
 
 ## systemd
@@ -295,6 +314,8 @@ extensions:
       - my-app.service
       - my-app-healthcheck.timer
 ```
+
+Listing a unit in `enable_services` is equivalent to running `systemctl enable` on it, so it starts on every boot. A device has no one to log in and start services by hand: if a service isn't enabled here, it doesn't run.
 
 The corresponding service unit lives in your overlay:
 
@@ -331,6 +352,8 @@ extensions:
     on_unmerge: # ◀ runs before deactivation
       - systemctl stop my-app.service
 ```
+
+A typical `on_merge` restarts the extension's services so they pick up new files and configuration. `--no-block` keeps the merge from waiting on the restart. A typical `on_unmerge` stops them cleanly. Together they let a device move between extension versions without a full reboot.
 
 Certain hooks are added automatically based on extension contents — you don't need to declare these:
 

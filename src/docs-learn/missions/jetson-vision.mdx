@@ -23,13 +23,13 @@ The device draws every overlay into the video itself, then serves the result as 
 ## Prerequisites
 
 - You have completed [First OTA](/learn/missions/first-ota) and [Remote App](/learn/missions/remote-app), so the Avocado CLI is installed and you have an Avocado Connect account
-- A host that meets the prerequisites in the [Jetson Orin Nano getting-started guide](/developer-reference/getting-started/jetson#prerequisites), with internet access (the first build downloads any model files missing from the project)
+- A host that meets the prerequisites in the [Jetson Orin Nano getting-started guide](/learn/get-started/jetson#prerequisites), with internet access (the first build downloads any model files missing from the project)
 - An NVIDIA Jetson Orin Nano Developer Kit with an M.2 2280 NVMe SSD installed, and its power supply
 - A USB-C cable from your host to the Jetson, for provisioning
 - A jumper to short the `FC REC` pin to `GND` for recovery mode
 - A UVC USB camera that streams MJPEG, such as a Logitech C920 or C270
 - An Ethernet connection for the Jetson with internet access, so it can reach Avocado Connect
-- Optional: a 3.3 V USB serial adapter to watch the board boot (see [Serial console](/developer-reference/getting-started/jetson#serial-console-optional))
+- Optional: a 3.3 V USB serial adapter to watch the board boot (see [Serial console](/learn/get-started/jetson#serial-console-optional))
 
 For background on the board, see the [Jetson Orin Nano Developer Kit](/hardware/nvidia/jetson-orin-nano-developer-kit) hardware page.
 
@@ -106,7 +106,7 @@ When provisioning completes, the CLI prints:
 [SUCCESS] Successfully provisioned runtime 'dev'
 ```
 
-For the wiring and the full provisioning output, see [Boot into recovery mode](/developer-reference/getting-started/jetson#boot-into-recovery-mode) in the Jetson Orin Nano getting-started guide.
+For the wiring and the full provisioning output, see [Boot into recovery mode](/learn/get-started/jetson#boot-into-recovery-mode) in the Jetson Orin Nano getting-started guide.
 
 ## Step 5: Boot the Jetson and confirm it registered
 

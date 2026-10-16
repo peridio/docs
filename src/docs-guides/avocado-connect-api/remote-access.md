@@ -114,7 +114,7 @@ curl "https://connect.peridio.com/api/orgs/{org_id}/projects/{project_id}/cohort
 
 `POST /api/orgs/{org_id}/tunnels`
 
-Opens a tunnel to a device by device ID (org-scoped; used by LaunchPad/Fleet). Defaults to a 1-hour TTL and device proxy port 9090.
+Opens a tunnel to a device by device ID (org-scoped; used by Fleet). Defaults to a 1-hour TTL and device proxy port 9090.
 
 **Path parameters:**
 

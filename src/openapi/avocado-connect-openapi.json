@@ -4177,7 +4177,7 @@
         "operationId": "DeviceTunnel_create",
         "tags": ["Remote Access"],
         "summary": "Open a device tunnel",
-        "description": "Opens a tunnel to a device by device ID (org-scoped; used by LaunchPad/Fleet). Defaults to a 1-hour TTL and device proxy port 9090.",
+        "description": "Opens a tunnel to a device by device ID (org-scoped; used by Fleet). Defaults to a 1-hour TTL and device proxy port 9090.",
         "parameters": [
           {
             "$ref": "#/components/parameters/OrgId"

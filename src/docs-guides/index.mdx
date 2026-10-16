@@ -1,0 +1,91 @@
+---
+title: Developer Reference
+sidebar_label: Overview
+slug: /
+description: A map of the Developer Reference, with guides for building on Avocado OS and reference docs for every Avocado tool and API.
+hide_table_of_contents: true
+---
+
+import LinkCardGrid, { LinkCard } from '@site/src/components/LinkCardGrid'
+
+Developer Reference is where you look things up once you're building with Avocado. It holds task guides for working with Avocado OS, and the reference docs for each Avocado tool and API.
+
+:::tip New to Avocado?
+
+Start with [Learn](/learn). It takes you from installing the CLI to running your code on a device, step by step. Come back here when you need detail on a specific topic.
+
+:::
+
+## Guides
+
+Topics for developers working with Avocado, grouped by what you're trying to do.
+
+<LinkCardGrid>
+  <LinkCard
+    href="/developer-reference/references/explore"
+    title="References"
+    description="Our repo of demos and fully working projects, from a shell heartbeat to React, Rust and vision apps. A great starting point for your own project."
+    cta="Browse references"
+  />
+  <LinkCard
+    href="/developer-reference/provisioning"
+    title="Development"
+    description="Guides for everyday development: provisioning, sideloading, container dev mode, hardware-in-the-loop, remote tunnels, and searching for packages in our feeds."
+    cta="Open the guides"
+  />
+  <LinkCard
+    href="/developer-reference/security"
+    title="Security"
+    description="The security features Avocado OS supports, in detail: boot signing, dm-verity, and encrypted /var."
+    cta="Read about security"
+  />
+  <LinkCard
+    href="/developer-reference/cross-compilation"
+    title="Advanced"
+    description="In-depth guides for going further: cross-compilation, custom kernels, device tree overlays, seeding /var, and customizing the rootfs and initramfs."
+    cta="Go deeper"
+  />
+</LinkCardGrid>
+
+## Tools and APIs
+
+Reference docs for each part of Avocado: commands, configuration, and APIs.
+
+<LinkCardGrid>
+  <LinkCard
+    href="/developer-reference/avocado-cli/overview"
+    title="Avocado CLI"
+    description="Runs on your machine. Creates, builds, provisions, and deploys Avocado OS projects, and talks to Avocado Connect."
+    cta="CLI reference"
+  />
+  <LinkCard
+    href="/developer-reference/avocado-connect-api/overview"
+    title="Avocado Connect API"
+    description="The REST API behind Avocado Connect, for automating devices, projects, runtimes, and deployments across your fleet."
+    cta="API reference"
+  />
+  <LinkCard
+    href="/developer-reference/avocadoctl/overview"
+    title="Avocado Control"
+    description="avocadoctl runs on the device. It manages system extensions, runtimes, and OS bundles, and exposes a Varlink API."
+    cta="avocadoctl reference"
+  />
+  <LinkCard
+    href="/developer-reference/stone/overview"
+    title="Stone"
+    description="Turns a manifest and build artifacts into disk images, OTA bundles (.aos), and provisioned devices."
+    cta="Stone reference"
+  />
+  <LinkCard
+    href="/developer-reference/meta-avocado/overview"
+    title="Meta Avocado"
+    description="The Yocto distro layer Avocado OS is built from, with BSP layers for NVIDIA, NXP, Raspberry Pi, Qualcomm, and more."
+    cta="Layer reference"
+  />
+  <LinkCard
+    href="/developer-reference/mcp/installation"
+    title="MCP"
+    description="The Avocado OS MCP server lets AI assistants scaffold projects, find packages, provision, deploy, and debug for you."
+    cta="Set up MCP"
+  />
+</LinkCardGrid>

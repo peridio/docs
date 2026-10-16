@@ -1,0 +1,67 @@
+---
+title: 'Code Signing'
+description: 'How Avocado Connect signs every update with The Update Framework (TUF), and how your organization takes control of its own signing keys.'
+---
+
+# Code Signing
+
+Every update Avocado Connect delivers is cryptographically signed, and every device checks the signature before it installs anything. A device only ever applies software your organization actually published, which protects your fleet against tampered or substituted updates in transit or in storage.
+
+Connect builds this on [The Update Framework (TUF)](https://theupdateframework.io/), the industry standard for securing software distribution. Signing works out of the box: Connect sets up your organization's keys when the organization is created, so there is no key ceremony to run before your first deployment.
+
+## The trust chain
+
+TUF splits signing across roles, each with its own key, so that no single key controls everything:
+
+- **Root**: The anchor of trust. It declares which keys are valid for every other role.
+- **Targets**: Signs the list of software a device should install. Connect delegates targets signing per runtime, so each runtime's contents are signed on their own.
+- **Snapshot and timestamp**: Keep devices from being fed stale or mixed-up metadata. Connect manages these automatically.
+
+Devices cache the TUF metadata and verify every update against it before applying it.
+
+## Trust levels
+
+You decide how much of the trust chain your organization holds itself. Connect tracks this as your organization's security level:
+
+- **Level 0 (default)**: Connect holds the signing keys and signs every runtime for you.
+- **Level 1**: You register your own content signing key, and an admin approves it. Runtimes can then carry signatures from a key you control.
+- **Level 2**: You promote the root role to a root key you hold. From then on, changes to the trust chain, such as rotating the server signing key, need your signature.
+
+Move up a level with the CLI. Create local keys with `avocado signing-keys create`, then register each one. Any member can register a key. Registered keys are staged until an organization owner or admin approves them, and `avocado connect keys list` shows each key's ID. Approving a new key retires the key it replaces, and `avocado connect keys retire <KEYID>` discards a staged key you no longer want.
+
+```bash
+# Level 1: register a local content key, then approve it (admin only)
+avocado connect keys register --type content --key <KEY_NAME>
+avocado connect keys approve <KEYID>
+
+# Level 2: register and approve a local root key, then hand it the root role (admin only)
+avocado connect keys register --type root --key <ROOT_KEY_NAME>
+avocado connect keys approve <ROOT_KEYID>
+avocado connect trust promote-root --key <ROOT_KEY_NAME>
+```
+
+## Check your signing status
+
+```bash
+avocado connect trust status
+```
+
+`avocado connect trust status` shows your organization's current root version, security level, whether a root promotion is pending, and which root versions your devices report, including how many devices are on a stale root. The same information is available from the API:
+
+```bash
+curl "https://connect.peridio.com/api/orgs/$ORG_ID/trust/status" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN"
+
+curl "https://connect.peridio.com/api/orgs/$ORG_ID/signing/status" \
+  -H "Authorization: Bearer $AVOCADO_TOKEN"
+```
+
+`signing/status` returns the signing setup itself: `setup_complete`, `root_rotated`, `root_json_version`, `timestamp_ttl_days`, the server key's `server_key_hex` and `server_keyid`, and `root_key` when one is set.
+
+To rotate the server signing key, an admin runs `avocado connect trust rotate-server-key`. At level 2 the rotation needs your root key, passed with `--key <ROOT_KEY_NAME>`.
+
+## Learn more
+
+- [Signing & Trust API](/developer-reference/avocado-connect-api/signing-trust): Every trust and signing endpoint, including root promotion and server-key rotation.
+- [Update architecture](/avocado-os/security/update-architecture): How Avocado OS applies verified updates atomically.
+- [`avocado connect keys`](/developer-reference/avocado-cli/commands#connect-keys) and [`avocado connect trust`](/developer-reference/avocado-cli/commands#connect-trust) in the CLI reference.
