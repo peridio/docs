@@ -93,7 +93,11 @@ feed either, so it is reported as the missing import it is, rather than a second
 time as a missing member that contradicts the first.
 
 `index.mdx` and `latest.mdx` are exempt: they live under `docs-changelog/`
-without being entries. Registrations disabled with a `/* ... */` block comment
+without being entries. `latest.mdx` is checked another way: `/changelog` lands on
+its `<Redirect>`, and the feed renders only from that entry downward, so the
+Redirect has to point at the newest entry (the first id in
+`sidebars-changelog.js`). Left on last month's entry, the new one never shows on
+the default page. Registrations disabled with a `/* ... */` block comment
 still read as active — the guard is text matching, not a JS parser.
 
 **Usage:**
