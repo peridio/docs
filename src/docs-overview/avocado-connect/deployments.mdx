@@ -9,7 +9,7 @@ Ship a new software version to the right devices, watch it roll out, and know it
 
 Connect builds on the [atomic update architecture](/avocado-os/security/update-architecture) in Avocado OS: updates apply to A/B partitions and roll back automatically if a boot fails, so a bad update can't brick a device.
 
-Every runtime is cryptographically signed, and each device verifies that signature before it installs anything, so a device only ever applies software your organization actually published. Connect builds this on The Update Framework (TUF), the industry standard for securing software distribution, and it works out of the box: signing is set up when your organization is created, with no key ceremony to run yourself.
+Every runtime is signed, and each device verifies the signature before it installs anything. See [Code Signing](/avocado-connect/code-signing).
 
 A **Runtime** is the versioned artifact you deploy. Publish runtimes to your project, assign them to cohorts, and deploy or deprecate them from one place.
 
