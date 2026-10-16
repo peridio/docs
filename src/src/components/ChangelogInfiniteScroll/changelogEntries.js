@@ -1,5 +1,7 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
+// -- October 2026 --
+import CONNECT_2026_10 from '../../../docs-changelog/october-2026/connect-2026.10.md'
 // -- September 2026 --
 import V1_0_0_RC_5 from '../../../docs-changelog/september-2026/1.0.0-rc.5.md'
 // -- August 2026 --
@@ -85,6 +87,14 @@ export const PRODUCTS = [
  * Entries without an explicit `product` are CLI releases.
  */
 const rawEntries = [
+  {
+    product: 'connect',
+    version: '2026.10',
+    monthSlug: 'october-2026',
+    monthLabel: 'October 2026',
+    permalink: '/changelog/october-2026/connect-2026.10',
+    Component: CONNECT_2026_10,
+  },
   {
     version: '1.0.0-rc.5',
     monthSlug: 'september-2026',
