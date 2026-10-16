@@ -256,8 +256,10 @@ Rebuild only the Rust extension first. `avocado build -e` builds a single extens
 
 ```bash
 # Recompile and repackage only the example-rust extension
-avocado build -e example-rust
+avocado --no-stamps build -e example-rust
 ```
+
+`--no-stamps` makes the build run even though `avocado.yaml` and the build scripts have not changed. Without it, the build compares those inputs, not the source under `ref-rust/`, reports `example-rust` as up to date and keeps the old binary. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps) for how the skip works.
 
 When it succeeds, rebuild the runtime so it picks up the new extension, then provision and boot again:
 

@@ -236,7 +236,7 @@ const config = {
             activeBasePath: 'hardware',
           },
           {
-            to: '/developer-reference/avocado-cli/overview',
+            to: '/developer-reference',
             label: 'Developer Reference',
             position: 'left',
             activeBasePath: 'developer-reference',
