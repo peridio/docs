@@ -5,6 +5,7 @@ copy_markdown: true
 description: 'Ship your first over-the-air update with Avocado OS: build a heartbeat project, boot it on a QEMU device connected to Avocado Connect, add a new metric, and watch the update land without a reboot.'
 ---
 
+import { Steps, Step } from '@site/src/components/Learn/Steps'
 import MarkComplete from '@site/src/components/Learn/MarkComplete'
 
 In this mission you go from zero to a verified over-the-air (OTA) update. You create a project from the heartbeat reference, connect it to Avocado Connect, and boot it on a QEMU virtual device. Then you add a new metric to the heartbeat script, publish it as a new runtime, deploy it, and watch the new field appear in the device's logs. The update merges live, with no reboot.
@@ -181,7 +182,7 @@ while true; do
 done
 ```
 
-Rebuild the runtime on your host. The heartbeat extension has no compile step, so this only repackages the overlay files:
+In a second terminal on your host, from `my-heartbeat`, rebuild the runtime. The heartbeat extension has no compile step, so this only repackages the overlay files:
 
 ```bash
 avocado build
@@ -189,7 +190,19 @@ avocado build
 
 ### Option A: Avocado CLI
 
-- `avocado connect upload <runtime> --publish --version <version>` — uploads the runtime at the given version and publishes it (draft → published) in one step.
+- Upload the `dev` runtime as version `v0.1.1` and publish it (draft → published) in one step:
+
+```bash
+avocado connect upload dev --publish --version v0.1.1
+```
+
+- The CLI lists and uploads each artifact, then publishes the runtime and ends with:
+
+```text
+[INFO] Publishing runtime...
+[SUCCESS] Runtime v0.1.1 published (status: published)
+```
+
 - Add `--description` to annotate the upload. As a fast path, the `--deploy-cohort` and `--deploy-activate` flags create and activate a deployment in the same command.
 
 <div className="framed-shot">
@@ -360,6 +373,23 @@ Go back to the VM terminal that is following the heartbeat log. Once the device 
 To confirm which runtime is active, run `avocadoctl runtime list` in the VM. The newest runtime is marked active.
 
 You shipped a change to a running device over the air, without a reboot.
+
+## Verify it works
+
+<Steps id="first-ota">
+  <Step id="device-online" title="Device is online">
+    Your QEMU device shows **Online** in your project's fleet in Avocado Connect.
+  </Step>
+  <Step id="runtime-published" title="Runtime is published">
+    The new runtime version appears under **Runtimes** in Avocado Connect with status _Published_.
+  </Step>
+  <Step id="deployment-on-target" title="Deployment is on target">
+    The deployment's **Rollout** tab shows your device **On target**.
+  </Step>
+  <Step id="new-metric-logged" title="New metric is in the log">
+    The heartbeat log on the device includes `disk_free_kb`.
+  </Step>
+</Steps>
 
 ## Rollback and safety
 
