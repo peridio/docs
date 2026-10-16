@@ -4,12 +4,15 @@ import useBrokenLinks from '@docusaurus/useBrokenLinks'
 import clsx from 'clsx'
 import Heading from '@theme/Heading'
 import data from '@site/src/data/hardware/dev-kit-matcher.json'
+import targets from '@site/src/data/hardware/targets.json'
+import { resolveMatcher } from './resolve'
 import styles from './styles.module.css'
 
 // Ported from Avocado Connect's LaunchPad hardware picker. Pairings are by SoC
 // family: each production device lists the dev kit that runs the same (or the
 // closest supported) silicon, plus any kits that also work for early work.
-const { devKits, production } = data
+// Labels and page URLs come from targets.json (see resolve.js).
+const { devKits, production } = resolveMatcher(data, targets)
 
 const PRODUCTION_PREFIX = 'production-'
 const DEV_KIT_PREFIX = 'dev-kit-'
