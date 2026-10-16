@@ -102,6 +102,19 @@ grep -v '^[[:space:]]*//' "$SIDEBAR" \
 # that is present and fine. The duplicate itself is caught below, once.
 sed -n "s|^ *permalink: '/changelog/\(.*\)',.*|\1|p" "$ENTRIES" | sort -u > "$work/permalinks"
 
+# ── 6 · the /changelog/latest target ────────────────────────────────────────
+# /changelog redirects to /changelog/latest, which redirects to one entry, and
+# the feed renders only from that entry downward. Leave it on last month's entry
+# and the new one never shows on the default page — while every check above
+# still passes. The newest entry is the first id in the sidebar, in file order.
+LATEST="$CONTENT_DIR/latest.mdx"
+latest_target=""
+if [ -f "$LATEST" ]; then
+  latest_target=$(sed -n 's|.*<Redirect to="/changelog/\([^"]*\)".*|\1|p' "$LATEST" | head -n 1 || true)
+fi
+newest=$(grep -v '^[[:space:]]*//' "$SIDEBAR" \
+  | grep -oE "'[a-z]+-[0-9]{4}/[^']+'" | head -n 1 | tr -d "'" || true)
+
 # ── the guard has to fail when its own parsing breaks ───────────────────────
 # A regex that quietly matches nothing would turn this whole script into a
 # no-op that reports success forever, which is worse than not having it.
@@ -116,6 +129,12 @@ for pair in "files:$work/files" "imports:$work/imported" \
     exit 1
   fi
 done
+
+if [ -f "$LATEST" ] && [ -z "$latest_target" ]; then
+  echo "error: found no <Redirect to=\"/changelog/...\"> in $LATEST — the page" >&2
+  echo "       changed shape and this check is no longer reading it. Fix the check." >&2
+  exit 1
+fi
 
 status=0
 
@@ -177,11 +196,20 @@ report "rawEntries renders the same entry more than once:" \
        "Remove the duplicate member — the entry shows twice in the feed." \
        "$work/duplicate_components"
 
+if [ -n "$latest_target" ] && [ "$latest_target" != "$newest" ]; then
+  status=1
+  echo "error: $LATEST redirects to /changelog/$latest_target," >&2
+  echo "       but the newest entry (first in $SIDEBAR) is $newest." >&2
+  echo "       Point the Redirect at /changelog/$newest — /changelog lands there." >&2
+  echo >&2
+fi
+
 if [ "$status" -ne 0 ]; then
   echo "Publishing a changelog entry means registering it in all of:" >&2
   echo "  $CONTENT_DIR/<month>/<entry>.md (or .mdx)" >&2
   echo "  $ENTRIES  (both the import and rawEntries)" >&2
   echo "  $SIDEBAR" >&2
+  echo "  $LATEST  (its Redirect, when the entry is the newest)" >&2
   exit 1
 fi
 

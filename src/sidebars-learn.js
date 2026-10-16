@@ -41,6 +41,7 @@ const sidebars = {
         'tutorials/rust-cross-compile',
       ],
     },
+    'dev-kit-to-production',
   ],
 }
 
