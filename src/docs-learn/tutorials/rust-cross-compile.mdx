@@ -225,14 +225,8 @@ journalctl -u ref-rust -f
 
 A new line of JSON appears every 30 seconds, similar to:
 
-```json
-{
-  "hostname": "avocado-qemux86-64",
-  "uptime": 42,
-  "mem_total_kb": 977972,
-  "mem_free_kb": 821488,
-  "load_1m": "0.12"
-}
+```text
+{"hostname":"avocado-qemux86-64","uptime":42,"mem_total_kb":977972,"mem_free_kb":821488,"load_1m":"0.12"}
 ```
 
 ## Step 7: Change the code and rebuild
