@@ -20,15 +20,16 @@ Meta Avocado is the Yocto distro layer that powers Avocado OS. It's the build in
 
 ### Platform BSP Layers
 
-| Layer                      | Targets                           |
-| -------------------------- | --------------------------------- |
-| `meta-avocado-raspberrypi` | Raspberry Pi 5, Pi 4, Pi Zero 2 W |
-| `meta-avocado-nvidia`      | Jetson Orin Nano, Jetson AGX Orin |
-| `meta-avocado-nxp`         | i.MX 8M Plus, i.MX 93, i.MX 91    |
-| `meta-avocado-x86-64`      | Intel x86-64-v2, x86-64-v3        |
-| `meta-avocado-rockchip`    | Rockchip platforms                |
-| `meta-avocado-stm`         | STMicroelectronics STM32MP        |
-| `meta-avocado-rubikpi`     | Qualcomm RB3 Gen 2                |
+| Layer                      | Targets                                 |
+| -------------------------- | --------------------------------------- |
+| `meta-avocado-raspberrypi` | Raspberry Pi 5, Pi 4, Pi Zero 2 W       |
+| `meta-avocado-nvidia`      | Jetson Orin Nano, Jetson AGX Orin       |
+| `meta-avocado-nxp`         | i.MX 8M Plus, i.MX 93, i.MX 91          |
+| `meta-avocado-x86-64`      | Intel x86-64-v2, x86-64-v3              |
+| `meta-avocado-arm64`       | Armv9-A UEFI systems (NVIDIA DGX Spark) |
+| `meta-avocado-rockchip`    | Rockchip platforms                      |
+| `meta-avocado-stm`         | STMicroelectronics STM32MP              |
+| `meta-avocado-rubikpi`     | Qualcomm RB3 Gen 2                      |
 
 ## Technical Details
 

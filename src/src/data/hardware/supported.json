@@ -112,6 +112,17 @@
       }
     },
     {
+      "name": "NVIDIA DGX Spark",
+      "target": "arm64-uefi-v9",
+      "board": "",
+      "url": "/hardware/nvidia/dgx-spark",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "in-progress"
+      }
+    },
+    {
       "name": "NVIDIA Jetson AGX Thor",
       "target": "jetson-agx-thor",
       "board": "",
