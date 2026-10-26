@@ -28,7 +28,7 @@ Meta Avocado is the Yocto distro layer that powers Avocado OS. It's the build in
 | `meta-avocado-nxp`         | i.MX 8M Plus, i.MX 91, i.MX 93, i.MX 95                      |
 | `meta-avocado-x86-64`      | Intel x86-64-v2, x86-64-v3, x86-64-v4                        |
 | `meta-avocado-amd-x86-64`  | AMD x86-64-v4                                                |
-| `meta-avocado-arm64`       | Generic arm64 UEFI                                           |
+| `meta-avocado-arm64`       | Generic arm64 UEFI (NVIDIA DGX Spark)                        |
 | `meta-avocado-qcom`        | Qualcomm RB3 Gen 2, RUBIK Pi 3                               |
 | `meta-avocado-rockchip`    | Rockchip platforms                                           |
 | `meta-avocado-stm`         | STMicroelectronics STM32MP                                   |
