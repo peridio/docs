@@ -1,4 +1,48 @@
 {
+  "dgx-spark": {
+    "name": "NVIDIA DGX Spark",
+    "target": "arm64-uefi-v9",
+    "releases": {
+      "2026": "in-progress"
+    },
+    "category": "usb",
+    "description": "The NVIDIA DGX Spark builds the generic arm64-uefi-v9 target, plus a board support extension for the GB10 GPU, ConnectX-7 RDMA, and onboard networking. Before the first boot, update the firmware from DGX OS (fwupdmgr update) and disable Secure Boot in UEFI setup.",
+    "configuration": {
+      "description": "Add the DGX Spark board support extension to the dev runtime:",
+      "yaml": "extensions:\n  avocado-bsp-dgx-spark:\n    source:\n      type: package\n      version: '*'\n\nruntimes:\n  dev:\n    extensions:\n      - avocado-bsp-dgx-spark"
+    },
+    "provisioning": {
+      "hostOs": [
+        "macOS",
+        "Linux"
+      ],
+      "prerequisites": [
+        "NVIDIA DGX Spark, firmware updated from DGX OS",
+        "Secure Boot disabled in UEFI setup",
+        "USB drive (16GB+)",
+        "HDMI display and a wired USB keyboard"
+      ],
+      "options": [
+        {
+          "id": "usb",
+          "label": "USB drive",
+          "profile": "usb",
+          "media": "USB drive",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile usb",
+          "bootSteps": [
+            "Plug the USB drive into a rear USB-C port",
+            "Power on and hold Esc or Del to enter UEFI setup",
+            "On the Save & Exit page, select the USB drive under Boot Override and press Enter"
+          ],
+          "bootNote": "The device boots the provisioned system with a login prompt on the HDMI display. The root user has an empty password — log in on the display or via SSH once the device is on the network. DGX OS on the internal NVMe is left untouched."
+        }
+      ]
+    },
+    "serial": null,
+    "gettingStartedUrl": "/learn/get-started/any-target",
+    "hardwareUrl": "/hardware/nvidia/dgx-spark"
+  },
   "fr201": {
     "name": "OnLogic FR201",
     "target": "fr201",
