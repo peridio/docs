@@ -48,6 +48,7 @@ Meta Avocado uses KAS for build orchestration:
 
 ```bash
 source scripts/init-build kas/machine/<machine>.yml
+source .envrc
 kas build $KAS_YML
 ```
 
