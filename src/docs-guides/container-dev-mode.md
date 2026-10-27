@@ -9,7 +9,7 @@ Container dev mode is the inner development loop for a containerized application
 
 This matters because Avocado OS has an immutable root filesystem. Without a dev loop, every application change means either re-shipping the whole container image to the device or rebuilding and reprovisioning the system, which is slow enough to break concentration when the image is measured in gigabytes. Container dev mode reuses the container engine's own pull protocol so only the layers that actually changed move across the wire.
 
-If you have used [hardware in the loop](./hardware-in-the-loop) to iterate on extensions, this is the same idea applied to containers: a host-side server, a live device, and a feedback loop measured in seconds.
+If you have used [hardware in the loop](/developer-reference/hardware-in-the-loop) to iterate on extensions, this is the same idea applied to containers: a host-side server, a live device, and a feedback loop measured in seconds.
 
 :::info
 Run all commands in this guide from the root of your Avocado project on your host machine, the directory that contains your Avocado config.
@@ -130,7 +130,7 @@ journalctl -u app.service -f          # the service the agent restarts
 journalctl -u container-agent-dev -f          # pull + restart, as the agent sees it
 ```
 
-This is the same host/target split as [hardware in the loop](./hardware-in-the-loop), which does for extensions what this page does for containers. If you already run HIL, the mental model carries over unchanged.
+This is the same host/target split as [hardware in the loop](/developer-reference/hardware-in-the-loop), which does for extensions what this page does for containers. If you already run HIL, the mental model carries over unchanged.
 
 ## Prerequisites
 
@@ -492,7 +492,7 @@ The embedded registry keeps a per-project store of pushed blobs. To garbage-coll
 avocado container dev prune
 ```
 
-This is scoped to the container dev mode store and is distinct from the top-level `avocado clean`, which removes Docker volumes and project state.
+This is scoped to the container dev mode store and is distinct from the top-level `avocado prune`, which removes abandoned Docker volumes.
 
 ## Command reference
 

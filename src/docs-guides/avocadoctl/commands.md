@@ -134,7 +134,7 @@ avocadoctl root-authority
 
 ### `avocadoctl serve`
 
-Starts the avocadoctl Varlink daemon, listening for connections from CLI commands and third-party applications. See the [Varlink API](./varlink-api/overview) documentation for details on the exposed interfaces.
+Starts the avocadoctl Varlink daemon, listening for connections from CLI commands and third-party applications. See the [Varlink API](/developer-reference/avocadoctl/varlink-api/overview) documentation for details on the exposed interfaces.
 
 ```
 avocadoctl serve [OPTIONS]
@@ -214,6 +214,40 @@ avocadoctl unmerge --unmount
 ---
 
 ## `avocadoctl ext` {#ext-commands}
+
+### `avocadoctl ext disable`
+
+Marks one or more extensions of the active runtime as disabled. The override is written to `overrides.json` next to the runtime's manifest, which stays unchanged; it takes effect on the next merge, so run `avocadoctl ext refresh` to apply it.
+
+```
+avocadoctl ext disable <NAME>...
+```
+
+#### Examples
+
+```bash
+avocadoctl ext disable my-app
+avocadoctl ext refresh
+```
+
+---
+
+### `avocadoctl ext enable`
+
+Marks one or more extensions of the active runtime as enabled, recording the override in `overrides.json` like `ext disable`. Run `avocadoctl ext refresh` to apply it.
+
+```
+avocadoctl ext enable <NAME>...
+```
+
+#### Examples
+
+```bash
+avocadoctl ext enable my-app
+avocadoctl ext refresh
+```
+
+---
 
 ### `avocadoctl ext list`
 
@@ -416,7 +450,7 @@ avocadoctl var-key list
 
 ```bash
 avocadoctl var-key list
-avocadoctl --json var-key list
+avocadoctl -o json var-key list
 ```
 
 ---
@@ -453,7 +487,7 @@ The activation process:
 2. If the runtime includes an OS bundle with a different `os_build_id` than the running system, an OS update is applied and a reboot is required.
 3. If no OS change is needed, the `active` symlink is atomically switched and extensions are refreshed.
 
-See [Activation Process](./runtime-management/activation-process) for full details.
+See [Activation Process](/developer-reference/avocadoctl/runtime-management/activation-process) for full details.
 
 ```
 avocadoctl runtime activate [OPTIONS] <ID>
@@ -512,6 +546,16 @@ avocadoctl runtime add --manifest /path/to/manifest.json
 
 ---
 
+### `avocadoctl runtime gc`
+
+Removes old runtimes and extension images no runtime references. It keeps at most `runtime_retention` runtimes (see [Configuration](/developer-reference/avocadoctl/configuration)); the active runtime and one referenced by a pending OS update are always kept. It also runs after every `runtime add` unless `auto_gc` is `false`.
+
+```
+avocadoctl runtime gc
+```
+
+---
+
 ### `avocadoctl runtime inspect`
 
 Shows detailed information about a runtime including manifest version, build time, runtime name and version, all extensions with their image IDs, and OS bundle information if present. Omit the ID to inspect the currently active runtime.
@@ -550,6 +594,26 @@ avocadoctl runtime list [OPTIONS]
 
 ```bash
 avocadoctl runtime list
+```
+
+---
+
+### `avocadoctl runtime metadata`
+
+Reads and writes key-value metadata on a runtime. The ID can be an unambiguous prefix.
+
+```
+avocadoctl runtime metadata set <ID> <KEY> <VALUE>
+avocadoctl runtime metadata get <ID> <KEY>
+avocadoctl runtime metadata list <ID>
+avocadoctl runtime metadata delete <ID> <KEY>
+```
+
+#### Examples
+
+```bash
+avocadoctl runtime metadata set a1b2 channel beta
+avocadoctl runtime metadata list a1b2
 ```
 
 ---

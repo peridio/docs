@@ -64,25 +64,27 @@ The runtime manifest is a JSON file that describes a complete runtime configurat
 
 ## Field Reference
 
-| Field                          | Type    | Required | Description                                                                                                      |
-| ------------------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| `manifest_version`             | integer | Yes      | Schema version. `1` for extensions-only manifests, `2` adds `initramfs_build_id` support.                        |
-| `id`                           | string  | Yes      | Unique identifier for this runtime, typically a UUID. Used as the directory name under `runtimes/`.              |
-| `built_at`                     | string  | Yes      | ISO-8601 timestamp of when the runtime was built.                                                                |
-| `runtime`                      | object  | Yes      | Runtime identity.                                                                                                |
-| `runtime.name`                 | string  | Yes      | Human-readable runtime name (e.g., "production", "dev").                                                         |
-| `runtime.version`              | string  | Yes      | Semantic version of the runtime.                                                                                 |
-| `extensions`                   | array   | Yes      | List of extension images included in this runtime. May be empty.                                                 |
-| `extensions[].name`            | string  | Yes      | Extension name.                                                                                                  |
-| `extensions[].version`         | string  | Yes      | Extension version.                                                                                               |
-| `extensions[].image_id`        | string  | No       | UUIDv5 content-addressable image identifier. When present, the image file is `{image_id}.raw`.                   |
-| `extensions[].image_type`      | string  | No       | Image format. Absent for raw squashfs/erofs images, `"kab"` for KAB-wrapped images.                              |
-| `extensions[].sha256`          | string  | Yes      | SHA-256 hash of the extension image file for integrity verification.                                             |
-| `os_bundle`                    | object  | No       | Optional OS bundle reference for rootfs/initramfs updates.                                                       |
-| `os_bundle.image_id`           | string  | Yes\*    | UUIDv5 identifier for the OS bundle image file. \*Required if `os_bundle` is present.                            |
-| `os_bundle.sha256`             | string  | Yes\*    | SHA-256 hash of the OS bundle `.raw` file for integrity verification.                                            |
-| `os_bundle.os_build_id`        | string  | No       | Identifies the rootfs version. Compared against the running system's `AVOCADO_OS_BUILD_ID` to detect OS changes. |
-| `os_bundle.initramfs_build_id` | string  | No       | Identifies the initramfs version. Requires `manifest_version` >= 2.                                              |
+| Field                          | Type    | Required | Description                                                                                                                                                                |
+| ------------------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `manifest_version`             | integer | Yes      | Schema version. `1` for extensions-only manifests, `2` adds `initramfs_build_id` support.                                                                                  |
+| `id`                           | string  | Yes      | Unique identifier for this runtime, typically a UUID. Used as the directory name under `runtimes/`.                                                                        |
+| `built_at`                     | string  | Yes      | ISO-8601 timestamp of when the runtime was built.                                                                                                                          |
+| `runtime`                      | object  | Yes      | Runtime identity.                                                                                                                                                          |
+| `runtime.name`                 | string  | Yes      | Human-readable runtime name (e.g., "production", "dev").                                                                                                                   |
+| `runtime.version`              | string  | Yes      | Semantic version of the runtime.                                                                                                                                           |
+| `extensions`                   | array   | Yes      | List of extension images included in this runtime. May be empty.                                                                                                           |
+| `extensions[].name`            | string  | Yes      | Extension name.                                                                                                                                                            |
+| `extensions[].version`         | string  | Yes      | Extension version.                                                                                                                                                         |
+| `extensions[].image_id`        | string  | No       | UUIDv5 content-addressable image identifier. When present, the image file is `{image_id}.raw`.                                                                             |
+| `extensions[].image_type`      | string  | No       | Image format. Absent for raw squashfs/erofs images, `"kab"` for KAB-wrapped images.                                                                                        |
+| `extensions[].sha256`          | string  | No       | SHA-256 hash of the extension image file for integrity verification.                                                                                                       |
+| `extensions[].root_hash`       | string  | No       | dm-verity root hash (hex). When present, the image is mounted through a verity device using the `{image}.verity` hash tree next to it, and every block is checked on read. |
+| `extensions[].enabled`         | boolean | No       | Build-time activation default. Absent or `true` merges the extension at refresh; `false` ships it inactive until `avocadoctl ext enable`.                                  |
+| `os_bundle`                    | object  | No       | Optional OS bundle reference for rootfs/initramfs updates.                                                                                                                 |
+| `os_bundle.image_id`           | string  | Yes\*    | UUIDv5 identifier for the OS bundle image file. \*Required if `os_bundle` is present.                                                                                      |
+| `os_bundle.sha256`             | string  | Yes\*    | SHA-256 hash of the OS bundle `.raw` file for integrity verification.                                                                                                      |
+| `os_bundle.os_build_id`        | string  | No       | Identifies the rootfs version. Compared against the running system's `AVOCADO_OS_BUILD_ID` to detect OS changes.                                                           |
+| `os_bundle.initramfs_build_id` | string  | No       | Identifies the initramfs version. Requires `manifest_version` >= 2.                                                                                                        |
 
 ## Image ID Scheme
 

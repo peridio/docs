@@ -7,7 +7,7 @@ copy_markdown: true
 
 # `commands`
 
-A complete reference of every `avocado` command and subcommand on a single page, taken from `--help` of `avocado 1.0.0-rc.5 (78732c3 2026-09-17)`. Use your browser's find (Ctrl+F / Cmd+F) to search.
+A complete reference of every `avocado` command and subcommand on a single page, taken from `--help` of `avocado 1.0.0 (405f5953 2026-10-27)`. Use your browser's find (Ctrl+F / Cmd+F) to search.
 
 ---
 
@@ -60,7 +60,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
   -V, --version              Print version
 
@@ -89,7 +89,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -132,7 +132,7 @@ Options:
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -171,7 +171,7 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
 
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
   -h, --help
           Print help (see a summary with '-h')
@@ -203,7 +203,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -229,7 +229,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -270,7 +270,7 @@ Options:
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -348,7 +348,7 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
 
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
   -h, --help
           Print help (see a summary with '-h')
@@ -384,7 +384,7 @@ Options:
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -433,7 +433,7 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
 
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
   -h, --help
           Print help (see a summary with '-h')
@@ -455,7 +455,7 @@ Arguments:
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
+  -f, --force                           Skip warnings and confirmation prompts. A raw SD card write from the host still asks for confirmation
   -t, --target <TARGET>                 Target architecture
       --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
       --profile <PROVISION_PROFILE>     Provision profile to use
@@ -469,7 +469,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -499,7 +499,7 @@ Options:
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -536,7 +536,7 @@ Options:
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -563,7 +563,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -590,7 +590,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -621,7 +621,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -648,7 +648,7 @@ Options:
       --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                   Print help
 
 ```
@@ -670,7 +670,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -690,7 +690,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -728,7 +728,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -752,7 +752,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -776,7 +776,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -797,7 +797,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -818,7 +818,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -844,7 +844,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -866,7 +866,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -890,7 +890,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -911,7 +911,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -935,7 +935,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -965,7 +965,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -990,7 +990,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1013,7 +1013,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1037,7 +1037,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1060,7 +1060,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1085,7 +1085,7 @@ Options:
       --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                       Print help
 
 ```
@@ -1109,7 +1109,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1134,7 +1134,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1156,7 +1156,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1180,7 +1180,7 @@ Options:
       --nfs-port <NFS_PORT>      NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                   Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start         On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start         On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                     Print help
 
 ```
@@ -1204,7 +1204,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1229,7 +1229,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1253,7 +1253,7 @@ Options:
       --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                   Print help
 
 ```
@@ -1279,7 +1279,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1306,7 +1306,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1332,7 +1332,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1356,7 +1356,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1380,7 +1380,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1405,7 +1405,7 @@ Options:
       --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                       Print help
 
 ```
@@ -1430,7 +1430,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1452,7 +1452,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1476,7 +1476,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1500,7 +1500,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1522,7 +1522,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1550,7 +1550,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1574,7 +1574,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1599,6 +1599,7 @@ Options:
   -C, --config <CONFIG>                Path to avocado.yaml configuration file [default: avocado.yaml]
   -t, --target <TARGET>                Target architecture
       --file <FILE>                    Path to pre-built tarball or artifact directory (skips export from Docker volume)
+      --no-sbom                        Skip SBOM generation; no SBOM is stored for the runtime
       --profile <PROFILE>              Profile name (defaults to the active default profile)
       --publish                        Publish the runtime immediately after upload (draft → published)
       --deploy-cohort <DEPLOY_COHORT>  Deploy after upload: cohort ID to target
@@ -1610,7 +1611,7 @@ Options:
       --nfs-port <NFS_PORT>            NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                         Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start               On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start               On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                           Print help
 
 ```
@@ -1640,7 +1641,7 @@ Options:
       --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                       Print help
 
 ```
@@ -1662,7 +1663,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1687,7 +1688,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1711,7 +1712,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1736,7 +1737,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1759,7 +1760,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1784,7 +1785,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1808,7 +1809,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1830,7 +1831,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1853,7 +1854,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1876,7 +1877,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1909,7 +1910,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -1963,7 +1964,7 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
 
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
   -h, --help
           Print help (see a summary with '-h')
@@ -1993,7 +1994,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2022,7 +2023,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2043,7 +2044,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2067,7 +2068,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2096,7 +2097,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2124,7 +2125,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2165,7 +2166,7 @@ Options:
       --no-tui
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help
           Print help
 
@@ -2195,7 +2196,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2224,7 +2225,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2256,7 +2257,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2283,7 +2284,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2312,7 +2313,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2332,7 +2333,7 @@ Arguments:
 Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
-  -f, --force                           Force the operation to proceed, bypassing warnings or confirmation prompts
+  -f, --force                           Skip warnings and confirmation prompts. A raw SD card write from the host still asks for confirmation
   -t, --target <TARGET>                 Target architecture
       --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
       --profile <PROVISION_PROFILE>     Provision profile to use
@@ -2344,7 +2345,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2365,7 +2366,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2389,7 +2390,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2417,7 +2418,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2444,7 +2445,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2474,7 +2475,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2501,7 +2502,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2531,7 +2532,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2566,7 +2567,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2589,7 +2590,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2616,7 +2617,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2643,7 +2644,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2668,7 +2669,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2695,7 +2696,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2723,7 +2724,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -2750,7 +2751,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2779,7 +2780,7 @@ Options:
       --nfs-port <NFS_PORT>     NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>         SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                  Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start        On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start        On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                    Print help
 
 ```
@@ -2804,7 +2805,7 @@ Options:
       --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                   Print help
 
 ```
@@ -2825,7 +2826,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2848,7 +2849,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2875,7 +2876,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2900,7 +2901,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2925,7 +2926,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -2951,7 +2952,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3004,7 +3005,7 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
 
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
   -h, --help
           Print help (see a summary with '-h')
@@ -3031,7 +3032,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -3055,7 +3056,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -3081,7 +3082,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3134,7 +3135,7 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
 
       --no-vm-auto-start
-          On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
   -h, --help
           Print help (see a summary with '-h')
@@ -3161,7 +3162,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -3185,7 +3186,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -3214,7 +3215,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3242,7 +3243,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -3261,7 +3262,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3283,7 +3284,7 @@ Options:
       --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                       Print help
 
 ```
@@ -3305,7 +3306,7 @@ Options:
       --nfs-port <NFS_PORT>        NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start           On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                       Print help
 
 ```
@@ -3325,7 +3326,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3352,7 +3353,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -3369,14 +3370,16 @@ Project configuration introspection (read-only)
 Usage: avocado config [OPTIONS] <COMMAND>
 
 Commands:
-  show  Show the parsed avocado.yaml in a stable JSON or YAML-ish summary
+  show      Show the parsed avocado.yaml in a stable JSON or YAML-ish summary
+  schema    Print the JSON Schema for avocado.yaml that this CLI uses
+  validate  Check an avocado.yaml against the schema and the CLI's own rules, without building. Exits 1 when there are errors
 
 Options:
       --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3398,7 +3401,47 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado config schema`
+
+```
+Print the JSON Schema for avocado.yaml that this CLI uses
+
+Usage: avocado config schema [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado config validate`
+
+```
+Check an avocado.yaml against the schema and the CLI's own rules, without building. Exits 1 when there are errors
+
+Usage: avocado config validate [OPTIONS]
+
+Options:
+  -c, --config <CONFIG>      Path to avocado.yaml, or `-` to read it from stdin [default: ./avocado.yaml]
+      --output <OUTPUT>      Output format [default: human] [possible values: human, json]
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3424,7 +3467,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3450,7 +3493,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3469,7 +3512,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3488,7 +3531,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3507,7 +3550,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3526,7 +3569,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3545,7 +3588,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3569,7 +3612,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3593,7 +3636,7 @@ Options:
       --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                            Print help
 
 ```
@@ -3612,7 +3655,7 @@ Manage the local avocado-vm helper VM (macOS / Windows dev hosts)
 Usage: avocado vm [OPTIONS] <COMMAND>
 
 Commands:
-  start    Boot the avocado-vm (no-op if already running)
+  start    Boot the avocado-vm (fails if it is already running)
   stop     Stop the avocado-vm (graceful; falls back to SIGKILL with --force)
   status   Show running state + manifest metadata
   shell    Open an SSH session into the running avocado-vm
@@ -3627,7 +3670,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3637,7 +3680,7 @@ Options:
 ### `avocado vm start`
 
 ```
-Boot the avocado-vm (no-op if already running)
+Boot the avocado-vm (fails if it is already running)
 
 Usage: avocado vm start [OPTIONS]
 
@@ -3656,7 +3699,7 @@ Options:
       --nfs-port <NFS_PORT>            NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>                SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                         Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start               On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start               On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                           Print help
 
 ```
@@ -3676,7 +3719,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3695,7 +3738,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3717,7 +3760,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3737,7 +3780,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3758,7 +3801,7 @@ Options:
       --nfs-port <NFS_PORT>    NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start       On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                   Print help
 
 ```
@@ -3778,7 +3821,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3803,7 +3846,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3826,7 +3869,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3849,7 +3892,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3871,7 +3914,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3891,7 +3934,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```
@@ -3914,7 +3957,7 @@ Options:
       --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start     On macOS/Windows, don't auto-start the avocado-vm; talk to the local docker daemon directly. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
   -h, --help                 Print help
 
 ```

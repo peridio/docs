@@ -17,7 +17,7 @@ Secure boot establishes a cryptographic chain of trust beginning at the silicon 
 
 That is what the chain does once it is closed, not what a published feed does by default. Until you sign the boot FIT and have the bootloader enforce your key, the distro bootloader does not enforce it. [Boot signing](/developer-reference/security/boot-signing) covers each link.
 
-The chain can be carried further, to the root filesystem and to individual system extensions, with dm-verity. That is an opt-in per image (`image.verity`) rather than something enabled by default, and for the rootfs it currently depends on the target being able to carry the root hash in a boot FIT. See [Filesystem Integrity](filesystem-integrity) for what applies where.
+The chain can be carried further, to the root filesystem and to individual system extensions, with dm-verity. That is an opt-in per image (`image.verity`) rather than something enabled by default, and for the rootfs it currently depends on the target being able to carry the root hash in a boot FIT. See [Filesystem Integrity](/avocado-os/security/filesystem-integrity) for what applies where.
 
 The challenge is that every silicon vendor has a different mechanism for establishing a root of trust, different fuse provisioning procedures, and different signing toolchains. Avocado abstracts this behind a unified interface that works the same way regardless of the underlying hardware.
 
@@ -42,7 +42,7 @@ The boot chain verification flows through each stage:
 
 1. **Silicon ROM** — Vendor-programmed immutable code validates the first-stage bootloader against keys burned into hardware fuses.
 2. **Bootloader** — Verified bootloader validates the kernel image and device tree using developer-provided signing keys.
-3. **Kernel** — Verified kernel can enforce dm-verity on the root filesystem when the rootfs image opts in (see [Filesystem Integrity](filesystem-integrity)).
+3. **Kernel** — Verified kernel can enforce dm-verity on the root filesystem when the rootfs image opts in (see [Filesystem Integrity](/avocado-os/security/filesystem-integrity)).
 4. **Root filesystem** — Immutable EROFS image. With verity enabled it is verified block-by-block at read time; without it the image is still read-only, but unverified.
 5. **Extensions** — Each system extension (sysext) and configuration extension (confext) can be verity-protected with `image.verity`, and is then verified before overlay.
 

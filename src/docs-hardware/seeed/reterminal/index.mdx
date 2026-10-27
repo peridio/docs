@@ -100,11 +100,11 @@ Hardware-in-the-loop development reduces iteration from weeks to hours. Remote d
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `reterminal`. The provisioning specifics are below.
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `reterminal`, published on the **2024** release feed. `avocado init` writes `release: 2026`, so set `distro.release: 2024` in `avocado.yaml` before the first install. The provisioning specifics are below.
 
 ### Provision
 
-Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+Build the project and execute the provisioning procedure. This will build the system image and write it to the device's onboard eMMC over USB. Put the device into USB boot mode following Seeed's documentation and connect it to your host with a USB cable before you provision.
 
 :::note Provisioning on a Linux host
 If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
@@ -112,11 +112,11 @@ If your Linux desktop auto-mounts removable media, disable it first — see [Lin
 
 ```bash title="Host machine"
 avocado build
-avocado provision -r dev --profile sd
+avocado provision -r dev --profile usb
 ```
 
 ### Run
 
-After provisioning completes, insert the SD card into your target device and power it on.
+After provisioning completes, disconnect the USB cable, return the device to its normal boot mode, and power it on.
 
-The device will boot from the SD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
+The device will boot from the onboard eMMC with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.

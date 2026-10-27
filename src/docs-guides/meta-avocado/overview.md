@@ -17,18 +17,24 @@ Meta Avocado is the Yocto distro layer that powers Avocado OS. It's the build in
 | `meta-avocado-shared` | Common shared configurations            |
 | `meta-avocado-qemu`   | QEMU emulation support                  |
 | `meta-avocado-tpm`    | TPM secure boot integration             |
+| `meta-avocado-sbom`   | SBOM and CVE report generation          |
 
 ### Platform BSP Layers
 
-| Layer                      | Targets                           |
-| -------------------------- | --------------------------------- |
-| `meta-avocado-raspberrypi` | Raspberry Pi 5, Pi 4, Pi Zero 2 W |
-| `meta-avocado-nvidia`      | Jetson Orin Nano, Jetson AGX Orin |
-| `meta-avocado-nxp`         | i.MX 8M Plus, i.MX 93, i.MX 91    |
-| `meta-avocado-x86-64`      | Intel x86-64-v2, x86-64-v3        |
-| `meta-avocado-rockchip`    | Rockchip platforms                |
-| `meta-avocado-stm`         | STMicroelectronics STM32MP        |
-| `meta-avocado-rubikpi`     | Qualcomm RB3 Gen 2                |
+| Layer                      | Targets                                                      |
+| -------------------------- | ------------------------------------------------------------ |
+| `meta-avocado-raspberrypi` | Raspberry Pi 5, Pi 4, Pi Zero 2 W, reTerminal, reTerminal DM |
+| `meta-avocado-nvidia`      | Jetson Orin Nano, Orin NX, AGX Orin, AGX Thor, reComputer    |
+| `meta-avocado-nxp`         | i.MX 8M Plus, i.MX 91, i.MX 93, i.MX 95                      |
+| `meta-avocado-x86-64`      | Intel x86-64-v2, x86-64-v3, x86-64-v4                        |
+| `meta-avocado-amd-x86-64`  | AMD x86-64-v4                                                |
+| `meta-avocado-arm64`       | Generic arm64 UEFI                                           |
+| `meta-avocado-qcom`        | Qualcomm RB3 Gen 2, RUBIK Pi 3                               |
+| `meta-avocado-rockchip`    | Rockchip platforms                                           |
+| `meta-avocado-stm`         | STMicroelectronics STM32MP                                   |
+| `meta-avocado-renesas`     | Renesas RZ/V2N                                               |
+| `meta-avocado-synaptics`   | Synaptics Astra                                              |
+| `meta-avocado-alif`        | Alif Ensemble E8                                             |
 
 ## Technical Details
 
@@ -41,7 +47,7 @@ Meta Avocado is the Yocto distro layer that powers Avocado OS. It's the build in
 Meta Avocado uses KAS for build orchestration:
 
 ```bash
-source init-build $KAS_YML
+source scripts/init-build kas/machine/<machine>.yml
 kas build $KAS_YML
 ```
 

@@ -16,15 +16,15 @@ Avocado OS is built around a few core concepts that work together to deliver a c
 // highlight-removed-end
 // highlight-orange-start
                       avocado.yaml                      <-- your config
-               ┌─────────────────────────┐
-               │ target: raspberrypi5    │
-               │                         │
-               │ runtimes:               │
-               │   dev:                  │
-               │     extensions:         │
-               │       - my-app          │              <-- your app
-               │       - avocado-ext-dev │
-               └─────────────────────────┘
+            ┌───────────────────────────────┐
+            │ default_target: raspberrypi5  │
+            │                               │
+            │ runtimes:                     │
+            │   dev:                        │
+            │     extensions:               │
+            │       - my-app                │           <-- your app
+            │       - avocado-ext-dev       │
+            └───────────────────────────────┘
                             │
                             ▼
 // highlight-orange-end
@@ -67,7 +67,7 @@ Filesystem technology for the rootFS and extensions is configurable in `avocado.
 The `avocado.yaml` file is the single source of truth for your Avocado project. It declares everything — your target hardware, your runtimes, your extensions, your SDK configuration. One file defines your entire system. As Justin puts it, "it feels a lot like infrastructure as code."
 
 ```yaml
-target: raspberrypi5 # ◀ target hardware
+default_target: raspberrypi5 # ◀ target hardware
 
 runtimes: # ◀ named deployment profiles
   dev:
@@ -358,7 +358,7 @@ A typical `on_merge` restarts the extension's services so they pick up new files
 Certain hooks are added automatically based on extension contents — you don't need to declare these:
 
 - Extensions containing **kernel modules** automatically run `depmod`
-- Extensions containing **shared libraries** automatically run `ldconfig`
+- Extensions containing **ld.so.conf.d** configuration automatically run `ldconfig`
 - Extensions containing **sysusers.d** configuration automatically run `systemd-sysusers`
 
-This means that if your extension ships a kernel module for a custom driver, the module dependency tree is rebuilt automatically when the extension merges. If it ships a shared library, the linker cache is updated. The system does the right thing without you having to remember the incantations.
+This means that if your extension ships a kernel module for a custom driver, the module dependency tree is rebuilt automatically when the extension merges. If it adds a library path in `ld.so.conf.d`, the linker cache is updated. The system does the right thing without you having to remember the incantations.

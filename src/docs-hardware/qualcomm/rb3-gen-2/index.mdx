@@ -73,7 +73,7 @@ default_target_board: rb3gen2-vision
 
 ## On Avocado OS
 
-- **2026 release feed.** The target is published on the 2026 release, `next` channel. `avocado init` writes a 2024 `distro:` block, so change it before the first install (see below).
+- **2026 release feed.** The target is published on the 2026 release, which `avocado init` uses by default.
 - **Real-time and virtualization.** The 2026 feed for this target carries both a stock and a PREEMPT_RT kernel; the project picks one with `kernel.version`. KVM is available on the RT kernel when the board runs the KVM firmware configuration.
 - **Camera pipeline.** With the Vision Kit board selected, the ISP comes up and the kit's cameras appear as `/dev/video*` devices.
 
@@ -81,15 +81,11 @@ default_target_board: rb3gen2-vision
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `rb3gen2`, available on the **2026** release feed. After `avocado init --target rb3gen2`, point the project at the 2026 feed and name your kit:
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `rb3gen2`, available on the **2026** release feed. After `avocado init --target rb3gen2`, name your kit:
 
 ```yaml title="avocado.yaml"
 default_target: rb3gen2
 default_target_board: rb3gen2-vision # or rb3gen2-industrial; omit for the core kit
-
-distro:
-  release: 2026
-  channel: next
 ```
 
 Then install and build as usual:
@@ -121,7 +117,7 @@ It re-enumerates on the host as `05c6:9008`, ready to provision. This is also th
 
 :::
 
-Then provision the `dev` runtime with the `ufs` profile. The profile is required: it is what mounts the host's USB bus into the provisioning container.
+Then provision the `dev` runtime with the `ufs` profile:
 
 ```bash title="Host machine"
 avocado provision -r dev --profile ufs

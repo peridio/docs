@@ -14,7 +14,7 @@ You generally don't think about either of these — they just make builds reprod
 
 ## Lockfiles
 
-When `avocado install` resolves a package list for the first time, the CLI writes the resolved name‑version‑release tuples for every installed package to a lockfile at `.avocado/lock.json` (under your project's source directory). On subsequent installs the CLI asks DNF for those exact versions, so two team members running the same project — or you running the same project six months from now — get byte‑identical sysroots.
+When `avocado install` resolves a package list for the first time, the CLI writes the resolved name‑version‑release tuples for every installed package to a lockfile, `avocado.lock`, at the top of your project's source directory (like `Cargo.lock`). A lock from an older CLI at `.avocado/lock.json` is migrated there on first load. Commit it. On subsequent installs the CLI asks DNF for those exact versions, so two team members running the same project — or you running the same project six months from now — get byte‑identical sysroots.
 
 ### What gets locked
 
@@ -27,11 +27,19 @@ Entries are scoped by **target** and then by **sysroot type**. A single project 
 - `extensions.<name>` — packages installed into each named extension's sysroot.
 - `runtimes.<name>` — packages installed into each named runtime's sysroot. As of schema v6, each runtime entry also tracks per-runtime extension state under `runtimes.<name>.extensions.<ext>` — so an extension installed under different runtimes is recorded against each one independently. The top-level `extensions.<name>` map is still maintained alongside it.
 
-The lockfile is a single JSON file (schema v6) that holds all of these. The CLI migrates older schema versions automatically on first write.
+Each target also records `kernel-versions` (the resolved kernel per sysroot), `repo-snapshot` (the feed snapshot its packages were resolved against, pinned on first fetch so a clean rebuild resolves the same packages) and `feeds` (the configured feed set, in priority order).
+
+The lockfile is a single JSON file (schema v8) that holds all of these. The CLI migrates older schema versions automatically.
+
+Parallel installs share the file safely: each save does a three-way merge against the lock it loaded, so an install writes only the entries it changed and never reverts another's.
 
 ### Updating locked versions
 
 The lockfile is **never updated by `avocado install` alone** once an entry exists — that's the whole point of pinning. To pick up a newer version of a package, you have to explicitly unlock the relevant scope first, then re‑install.
+
+The one exception is an exact version pin in `avocado.yaml`. When the locked version does not match it, the install uses the pin and re-locks (`avocado.yaml pins <v>, avocado.lock has <v>. Using the yaml pin and re-locking.`), even for an extension that would otherwise be skipped as up to date. `*`, globs and pins that match the lock keep the locked version.
+
+To move a whole target forward, `avocado update` advances it to the latest feed snapshot and clears the package pins, so the next `avocado install` re-resolves everything to the latest versions.
 
 The `avocado unlock` command clears lockfile entries. It accepts scope flags so you can unlock as narrowly as the work requires:
 
@@ -51,9 +59,11 @@ avocado unlock --extension my-app
 avocado unlock --runtime dev
 ```
 
+`--extension` also clears that extension's runtime-scoped entries (`runtimes.<name>.extensions.<ext>`).
+
 After unlocking, run `avocado install` to re-resolve and write fresh entries.
 
-`avocado clean --unlock` is the broadest equivalent — it clears every lockfile entry for the target in one step. The `--unlock` flag requires `-C/--config` and `--target`:
+`avocado clean --unlock` is the broadest equivalent — it clears every lockfile entry for the target in one step. The `--unlock` flag requires `-C/--config`; the target comes from `--target`, `AVOCADO_TARGET` or the config's `default_target`:
 
 ```bash
 avocado clean --unlock -C avocado.yaml --target jetson-orin-nano-devkit
@@ -89,21 +99,25 @@ $AVOCADO_PREFIX/.stamps/
 ├── sdk/<host_arch>/compile-deps.stamp
 ├── rootfs/install.stamp
 ├── initramfs/install.stamp
-├── extension/<name>/install.stamp
-├── extension/<name>/build.stamp
-├── extension/<name>/image.stamp
+├── rootfs/<runtime>/image.stamp
+├── initramfs/<runtime>/image.stamp
+├── ext/<name>/install.stamp
+├── ext/<name>/build.stamp
+├── ext/<name>/image.stamp
 ├── runtime/<name>/install.stamp
 ├── runtime/<name>/build.stamp
 ├── runtime/<name>/sign.stamp
 └── runtime/<name>/provision.stamp
 ```
 
+The rootfs and initramfs sysroots are shared by every runtime of a target, so their install stamps are per target. Their image stamps are per runtime: each runtime builds its own rootfs and initramfs image, and one runtime's rebuild must not make another's older image look current.
+
 ### What invalidates a stamp
 
 Each stamp records SHA‑256 hashes of:
 
 - The relevant section of `avocado.yaml` (e.g. `runtimes.dev` for a runtime stamp).
-- The declared package list for that component.
+- The declared package list for that component, together with the lockfile pins in force at install time.
 
 When you re-run a command, the CLI re-computes those hashes against the current config and lockfile state, and re-runs the work if either has changed. Edits like adding a package, bumping a version pin, changing an overlay path, or unlocking and re-resolving the lockfile all change the relevant hash and cause the next run to redo the step.
 
@@ -134,7 +148,7 @@ avocado --no-stamps install --runtime dev
 avocado clean --stamps -C avocado.yaml --target jetson-orin-nano-devkit
 ```
 
-This removes the entire `.stamps` directory inside the SDK container volume. The next invocation rebuilds the cache from scratch as steps succeed. `--stamps` requires `-C/--config` and `--target` because the CLI has to enter the SDK container for the target to do the deletion.
+This removes the entire `.stamps` directory inside the SDK container volume. The next invocation rebuilds the cache from scratch as steps succeed. `--stamps` requires `-C/--config` because the CLI has to enter the SDK container for the target to do the deletion; the target comes from `--target`, `AVOCADO_TARGET` or the config's `default_target`.
 
 ### Picking the right tool
 

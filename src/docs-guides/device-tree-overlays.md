@@ -10,6 +10,8 @@ description: 'Declare a device-tree overlay in an extension and let avocado buil
 
 **NVIDIA Jetson (Tegra) is the one target this page documents, and the only one proven on hardware.** Other targets are not covered here: their delivery paths have not been confirmed on a board, and this page does not describe a mechanism nobody has watched work.
 
+The Jetson delivery hook ships in the `2024` release's BSP. The `2026` release's Jetson BSP does not ship one yet, so a Jetson project on `release: 2026` (the `avocado init` default) that declares an overlay fails: `avocado install` cannot find the hook package `avocado-dtc-overlay-deliver`. Set `distro.release: 2024` for the Jetson flow on this page.
+
 :::
 
 A device-tree overlay is a small patch to your board's hardware description: enable a SPI bus, wire up a GPIO, add a sensor the base device tree does not know about. Traditionally that means compiling a `.dtbo` by hand with `dtc` and finding somewhere on the boot partition to put it - a per-board manual step that has to be repeated on every image.
@@ -64,14 +66,30 @@ extensions:
 | Key      | Required | Meaning                                                                                                                                                                                                                                                                                                      |
 | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `name`   | yes      | Authoritative. It is the compiled blob's basename (`<name>.dtbo`) and, on the targets that select overlays at boot, the selection argument. Must be a safe basename: no `/`, no whitespace, not `.` or `..`. Names must be unique across the whole runtime - a duplicate is a hard error, not last-one-wins. |
-| `src`    | yes      | Path to the overlay source, relative to the project root.                                                                                                                                                                                                                                                    |
+| `src`    | no       | Path to the overlay source, relative to the project root (or, for an extension with a `source:`, to that extension's own directory). Omit it to name a stock overlay the BSP already ships: nothing is compiled, and the hook delivers and selects it by `name`.                                             |
 | `params` | no       | A mapping of per-overlay parameters. Accepted by the schema, but no hook on a documented target consumes it - the Jetson hook ignores it silently. Encode the values in the `.dtso` instead.                                                                                                                 |
 
 :::warning declare `avocado-runtime`
 The runtime must pull `avocado-runtime`, which is what installs `avocado-img-bootfiles` - the package shipping `u-boot.bin` and the `bootfiles/*` entries the bundler needs to build a boot image. A project that omits it fails late, at bundling, with `File 'u-boot.bin' not found in any input directory for FAT image`, which reads like a broken BSP rather than a missing declaration. It cost us two weeks of chasing a product bug that was a project-config omission.
 :::
 
-The feature is inert unless an overlay is declared. A project with no `device_tree_overlays` anywhere builds exactly as before.
+The feature is inert unless an overlay or a `boot_config` line is declared. A project with neither builds exactly as before.
+
+Both keys follow an extension's `target-<name>:` overrides, so a declaration under `target-jetson-orin-nano-devkit:` reaches only that board. As with every override, a target's list replaces the base list.
+
+### `boot_config`
+
+For a setting an overlay source cannot express, such as a base `dtparam` or a firmware option, an extension can list `boot_config` lines, one `key=value` each:
+
+```yaml
+extensions:
+  my-board:
+    boot_config:
+      - dtparam=i2c_arm=on
+      - usb_max_current_enable=1
+```
+
+The lines go to the BSP's delivery hook verbatim; what they mean, and whether the board can apply them, is the hook's decision. The key must be an identifier, so `[gpio4=1]` filters and `#x=y` comments are refused, and `dtoverlay=` is refused in favor of a `device_tree_overlays` entry. A key set to conflicting values draws a warning. A hook that does not claim `boot_config` fails the build rather than ignoring the lines. The Jetson hook documented here delivers overlays only.
 
 ## Writing the overlay source
 
@@ -259,11 +277,13 @@ The base DTB is selected by the `DTBFILE` the BSP records, because a real Tegra 
 Declaring an overlay on a target whose BSP ships no delivery hook is a **hard error**, not a silent skip:
 
 ```text
-[ERROR] device-tree overlays are declared but this target provides no delivery hook.
-        Expected an executable at .../usr/libexec/avocado/device-tree-overlay-deliver
+[ERROR] this target provides no delivery hook for the boot settings this project declares (dt_overlay).
+        Expected an executable at .../usr/libexec/avocado/device-tree-overlay-deliver (installed by the BSP layer).
 ```
 
-The same applies one level deeper: if the hook runs but does not claim an overlay, the build fails naming it. A declared overlay either reaches the boot medium or fails the build - it never quietly disappears into an image that looks fine.
+The kinds in parentheses are what the project declares: `dt_overlay` (an overlay with a `src`), `dt_overlay_stock` (an overlay without one) and `boot_config`. A BSP that ships a hook may also ship `usr/libexec/avocado/boot-settings.json` listing the kinds it delivers; when it does, a project declaring a kind the board does not list fails at the start of the build with `this target cannot deliver: <kinds>`, naming the kinds it supports.
+
+The same applies one level deeper: if the hook runs but does not claim an overlay, or leaves `boot_config` lines unclaimed, the build fails naming them. A declared overlay either reaches the boot medium or fails the build - it never quietly disappears into an image that looks fine.
 
 ## Troubleshooting
 
@@ -273,6 +293,8 @@ The same applies one level deeper: if the hook runs but does not claim an overla
 | `device-tree overlay name '<n>' is not a valid basename`             | `name` has a `/`, whitespace, or is `.`/`..`                             | Use a plain basename; it becomes a filename and a boot-loader argument                                   |
 | `device-tree overlay name '<n>' is declared by both '<a>' and '<b>'` | Two extensions on one runtime used the same name                         | Rename one; names are runtime-global                                                                     |
 | `this target provides no delivery hook`                              | Target's BSP has no hook (see the support matrix)                        | Remove the declaration for that target, or add a hook to the BSP layer                                   |
+| `this target cannot deliver: <kinds>`                                | The board's `boot-settings.json` does not list a kind the project uses   | Remove that setting for this target (a `target-<name>:` override), or use a board that delivers it       |
+| `boot_config lines staged but not delivered by the BSP hook`         | The hook does not support `boot_config`                                  | Keep `boot_config` off this target with a `target-<name>:` override                                      |
 | `device-tree overlays staged but not delivered by the BSP hook`      | Hook ran but did not claim the overlay                                   | A BSP bug - report it with the build log; the build correctly refused to ship a silently-dropped overlay |
 | `no dt-bindings under <dir>`                                         | Source `#include`s kernel headers, `kernel-devsrc` missing or incomplete | Confirm the SDK was provisioned for a project declaring overlays; a no-`#include` overlay needs neither  |
 | `fdtoverlay failed to merge` (Jetson)                                | Overlay targets a label or path absent from the base DTB                 | Check the target resolves in that board's base tree; prefer `target-path` when unsure                    |
@@ -281,6 +303,6 @@ The same applies one level deeper: if the hook runs but does not claim an overla
 
 ## What's next
 
-- [Custom kernel](./custom-kernel) - bring your own kernel tree, including the vendor trees that ship board device trees
-- [Provisioning](./provisioning) - writing a built image to a board
-- [Hardware-in-the-loop development](./hardware-in-the-loop) - iterating against a live device
+- [Custom kernel](/developer-reference/custom-kernel) - bring your own kernel tree, including the vendor trees that ship board device trees
+- [Provisioning](/developer-reference/provisioning) - writing a built image to a board
+- [Hardware-in-the-loop development](/developer-reference/hardware-in-the-loop) - iterating against a live device

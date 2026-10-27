@@ -16,7 +16,7 @@ The first is a per-project choice you make in config. The second is a property o
 
 ## Signing the boot FIT
 
-The FIT carries the kernel, the device tree, this runtime's initramfs, and — when [rootfs verity](/developer-reference/security/verity) is on — the rootfs root hash. Signing it is what makes that root hash mean anything.
+The FIT carries the kernel, the device tree, this runtime's initramfs, and — when [rootfs verity](/developer-reference/security/verity) is on — the rootfs root hash. When `kernel.cmdline_extra` is set it rides in every FIT configuration node too, as `avocado,cmdline-extra`. Signing it is what makes those values mean anything, so on a FIT machine either one fails the build unless `fit_key` or `fit_unsigned: true` is set.
 
 ### 1. Get a key into the registry
 

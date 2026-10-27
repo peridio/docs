@@ -8,7 +8,7 @@ An OS bundle is a self-describing archive containing the base operating system i
 
 ## When OS Bundles Are Used
 
-A [runtime manifest](../runtime-management/manifest-spec) may optionally include an `os_bundle` reference. When a runtime with a different `os_build_id` than the running system is activated, the OS bundle [update process](./update-process) is triggered automatically.
+A [runtime manifest](/developer-reference/avocadoctl/runtime-management/manifest-spec) may optionally include an `os_bundle` reference. When a runtime with a different `os_build_id` than the running system is activated, the OS bundle [update process](/developer-reference/avocadoctl/os-bundles/update-process) is triggered automatically.
 
 ## Relationship to Runtimes
 
@@ -18,5 +18,5 @@ OS bundles are referenced by `image_id` in the runtime manifest and stored as `.
 
 OS bundles are distributed as `.aos` files (tar.zst compressed archives) containing:
 
-- **`bundle.json`** -- Update metadata and configuration. See [Bundle Format](./bundle-format) for the full specification.
+- **`bundle.json`** -- Update metadata and configuration. See [Bundle Format](/developer-reference/avocadoctl/os-bundles/bundle-format) for the full specification.
 - **Artifact files** -- The actual rootfs and/or initramfs images to be written to partitions.

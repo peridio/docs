@@ -39,7 +39,9 @@ avocadoctl operates in a client-daemon model. The daemon listens on a Unix socke
 ├── active                          # symlink → runtimes/{active_runtime_id}
 ├── runtimes/
 │   ├── {runtime_id}/
-│   │   └── manifest.json           # runtime manifest
+│   │   ├── manifest.json           # runtime manifest
+│   │   ├── overrides.json          # ext enable/disable overrides
+│   │   └── metadata.json           # runtime metadata key-values
 │   └── {runtime_id}/
 │       └── manifest.json
 ├── images/

@@ -49,7 +49,20 @@ runtimes:
       version: '6.12.69'
 ```
 
-`package` and `compile` are mutually exclusive. If the `kernel` section is omitted entirely, the default Avocado kernel is used.
+`package` and `compile` are mutually exclusive. If the `kernel` section is omitted entirely, the default Avocado kernel is used. A pinned variant whose version extends the stock kernel's, such as a PREEMPT_RT build, installs like any other pin.
+
+### Kernel command line
+
+A `kernel` block can also amend how the kernel boots, with or without `package`/`compile`:
+
+```yaml
+runtimes:
+  dev:
+    kernel:
+      cmdline_extra: 'isolcpus=2,3 nohz_full=2,3'
+```
+
+`cmdline_extra` appends to the platform's own command line; `cmdline` replaces it. The two are mutually exclusive. On machines that boot a FIT, `cmdline_extra` is written into every FIT configuration node as `avocado,cmdline-extra`, covered by the FIT signature, so the runtime must set `signing.fit_key` or `signing.fit_unsigned: true` (see [Boot signing](/developer-reference/security/boot-signing)), and a value holding `"`, `\`, `#`, `&`, `'` or a newline is refused. Whether a board applies these settings at all is up to its BSP; when the board's `boot-settings.json` does not list `kernel_args`, the build warns that the setting may be ignored.
 
 ## SDK compile section
 
@@ -57,7 +70,7 @@ When compiling from source, define the compile section that the runtime referenc
 
 ```yaml
 sdk:
-  image: docker.io/avocadolinux/sdk:{{ avocado.distro.channel }}
+  image: docker.io/avocadolinux/sdk:{{ config.distro.release }}
 
   compile:
     kernel:
@@ -66,7 +79,7 @@ sdk:
         libelf1: '*'
 
   packages:
-    avocado-sdk-toolchain: '{{ avocado.distro.version }}'
+    avocado-sdk-toolchain: '*'
     nativesdk-bc: '*'
     nativesdk-libelf1: '*'
 ```
@@ -304,6 +317,6 @@ When targeting different hardware, adjust the following based on your board:
 
 ## What's next
 
-- [Cross-compilation guide](./cross-compilation) for compiling applications and kernel modules with the SDK
+- [Cross-compilation guide](/developer-reference/cross-compilation) for compiling applications and kernel modules with the SDK
 - [Extensions reference](/avocado-os/core-concepts#extensions) for complete configuration options
-- [Hardware-in-the-loop development](./hardware-in-the-loop) for testing on live devices
+- [Hardware-in-the-loop development](/developer-reference/hardware-in-the-loop) for testing on live devices

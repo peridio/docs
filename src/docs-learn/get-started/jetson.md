@@ -68,6 +68,14 @@ avocado init --target jetson-orin-nano-devkit jetson-orin-nano-devkit
 cd jetson-orin-nano-devkit
 ```
 
+`avocado init` sets `distro.release: 2026`, where this board's target is named `jetson-orin-nano` instead. To build the `jetson-orin-nano-devkit` target, set the release in `avocado.yaml` to 2024:
+
+```yaml title="avocado.yaml"
+distro:
+  release: 2024
+  channel: edge
+```
+
 ## Install
 
 Install the SDK toolchain, extension dependencies, and runtime packages.

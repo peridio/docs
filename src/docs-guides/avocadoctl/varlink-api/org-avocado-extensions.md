@@ -30,7 +30,8 @@ type ExtensionStatus (
     isConfext: bool,
     isMerged: bool,
     origin: ?string,
-    imageId: ?string
+    imageId: ?string,
+    imageType: ?string
 )
 
 # List all available extensions in the extensions directory
@@ -53,6 +54,15 @@ method Enable(extensions: []string, osRelease: ?string) -> (enabled: int, failed
 
 # Disable extensions for a specific OS release version
 method Disable(extensions: ?[]string, all: ?bool, osRelease: ?string) -> (disabled: int, failed: int)
+
+# Override the build-time `enabled` default for one or more extensions in
+# the active runtime. Writes to <runtime_dir>/overrides.json; takes effect
+# on the next merge/refresh. Names may be the bare extension name
+# (`microclaw`) or the versioned form shown by `ext list`
+# (`microclaw-0.1.57`). `updated` counts names that resolved + were
+# written; `missing` counts names not found in the active manifest
+# (still recorded for future use).
+method SetEnabled(extensions: []string, enabled: bool) -> (updated: int, missing: int)
 
 # Show status of merged extensions
 method Status() -> (extensions: []ExtensionStatus)
@@ -92,6 +102,7 @@ Represents the current status of an extension, including whether it is merged in
 | `isMerged`  | `bool`    | `true` if the extension is currently merged into the root filesystem |
 | `origin`    | `?string` | Origin identifier (e.g., the TUF target name)                        |
 | `imageId`   | `?string` | Image digest or build identifier                                     |
+| `imageType` | `?string` | `kab` for a KAB-wrapped image; absent for a raw squashfs/erofs image |
 
 ## Methods
 
@@ -409,6 +420,26 @@ printf("Disabled: %ld, Failed: %ld\n", disabled, failed);
 varlink_object_unref(reply);
 varlink_object_unref(parameters);
 ```
+
+### SetEnabled
+
+Override the manifest's `enabled` default for one or more extensions in the active runtime. The override is written to `overrides.json` in the runtime directory and takes effect on the next `Merge` or `Refresh`. Backs `avocadoctl ext enable` and `avocadoctl ext disable`.
+
+**Signature:** `SetEnabled(extensions: []string, enabled: bool) -> (updated: int, missing: int)`
+
+**Parameters:**
+
+| Field        | Type       | Description                                                                |
+| ------------ | ---------- | -------------------------------------------------------------------------- |
+| `extensions` | `[]string` | Extension names, bare (`my-app`) or in the versioned form `ext list` shows |
+| `enabled`    | `bool`     | `true` to enable, `false` to disable                                       |
+
+**Returns:**
+
+| Field     | Type  | Description                                                                   |
+| --------- | ----- | ----------------------------------------------------------------------------- |
+| `updated` | `int` | Names found in the active manifest and written                                |
+| `missing` | `int` | Names not in the active manifest; they are still recorded for a later runtime |
 
 ### Status
 

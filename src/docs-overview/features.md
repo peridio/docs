@@ -23,7 +23,7 @@ Avocado threads the needle. You get the full power of Yocto's build infrastructu
 Your entire system is defined in a single `avocado.yaml` file. It feels like infrastructure as code — declare your extensions, runtimes, target hardware, packages, and SDK configuration in one place, and Avocado assembles your Linux image from it.
 
 ```yaml
-target: raspberrypi5
+default_target: raspberrypi5
 
 runtimes:
   dev:

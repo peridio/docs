@@ -28,7 +28,7 @@ When an OS change is needed:
 6. The system must be rebooted to boot into the new OS.
 7. On next boot, the pending update is verified and the runtime is activated.
 
-See [OS Bundle Update Process](../os-bundles/update-process) for full details.
+See [OS Bundle Update Process](/developer-reference/avocadoctl/os-bundles/update-process) for full details.
 
 ### Step 3b: Extension-Only Path
 
@@ -36,7 +36,7 @@ When no OS change is needed:
 
 1. The `/var/lib/avocado/active` symlink is atomically switched to point to the target runtime.
 2. Extensions are refreshed: all existing extensions are unmerged, then the new runtime's extensions are merged.
-3. During merge, extensions are ordered deterministically based on their position in the [manifest](./manifest-spec).
+3. During merge, extensions are ordered deterministically based on their position in the [manifest](/developer-reference/avocadoctl/runtime-management/manifest-spec).
 4. `depmod` is run to update kernel module dependencies.
 
 ## Extension Refresh During Activation
