@@ -833,7 +833,7 @@
           "label": "eMMC (USB boot)",
           "profile": "usb",
           "media": "Onboard eMMC (flashed over USB)",
-          "autoMount": false,
+          "autoMount": true,
           "description": "Put the device into USB boot mode following Seeed's documentation and connect it to your host with a USB cable, then provision the dev runtime with the usb profile:",
           "command": "avocado provision -r dev --profile usb",
           "bootInstructions": "Disconnect the USB cable, return the device to its normal boot mode, and power it on. It boots Avocado OS from the onboard eMMC."
@@ -864,7 +864,7 @@
           "label": "eMMC (USB boot)",
           "profile": "usb",
           "media": "Onboard eMMC (flashed over USB)",
-          "autoMount": false,
+          "autoMount": true,
           "description": "Put the device into USB boot mode following Seeed's documentation and connect it to your host with a USB cable, then provision the dev runtime with the usb profile:",
           "command": "avocado provision -r dev --profile usb",
           "bootInstructions": "Disconnect the USB cable, return the device to its normal boot mode, and power it on. It boots Avocado OS from the onboard eMMC."
