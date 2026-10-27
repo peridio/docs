@@ -152,7 +152,7 @@
       "why": "The TPC-115W runs NXP i.MX 8M Mini. The i.MX 8M Plus EVK is the closest supported i.MX 8M kit."
     },
     "onlogic-fr201": {
-      "target": "fr201",
+      "target": "fr202",
       "soc": "Raspberry Pi CM4 (Broadcom BCM2711)",
       "underEvaluation": false,
       "recommended": "raspberrypi4",

@@ -166,19 +166,19 @@ Avocado eliminates that tradeoff. The system is hardened from day one — immuta
 
 ---
 
-## Deterministic, Reproducible Builds
+## Reproducible Builds
 
-> **When you run `avocado build`, you get the same image every time.**
+> **When you run `avocado build`, you get the same package set every time.**
 
-The same packages, the same versions, the same layout, the same checksums. This is not aspirational — it's architectural.
+The same packages, the same versions, the same layout. This is not aspirational — it's architectural.
 
 This stands in contrast to how most teams build embedded systems today. A Dockerfile pulls `apt-get install` from upstream repositories that change daily — your build on Monday produces a different image than your build on Friday. Ubuntu and Debian package mirrors are living, mutable targets. Even pinning versions doesn't guarantee the same binary output because the build environment itself varies. Ship that to a fleet and what you're left with are systems in the field mutating. When you apply packages at runtime, you apply mutations to that runtime. That causes state drift — being observable or understanding what's going wrong in your application becomes really difficult to reproduce on the desk.
 
 Avocado's approach is different. Packages are pre-built from known Yocto sources into versioned, immutable RPM feeds. The CLI installs specific package versions into a sysroot and images them. There's no runtime package resolution, no network fetches during build, no ambient state leaking in. The `avocado.yaml` plus the package feed version fully determines the output.
 
-> **Two engineers on different machines, building the same config against the same feed, get bit-identical images.**
+> **Two engineers on different machines, building the same config against the same feed, get the same packages at the same versions in the same images.**
 
-This matters for certification, for auditing, for debugging production issues, and for sleeping well at night. When a device in the field has a problem, you can reproduce its exact image locally because the build is deterministic.
+This matters for certification, for auditing, for debugging production issues, and for sleeping well at night. When a device in the field has a problem, you can rebuild its image locally from the same config and feed, with the same package set.
 
 ---
 

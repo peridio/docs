@@ -36,9 +36,9 @@ Traditional provisioning workflows often require powering on the device, waiting
 
 ### Reproducible builds
 
-Every Avocado build is deterministic. The same `avocado.yaml` plus the same package feed version produces the same output, byte for byte. This means:
+Every Avocado build is reproducible at the package level. The same `avocado.yaml` plus the same package feed version installs the same packages at the same versions, and `avocado.lock` records them. Images are not yet byte-for-byte identical across builds, because package-manager state ships inside them. This means:
 
-- Builds can be independently reproduced and verified by auditors
+- Builds can be independently reproduced, and their package sets verified, by auditors
 - Binary artifacts can be traced back to their exact source configuration
 - Compliance evidence doesn't depend on "trust us" — it's independently verifiable
 

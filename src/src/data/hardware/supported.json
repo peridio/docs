@@ -190,7 +190,7 @@
     },
     {
       "name": "OnLogic FR201",
-      "target": "fr201",
+      "target": "fr202",
       "board": "",
       "url": "/hardware/onlogic/fr201",
       "external": false,
@@ -300,12 +300,12 @@
     },
     {
       "name": "STMicroelectronics STM32MP257F-DK",
-      "target": "stm32mp257f-dk",
+      "target": "stm32mp25-dk",
       "board": "",
       "url": "/hardware/stmicroelectronics/stm32mp257f-dk",
       "external": false,
       "lts": {
-        "2024": "supported",
+        "2024": "in-progress",
         "2026": "in-progress"
       }
     },
