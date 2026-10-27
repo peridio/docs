@@ -1101,7 +1101,7 @@
       "prerequisites": [
         "USB drive",
         "UEFI boot support (Legacy BIOS not supported)",
-        "Build host CPU with AVX-512"
+        "A Linux build host with an AVX-512 CPU (the macOS setup below does not apply to this target)"
       ],
       "options": [
         {
