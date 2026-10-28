@@ -59,8 +59,9 @@ method Disable(extensions: ?[]string, all: ?bool, osRelease: ?string) -> (disabl
 # the active runtime. Writes to <runtime_dir>/overrides.json; takes effect
 # on the next merge/refresh. Names may be the bare extension name
 # (`microclaw`) or the versioned form shown by `ext list`
-# (`microclaw-0.1.57`). `updated` counts names that resolved + were
-# written; `missing` counts names not found in the active manifest
+# (`microclaw-0.1.57`). `updated` counts every name processed: an
+# override was written, or cleared when it matched the manifest default.
+# `missing` counts the names among them not found in the active manifest
 # (still recorded for future use).
 method SetEnabled(extensions: []string, enabled: bool) -> (updated: int, missing: int)
 
@@ -436,10 +437,10 @@ Override the manifest's `enabled` default for one or more extensions in the acti
 
 **Returns:**
 
-| Field     | Type  | Description                                                                   |
-| --------- | ----- | ----------------------------------------------------------------------------- |
-| `updated` | `int` | Names found in the active manifest and written                                |
-| `missing` | `int` | Names not in the active manifest; they are still recorded for a later runtime |
+| Field     | Type  | Description                                                                                                                              |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `updated` | `int` | Every name processed, including those also counted in `missing`; an override is written, or cleared when it matches the manifest default |
+| `missing` | `int` | Names not in the active manifest; they are still recorded for a later runtime                                                            |
 
 ### Status
 
