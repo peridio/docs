@@ -175,7 +175,7 @@ Switch MBR partition layout by rewriting the partition table.
 
 ### efibootmgr
 
-Point the firmware at the target slot's EFI boot entry. `slot_entries` maps each slot to an entry label. The device looks that label up in `efibootmgr -v` and runs `efibootmgr -n` on the matching entry, which sets `BootNext` for the next reboot only. The entry must already exist in NVRAM. If no entry matches the label, the action fails with `No EFI boot entry found with label '<label>'`. This action sets `BootNext` in every phase, including `commit`; it does not set `BootOrder`. To make a slot the permanent default on an EFI target, add a `command` commit action that sets `BootOrder`, for example with `efibootmgr -o`.
+Point the firmware at the target slot's EFI boot entry. `slot_entries` maps each slot to an entry label, which is also the GPT name of that slot's ESP; an entry missing from NVRAM is re-created on that partition. Under `activate` and `rollback` this writes `BootNext`, a one-shot; under `commit` it writes `BootOrder`, which makes the slot permanent.
 
 ```json
 {
@@ -193,7 +193,7 @@ The optional `update.rollback` array has the same format as `activate`. These ac
 
 ## Commit Actions
 
-The optional `update.commit` array has the same format as `activate`. These actions run on the next boot once verification passes, to mark the new slot good. Examples are `qbootctl -m`, a U-Boot bootcount reset, or a `command` action that sets `BootOrder` with `efibootmgr -o`.
+The optional `update.commit` array has the same format as `activate`. These actions run on the next boot once verification passes, to mark the new slot good: for example `qbootctl -m`, a U-Boot bootcount reset, or an `efibootmgr` action that makes the slot permanent in `BootOrder`.
 
 ## Verification
 
