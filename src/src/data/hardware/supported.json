@@ -25,24 +25,24 @@
     },
     {
       "name": "Advantech MIC-733-AO5A1",
-      "target": "jetson-agx-orin-devkit",
+      "target": "jetson-agx-orin",
       "board": "mic-733-ao5a1",
       "url": "/hardware/advantech/mic-733-ao",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
       "name": "Advantech MIC-733-AO6A1",
-      "target": "jetson-agx-orin-devkit",
+      "target": "jetson-agx-orin",
       "board": "mic-733-ao6a1",
       "url": "/hardware/advantech/mic-733-ao",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -102,13 +102,13 @@
     },
     {
       "name": "NVIDIA Jetson AGX Orin Developer Kit",
-      "target": "jetson-agx-orin-devkit",
+      "target": "jetson-agx-orin",
       "board": "",
       "url": "/hardware/nvidia/jetson-agx-orin",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -135,13 +135,13 @@
     },
     {
       "name": "NVIDIA Jetson Orin Nano Developer Kit",
-      "target": "jetson-orin-nano-devkit",
+      "target": "jetson-orin-nano",
       "board": "",
       "url": "/hardware/nvidia/jetson-orin-nano-developer-kit",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {

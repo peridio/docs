@@ -288,10 +288,10 @@
   },
   "jetson-orin-nano-devkit": {
     "name": "NVIDIA Jetson Orin Nano",
-    "target": "jetson-orin-nano-devkit",
+    "target": "jetson-orin-nano",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
@@ -391,10 +391,10 @@
   },
   "jetson-agx-orin-devkit": {
     "name": "NVIDIA Jetson AGX Orin",
-    "target": "jetson-agx-orin-devkit",
+    "target": "jetson-agx-orin",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
