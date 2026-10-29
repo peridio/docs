@@ -299,6 +299,17 @@
       }
     },
     {
+      "name": "SolidRun R8000",
+      "target": "amd-x86-64-v4",
+      "board": "",
+      "url": "/hardware/solidrun/r8000",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "in-progress"
+      }
+    },
+    {
       "name": "STMicroelectronics STM32MP257F-DK",
       "target": "stm32mp25-dk",
       "board": "",

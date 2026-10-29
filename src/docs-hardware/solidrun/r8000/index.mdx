@@ -1,0 +1,119 @@
+---
+title: 'Production-Ready SolidRun R8000 Deployment'
+sidebar_position: 1
+description: 'Deploy the SolidRun R8000 COM Express Type 6 platform with Avocado OS. AMD Ryzen 8000 series (Zen 4) with Radeon 780M graphics, an XDNA NPU, a firmware TPM 2.0 and 2.5GbE, on the x86-64-v4 target.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+<HardwareHero
+  vendor="SolidRun"
+  vendorUrl="https://www.solid-run.com/"
+  model="R8000"
+  tagline="AMD Ryzen 8000 series COM Express Type 6 platform for edge compute, with on-chip graphics and an NPU."
+  stats={[
+    { value: 'Zen 4, 8C / 16T', label: 'AMD Ryzen 8000 Series' },
+    { value: 'Radeon 780M', label: 'Integrated Graphics' },
+    { value: 'XDNA', label: 'NPU' },
+    { value: 'TPM 2.0', label: 'Firmware TPM' },
+    { value: '2.5GbE', label: 'Intel I226-IT' },
+    { value: 'x86-64-v4', label: 'Instruction Set' },
+  ]}
+  target="amd-x86-64-v4"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/learn/get-started/any-target',
+    },
+  }}
+/>
+
+## Overview
+
+The SolidRun R8000 is a COM Express Type 6 Compact module built on the AMD Ryzen 8000 series, with Zen 4 cores, Radeon 780M graphics and an AMD XDNA NPU on one chip. Avocado OS supports it through the `amd-x86-64-v4` target, which builds for the x86-64-v4 microarchitecture level so the image uses the AVX-512 instructions Zen 4 provides. The target boots through UEFI and systemd-boot, and uses A/B boot slots selected through UEFI boot entries, so an update is tried once and made permanent only after it has booted and been verified.
+
+## Specifications
+
+The values below are from the board Avocado OS was brought up on: an R8000 module with a Ryzen 7 PRO 8840U on the SolidRun EVK carrier.
+
+| Specification | Value                                       | Notes                                            |
+| ------------- | ------------------------------------------- | ------------------------------------------------ |
+| Form factor   | COM Express Type 6 Compact                  | Tested on the SolidRun EVK carrier               |
+| CPU           | AMD Ryzen 7 PRO 8840U, 8 cores / 16 threads | Zen 4, up to 5.1 GHz, AVX-512                    |
+| Graphics      | AMD Radeon 780M                             | `amdgpu` driver with firmware in the base image  |
+| NPU           | AMD XDNA                                    | `amdxdna` driver, exposed as `/dev/accel/accel0` |
+| Memory        | 16 GB                                       | As fitted on the test board                      |
+| Security      | Firmware TPM 2.0 (AMD PSP)                  | Reached through the ACPI CRB interface           |
+| Networking    | Intel I226-IT                               | 2.5 Gigabit Ethernet, `igc` driver               |
+| Storage       | NVMe (M.2), USB                             | The test board booted from a USB SSD             |
+| Firmware      | UEFI (AMI)                                  | Legacy BIOS boot is not supported                |
+| Kernel        | Linux 7.2                                   | linux-yocto with the `amd-x86-64` BSP            |
+
+## Use Cases
+
+### Edge AI Inference
+
+The XDNA NPU and the Radeon 780M give a fleet two accelerators next to eight Zen 4 cores, for vision and inference workloads that should run on the device rather than in the cloud.
+
+### Industrial and Embedded PCs
+
+The COM Express Type 6 form factor lets a carrier board be designed around the product's I/O while the compute module stays the same, and Avocado OS keeps the software stack identical across carriers.
+
+### Edge Gateways
+
+2.5 Gigabit Ethernet and a firmware TPM make the R8000 a fit for gateways that aggregate data from other devices and need a hardware-backed identity.
+
+## Challenges and Solutions
+
+| Challenge                                | Solution                                                                       |
+| ---------------------------------------- | ------------------------------------------------------------------------------ |
+| Building and maintaining an x86 BSP      | The `amd-x86-64-v4` target, with the kernel, firmware and microcode integrated |
+| Using AVX-512 without a custom toolchain | The whole image is built for x86-64-v4                                         |
+| Updates that leave a device unbootable   | A/B boot slots: an update is tried once and kept only after it verifies        |
+| Building OTA and fleet infrastructure    | Peridio Core: OTA, observability, fleet management                             |
+
+## Key Features
+
+### x86-64-v4 Image
+
+Every package is built for the x86-64-v4 level, so AVX-512 is available to the whole system, not only to applications that detect it at runtime.
+
+### A/B Updates Through UEFI
+
+Each boot slot has its own UEFI boot entry. An update boots the new slot once, and only a successful verification makes it the default. A failed one returns to the previous slot on the next boot.
+
+### Fleet Management
+
+Peridio Core delivers atomic OTA updates, staged rollouts, a fleet dashboard, health monitoring, remote debugging and secure tunnel access.
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `amd-x86-64-v4`. The provisioning specifics are below.
+
+:::note Build host
+The target builds for x86-64-v4, and parts of the build run target binaries on the build host. The build host's CPU must support AVX-512, as Zen 4 and recent Intel Xeon processors do.
+:::
+
+### Provision
+
+Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+
+:::note Provisioning on a Linux host
+If your Linux desktop auto-mounts removable media, disable it first. See [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+:::
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile usb
+```
+
+### Run
+
+After provisioning completes, connect the USB drive to the R8000 and boot from it through UEFI.
+
+The device will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide. On the first boot the `/var` partition grows to fill the drive.
+
+The serial console is the FCH UART at 115200 baud (`ttyS4`).
