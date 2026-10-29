@@ -8,7 +8,7 @@ const sidebars = {
       label: 'October 2026',
       collapsible: false,
       collapsed: false,
-      items: ['october-2026/connect-2026.10'],
+      items: ['october-2026/1.0.0', 'october-2026/connect-2026.10'],
     },
     {
       type: 'category',

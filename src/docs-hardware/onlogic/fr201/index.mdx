@@ -22,7 +22,7 @@ import HardwareHero from '@site/src/components/HardwareHero'
     { value: 'Up to 8GB', label: 'LPDDR4-3200 Memory' },
     { value: 'Dual GbE', label: 'Redundant Networking' },
   ]}
-  target="fr201"
+  target="fr202"
   ctas={{
     primary: {
       label: 'Get Started',
@@ -100,7 +100,7 @@ Thermal management optimizations for fanless operation. Automatic resource alloc
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `fr201`. The provisioning specifics are below.
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. The FR201 uses the `fr202` target, published on the **2024** release feed. `avocado init` writes `release: 2026`, so set `distro.release: 2024` in `avocado.yaml` before the first install. The provisioning specifics are below.
 
 ### Provision
 
@@ -112,11 +112,11 @@ If your Linux desktop auto-mounts removable media, disable it first — see [Lin
 
 ```bash title="Host machine"
 avocado build
-avocado provision -r dev --profile usb
+avocado provision -r dev --profile sd
 ```
 
 ### Run
 
-After provisioning completes, remove the USB drive, insert it into the target device, and power it on.
+Provisioning writes the image to a microSD card in a card reader on the host. After it completes, remove the card, insert it into the device, and power it on.
 
 The device will boot with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.

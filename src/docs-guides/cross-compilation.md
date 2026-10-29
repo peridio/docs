@@ -407,7 +407,7 @@ The SDK environment provides these variables for cross-compilation scripts:
 2. **Define target sysroot packages** in `sdk.compile.*.packages` for headers and libraries
 3. **Write a compile script** that uses SDK environment variables for cross-compilation
 4. **Write an install script** that copies artifacts to `$AVOCADO_BUILD_EXT_SYSROOT`
-5. **Build the extension** with `avocado build` or `avocado ext build --ext <name>`
+5. **Build the extension** with `avocado build` or `avocado ext build <name>`
 
 The SDK handles container orchestration, package installation, and environment setup. Your scripts focus on the actual build logic for your specific codebase.
 
@@ -467,7 +467,7 @@ See [`avocado sdk package`](/developer-reference/avocado-cli/commands#avocado-sd
 Use `avocado ext package` to bundle an extension's source directory as an RPM that can be published to a package feed and consumed as a remote extension:
 
 ```bash
-avocado ext package my-app --out ./dist/
+avocado ext package my-app --out-dir ./dist/
 ```
 
 This packages the extension's **source directory** (the directory containing `avocado.yaml`) into an RPM. A warning is printed reminding you to verify the build first — run `avocado ext build my-app` before packaging.
@@ -507,6 +507,6 @@ This completes the round-trip: cross-compile -> package -> publish -> consume as
 ## What's next
 
 - [Extensions reference](/avocado-os/core-concepts#extensions) for complete configuration options
-- [Seeding the var partition](./seeding-var) for pre-populating persistent storage at build time
-- [Hardware-in-the-loop development](./hardware-in-the-loop) for testing compiled code on live devices
-- [Sideloading updates](./sideloading) for deploying extensions to devices
+- [Seeding the var partition](/developer-reference/seeding-var) for pre-populating persistent storage at build time
+- [Hardware-in-the-loop development](/developer-reference/hardware-in-the-loop) for testing compiled code on live devices
+- [Sideloading updates](/developer-reference/sideloading) for deploying extensions to devices

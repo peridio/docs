@@ -119,7 +119,7 @@ Ordered list; offsets default to sequential when omitted.
 | `image`                                      | no       | Image key that fills this partition.                                                                                                                                        |
 | `partition_type`                             | no       | GPT/MBR partition type.                                                                                                                                                     |
 | `partition_uuid`                             | no       | Partition UUID.                                                                                                                                                             |
-| `offset` / `offset_unit`                     | no       | Start offset (`bytes` or `blocks`); sequential if omitted.                                                                                                                  |
+| `offset` / `offset_unit`                     | no       | Start offset in any size unit (`bytes`, `mebibytes`, `blocks`, …); sequential if omitted.                                                                                   |
 | `offset_redundant` / `offset_redundant_unit` | no       | Redundant copy offset (e.g. for a U-Boot env).                                                                                                                              |
 | `size` / `size_unit`                         | see note | Partition size. Both must be present or both absent.                                                                                                                        |
 | `expand`                                     | no       | `"true"` marks the partition as expandable to fill remaining space.                                                                                                         |
@@ -151,6 +151,7 @@ Declares how OS artifacts map to A/B slots for OTA. stone copies this into the g
 | `os_artifacts`   | yes      | Map of artifact name → `{ image_key, slot_partitions }`.                          |
 | `activate`       | yes      | Action(s) to switch slots: `uboot-env`, `command`, `mbr-switch`, or `efibootmgr`. |
 | `rollback`       | no       | Action(s) to revert a slot switch.                                                |
+| `commit`         | no       | Action(s) run on the next boot once the new slot verifies, to mark it good.       |
 
 ## Manifest overlays
 

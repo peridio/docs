@@ -20,7 +20,7 @@ Manufacturing is the most vulnerable point in a device's lifecycle. Hardware arr
 Avocado's `avocado provision` command handles the full manufacturing flow:
 
 - **Image flashing** — Write the complete system (bootloaders, root filesystem, extensions) to the target storage in a single operation
-- **Key provisioning** — Program signing keys, encryption keys, and device identity into hardware security modules or OTP fuses
+- **Key provisioning** — Fusing the hardware root of trust is a separate manufacturing step that `avocado provision` does not perform (see [Fuse provisioning](/avocado-os/security/secure-boot#fuse-provisioning)); the `/var` encryption key is created on the device's first boot (see [Hardware-Backed Encryption](/avocado-os/security/encryption))
 - **Device identity** — Assign unique device certificates for fleet enrollment and mutual TLS authentication
 - **Hardware testing** — Manufacturing mode boot runs end-of-line tests (GPIO validation, peripheral checks, sensor calibration) before sealing the device
 
@@ -36,9 +36,9 @@ Traditional provisioning workflows often require powering on the device, waiting
 
 ### Reproducible builds
 
-Every Avocado build is deterministic. The same `avocado.yaml` plus the same package feed version produces the same output, byte for byte. This means:
+Every Avocado build is reproducible at the package level. The same `avocado.yaml` plus the same package feed version installs the same packages at the same versions, and `avocado.lock` records them. Byte-for-byte identical images across builds are not yet guaranteed. This means:
 
-- Builds can be independently reproduced and verified by auditors
+- Builds can be independently reproduced, and their package sets verified, by auditors
 - Binary artifacts can be traced back to their exact source configuration
 - Compliance evidence doesn't depend on "trust us" — it's independently verifiable
 

@@ -64,8 +64,16 @@ Look for an entry containing `NVIDIA Corp. APX` — this confirms the device is 
 Create a new project targeting the Jetson Orin Nano.
 
 ```bash
-avocado init --target jetson-orin-nano-devkit jetson-orin-nano-devkit
-cd jetson-orin-nano-devkit
+avocado init --target jetson-orin-nano jetson-orin-nano
+cd jetson-orin-nano
+```
+
+`avocado init` sets `distro.release: 2026`, where this board's target is `jetson-orin-nano`. On the 2024 release the target is `jetson-orin-nano-devkit` instead. To build on 2024, use that target and set the release in `avocado.yaml`:
+
+```yaml title="avocado.yaml"
+distro:
+  release: 2024
+  channel: edge
 ```
 
 ## Install

@@ -4,7 +4,7 @@ sidebar_position: 3
 description: 'Step-by-step walkthrough of the OS bundle update process including extraction, artifact writing, slot activation, and verification.'
 ---
 
-This page describes the end-to-end OS bundle update flow that occurs when a runtime with a different `os_build_id` than the running system is [activated](../runtime-management/activation-process).
+This page describes the end-to-end OS bundle update flow that occurs when a runtime with a different `os_build_id` than the running system is [activated](/developer-reference/avocadoctl/runtime-management/activation-process).
 
 ## End-to-End Update Flow
 
@@ -14,7 +14,7 @@ The `.aos` file (a tar.zst compressed archive) is extracted to a staging directo
 
 ### 2. Parse bundle.json
 
-The `bundle.json` file is read and parsed. See [Bundle Format](./bundle-format) for the full specification.
+The `bundle.json` file is read and parsed. See [Bundle Format](/developer-reference/avocadoctl/os-bundles/bundle-format) for the full specification.
 
 ### 3. Check If Already Up-to-Date
 
@@ -87,12 +87,12 @@ On the next boot, avocadoctl checks for `pending-update.json`:
 
 1. If present, reads the verify configuration.
 2. Checks `/etc/os-release` for the expected field value.
-3. If verification succeeds: activates the runtime (switches the active symlink) and refreshes extensions.
+3. If verification succeeds: runs the bundle's `commit` actions, then activates the runtime (switches the active symlink) and refreshes extensions.
 4. If verification fails: executes rollback actions to restore the previous boot slot.
 
 ## Streaming Mode
 
-When `stream_os_to_partition = true` is set in the [configuration](../configuration), OS bundle artifacts are streamed directly from HTTP to the target partition during a TUF-based update. This skips the intermediate staging step.
+When `stream_os_to_partition = true` is set in the [configuration](/developer-reference/avocadoctl/configuration), OS bundle artifacts are streamed directly from HTTP to the target partition during a TUF-based update. This skips the intermediate staging step.
 
 **Trade-offs:**
 

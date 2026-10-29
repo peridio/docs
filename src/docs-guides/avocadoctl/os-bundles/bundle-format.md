@@ -4,7 +4,7 @@ sidebar_position: 2
 description: 'Specification of the OS bundle bundle.json format including update strategies, slot detection, artifacts, and verification.'
 ---
 
-The `bundle.json` file inside an `.aos` archive describes how to apply the OS update. It is parsed by avocadoctl during the [update process](./update-process).
+The `bundle.json` file inside an `.aos` archive describes how to apply the OS update. It is parsed by avocadoctl during the [update process](/developer-reference/avocadoctl/os-bundles/update-process).
 
 ## Full Example
 
@@ -175,14 +175,14 @@ Switch MBR partition layout by rewriting the partition table.
 
 ### efibootmgr
 
-Set the EFI boot entry for the target slot.
+Point the firmware at the target slot's EFI boot entry. `slot_entries` maps each slot to an entry label, which is also the GPT name of that slot's ESP; an entry missing from NVRAM is re-created on that partition. Under `activate` and `rollback` this writes `BootNext`, a one-shot; under `commit` it writes `BootOrder`, which makes the slot permanent.
 
 ```json
 {
   "type": "efibootmgr",
   "slot_entries": {
-    "a": "0001",
-    "b": "0002"
+    "a": "boot-a",
+    "b": "boot-b"
   }
 }
 ```
@@ -190,6 +190,10 @@ Set the EFI boot entry for the target slot.
 ## Rollback Actions
 
 The optional `update.rollback` array has the same format as `activate`. These actions are executed if verification fails after reboot to restore the previous boot slot.
+
+## Commit Actions
+
+The optional `update.commit` array has the same format as `activate`. These actions run on the next boot once verification passes, to mark the new slot good: for example `qbootctl -m`, a U-Boot bootcount reset, or an `efibootmgr` action that makes the slot permanent in `BootOrder`.
 
 ## Verification
 
@@ -205,14 +209,14 @@ The `verify` and `verify_initramfs` objects define how to confirm the OS update 
 
 The optional `layout` object is used on MBR-based systems where partitions are identified by offset rather than label.
 
-| Field                      | Type    | Description                                       |
-| -------------------------- | ------- | ------------------------------------------------- |
-| `device`                   | string  | Block device path (e.g., `/dev/mmcblk0`).         |
-| `block_size`               | integer | Optional block size in bytes.                     |
-| `partitions`               | array   | List of partition definitions.                    |
-| `partitions[].name`        | string  | Partition name for referencing in `slot_targets`. |
-| `partitions[].offset`      | number  | Partition start offset.                           |
-| `partitions[].offset_unit` | string  | Unit for offset (e.g., `MiB`, `sectors`).         |
-| `partitions[].size`        | number  | Partition size.                                   |
-| `partitions[].size_unit`   | string  | Unit for size (e.g., `MiB`, `GiB`).               |
-| `partitions[].expand`      | string  | Optional expand strategy.                         |
+| Field                      | Type    | Description                                                                       |
+| -------------------------- | ------- | --------------------------------------------------------------------------------- |
+| `device`                   | string  | Block device path (e.g., `/dev/mmcblk0`).                                         |
+| `block_size`               | integer | Optional block size in bytes.                                                     |
+| `partitions`               | array   | List of partition definitions.                                                    |
+| `partitions[].name`        | string  | Partition name for referencing in `slot_targets`.                                 |
+| `partitions[].offset`      | number  | Partition start offset.                                                           |
+| `partitions[].offset_unit` | string  | Unit for offset (e.g., `bytes`, `mebibytes`). An unknown unit is read as bytes.   |
+| `partitions[].size`        | number  | Partition size.                                                                   |
+| `partitions[].size_unit`   | string  | Unit for size (e.g., `mebibytes`, `gibibytes`). An unknown unit is read as bytes. |
+| `partitions[].expand`      | string  | Optional expand strategy.                                                         |

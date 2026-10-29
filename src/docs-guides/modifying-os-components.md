@@ -31,7 +31,7 @@ This is why "can I just build it as an RPM?" is usually the wrong question. Ever
 
 The first four rows are the common case. The CLI covers them, and nothing in this guide applies.
 
-Version pins have one wrinkle. Once a package has a lockfile entry, the CLI installs the locked version whatever `avocado.yaml` asks for, so editing the pin on its own leaves you on the old one. Run [`avocado unlock`](/developer-reference/avocado-cli/commands#avocado-unlock) for the scope that holds the package, then `avocado install`, and the new pin resolves. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps#updating-locked-versions).
+Version pins have one wrinkle. Once a package has a lockfile entry, the CLI installs the locked version unless `avocado.yaml` pins an exact version that differs from it: an exact pin wins and is re-locked on the next `avocado install`, but `*`, a glob, or a pin the locked version still matches leaves you on the old one. In that case run [`avocado unlock`](/developer-reference/avocado-cli/commands#avocado-unlock) for the scope that holds the package, then `avocado install`. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps#updating-locked-versions).
 
 ## When you do need Yocto
 

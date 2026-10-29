@@ -22,7 +22,9 @@ type RuntimeInfo (
 type ManifestExtension (
     name: string,
     version: string,
-    imageId: ?string
+    imageId: ?string,
+    imageType: ?string,
+    sha256: ?string
 )
 
 type Runtime (
@@ -57,11 +59,37 @@ method Activate(id: string) -> (message: string, done: bool, runtime: ?Runtime)
 # Inspect a runtime's details (omit id to inspect the active runtime)
 method Inspect(id: ?string) -> (runtime: Runtime)
 
+type MetadataEntry (
+    key: string,
+    value: string
+)
+
+# Set a metadata key-value pair on a runtime
+method MetadataSet(id: string, key: string, value: string) -> ()
+
+# Get a metadata value by key
+method MetadataGet(id: string, key: string) -> (value: string)
+
+# List all metadata for a runtime
+method MetadataList(id: string) -> (entries: []MetadataEntry)
+
+# Delete a metadata key
+method MetadataDelete(id: string, key: string) -> ()
+
+type GcResult (
+    removedRuntimes: []string,
+    removedImages: []string
+)
+
+# Run garbage collection to remove old runtimes and unreferenced images
+method GarbageCollect() -> (result: GcResult)
+
 error RuntimeNotFound (id: string)
 error AmbiguousRuntimeId (id: string, candidates: []string)
 error RemoveActiveRuntime ()
 error StagingFailed (reason: string)
 error UpdateFailed (reason: string)
+error MetadataKeyNotFound (id: string, key: string)
 ```
 
 ## Types
@@ -79,11 +107,13 @@ Basic identity of a runtime.
 
 An extension declared in the runtime manifest.
 
-| Field     | Type      | Description                                                   |
-| --------- | --------- | ------------------------------------------------------------- |
-| `name`    | `string`  | Extension name                                                |
-| `version` | `string`  | Extension version string                                      |
-| `imageId` | `?string` | Image digest used to verify the downloaded extension artifact |
+| Field       | Type      | Description                                                          |
+| ----------- | --------- | -------------------------------------------------------------------- |
+| `name`      | `string`  | Extension name                                                       |
+| `version`   | `string`  | Extension version string                                             |
+| `imageId`   | `?string` | Image digest used to verify the downloaded extension artifact        |
+| `imageType` | `?string` | `kab` for a KAB-wrapped image; absent for a raw squashfs/erofs image |
+| `sha256`    | `?string` | SHA-256 of the extension image                                       |
 
 ### Runtime
 
@@ -513,6 +543,27 @@ varlink_object_unref(reply);
 varlink_object_unref(parameters);
 ```
 
+### MetadataSet, MetadataGet, MetadataList, MetadataDelete
+
+Read and write key-value metadata on a runtime, by ID or unambiguous prefix. Back `avocadoctl runtime metadata`.
+
+**Signatures:**
+
+- `MetadataSet(id: string, key: string, value: string) -> ()`
+- `MetadataGet(id: string, key: string) -> (value: string)`
+- `MetadataList(id: string) -> (entries: []MetadataEntry)`, where `MetadataEntry` is `(key: string, value: string)`
+- `MetadataDelete(id: string, key: string) -> ()`
+
+`MetadataGet` and `MetadataDelete` return `MetadataKeyNotFound` for a key the runtime does not have.
+
+### GarbageCollect
+
+Remove old runtimes and extension images no runtime references, keeping at most `[avocado.gc] runtime_retention` runtimes. The active runtime and one referenced by a pending OS update are always kept. Backs `avocadoctl runtime gc`.
+
+**Signature:** `GarbageCollect() -> (result: GcResult)`
+
+**Returns:** `result`, a `GcResult` of `removedRuntimes: []string` (runtime IDs) and `removedImages: []string` (image filenames).
+
 ## Errors
 
 ### RuntimeNotFound
@@ -563,3 +614,14 @@ Returned when the OS update triggered by `Activate` fails.
 | `reason`  | `string` | Human-readable failure description |
 
 **Trigger:** OS image write failure, bootloader configuration error, or extension enable/merge failure during `Activate`.
+
+### MetadataKeyNotFound
+
+Returned when a metadata key is not set on the runtime.
+
+| Parameter | Type     | Description     |
+| --------- | -------- | --------------- |
+| `id`      | `string` | The runtime ID  |
+| `key`     | `string` | The missing key |
+
+**Trigger:** `MetadataGet` or `MetadataDelete` with a key the runtime does not have.

@@ -64,4 +64,4 @@ Inspect shows full details for a specific runtime or the active runtime (when ID
 
 ## The Active Symlink
 
-The active runtime is tracked by a symlink at `/var/lib/avocado/active` pointing to `runtimes/{active_runtime_id}`. This symlink is switched atomically during [activation](./activation-process). Because it uses a single `rename` system call, there is no window where the symlink is missing or points to an invalid target.
+The active runtime is tracked by a symlink at `/var/lib/avocado/active` pointing to `runtimes/{active_runtime_id}`. This symlink is switched atomically during [activation](/developer-reference/avocadoctl/runtime-management/activation-process). Because it uses a single `rename` system call, there is no window where the symlink is missing or points to an invalid target.

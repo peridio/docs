@@ -27,7 +27,7 @@ rootfs:
   packages:
     avocado-pkg-rootfs: '*'
     strace: '*'
-    tcpdump: '>=4.0'
+    tcpdump: '*'
 ```
 
 :::caution
@@ -38,13 +38,14 @@ When you specify `rootfs.packages`, the CLI installs **only** the packages you l
 
 ### Version constraints
 
-Package values are version constraints passed to DNF:
+Package values are appended to the package name (`<name>-<value>`) and passed to DNF:
 
-| Value     | Meaning                        |
-| --------- | ------------------------------ |
-| `'*'`     | Any version (latest available) |
-| `'1.2'`   | Exact version `1.2`            |
-| `'>=4.0'` | Version 4.0 or newer           |
+| Value   | Meaning                        |
+| ------- | ------------------------------ |
+| `'*'`   | Any version (latest available) |
+| `'1.2'` | Exact version `1.2`            |
+
+Range operators such as `'>=4.0'` are not supported here; DNF would receive `tcpdump->=4.0`. An exact version also overrides a different version recorded in the lock file.
 
 ## Adding packages to the initramfs
 
@@ -152,4 +153,4 @@ If you remove a package from the `packages` map, the CLI detects the removal on 
 
 ## Lock file
 
-Installed package versions are pinned to `.avocado/lock.json` on first install, and subsequent installs reuse those pins so builds are reproducible. To pick up a newer version of a package, run `avocado unlock` to clear the relevant entries before re-installing. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps) for the full reference.
+Installed package versions are pinned to `avocado.lock` on first install, and subsequent installs reuse those pins so builds are reproducible. To pick up a newer version of a package, run `avocado unlock` to clear the relevant entries before re-installing. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps) for the full reference.

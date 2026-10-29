@@ -62,9 +62,9 @@ Then build and provision as usual. The tool lands at `/usr/sbin/avocado-set-boot
 
 :::caution Do not add it through your own extension's `packages:`
 
-As of avocado-cli 1.0.0-rc.5 (still unfixed), naming a package under `packages:` in an extension **you declare in your own `avocado.yaml`** does not put it in the image. `avocado install` resolves the package, installs it, and reports success, and the built extension image still comes out empty - 4096 bytes, holding only its own `extension-release` marker - so the tool is absent at runtime. Reproduced with a `sysext`-only extension and with one combining `sysext` and `confext`.
+On avocado-cli 1.0.0-rc.5, naming a package under `packages:` in an extension **you declare in your own `avocado.yaml`** does not put it in the image. `avocado install` resolves the package, installs it, and reports success, and the built extension image still comes out empty - 4096 bytes, holding only its own `extension-release` marker - so the tool is absent at runtime. Reproduced with a `sysext`-only extension and with one combining `sysext` and `confext`.
 
-This is narrower than it may sound, and the distinction matters if you are reading it to decide how to ship something else. An extension fetched as a package, the way a BSP extension is, installs its `packages:` correctly on the same CLI version - so the defect is in the inline path rather than in extensions generally. Tracked as [avocado-cli#283](https://github.com/avocado-linux/avocado-cli/issues/283).
+This is narrower than it may sound, and the distinction matters if you are reading it to decide how to ship something else. An extension fetched as a package, the way a BSP extension is, installs its `packages:` correctly on the same CLI version - so the defect is in the inline path rather than in extensions generally. Tracked as [avocado-cli#283](https://github.com/avocado-linux/avocado-cli/issues/283). Since 1.0.0, `ext build` refuses a package extension whose sysroot has no package database instead of shipping an empty image, but this page has not been re-checked against 1.0.0.
 
 An extension's `overlay:` is also unaffected: files you place there do reach the image.
 

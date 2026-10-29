@@ -20,22 +20,29 @@ The Avocado CLI uses a single configuration file to define your project settings
 
 By default, the CLI looks for a configuration file named `avocado.yaml` in the current working directory. This can be configured to use a different file name or location.
 
-For detailed information about all available configuration options, see the [config schema](./config-schema.mdx).
+For detailed information about all available configuration options, see the [config schema](/developer-reference/avocado-cli/config-schema).
+
+`avocado init` writes a starter `avocado.yaml` on `distro.release: 2026` and `distro.channel: edge`. Its first line is a `yaml-language-server` comment that points editors at the [JSON Schema](/schemas/avocado-config.json), so they validate the file as you type. `avocado config schema` prints the schema the installed CLI uses.
+
+The CLI warns about keys it ignores, such as a misspelled or retired key (`extentions:`), with a "did you mean" suggestion. These warnings go to stderr and never fail a command. To check a config without building, run `avocado config validate`: YAML errors, schema violations and the CLI's own checks are errors (exit status 1), and ignored keys are warnings. It reads stdin with `-c -`, and `--output json` prints `{ok, errors, warnings}`.
 
 ## Environment variables
 
 Environment variables take precedence over configuration file values. When set, they override the corresponding config field.
 
-| Environment variable     | Config equivalent        | Description                                                                                                                                   |
-| ------------------------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AVOCADO_TARGET`         | `default_target`         | Target architecture for builds and deployments.                                                                                               |
-| `AVOCADO_TARGET_BOARD`   | `default_target_board`   | Board variant within the target, feeding `{{ avocado.target.board }}` interpolation.                                                          |
-| `AVOCADO_RUNTIME`        | `default_runtime`        | Default runtime for commands that scope by runtime. Overrides `default_runtime` from config.                                                  |
-| `AVOCADO_REPO_URL`       | `distro.repo.url`        | Package repository URL.                                                                                                                       |
-| `AVOCADO_RELEASEVER`     | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).                                                                                                  |
-| `AVOCADO_DISTRO_RELEASE` | `distro.release`         | Distribution feed year (e.g., `2024`).                                                                                                        |
-| `AVOCADO_DISTRO_CHANNEL` | `distro.channel`         | Distribution stability channel (e.g., `edge`, `stable`).                                                                                      |
-| `AVOCADO_PARALLEL_TASKS` | none                     | How many tasks run at once across the install DAG, the build DAG and the SDK phase. Defaults to `min(cpus, 4)`, and to `1` under `--runs-on`. |
+| Environment variable           | Config equivalent        | Description                                                                                                                                                                            |
+| ------------------------------ | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AVOCADO_TARGET`               | `default_target`         | Target architecture for builds and deployments.                                                                                                                                        |
+| `AVOCADO_TARGET_BOARD`         | `default_target_board`   | Board variant within the target, feeding `{{ avocado.target.board }}` interpolation.                                                                                                   |
+| `AVOCADO_RUNTIME`              | `default_runtime`        | Default runtime for commands that scope by runtime. Overrides `default_runtime` from config.                                                                                           |
+| `AVOCADO_REPO_URL`             | `distro.repo.url`        | Package repository URL.                                                                                                                                                                |
+| `AVOCADO_RELEASEVER`           | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).                                                                                                                                           |
+| `AVOCADO_DISTRO_RELEASE`       | `distro.release`         | Distribution feed year (e.g., `2024`).                                                                                                                                                 |
+| `AVOCADO_DISTRO_CHANNEL`       | `distro.channel`         | Distribution stability channel (e.g., `edge`, `stable`).                                                                                                                               |
+| `AVOCADO_REPO_CA`              | `distro.repo.ca`         | Path to a CA certificate bundle that the package feed's TLS certificate is checked against.                                                                                            |
+| `AVOCADO_REPO_INSECURE`        | `distro.repo.tls_verify` | Set to `1`, `true` or `yes` to skip TLS verification of the package feed. Testing only.                                                                                                |
+| `AVOCADO_PARALLEL_TASKS`       | none                     | How many tasks run at once across the install DAG, the build DAG and the SDK phase. Defaults to `min(cpus, 4)`, and to `1` under `--runs-on`.                                          |
+| `AVOCADO_NO_SESSION_CONTAINER` | none                     | Set to `1` to run each install and build step in its own `docker run` instead of reusing one SDK container per command. For debugging a container an earlier step left in a bad state. |
 
 ### Legacy environment variables
 
@@ -90,7 +97,7 @@ Some targets are a System-on-Module (SoM) that ships on more than one carrier bo
 4. Top-level `default_target_board`
 5. Falls back to the resolved target when none of the above are set
 
-The `--target-board` flag is available on the same subcommands as `--target` (`build`, `provision`, `runtime provision`, `install`, and the `rootfs` / `initramfs` / `sdk` / `ext` build steps).
+The `--target-board` flag is available on `build`, `install`, `provision`, `runtime build`, `runtime provision`, `sdk install`, `ext build`, `rootfs install` and `initramfs install`.
 
 Set both keys at the top of your `avocado.yaml`:
 
@@ -116,6 +123,20 @@ avocado build --target imx8mp-var-dart --target-board variscite-sonata
 ```
 
 The per-target [Get Started](/learn/get-started/any-target) page and the target's [hardware page](/hardware/support-matrix) call out when a board is required and which value to use.
+
+## Add-on feeds
+
+`distro.feeds` lists the package feeds to enable, in dnf priority order (first wins). The distro feed comes first unless you list it. A name that `repos:` does not define names an add-on feed that the distro feed publishes for your target, such as ROS 2:
+
+```yaml
+distro:
+  release: 2026
+  channel: edge
+  feeds:
+    - ros2-jazzy
+```
+
+An add-on needs no URL. It enables two repos off the distro feed's base URL, releasever and TLS settings: `target/<target>-<name>` for target installs and the SDK's target sysroot, and `sdk/<target>-<name>` for the SDK host. Before anything is written to `avocado.lock`, the CLI checks the name against the add-ons the channel publishes for the target (and, when the lock pins a feed snapshot, against that snapshot) and refuses one the target does not have, suggesting the nearest published name.
 
 ## Connect configuration
 
@@ -229,7 +250,7 @@ extensions:
 The `overlay` field on `rootfs` and `initramfs` merges a source directory from your project into the sysroot after package installation. Two forms are supported:
 
 ```yaml
-# Short form — merge mode (rsync -a: adds/replaces files, leaves unrelated files alone)
+# Short form — merge mode (keeps the overlay files' modes)
 rootfs:
   overlay: overlays/rootfs
 
@@ -237,15 +258,18 @@ rootfs:
 initramfs:
   overlay:
     dir: overlays/initramfs
-    mode: opaque # cp -r: fully replaces directory contents
+    mode: opaque # new files get default modes and fresh timestamps
 ```
 
-| Field  | Default    | Description                                               |
-| ------ | ---------- | --------------------------------------------------------- |
-| `dir`  | (required) | Path relative to project root (`src_dir`)                 |
-| `mode` | `merge`    | `merge` (rsync -a) or `opaque` (cp -r, replaces contents) |
+| Field        | Default   | Description                                                                                                      |
+| ------------ | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| `dir`        | `overlay` | Path relative to project root (`src_dir`)                                                                        |
+| `mode`       | `merge`   | `merge` keeps each overlay file's mode; `opaque` applies the default (umask-filtered) mode and a fresh timestamp |
+| `preprocess` | `false`   | Run `{{ }}` interpolation over overlay files: `true` for all UTF-8 files, or a list of globs                     |
 
 The string short form is equivalent to `{ dir: "...", mode: "merge" }`. The overlay path is resolved as `/opt/src/<path>` inside the SDK container. Overlay config participates in the sysroot stamp, so changes trigger a reinstall.
+
+In both modes the overlay is copied over the sysroot. Paths the overlay creates are owned by root; directories that already exist keep their mode and owner, and nothing else in the sysroot is touched. Each install records the files the overlay placed and, on the next install, removes the ones the overlay no longer has (printing `Removed /<path>`); a path a package owns is kept, with a notice. An overlay directory that would replace a symlink or file in the sysroot fails the install.
 
 ## Kernel configuration
 
@@ -293,6 +317,8 @@ Two mutually exclusive modes:
 | `cmdline_extra` | Arguments appended to the platform's command line (e.g. `isolcpus=4-6`, `earlycon`). Mutually exclusive with `cmdline` |
 
 A `kernel:` block that sets only `cmdline` or `cmdline_extra` is valid, and it does not change where the kernel comes from. The kernel is still selected by the runtime's named reference, the top-level entry, or the platform, exactly as if the block were absent; the project is only changing how that kernel boots. Precedence is per concern: a runtime's `cmdline` / `cmdline_extra` wins over the top-level one, while the kernel itself keeps resolving by its own rules. Both resolve per target, so a `target-<name>:` override at either level is honored. The command line reaches the build and provision hooks as `AVOCADO_KERNEL_CMDLINE` / `AVOCADO_KERNEL_CMDLINE_EXTRA`, and editing it alone invalidates the runtime build.
+
+On machines that boot a FIT, the runtime build writes `cmdline_extra` into every FIT configuration node as `avocado,cmdline-extra`, covered by the FIT signature. The build fails when `cmdline_extra` is set without `signing.fit_key` or `signing.fit_unsigned`, when the runtime builds no initramfs, or when the value holds a `"`, `'`, `\`, `#`, `&` or newline.
 
 ### Runtime kernel references
 

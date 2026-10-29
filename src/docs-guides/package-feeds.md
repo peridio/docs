@@ -9,7 +9,7 @@ copy_markdown: true
 
 Avocado OS maintains RPM package feeds hosted at `https://repo.avocadolinux.org`. These feeds provide pre-built packages for your target architecture, including system libraries, development tools, language runtimes, and more.
 
-The feeds are organized by release and channel (e.g., `2024/edge`) and include separate repositories for:
+The feeds are organized by release and channel (e.g., `2026/edge`) and include separate repositories for:
 
 - **SDK packages** — tools and libraries for the build environment
 - **Target packages** — packages installable into runtimes and extensions on your target hardware
@@ -76,7 +76,7 @@ By default, packages are fetched from `https://repo.avocadolinux.org` using the 
 
 ```yaml
 distro:
-  release: 2024
+  release: 2026
   channel: edge
 ```
 
@@ -84,11 +84,11 @@ To override the repository URL or release version, use the `distro.repo` section
 
 ```yaml
 distro:
-  release: 2024
+  release: 2026
   channel: edge
   repo:
     url: 'https://custom-repo.example.com'
-    releasever: '2024-custom'
+    releasever: '2026-custom'
 ```
 
 You can also override these values with environment variables:
@@ -97,6 +97,27 @@ You can also override these values with environment variables:
 | -------------------- | -------------------------------- |
 | `AVOCADO_REPO_URL`   | Override the repository base URL |
 | `AVOCADO_RELEASEVER` | Override the release version     |
+
+## Additional Feeds
+
+`distro.feeds` lists the feeds a project enables, in priority order: the first entry wins when two feeds carry the same package, and the distro feed comes first unless you place it yourself. A name defined under `repos:` is your own feed (`url:`, `path:` or `org:`):
+
+```yaml
+distro:
+  release: 2026
+  channel: edge
+  feeds:
+    - my-mirror
+    - ros2-jazzy
+
+repos:
+  my-mirror:
+    url: 'https://rpm.example.com/$target'
+```
+
+A name `repos:` does not define is an **add-on feed** the distro feed publishes, such as `ros2-jazzy` above. It needs no URL: it enables the add-on's target repo (`target/<target>-<name>`, for target installs and the SDK's target sysroot) and its SDK repo (`sdk/<target>-<name>`, for the SDK host) off the distro feed's base URL, releasever and TLS settings. List the add-on once; `<name>-sdk`, `ext` and `<name>-ext` are not add-on names.
+
+Before anything is written to the lock, the CLI checks the name against the channel's `targets.json` and refuses one the target does not publish, suggesting the nearest published name, the add-ons the target does publish, and the other targets that carry it. A name close to one `repos:` defines is refused as a typo. If `targets.json` cannot be read, the CLI warns and lets dnf report what is missing.
 
 ## Additional DNF Options
 

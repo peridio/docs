@@ -42,22 +42,22 @@ runtimes:
     packages:
       avocado-runtime: '*'
     var_files:
-      - source: config/app-defaults/
-        dest: lib/myapp/
+      - source: config/myapp
+        dest: lib/
       - source: certs/device.pem
-        dest: lib/myapp/certs/device.pem
+        dest: lib/myapp/certs/
 ```
 
 Each entry has two fields:
 
-| Field    | Description                                         |
-| -------- | --------------------------------------------------- |
-| `source` | Path relative to `src_dir` (file or directory)      |
-| `dest`   | Destination path relative to the var partition root |
+| Field    | Description                                                           |
+| -------- | --------------------------------------------------------------------- |
+| `source` | Path relative to `src_dir` (file or directory)                        |
+| `dest`   | Directory, relative to the var partition root, that receives `source` |
 
-Directories are copied recursively. The `dest` for a directory should end with a `/` to make intent explicit.
+`dest` is always a directory: the source file or directory is copied into it under its own name, and directories are copied recursively. Above, `config/myapp` lands at `/var/lib/myapp/` and `certs/device.pem` at `/var/lib/myapp/certs/device.pem`. A `dest` that names the file itself (`dest: lib/myapp/certs/device.pem`) creates a directory of that name with the file inside it.
 
-On the device, `dest: lib/myapp/` maps to `/var/lib/myapp/`.
+The copies are owned by root, whatever their owner in your source tree, and files already in `dest` keep their owners.
 
 ### When to use this
 
@@ -86,9 +86,9 @@ extensions:
       - image: docker.io/library/nginx
         tag: '1.25'
 
-  sdk:
-    packages:
-      nativesdk-docker: '*'
+sdk:
+  packages:
+    nativesdk-docker: '*'
 ```
 
 Each `docker_images` entry requires:
@@ -123,13 +123,15 @@ extensions:
 
 Without this, `avocado ext image` would try to bake the Docker storage directory into the read-only erofs image, which is not what you want.
 
+Whatever the extension's sysroot does hold at those paths is copied onto the var partition by `runtime build` instead. When two extensions provide the same path, the one listed first in the runtime's `extensions` wins.
+
 ### 4. Complete example
 
 ```yaml
 cli_requirement: '>=0.27.0'
 
 distro:
-  release: 2024
+  release: 2026
   channel: edge
 
 sdk:
@@ -156,9 +158,9 @@ runtimes:
     # Static files to seed onto the var partition
     var_files:
       - source: config/redis.conf
-        dest: lib/myapp/redis.conf
-      - source: config/nginx/
-        dest: lib/myapp/nginx/
+        dest: lib/myapp/
+      - source: config/nginx
+        dest: lib/myapp/
 ```
 
 ### SDK requirements for Docker-in-Docker
@@ -206,6 +208,6 @@ The var seeding steps (static files and Docker image priming) run automatically 
 ## What's next
 
 - [Extensions reference](/avocado-os/core-concepts#extensions) for complete `var_files` and `docker_images` configuration options
-- [Cross-compilation guide](./cross-compilation) for building extension binaries that use the var partition
-- [Sideloading](./sideloading) for deploying updates to a running device
+- [Cross-compilation guide](/developer-reference/cross-compilation) for building extension binaries that use the var partition
+- [Sideloading](/developer-reference/sideloading) for deploying updates to a running device
 - [Encrypted /var](/developer-reference/security/encrypted-var) — seeded content survives encryption, because the first boot converts the flashed partition in place rather than formatting over it

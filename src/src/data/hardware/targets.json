@@ -22,9 +22,9 @@
       "hostOs": ["macOS", "Linux"],
       "prerequisites": [
         "Thundercomm Rubik Pi 3",
-        "USB-C power cable + a PD 3.0 compliant 12V/3A adapter for the power input (port 10) \u2014 bus power is not enough. The power LED only lights when PD negotiation succeeds; if it stays off the board will not boot.",
+        "USB-C power cable + a PD 3.0 compliant 12V/3A adapter for the power input (port 10) — bus power is not enough. The power LED only lights when PD negotiation succeeds; if it stays off the board will not boot.",
         "USB-C (or USB-C-to-A) data cable for flashing, from the board's USB-C port (port 5) to your host",
-        "Micro-USB cable for the debug UART console (Micro-USB port, port 2) \u2014 leave this disconnected during provisioning/flashing; connect it only after provisioning succeeds"
+        "Micro-USB cable for the debug UART console (Micro-USB port, port 2) — leave this disconnected during provisioning/flashing; connect it only after provisioning succeeds"
       ],
       "options": [
         {
@@ -48,7 +48,7 @@
           "recoveryMode": {
             "reference": {
               "url": "https://www.thundercomm.com/rubik-pi-3/en/docs/rubik-pi-3-user-manual/1.0.0-u/set-up-your-device",
-              "label": "RUBIK Pi 3 \u2014 Set up your device"
+              "label": "RUBIK Pi 3 — Set up your device"
             },
             "steps": [
               "With the board powered off, connect the USB-C data cable from the board's USB-C port (port 5) to your host.",
@@ -56,7 +56,7 @@
               "While holding EDL, connect the power cable to the power input (port 10) to apply power, then release the button. The board enumerates in Qualcomm EDL (download) mode."
             ],
             "verifyCommand": "lsusb",
-            "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode) \u2014 this confirms the board is ready to flash."
+            "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode) — this confirms the board is ready to flash."
           },
           "bootInstructions": "Disconnect the USB-C data cable (port 5), leave the power input (port 10) connected, and power-cycle the board. It boots Avocado OS from the onboard UFS storage.",
           "bootNote": "Now that provisioning has succeeded, connect the Micro-USB cable to the debug port (port 2) for the UART console (see Serial Console above). The root user is passwordless in the dev runtime."
@@ -67,7 +67,7 @@
       "onboard": true,
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0",
-      "description": "The Rubik Pi 3 exposes its debug UART over the onboard Micro-USB port (port 2) \u2014 no TTL adapter is required. Connect the Micro-USB cable to your host only after provisioning completes (leave it disconnected while flashing). The host then enumerates a USB serial device for the console."
+      "description": "The Rubik Pi 3 exposes its debug UART over the onboard Micro-USB port (port 2) — no TTL adapter is required. Connect the Micro-USB cable to your host only after provisioning completes (leave it disconnected while flashing). The host then enumerates a USB serial device for the console."
     },
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/qualcomm/rubik-pi-3"
@@ -118,7 +118,7 @@
               "With the USB-C data cable connected to your host, put the kit into Qualcomm EDL mode following the RB3 Gen 2 documentation linked above."
             ],
             "verifyCommand": "lsusb",
-            "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode). 05c6:900e is the SoC's dload/ramdump mode, not EDL \u2014 power-cycle the board into EDL again if you see it."
+            "verifyExpect": "Look for a Qualcomm device with ID 05c6:9008 (Emergency Download mode). 05c6:900e is the SoC's dload/ramdump mode, not EDL — power-cycle the board into EDL again if you see it."
           },
           "bootInstructions": "Disconnect the USB-C data cable and power-cycle the kit. It boots Avocado OS from the onboard UFS storage.",
           "bootNote": "The root user is passwordless in the dev runtime, and the avocado-ext-sshd-dev extension in the generated project brings up SSH."
@@ -201,7 +201,7 @@
           "prerequisites": ["SD card reader"],
           "description": "Insert your SD card into a reader on your host, then run the sd profile, which writes the image directly to the SD card:",
           "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "With the SD card inserted, apply power to the Raspberry Pi 5 \u2014 it boots from the card."
+          "bootInstructions": "With the SD card inserted, apply power to the Raspberry Pi 5 — it boots from the card."
         },
         {
           "id": "usb",
@@ -210,9 +210,9 @@
           "media": "SD card or NVMe SSD in the Pi (flashed in place over USB)",
           "autoMount": true,
           "prerequisites": ["USB-C data cable (Pi to host)"],
-          "description": "Flash the Pi's storage in place over USB, with no card reader \u2014 this also works for an NVMe SSD installed in the Pi. With the Pi powered off and the target storage in place, press and hold the power button, then connect a USB-C data cable from the Pi to your host to apply power, releasing the button once it's connected. The Pi boots into USB device mode and your host detects it as a USB mass storage device. Note that the Pi is powered over this same USB-C cable: the Pi 5 targets a 5 V/5 A (27 W) supply and most host ports deliver less, so use a data-capable USB-C cable and a host port that can source enough current (an NVMe SSD adds to the draw); if provisioning is unreliable, use the SD-card method instead. The Pi 5's status LED confirms power: it shows red in standby and turns steady green once powered with enough current \u2014 if it won't turn green, stays red, or flickers, the supply is too weak. Then provision with the usb profile:",
+          "description": "Flash the Pi's storage in place over USB, with no card reader — this also works for an NVMe SSD installed in the Pi. With the Pi powered off and the target storage in place, press and hold the power button, then connect a USB-C data cable from the Pi to your host to apply power, releasing the button once it's connected. The Pi boots into USB device mode and your host detects it as a USB mass storage device. Note that the Pi is powered over this same USB-C cable: the Pi 5 targets a 5 V/5 A (27 W) supply and most host ports deliver less, so use a data-capable USB-C cable and a host port that can source enough current (an NVMe SSD adds to the draw); if provisioning is unreliable, use the SD-card method instead. The Pi 5's status LED confirms power: it shows red in standby and turns steady green once powered with enough current — if it won't turn green, stays red, or flickers, the supply is too weak. Then provision with the usb profile:",
           "command": "avocado provision -r dev --profile usb",
-          "bootInstructions": "Disconnect the USB-C data cable, then apply power to the Raspberry Pi 5 \u2014 it boots from its storage."
+          "bootInstructions": "Disconnect the USB-C data cable, then apply power to the Raspberry Pi 5 — it boots from its storage."
         }
       ]
     },
@@ -288,10 +288,10 @@
   },
   "jetson-orin-nano-devkit": {
     "name": "NVIDIA Jetson Orin Nano",
-    "target": "jetson-orin-nano-devkit",
+    "target": "jetson-orin-nano",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
@@ -337,7 +337,7 @@
               "Apply power to the Jetson"
             ],
             "verifyCommand": "lsusb",
-            "verifyExpect": "Look for an entry containing NVIDIA Corp. APX \u2014 this confirms the device is in recovery mode."
+            "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
           },
           "bootSteps": [
             "Remove power from the Jetson",
@@ -346,7 +346,7 @@
             "If you attached a serial console adapter, leave it connected",
             "Apply power"
           ],
-          "bootNote": "The device will boot with the provisioned system. The root user has an empty password \u2014 log in over the serial console (if connected) or via SSH once the device is on the network."
+          "bootNote": "The device will boot with the provisioned system. The root user has an empty password — log in over the serial console (if connected) or via SSH once the device is on the network."
         }
       ]
     },
@@ -391,10 +391,10 @@
   },
   "jetson-agx-orin-devkit": {
     "name": "NVIDIA Jetson AGX Orin",
-    "target": "jetson-agx-orin-devkit",
+    "target": "jetson-agx-orin",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
@@ -466,7 +466,7 @@
               }
             ],
             "verifyCommand": "lsusb",
-            "verifyExpect": "Look for an entry containing NVIDIA Corp. APX \u2014 this confirms the device is in recovery mode."
+            "verifyExpect": "Look for an entry containing NVIDIA Corp. APX — this confirms the device is in recovery mode."
           },
           "bootSteps": [
             "Remove power from the Jetson",
@@ -474,7 +474,7 @@
             "If you want a serial console, leave the Micro USB cable connected",
             "Apply power"
           ],
-          "bootNote": "The device will boot with the provisioned system. The root user has an empty password \u2014 log in over the serial console (if connected) or via SSH once the device is on the network."
+          "bootNote": "The device will boot with the provisioned system. The root user has an empty password — log in over the serial console (if connected) or via SSH once the device is on the network."
         }
       ]
     },
@@ -501,7 +501,7 @@
         "NVIDIA Jetson AGX Thor Developer Kit",
         "Included USB-C power supply",
         "USB-C cable (host to Jetson, for flashing)",
-        "USB-C cable (host to Jetson, for the debug console) \u2014 optional",
+        "USB-C cable (host to Jetson, for the debug console) — optional",
         "16 GB available disk space"
       ],
       "options": [
@@ -529,7 +529,7 @@
                 ]
               },
               {
-                "text": "Connect a USB-C cable from your host to the flashing USB-C port (callout 5a) \u2014 the port that supports Force Recovery Mode."
+                "text": "Connect a USB-C cable from your host to the flashing USB-C port (callout 5a) — the port that supports Force Recovery Mode."
               },
               {
                 "text": "Put the device into Force Recovery Mode: press and hold both the Force Recovery button (12) and the Reset button (13) for 3 seconds.",
@@ -550,13 +550,13 @@
             "Power-cycle the device by unplugging and reconnecting the USB-C power supply at port 5b",
             "For console access, keep the debug USB-C cable connected to port 8"
           ],
-          "bootNote": "The device will boot with the provisioned system. The root user has an empty password \u2014 log in over the serial console (if connected) or via SSH once the device is on the network."
+          "bootNote": "The device will boot with the provisioned system. The root user has an empty password — log in over the serial console (if connected) or via SSH once the device is on the network."
         }
       ]
     },
     "serial": {
       "onboard": true,
-      "description": "The Jetson AGX Thor exposes its UART debug console over a dedicated USB-C port (callout 8), located behind the lid cover on the I/O side. Connect a USB-C cable from that port to your host \u2014 no separate serial adapter is required. The host enumerates a serial device for the console.",
+      "description": "The Jetson AGX Thor exposes its UART debug console over a dedicated USB-C port (callout 8), located behind the lid cover on the I/O side. Connect a USB-C cable from that port to your host — no separate serial adapter is required. The host enumerates a serial device for the console.",
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
@@ -617,7 +617,7 @@
           "prerequisites": ["microSD card (8GB+)", "SD card reader"],
           "description": "Set the carrier's SW7 switch to external (boot from external media) and insert the SD card, then provision the dev runtime with the sd profile:",
           "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "With SW7 set to external and the SD card inserted, power on the board \u2014 it boots Avocado OS from the SD card."
+          "bootInstructions": "With SW7 set to external and the SD card inserted, power on the board — it boots Avocado OS from the SD card."
         },
         {
           "id": "uuu-emmc",
@@ -626,7 +626,7 @@
           "media": "Onboard eMMC (flashed over USB)",
           "autoMount": false,
           "prerequisites": ["USB-C cable (board to host)", "Micro USB cable for the debug port"],
-          "description": "Flash the onboard eMMC over USB with the uuu-emmc profile. First put the board into serial download mode: connect the USB-C cable and the micro USB debug port to your host, set SW7 to external, and power on the board with no SD card in the slot \u2014 it comes up in serial download (UUU) mode. Then provision:",
+          "description": "Flash the onboard eMMC over USB with the uuu-emmc profile. First put the board into serial download mode: connect the USB-C cable and the micro USB debug port to your host, set SW7 to external, and power on the board with no SD card in the slot — it comes up in serial download (UUU) mode. Then provision:",
           "command": "avocado provision -r dev --profile uuu-emmc",
           "steps": [
             {
@@ -634,7 +634,7 @@
               "content": "After programming completes, set SW7 back to internal so the board boots from the onboard eMMC."
             }
           ],
-          "bootInstructions": "With SW7 set to internal, power-cycle the board \u2014 it boots Avocado OS from the onboard eMMC."
+          "bootInstructions": "With SW7 set to internal, power-cycle the board — it boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -642,7 +642,7 @@
       "onboard": true,
       "baud": 115200,
       "command": "tio -b 115200 /dev/ttyUSB0",
-      "description": "The Variscite carrier exposes a debug UART console over its onboard micro USB port \u2014 no separate TTL adapter is required. Connect the micro USB debug port to your host and open the serial device it enumerates."
+      "description": "The Variscite carrier exposes a debug UART console over its onboard micro USB port — no separate TTL adapter is required. Connect the micro USB debug port to your host and open the serial device it enumerates."
     },
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/variscite/dart-mx8m-plus"
@@ -813,37 +813,6 @@
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/nxp/frdm-imx-91"
   },
-  "fr201": {
-    "name": "OnLogic FR201",
-    "target": "fr201",
-    "releases": {
-      "2024": "supported",
-      "2026": "in-progress"
-    },
-    "category": "usb",
-    "provisioning": {
-      "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["USB drive"],
-      "options": [
-        {
-          "id": "usb",
-          "label": "USB drive",
-          "profile": "usb",
-          "media": "USB drive",
-          "autoMount": true,
-          "command": "avocado provision -r dev --profile usb",
-          "bootInstructions": "Insert the USB drive into the device and apply power."
-        }
-      ]
-    },
-    "serial": {
-      "baud": 115200,
-      "voltage": "3.3V",
-      "command": "tio -b 115200 /dev/ttyUSB0"
-    },
-    "gettingStartedUrl": "/learn/get-started/any-target",
-    "hardwareUrl": "/hardware/onlogic/fr201"
-  },
   "reterminal": {
     "name": "Seeed reTerminal",
     "target": "reterminal",
@@ -851,19 +820,23 @@
       "2024": "supported",
       "2026": "in-progress"
     },
-    "category": "sd",
+    "category": "physical",
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "prerequisites": [
+        "Seeed reTerminal with its power supply",
+        "USB cable from the device to your host for flashing"
+      ],
       "options": [
         {
-          "id": "sd",
-          "label": "SD card",
-          "profile": "sd",
-          "media": "microSD card (8GB+)",
+          "id": "usb",
+          "label": "eMMC (USB boot)",
+          "profile": "usb",
+          "media": "Onboard eMMC (flashed over USB)",
           "autoMount": true,
-          "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "description": "Put the device into USB boot mode following Seeed's documentation and connect it to your host with a USB cable, then provision the dev runtime with the usb profile:",
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Disconnect the USB cable, return the device to its normal boot mode, and power it on. It boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -878,19 +851,23 @@
       "2024": "supported",
       "2026": "in-progress"
     },
-    "category": "sd",
+    "category": "physical",
     "provisioning": {
       "hostOs": ["macOS", "Linux"],
-      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "prerequisites": [
+        "Seeed reTerminal DM with its power supply",
+        "USB cable from the device to your host for flashing"
+      ],
       "options": [
         {
-          "id": "sd",
-          "label": "SD card",
-          "profile": "sd",
-          "media": "microSD card (8GB+)",
+          "id": "usb",
+          "label": "eMMC (USB boot)",
+          "profile": "usb",
+          "media": "Onboard eMMC (flashed over USB)",
           "autoMount": true,
-          "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "description": "Put the device into USB boot mode following Seeed's documentation and connect it to your host with a USB cable, then provision the dev runtime with the usb profile:",
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Disconnect the USB cable, return the device to its normal boot mode, and power it on. It boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -900,9 +877,9 @@
   },
   "stm32mp257f-dk": {
     "name": "STMicroelectronics STM32MP257F-DK",
-    "target": "stm32mp257f-dk",
+    "target": "stm32mp25-dk",
     "releases": {
-      "2024": "supported",
+      "2024": "in-progress",
       "2026": "in-progress"
     },
     "category": "sd",
@@ -1079,5 +1056,36 @@
     },
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/solidrun/hummingboard-rz-v2n-aiot"
+  },
+  "fr202": {
+    "name": "OnLogic FR201",
+    "target": "fr202",
+    "releases": {
+      "2024": "supported",
+      "2026": "in-progress"
+    },
+    "category": "sd",
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": ["microSD card (8GB+)", "SD card reader"],
+      "options": [
+        {
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
+        }
+      ]
+    },
+    "serial": {
+      "baud": 115200,
+      "voltage": "3.3V",
+      "command": "tio -b 115200 /dev/ttyUSB0"
+    },
+    "gettingStartedUrl": "/learn/get-started/any-target",
+    "hardwareUrl": "/hardware/onlogic/fr201"
   }
 }

@@ -1,29 +1,30 @@
 {
-  "fr201": {
+  "fr202": {
     "name": "OnLogic FR201",
-    "target": "fr201",
+    "target": "fr202",
     "releases": {
       "2024": "supported",
       "2026": "in-progress"
     },
-    "category": "usb",
+    "category": "sd",
     "provisioning": {
       "hostOs": [
         "macOS",
         "Linux"
       ],
       "prerequisites": [
-        "USB drive"
+        "microSD card (8GB+)",
+        "SD card reader"
       ],
       "options": [
         {
-          "id": "usb",
-          "label": "USB drive",
-          "profile": "usb",
-          "media": "USB drive",
+          "id": "sd",
+          "label": "SD card",
+          "profile": "sd",
+          "media": "microSD card (8GB+)",
           "autoMount": true,
-          "command": "avocado provision -r dev --profile usb",
-          "bootInstructions": "Insert the USB drive into the device and apply power."
+          "command": "avocado provision -r dev --profile sd",
+          "bootInstructions": "Insert the SD card into the device and apply power."
         }
       ]
     },
@@ -34,33 +35,6 @@
     },
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/onlogic/fr201"
-  },
-  "fr202": {
-    "name": "Fr202",
-    "target": "fr202",
-    "category": "physical",
-    "description": "Fr202 is supported by the Avocado package feed. A detailed getting-started guide for this target hasn't been written yet — the steps below are the standard flow.",
-    "provisioning": {
-      "hostOs": [
-        "macOS",
-        "Linux"
-      ],
-      "prerequisites": [],
-      "options": [
-        {
-          "id": "default",
-          "label": "Default",
-          "profile": null,
-          "media": null,
-          "autoMount": false,
-          "command": "avocado provision -r dev",
-          "bootInstructions": "After provisioning completes, power-cycle the device to boot Avocado OS. The root user is passwordless in the dev runtime."
-        }
-      ]
-    },
-    "serial": null,
-    "gettingStartedUrl": "/learn/get-started/any-target",
-    "hardwareUrl": null
   },
   "grinn-astra-1680-sbc": {
     "name": "Grinn AstraSOM-1680",
@@ -487,10 +461,10 @@
   },
   "jetson-agx-orin-devkit": {
     "name": "NVIDIA Jetson AGX Orin",
-    "target": "jetson-agx-orin-devkit",
+    "target": "jetson-agx-orin",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
@@ -667,10 +641,10 @@
   },
   "jetson-orin-nano-devkit": {
     "name": "NVIDIA Jetson Orin Nano",
-    "target": "jetson-orin-nano-devkit",
+    "target": "jetson-orin-nano",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "tegraflash",
     "description": "The Jetson is provisioned over USB using NVIDIA's tegraflash tooling, which runs inside the Avocado SDK container.",
@@ -1080,25 +1054,26 @@
       "2024": "supported",
       "2026": "in-progress"
     },
-    "category": "sd",
+    "category": "physical",
     "provisioning": {
       "hostOs": [
         "macOS",
         "Linux"
       ],
       "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader"
+        "Seeed reTerminal with its power supply",
+        "USB cable from the device to your host for flashing"
       ],
       "options": [
         {
-          "id": "sd",
-          "label": "SD card",
-          "profile": "sd",
-          "media": "microSD card (8GB+)",
+          "id": "usb",
+          "label": "eMMC (USB boot)",
+          "profile": "usb",
+          "media": "Onboard eMMC (flashed over USB)",
           "autoMount": true,
-          "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "description": "Put the device into USB boot mode following Seeed's documentation and connect it to your host with a USB cable, then provision the dev runtime with the usb profile:",
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Disconnect the USB cable, return the device to its normal boot mode, and power it on. It boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -1113,25 +1088,26 @@
       "2024": "supported",
       "2026": "in-progress"
     },
-    "category": "sd",
+    "category": "physical",
     "provisioning": {
       "hostOs": [
         "macOS",
         "Linux"
       ],
       "prerequisites": [
-        "microSD card (8GB+)",
-        "SD card reader"
+        "Seeed reTerminal DM with its power supply",
+        "USB cable from the device to your host for flashing"
       ],
       "options": [
         {
-          "id": "sd",
-          "label": "SD card",
-          "profile": "sd",
-          "media": "microSD card (8GB+)",
+          "id": "usb",
+          "label": "eMMC (USB boot)",
+          "profile": "usb",
+          "media": "Onboard eMMC (flashed over USB)",
           "autoMount": true,
-          "command": "avocado provision -r dev --profile sd",
-          "bootInstructions": "Insert the SD card into the device and apply power."
+          "description": "Put the device into USB boot mode following Seeed's documentation and connect it to your host with a USB cable, then provision the dev runtime with the usb profile:",
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Disconnect the USB cable, return the device to its normal boot mode, and power it on. It boots Avocado OS from the onboard eMMC."
         }
       ]
     },
@@ -1255,9 +1231,9 @@
   },
   "stm32mp257f-dk": {
     "name": "STMicroelectronics STM32MP257F-DK",
-    "target": "stm32mp257f-dk",
+    "target": "stm32mp25-dk",
     "releases": {
-      "2024": "supported",
+      "2024": "in-progress",
       "2026": "in-progress"
     },
     "category": "sd",

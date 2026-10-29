@@ -30,16 +30,16 @@ It is a strict boolean. `verity: "true"`, `verity: 1` and `verity: yes` are reje
 
 `avocado ext image` and the rootfs build run `veritysetup format` over the finished image and emit a hash tree plus its root hash.
 
-| Image     | Hash tree           | Root hash lands in                                                                                                        |
-| --------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Extension | `<image_id>.verity` | The runtime manifest, as the entry's `root_hash`                                                                          |
-| Rootfs    | `<rootfs>.verity`   | The boot FIT, as `avocado,roothash`; the tree goes to the machine's per-slot `rootfs-a-hash` / `rootfs-b-hash` partitions |
+| Image     | Hash tree                                            | Root hash lands in                                                                                                        |
+| --------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Extension | `<image_id>.verity`                                  | The runtime manifest, as the entry's `root_hash`                                                                          |
+| Rootfs    | `rootfs-verity/avocado-image-rootfs-<target>.verity` | The boot FIT, as `avocado,roothash`; the tree goes to the machine's per-slot `rootfs-a-hash` / `rootfs-b-hash` partitions |
 
 On boot, U-Boot reads `avocado,roothash` out of the FIT configuration node and hands the kernel `root=/dev/mapper/root roothash=<hash> systemd.verity_root_data=<rootdev> systemd.verity_root_hash=<hashdev>`, so systemd's veritysetup generator activates the mapping before the root is mounted. A FIT with no root hash boots the plain rootfs on the same environment.
 
 The salt is fixed at zero. The manifest and the FIT are the trust anchors, so a public salt costs nothing and buys reproducible root hashes.
 
-The rootfs tree is written as a standalone image, not appended, because systemd's veritysetup generator wants a block device and has no hash-offset option.
+The rootfs tree is written as a standalone image, not appended, because systemd's veritysetup generator wants a block device and has no hash-offset option. It is written to `rootfs-verity/` in the runtime's output directory, outside the rootfs install root, so a build with verity off leaves the BSP's own files in place.
 
 ## Requirements
 
@@ -52,6 +52,14 @@ The rootfs tree is written as a standalone image, not appended, because systemd'
   root hash, but no FIT signing key is configured. Set
   runtimes.<name>.signing.fit_key to an RSA key in the signing-key registry, or
   signing.fit_unsigned: true if this machine's U-Boot enforces no key.
+  ```
+
+  The FIT is rebuilt around the runtime's initramfs, so the runtime must also build one. Without it the build fails rather than boot the feed's FIT without the root hash, unverified:
+
+  ```
+  ERROR: rootfs.image.verity is on, which on this machine needs the boot FIT
+  rebuilt with the root hash, but this runtime built no initramfs to rebuild
+  the FIT around. Install the initramfs packages, or turn rootfs verity off.
   ```
 
   The other i.MX stone manifests (`imx93-evk`, `imx91-frdm`, `imx95-frdm`, `imx8mp-var-dart`, `ucm-imx8m-plus`) already stage the hash partitions, but boot with `booti` rather than a FIT, so there is nothing to carry the root hash yet.

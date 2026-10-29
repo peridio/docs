@@ -7,7 +7,7 @@ description: 'Deploy firmware updates directly from desktop to Raspberry Pi 4 us
 
 This guide provides a comprehensive step-by-step walkthrough for deploying firmware updates directly from your desktop to a Raspberry Pi 4 using Avocado OS's powerful sideloading capabilities. By leveraging Avocado OS sideloading, you can rapidly test and deploy firmware iterations to physical hardware without requiring a full cloud infrastructure setup, making it ideal for development environments, proof-of-concepts, and situations where direct device access is preferred. This approach streamlines the development workflow by allowing you to push updates directly from your workstation to your Raspberry Pi 4 while maintaining the security and reliability features built into the Avocado OS update system.
 
-In this guide, you will use the Avocado CLI with a pre-configured example repository to build a custom Avocado OS image and provision it directly to your device. We'll walk through cloning the example repository, installing dependencies, building the image, flashing the system to an SD card, and then demonstrate how to use sideloading for rapid development iterations on your Raspberry Pi 4.
+In this guide, you will use the Avocado CLI to build a custom Avocado OS image and provision it directly to your device. We'll walk through initializing a project, installing dependencies, building the image, flashing the system to an SD card, and then demonstrate how to use sideloading for rapid development iterations on your Raspberry Pi 4.
 
 ## Prerequisites
 
@@ -44,66 +44,48 @@ Avocado CLI - A command line interface for Avocado
 Usage: avocado [OPTIONS] <COMMAND>
 
 Commands:
-  sdk        SDK related commands
-  ext        Extension related commands
-  init       Initialize a new avocado project
-  runtime    Runtime management commands
-  hitl       Hardware-in-the-loop testing commands
-  clean      Clean the avocado project by removing docker volumes and state files
-  install    Install all components (SDK, extensions, and runtime dependencies)
-  upgrade    Upgrade the CLI to the latest (or specified) version
-  build      Build all components (SDK compile, extensions, and runtime images)
-  provision  Provision a runtime (shortcut for 'runtime provision')
-  deploy     Deploy a runtime to a device (shortcut for 'runtime deploy')
+  sdk           SDK related commands
+  ext           Extension related commands
+  rootfs        Rootfs sysroot and image commands
+  initramfs     Initramfs sysroot and image commands
+  kernel        Kernel image commands
+  sbom          Emit an SPDX 3.0 SBOM of the packages installed in this project
+  init          Initialize a new avocado project
+  runtime       Runtime management commands
+  hitl          Hardware-in-the-loop testing commands
 
-Options:
-      --target <TARGET>  Global target architecture
-  -h, --help             Print help
-  -V, --version          Print version
+... snip ...
+
+  build         Build all components (SDK compile, extensions, and runtime images)
+  fetch         Fetch and refresh repository metadata for sysroots
+  provision     Provision a runtime (shortcut for 'runtime provision')
+  deploy        Deploy a runtime to a device (shortcut for 'runtime deploy')
+
+... snip ...
+
+  -h, --help                 Print help
+  -V, --version              Print version
 
 ```
 
-## Clone the Avocado extension repository
+## Initialize a project
 
-Instead of initializing a new project, we'll use a pre-configured example that supports multiple targets. Clone the Avocado extension repository which contains a comprehensive example configuration.
+Create a new project for the Raspberry Pi 4. `avocado init` writes an `avocado.yaml` with `default_target: "raspberrypi4"`, so later commands need no `--target`:
 
 #### Command
 
 ```bash
-git clone https://github.com/avocado-linux/avocado-ext.git
+avocado init --target raspberrypi4 raspberrypi4
+cd raspberrypi4
 ```
-
-## Navigate to the development runtime
-
-The repository contains a full example configuration in the `runtimes/dev` directory that supports multiple hardware targets. Navigate to this directory:
-
-#### Command
-
-```bash
-cd avocado-ext/runtimes/dev
-```
-
-This directory contains a comprehensive `avocado.yaml` configuration file that supports multiple targets including Raspberry Pi 4, with all necessary dependencies and extensions pre-configured.
-
-## Set target architecture
-
-Since the configuration supports multiple targets, we need to specify which target architecture we're building for by setting an environment variable:
-
-#### Command
-
-```bash
-export AVOCADO_TARGET="raspberrypi4"
-```
-
-This environment variable tells all subsequent Avocado commands to use the Raspberry Pi 4 target configuration.
 
 :::info
-Run all subsequent commands in this guide from the `runtimes/dev` directory — the directory that contains the multi-target Avocado config (`avocado.yaml`).
+Run all subsequent commands in this guide from the project directory — the directory that contains `avocado.yaml`.
 :::
 
 ## Pre-configured setup
 
-The example repository comes with a pre-configured `avocado.yaml` that includes user credentials and all necessary settings for multiple hardware targets. The configuration is already set up with an empty root password for development convenience, so no additional credential setup is required.
+The generated `avocado.yaml` is ready for development as-is. Its `dev` permissions profile gives root an empty password, and the `dev` runtime includes `avocado-ext-sshd-dev`, the SSH server that `avocado deploy` connects through, so no additional credential setup is required.
 
 ## Install dependencies
 
@@ -118,10 +100,10 @@ avocado install
 #### Output
 
 ```text
-[INFO] Using target: raspberrypi4 (from environment variable)
+[INFO] Using target: raspberrypi4 (from config file (default_target))
 [INFO] Starting comprehensive install process...
 [INFO] Step 1/3: Installing SDK dependencies
-[INFO] Using target: raspberrypi4 (from environment variable)
+[INFO] Using target: raspberrypi4 (from config file (default_target))
 [INFO] Installing SDK dependencies.
 [INFO] Initializing Avocado SDK.
 Avocado SDK                                                          1.9 kB/s | 1.9 kB     00:00
@@ -156,12 +138,12 @@ avocado build
 #### Output
 
 ```text
-[INFO] Using target: raspberrypi4 (from environment variable)
+[INFO] Using target: raspberrypi4 (from config file (default_target))
 [INFO] Starting comprehensive build process...
 [INFO] Step 1/4: Analyzing dependencies and compiling SDK code
 [INFO] No SDK compilation needed.
 [INFO] Step 2/4: Building extensions
-[INFO] Building sysext extension 'avocado-dev'.
+[INFO] Building sysext extension 'app'.
 
 ... snip ...
 
@@ -198,7 +180,7 @@ The provisioning process creates the necessary artifacts for flashing to your Ra
 
 ## SD card provisioning configuration
 
-The example repository includes pre-configured SD card provisioning profiles that grant the necessary system access for writing to SD cards. No additional configuration is required.
+The Raspberry Pi 4 BSP ships an `sd` provisioning profile, and the `sdk.container_args` that `avocado init` writes (`--privileged`, `-v /dev:/dev`) give it the access it needs to write to SD cards. No additional configuration is required.
 
 ## Write to SD card
 
@@ -222,7 +204,7 @@ The provisioning process will guide you through the SD card writing:
 
 1. **Initial Setup**: The tool prepares the image and waits for SD card detection
 2. **Insert SD Card**: When prompted, insert your SD card - it will be automatically detected
-3. **Confirmation**: You'll need to confirm the write operation by typing `y`
+3. **Confirmation**: You'll need to confirm the write operation by typing `y`. Answering no, or running without a terminal, fails the provision; `--force` does not skip this confirmation.
 
 #### Output
 
@@ -289,7 +271,7 @@ Once the SD card writing is complete:
 1. **Safely remove** the SD card from your computer
 2. **Insert the SD card** into your Raspberry Pi 4
 3. **Connect power** to boot the device
-4. **Log in** using the `root` account and the password you configured earlier
+4. **Log in** using the `root` account with an empty password (the `dev` permissions profile)
 
 Your Raspberry Pi 4 is now running Avocado OS and ready for development and sideloading workflows!
 
@@ -358,9 +340,9 @@ You should see an error indicating the command is not found.
 
 #### Add new dependency
 
-In your development workstation's `runtimes/dev` directory, edit the `avocado.yaml` file to add `tcpdump` to the application dependencies.
+In your project directory on your development workstation, edit the `avocado.yaml` file to add `tcpdump` to the application dependencies.
 
-Find the `extensions.app.packages` section and add the `tcpdump` line:
+Under `extensions.app`, uncomment `packages:` and add a `tcpdump` line:
 
 ```yaml title="avocado.yaml"
 ... snip ...
@@ -368,7 +350,6 @@ Find the `extensions.app.packages` section and add the `tcpdump` line:
 extensions:
   app:
     packages:
-      i2c-tools: '*'
       # highlight-added-start
       tcpdump: '*'
       # highlight-added-end

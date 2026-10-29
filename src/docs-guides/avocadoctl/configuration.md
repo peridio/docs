@@ -20,18 +20,23 @@ socket = "unix:/run/avocado/avocadoctl.sock"
 
 [avocado.update]
 stream_os_to_partition = false
+
+[avocado.gc]
+runtime_retention = 3
+auto_gc = true
 ```
 
 ## Extension Settings
 
 The `[avocado.ext]` section controls how extensions are stored and merged.
 
-| Key               | Type   | Default                   | Description                                                                                                    |
-| ----------------- | ------ | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `dir`             | string | `/var/lib/avocado/images` | Directory where extension images are stored                                                                    |
-| `sysext_mutable`  | string | `ephemeral`               | Mutability mode for system extensions (sysext) overlaying `/usr` and `/opt`                                    |
-| `confext_mutable` | string | `ephemeral`               | Mutability mode for configuration extensions (confext) overlaying `/etc`                                       |
-| `mutable`         | string | -                         | **Deprecated.** Legacy option that applies to both sysext and confext. Use the specific options above instead. |
+| Key                | Type    | Default                   | Description                                                                                                    |
+| ------------------ | ------- | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `dir`              | string  | `/var/lib/avocado/images` | Directory where extension images are stored                                                                    |
+| `sysext_mutable`   | string  | `ephemeral`               | Mutability mode for system extensions (sysext) overlaying `/usr` and `/opt`                                    |
+| `confext_mutable`  | string  | `ephemeral`               | Mutability mode for configuration extensions (confext) overlaying `/etc`                                       |
+| `mutable`          | string  | -                         | **Deprecated.** Legacy option that applies to both sysext and confext. Use the specific options above instead. |
+| `spot_check_bytes` | integer | `4096`                    | Bytes read from the head and the tail of each extension image for spot-check hashing                           |
 
 ### Mutability Modes
 
@@ -62,6 +67,15 @@ The `[avocado.update]` section controls OS update behavior.
 | Key                      | Type | Default | Description                                                                                                                                                                     |
 | ------------------------ | ---- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `stream_os_to_partition` | bool | `false` | Stream OS bundle artifacts directly from HTTP to partitions without staging to disk. Reduces disk I/O and temporary storage but disables resumable downloads for the OS bundle. |
+
+## Garbage Collection Settings
+
+The `[avocado.gc]` section controls how many staged runtimes are kept.
+
+| Key                 | Type    | Default | Description                                                                                                                                             |
+| ------------------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `runtime_retention` | integer | `3`     | Maximum number of runtimes to keep, including the active one (minimum 1). The active runtime and one referenced by a pending OS update are always kept. |
+| `auto_gc`           | bool    | `true`  | Run garbage collection after each `runtime add`. When `false`, it runs only on `avocadoctl runtime gc`.                                                 |
 
 ## Environment Variable Overrides
 
