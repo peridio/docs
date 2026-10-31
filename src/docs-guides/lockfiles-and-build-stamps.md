@@ -66,7 +66,7 @@ After unlocking, run `avocado install` to re-resolve and write fresh entries.
 `avocado clean --unlock` is the broadest equivalent — it clears every lockfile entry for the target in one step. The `--unlock` flag requires `-C/--config`; the target comes from `--target`, `AVOCADO_TARGET` or the config's `default_target`:
 
 ```bash
-avocado clean --unlock -C avocado.yaml --target jetson-orin-nano-devkit
+avocado clean --unlock -C avocado.yaml --target jetson-orin-nano
 ```
 
 Use it when you want to reset the project's input state entirely.
@@ -145,7 +145,7 @@ avocado --no-stamps install --runtime dev
 **Delete the stamp cache** with `avocado clean --stamps`:
 
 ```bash
-avocado clean --stamps -C avocado.yaml --target jetson-orin-nano-devkit
+avocado clean --stamps -C avocado.yaml --target jetson-orin-nano
 ```
 
 This removes the entire `.stamps` directory inside the SDK container volume. The next invocation rebuilds the cache from scratch as steps succeed. `--stamps` requires `-C/--config` because the CLI has to enter the SDK container for the target to do the deletion; the target comes from `--target`, `AVOCADO_TARGET` or the config's `default_target`.

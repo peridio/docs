@@ -68,7 +68,7 @@ avocado init --target jetson-orin-nano jetson-orin-nano
 cd jetson-orin-nano
 ```
 
-`avocado init` sets `distro.release: 2026`, where this board's target is `jetson-orin-nano`. On the 2024 release the target is `jetson-orin-nano-devkit` instead. To build on 2024, use that target and set the release in `avocado.yaml`:
+`avocado init` sets `distro.release: 2026`. The target is `jetson-orin-nano` on the 2024 release too, so to build on 2024 only the release changes in `avocado.yaml`:
 
 ```yaml title="avocado.yaml"
 distro:

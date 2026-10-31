@@ -29,11 +29,11 @@ This guide covers:
 
 The declaration is portable; the delivery mechanism is not. Each BSP layer installs its own delivery hook, so what happens to the compiled blob differs by board - including how you ship a _change_ to an overlay later.
 
-| Target                                      | Status                             | Delivery mechanism                                       | Updating an overlay                                       |
-| ------------------------------------------- | ---------------------------------- | -------------------------------------------------------- | --------------------------------------------------------- |
-| `jetson-orin-nano-devkit` (and other Tegra) | **Working** - verified on hardware | Merged into the base DTB at build time with `fdtoverlay` | **Reflash** - see [Jetson](#jetson-tegra)                 |
-| `qemux86-64`                                | Not applicable                     | None - x86 boots via ACPI and has no device tree         | n/a                                                       |
-| Any other target                            | Not documented yet                 | Varies by BSP                                            | Build fails by design - see [below](#unsupported-targets) |
+| Target                               | Status                             | Delivery mechanism                                       | Updating an overlay                                       |
+| ------------------------------------ | ---------------------------------- | -------------------------------------------------------- | --------------------------------------------------------- |
+| `jetson-orin-nano` (and other Tegra) | **Working** - verified on hardware | Merged into the base DTB at build time with `fdtoverlay` | **Reflash** - see [Jetson](#jetson-tegra)                 |
+| `qemux86-64`                         | Not applicable                     | None - x86 boots via ACPI and has no device tree         | n/a                                                       |
+| Any other target                     | Not documented yet                 | Varies by BSP                                            | Build fails by design - see [below](#unsupported-targets) |
 
 The Jetson row has been confirmed by reading the device tree of a running kernel on the board. Other boards will be documented as each one is verified the same way - see [Confirming the overlay applied](#confirming-the-overlay-applied) for why a green build is not evidence that an overlay reached a kernel.
 
@@ -48,7 +48,7 @@ Overlays are declared on the **extension** that ships them, not on the runtime a
 ```yaml
 runtimes:
   dev:
-    target: jetson-orin-nano-devkit
+    target: jetson-orin-nano
     extensions:
       - my-board
     packages:
@@ -75,7 +75,7 @@ The runtime must pull `avocado-runtime`, which is what installs `avocado-img-boo
 
 The feature is inert unless an overlay or a `boot_config` line is declared. A project with neither builds exactly as before.
 
-Both keys follow an extension's `target-<name>:` overrides, so a declaration under `target-jetson-orin-nano-devkit:` reaches only that board. As with every override, a target's list replaces the base list.
+Both keys follow an extension's `target-<name>:` overrides, so a declaration under `target-jetson-orin-nano:` reaches only that board. As with every override, a target's list replaces the base list.
 
 ### `boot_config`
 
@@ -164,14 +164,14 @@ A `/include/ "shared.dtsi"` (the native DTS include, not a cpp one) resolves rel
 
 ```bash
 avocado install
-avocado build --target jetson-orin-nano-devkit
+avocado build --target jetson-orin-nano
 ```
 
 The build logs three ordered markers. All three must appear:
 
 ```text
 avocado-dtc-overlay: built .../device-tree-overlays/hello-overlay.dtbo from hello-overlay
-device-tree-overlay-deliver: delivered 1 overlay(s) merged into tegra234-p3768-0000+p3767-0005-nv-super.dtb for avocado-jetson-orin-nano-devkit: hello-overlay
+device-tree-overlay-deliver: delivered 1 overlay(s) merged into tegra234-p3768-0000+p3767-0005-nv-super.dtb for avocado-jetson-orin-nano: hello-overlay
 [SUCCESS] OS bundle created: .../os-bundle.aos
 ```
 
