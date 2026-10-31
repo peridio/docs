@@ -7,6 +7,7 @@ hide_title: true
 
 import HardwareHero from '@site/src/components/HardwareHero'
 import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
+import TargetRelease from '@site/src/components/TargetRelease'
 
 <HardwareHero
   vendor="NXP"
@@ -124,6 +125,8 @@ AHAB is applied when the feed is built rather than from `avocado.yaml`, because 
 ## Getting Started
 
 The [NXP FRDM i.MX 93 guide](/learn/get-started/frdm-imx93) walks through the whole path for this board: prerequisites, the serial console, building, provisioning to an SD card, first boot, and running your own container so that it comes back after a power cycle.
+
+<TargetRelease id="imx93-frdm" />
 
 ```bash title="Host machine"
 avocado init --target imx93-frdm imx93-frdm

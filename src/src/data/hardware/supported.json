@@ -3,13 +3,13 @@
   "devices": [
     {
       "name": "Advantech ICAM-540",
-      "target": "icam-540",
-      "board": "",
+      "target": "jetson-orin-nx",
+      "board": "icam-540",
       "url": "/hardware/advantech/icam-540",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -20,7 +20,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -31,7 +31,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "supported"
+        "2026": "in-progress"
       }
     },
     {
@@ -42,7 +42,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "supported"
+        "2026": "in-progress"
       }
     },
     {
@@ -86,7 +86,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -97,7 +97,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -130,7 +130,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -152,7 +152,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -163,7 +163,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -174,7 +174,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -185,7 +185,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -240,7 +240,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -251,7 +251,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -317,7 +317,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {

@@ -6,6 +6,7 @@ hide_title: true
 ---
 
 import HardwareHero from '@site/src/components/HardwareHero'
+import TargetRelease from '@site/src/components/TargetRelease'
 
 <HardwareHero
   vendor="Seeed Studio"
@@ -100,7 +101,9 @@ Hardware-in-the-loop development reduces iteration from weeks to hours. Remote d
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `reterminal`, published on the **2024** release feed. `avocado init` writes `release: 2026`, so set `distro.release: 2024` in `avocado.yaml` before the first install. The provisioning specifics are below.
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `reterminal` The provisioning specifics are below.
+
+<TargetRelease id="reterminal" />
 
 ### Provision
 

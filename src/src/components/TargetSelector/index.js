@@ -7,10 +7,11 @@ import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
 import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
 import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
+import TargetRelease from '@site/src/components/TargetRelease'
 import styles from './styles.module.css'
 // Hardcoded list: sourced from the hand-maintained targets.json, not the live
-// feed. The feed is single-release (2024), so it can't represent which release
-// each target is on — that lives in each entry's `releases` map here.
+// feed. Which release each target is on lives in each entry's `releases` map
+// here, rendered by TargetRelease.
 // ponytail: sync-targets.js / generated-targets.json are now unused by the
 // selector; leave the build step in place, drop it when the feed goes away.
 import targets from '@site/src/data/hardware/targets.json'
@@ -21,10 +22,6 @@ import targets from '@site/src/data/hardware/targets.json'
 const targetList = Object.entries(targets)
   .map(([id, target]) => ({ ...target, id }))
   .sort((a, b) => a.name.localeCompare(b.name))
-
-// Avocado OS release year -> Yocto feed codename.
-const RELEASE_NAMES = { 2024: 'scarthgap', 2026: 'wrynose' }
-const STATUS_LABELS = { supported: 'Supported', 'in-progress': 'In progress' }
 
 export default function TargetSelector() {
   const [query, setQuery] = useState('')
@@ -296,38 +293,12 @@ export default function TargetSelector() {
               />
             ))}
 
-          {t.releases &&
-            Object.keys(t.releases).length > 0 &&
-            (() => {
-              const years = Object.keys(t.releases).sort((a, b) => Number(a) - Number(b))
-              // Prefer a fully-supported release for the example value; else the newest available.
-              const preferred =
-                years.filter((y) => t.releases[y] === 'supported').pop() || years[years.length - 1]
-              return (
-                <>
-                  <Heading as="h2">Release Support</Heading>
-                  <p>{t.name} is available on the following Avocado OS releases:</p>
-                  <ul>
-                    {years.map((y) => (
-                      <li key={y}>
-                        <strong>{y}</strong> ({RELEASE_NAMES[y] || 'unknown'}) —{' '}
-                        {STATUS_LABELS[t.releases[y]] || t.releases[y]}
-                      </li>
-                    ))}
-                  </ul>
-                  {!t.configuration && (
-                    <>
-                      <p>
-                        Set the release in your <code>avocado.yaml</code>:
-                      </p>
-                      <pre>
-                        <code>{`distro:\n  release: ${preferred}`}</code>
-                      </pre>
-                    </>
-                  )}
-                </>
-              )
-            })()}
+          {t.releases && (
+            <>
+              <Heading as="h2">Release</Heading>
+              <TargetRelease releases={t.releases} />
+            </>
+          )}
 
           <Heading as="h2">Prerequisites</Heading>
           <ul>

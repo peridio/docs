@@ -4,7 +4,7 @@
     "target": "rubikpi3",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "physical",
     "description": "The Rubik Pi 3 is provisioned by flashing the board's onboard UFS storage over USB while the device is in Qualcomm EDL (Emergency Download) mode.",
@@ -132,7 +132,8 @@
     "name": "QEMU ARM64",
     "target": "qemuarm64",
     "releases": {
-      "2024": "supported"
+      "2024": "supported",
+      "2026": "supported"
     },
     "category": "virtual",
     "provisioning": {
@@ -158,7 +159,8 @@
     "name": "QEMU x86-64",
     "target": "qemux86-64",
     "releases": {
-      "2024": "supported"
+      "2024": "supported",
+      "2026": "supported"
     },
     "category": "virtual",
     "provisioning": {
@@ -185,7 +187,7 @@
     "target": "raspberrypi5",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "sd",
     "provisioning": {
@@ -229,7 +231,7 @@
     "target": "raspberrypi4",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "sd",
     "provisioning": {
@@ -568,7 +570,7 @@
     "target": "imx8mp-evk",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "sd",
     "provisioning": {
@@ -724,7 +726,7 @@
     "target": "imx93-evk",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "sd",
     "provisioning": {
@@ -755,7 +757,7 @@
     "target": "imx93-frdm",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "sd",
     "provisioning": {
@@ -787,7 +789,7 @@
     "target": "imx91-frdm",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "sd",
     "provisioning": {
@@ -908,10 +910,10 @@
   },
   "icam-540": {
     "name": "Advantech ICAM-540",
-    "target": "icam-540",
+    "target": "jetson-orin-nx",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "other",
     "provisioning": {
@@ -935,14 +937,15 @@
       "command": "tio -b 115200 /dev/ttyUSB0"
     },
     "gettingStartedUrl": "/learn/get-started/any-target",
-    "hardwareUrl": "/hardware/advantech/icam-540"
+    "hardwareUrl": "/hardware/advantech/icam-540",
+    "board": "icam-540"
   },
   "intel-x86-64-v3": {
     "name": "Intel x86-64-v3",
     "target": "intel-x86-64-v3",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "usb",
     "provisioning": {
@@ -969,7 +972,7 @@
     "target": "intel-x86-64-v2",
     "releases": {
       "2024": "supported",
-      "2026": "in-progress"
+      "2026": "supported"
     },
     "category": "usb",
     "provisioning": {

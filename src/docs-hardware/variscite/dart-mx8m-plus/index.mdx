@@ -6,6 +6,7 @@ hide_title: true
 ---
 
 import HardwareHero from '@site/src/components/HardwareHero'
+import TargetRelease from '@site/src/components/TargetRelease'
 
 {/* TODO: add the hero image at src/static/img/hardware/variscite/dart-mx8m-plus.png, then set image / imageAlt on HardwareHero below. */}
 
@@ -122,6 +123,8 @@ LTS commitments aligned with the Civil Infrastructure Platform (CIP), combined w
 ### Init, Install, & Build
 
 Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `imx8mp-var-dart`.
+
+<TargetRelease id="imx8mp-var-dart" />
 
 This target requires **both a target and a board**. After `avocado init`, make sure both keys are set at the top of your `avocado.yaml`:
 

@@ -6,6 +6,7 @@ hide_title: true
 ---
 
 import HardwareHero from '@site/src/components/HardwareHero'
+import TargetRelease from '@site/src/components/TargetRelease'
 
 {/* TODO: no vendor image yet — add src/static/img/hardware/compulab/iot-gate-imx8plus.png and set image / imageAlt on HardwareHero once available. */}
 
@@ -59,6 +60,8 @@ CompuLab's own [IOT-GATE-iMX8PLUS product page](https://www.compulab.com/product
 Follow the [Any Supported Target](/learn/get-started/any-target)
 instructions under Getting Started. The build target is `ucm-imx8m-plus`; add
 the gateway carrier extension to bring up the peripherals above:
+
+<TargetRelease id="iot-gate-imx8plus" />
 
 ```yaml
 default_target: ucm-imx8m-plus

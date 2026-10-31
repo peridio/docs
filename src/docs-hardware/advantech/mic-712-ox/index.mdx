@@ -6,6 +6,7 @@ hide_title: true
 ---
 
 import HardwareHero from '@site/src/components/HardwareHero'
+import TargetRelease from '@site/src/components/TargetRelease'
 
 {/* TODO: no vendor image yet — add src/static/img/hardware/advantech/mic-712-ox.png and set image / imageAlt on HardwareHero once available. */}
 
@@ -69,6 +70,8 @@ The Advantech MIC-712-OX is an ultra-slim, fanless AI inference system built on 
 ### Init, Install, & Build
 
 Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. The MIC-712-OX uses the `jetson-orin-nx` target with the `mic-712-ox-16gb` board:
+
+<TargetRelease releases={{ 2024: 'supported', 2026: 'supported' }} />
 
 ```yaml title="avocado.yaml"
 default_target: 'jetson-orin-nx'
