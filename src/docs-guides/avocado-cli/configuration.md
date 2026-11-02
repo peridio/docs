@@ -24,7 +24,23 @@ For detailed information about all available configuration options, see the [con
 
 `avocado init` writes a starter `avocado.yaml` on `distro.release: 2026` and `distro.channel: edge`. Its first line is a `yaml-language-server` comment that points editors at the [JSON Schema](/schemas/avocado-config.json), so they validate the file as you type. `avocado config schema` prints the schema the installed CLI uses.
 
-The CLI warns about keys it ignores, such as a misspelled or retired key (`extentions:`), with a "did you mean" suggestion. These warnings go to stderr and never fail a command. To check a config without building, run `avocado config validate`: YAML errors, schema violations and the CLI's own checks are errors (exit status 1), and ignored keys are warnings. It reads stdin with `-c -`, and `--output json` prints `{ok, errors, warnings}`.
+### Checking your config
+
+The CLI warns about any key it ignores, whether it's misspelled, in the wrong place, or an old name that was renamed (`extentions:`). It suggests the closest valid key when one is near:
+
+```text
+[WARNING] ./avocado.yaml: unknown key 'runtimes.dev.extentions' is ignored; did you mean 'extensions'?
+```
+
+These warnings go to stderr and never fail a command, so a file that built before still builds. `avocado config show --output json` includes them in a `warnings` array.
+
+To check a config without building, run `avocado config validate`: YAML errors, schema violations and the CLI's own checks are errors (exit status 1), and ignored keys are warnings. It reads stdin with `-c -`, and `--output json` prints `{ok, errors, warnings}`.
+
+The same schema powers editor support. Projects created with `avocado init` start with the `yaml-language-server` line, which gives VS Code (with the Red Hat YAML extension) and other YAML-language-server editors autocomplete, hover docs and validation. Add it to the top of an existing `avocado.yaml` to get the same:
+
+```yaml
+# yaml-language-server: $schema=https://docs.peridio.com/schemas/avocado-config.json
+```
 
 ## Environment variables
 
@@ -180,6 +196,38 @@ runtimes:
 
 `fit_key` replaces the `AVOCADO_FIT_KEY_DIR` environment variable and `fit_unsigned` replaces `AVOCADO_FIT_UNSIGNED`; neither variable is read any more. See [Boot signing](/developer-reference/security/boot-signing).
 
+## One entry or named entries
+
+`rootfs`, `initramfs`, `kernel` and `permissions` each take either one configuration or a map of named ones. The CLI decides by the keys it finds:
+
+- If any key is one of that section's fields (such as `packages` in `rootfs`, or `users` in `permissions`), the whole section is one configuration, named `default`. A `target-<name>:` key next to the fields doesn't count as an entry name, so a per-target override block keeps the one-configuration form.
+- Otherwise every key is an entry name, and each entry is a configuration.
+
+Mixing field keys with entry names is an error: `permissions: is one block, because it sets a field, so 'prod' cannot be named entries. Use one form`.
+
+```yaml
+# One configuration: `users` is a permissions field
+permissions:
+  users:
+    root:
+      password: ''
+
+# Named entries: `dev` and `prod` are not permissions fields
+permissions:
+  dev:
+    users:
+      root:
+        password: ''
+  prod:
+    users:
+      admin:
+        password: '$6$...'
+```
+
+Watch for misspellings here. `permissions: { user: ... }` has no permissions field, so it is read as an entry named `user`, not as users. The CLI warns about this: `'permissions.user' sets no permissions fields, so it is read as a named permissions entry; did you mean the field 'users'?`
+
+Named entries are referenced by name, for example `permissions: prod` on a rootfs, or `kernel: yocto-6-6` on a runtime. For `rootfs` and `initramfs`, only the entry named `default` (or the only entry) is built, and `overlay`, `post_install`, `image` and `source` are read only in the one-configuration form, so use that form for images.
+
 ## Rootfs configuration
 
 The `rootfs` section configures the shared rootfs sysroot used by runtime builds.
@@ -187,36 +235,42 @@ The `rootfs` section configures the shared rootfs sysroot used by runtime builds
 ```yaml
 rootfs:
   filesystem: erofs-lz4 # default
-  overlay: overlays/rootfs # optional: merged into sysroot after package install
+  overlay: overlays/rootfs # optional: copied into the sysroot after package install
+  permissions: dev # a profile from the top-level permissions section
   packages:
     avocado-pkg-rootfs: '*'
 ```
 
-| Field        | Default     | Description                                                       |
-| ------------ | ----------- | ----------------------------------------------------------------- |
-| `filesystem` | `erofs-lz4` | Image format: `erofs-lz4` or `erofs-zst`                          |
-| `overlay`    |             | Path or object — see [Overlay](#overlay) below                    |
-| `packages`   |             | Map of package names to version constraints                       |
-| `image`      |             | Image wrapper options — see [Image options](#image-options) below |
+| Field          | Default              | Description                                                                                                                                                                                                                                                                      |
+| -------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages`     | `avocado-pkg-rootfs` | Map of package names to version constraints. When no packages are set, the rootfs installs `avocado-pkg-rootfs`                                                                                                                                                                  |
+| `filesystem`   | `erofs-lz4`          | Image format: `erofs-lz4` or `erofs-zst`                                                                                                                                                                                                                                         |
+| `overlay`      |                      | Path or object. See [Overlay](#overlay) below                                                                                                                                                                                                                                    |
+| `permissions`  |                      | Users and groups for the image: the name of a [permissions](#permissions) profile, or an inline profile                                                                                                                                                                          |
+| `post_install` |                      | Script, relative to `src_dir`, run on the image work directory just before the filesystem is created. It replaces the built-in steps (usrmerge symlinks, removing `/media`, `/mnt`, `/srv` and the contents of `/boot`, an empty `/etc/machine-id`, systemd presets, `ldconfig`) |
+| `image`        |                      | Image wrapper options. See [Image options](#image-options) below                                                                                                                                                                                                                 |
+| `source`       |                      | `{ type: path, path: <dir> }` reads the whole section from `<dir>/avocado.yaml` (or `avocado.yml`) instead, with `<dir>` relative to `src_dir`                                                                                                                                   |
+
+A `target-<name>:` block inside `rootfs` overrides settings for that target, but only `post_install` and `image` are taken from it.
 
 ## Initramfs configuration
 
-The `initramfs` section configures the initramfs sysroot used for the early boot environment.
+The `initramfs` section configures the initramfs sysroot used for the early boot environment. It takes the same fields as `rootfs`: `overlay`, `permissions`, `post_install`, `source` and `target-<name>:` blocks work the same way. These differ:
 
 ```yaml
 initramfs:
   filesystem: cpio.zst # default
-  overlay: overlays/initramfs # optional: merged into sysroot after package install
+  overlay: overlays/initramfs # optional: copied into the sysroot after package install
+  permissions: dev
   packages:
     avocado-pkg-initramfs: '*'
 ```
 
-| Field        | Default    | Description                                                                       |
-| ------------ | ---------- | --------------------------------------------------------------------------------- |
-| `filesystem` | `cpio.zst` | Image format: `cpio`, `cpio.zst`, `cpio.lz4`, or `cpio.gz`                        |
-| `overlay`    |            | Path or object — see [Overlay](#overlay) below                                    |
-| `packages`   |            | Map of package names to version constraints                                       |
-| `image`      |            | Wrapper options (`type`, `args` only) — see [Image options](#image-options) below |
+| Field        | Default                 | Description                                                                                                           |
+| ------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `packages`   | `avocado-pkg-initramfs` | Map of package names to version constraints. When no packages are set, the initramfs installs `avocado-pkg-initramfs` |
+| `filesystem` | `cpio.zst`              | Image format: `cpio`, `cpio.zst`, `cpio.lz4`, or `cpio.gz`                                                            |
+| `image`      |                         | Wrapper options (`type`, `args` only). See [Image options](#image-options) below                                      |
 
 ## Image options
 
@@ -270,6 +324,59 @@ initramfs:
 The string short form is equivalent to `{ dir: "...", mode: "merge" }`. The overlay path is resolved as `/opt/src/<path>` inside the SDK container. Overlay config participates in the sysroot stamp, so changes trigger a reinstall.
 
 In both modes the overlay is copied over the sysroot. Paths the overlay creates are owned by root; directories that already exist keep their mode and owner, and nothing else in the sysroot is touched. Each install records the files the overlay placed and, on the next install, removes the ones the overlay no longer has (printing `Removed /<path>`); a path a package owns is kept, with a notice. An overlay directory that would replace a symlink or file in the sysroot fails the install.
+
+## Permissions
+
+The `permissions` section defines the users and groups baked into an image's `/etc/passwd`, `/etc/shadow` and `/etc/group` at build time. A rootfs or initramfs picks a profile through its `permissions` field, by name or inline. Projects created with `avocado init` start with a `dev` profile:
+
+```yaml
+rootfs:
+  permissions: dev
+
+initramfs:
+  permissions: dev
+
+permissions:
+  dev: # NOT FOR PRODUCTION: empty root password
+    users:
+      root:
+        password: ''
+  prod:
+    users:
+      admin:
+        password: '$6$...' # a crypt hash, as written to /etc/shadow
+        shell: /bin/sh
+        groups: [admin, wheel]
+    groups:
+      admin:
+        gid: 1000
+```
+
+Groups are created before users, so a user can name a group defined in the same profile.
+
+### User fields
+
+| Field                                                                              | Description                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `password`                                                                         | Password hash written to `/etc/shadow`. An empty string means no password, and the build log warns about it. Defaults to `*`, which disables password login                                                                                                                      |
+| `uid`                                                                              | User ID. When omitted, assigned from a counter starting at 1000 that doesn't skip IDs already in the base image                                                                                                                                                                  |
+| `gid`                                                                              | Primary group ID written to `/etc/passwd`. When omitted, the user takes the GID of the first entry in `groups`, which must exist by then or the build fails. With no `groups` either, the user gets a group of its own name, created with the UID as its GID if it doesn't exist |
+| `groups`                                                                           | The first entry is the primary group (see `gid`); the user is not added to it as a member. The user joins each remaining group. A group that doesn't exist is skipped with a warning                                                                                             |
+| `home`, `shell`, `gecos`                                                           | Home directory (default `/home/<name>`), login shell (default `/bin/sh`) and full-name field (default the user name)                                                                                                                                                             |
+| `last_change`, `min_days`, `max_days`, `warn_days`, `inactive_days`, `expire_date` | Password aging fields for `/etc/shadow`, as integers                                                                                                                                                                                                                             |
+
+A user that already exists in the base image keeps its `/etc/passwd` entry; only its `/etc/shadow` entry is rewritten.
+
+### Group fields
+
+A group's value can be an object with these fields, or empty for a group with an automatically assigned GID.
+
+| Field     | Description                                                                                                                                                         |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gid`     | Group ID. When omitted, assigned from a counter starting at 1000. For a group already in the base image, a `gid` that differs from the existing one fails the build |
+| `members` | Users in the group. For a group already in the base image, this replaces its member list                                                                            |
+
+A user's `disabled` and a group's `password` have no effect, and the CLI warns if you set them. `system` on a user or group only labels the build log; it doesn't change ID allocation.
 
 ## Kernel configuration
 
