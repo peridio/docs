@@ -82,15 +82,15 @@ avocado build
 
 ### Provision
 
-The gateway is programmed through the on-module eMMC over USB, with the `uuu-emmc` profile. This is the path we have run end to end on the IOT-GATE-iMX8PLUS.
+The gateway is programmed through the on-module eMMC over USB, with the `uuu-emmc` profile. We have run this path end to end on the IOT-GATE-iMX8PLUS on the 2026 release.
 
 1. Put the gateway in **USB serial download** mode, and connect its USB OTG port to your host. CompuLab's [IOT-GATE-iMX8PLUS documentation](https://www.compulab.com/products/iot-gateways/iot-gate-imx8plus-industrial-arm-iot-gateway/) covers the boot-mode selection and which port is the OTG port.
 2. Build and provision:
 
-```bash title="Host machine"
-avocado build
-avocado provision -r dev --profile uuu-emmc
-```
+   ```bash title="Host machine"
+   avocado build
+   avocado provision -r dev --profile uuu-emmc
+   ```
 
 3. When programming completes, return the gateway to eMMC boot and power-cycle it. On first boot, the carrier extension switches the boot device tree to `iot-gate-imx8plus.dtb`. That takes effect from the next reboot.
 

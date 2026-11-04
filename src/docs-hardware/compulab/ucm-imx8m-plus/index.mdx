@@ -126,18 +126,18 @@ The UCM-i.MX8M-Plus is a module, so the same target serves every carrier board i
 
 ### Provision
 
-The module can be provisioned to an SD card on the carrier, or to its on-module eMMC over USB. Which one your board boots from is set by the i.MX 8M Plus `BOOT_MODE` pins, which the carrier routes to a switch, jumpers or fixed straps. Check your carrier's documentation for how it sets them. Disable Linux host auto-mounting first if applicable — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+The module can be provisioned to an SD card on the carrier, or to its on-module eMMC over USB. Which one your board boots from is set by the i.MX 8M Plus `BOOT_MODE` pins, which the carrier routes to a switch, jumpers or fixed straps. Check your carrier's documentation for how it sets them.
 
 #### Option A — SD card
 
-Set the carrier to boot from SD, insert the SD card, then build and provision with the `sd` profile:
+Put the SD card in your host's card reader, then build and provision with the `sd` profile. Disable Linux host auto-mounting first if applicable — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
 
 ```bash title="Host machine"
 avocado build
 avocado provision -r dev --profile sd
 ```
 
-Insert the SD card into the carrier and power it on. It boots Avocado OS from the SD card.
+Move the SD card to the carrier, set the carrier to boot from SD, and power it on. It boots Avocado OS from the SD card.
 
 #### Option B — eMMC over USB (UUU)
 
