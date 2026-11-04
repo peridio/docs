@@ -80,13 +80,18 @@ avocado install
 avocado build
 ```
 
-:::note
+### Provision
 
-Provisioning and boot-mode details (SD, onboard eMMC, or a non-SD-card
-programming path) depend on the gateway's own carrier connectors, which are
-not yet verified against Avocado OS on this specific board. See the
-[UCM-i.MX8M-Plus provisioning note](/hardware/compulab/ucm-imx8m-plus#getting-started)
-for the general SOM procedure, and confirm the gateway's own boot-mode
-selection in CompuLab's IOT-GATE-iMX8PLUS documentation before provisioning.
+The gateway is programmed through the on-module eMMC over USB, with the `uuu-emmc` profile. This is the path we have run end to end on the IOT-GATE-iMX8PLUS.
 
-:::
+1. Put the gateway in **USB serial download** mode, and connect its USB OTG port to your host. CompuLab's [IOT-GATE-iMX8PLUS documentation](https://www.compulab.com/products/iot-gateways/iot-gate-imx8plus-industrial-arm-iot-gateway/) covers the boot-mode selection and which port is the OTG port.
+2. Build and provision:
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile uuu-emmc
+```
+
+3. When programming completes, return the gateway to eMMC boot and power-cycle it. On first boot, the carrier extension switches the boot device tree to `iot-gate-imx8plus.dtb`. That takes effect from the next reboot.
+
+The `sd` profile and the module-level details (console, device-tree overlays) are on the [UCM-i.MX8M-Plus page](/hardware/compulab/ucm-imx8m-plus#getting-started).

@@ -120,25 +120,48 @@ Avocado Connect delivers atomic OTA updates with delta compression, A/B rollback
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `ucm-imx8m-plus`.
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `ucm-imx8m-plus`. The provisioning specifics are below.
+
+The UCM-i.MX8M-Plus is a module, so the same target serves every carrier board it sits on. Your carrier's own device tree and peripherals come from a carrier extension in your project. The [IOT-GATE-iMX8PLUS gateway](/hardware/compulab/iot-gate-imx8plus) is a worked example.
 
 ### Provision
 
-Build the project and execute the provisioning procedure — this builds the system image and writes it to the SD card. On a Linux host, disable auto-mounting first if applicable — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+The module can be provisioned to an SD card on the carrier, or to its on-module eMMC over USB. Which one your board boots from is set by the i.MX 8M Plus `BOOT_MODE` pins, which the carrier routes to a switch, jumpers or fixed straps. Check your carrier's documentation for how it sets them. Disable Linux host auto-mounting first if applicable — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
 
-```bash
+#### Option A — SD card
+
+Set the carrier to boot from SD, insert the SD card, then build and provision with the `sd` profile:
+
+```bash title="Host machine"
 avocado build
 avocado provision -r dev --profile sd
 ```
 
-:::note
+Insert the SD card into the carrier and power it on. It boots Avocado OS from the SD card.
 
-Provisioning specifics (boot-mode switch positions and whether eMMC-over-USB is used) depend on the CompuLab carrier board. Confirm the boot-mode selection for your carrier in CompuLab's documentation before provisioning.
+#### Option B — eMMC over USB (UUU)
 
+Flash the on-module eMMC directly over USB. The i.MX 8M Plus boot ROM has a USB serial download mode that NXP's `uuu` tool talks to, and the `uuu-emmc` profile runs `uuu` for you.
+
+1. Set the carrier to **serial download** mode. That is `BOOT_MODE[3:0] = 0001` on the i.MX 8M Plus. The boot ROM also drops into serial download on its own when it finds no bootable image.
+2. Connect the SoC's **USB1 (OTG)** port on the carrier to your host, and power on the board.
+3. Build and provision with the `uuu-emmc` profile:
+
+```bash title="Host machine"
+avocado build
+avocado provision -r dev --profile uuu-emmc
+```
+
+When programming completes, set the carrier back to **eMMC** boot and power-cycle the board. It boots Avocado OS from the on-module eMMC.
+
+:::note Designing your own carrier
+For the `uuu-emmc` path, a custom carrier needs to expose the `BOOT_MODE` pins, so a board can be put into serial download, and bring the SoC's USB1 (OTG) port out to a connector. CompuLab's UCM-i.MX8M-Plus carrier design guide has the pin assignments.
 :::
 
 ### Run
 
-Insert the SD card into the carrier, set the boot mode to the SD/external media per your carrier, and power it on. The `root` user is passwordless in the `dev` runtime used by this guide; a serial console is available over the carrier's debug UART, or you can SSH into the device once it is on the network.
+The `root` user is passwordless in the `dev` runtime used by this guide. The serial console is on UART2 (`ttymxc1`) at 115200 baud, on whichever connector your carrier routes it to. You can also SSH into the device once it is on the network.
 
-For board-level setup — power, console, and boot-mode selection — see the [CompuLab UCM-i.MX8M-Plus product page](https://www.compulab.com/products/computer-on-modules/ucm-imx8m-plus-nxp-i-mx-8m-plus-som-system-on-module-computer/) and CompuLab's evaluation-kit documentation.
+The image boots the SoM's default device tree, `ucm-imx8m-plus.dtb`. The boot partition also carries CompuLab's overlays for this module (HDMI, LVDS, MIPI-DSI, CAN, USB device, RTC, SPI, PCIe and others), which a carrier extension can stack on top. Your carrier extension can also select a different base device tree, the way the IOT-GATE-iMX8PLUS extension does.
+
+For board-level setup — power, console and boot-mode selection — see the [CompuLab UCM-i.MX8M-Plus product page](https://www.compulab.com/products/computer-on-modules/ucm-imx8m-plus-nxp-i-mx-8m-plus-som-system-on-module-computer/) and CompuLab's evaluation-kit documentation.
