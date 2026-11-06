@@ -24,7 +24,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR.** On a Jetson Orin Nano 8GB, Avocado OS idles with about 7020 MiB of RAM available, against about 6625 MiB on JetPack 7.2.1 running its stock Ubuntu desktop, roughly 395 MiB more before any model is loaded. Getting a stock JetPack install onto the board took about 30 minutes of installer and manual steps, against 69 seconds of flashing for Avocado OS. [ENGINEER: the same comparison with a TensorRT model loaded on Avocado OS.]
+**TL;DR.** On a Jetson Orin Nano 8GB, Avocado OS idles with about 7020 MiB of RAM available, against about 6625 MiB on JetPack 7.2.1 running its stock Ubuntu desktop, roughly 395 MiB more before any model is loaded. Getting a stock JetPack install onto the board took about 30 minutes of installer and manual steps, against under 8 minutes for Avocado OS from the first command to a logged-in board. [ENGINEER: the same comparison with a TensorRT model loaded on Avocado OS.]
 
 {/* truncate */}
 
@@ -70,9 +70,16 @@ The times, which I did not take on one clean pass, so treat them as approximate:
 
 None of that repeats well. A hundred boards means a hundred manual installs, which does not scale.
 
-**Avocado OS** is flashed from the project with one command. The flash log shows 69 seconds from signing the binaries (00:46:39) to the device-side final-status wait (00:47:48), with the NVMe written in between. That is the flash only. [ENGINEER: the end-to-end time including the SDK install and the build, from a clean host.] The same image takes OTA updates and is managed as a fleet through Peridio, so the board is provisioned once and updated in place afterwards.
+**Avocado OS** is installed from the project with four commands, recorded in one pass from a clean project directory on 2026-11-06 (host time, from the recording's marks):
+- **`avocado install -f`:** 43 seconds, with the SDK image already on the host.
+- **`avocado build`:** 11 seconds.
+- **`avocado provision -r power --profile tegraflash-nvme`:** 5 minutes 2 seconds, including the var image build and the flash. The flash script itself ran 4 minutes 49 seconds (20:40:09 to 20:44:58). It asked for no confirmation.
+- **Boot:** 32 seconds from the power cycle to the automatic root login on the serial console.
+- **Total:** 7 minutes 45 seconds from the first `avocado install` to the login, including about 36 seconds to remove the recovery jumper by hand. Putting the board into recovery mode beforehand is not counted. Neither is the SDK image download.
 
-<PullQuote label="Setup">About **30 minutes** of installer and manual steps for stock JetPack (approximate), against **69 seconds** of flashing for Avocado OS. [ENGINEER: Avocado OS end to end, including the SDK install and build.]</PullQuote>
+All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`), on Avocado OS 2026.73 with kernel 6.18.52. The same image takes OTA updates and is managed as a fleet through Peridio, so the board is provisioned once and updated in place afterwards. [ENGINEER: the same run on a host with no cached SDK image, if you want the download included.]
+
+<PullQuote label="Setup">About **30 minutes** of installer and manual steps for stock JetPack (approximate), against **7 minutes 45 seconds** for Avocado OS from the first command to a logged-in board.</PullQuote>
 
 
 ## Result
@@ -83,6 +90,7 @@ None of that repeats well. A hundred boards means a hundred manual installs, whi
 | --- | --- | --- | --- |
 | Avocado OS, bare image | idle | 363 to 368 | not recorded |
 | Avocado OS, reference runtime | idle, one SSH session | 444 | 7020 |
+| Avocado OS, reference runtime | idle, about 45 seconds after boot, serial console only (not settled) | 389 | 7075 |
 | JetPack 7.2.1, headless | idle, one boot | 563 to 566 | not recorded |
 | JetPack 7.2.1, Ubuntu desktop | idle, cold boot, settled | 857 to 861 | 6624 to 6627 |
 | JetPack 7.2.1, Ubuntu desktop | `trtexec` ResNet-50 FP16 running (minimum available, maximum used) | 1220 | 6265 |
