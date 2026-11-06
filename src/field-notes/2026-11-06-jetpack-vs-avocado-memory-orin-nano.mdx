@@ -1,0 +1,131 @@
+---
+title: 'How much of an Orin Nano 8GB is left for your model: JetPack 7.2 vs Avocado OS'
+description: 'Same board, two OS images: idle memory, then with a TensorRT model loaded. Avocado OS idles at 363 to 444 MiB used on an Orin Nano 8GB, and this note measures how much RAM each OS leaves for the workload.'
+date: 2026-11-06
+draft: true
+authors: [jtia]
+tags: [jetson, orin-nano, memory, tensorrt, jetpack]
+category: 'Memory'
+tested_against: 'Avocado CLI 1.1.0-dev, linux-yocto 6.18.52, 2026 next feed; JetPack 7.2.1 (Ubuntu); Jetson Orin Nano 8GB devkit'
+poster: jtia
+lift_for_blog: 'On an 8 GB module, the RAM an OS leaves for the model decides the model size, the stream count or whether a cheaper module will do.'
+promote_to_track: ''
+---
+
+import PullQuote from '@site/src/components/PullQuote'
+import TestStatus from '@site/src/components/TestStatus'
+
+<TestStatus
+  targets={['jetson-orin-nano-devkit']}
+  cli="1.1.0-dev"
+  reference={{
+    label: 'jetson-orin-nano-power',
+    href: 'https://github.com/avocado-linux/references/tree/main/jetson-orin-nano-power',
+  }}
+/>
+
+**TL;DR.** On a Jetson Orin Nano 8GB, a bare Avocado OS image idles at 363 to 368 MiB of used memory, and a runtime with four extensions and an SSH session at 444 MiB. [ENGINEER: the headline number, the RAM left for a TensorRT model on JetPack 7.2 as a typical user runs it (Ubuntu desktop) against Avocado OS on the same board.]
+
+{/* truncate */}
+
+## What this is
+
+Avocado OS is a Yocto-based embedded Linux distribution that ships as an immutable root filesystem plus extensions layered on top of it. Peridio builds the device fleet platform around it. The Jetson Orin Nano 8GB has 8 GB of RAM shared between the CPU and the GPU, so whatever the operating system holds is memory a model cannot use. Add TensorRT on top of JetPack and a large part of the 8 GB can be gone before your application starts.
+
+This note puts the same board through two OS images and measures what is left for the workload: first at idle, then with a TensorRT model loaded.
+
+## How I measured it
+
+The board is a Jetson Orin Nano 8GB devkit. The two images:
+
+- **JetPack 7.2.1** as a typical user runs it: the Ubuntu desktop image from NVIDIA's installer, default services, no trimming. [ENGINEER: confirm the exact image, the first-boot state, and whether the desktop session was logged in.]
+- **Avocado OS** from the `jetson-orin-nano-power` reference: the `avocado-bsp-jetson-orin-nano`, `avocado-ext-dev`, `avocado-ext-sshd-dev` and `avocado-ext-bringup` extensions on linux-yocto 6.18.52.
+
+Memory is read on the device after the boot has settled, with one command on both sides:
+
+```bash
+free -m | awk 'NR==2{print $3 " MiB used, " $7 " MiB available"}'
+```
+
+For the loaded case, the same ONNX model is built into a TensorRT engine and run on each OS, and the same command is read while it runs. [ENGINEER: name the model, the precision, the batch size and how long the engine ran before the reading.]
+
+## Result
+
+<PullQuote>[ENGINEER: headline, for example "X MiB left for the model on Avocado OS against Y MiB on JetPack"]</PullQuote>
+
+| Image | State | Used (MiB) | Available (MiB) |
+| --- | --- | --- | --- |
+| Avocado OS, bare image | idle | 363 to 368 | not recorded |
+| Avocado OS, reference runtime | idle, one SSH session | 444 | 7020 |
+| JetPack 7.2.1, headless | idle, one boot | 563 to 566 | not recorded |
+| JetPack 7.2.1, Ubuntu desktop | idle | [ENGINEER] | [ENGINEER] |
+| Avocado OS, reference runtime | TensorRT model loaded | [ENGINEER] | [ENGINEER] |
+| JetPack 7.2.1, Ubuntu desktop | TensorRT model loaded | [ENGINEER] | [ENGINEER] |
+
+The bare-image figures are the same on the L4T 6.8 and linux-yocto 6.18 kernels. The headless JetPack row is one boot and is not the comparison baseline: a typical user runs the Ubuntu desktop, so that row is what this note is measured against. [ENGINEER: record Available for every row.]
+
+### What the headroom buys
+
+[ENGINEER: close with what the difference buys on an 8 GB module: a bigger model, more concurrent streams, or a cheaper module. Use the measured numbers only.]
+
+### Idle power, on the same board
+
+The module's own power monitor (INA3221, VDD_IN rail) reads 4.75 W on the Avocado reference from a cold boot and 4.72 W after a warm reboot. JetPack 7.2.1 read 4.84 W on the same board, from `tegrastats`, on one headless boot. That is module power only: the carrier, fan and peripherals are excluded. The gap is inside the noise, and it was read against the headless baseline, not the desktop one. [ENGINEER: rerun the JetPack power reading on the Ubuntu desktop image with the same tool.]
+
+The Avocado figure depends on two things set at boot: the 25 W power mode, and the `schedutil` CPU and `simple_ondemand` GPU governors. Without them the same runtime idled at 5.47 W (60 s window), because the Jetson kernels boot with the `performance` governors and the GPU sits at 918 MHz while nothing runs. The reference project ships `verify-power.sh`, which reads the monitor so you can check the number on your own hardware.
+
+## Issues Encountered
+
+**The JetPack baseline is thin.** The 563 to 566 MiB and 4.84 W figures are one boot, one tool and one day, on a headless image, and their conditions (power mode, services) are not fully recorded. "Within noise" is the strongest claim the power data supports.
+
+**`avocado provision` could not flash from its container until the SDK container was privileged.** It failed at the first flash step with `could not retrieve chip ID`. Inside an SDK container started without `--privileged` there is no `/dev/bus/usb`, and `tegrarcm_v2 --new_session --chip 0x23 --instance 10-1 --uid` exits 8 with no output; the same command in a privileged container prints the chip ID. Adding this to the project's `sdk:` block fixed it, and a provision with it exited 0 and booted from NVMe:
+
+```yaml
+sdk:
+  container_args:
+    - --network=host
+    - --privileged
+    - -v /dev:/dev
+    - -v /sys:/sys
+```
+
+[ENGINEER: add the `container_args` block to the `jetson-orin-nano-power` reference, then confirm it flashes from a clean checkout. I ran that provision from a project copy, not from the published reference.]
+
+**The 15 W mode is not a battery mode for CPU-only work.** On an earlier bitbake-built image running a ResNet-50 FP16 TensorRT engine, the 15 W mode (mode 0) gave 11.4 W and 325 queries per second against 17.6 W and 483 at 25 W. On this runtime a CPU-only load does not follow that pattern: with six `sha256sum` processes the 15 W mode finished in 12 s at 7.05 W and the 25 W mode in 14 s at 6.64 W, repeated twice. `nvpmodel.conf` caps the CPU at 1497.6 MHz and the GPU at 612 MHz in mode 0, and at 1344 MHz and 918 MHz in mode 1, so a GPU-bound load is where the 15 W mode would be expected to cost throughput. I did not repeat the TensorRT comparison on this runtime.
+
+**The base runtime can hang at boot.** On some boots the root filesystem blocks at `Early TPM SRK Setup`, with no timeout, waiting for a TPM device the firmware never creates (the fTPM is not enabled). Masking `systemd-tpm2-setup-early.service` on the kernel command line avoided it in every boot I tried. The reference does not set the mask: it would hide a hang whose cause is unknown.
+
+**`/boot/efi` fails to mount on an SD card, and boot continues.** The journal shows `Failed to create mount point '/boot/efi', ignoring: Read-only file system`, because the erofs rootfs has no `/boot/efi` directory. The unit is `WantedBy=local-fs.target`, not required, which is why boot continues.
+
+**The debug extensions give root to anyone with the console.** `avocado-ext-sshd-dev` (root SSH login), `avocado-ext-dev` (development tools) and `avocado-ext-bringup` (a root serial console) are development extensions, and they are part of the 444 MiB. Remove all three before shipping. [ENGINEER: record the idle memory with only the board support extension, so the figure reflects a shipping image.]
+
+**One feed, one board.** Only the 2026 `next` feed and the Orin Nano 8GB devkit were checked. [ENGINEER: confirm `avocado-ext-bringup` and the governors unit in `avocado-bsp-jetson-orin-nano` are published to the feed before this note ships; neither was when the reference project's first CI run tried to install it.]
+
+## Reproduce it
+
+You need a Linux host with Docker and the Avocado CLI, a Jetson Orin Nano 8GB devkit, a USB-C cable, a jumper wire for the FC_REC pin, and a USB serial adapter for the debug console. The project's `getting_started.md` has the full flow, including recovery mode. [ENGINEER: run the whole flow once from a clean checkout of the published reference.]
+
+### Avocado OS side
+
+```bash
+avocado init --reference jetson-orin-nano-power jetson-orin-nano-power
+cd jetson-orin-nano-power
+avocado install -f
+avocado build
+avocado provision -r power --profile tegraflash-nvme
+```
+
+Use `--profile tegraflash-sd` for an SD card. Both erase the target entirely and rewrite the QSPI firmware and the UEFI variables. Get onto the board through the debug console (115200 baud), install your key in `/var/lib/ssh/authorized_keys`, then read memory and power from the host:
+
+```bash
+ssh root@<device-ip> "free -m | awk 'NR==2{print \$3 \" MiB used, \" \$7 \" MiB available\"}'"
+ssh root@<device-ip> sh -s < verify-power.sh
+```
+
+### JetPack side
+
+[ENGINEER: the exact JetPack 7.2.1 install steps, the settle time before reading, and the commands for reading memory and power with `tegrastats`.]
+
+### With a model loaded
+
+[ENGINEER: the model file, the `trtexec` command or the `jetson-trt` reference runtime used on each side, and when the memory reading is taken. The `jetson-trt` reference in `avocado-linux/references` builds a TensorRT engine from an ONNX model on the device and serves its throughput.]
