@@ -49,6 +49,17 @@ free -m | awk 'NR==2{print $3 " MiB used, " $7 " MiB available"}'
 
 For the loaded case, the same ONNX model is built into a TensorRT engine and run on each OS, and the same command is read while it runs. [ENGINEER: name the model, the precision, the batch size and how long the engine ran before the reading.]
 
+## Getting each OS onto the board
+
+Memory is the number this note is about, but the setup cost decides whether a result like it matters for a fleet. I installed both.
+
+**JetPack** comes as a large download with a lot of software in it, and the install is manual: several steps run by a person at the board, and the result is a general-purpose Ubuntu image carrying the usual desktop and server services that an embedded product then has to strip back out. [ENGINEER: the ISO size, the number of manual steps, the wall-clock time from download to a booted board, and the specific Ubuntu problems that cost time on an embedded device.] None of that repeats well. A hundred boards means a hundred manual installs, which does not scale.
+
+**Avocado OS** is flashed from the project with one command. The flash log shows 69 s from signing the binaries (00:46:39) to the device-side final-status wait (00:47:48), with the NVMe written in between. [ENGINEER: the end-to-end time including the SDK install and the build, from a clean host.] The same image takes OTA updates and is managed as a fleet through Peridio, so the board is provisioned once and updated in place afterwards.
+
+<PullQuote label="Setup">[ENGINEER: one line with the measured install time for each OS on the same board]</PullQuote>
+
+
 ## Result
 
 <PullQuote>[ENGINEER: headline, for example "X MiB left for the model on Avocado OS against Y MiB on JetPack"]</PullQuote>
