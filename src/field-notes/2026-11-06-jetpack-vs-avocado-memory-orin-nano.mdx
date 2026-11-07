@@ -98,6 +98,7 @@ All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`
 | Avocado OS, reference runtime plus TensorRT extension | idle, cold boot, settled | 390 to 391 | 7072 to 7073 |
 | Avocado OS, reference runtime plus TensorRT extension | `trtexec` ResNet-50 FP16 running (minimum available, maximum used) | 837 | 6626 |
 | Avocado OS, reference runtime plus TensorRT extension | idle again after the run | 573 to 577 | 6886 to 6890 |
+| Avocado OS, board support extension only | idle, cold boot, settled | 215 to 216 | 7072 |
 
 The JetPack desktop rows are one install and one cold boot, three idle readings each, on 2026-11-03. The model cost about 361 MiB of available RAM at its minimum point (6626 to 6265), and about 166 MiB stayed in use after it exited. The same run gave 580 queries per second on the cold boot. The bare-image Avocado figures are the same on the L4T 6.8 and linux-yocto 6.18 kernels. The headless JetPack row is one boot and is not the comparison baseline: a typical user runs the Ubuntu desktop, so that is what this note is measured against. The idle gap of about 447 MiB is 7072 to 7073 minus 6624 to 6627, and it compares two different kernels, so it is approximate. The Avocado OS TensorRT rows are one cold boot and one run on 2026-11-07 (board clock), with three idle readings each. The model cost about 446 MiB of available RAM at its minimum point (7072 to 6626), and about 182 MiB stayed in use after it exited. The same run gave 599.1 queries per second and a mean latency of 1.711 ms.
 
@@ -138,7 +139,7 @@ The block is in the `jetson-orin-nano-power` reference. I ran the flash from a c
 
 **`/boot/efi` fails to mount on an SD card, and boot continues.** The journal shows `Failed to create mount point '/boot/efi', ignoring: Read-only file system`, because the erofs rootfs has no `/boot/efi` directory. The unit is `WantedBy=local-fs.target`, not required, which is why boot continues.
 
-**The debug extensions give root to anyone with the console.** `avocado-ext-sshd-dev` (root SSH login), `avocado-ext-dev` (development tools) and `avocado-ext-bringup` (a root serial console) are development extensions, and they are part of the 444 MiB. Remove all three before shipping. [ENGINEER: record the idle memory with only the board support extension, so the figure reflects a shipping image.]
+**The debug extensions give root to anyone with the console.** `avocado-ext-sshd-dev` (root SSH login), `avocado-ext-dev` (development tools) and `avocado-ext-bringup` (a root serial console) are development extensions, and they are part of the 444 MiB. Remove all three before shipping. With only `avocado-bsp-jetson-orin-nano` in the runtime (one cold boot on 2026-11-07, board clock, an empty root password on the serial console for access), the idle reading was 7072 MiB available after 240 seconds of uptime, three readings at 7071.8, 7072.1 and 7072.3 MiB, the same as the image with the debug extensions and the TensorRT extension. The Used column fell from 390 to 391 MiB to 215 to 216 MiB, but it depends on how the kernel counts buffer cache, so compare Available between images, not Used.
 
 **One feed, one board.** Only the 2026 `next` feed and the Orin Nano 8GB devkit were checked.
 
