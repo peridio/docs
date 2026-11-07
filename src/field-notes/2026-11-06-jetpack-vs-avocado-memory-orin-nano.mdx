@@ -114,37 +114,6 @@ The Avocado figure depends on two things set at boot: the 25 W power mode, and t
 
 These power figures come from a local build of `avocado-bsp-jetson-orin-nano` that carries the governors unit. The reference depends on that change, which is in review (bsp-jetson-orin-nano PR #6). The BSP currently on the feed, 0.2.1, does not have it: on a board flashed from the feed, `avocado-idle-governors.service` does not exist, `nvpmodel.service` and `nvpower.service` are `disabled`, `nvpmodel -q` prints `power mode is not set!`, the GPU devfreq node is missing and the CPU governor is `performance`. Until that change is merged and published, a project built from the feed does not reach these figures.
 
-## Issues Encountered
-
-**The JetPack baseline is thin.** The desktop memory figures are one install and one cold boot, and the 563 to 566 MiB and 4.84 W figures are one boot and one tool on a headless image, with their conditions (power mode, services) not fully recorded. "Within noise" is the strongest claim the power data supports.
-
-**`avocado provision` could not flash from its container until the SDK container was privileged.** It failed at the first flash step with `could not retrieve chip ID`. Inside an SDK container started without `--privileged` there is no `/dev/bus/usb`, and `tegrarcm_v2 --new_session --chip 0x23 --instance 10-1 --uid` exits 8 with no output; the same command in a privileged container prints the chip ID. Adding this to the project's `sdk:` block fixed it, and a provision with it exited 0 and booted from NVMe:
-
-```yaml
-sdk:
-  container_args:
-    - --network=host
-    - --privileged
-    - -v /dev:/dev
-    - -v /sys:/sys
-```
-
-The block is in the `jetson-orin-nano-power` reference. I ran the flash from a clean project copy of the reference branch, with `avocado-ext-bringup` as a local path extension, and not yet from `avocado init --reference` on the published repository, which waits for the reference to merge.
-
-**The 15 W mode is not a battery mode for CPU-only work.** On an earlier bitbake-built image running a ResNet-50 FP16 TensorRT engine, the 15 W mode (mode 0) gave 11.4 W and 325 queries per second against 17.6 W and 483 at 25 W. On this runtime a CPU-only load does not follow that pattern: with six `sha256sum` processes the 15 W mode finished in 12 s at 7.05 W and the 25 W mode in 14 s at 6.64 W, repeated twice. `nvpmodel.conf` caps the CPU at 1497.6 MHz and the GPU at 612 MHz in mode 0, and at 1344 MHz and 918 MHz in mode 1, so a GPU-bound load is where the 15 W mode would be expected to cost throughput. I did not repeat the TensorRT comparison on this runtime.
-
-**The first boot after a flash does not always reach Linux.** The three install recordings booted straight to the login. On both flashes of the TensorRT image the board stopped at the UEFI shell (`Shell>`, after the `startup.nsh` countdown) and a `reset` from that prompt booted Avocado OS. I did not find why, and a later warm `reboot` went straight to the login.
-
-**The base runtime can hang at boot.** On some boots the root filesystem blocks at `Early TPM SRK Setup`, with no timeout, waiting for a TPM device the firmware never creates (the fTPM is not enabled). Masking `systemd-tpm2-setup-early.service` on the kernel command line avoided it in every boot I tried. The reference does not set the mask: it would hide a hang whose cause is unknown.
-
-**`/boot/efi` fails to mount on an SD card, and boot continues.** The journal shows `Failed to create mount point '/boot/efi', ignoring: Read-only file system`, because the erofs rootfs has no `/boot/efi` directory. The unit is `WantedBy=local-fs.target`, not required, which is why boot continues.
-
-**The debug extensions give root to anyone with the console.** `avocado-ext-sshd-dev` (root SSH login), `avocado-ext-dev` (development tools) and `avocado-ext-bringup` (a root serial console) are development extensions, and they are part of the 444 MiB. Remove all three before shipping. With only `avocado-bsp-jetson-orin-nano` in the runtime (one cold boot on 2026-11-07, board clock, an empty root password on the serial console for access), the idle reading was 7072 MiB available after 240 seconds of uptime, three readings at 7071.8, 7072.1 and 7072.3 MiB, the same as the image with the debug extensions and the TensorRT extension. The Used column fell from 390 to 391 MiB to 215 to 216 MiB, but it depends on how the kernel counts buffer cache, so compare Available between images, not Used.
-
-**One feed, one board.** Only the 2026 `next` feed and the Orin Nano 8GB devkit were checked.
-
-**The reference depends on two things that are not published yet.** `avocado-ext-bringup` is not on the feed (the reference's first CI run failed on it with `Unable to find a match`, and the feed's package index for the target has no entry for it), so the demo used it as a local path extension. The governors unit is not in the feed's BSP 0.2.1, as described under idle power. Both PRs stay drafts until the BSP change and the bringup extension are published.
-
 ## Reproduce it
 
 You need a Linux host with Docker and the Avocado CLI, a Jetson Orin Nano 8GB devkit, a USB-C cable, a jumper wire for the FC_REC pin, and a USB serial adapter for the debug console. The project's `getting_started.md` has the full flow, including recovery mode.
