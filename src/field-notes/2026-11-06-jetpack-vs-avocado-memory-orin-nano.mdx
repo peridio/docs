@@ -24,7 +24,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR.** On a Jetson Orin Nano 8GB, Avocado OS idles with about 7020 MiB of RAM available, against about 6625 MiB on JetPack 7.2.1 running its stock Ubuntu desktop, roughly 395 MiB more before any model is loaded. Getting a stock JetPack install onto the board took about 30 minutes of installer and manual steps, against about 7 minutes for Avocado OS from the first command to a logged-in board. [ENGINEER: the same comparison with a TensorRT model loaded on Avocado OS.]
+**TL;DR.** On a Jetson Orin Nano 8GB, Avocado OS idles with about 7072 MiB of RAM available, against about 6625 MiB on JetPack 7.2.1 running its stock Ubuntu desktop, roughly 447 MiB more, and it still has 6626 MiB available while a ResNet-50 FP16 TensorRT engine runs, against 6265 MiB on JetPack. Getting a stock JetPack install onto the board took about 30 minutes of installer and manual steps, against about 7 minutes for Avocado OS from the first command to a logged-in board.
 
 {/* truncate */}
 
@@ -47,7 +47,7 @@ Memory is read on the device after the boot has settled, with one command on bot
 free -m | awk 'NR==2{print $3 " MiB used, " $7 " MiB available"}'
 ```
 
-For the loaded case, the same ONNX model is built into a TensorRT engine and run on each OS, and memory is read while it runs. On JetPack the model is `resnet50-v1-12.onnx` from the ONNX model zoo (102,576,593 bytes), built with `trtexec --onnx=... --fp16` and run for 60 seconds, with `MemAvailable` sampled every 2 seconds in the 25 W mode. The protocol is a cold boot, 4 minutes to settle, three idle readings 5 seconds apart, the 60-second run, then three idle readings again. [ENGINEER: the same run on Avocado OS, with the same model and flags.]
+For the loaded case, the same ONNX model is built into a TensorRT engine and run on each OS, and memory is read while it runs. On JetPack the model is `resnet50-v1-12.onnx` from the ONNX model zoo (102,576,593 bytes), built with `trtexec --onnx=... --fp16` and run for 60 seconds, with `MemAvailable` sampled every 2 seconds in the 25 W mode. The protocol is a cold boot, 4 minutes to settle, three idle readings 5 seconds apart, the 60-second run, then three idle readings again. On Avocado OS the same model was fetched on the board (sha256 checked), built with the same flags (`/usr/src/tensorrt/bin/trtexec --onnx=... --saveEngine=... --fp16`, 46.8 s, a 51,525,476-byte engine) and run with `--loadEngine=... --duration=60 --warmUp=1000`, after a warm reboot and 240 seconds of uptime, with `MemAvailable` sampled every 2 seconds (32 samples).
 
 ## Getting each OS onto the board
 
@@ -84,7 +84,7 @@ All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`
 
 ## Result
 
-<PullQuote>Avocado OS leaves about **395 MiB** more RAM available at idle: **7020 MiB** against about **6625 MiB** on JetPack's Ubuntu desktop. [ENGINEER: the loaded figure on Avocado OS.]</PullQuote>
+<PullQuote>Avocado OS leaves about **447 MiB** more RAM available at idle (**7072 MiB** against about **6625 MiB** on JetPack's Ubuntu desktop) and **361 MiB** more while the model runs (**6626 MiB** against **6265 MiB**).</PullQuote>
 
 | Image | State | Used (MiB) | Available (MiB) |
 | --- | --- | --- | --- |
@@ -95,13 +95,15 @@ All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`
 | JetPack 7.2.1, Ubuntu desktop | idle, cold boot, settled | 857 to 861 | 6624 to 6627 |
 | JetPack 7.2.1, Ubuntu desktop | `trtexec` ResNet-50 FP16 running (minimum available, maximum used) | 1220 | 6265 |
 | JetPack 7.2.1, Ubuntu desktop | idle again after the run | 1025 | 6459 to 6460 |
-| Avocado OS, reference runtime | TensorRT model loaded | [ENGINEER] | [ENGINEER] |
+| Avocado OS, reference runtime plus TensorRT extension | idle, cold boot, settled | 390 to 391 | 7072 to 7073 |
+| Avocado OS, reference runtime plus TensorRT extension | `trtexec` ResNet-50 FP16 running (minimum available, maximum used) | 837 | 6626 |
+| Avocado OS, reference runtime plus TensorRT extension | idle again after the run | 573 to 577 | 6886 to 6890 |
 
-The JetPack desktop rows are one install and one cold boot, three idle readings each, on 2026-11-03. The model cost about 361 MiB of available RAM at its minimum point (6626 to 6265), and about 166 MiB stayed in use after it exited. The same run gave 580 queries per second on the cold boot. The bare-image Avocado figures are the same on the L4T 6.8 and linux-yocto 6.18 kernels. The headless JetPack row is one boot and is not the comparison baseline: a typical user runs the Ubuntu desktop, so that is what this note is measured against. The 395 MiB comes from 7020 minus 6624 to 6627, and it compares two different kernels, so it is approximate.
+The JetPack desktop rows are one install and one cold boot, three idle readings each, on 2026-11-03. The model cost about 361 MiB of available RAM at its minimum point (6626 to 6265), and about 166 MiB stayed in use after it exited. The same run gave 580 queries per second on the cold boot. The bare-image Avocado figures are the same on the L4T 6.8 and linux-yocto 6.18 kernels. The headless JetPack row is one boot and is not the comparison baseline: a typical user runs the Ubuntu desktop, so that is what this note is measured against. The idle gap of about 447 MiB is 7072 to 7073 minus 6624 to 6627, and it compares two different kernels, so it is approximate. The Avocado OS TensorRT rows are one cold boot and one run on 2026-11-07 (board clock), with three idle readings each. The model cost about 446 MiB of available RAM at its minimum point (7072 to 6626), and about 182 MiB stayed in use after it exited. The same run gave 599.1 queries per second and a mean latency of 1.711 ms.
 
 ### What the headroom buys
 
-[ENGINEER: close with what the difference buys on an 8 GB module: a bigger model, more concurrent streams, or a cheaper module. Use the measured numbers only, and add the loaded Avocado OS figure first.]
+The ResNet-50 run cost about 446 MiB of available RAM on Avocado OS (7072 to 6626) and about 361 MiB on JetPack (6626 to 6265) at their minimum points. The idle gap of about 447 MiB is therefore roughly the footprint of one more copy of this workload on Avocado OS. On an 8 GB module that is room for a second model or more concurrent streams before reaching for a bigger module. Each figure is one run, and the Avocado OS run used the feed's board support package, which does not set the 25 W power mode, so its 599.1 queries per second is not comparable with JetPack's 580.2.
 
 ### Idle power, on the same board
 
@@ -129,6 +131,8 @@ sdk:
 The block is in the `jetson-orin-nano-power` reference. I ran the flash from a clean project copy of the reference branch, with `avocado-ext-bringup` as a local path extension, and not yet from `avocado init --reference` on the published repository, which waits for the reference to merge.
 
 **The 15 W mode is not a battery mode for CPU-only work.** On an earlier bitbake-built image running a ResNet-50 FP16 TensorRT engine, the 15 W mode (mode 0) gave 11.4 W and 325 queries per second against 17.6 W and 483 at 25 W. On this runtime a CPU-only load does not follow that pattern: with six `sha256sum` processes the 15 W mode finished in 12 s at 7.05 W and the 25 W mode in 14 s at 6.64 W, repeated twice. `nvpmodel.conf` caps the CPU at 1497.6 MHz and the GPU at 612 MHz in mode 0, and at 1344 MHz and 918 MHz in mode 1, so a GPU-bound load is where the 15 W mode would be expected to cost throughput. I did not repeat the TensorRT comparison on this runtime.
+
+**The first boot after a flash does not always reach Linux.** The three install recordings booted straight to the login. On both flashes of the TensorRT image the board stopped at the UEFI shell (`Shell>`, after the `startup.nsh` countdown) and a `reset` from that prompt booted Avocado OS. I did not find why, and a later warm `reboot` went straight to the login.
 
 **The base runtime can hang at boot.** On some boots the root filesystem blocks at `Early TPM SRK Setup`, with no timeout, waiting for a TPM device the firmware never creates (the fTPM is not enabled). Masking `systemd-tpm2-setup-early.service` on the kernel command line avoided it in every boot I tried. The reference does not set the mask: it would hide a hang whose cause is unknown.
 
@@ -183,4 +187,13 @@ ssh root@<device-ip> sh -s < verify-power.sh
 
 ### With a model loaded
 
-[ENGINEER: the model file, the `trtexec` command or the `jetson-trt` reference runtime used on each side, and when the memory reading is taken. The `jetson-trt` reference in `avocado-linux/references` builds a TensorRT engine from an ONNX model on the device and serves its throughput.]
+The model is `resnet50-v1-12.onnx` from the ONNX model zoo (102,576,593 bytes, sha256 `3f03fdef724b22947eed826f1eef1dc5c34151bb4c37d634f1db89dfa2dd1526`). On Avocado OS the runtime carries one more extension, a local path extension whose `packages:` list names `tensorrt-trtexec-prebuilt`, `tensorrt-plugins-prebuilt`, `libnvinfer10`, `libnvinfer-builder-resource-ptx`, `cudnn` and `libcublas`, all from the feed at the JetPack 7.2.1 versions (TensorRT 10.16.2.10, cuDNN 9.20.0.46, cuBLAS 13.4.1.3). Without `tensorrt-plugins-prebuilt`, `trtexec` stops with `Unable to open library: libnvinfer_plugin.so.10`. On the board:
+
+```bash
+mkdir -p /var/trt && cd /var/trt
+curl -ksSL -o resnet50-v1-12.onnx 'https://media.githubusercontent.com/media/onnx/models/main/validated/vision/classification/resnet/model/resnet50-v1-12.onnx'
+sha256sum resnet50-v1-12.onnx
+/usr/src/tensorrt/bin/trtexec --onnx=resnet50-v1-12.onnx --saveEngine=resnet50.plan --fp16
+```
+
+The image has no CA bundle, so `curl -k` is used and the checksum is what establishes the file. Then reboot, wait 240 seconds, read memory three times 5 seconds apart, run `trtexec --loadEngine=resnet50.plan --duration=60 --warmUp=1000` while `MemAvailable` is sampled every 2 seconds, and read memory three more times. The same flags on JetPack use `/usr/src/tensorrt/bin/trtexec` as well.
