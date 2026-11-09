@@ -72,6 +72,8 @@ JetPack comes as a 5.0 GB ISO with a lot of software in it, and the install is m
 Problems that cost time on an embedded device:
 
 - On four runs on the same board on 2026-11-06, the stock installer stopped at Step 9 of 13 with `An error occurred. Press enter to start a shell`. The interface `enP8p1s0` was never brought up in the runs I inspected, and I got a DHCP lease by hand with `ip link set enP8p1s0 up` and `dhcpcd`. I did not isolate the cause.
+- The install target decides how much the installer asks. `Install on NVMe` runs an unattended install from a fixed configuration, with no prompts for keyboard, user, storage layout or network, so there is no point at which to fix a network problem before it fails. The other targets open the interactive installer for those choices.
+- `Install on microSD` did not work on this bench on 2026-11-09. The installer stopped with `preseed: force-bootdisk=mmcblk0 is not a valid storage device. Starting interactive installer.`, because `lsblk` listed no `mmcblk0`. The card sat behind an SDWire3 SD-card mux, which UEFI listed as `UEFI SanDisk SN64G SD Device`. I did not isolate whether the mux or the installer kernel hides it. The install ended up on the NVMe, which erased the Avocado OS image that was there.
 - The stock image's `sshd` has no host keys, and I enabled it by hand to reach the board.
 - 365 package updates were pending after the install.
 - At idle the top resident processes were `gnome-shell` (226 MB), `nvargus-daemon` (135 MB), `mutter-x11-frames` (122 MB), `Xorg` (84 MB) and `dockerd` (79 MB).
@@ -89,7 +91,7 @@ The times were not taken on one clean pass, so treat them as approximate:
 ### Takeaways
 
 - **Numbers:** about 30 minutes to a configured board, 857 to 861 MiB of RAM used at idle, a 1220 MiB peak while the model runs, and 6265 MiB left at the low point.
-- **Experience:** 12 manual steps on every board, and a stock installer that stopped part-way on four runs in a row.
+- **Experience:** 12 manual steps on every board, a stock installer that stopped part-way on four runs in a row, and an unattended install only when the target is the NVMe.
 - **Production readiness:** a general-purpose Ubuntu desktop with `dockerd` running, 365 pending updates and no SSH host keys until someone enables `sshd`. A hundred boards means a hundred manual installs, which does not scale.
 - **Against Avocado OS:** about 4.3 times as long to set up, about 2.2 times the RAM used at idle, about 46% more used at the peak of the model run, and 447 MiB less available at idle.
 
