@@ -180,7 +180,7 @@ The model costs about the same RAM on both images, 389 MiB of available memory o
 ![GPU and CPU load through the model run. The GPU sits at about 98% on both images while the model runs and at 0% otherwise. CPU use is about 10% on JetPack and about 5% on Avocado OS.](/img/field-notes/jetpack-vs-avocado-gpu-cpu-load.svg)
 
 - **GPU and CPU load:** both images keep the GPU near 98% for the whole run (95% to 96% on average), so the engine is GPU-bound on both. The CPU averaged 10.7% on JetPack against 5.2% on Avocado OS. JetPack's figures come from `tegrastats`, Avocado OS's from sysfs and `/proc/stat`, because the Avocado image has no `tegrastats`.
-- **Throughput:** 466 to 471 queries per second on JetPack (mean latency 2.19 ms, six runs including one on a freshly rebuilt engine) and 601.6 on Avocado OS (1.70 ms). Do not read that as an OS difference. JetPack ran in the 25 W power mode with the GPU at about 910 MHz. The Avocado run came from the feed's board support package, which does not set the power mode, so its CPU and GPU governors sit on `performance`. The next section has the power side of the same difference.
+- **Throughput:** 466 to 471 queries per second on JetPack (2.19 ms mean latency, six runs) against 601.6 on Avocado OS (1.70 ms). That is not an OS difference: JetPack ran in the 25 W power mode and this Avocado image ran without one. The power section below has the details.
 - **Conditions:** one install and one cold boot per image on 2026-11-09, three idle readings each. Earlier runs landed within a few MiB of these: 857 to 861 MiB used on JetPack on 2026-11-03, and 390 to 391 MiB on Avocado OS on 2026-11-07.
 
 <details>
