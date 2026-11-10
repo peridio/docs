@@ -384,13 +384,13 @@ avocado provision dev
 Now deploy the updated system to your device using the `avocado deploy` command:
 
 ```bash
-avocado deploy -r dev -d 192.168.0.103
+avocado deploy dev -d 192.168.0.103
 ```
 
 Replace `192.168.0.103` with your device's IP address or use the hostname if mDNS resolution is working:
 
 ```bash
-avocado deploy -r dev -d avocado-raspberrypi4
+avocado deploy dev -d avocado-raspberrypi4
 ```
 
 ##### Deployment process
@@ -418,7 +418,7 @@ This sideloading workflow enables rapid iteration during development:
 
 1. **Make changes** to your `avocado.yaml` configuration
 2. **Rebuild** with `avocado install && avocado build && avocado provision dev`
-3. **Deploy** with `avocado deploy -r dev -d <device-address>`
+3. **Deploy** with `avocado deploy dev -d <device-address>`
 4. **Test** your changes on the live device
 5. **Repeat** as needed
 
