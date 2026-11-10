@@ -3,7 +3,7 @@ import { SolutionData } from '../types'
 export const data: SolutionData = {
   title: 'Raspberry Pi 4 Model B Device Management | Production-Ready OTA',
   description:
-    'Deploy Raspberry Pi 4 Model B devices in production with Peridio Fleet + Avocado OS. Yocto-based, secure OTA updates, enterprise support for IoT and edge computing.',
+    'Deploy Raspberry Pi 4 Model B devices in production with Peridio Fleet and Avocado OS: Yocto-based, with secure OTA updates.',
   keywords:
     'raspberry pi 4 model b, device management, ota updates, yocto, embedded linux, iot, edge computing, fleet management',
   canonicalUrl: 'https://docs.peridio.com/solutions/raspberry-pi/raspberry-pi-4-model-b',

@@ -3,7 +3,7 @@ import { SolutionData } from '../types'
 export const data: SolutionData = {
   title: 'NXP FRDM i.MX 93 Edge AI Development | Industrial Linux | Peridio',
   description:
-    'Production-ready NXP FRDM i.MX 93 development with dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and secure edge connectivity. Enterprise OTA and fleet management.',
+    'Production-ready NXP FRDM i.MX 93 with dual Cortex-A55, Cortex-M33 and an Ethos-U65 NPU, plus secure OTA and fleet management.',
   keywords:
     'nxp frdm imx93, i.mx 93, cortex-a55, edge ai, ethos u65, industrial linux, embedded, fleet management',
   canonicalUrl: 'https://docs.peridio.com/solutions/nxp/frdm-93',

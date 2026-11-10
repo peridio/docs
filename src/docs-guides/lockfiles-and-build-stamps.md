@@ -2,7 +2,7 @@
 sidebar_position: 9
 title: 'Lockfiles and build stamps'
 copy_markdown: true
-description: 'How Avocado pins package versions across builds with a lockfile, and how it caches completed build steps with stamps — plus the commands to inspect, invalidate, and rebuild from a clean state.'
+description: 'How Avocado pins package versions with a lockfile and caches completed build steps with stamps, and how to inspect, invalidate and rebuild clean.'
 ---
 
 Avocado has two internal subsystems that determine what gets built and when:

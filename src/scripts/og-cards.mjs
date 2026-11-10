@@ -21,15 +21,14 @@ import process from 'node:process'
 import { pathToFileURL } from 'node:url'
 import { OUT_DIR, readDescriptions, readNotes } from './og/notes.mjs'
 import { loadFonts, renderNote } from './og/render.mjs'
-import { OG_CANVAS, OG_MAX_BYTES } from './og/tokens.mjs'
+import { OG_CANVAS, OG_DESCRIPTION_MAX, OG_MAX_BYTES } from './og/tokens.mjs'
 
 const MANIFEST = path.join(OUT_DIR, 'manifest.json')
 const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex')
 
-// Search engines and link previews truncate a description past roughly this,
-// and its first sentence is the card's kicker. Every note, drafts included,
-// must stay at or under it; both `og` and `og:check` fail otherwise.
-export const DESCRIPTION_MAX = 160
+// Every note, drafts included, must keep its description at or under
+// OG_DESCRIPTION_MAX; both `og` and `og:check` fail otherwise.
+export const DESCRIPTION_MAX = OG_DESCRIPTION_MAX
 
 async function renderAll() {
   const fonts = await loadFonts()

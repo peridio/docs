@@ -3,7 +3,7 @@ sidebar_position: 1.5
 title: 'Boot device selection'
 copy_markdown: true
 draft: true
-description: 'Choose which storage device a board boots from. Provisioning decides where an image is written; firmware decides which disk boots, and on a board with two bootable disks those are separate choices.'
+description: 'Choose which storage device a board boots from. Provisioning picks where an image is written; firmware picks which disk boots.'
 ---
 
 :::caution Jetson only, and newer than your image

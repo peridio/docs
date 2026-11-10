@@ -2,7 +2,7 @@
 sidebar_position: 3
 title: 'Container dev mode'
 copy_markdown: true
-description: 'Layer-aware hot-reload for containers on Avocado OS - change one line and ship only the changed layer to a running device, with no reflash and no full image re-push.'
+description: 'Layer-aware hot reload for containers on Avocado OS: change one line and ship only the changed layer to a running device, with no reflash.'
 ---
 
 Container dev mode is the inner development loop for a containerized application running on an Avocado OS device. You keep building images the way you already do (`docker build`), and the changed layer is pushed to the device and the container restarted, in place, on the running system. There is no reflash, no full image re-transfer, and no rebuild of the OS.

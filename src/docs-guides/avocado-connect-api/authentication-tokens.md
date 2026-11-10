@@ -1,7 +1,7 @@
 ---
 title: 'Authentication & Tokens'
 sidebar_position: 2
-description: 'Obtain and manage API access tokens. Authenticate every request with `Authorization: Bearer <token>`. Create a personal token via `POST /api/me/api-tokens` or an org-scoped token via `POST /api/orgs/{org_id}/api-tokens`.'
+description: 'Create personal or org-scoped API tokens for the Avocado Connect API, and authenticate every request with an Authorization: Bearer header.'
 copy_markdown: true
 ---
 

@@ -2,7 +2,7 @@
 title: Provisioning
 sidebar_position: 1
 copy_markdown: true
-description: 'Avocado Linux provisioning processes for preparing target hardware - image generation, bootloader configuration, and deployment strategies for reliable installation.'
+description: 'Prepare target hardware for Avocado Linux: image generation, bootloader configuration and deployment strategies for a reliable install.'
 ---
 
 Avocado Linux provisioning encompasses the processes and methodologies for preparing target hardware to run Avocado OS. This reference covers provisioning concepts, target hardware considerations, and programming environment requirements for reliable deployment.

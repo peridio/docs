@@ -2,7 +2,7 @@
 title: 'Security features'
 sidebar_position: 0
 copy_markdown: true
-description: 'How Avocado OS splits security features between the feed that builds them and the runtime that opts in: encrypted /var, dm-verity, and signed boot, enabled from avocado.yaml.'
+description: 'How Avocado OS splits security between the feed that builds it and the runtime that opts in: encrypted /var, dm-verity and signed boot.'
 ---
 
 import SecurityMatrix from '@site/src/components/SecurityMatrix'

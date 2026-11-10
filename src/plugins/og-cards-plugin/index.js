@@ -15,7 +15,8 @@
 // with the page it previews.
 //
 // A card that cannot be rendered (a title too long for the layout, say) fails
-// the build, the same way a broken link does.
+// the build, the same way a broken link does. So does a page whose meta
+// description is over OG_DESCRIPTION_MAX (160) characters.
 
 const path = require('node:path')
 const { readFileSync } = require('node:fs')
@@ -115,6 +116,7 @@ module.exports = function ogCardsPlugin(context) {
 
     async postBuild({ outDir }) {
       const { loadFonts, renderNote } = await import('../../scripts/og/render.mjs')
+      const { OG_DESCRIPTION_MAX } = await import('../../scripts/og/tokens.mjs')
       const { DEFAULT_OG_CARD, cardPathFor, familyFor } = await import(
         '../../scripts/og/routes.mjs'
       )
@@ -142,6 +144,17 @@ module.exports = function ogCardsPlugin(context) {
       const started = Date.now()
       const failures = []
       let bytes = 0
+      const tooLong = cards.filter(
+        (card) => String(card.description ?? '').length > OG_DESCRIPTION_MAX
+      )
+      if (tooLong.length) {
+        throw new Error(
+          `Meta descriptions over ${OG_DESCRIPTION_MAX} characters on ${tooLong.length} page(s):\n` +
+            tooLong.map((card) => `- ${card.slug}: ${card.description.length} chars`).join('\n') +
+            '\nShorten the `description` front matter (or `description` in src/data/solutions); ' +
+            'a page without one takes its first paragraph, so add one.'
+        )
+      }
       for (const card of cards) {
         try {
           const artwork = await familyArtwork(card.family)

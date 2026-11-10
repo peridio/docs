@@ -1,7 +1,7 @@
 ---
 title: 'Usage'
 sidebar_position: 1
-description: 'Ways to use the Avocado OS MCP server - guided slash-command workflows, natural-language requests for scaffolding, packages, provisioning, deploying, and debugging.'
+description: 'Use the Avocado OS MCP server: guided slash-command workflows and plain-English requests for scaffolding, packages, provisioning and debugging.'
 ---
 
 # Usage

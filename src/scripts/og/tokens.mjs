@@ -7,6 +7,14 @@
 // Everything a redesign would touch lives in this file, template.mjs and
 // pixels.mjs, and the generator/guard do not care what the card looks like.
 
+/**
+ * Longest allowed meta description, in characters. Search snippets and link
+ * previews cut a description off past roughly this, and its first sentence is
+ * a card's kicker. Field Notes (og-cards.mjs) and docs pages (og-cards-plugin)
+ * both fail past it.
+ */
+export const OG_DESCRIPTION_MAX = 160
+
 /** Open Graph large-card canvas. The manifest and the meta tags assume this. */
 export const OG_CANVAS = { width: 1200, height: 630 }
 
