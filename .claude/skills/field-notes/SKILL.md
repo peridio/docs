@@ -48,7 +48,7 @@ A Field Note is true. Every number, version and command output traces to somethi
 ### Checklist for step 5
 
 - Frontmatter: `title` (result-first), `description`, `date`, `draft: true`, `authors`, `tags`, `category`, and the internal fields (`tested_against`, `poster`, `lift_for_blog`, `promote_to_track`).
-- Index thumbnail: set `image_source`, then run `make thumbs`. Commit the generated files.
+- Index thumbnail: keep the template's empty `image: ''` line, set `image_source`, then run `make thumbs`. Without the `image:` line the generator writes the files and fails with `no image: line to update`. Use a 16:9 source with large shapes and labels, because the generator dithers it to six grey levels. Commit the generated files and the source.
 - `<TestStatus>` with `targets`, a released `cli` version, and the `reference` link.
 - A TL;DR that opens with the result in one sentence with its key number. For a comparison, add one bullet list of facts per option, then one line of conditions.
 - The `{/* truncate */}` marker, then a cold-reader intro of two or three sentences.
