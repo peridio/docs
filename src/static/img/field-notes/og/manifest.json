@@ -5,43 +5,43 @@
   "cards": {
     "2026-06-20-two-boots-trust-update": {
       "alt": "Two boots to trust an update on Avocado OS",
-      "bytes": 148983,
-      "sha256": "e3566a22b216fdcc07f51535197abf93ba5196809dd704968a4ce624161a1be9"
+      "bytes": 150105,
+      "sha256": "09022c1b96486cbb40b4a82283afc58394771cbdf1df7bc568592219312f6b3a"
     },
     "2026-06-22-fastest-path-ai-vision-nvidia": {
       "alt": "Four-model DeepStream vision on Jetson Orin Nano in ~14 minutes",
-      "bytes": 103301,
-      "sha256": "84b748c33523b205697a220fdd834f9a7cf981e24eed7305112a6b122115e3af"
+      "bytes": 96277,
+      "sha256": "e6fd9a63151ca7bae5bc224bc733642f5e48fd3c6c92e2cf8bc33997a2d2fce0"
     },
     "2026-06-24-hardened-boot-imx93": {
       "alt": "Pull the flash off our i.MX93 and you get ciphertext",
-      "bytes": 299482,
-      "sha256": "0611d761928f3b259ee3dd325ffad71d25c0bb5341b6f74617545deaf36f50fe"
+      "bytes": 295391,
+      "sha256": "181e38aa74e58c3ddf62e5501a69b6426a6a8a25dd64a95133a38a490bb3ad3b"
     },
     "2026-07-01-nodejs-dashboard-portability": {
       "alt": "One codebase from QEMU to Raspberry Pi to Jetson",
-      "bytes": 177515,
-      "sha256": "802b90d3a11faded11fc1e4d6d88514497c7a72762762e17b3f79fdd1b64e43c"
+      "bytes": 182937,
+      "sha256": "c61574f8d1e6738a261a8b44f5589f21be4c7b06e2db0e7a96a3ba959a1a4e2a"
     },
     "2026-07-02-agentic-mcp-pi-exporter": {
       "alt": "Chatting a Prometheus exporter onto a Raspberry Pi 4",
-      "bytes": 148198,
-      "sha256": "78c8348ea218c4b1a97a5a53aa6550fead418d736ef5373b56e69f41598a5555"
+      "bytes": 147127,
+      "sha256": "09357f2ee4031875ef992b7e4725db4c0c69c12a99c85170c0c69f716b3edcfc"
     },
     "2026-07-08-imx8mp-npu-pose": {
       "alt": "One NPU today, a different NPU tomorrow",
-      "bytes": 267575,
-      "sha256": "0d226242e2d315494043912509226249d9720f50086209fcd466e0f35842bbd2"
+      "bytes": 262644,
+      "sha256": "746f29876aefe68045994ff87baac323f12d2cb7cfcf97fcb92ec3217d8c3743"
     },
     "2026-07-15-python-multiversion-uv": {
       "alt": "Three pinned Pythons on one device: per-app CPython isolation with uv",
-      "bytes": 91848,
-      "sha256": "d982430f827af7675af91eb98ccf6c3826c60cbff8586c8eea3168a8ad4ac896"
+      "bytes": 92555,
+      "sha256": "13d89104387e7c67b25f05ab92f92b64c17ae5d5948f04eeace860d719033e04"
     },
     "2026-07-28-ros2-foxglove-immutable-os": {
       "alt": "ROS2 and Foxglove - Running on Avocado OS",
-      "bytes": 99251,
-      "sha256": "f57816758581a69ef225886b9a2152cb8dfa8cf8fd79395ebd8fd3131b621dab"
+      "bytes": 103773,
+      "sha256": "9c966c2910f903b4f7bc13c826068aa610ed9407d9a58b9324020827f9352fdd"
     },
     "2026-09-10-native-ros2-humble-avocado": {
       "alt": "Native ROS 2 Humble on Avocado OS",
