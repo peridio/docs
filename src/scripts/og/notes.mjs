@@ -9,6 +9,7 @@ import { existsSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { cardTitle } from './headline.mjs'
 
 const require = createRequire(import.meta.url)
 const { listNoteFiles, readNote } = require('../thumbnails/notes.js')
@@ -56,9 +57,9 @@ export function readNotes(dir = NOTES_DIR) {
     .filter(({ frontMatter }) => frontMatter.draft !== true)
     .map(({ slug, frontMatter }) => ({
       slug,
-      // `og_title` is an optional shorter headline for the card only, for the
-      // few titles too long to set at display size. The page title is unchanged.
-      title: frontMatter.og_title ?? frontMatter.title,
+      // `og_title` is an optional shorter headline for the card only; blank
+      // means no override (see headline.mjs). The page title is unchanged.
+      title: cardTitle(frontMatter.og_title, frontMatter.title),
       description: frontMatter.description,
       category: frontMatter.category,
       artwork: artworkFor(slug, frontMatter),

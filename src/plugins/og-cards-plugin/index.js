@@ -78,7 +78,7 @@ async function solutionCard(outDir, permalink, cardPathFor, familyFor) {
 }
 
 /** Every docs page across all docs plugin instances, as card input. */
-function collectDocs(allContent, cardPathFor, familyFor) {
+function collectDocs(allContent, cardPathFor, familyFor, cardTitle) {
   const docs = []
   for (const content of Object.values(allContent[DOCS_PLUGIN] ?? {})) {
     for (const version of content.loadedVersions ?? []) {
@@ -87,8 +87,9 @@ function collectDocs(allContent, cardPathFor, familyFor) {
         docs.push({
           slug: doc.permalink,
           file: cardPathFor(doc.permalink),
-          // `og_title` is an optional shorter headline for the card only.
-          title: doc.frontMatter.og_title ?? doc.title,
+          // `og_title` is an optional shorter headline for the card only; blank
+          // means no override (see scripts/og/headline.mjs).
+          title: cardTitle(doc.frontMatter.og_title, doc.title),
           description: doc.description,
           eyebrow: family.eyebrow,
           family: family.key,
@@ -107,7 +108,8 @@ module.exports = function ogCardsPlugin(context) {
 
     async allContentLoaded({ allContent }) {
       const { cardPathFor, familyFor } = await import('../../scripts/og/routes.mjs')
-      docs = collectDocs(allContent, cardPathFor, familyFor)
+      const { cardTitle } = await import('../../scripts/og/headline.mjs')
+      docs = collectDocs(allContent, cardPathFor, familyFor, cardTitle)
       solutionPages = collectSolutionPages(allContent, context.siteDir)
     },
 

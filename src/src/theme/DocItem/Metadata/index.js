@@ -6,18 +6,19 @@
  * path cardPathFor() derives from the permalink, so every docs page has one.
  * A page that sets `image` in front matter keeps that image instead, for
  * bespoke artwork. The card's alt text is the headline the card renders:
- * `og_title` when set, otherwise the page title.
+ * `og_title` when set and not blank, otherwise the page title.
  */
 import React from 'react'
 import { PageMetadata } from '@docusaurus/theme-common'
 import { useDoc } from '@docusaurus/plugin-content-docs/client'
 import { cardPathFor } from '@site/scripts/og/routes.mjs'
 import { OG_CANVAS } from '@site/scripts/og/tokens.mjs'
+import { cardTitle } from '@site/scripts/og/headline.mjs'
 
 export default function DocItemMetadata() {
   const { metadata, frontMatter, assets } = useDoc()
   const bespoke = assets.image ?? frontMatter.image
-  const alt = frontMatter.og_title ?? metadata.title
+  const alt = cardTitle(frontMatter.og_title, metadata.title)
 
   return (
     <PageMetadata

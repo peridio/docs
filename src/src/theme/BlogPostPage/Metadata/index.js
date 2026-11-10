@@ -14,6 +14,7 @@ import React from 'react'
 import { PageMetadata } from '@docusaurus/theme-common'
 import { useBlogPost } from '@docusaurus/plugin-content-blog/client'
 import ogManifest from '@site/static/img/field-notes/og/manifest.json'
+import { cardTitle } from '@site/scripts/og/headline.mjs'
 
 /** `@site/field-notes/2026-06-15-foo.mdx` -> `2026-06-15-foo` */
 export function cardSlug(source) {
@@ -35,7 +36,7 @@ export default function BlogPostPageMetadata() {
 
   return (
     <PageMetadata
-      title={frontMatter.title_meta ?? title}
+      title={cardTitle(frontMatter.title_meta, title)}
       description={description}
       keywords={keywords}
       image={image}
