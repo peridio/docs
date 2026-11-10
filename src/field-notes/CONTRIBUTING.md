@@ -39,6 +39,7 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 | `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                                                                                             |
 | `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                                                                                                 |
 | `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag                                                                             |
+| `og_title`         | no       | yes      | Shorter headline for the share card only, when `title` is too long to set on it (`npm run og` says so). The page title is unchanged               |
 | `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`, or `-thumb.gif` from an animated source) — written by `make thumbs`, not by hand  |
 | `image_source`     | no       | **no**   | Where `make thumbs` gets the art: `local:<path>`, `unsplash:<photo-id>` or `url:<link>`. Build input only — the theme renders `image`, never this |
 | `image_preset`     | no       | **no**   | Override the dither preset for one note; omit — one preset serves every note                                                                      |

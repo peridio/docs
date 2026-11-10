@@ -23,6 +23,10 @@ fi
 
 npm run lint
 npm exec -- prettier --check .
+# Field Notes share cards are committed build output. Re-render them in memory
+# and fail if any is missing, orphaned, over the size cap, or stale against its
+# note's title/description/category/artwork. Needs no build.
+npm run og:check
 npm run build
 # Diagrams render in the reader's browser, so `npm run build` above passes even
 # with a malformed one - check them here rather than finding out after deploy.

@@ -1,0 +1,86 @@
+// Design tokens for the Field Notes Open Graph cards.
+//
+// Ported from the apex site's use-case card (src/lib/og/og-tokens.mjs there):
+// copy on the left, the note's dithered artwork bleeding in from the right, the
+// Peridio lockup in the footer. The visual treatment is a first pass and is
+// expected to change; everything a redesign would touch lives in this file and
+// template.mjs, and the generator/guard do not care what the card looks like.
+
+/** Open Graph large-card canvas. The manifest and the meta tags assume this. */
+export const OG_CANVAS = { width: 1200, height: 630 }
+
+/**
+ * Hard ceiling on a rendered card, in bytes. 300 KiB: WhatsApp stops fetching
+ * link previews above roughly this size, the tightest limit among the
+ * platforms that matter.
+ */
+export const OG_MAX_BYTES = 307200
+
+/** Faces the cards use. Must match the files in ./fonts (asserted by size). */
+export const OG_FONTS = { body: 'DM Sans', mono: 'Geist Mono' }
+
+export const OG_FONT_FILES = [
+  ['DMSans[opsz,wght].ttf', 240164],
+  ['GeistMono[wght].ttf', 171948],
+]
+
+/** Card palette. Keys are roles, not colour names. */
+export const OG_COLORS = {
+  ground: '#050408',
+  ink: '#ffffff',
+  accent: '#5f51ff',
+  accentSoft: '#afa8ff',
+  kicker: '#e6e5eb',
+  footnote: '#8a8a93',
+}
+
+/** Geometry. Everything the fitter measures against is named here. */
+export const OG_LAYOUT = {
+  padX: 80,
+  padY: 72,
+  // The copy column. The artwork sits behind its right edge, so text is
+  // measured against this width rather than the canvas.
+  textWidth: 600,
+
+  eyebrowSize: 18,
+  eyebrowSpacing: 4,
+
+  // The title steps down from max to min until it fits. It is budgeted by
+  // height, not line count: Field Note titles run to 120 characters, so a
+  // fourth line is allowed once the size is small enough that four lines are
+  // no taller than three at full size.
+  titleMaxSize: 56,
+  titleMinSize: 40,
+  titleMaxLines: 4,
+  titleMaxHeight: 182,
+  titleLineHeight: 1.08,
+  titleWeight: 650,
+  titleSpacing: -1.5,
+
+  ruleWidth: 240,
+  ruleHeight: 4,
+
+  kickerSize: 24,
+  kickerLineHeight: 1.35,
+  kickerMaxLines: 3,
+  // A note's description is written for search snippets, not for this card;
+  // trailing sentences past this budget are dropped before measuring.
+  kickerMaxChars: 150,
+
+  footerSize: 20,
+  logoIcon: 36,
+  logoWordmark: 27,
+
+  // The artwork, positioned in the right half and faded into the ground.
+  imageLeft: 520,
+  imageWidth: 680,
+  imageOpacity: 0.9,
+}
+
+/** The URL printed in the footer. */
+export const OG_FOOTER_URL = 'docs.peridio.com/field-notes'
+
+/** The fading accent rule under the headline, same treatment as apex. */
+export function ruleGradient(color = OG_COLORS.accent) {
+  return `linear-gradient(90deg, ${color} 0%, ${color} 25%, ${OG_COLORS.ground} 100%)`
+}
