@@ -7,6 +7,8 @@
 // page cannot go stale. The theme's DocItem/Metadata points og:image at
 // cardPathFor(permalink), and this plugin writes exactly those paths.
 //
+// The artwork is a generated pixel skyline, one per family (scripts/og/skyline.mjs).
+//
 // A card that cannot be rendered (a title too long for the layout, say) fails
 // the build, the same way a broken link does.
 
@@ -29,8 +31,7 @@ function collectDocs(allContent, cardPathFor, familyFor) {
           title: doc.frontMatter.og_title ?? doc.title,
           description: doc.description,
           eyebrow: family.eyebrow,
-          footer: family.footer,
-          artwork: null,
+          family: family.key,
         })
       }
     }
@@ -51,6 +52,7 @@ module.exports = function ogCardsPlugin() {
     async postBuild({ outDir }) {
       const { loadFonts, renderNote } = await import('../../scripts/og/render.mjs')
       const { DEFAULT_OG_CARD } = await import('../../scripts/og/routes.mjs')
+      const { skylineArtwork } = await import('../../scripts/og/skyline.mjs')
       const fonts = await loadFonts()
       const cards = [
         ...docs,
@@ -61,8 +63,7 @@ module.exports = function ogCardsPlugin() {
           description:
             'Guides, references and hardware support for Avocado OS and Avocado Connect: build, ship and update embedded Linux devices.',
           eyebrow: 'Documentation',
-          footer: 'docs.peridio.com',
-          artwork: null,
+          family: 'default',
         },
       ]
 
@@ -71,7 +72,8 @@ module.exports = function ogCardsPlugin() {
       let bytes = 0
       for (const card of cards) {
         try {
-          const { buffer } = await renderNote(card, fonts)
+          const artwork = await skylineArtwork(card.family)
+          const { buffer } = await renderNote({ ...card, artwork }, fonts)
           const target = path.join(outDir, card.file)
           await mkdir(path.dirname(target), { recursive: true })
           await writeFile(target, buffer)

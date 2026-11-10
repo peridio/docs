@@ -15,35 +15,15 @@ export const DEFAULT_OG_CARD = `${DOCS_OG_DIR}/default.png`
 /**
  * Card families, matched in order on the permalink. One template per family
  * once the designs settle; for now they share the Field Notes layout and
- * differ in eyebrow and footer.
+ * differ in eyebrow and in the seed of their skyline artwork (skyline.mjs).
  */
 export const OG_FAMILIES = [
-  {
-    key: 'reference',
-    match: /^\/developer-reference\/references(\/|$)/,
-    eyebrow: 'Reference',
-    footer: 'docs.peridio.com/developer-reference',
-  },
-  {
-    key: 'dev-reference',
-    match: /^\/developer-reference(\/|$)/,
-    eyebrow: 'Developer Reference',
-    footer: 'docs.peridio.com/developer-reference',
-  },
-  {
-    key: 'hardware',
-    match: /^\/hardware(\/|$)/,
-    eyebrow: 'Hardware',
-    footer: 'docs.peridio.com/hardware',
-  },
-  { key: 'learn', match: /^\/learn(\/|$)/, eyebrow: 'Learn', footer: 'docs.peridio.com/learn' },
-  {
-    key: 'changelog',
-    match: /^\/changelog(\/|$)/,
-    eyebrow: 'Changelog',
-    footer: 'docs.peridio.com/changelog',
-  },
-  { key: 'product', match: /^\//, eyebrow: 'Product Docs', footer: 'docs.peridio.com' },
+  { key: 'reference', match: /^\/developer-reference\/references(\/|$)/, eyebrow: 'Reference' },
+  { key: 'dev-reference', match: /^\/developer-reference(\/|$)/, eyebrow: 'Developer Reference' },
+  { key: 'hardware', match: /^\/hardware(\/|$)/, eyebrow: 'Hardware' },
+  { key: 'learn', match: /^\/learn(\/|$)/, eyebrow: 'Learn' },
+  { key: 'changelog', match: /^\/changelog(\/|$)/, eyebrow: 'Changelog' },
+  { key: 'product', match: /^\//, eyebrow: 'Product Docs' },
 ]
 
 /** The family for a docs permalink. Every permalink matches one. */

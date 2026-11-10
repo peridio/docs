@@ -1,10 +1,12 @@
 // Design tokens for the Field Notes Open Graph cards.
 //
 // Ported from the apex site's use-case card (src/lib/og/og-tokens.mjs there):
-// copy on the left, the note's dithered artwork bleeding in from the right, the
-// Peridio lockup in the footer. The visual treatment is a first pass and is
-// expected to change; everything a redesign would touch lives in this file and
-// template.mjs, and the generator/guard do not care what the card looks like.
+// copy on the left, artwork bleeding in from the right, the Peridio icon and
+// section label in the footer. Field Notes supply their own dithered artwork;
+// docs pages get a generated pixel skyline (skyline.mjs). The visual treatment
+// is a first pass and is expected to change; everything a redesign would touch
+// lives in this file, template.mjs and skyline.mjs, and the generator/guard do
+// not care what the card looks like.
 
 /** Open Graph large-card canvas. The manifest and the meta tags assume this. */
 export const OG_CANVAS = { width: 1200, height: 630 }
@@ -67,9 +69,11 @@ export const OG_LAYOUT = {
   // trailing sentences past this budget are dropped before measuring.
   kickerMaxChars: 150,
 
-  footerSize: 20,
+  // Footer: the Peridio icon, a slash, then the label ("icon / Docs").
   logoIcon: 36,
-  logoWordmark: 27,
+  footerGap: 14,
+  footerSize: 30,
+  footerWeight: 600,
 
   // The artwork, positioned in the right half and faded into the ground.
   imageLeft: 520,
@@ -77,8 +81,35 @@ export const OG_LAYOUT = {
   imageOpacity: 0.9,
 }
 
-/** The URL printed in the footer. */
-export const OG_FOOTER_URL = 'docs.peridio.com/field-notes'
+/**
+ * The pixel skyline drawn behind docs-page cards (skyline.mjs). `floor`, `rise`
+ * and `jitter` are fractions of the artwork height: the minimum column height,
+ * the extra height gained from the left edge to the right, and the random
+ * height on top. The ramp runs dark to light between `OG_COLORS.ground` and
+ * `OG_COLORS.accent`. One composition for now (v1); further variations go here.
+ */
+export const OG_SKYLINE = {
+  cell: 21,
+  floor: 0.13,
+  rise: 0.47,
+  jitter: 0.3,
+  accentRate: 0.06,
+  ramp: ['#110b22', '#1b1236', '#271a4d', '#352366', '#452e85'],
+}
+
+/**
+ * Field Notes override the title fit: always two lines, at a smaller size than
+ * docs titles. A note whose title cannot fit sets a shorter `og_title`.
+ */
+export const OG_FIELD_NOTES_TITLE = {
+  titleMaxSize: 48,
+  titleMinSize: 36,
+  titleMaxLines: 2,
+  titleMaxHeight: 104,
+}
+
+/** The label after the slash in the footer mark. */
+export const OG_FOOTER_LABEL = 'Docs'
 
 /** The fading accent rule under the headline, same treatment as apex. */
 export function ruleGradient(color = OG_COLORS.accent) {
