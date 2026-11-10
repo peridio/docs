@@ -140,7 +140,7 @@ Set **SW7 to external**, insert the SD card, then build and provision with the `
 
 ```bash
 avocado build
-avocado provision -r dev --profile sd
+avocado provision dev --profile sd
 ```
 
 With SW7 still set to external and the SD card inserted, power on the board — it boots Avocado OS from the SD card.
@@ -151,7 +151,7 @@ Flash the onboard eMMC directly over USB. Connect the **USB-C cable** and the **
 
 ```bash
 avocado build
-avocado provision -r dev --profile uuu-emmc
+avocado provision dev --profile uuu-emmc
 ```
 
 After programming completes, set **SW7 to internal** and power-cycle the board — it boots Avocado OS from the onboard eMMC.

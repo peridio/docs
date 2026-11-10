@@ -160,7 +160,7 @@ The `avocado provision` command prepares the specified runtime by transforming t
 #### Command
 
 ```bash
-avocado provision -r dev
+avocado provision dev
 ```
 
 #### Output
@@ -195,7 +195,7 @@ Make sure your SD card is **NOT** inserted before running the provisioning comma
 #### Command
 
 ```bash
-avocado provision --profile sd -r dev
+avocado provision --profile sd dev
 ```
 
 #### Interactive process
@@ -376,7 +376,7 @@ avocado build
 ##### Provision runtime
 
 ```bash
-avocado provision -r dev
+avocado provision dev
 ```
 
 ### Deploy via sideloading
@@ -417,7 +417,7 @@ You should now see the `tcpdump` version information, confirming that the packag
 This sideloading workflow enables rapid iteration during development:
 
 1. **Make changes** to your `avocado.yaml` configuration
-2. **Rebuild** with `avocado install && avocado build && avocado provision -r dev`
+2. **Rebuild** with `avocado install && avocado build && avocado provision dev`
 3. **Deploy** with `avocado deploy -r dev -d <device-address>`
 4. **Test** your changes on the live device
 5. **Repeat** as needed

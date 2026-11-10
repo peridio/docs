@@ -134,7 +134,7 @@ Put the SD card in your host's card reader, then build and provision with the `s
 
 ```bash title="Host machine"
 avocado build
-avocado provision -r dev --profile sd
+avocado provision dev --profile sd
 ```
 
 Move the SD card to the carrier, set the carrier to boot from SD, and power it on. It boots Avocado OS from the SD card.
@@ -149,7 +149,7 @@ Flash the on-module eMMC directly over USB. The i.MX 8M Plus boot ROM has a USB 
 
 ```bash title="Host machine"
 avocado build
-avocado provision -r dev --profile uuu-emmc
+avocado provision dev --profile uuu-emmc
 ```
 
 When programming completes, set the carrier back to **eMMC** boot and power-cycle the board. It boots Avocado OS from the on-module eMMC.

@@ -76,7 +76,7 @@ Put the board in EDL mode (hold the EDL button (port 12) while connecting power)
 
 ```bash title="Host machine"
 avocado build
-avocado provision -r dev --profile ufs
+avocado provision dev --profile ufs
 ```
 
 ### Hypervisor selection (GPU/NPU vs. virtualization)
@@ -104,7 +104,7 @@ The default is Gunyah. To provision a board for virtualization instead, pass
 the environment variable through to the provisioning process:
 
 ```bash title="Host machine"
-avocado provision -r dev --profile ufs --env AVOCADO_HYPERVISOR=kvm
+avocado provision dev --profile ufs --env AVOCADO_HYPERVISOR=kvm
 ```
 
 The selection is a boot-partition choice; it is independent of A/B OS updates
