@@ -1,14 +1,14 @@
 ---
-title: 'How much of an Orin Nano 8GB is left for your model: JetPack 7.2 vs Avocado OS'
-description: 'Same board, two OS images: Avocado OS uses about 444 MiB of RAM at idle against about 866 MiB on JetPack 7.2.1 with the Ubuntu desktop, and this note measures how much RAM each leaves for a TensorRT model.'
+title: 'JetPack 7.2 vs Avocado OS on an Orin Nano 8GB: setup time, disk and RAM'
+description: 'Same board, two OS images: Avocado OS takes under 7 minutes and 4 commands to a running board with a TensorRT model, against about 30 minutes and 12 manual steps on JetPack 7.2.1, and uses about 2.5 GiB of disk against 34 GiB and about 400 MiB less RAM.'
 date: 2026-11-06
 draft: true
 authors: [jtia]
-tags: [jetson, orin-nano, memory, tensorrt, jetpack]
-category: 'Memory'
+tags: [jetson, orin-nano, setup, memory, tensorrt, jetpack]
+category: 'Footprint'
 tested_against: 'Avocado CLI 1.1.0-dev, linux-yocto 6.18.52, 2026 next feed plus bsp-jetson-orin-nano PR #6; JetPack 7.2.1 (Ubuntu); Jetson Orin Nano 8GB devkit'
 poster: jtia
-lift_for_blog: 'On an 8 GB module, the RAM an OS leaves for the model decides the model size, the stream count or whether a cheaper module will do.'
+lift_for_blog: 'On an 8 GB module the OS decides how long a board takes to set up, how much of the drive it uses, what it carries into production and how much RAM is left for the model.'
 promote_to_track: ''
 ---
 
@@ -28,23 +28,27 @@ import TestStatus from '@site/src/components/TestStatus'
 
 **Ubuntu + JetPack 7.2.1** (stock desktop)
 
-- RAM used: 866 MiB at idle, 1255 MiB while the model runs (6230 MiB left at the low point)
-- Disk: 35,027 MiB used with `nvidia-jetpack` installed (8,861 MiB for the stock install)
 - Setup: about 30 minutes, 12 manual steps
+- Disk: 35,027 MiB used with `nvidia-jetpack` installed (8,861 MiB for the stock install)
+- RAM used: 866 MiB at idle, 1255 MiB while the model runs (6230 MiB left at the low point)
+- Production readiness: a general-purpose desktop with `dockerd` running, 365 pending updates after the install and no SSH host keys
 
 **Avocado OS**
 
-- RAM used: 444 MiB at idle, 877 MiB while the model runs (6587 MiB left at the low point)
-- Disk: 2,545 MiB used with the TensorRT libraries, the model and the engine on it (a 67.5 MiB root filesystem and 2,477 MiB of `/var`)
 - Setup: 6 minutes 56 seconds, 4 commands
+- Disk: 2,545 MiB used with the TensorRT libraries, the model and the engine on it (a 67.5 MiB read-only root filesystem and 2,477 MiB of `/var`)
+- RAM used: 444 MiB at idle, 877 MiB while the model runs (6587 MiB left at the low point)
+- Production readiness: an immutable root filesystem with extensions on top, built to take OTA updates through Peridio (not measured here)
+
+Power and throughput are level: 4.7 W against 4.9 W at idle and 16.3 W against 16.5 W while the model runs, with 491.6 queries per second on Avocado OS and 466 to 471 on JetPack.
 
 {/* truncate */}
 
 ## What this is
 
-Avocado OS is a Yocto-based embedded Linux distribution that ships as an immutable root filesystem plus extensions layered on top of it. Peridio builds the device fleet platform around it. The Jetson Orin Nano 8GB has 8 GB of RAM shared between the CPU and the GPU, so whatever the operating system holds is memory a model cannot use. Add TensorRT on top of JetPack and a large part of the 8 GB can be gone before your application starts.
+Avocado OS is a Yocto-based embedded Linux distribution that ships as an immutable root filesystem plus extensions layered on top of it. Peridio builds the device fleet platform around it. On a Jetson Orin Nano 8GB the operating system decides how long a board takes to set up, how much of the NVMe it uses, what it carries into production, and how much of the 8 GB of RAM shared between the CPU and the GPU is left for a model.
 
-This note puts the same board through two OS images and measures what is left for the workload: first at idle, then with a TensorRT model loaded.
+This note puts the same board through two OS images and compares those four things, then power and throughput with a TensorRT model loaded.
 
 ## How I measured it
 
@@ -149,10 +153,36 @@ TensorRT is one more extension in the same project, built with `-r trt` instead 
 ## Result
 
 <PullQuote>
-  Avocado OS leaves about **400 MiB** more RAM available at idle (**7021 MiB** against **6618 MiB**
-  on JetPack's Ubuntu desktop) and **357 MiB** more while the model runs (**6587 MiB** against
-  **6230 MiB**), at the same power draw and about 5% more throughput.
+  Avocado OS gets a board running a TensorRT model in **6 minutes 56 seconds** and 4 commands, uses
+  about **2.5 GiB** of disk against **34 GiB**, and leaves about **400 MiB** more RAM, at the same
+  power draw.
 </PullQuote>
+
+|                                 | JetPack 7.2.1    | Avocado OS | Difference     |
+| ------------------------------- | ---------------- | ---------- | -------------- |
+| Time to a configured board      | about 30 minutes | 6 min 56 s | about 77% less |
+| Manual steps                    | 12               | 4 commands |                |
+| Disk used                       | 35,027 MiB       | 2,545 MiB  | about 93% less |
+| RAM used at idle                | 866 MiB          | 444 MiB    | about 49% less |
+| RAM used at the model's peak    | 1255 MiB         | 877 MiB    | about 30% less |
+| Throughput (queries per second) | 466 to 471       | 491.6      | about 5% more  |
+| Power while the model runs      | 16.5 W           | 16.3 W     | level          |
+
+### Production readiness
+
+What each image is when the install finishes, from the same two boards:
+
+|                            | JetPack 7.2.1                                          | Avocado OS                                                                  |
+| -------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Root filesystem            | writable ext4 holding the whole Ubuntu system          | read-only erofs, 67.5 MiB, with extensions merged on top                    |
+| After the install          | 365 package updates pending, no SSH host keys          | the image is replaced whole by an OTA update, which I did not measure here  |
+| First boot                 | seven interactive dialogs, then `sshd` enabled by hand | boots to a root login on the serial console by itself                       |
+| What runs at idle          | GNOME desktop, `dockerd`, `containerd`                 | 22 processes: `systemd`, `journald`, `udevd`, `avocadoctl` and a few others |
+| Going from the other image | needs NVIDIA's stock QSPI firmware flashed first       | one `avocado provision` command, with the board in recovery mode            |
+
+The Avocado reference carries three development extensions, a root serial console and root SSH among them, to remove before shipping. A hundred JetPack boards means a hundred manual installs, which does not scale.
+
+### RAM
 
 RAM used, in MiB (lower is better):
 
@@ -182,6 +212,8 @@ The model costs about the same RAM on both images: about 390 MiB of available me
 - **GPU and CPU load:** both images keep the GPU near 98% for the whole run (95% to 96% on average), so the engine is GPU-bound on both. The CPU averaged 10.7% on JetPack against 8.9% on Avocado OS. JetPack's figures come from `tegrastats`, Avocado OS's from sysfs and `/proc/stat`, because the Avocado image has no `tegrastats`.
 - **Throughput:** 466 to 471 queries per second on JetPack (2.19 ms mean latency, six runs) against 491.6 on Avocado OS (2.09 ms, one run), about 5% more. The GPU ran at 918 MHz on Avocado OS and about 910 MHz on JetPack.
 - **Power:** the module drew 16.3 W while the model ran on Avocado OS and 16.5 W on JetPack, and 4.7 W against 4.9 W at idle. The power section below has the detail.
+- **Against a headless JetPack boot:** the idle gap is about 120 MiB (563 to 566 MiB used on one earlier boot, against 444 MiB). Most of the roughly 420 MiB gap to the desktop is the desktop itself: `gnome-shell`, `mutter` and `Xorg` hold about 420 MB of resident memory between them.
+- **Where the Avocado OS RAM goes:** on one boot the 22 userspace processes held about 82 MB of the 444 MiB, and the development extensions are not resident services. The rest is kernel and driver memory, page cache and the kernel's free-memory reserve, so trimming the extensions would not move the figure much.
 - **Conditions:** one install and one cold boot per image on 2026-11-09, three idle readings each. Earlier runs landed within a few MiB of these on JetPack (857 to 861 MiB used on 2026-11-03).
 
 <details>
