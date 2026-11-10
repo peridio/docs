@@ -1,6 +1,6 @@
 ---
 title: 'JetPack 7.2 vs Avocado OS on an Orin Nano 8GB: setup time, disk and RAM'
-description: 'Same board, two OS images. Avocado OS reaches a login in under 7 minutes with 4 commands, against about 24 minutes and 12 manual steps on JetPack 7.2.1 before TensorRT. It uses about 2.5 GiB of disk against 34 GiB, and about 400 MiB less RAM.'
+description: 'Same board, two OS images. Avocado OS reaches a login in under 7 minutes with 4 commands, against about 24 minutes and 11 manual steps on JetPack 7.2.1 before TensorRT. It uses about 2.5 GiB of disk against 34 GiB, and about 400 MiB less RAM.'
 date: 2026-11-06
 draft: true
 authors: [jtia]
@@ -30,7 +30,7 @@ import TestStatus from '@site/src/components/TestStatus'
 
 **Ubuntu + JetPack 7.2.1** (stock desktop)
 
-- Setup: about 30 minutes, 12 manual steps
+- Setup: about 30 minutes, 12 manual steps (11 before `nvidia-jetpack`)
 - Disk: 35,027 MiB with `nvidia-jetpack` installed
 - RAM used: 866 MiB at idle, 1255 MiB with the model running
 - Production readiness: desktop, `dockerd` running, 365 pending updates, no SSH host keys
@@ -162,7 +162,7 @@ TensorRT is one more extension. Build it with `-r trt` instead of `-r power`. Th
 |                                 | JetPack 7.2.1    | Avocado OS | Difference     |
 | ------------------------------- | ---------------- | ---------- | -------------- |
 | Time to a login, no TensorRT    | about 24 minutes | 6 min 56 s | about 71% less |
-| Manual steps                    | 12               | 4 commands |                |
+| Manual steps, no TensorRT       | 11               | 4 commands |                |
 | Disk used                       | 35,027 MiB       | 2,545 MiB  | about 93% less |
 | RAM used at idle                | 866 MiB          | 444 MiB    | about 49% less |
 | RAM used at the model's peak    | 1255 MiB         | 877 MiB    | about 30% less |
