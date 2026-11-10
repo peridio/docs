@@ -49,6 +49,8 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 | `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                                                                                                                           |
 | `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                                                                                                                                     |
 
+Give every note an index thumbnail: set `image_source` and run `make thumbs`. Most published notes have one, and the build does not enforce it.
+
 `poster`, `lift_for_blog`, and `promote_to_track` are editorial metadata. They never render to readers, but they live in frontmatter so the team can grep them. Run from `src/field-notes/`:
 
 ```bash
@@ -102,11 +104,25 @@ The masthead — the "FIELD NOTES" eyebrow, title, date, **tag pills**, and the 
 
 ## Writing rules
 
-- **TL;DR first.** Two sentences: what you did, what happened. Above everything else.
+- **TL;DR first.** One sentence with the result and its key number, above everything else. For a comparison, follow it with one bullet list of facts per option. Put test conditions in a last line, after the result. Do not open with a description of the setup.
 - **Cold-reader intro.** Assume the reader has never heard of Peridio or Avocado. Two or three sentences orient a stranger, then go dense.
 - **Result-first title.** Concrete and specific. "We cut power 200 times mid-update on a Jetson. Here's what bricked." beats "Improving OTA resilience on embedded Linux."
 - **No hype.** No "revolutionary," no "blazing fast," no "10x."
-- **Include what didn't work.** Honesty about dead ends is the single biggest credibility signal.
+- **Include what didn't work.** Honesty about dead ends is the single biggest credibility signal. In a comparison, put each problem in the section of the option it belongs to. Drop a problem that is fixed before publication, and say what changed. Keep every problem that is still true when the note ships.
+- **Plain technical English.** Keep sentences under 25 words, and instructions under 20. Use one idea per sentence, active voice, no semicolons in prose, and one word for one action. Keep every hedge and every number as written.
+- **Lead with the largest measured difference.** Compute each difference as a percentage against the strongest and the weakest honest baseline. A headline must survive the weakest one.
+- **Every number traces to a run.** Keep the raw data, and regenerate tables and charts from it. State the run count. Say what you did not measure.
+- **Cite a released version.** `cli` and `tested_against` name a released version. If a development build produced the measured image, say so in the text.
+
+## Comparison notes
+
+A note that compares two images or options follows the structure in `.claude/skills/field-notes/references/comparison-note.md`: a TL;DR with one bullet list per option, a "How I measured it" section, one section per option (Getting started, Timing, Takeaways), an at-a-glance result table, and the resource tables and charts. Use a static SVG, not Mermaid, when a chart needs a legend.
+
+## Before you mark a PR ready
+
+Run the checks that CI runs, from `src/`: `npm run lint`, `npm exec -- prettier --check .`, `npm run check-mermaid`, and `npm run build`. A note with `draft: true` is not in the build output, so set `draft: false`, build, inspect `build/field-notes/YYYY/MM/DD/<slug>.html`, and set it back. The full list is in `.claude/skills/field-notes/references/verification.md`.
+
+When the note depends on a change that is not published, keep `draft: true` in the frontmatter. The PR can then be ready for review without publishing the note.
 
 ## Posting to community channels
 
