@@ -26,7 +26,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR.** On the same Orin Nano 8GB, Avocado OS sets up in 6 minutes 56 seconds instead of about 30 minutes. It uses 93% less disk and 49% less idle RAM than JetPack 7.2.1, and draws the same power.
+**TL;DR.** On the same Orin Nano 8GB, Avocado OS goes from a clean project to a login in 6 minutes 56 seconds, against about 30 minutes for a JetPack board with `nvidia-jetpack`. It uses 93% less disk and 49% less idle RAM than JetPack 7.2.1, and draws the same power.
 
 **Ubuntu + JetPack 7.2.1** (stock desktop)
 
@@ -37,12 +37,12 @@ import TestStatus from '@site/src/components/TestStatus'
 
 **Avocado OS**
 
-- Setup: 6 minutes 56 seconds, 4 commands
+- Setup: 6 minutes 56 seconds to a login with the `power` runtime, 4 commands. The model and engine add about 82 seconds on the board.
 - Disk: 2,545 MiB with TensorRT, the model and the engine
 - RAM used: 444 MiB at idle, 877 MiB with the model running
 - Production readiness: immutable root filesystem, built for OTA updates through Peridio (not measured here)
 
-Throughput is 466 to 471 queries per second on JetPack and 491.6 on Avocado OS. Power is 16.5 W against 16.3 W with the model running. Every figure is one install and one run on 2026-11-09, with a ResNet-50 FP16 engine in the 25 W power mode.
+Throughput is 466 to 471 queries per second on JetPack and 491.6 on Avocado OS. Power is 16.5 W against 16.3 W with the model running. RAM, power and throughput come from one install and one cold boot per image on 2026-11-09, with a ResNet-50 FP16 engine in the 25 W power mode. JetPack throughput covers six runs. The Avocado OS setup time and the JetPack ISO write come from 2026-11-06.
 
 {/* truncate */}
 
@@ -141,27 +141,27 @@ TensorRT is one more extension. Build it with `-r trt` instead of `-r power`. Th
 
 ### Timing
 
-- **Total:** 6 minutes 56 seconds from the first `avocado install` to the login. Setting up recovery mode is not counted.
+- **Total:** 6 minutes 56 seconds from the first `avocado install` to the login, with the `power` runtime. That runtime has no TensorRT extension. Fetching the model (2 seconds) and building the engine (80 seconds) on the board add about 82 seconds. I did not time a `trt` build end to end. Setting up recovery mode is not counted.
 - **SDK image download:** not counted, because it depends on bandwidth. The SDK image is 140 MB. The project's SDK volume grew to about 5.5 GB after the install.
 
 ### Takeaways
 
-- **Numbers:** 6 minutes 56 seconds to a logged-in board and 2,545 MiB of disk with TensorRT. RAM: 444 MiB at idle, an 877 MiB peak with the model running, 6587 MiB left at the low point.
+- **Numbers:** 6 minutes 56 seconds to a logged-in board (about 82 seconds more for the model and engine) and 2,545 MiB of disk with TensorRT. RAM: 444 MiB at idle, an 877 MiB peak with the model running, 6587 MiB left at the low point.
 - **Experience:** four commands, no step at the board. The board boots the new image by itself.
 - **Production readiness:** an immutable root filesystem with extensions on top, OTA updates, and fleet management through Peridio. The reference carries three development extensions, including a root serial console and root SSH. Remove them before shipping.
-- **Against JetPack:** Avocado OS takes about 77% less time to set up. It uses about 49% less RAM at idle, about 30% less at the peak, and about 93% less disk. It leaves about 400 MiB (about 6%) more RAM available at idle.
+- **Against JetPack:** Avocado OS takes about 77% less time to reach a login, compared with JetPack's total with `nvidia-jetpack`. It uses about 49% less RAM at idle, about 30% less at the peak, and about 93% less disk. It leaves about 400 MiB (about 6%) more RAM available at idle.
 
 ## Result
 
 <PullQuote>
-  Avocado OS takes a board to a running TensorRT model in **6 minutes 56 seconds** and 4 commands.
-  It uses about **2.5 GiB** of disk against **34 GiB**, leaves about **400 MiB** more RAM, and draws
-  the same power.
+  Avocado OS takes a board to a login in **6 minutes 56 seconds** and 4 commands, and to a running
+  model about 82 seconds later. It uses about **2.5 GiB** of disk against **34 GiB**, leaves about
+  **400 MiB** more RAM, and draws the same power.
 </PullQuote>
 
 |                                 | JetPack 7.2.1    | Avocado OS | Difference     |
 | ------------------------------- | ---------------- | ---------- | -------------- |
-| Time to a configured board      | about 30 minutes | 6 min 56 s | about 77% less |
+| Time to a login (see Timing)    | about 30 minutes | 6 min 56 s | about 77% less |
 | Manual steps                    | 12               | 4 commands |                |
 | Disk used                       | 35,027 MiB       | 2,545 MiB  | about 93% less |
 | RAM used at idle                | 866 MiB          | 444 MiB    | about 49% less |
@@ -289,6 +289,11 @@ The project's `getting_started.md` covers recovery mode.
 ```bash
 avocado init --reference jetson-orin-nano-power jetson-orin-nano-power
 cd jetson-orin-nano-power
+```
+
+Until the governors change ships, point the `avocado-bsp-jetson-orin-nano` extension at a checkout of the PR branch (`source: {type: path, path: ../bsp}` in `avocado.yaml`). Do this before you install, build and provision. A board flashed from the feed BSP has no power profile, and editing `avocado.yaml` afterward does not change it.
+
+```bash
 avocado install -f
 avocado build
 avocado provision -r power --profile tegraflash-nvme
@@ -296,9 +301,7 @@ avocado provision -r power --profile tegraflash-nvme
 
 Use `--profile tegraflash-sd` for an SD card. Both profiles overwrite the target and rewrite the QSPI firmware and the UEFI variables.
 
-Until the governors change ships, point the `avocado-bsp-jetson-orin-nano` extension at a checkout of the PR branch (`source: {type: path, path: ../bsp}` in `avocado.yaml`).
-
-After the flash, remove the jumper. A power cycle with the jumper fitted returns the board to recovery mode. Connect to the debug console (115200 baud) and install your key in `/var/lib/ssh/authorized_keys`. Then read memory and power from the host:
+After the flash, remove the jumper. A power cycle with the jumper fitted returns the board to recovery mode. Connect to the debug console (115200 baud) and install your key in `/var/lib/ssh/authorized_keys.d/root`, which the SSH extension reads because the root filesystem is read-only. Then read memory and power from the host:
 
 ```bash
 ssh root@<device-ip> "free -m | awk 'NR==2{print \$3 \" MiB used, \" \$7 \" MiB available\"}'"
@@ -342,4 +345,4 @@ sync
 
 The image has no CA bundle, so the command uses `curl -k`. The checksum establishes the file. Run `sync` before you power-cycle. On one run, an engine written just before a power cycle came back as a 0-byte file, and `trtexec` failed with `read 0 out of 32 bytes`. I did not find the cause.
 
-Then cold-boot the board and wait 240 seconds. Read memory three times, 5 seconds apart. Run `trtexec --loadEngine=resnet50.plan --duration=60 --warmUp=1000` while you sample `MemAvailable` every 2 seconds. Read memory three more times. JetPack uses the same flags with `/usr/src/tensorrt/bin/trtexec`. The Avocado OS root filesystem allows no writes, so the model and engine live under `/var`.
+Then cold-boot the board and wait 240 seconds. Read memory three times, 5 seconds apart. Run `trtexec --loadEngine=/var/trt/resnet50.plan --duration=60 --warmUp=1000` while you sample `MemAvailable` every 2 seconds. Read memory three more times. JetPack uses the same flags with `/usr/src/tensorrt/bin/trtexec`. The Avocado OS root filesystem allows no writes, so the model and engine live under `/var`.
