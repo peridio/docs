@@ -50,4 +50,4 @@ Open the generated `-thumb.png` for the note. Every label on it must be readable
 
 ## 4. Do not commit build output
 
-The build can modify `src/src/data/hardware/generated-targets.json`. It is generated output. Stage only the note and its assets.
+The build can modify `src/src/data/hardware/generated-targets.json`. It is generated output. Stage the note, its assets, `src/field-notes/thumbnails.lock.json` when `make thumbs` changed it, and `src/field-notes/authors.yml` when you registered an author. Leave out the generated hardware data.

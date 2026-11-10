@@ -36,13 +36,13 @@ A Field Note is true. Every number, version and command output traces to somethi
    - which baseline a typical user runs, and why that baseline;
    - the measurement protocol, and whether both sides ran it the same way;
    - whether both sides use the same configuration (power mode, governors, versions);
-   - which released version of the tool the note will cite;
+   - which released version of the tool the note will cite, and whether the engineer reran the project with it;
    - which changes the note depends on are not published yet;
    - which recordings or screenshots exist, and where they are hosted.
-5. **Write the note.** Write `src/field-notes/YYYY-MM-DD-<slug>.mdx`. The date prefix must match the frontmatter `date`, and the slug must match the note's scope. Set `draft: true`. Include every part in the checklist below.
+5. **Write the note.** Write `src/field-notes/YYYY-MM-DD-<slug>.mdx`. The date prefix must match the frontmatter `date`, and the slug must match the note's scope. Set `draft: true` on a new note. For an existing published note, keep its current `draft` value. Include every part in the checklist below.
 6. **Check the headline.** Compute each difference as a percentage against the strongest and the weakest honest baseline. Lead the title and the TL;DR with the large differences, and state a small difference plainly as one result among others. Do not claim what nobody measured.
 7. **Run a plain-English pass.** Keep sentences under 25 words, and instructions under 20. Use one idea per sentence, active voice, no semicolons in prose, and one word for one action. Keep every hedge and every number exactly as written. After the rewrite, compare the numbers in the old and new text.
-8. **Verify.** Run the commands in `references/verification.md`, including the build with `draft` temporarily set to `false`.
+8. **Verify.** Run the commands in `references/verification.md`, including the build with `draft` temporarily set to `false`. Restore the original value afterwards.
 9. **Open the PR as a draft.** Write the body as Problem, Solution, Key changes and Reviewer notes, and state what was verified and what was not. Keep private feedback out of the PR, the note and the commit. Mark the PR ready only when CI is green or its known red check is explained in the body. Request reviewers.
 
 ### Checklist for step 5
@@ -61,7 +61,7 @@ A Field Note is true. Every number, version and command output traces to somethi
 
 - Do NOT skip the step 1 `Read`. The template and CONTRIBUTING define the format.
 - Do NOT fabricate versions, numbers, board names or command output.
-- Do NOT cite a development build as the tested version. Cite the released version, and say which build produced the measured image.
+- Do NOT cite a release you did not run. Name a released version in `cli` and `tested_against` only after you built, flashed and booted the project with it, and say which build produced the measured image. If you ran only a development build, cite that build and keep `draft: true` until you rerun with the release.
 - Do NOT lead with the weakest result because it was the first one measured.
 - Do NOT compare two sides that ran different configurations without saying so.
 - Do NOT hype ("revolutionary", "blazing fast", "10x").
@@ -70,6 +70,6 @@ A Field Note is true. Every number, version and command output traces to somethi
 
 ## It's working if
 
-The build in `references/verification.md` exits 0 with `draft` set to `false`, and the note's `draft` line is `true` again afterwards. Every number that does not appear in the raw data is a derivation you can name. A reader who reads only the TL;DR can state the result and its key numbers.
+The build in `references/verification.md` exits 0 with `draft` set to `false`, and the note's `draft` line has its original value again afterwards. Every number that does not appear in the raw data is a derivation you can name. A reader who reads only the TL;DR can state the result and its key numbers.
 
 For a note that is ready to leave draft, `grep -l "\[ENGINEER:" src/field-notes/<note>.mdx` prints nothing. A draft that still has markers prints the note, which is expected. Keep `draft: true` until it does not, because the build with `draft` set to `false` renders every marker on the page.

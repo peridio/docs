@@ -112,7 +112,7 @@ The masthead — the "FIELD NOTES" eyebrow, title, date, **tag pills**, and the 
 - **Plain technical English.** Keep sentences under 25 words, and instructions under 20. Use one idea per sentence, active voice, no semicolons in prose, and one word for one action. Keep every hedge and every number as written.
 - **Lead with the largest measured difference.** Compute each difference as a percentage against the strongest and the weakest honest baseline. A headline must survive the weakest one.
 - **Every number traces to a run.** Keep the raw data, and regenerate tables and charts from it. State the run count. Say what you did not measure.
-- **Cite a released version.** `cli` and `tested_against` name a released version. If a development build produced the measured image, say so in the text.
+- **Cite a released version you ran.** `cli` and `tested_against` name a released version only after you built, flashed and booted the project with it. If a development build produced the measured image, say so in the text. If you ran only the development build, cite it and keep `draft: true`.
 
 ## Comparison notes
 
