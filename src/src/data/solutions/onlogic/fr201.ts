@@ -6,7 +6,6 @@ export const data: SolutionData = {
     'Deploy OnLogic FR201 fanless industrial gateways with atomic updates, protocol bridging, and enterprise fleet management. Production-ready software on industrial grade hardware.',
   keywords:
     'onlogic fr201, industrial gateway, fanless pc, protocol bridge, atomic updates, fleet management, modbus, opc-ua',
-  ogImage: '/img/FR201.png',
   canonicalUrl: 'https://docs.peridio.com/solutions/onlogic/fr201',
 
   hero: {

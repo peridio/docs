@@ -27,6 +27,7 @@ test('familyFor routes each section to its card family', () => {
     '/developer-reference': 'dev-reference',
     '/developer-reference/avocado-cli/commands': 'dev-reference',
     '/hardware/support-matrix': 'hardware',
+    '/solutions/qualcomm/rubik-pi': 'hardware',
     '/learn/missions/first-ota': 'learn',
     '/changelog/october-2026/1.0.0': 'changelog',
     '/avocado-os/about': 'product',
@@ -40,4 +41,5 @@ test('a prefix match needs a path boundary', () => {
   // `/hardware-foo` is not under /hardware.
   assert.equal(familyFor('/hardware-foo').key, 'product')
   assert.equal(familyFor('/learning').key, 'product')
+  assert.equal(familyFor('/solutions-foo').key, 'product')
 })

@@ -20,7 +20,8 @@ export const DEFAULT_OG_CARD = `${DOCS_OG_DIR}/default.png`
 export const OG_FAMILIES = [
   { key: 'reference', match: /^\/developer-reference\/references(\/|$)/, eyebrow: 'Reference' },
   { key: 'dev-reference', match: /^\/developer-reference(\/|$)/, eyebrow: 'Developer Reference' },
-  { key: 'hardware', match: /^\/hardware(\/|$)/, eyebrow: 'Hardware' },
+  // Hardware solution pages live under /solutions as well as /hardware.
+  { key: 'hardware', match: /^\/(hardware|solutions)(\/|$)/, eyebrow: 'Hardware' },
   { key: 'learn', match: /^\/learn(\/|$)/, eyebrow: 'Learn' },
   { key: 'changelog', match: /^\/changelog(\/|$)/, eyebrow: 'Changelog' },
   { key: 'product', match: /^\//, eyebrow: 'Product Docs' },

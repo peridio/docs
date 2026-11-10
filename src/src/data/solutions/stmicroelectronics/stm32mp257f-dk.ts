@@ -6,7 +6,6 @@ export const data: SolutionData = {
     'Deploy STM32MP257F-DK in production 4x faster with Peridio Fleet + Avocado OS. Yocto-based, secure OTA updates, enterprise support for industrial IoT.',
   keywords:
     'stm32mp257f-dk, stmicroelectronics, device management, ota updates, yocto, embedded linux, industrial iot, edge ai, dual core cortex-a35',
-  ogImage: '/img/stmicro_STM32MP257F-DK.png',
   canonicalUrl: 'https://docs.peridio.com/solutions/stmicroelectronics/stm32mp157d-dk',
 
   hero: {

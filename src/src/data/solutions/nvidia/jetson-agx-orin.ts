@@ -6,7 +6,6 @@ export const data: SolutionData = {
     'Production-ready NVIDIA Jetson AGX Orin deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for the most powerful edge AI platform.',
   keywords:
     'nvidia jetson agx orin, device management, ota updates, yocto, embedded linux, industrial ai, robotics, fleet management, autonomous systems, edge computing',
-  ogImage: '/img/nvidia-jetson-orin.jpg',
   canonicalUrl: 'https://docs.peridio.com/solutions/nvidia/jetson-agx-orin',
 
   hero: {

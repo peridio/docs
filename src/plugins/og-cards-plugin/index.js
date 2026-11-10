@@ -9,13 +9,73 @@
 //
 // The artwork is a generated pixel composition, one per family (scripts/og/pixels.mjs).
 //
+// Hardware solution pages (src/pages, rendered by SolutionLayout) are React
+// pages, not docs, so they carry no front matter. Their card copy is read back
+// from the page's own built HTML after the build, so the card cannot disagree
+// with the page it previews.
+//
 // A card that cannot be rendered (a title too long for the layout, say) fails
 // the build, the same way a broken link does.
 
 const path = require('node:path')
-const { mkdir, writeFile } = require('node:fs/promises')
+const { readFileSync } = require('node:fs')
+const { mkdir, readFile, writeFile } = require('node:fs/promises')
 
 const DOCS_PLUGIN = 'docusaurus-plugin-content-docs'
+const PAGES_PLUGIN = 'docusaurus-plugin-content-pages'
+const SOLUTION_LAYOUT = /from '@site\/src\/components\/solutions\/SolutionLayout'/
+
+/** Pages rendered by SolutionLayout, as { permalink } (copy is read after the build). */
+function collectSolutionPages(allContent, siteDir) {
+  const pages = []
+  for (const content of Object.values(allContent[PAGES_PLUGIN] ?? {})) {
+    for (const page of content ?? []) {
+      if (page.type !== 'jsx') continue
+      const file = page.source.replace(/^@site\//, `${siteDir}/`)
+      if (SOLUTION_LAYOUT.test(readFileSync(file, 'utf8')))
+        pages.push({ permalink: page.permalink })
+    }
+  }
+  return pages
+}
+
+const decode = (text) =>
+  text
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;|&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+
+function metaContent(html, attr, name) {
+  for (const tag of html.match(/<meta\b[^>]*>/g) ?? []) {
+    if (!tag.includes(`${attr}="${name}"`)) continue
+    const content = tag.match(/content="([^"]*)"/)
+    if (content) return decode(content[1])
+  }
+  return ''
+}
+
+/**
+ * A solution page's card input, from its built HTML. The page title reads
+ * "Product Topic | Subtitle | Peridio"; the card headline is the first part.
+ */
+async function solutionCard(outDir, permalink, cardPathFor, familyFor) {
+  const html = await readFile(
+    path.join(outDir, `${permalink.replace(/\/$/, '') || '/index'}.html`),
+    'utf8'
+  )
+  const title = metaContent(html, 'property', 'og:title').split(' | ')[0].trim()
+  const family = familyFor(permalink)
+  return {
+    slug: permalink,
+    file: cardPathFor(permalink),
+    title,
+    description: metaContent(html, 'name', 'description'),
+    eyebrow: family.eyebrow,
+    family: family.key,
+  }
+}
 
 /** Every docs page across all docs plugin instances, as card input. */
 function collectDocs(allContent, cardPathFor, familyFor) {
@@ -39,23 +99,33 @@ function collectDocs(allContent, cardPathFor, familyFor) {
   return docs
 }
 
-module.exports = function ogCardsPlugin() {
+module.exports = function ogCardsPlugin(context) {
   let docs = []
+  let solutionPages = []
   return {
     name: 'og-cards-plugin',
 
     async allContentLoaded({ allContent }) {
       const { cardPathFor, familyFor } = await import('../../scripts/og/routes.mjs')
       docs = collectDocs(allContent, cardPathFor, familyFor)
+      solutionPages = collectSolutionPages(allContent, context.siteDir)
     },
 
     async postBuild({ outDir }) {
       const { loadFonts, renderNote } = await import('../../scripts/og/render.mjs')
-      const { DEFAULT_OG_CARD } = await import('../../scripts/og/routes.mjs')
+      const { DEFAULT_OG_CARD, cardPathFor, familyFor } = await import(
+        '../../scripts/og/routes.mjs'
+      )
       const { familyArtwork } = await import('../../scripts/og/pixels.mjs')
       const fonts = await loadFonts()
+      const solutions = await Promise.all(
+        solutionPages.map(({ permalink }) =>
+          solutionCard(outDir, permalink, cardPathFor, familyFor)
+        )
+      )
       const cards = [
         ...docs,
+        ...solutions,
         {
           slug: 'default',
           file: DEFAULT_OG_CARD,

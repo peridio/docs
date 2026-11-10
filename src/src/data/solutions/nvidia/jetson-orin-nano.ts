@@ -6,7 +6,6 @@ export const data: SolutionData = {
     'Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for industrial AI.',
   keywords:
     'nvidia jetson orin nano, device management, ota updates, yocto, embedded linux, industrial ai, robotics, fleet management',
-  ogImage: '/img/nvidia-jetson-orin.jpg',
   canonicalUrl: 'https://docs.peridio.com/solutions/nvidia/jetson-orin-nano',
 
   hero: {

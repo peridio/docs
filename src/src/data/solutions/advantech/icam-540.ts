@@ -6,7 +6,6 @@ export const icam540Data: SolutionData = {
     'Deploy Advantech ICAM-540 industrial AI cameras with NVIDIA Jetson Orin NX, 100 TOPS AI performance, and enterprise fleet management. Production-ready edge vision.',
   keywords:
     'advantech icam-540, industrial ai camera, nvidia jetson orin nx, sony imx334, edge ai, computer vision, camnavi sdk, deepstream, fleet management',
-  ogImage: '/img/icam540.png',
   canonicalUrl: 'https://docs.peridio.com/solutions/advantech/icam-540',
 
   hero: {
