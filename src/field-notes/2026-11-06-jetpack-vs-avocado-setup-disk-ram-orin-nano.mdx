@@ -6,7 +6,7 @@ draft: true
 authors: [jtia]
 tags: [jetson, orin-nano, setup, memory, tensorrt, jetpack]
 category: 'Footprint'
-tested_against: 'Avocado CLI 1.1.0-dev, linux-yocto 6.18.52, 2026 next feed plus bsp-jetson-orin-nano PR #6; JetPack 7.2.1 (Ubuntu); Jetson Orin Nano 8GB devkit'
+tested_against: 'Avocado CLI 1.0.0 (measured image built with 1.1.0-dev), linux-yocto 6.18.52, 2026 next feed plus bsp-jetson-orin-nano PR #6; JetPack 7.2.1 (Ubuntu); Jetson Orin Nano 8GB devkit'
 poster: jtia
 lift_for_blog: 'On an 8 GB module the OS decides how long a board takes to set up, how much of the drive it uses, what it carries into production and how much RAM is left for the model.'
 promote_to_track: ''
@@ -17,7 +17,7 @@ import TestStatus from '@site/src/components/TestStatus'
 
 <TestStatus
   targets={['jetson-orin-nano-devkit']}
-  cli="1.1.0-dev"
+  cli="1.0.0"
   reference={{
     label: 'jetson-orin-nano-power',
     href: 'https://github.com/avocado-linux/references/tree/main/jetson-orin-nano-power',
@@ -55,7 +55,7 @@ This note compares it with JetPack 7.2.1 on one Orin Nano 8GB: setup time, disk 
 The board is a Jetson Orin Nano 8GB devkit. I used two images:
 
 - **JetPack 7.2.1**, as a typical user runs it. I installed NVIDIA's `jetsoninstaller-r39.2.1-2026-08-07-18-30-47-arm64.iso` (5,035,601,920 bytes) to the NVMe. The result is Ubuntu 24.04 with the GNOME desktop, kernel 6.8.12-1021-tegra and default services. The stock install has no CUDA, TensorRT or `trtexec`. `apt-get install nvidia-jetpack` adds them (TensorRT 10.16.2.10).
-- **Avocado OS**, from the `jetson-orin-nano-power` reference. It merges the `avocado-bsp-jetson-orin-nano`, `avocado-ext-dev`, `avocado-ext-sshd-dev`, `avocado-ext-bringup` and `avocado-ext-trt` extensions on linux-yocto 6.18.52. The board support extension comes from bsp-jetson-orin-nano PR #6. It sets the 25 W power mode and the CPU and GPU governors at boot. I built it as a local path extension because the feed version does not have it yet.
+- **Avocado OS**, from the `jetson-orin-nano-power` reference. It merges the `avocado-bsp-jetson-orin-nano`, `avocado-ext-dev`, `avocado-ext-sshd-dev`, `avocado-ext-bringup` and `avocado-ext-trt` extensions on linux-yocto 6.18.52. The board support extension comes from bsp-jetson-orin-nano PR #6. It sets the 25 W power mode and the CPU and GPU governors at boot. I built it as a local path extension because the feed version does not have it yet. I built the measured image with Avocado CLI 1.1.0-dev. I then built, flashed and booted the same project with the released 1.0.0. All five extensions merged and the board came up in the 25 W mode.
 
 Both images run TensorRT from native packages, not a container. `trtexec` is in `/usr/src/tensorrt/bin`. I did not measure a container path. [NVIDIA's TensorRT container page](https://docs.nvidia.com/deeplearning/tensorrt/latest/installing-tensorrt/install-container.html) names Jetson AGX Orin and Jetson Thor for Jetson, not the Orin Nano. It lists a multi-GB download and extra container overhead as limits of that path.
 
