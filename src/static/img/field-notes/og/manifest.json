@@ -20,8 +20,8 @@
     },
     "2026-07-01-nodejs-dashboard-portability": {
       "alt": "One codebase from QEMU to Raspberry Pi to Jetson",
-      "bytes": 182937,
-      "sha256": "c61574f8d1e6738a261a8b44f5589f21be4c7b06e2db0e7a96a3ba959a1a4e2a"
+      "bytes": 181783,
+      "sha256": "5be4759d2558e927d0f17c05f5cd7ec94f70186c5b04d2e9035f669506cc691b"
     },
     "2026-07-02-agentic-mcp-pi-exporter": {
       "alt": "Chatting a Prometheus exporter onto a Raspberry Pi 4",
