@@ -15,7 +15,7 @@ export const DEFAULT_OG_CARD = `${DOCS_OG_DIR}/default.png`
 /**
  * Card families, matched in order on the permalink. One template per family
  * once the designs settle; for now they share the Field Notes layout and
- * differ in eyebrow and in the seed of their skyline artwork (skyline.mjs).
+ * differ in eyebrow and in their pixel artwork (pixels.mjs, OG_PIXELS).
  */
 export const OG_FAMILIES = [
   { key: 'reference', match: /^\/developer-reference\/references(\/|$)/, eyebrow: 'Reference' },

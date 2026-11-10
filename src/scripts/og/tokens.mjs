@@ -3,10 +3,9 @@
 // Ported from the apex site's use-case card (src/lib/og/og-tokens.mjs there):
 // copy on the left, artwork bleeding in from the right, the Peridio icon and
 // section label in the footer. Field Notes supply their own dithered artwork;
-// docs pages get a generated pixel skyline (skyline.mjs). The visual treatment
-// is a first pass and is expected to change; everything a redesign would touch
-// lives in this file, template.mjs and skyline.mjs, and the generator/guard do
-// not care what the card looks like.
+// docs pages get a generated pixel composition per family (pixels.mjs).
+// Everything a redesign would touch lives in this file, template.mjs and
+// pixels.mjs, and the generator/guard do not care what the card looks like.
 
 /** Open Graph large-card canvas. The manifest and the meta tags assume this. */
 export const OG_CANVAS = { width: 1200, height: 630 }
@@ -82,19 +81,29 @@ export const OG_LAYOUT = {
 }
 
 /**
- * The pixel skyline drawn behind docs-page cards (skyline.mjs). `floor`, `rise`
- * and `jitter` are fractions of the artwork height: the minimum column height,
- * the extra height gained from the left edge to the right, and the random
- * height on top. The ramp runs dark to light between `OG_COLORS.ground` and
- * `OG_COLORS.accent`. One composition for now (v1); further variations go here.
+ * The pixel artwork drawn behind docs-page cards (pixels.mjs). Every family
+ * shares the cell size, ramp and accent rate; `compositions` picks each
+ * family's arrangement and the string its random source is seeded from. The
+ * seeds are the names the compositions had in the OG design lab, so the cards
+ * match the ones picked there. The ramp runs dark to light between
+ * `OG_COLORS.ground` and `OG_COLORS.accent`.
  */
-export const OG_SKYLINE = {
-  cell: 21,
-  floor: 0.13,
-  rise: 0.47,
-  jitter: 0.3,
+export const OG_PIXELS = {
+  cell: 30,
   accentRate: 0.06,
   ramp: ['#110b22', '#1b1236', '#271a4d', '#352366', '#452e85'],
+  // The changelog skyline: minimum column height, extra height gained from
+  // left to right, and random height on top, as fractions of the artwork.
+  skyline: { floor: 0.13, rise: 0.47, jitter: 0.3 },
+  compositions: {
+    changelog: { draw: 'skyline', seed: 'Chunky' },
+    'dev-reference': { draw: 'streams', seed: 'Streams, dense' },
+    learn: { draw: 'dashes', seed: 'Dashes, lit tops' },
+    product: { draw: 'glowGrid', seed: 'Glow on grid' },
+    hardware: { draw: 'banks', seed: 'Banks, staggered' },
+    reference: { draw: 'rows', seed: 'Right-aligned rows' },
+    default: { draw: 'dither', seed: 'Dithered glow' },
+  },
 }
 
 /**
