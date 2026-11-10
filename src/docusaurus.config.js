@@ -37,6 +37,8 @@ const config = {
   },
   plugins: [
     './plugins/yaml-loader-plugin',
+    // One generated share card per docs page, plus the default card below.
+    './plugins/og-cards-plugin',
     [
       '@docusaurus/plugin-client-redirects',
       {
@@ -188,6 +190,18 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // Share card for pages with no card of their own (custom pages, the
+      // Field Notes index). Rendered at build time by plugins/og-cards-plugin.
+      image: 'og/default.png',
+      // Fallback description for generated pages that set none (Field Notes
+      // tag and author pages, 404). Page-level descriptions override it.
+      metadata: [
+        {
+          name: 'description',
+          content:
+            'Guides, references and hardware support for Avocado OS and Avocado Connect: build, ship and update embedded Linux devices.',
+        },
+      ],
       colorMode: {
         defaultMode: 'light',
         disableSwitch: false,

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Head from '@docusaurus/Head'
+import { PageMetadata } from '@docusaurus/theme-common'
 import Layout from '@theme/Layout'
 import SolutionHero from './SolutionHero'
 import ValueProposition from './ValueProposition'
@@ -105,10 +106,12 @@ export default function SolutionLayout(props: SolutionLayoutProps) {
         {keywords && <meta name="keywords" content={keywords} />}
         <meta property="og:title" content={`${title} | Peridio`} />
         <meta property="og:description" content={description} />
-        {ogImage && <meta property="og:image" content={ogImage} />}
         <meta property="og:type" content="product" />
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
       </Head>
+      {/* PageMetadata makes the image URL absolute (scrapers ignore relative
+          og:image URLs) and sets twitter:image to the same picture. */}
+      {ogImage && <PageMetadata image={ogImage} />}
 
       <SolutionHero {...hero} />
 

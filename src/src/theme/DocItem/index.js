@@ -1,5 +1,7 @@
 import React from 'react'
 import DocItem from '@theme-original/DocItem'
+import DocItemMetadata from '@theme/DocItem/Metadata'
+import { DocProvider } from '@docusaurus/plugin-content-docs/client'
 import ChangelogInfiniteScroll from '../../components/ChangelogInfiniteScroll'
 
 export default function DocItemWrapper(props) {
@@ -16,7 +18,17 @@ export default function DocItemWrapper(props) {
     permalink !== '/changelog/' &&
     permalink !== '/changelog/latest'
   ) {
-    return <ChangelogInfiniteScroll initialContent={content} />
+    // The infinite scroll replaces DocItem, and with it DocItem/Metadata, so
+    // render the entry's metadata here. Without it a changelog entry's static
+    // HTML carries no page title, description or share card.
+    return (
+      <>
+        <DocProvider content={content}>
+          <DocItemMetadata />
+        </DocProvider>
+        <ChangelogInfiniteScroll initialContent={content} />
+      </>
+    )
   }
 
   if (permalink === '/hardware/support-matrix') {

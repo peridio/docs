@@ -153,7 +153,12 @@ async function artworkDataUrl(file) {
 export async function prepareCard(note, fonts) {
   const title = normalize(note.title)
   if (!title) throw new Error('missing title')
-  const eyebrow = note.category ? `Field Notes · ${normalize(note.category)}` : 'Field Notes'
+  // Docs pages pass their family's eyebrow; Field Notes derive it from the category.
+  const eyebrow = note.eyebrow
+    ? normalize(note.eyebrow)
+    : note.category
+      ? `Field Notes · ${normalize(note.category)}`
+      : 'Field Notes'
   if (
     (await measure(eyebrow.toUpperCase(), fonts, {
       size: L.eyebrowSize,
@@ -166,6 +171,7 @@ export async function prepareCard(note, fonts) {
   return {
     eyebrow,
     title,
+    footer: note.footer,
     ...(await fitTitle(title, fonts)),
     kickerLines: await fitKicker(clampKicker(note.description), fonts),
     image: await artworkDataUrl(note.artwork),

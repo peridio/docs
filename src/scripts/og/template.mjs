@@ -71,7 +71,7 @@ export function cardHtml(card, { foregroundOnly = false } = {}) {
     ? `<div style="display:flex;flex-direction:column;font-size:${L.kickerSize}px;line-height:${L.kickerLineHeight};color:${OG_COLORS.kicker};">${lines(card.kickerLines, '')}</div>`
     : ''
 
-  const footer = `<div style="display:flex;align-items:center;gap:28px;">${peridioLogo()}<div style="font-family:'${OG_FONTS.mono}';font-size:${L.footerSize}px;color:${OG_COLORS.footnote};">${escapeHtml(OG_FOOTER_URL)}</div></div>`
+  const footer = `<div style="display:flex;align-items:center;gap:28px;">${peridioLogo()}<div style="font-family:'${OG_FONTS.mono}';font-size:${L.footerSize}px;color:${OG_COLORS.footnote};white-space:nowrap;">${escapeHtml(card.footer ?? OG_FOOTER_URL)}</div></div>`
 
   return (
     `<div style="position:relative;display:flex;width:${OG_CANVAS.width}px;height:${OG_CANVAS.height}px;background:${foregroundOnly ? '#000000' : OG_COLORS.ground};color:${OG_COLORS.ink};font-family:'${OG_FONTS.body}';">` +
