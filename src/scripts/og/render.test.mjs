@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { clampKicker, loadFonts, prepareCard, wrap } from './render.mjs'
-import { OG_LAYOUT } from './tokens.mjs'
+import { OG_FIELD_NOTES_TITLE, OG_LAYOUT } from './tokens.mjs'
 
 test('clampKicker keeps short copy as written', () => {
   assert.equal(clampKicker('One sentence.  With   spaces.', 150), 'One sentence. With spaces.')
@@ -33,12 +33,34 @@ test('wrap respects the line limit and the column width', async () => {
   assert.equal(await wrap('x'.repeat(200), fonts, style, 3), null)
 })
 
-test('prepareCard fits a long title by stepping the size down', async () => {
+test('prepareCard fits a docs title by stepping the size down', async () => {
   const fonts = await loadFonts()
   const card = await prepareCard(
     {
       slug: 'test',
       title: 'One NPU today, a different NPU tomorrow: MoveNet pose detection on the i.MX 8M Plus',
+      description: 'Short dek.',
+      eyebrow: 'Learn',
+      artwork: null,
+    },
+    fonts
+  )
+  assert.equal(card.eyebrow, 'Learn')
+  assert.ok(card.titleSize <= OG_LAYOUT.titleMaxSize && card.titleSize >= OG_LAYOUT.titleMinSize)
+  assert.ok(card.titleLines.length > 2)
+  assert.ok(
+    card.titleLines.length * card.titleSize * OG_LAYOUT.titleLineHeight <= OG_LAYOUT.titleMaxHeight
+  )
+  assert.deepEqual(card.kickerLines, ['Short dek.'])
+  assert.equal(card.image, null)
+})
+
+test('prepareCard keeps a Field Notes title to two lines at the smaller size', async () => {
+  const fonts = await loadFonts()
+  const card = await prepareCard(
+    {
+      slug: 'test',
+      title: 'Four-model DeepStream vision on Jetson Orin Nano in ~14 minutes',
       description: 'Short dek.',
       category: 'Portability',
       artwork: null,
@@ -46,12 +68,28 @@ test('prepareCard fits a long title by stepping the size down', async () => {
     fonts
   )
   assert.equal(card.eyebrow, 'Field Notes · Portability')
-  assert.ok(card.titleSize <= OG_LAYOUT.titleMaxSize && card.titleSize >= OG_LAYOUT.titleMinSize)
+  assert.equal(card.titleLines.length, 2)
   assert.ok(
-    card.titleLines.length * card.titleSize * OG_LAYOUT.titleLineHeight <= OG_LAYOUT.titleMaxHeight
+    card.titleSize <= OG_FIELD_NOTES_TITLE.titleMaxSize &&
+      card.titleSize >= OG_FIELD_NOTES_TITLE.titleMinSize
   )
-  assert.deepEqual(card.kickerLines, ['Short dek.'])
-  assert.equal(card.image, null)
+})
+
+test('prepareCard refuses a Field Notes title longer than two lines allow', async () => {
+  const fonts = await loadFonts()
+  await assert.rejects(
+    prepareCard(
+      {
+        slug: 't',
+        title:
+          'One NPU today, a different NPU tomorrow: MoveNet pose detection on the i.MX 8M Plus',
+        description: '',
+        artwork: null,
+      },
+      fonts
+    ),
+    /2 lines .* shorten it/
+  )
 })
 
 test('prepareCard refuses a title that cannot fit, naming the fix', async () => {

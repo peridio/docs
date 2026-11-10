@@ -8,7 +8,7 @@ import {
   OG_CANVAS,
   OG_COLORS,
   OG_FONTS,
-  OG_FOOTER_URL,
+  OG_FOOTER_LABEL,
   OG_LAYOUT as L,
   ruleGradient,
 } from './tokens.mjs'
@@ -28,11 +28,14 @@ function svgPart(part, width, height) {
   return `<svg width="${width}" height="${height}" viewBox="${part.viewBox}" fill="currentColor" preserveAspectRatio="xMidYMid meet">${paths}</svg>`
 }
 
-function peridioLogo() {
-  const { icon, wordmark } = BRAND_LOGO
-  const [, , w, h] = wordmark.viewBox.split(/\s+/).map(Number)
-  const wordmarkWidth = Math.round(L.logoWordmark * (w / h))
-  return `<div style="display:flex;align-items:center;gap:12px;color:${OG_COLORS.ink};">${svgPart(icon, L.logoIcon, L.logoIcon)}${svgPart(wordmark, wordmarkWidth, L.logoWordmark)}</div>`
+/** The footer mark: Peridio icon, then the label ("icon Docs"). */
+function footerMark(label) {
+  return (
+    `<div style="display:flex;align-items:center;gap:${L.footerGap}px;color:${OG_COLORS.ink};">` +
+    svgPart(BRAND_LOGO.icon, L.logoIcon, L.logoIcon) +
+    `<div style="font-size:${L.footerSize}px;font-weight:${L.footerWeight};letter-spacing:-0.5px;white-space:nowrap;">${escapeHtml(label)}</div>` +
+    '</div>'
+  )
 }
 
 function artwork(image) {
@@ -71,13 +74,15 @@ export function cardHtml(card, { foregroundOnly = false } = {}) {
     ? `<div style="display:flex;flex-direction:column;font-size:${L.kickerSize}px;line-height:${L.kickerLineHeight};color:${OG_COLORS.kicker};">${lines(card.kickerLines, '')}</div>`
     : ''
 
-  const footer = `<div style="display:flex;align-items:center;gap:28px;">${peridioLogo()}<div style="font-family:'${OG_FONTS.mono}';font-size:${L.footerSize}px;color:${OG_COLORS.footnote};white-space:nowrap;">${escapeHtml(card.footer ?? OG_FOOTER_URL)}</div></div>`
+  const footer = footerMark(OG_FOOTER_LABEL)
 
   return (
     `<div style="position:relative;display:flex;width:${OG_CANVAS.width}px;height:${OG_CANVAS.height}px;background:${foregroundOnly ? '#000000' : OG_COLORS.ground};color:${OG_COLORS.ink};font-family:'${OG_FONTS.body}';">` +
     (foregroundOnly ? '' : artwork(card.image)) +
     `<div style="position:absolute;left:${L.padX}px;top:${L.padY}px;width:${L.textWidth}px;height:${OG_CANVAS.height - 2 * L.padY}px;display:flex;flex-direction:column;justify-content:space-between;">` +
-    `<div style="display:flex;flex-direction:column;gap:28px;">${eyebrow}${title}${rule}${kicker}</div>` +
+    eyebrow +
+    // Title, rule and kicker centered vertically between the eyebrow and the footer.
+    `<div style="flex-grow:1;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:28px 0;">${title}${rule}${kicker}</div>` +
     footer +
     '</div></div>'
   )

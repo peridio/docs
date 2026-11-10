@@ -12,7 +12,14 @@ import { render } from 'takumi-js'
 import { fromHtml } from 'takumi-js/helpers/html'
 import { Renderer } from 'takumi-js/node'
 import { cardHtml, escapeHtml } from './template.mjs'
-import { OG_CANVAS, OG_FONTS, OG_FONT_FILES, OG_LAYOUT as L, OG_MAX_BYTES } from './tokens.mjs'
+import {
+  OG_CANVAS,
+  OG_FIELD_NOTES_TITLE,
+  OG_FONTS,
+  OG_FONT_FILES,
+  OG_LAYOUT as L,
+  OG_MAX_BYTES,
+} from './tokens.mjs'
 
 const FONT_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fonts')
 
@@ -101,11 +108,11 @@ export function clampKicker(text, max = L.kickerMaxChars) {
   return kept || sentences[0]
 }
 
-async function fitTitle(title, fonts) {
-  for (let size = L.titleMaxSize; size >= L.titleMinSize; size -= 2) {
+async function fitTitle(title, fonts, fit = L) {
+  for (let size = fit.titleMaxSize; size >= fit.titleMinSize; size -= 2) {
     const maxLines = Math.min(
-      L.titleMaxLines,
-      Math.floor(L.titleMaxHeight / (size * L.titleLineHeight))
+      fit.titleMaxLines,
+      Math.floor(fit.titleMaxHeight / (size * L.titleLineHeight))
     )
     const lines = await wrap(
       title,
@@ -116,7 +123,7 @@ async function fitTitle(title, fonts) {
     if (lines) return { titleSize: size, titleLines: lines }
   }
   throw new Error(
-    `title does not fit ${L.titleMaxHeight}px of height at the ${L.titleMinSize}px minimum; shorten it`
+    `title does not fit ${fit.titleMaxLines} lines at the ${fit.titleMinSize}px minimum; shorten it`
   )
 }
 
@@ -153,7 +160,9 @@ async function artworkDataUrl(file) {
 export async function prepareCard(note, fonts) {
   const title = normalize(note.title)
   if (!title) throw new Error('missing title')
-  // Docs pages pass their family's eyebrow; Field Notes derive it from the category.
+  // Docs pages pass their family's eyebrow; Field Notes derive it from the
+  // category and use the tighter two-line title fit.
+  const isFieldNote = !note.eyebrow
   const eyebrow = note.eyebrow
     ? normalize(note.eyebrow)
     : note.category
@@ -171,8 +180,7 @@ export async function prepareCard(note, fonts) {
   return {
     eyebrow,
     title,
-    footer: note.footer,
-    ...(await fitTitle(title, fonts)),
+    ...(await fitTitle(title, fonts, isFieldNote ? { ...L, ...OG_FIELD_NOTES_TITLE } : L)),
     kickerLines: await fitKicker(clampKicker(note.description), fonts),
     image: await artworkDataUrl(note.artwork),
   }
