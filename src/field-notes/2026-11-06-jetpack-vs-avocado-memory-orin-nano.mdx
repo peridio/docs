@@ -1,6 +1,6 @@
 ---
 title: 'How much of an Orin Nano 8GB is left for your model: JetPack 7.2 vs Avocado OS'
-description: 'Same board, two OS images: Avocado OS uses about 390 MiB of RAM at idle against about 860 MiB on JetPack 7.2.1 with the Ubuntu desktop, and this note measures how much RAM each leaves for a TensorRT model.'
+description: 'Same board, two OS images: Avocado OS uses about 394 MiB of RAM at idle against about 866 MiB on JetPack 7.2.1 with the Ubuntu desktop, and this note measures how much RAM each leaves for a TensorRT model.'
 date: 2026-11-06
 draft: true
 authors: [jtia]
@@ -24,18 +24,18 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR.** The same Jetson Orin Nano 8GB, two OS images, one ResNet-50 FP16 TensorRT engine. Every figure is one install and one run.
+**TL;DR.** The same Jetson Orin Nano 8GB, two OS images, one ResNet-50 FP16 TensorRT engine. Every figure is one install and one run on 2026-11-09.
 
 **Ubuntu + JetPack 7.2.1** (stock desktop)
 
-- RAM used: 857 to 861 MiB at idle, 1220 MiB while the model runs (6265 MiB left at the low point)
-- Disk: `nvidia-jetpack` adds about 26 GB on top of the stock install [ENGINEER: record the total used disk with `df` on the JetPack install, so the line can state one figure in GB]
+- RAM used: 866 MiB at idle, 1255 MiB while the model runs (6230 MiB left at the low point)
+- Disk: 35,027 MiB used with `nvidia-jetpack` installed (8,861 MiB for the stock install)
 - Setup: about 30 minutes, 12 manual steps
 
 **Avocado OS**
 
-- RAM used: 390 to 391 MiB at idle, 837 MiB while the model runs (6626 MiB left at the low point)
-- Disk: a 70.8 MB root filesystem image, and a 3.2 GB `/var` image once the TensorRT libraries are in it (0.58 GB without them)
+- RAM used: 394 MiB at idle, 799 MiB while the model runs (6665 MiB left at the low point)
+- Disk: 2,473 MiB used with the TensorRT libraries, the model and the engine on it (a 67.5 MiB root filesystem and 2,405 MiB of `/var`)
 - Setup: 6 minutes 56 seconds, 4 commands
 
 {/* truncate */}
@@ -50,18 +50,36 @@ This note puts the same board through two OS images and measures what is left fo
 
 The board is a Jetson Orin Nano 8GB devkit. The two images:
 
-- **JetPack 7.2.1** as a typical user runs it: NVIDIA's `jetsoninstaller-r39.2.1-2026-08-07-18-30-47-arm64.iso` (5,035,601,920 bytes), installed to the NVMe, giving Ubuntu 24.04 with the GNOME desktop on kernel 6.8.12-1021-tegra, default services, no trimming. The stock install has no CUDA, TensorRT or `trtexec`; `apt-get install nvidia-jetpack` adds them (TensorRT 10.16.2.10) and about 26 GB of disk.
-- **Avocado OS** from the `jetson-orin-nano-power` reference: the `avocado-bsp-jetson-orin-nano`, `avocado-ext-dev`, `avocado-ext-sshd-dev` and `avocado-ext-bringup` extensions on linux-yocto 6.18.52.
+- **JetPack 7.2.1** as a typical user runs it: NVIDIA's `jetsoninstaller-r39.2.1-2026-08-07-18-30-47-arm64.iso` (5,035,601,920 bytes), installed to the NVMe, giving Ubuntu 24.04 with the GNOME desktop on kernel 6.8.12-1021-tegra, default services, no trimming. The stock install has no CUDA, TensorRT or `trtexec`; `apt-get install nvidia-jetpack` adds them (TensorRT 10.16.2.10).
+- **Avocado OS** from the `jetson-orin-nano-power` reference: the `avocado-bsp-jetson-orin-nano`, `avocado-ext-dev`, `avocado-ext-sshd-dev`, `avocado-ext-bringup` and `avocado-ext-trt` extensions on linux-yocto 6.18.52.
 
-Both sides run TensorRT natively, with `trtexec` from `/usr/src/tensorrt/bin`, not in a container. No camera is involved: `trtexec` feeds the engine its own inputs, so the numbers measure the engine and the memory around it, not a camera pipeline. [ENGINEER: embed the two install recordings here once they are on YouTube, as the screenshot of it working]
+Both sides run TensorRT with native packages, not in a container: `trtexec` from `/usr/src/tensorrt/bin`, installed by `nvidia-jetpack` on JetPack and by the `avocado-ext-trt` extension on Avocado OS. I did not measure a container-based path on JetPack. No camera is involved. `trtexec` feeds the engine its own inputs, so the numbers measure the engine and the memory around it, not a camera pipeline.
 
-Memory is read on the device after the boot has settled, with one command on both sides:
+Here are the two Avocado OS installs, from flash to login. The first is the base image and the second adds TensorRT.
 
-```bash
-free -m | awk 'NR==2{print $3 " MiB used, " $7 " MiB available"}'
-```
+<div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/xJKfe4OBM9I"
+    title="Installing Avocado OS on a Jetson Orin Nano (Flash to Login)"
+    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  />
+</div>
 
-For the loaded case, the same ONNX model is built into a TensorRT engine and run on each OS, and memory is read while it runs. On JetPack the model is `resnet50-v1-12.onnx` from the ONNX model zoo (102,576,593 bytes), built with `trtexec --onnx=... --fp16` and run for 60 seconds, with `MemAvailable` sampled every 2 seconds in the 25 W mode. The protocol is a cold boot, 4 minutes to settle, three idle readings 5 seconds apart, the 60-second run, then three idle readings again. On Avocado OS the same model was fetched on the board (sha256 checked), built with the same flags (`/usr/src/tensorrt/bin/trtexec --onnx=... --saveEngine=... --fp16`, 46.8 s, a 51,525,476-byte engine) and run with `--loadEngine=... --duration=60 --warmUp=1000`, after a warm reboot and 240 seconds of uptime, with `MemAvailable` sampled every 2 seconds (32 samples).
+<div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, marginBottom: '1.5rem' }}>
+  <iframe
+    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+    src="https://www.youtube.com/embed/Z9l3UjK4YA8"
+    title="Installing Avocado OS with TensorRT on a Jetson Orin Nano"
+    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  />
+</div>
+
+RAM used is `MemTotal` minus `MemAvailable` from `/proc/meminfo` on both sides, which is the number `free -m` prints as used on JetPack. Both images were sampled the same way: a cold boot, 240 seconds of uptime to settle, three idle readings 5 seconds apart, a 60-second `trtexec` run, then three idle readings again, with `MemAvailable` sampled every 2 seconds across the whole sequence.
+
+The model is `resnet50-v1-12.onnx` from the ONNX model zoo (102,576,593 bytes, sha256 checked on both boards), built on each board with `trtexec --onnx=... --fp16` and run with `--loadEngine=... --duration=60 --warmUp=1000`. The build took 73 seconds on JetPack (a 51,641,260-byte engine) and 52 seconds on Avocado OS (51,528,604 bytes).
 
 ## Ubuntu + JetPack 7.2.1
 
@@ -71,29 +89,30 @@ JetPack comes as a 5.0 GB ISO with a lot of software in it, and the install is m
 
 Problems that cost time on an embedded device:
 
-- On four runs on the same board on 2026-11-06, the stock installer stopped at Step 9 of 13 with `An error occurred. Press enter to start a shell`. The interface `enP8p1s0` was never brought up in the runs I inspected, and I got a DHCP lease by hand with `ip link set enP8p1s0 up` and `dhcpcd`. I did not isolate the cause.
-- The install target decides how much the installer asks. `Install on NVMe` runs an unattended install from a fixed configuration, with no prompts for keyboard, user, storage layout or network, so there is no point at which to fix a network problem before it fails. The other targets open the interactive installer for those choices.
-- `Install on microSD` did not work on this bench on 2026-11-09. The installer stopped with `preseed: force-bootdisk=mmcblk0 is not a valid storage device. Starting interactive installer.`, because `lsblk` listed no `mmcblk0`. The card sat behind an SDWire3 SD-card mux, which UEFI listed as `UEFI SanDisk SN64G SD Device`. I did not isolate whether the mux or the installer kernel hides it. The install ended up on the NVMe, which erased the Avocado OS image that was there.
+- **The installer fails on a board that has run Avocado OS.** On four runs on 2026-11-06 the stock installer stopped at Step 9 of 13 with `An error occurred. Press enter to start a shell`. The cause is the firmware in the board's QSPI flash. Avocado OS flashing leaves Avocado's firmware there, NVIDIA's bootloader package reads the board name from the running firmware (`3767--0005--1--avocado-jetson-orin-nano-`) and rejects it as not matching any known board. After I flashed NVIDIA's stock QSPI firmware back (`flash.sh jetson-orin-nano-devkit-super-qspi internal`, 516 seconds, board in recovery mode) the same installer passed Step 9 and booted by itself on 2026-11-09. A board fresh from the factory has stock firmware and is not affected, but going back to JetPack from Avocado OS costs that flash first. Recovery mode is needed only for the flash, not for the installer. In the installer shell the interface `enP8p1s0` was also down until I brought it up by hand, which turned out not to be the cause.
+- The install target decides how much the installer asks. `Install on NVMe` runs an unattended install from a fixed configuration, with no prompts for keyboard, user, storage layout or network, so there is no point at which to fix a problem before it fails. The other targets open the interactive installer for those choices.
+- `Install on microSD` did not work on this bench. The installer stopped with `preseed: force-bootdisk=mmcblk0 is not a valid storage device. Starting interactive installer.`, because `lsblk` listed no `mmcblk0`, and booting the installer itself from that card failed with `Unable to find a medium`. The card sat behind an SDWire3 SD-card mux, which UEFI listed as `UEFI SanDisk SN64G SD Device`. I did not isolate whether the mux or the installer kernel hides it, so the install went to the NVMe.
 - The stock image's `sshd` has no host keys, and I enabled it by hand to reach the board.
 - 365 package updates were pending after the install.
 - At idle the top resident processes were `gnome-shell` (226 MB), `nvargus-daemon` (135 MB), `mutter-x11-frames` (122 MB), `Xorg` (84 MB) and `dockerd` (79 MB).
 
 ### Timing
 
-The times were not taken on one clean pass, so treat them as approximate:
+The times are from the 2026-11-09 install, except where noted:
 
 - **ISO download:** not timed, because it depends on the bandwidth of whoever runs it.
-- **Writing the ISO to the card:** 79.7 seconds with `dd` at 63.2 MB/s, then a byte-for-byte compare against the ISO.
-- **Installer, from picking `Install on NVMe` to its Step 9 of 13:** 12 minutes 37 seconds (12:56:27 to 13:09:04). Step 5 of 13, `Installing required packages`, alone took 9 minutes 32 seconds.
-- **The rest of the install and the manual steps:** about 15 minutes, from my own hand timing on an earlier install of the same ISO. I did not log it.
+- **Writing the ISO to the card:** 79.7 seconds with `dd` at 63.2 MB/s, then a byte-for-byte compare against the ISO (2026-11-06).
+- **Installer, from picking `Install on NVMe` to its last step:** 12 minutes 56 seconds (18:22:16 to 18:35:12), of which Step 5 of 13, `Installing required packages`, takes the longest. The kernel booted into the installed system 2 minutes after that.
+- **First-boot dialogs and enabling `sshd`:** not logged. They are manual and took a few minutes by hand.
+- **`apt-get install nvidia-jetpack`:** 6 minutes 10 seconds, 9,468 MB downloaded in 2 minutes 15 seconds at 70.1 MB/s, adding 26,166 MiB of disk (8,861 MiB to 35,027 MiB).
 - **Total:** about 30 minutes from a written card to a configured board.
 
 ### Takeaways
 
-- **Numbers:** about 30 minutes to a configured board, 857 to 861 MiB of RAM used at idle, a 1220 MiB peak while the model runs, and 6265 MiB left at the low point.
-- **Experience:** 12 manual steps on every board, a stock installer that stopped part-way on four runs in a row, and an unattended install only when the target is the NVMe.
+- **Numbers:** about 30 minutes to a configured board, 866 MiB of RAM used at idle, a 1255 MiB peak while the model runs, 6230 MiB left at the low point, and 35,027 MiB of disk.
+- **Experience:** 12 manual steps on every board, an installer that needs stock firmware and stopped part-way on four runs in a row without it, and an unattended install only when the target is the NVMe.
 - **Production readiness:** a general-purpose Ubuntu desktop with `dockerd` running, 365 pending updates and no SSH host keys until someone enables `sshd`. A hundred boards means a hundred manual installs, which does not scale.
-- **Against Avocado OS:** about 4.3 times as long to set up, about 2.2 times the RAM used at idle, about 46% more used at the peak of the model run, and 447 MiB less available at idle.
+- **Against Avocado OS:** about 4.3 times as long to set up, about 2.2 times the RAM used at idle, about 57% more used at the peak of the model run, 452 MiB less available at idle, and about 14 times the disk.
 
 ## Avocado OS
 
@@ -108,6 +127,8 @@ Avocado OS is installed from the project with four commands, recorded in one pas
 
 All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`), on Avocado OS 2026.73 with kernel 6.18.52. The same image takes OTA updates and is managed as a fleet through Peridio, so the board is provisioned once and updated in place afterwards.
 
+TensorRT is one more extension in the same project, built with `-r trt` instead of `-r power`. There is no separate install step on the board: the libraries come with the image, and on the board I fetched the model (9 seconds) and built the engine (52 seconds).
+
 ### Timing
 
 - **Total:** 6 minutes 56 seconds from the first `avocado install` to the login. Putting the board into recovery mode beforehand is not counted.
@@ -115,10 +136,10 @@ All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`
 
 ### Takeaways
 
-- **Numbers:** 6 minutes 56 seconds to a logged-in board, 390 to 391 MiB of RAM used at idle, an 837 MiB peak while the model runs, and 6626 MiB left at the low point.
+- **Numbers:** 6 minutes 56 seconds to a logged-in board, 394 MiB of RAM used at idle, a 799 MiB peak while the model runs, 6665 MiB left at the low point, and 2,473 MiB of disk with TensorRT.
 - **Experience:** four commands, no step at the board, and the board boots into the new image by itself.
 - **Production readiness:** an immutable root filesystem with extensions on top, OTA updates, and fleet management through Peridio. The reference carries three development extensions, a root serial console and root SSH among them, to remove before shipping.
-- **Against JetPack:** about 77% less setup time, about 55% less RAM used at idle, about 31% less at the peak of the model run, and 447 MiB (about 7%) more RAM available at idle.
+- **Against JetPack:** about 77% less setup time, about 55% less RAM used at idle, about 36% less at the peak of the model run, 452 MiB (about 7%) more RAM available at idle, and about 93% less disk.
 
 <PullQuote label="Setup">
   About **30 minutes** of installer and manual steps for stock JetPack (approximate), against **6
@@ -128,47 +149,47 @@ All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`
 ## Result
 
 <PullQuote>
-  Avocado OS leaves about **447 MiB** more RAM available at idle (**7072 MiB** against about **6625
-  MiB** on JetPack's Ubuntu desktop) and **361 MiB** more while the model runs (**6626 MiB** against
-  **6265 MiB**).
+  Avocado OS leaves about **452 MiB** more RAM available at idle (**7071 MiB** against **6618 MiB**
+  on JetPack's Ubuntu desktop) and **435 MiB** more while the model runs (**6665 MiB** against
+  **6230 MiB**).
 </PullQuote>
 
 RAM used, in MiB (lower is better):
 
 | State                        | JetPack 7.2.1 | Avocado OS |
 | ---------------------------- | ------------- | ---------- |
-| Idle, cold boot, settled     | 857 to 861    | 390 to 391 |
-| Model running (maximum used) | 1220          | 837        |
-| Idle again after the run     | 1025          | 573 to 577 |
+| Idle, cold boot, settled     | 866           | 394        |
+| Model running (average)      | 1213          | 781        |
+| Model running (maximum used) | 1255          | 799        |
+| Idle again after the run     | 1016          | 582        |
 
 RAM available, in MiB (higher is better):
 
-| State                             | JetPack 7.2.1 | Avocado OS   |
-| --------------------------------- | ------------- | ------------ |
-| Idle, cold boot, settled          | 6624 to 6627  | 7072 to 7073 |
-| Model running (minimum available) | 6265          | 6626         |
-| Idle again after the run          | 6459 to 6460  | 6886 to 6890 |
+| State                             | JetPack 7.2.1 | Avocado OS |
+| --------------------------------- | ------------- | ---------- |
+| Idle, cold boot, settled          | 6618          | 7071       |
+| Model running (minimum available) | 6230          | 6665       |
+| Idle again after the run          | 6469          | 6882       |
 
-```mermaid
-xychart-beta
-    title "RAM used in MiB"
-    x-axis ["JetPack idle", "Avocado idle", "JetPack model", "Avocado model", "JetPack after", "Avocado after"]
-    y-axis "MiB used" 0 --> 1400
-    bar [859, 391, 1220, 837, 1025, 575]
-```
+![RAM used through the model run on JetPack 7.2.1 and Avocado OS. Both sit flat at idle, jump when the model loads and settle at a higher level after it exits. JetPack idles at 866 MiB and peaks at 1255 MiB; Avocado OS idles at 394 MiB and peaks at 799 MiB.](/img/field-notes/jetpack-vs-avocado-ram-over-time.svg)
 
-The bars use the middle of each range. [ENGINEER: after a re-profile, replace the chart with memory over time through the model run, and add CPU and GPU load from `tegrastats`]
+![RAM used on JetPack 7.2.1 and Avocado OS at idle, as an average while the model runs and at its peak: 866 against 394 MiB at idle, 1213 against 781 on average and 1255 against 799 at the peak.](/img/field-notes/jetpack-vs-avocado-ram-summary.svg)
 
-- **Conditions:** the JetPack rows are one install and one cold boot on 2026-11-03, three idle readings each. The Avocado OS rows with TensorRT are one cold boot and one run on 2026-11-07 (board clock), three idle readings each.
-- **Cost of the model:** about 361 MiB of available RAM on JetPack (6626 to 6265) and about 446 MiB on Avocado OS (7072 to 6626) at the minimum point. About 166 MiB and about 182 MiB stayed in use after it exited.
-- **Throughput:** 580 queries per second on JetPack, and 599.1 on Avocado OS with a mean latency of 1.711 ms. The two are not comparable: the Avocado OS run used the feed's board support package, which does not set the 25 W power mode.
-- **Idle gap:** about 447 MiB is 7072 to 7073 minus 6624 to 6627, and it compares two different kernels, so it is approximate.
+The model costs about the same RAM on both images, 389 MiB of available memory on JetPack and 406 MiB on Avocado OS at the low point. The gap comes from what is already in use before the model starts.
+
+![GPU and CPU load through the model run. The GPU sits at about 98% on both images while the model runs and at 0% otherwise. CPU use is about 10% on JetPack and about 5% on Avocado OS.](/img/field-notes/jetpack-vs-avocado-gpu-cpu-load.svg)
+
+- **GPU and CPU load:** both images keep the GPU near 98% for the whole run (95% to 96% on average), so the engine is GPU-bound on both. The CPU averaged 10.7% on JetPack against 5.2% on Avocado OS. JetPack's figures come from `tegrastats`, Avocado OS's from sysfs and `/proc/stat`, because the Avocado image has no `tegrastats`.
+- **Throughput:** 466 to 471 queries per second on JetPack (mean latency 2.19 ms, six runs including one on a freshly rebuilt engine) and 601.6 on Avocado OS (1.70 ms). Do not read that as an OS difference. JetPack ran in the 25 W power mode with the GPU at about 910 MHz. The Avocado run came from the feed's board support package, which does not set the power mode, so its CPU and GPU governors sit on `performance`. The next section has the power side of the same difference.
+- **Conditions:** one install and one cold boot per image on 2026-11-09, three idle readings each. Earlier runs landed within a few MiB of these: 857 to 861 MiB used on JetPack on 2026-11-03, and 390 to 391 MiB on Avocado OS on 2026-11-07.
 
 <details>
 <summary>Other readings</summary>
 
 | Image                                    | State                                                                  | Used (MiB) | Available (MiB) |
 | ---------------------------------------- | ---------------------------------------------------------------------- | ---------- | --------------- |
+| JetPack 7.2.1, desktop, earlier install  | idle, cold boot, settled (2026-11-03)                                  | 857 to 861 | 6624 to 6627    |
+| Avocado OS, with TensorRT, earlier run   | idle, cold boot, settled (2026-11-07)                                  | 390 to 391 | 7072 to 7073    |
 | Avocado OS, bare image                   | idle                                                                   | 363 to 368 | not recorded    |
 | Avocado OS, reference runtime            | idle, one SSH session                                                  | 444        | 7020            |
 | Avocado OS, reference runtime            | idle, about a minute after power-on, serial console only (not settled) | 389        | 7074            |
@@ -181,21 +202,26 @@ The bare-image Avocado figures are the same on the L4T 6.8 and linux-yocto 6.18 
 
 ### What the headroom buys
 
-The ResNet-50 run cost about 446 MiB of available RAM on Avocado OS and about 361 MiB on JetPack. The idle gap of about 447 MiB is therefore roughly the footprint of one more copy of this workload on Avocado OS. On an 8 GB module that is room for:
+The ResNet-50 run cost about 406 MiB of available RAM on Avocado OS, so the idle gap of 452 MiB is slightly more than one more copy of this workload. On an 8 GB module that is room for:
 
 - a second model resident at the same time, a detector and a classifier for example, instead of swapping them;
 - more concurrent camera streams, each with its own decode and preprocessing buffers;
 - a larger batch size or a higher input resolution on the same model;
+- a larger model, for example a bigger backbone or a small language model, in the memory the desktop would have held;
 - the rest of the product next to the model: the camera pipeline, an application server and the device agent;
+- headroom for an OTA update: staging a new image, or running the old and new application side by side during a rollout;
+- a safety margin against out-of-memory kills when an allocation spikes, which on a device in the field has no one to restart it;
 - a cheaper module, if a workload that fits in 8 GB on JetPack also fits in less on Avocado OS. I did not test a smaller module.
 
 ### Idle power, on the same board
 
-Idle power is a tie within the noise, but only once the 25 W power mode and the CPU and GPU governors are set. The module's own power monitor (INA3221, VDD_IN rail) reads 4.75 W on the Avocado reference from a cold boot and 4.72 W after a warm reboot. JetPack 7.2.1 read 4.84 W on the same board, from `tegrastats`, on one headless boot. That is module power only: the carrier, fan and peripherals are excluded, and the comparison is against the headless baseline, not the desktop one.
+Idle power is a tie when Avocado OS runs the `power` profile, and the profile matters. The module's own power monitor (INA3221, VDD_IN rail) reads 4.75 W on the Avocado reference from a cold boot and 4.72 W after a warm reboot. JetPack 7.2.1 read 4.84 W on the same board from `tegrastats` on one headless boot, and 4.93 W with the Ubuntu desktop on 2026-11-09. That is module power only: the carrier, fan and peripherals are excluded.
 
-The Avocado figure depends on the 25 W mode and the `schedutil` CPU and `simple_ondemand` GPU governors, all set at boot. Without them the same runtime idled at 5.47 W (60 s window), because the Jetson kernels boot with the `performance` governors and the GPU sits at 918 MHz while nothing runs. The reference project ships `verify-power.sh`, which reads the monitor so you can check the number on your own hardware.
+The profile sets the 25 W power mode and the `schedutil` CPU and `simple_ondemand` GPU governors at boot. Without them the Jetson kernels boot with the `performance` governors and the GPU sits at 918 MHz while nothing runs. The `trt` run above had no profile: it idled at 6.53 W and drew 19.8 W while the model ran, against 4.93 W and 16.5 W on JetPack. Those clocks are also where its 601.6 queries per second come from. Per watt the two are close, about 30 queries per second per watt on Avocado OS and 28 on JetPack, and I did not run the `trt` image with the profile on, so there is no like-for-like throughput figure. The reference project ships `verify-power.sh`, which reads the monitor so you can check the number on your own hardware.
 
-These power figures come from a local build of `avocado-bsp-jetson-orin-nano` that carries the governors unit. The reference depends on that change, which is in review (bsp-jetson-orin-nano PR #6). The BSP currently on the feed, 0.2.1, does not have it: on a board flashed from the feed, `avocado-idle-governors.service` does not exist, `nvpmodel.service` and `nvpower.service` are `disabled`, `nvpmodel -q` prints `power mode is not set!`, the GPU devfreq node is missing and the CPU governor is `performance`. Until that change is merged and published, a project built from the feed does not reach these figures.
+**What to take from it:** set the power profile. With it Avocado OS idles level with JetPack, and the RAM headroom above is a gain on top of equal idle power.
+
+These power figures come from a local build of `avocado-bsp-jetson-orin-nano` that carries the governors unit. The reference depends on that change, which is in review (bsp-jetson-orin-nano PR #6). The BSP currently on the feed, 0.2.1, does not have it: on a board flashed from the feed, `avocado-idle-governors.service` does not exist, `nvpmodel.service` and `nvpower.service` are `disabled`, `nvpmodel -q` prints `power mode is not set!`, the GPU devfreq node is missing and the CPU governor is `performance`. Until that change is merged and published, a project built from the feed does not reach the idle figures.
 
 ## Reproduce it
 
@@ -220,17 +246,18 @@ ssh root@<device-ip> sh -s < verify-power.sh
 
 ### JetPack side
 
-1. Write the `jetsoninstaller-r39.2.1-...-arm64.iso` to a USB stick or card, and boot it from the UEFI Boot Manager (F11 on the serial console).
-2. If the installer asks to update the firmware, answer `Y`. Choose `Install Jetson ISO`, then `Install on NVMe`.
-3. Finish NVIDIA's first-boot setup on the USB device-mode serial port (`/dev/ttyACM0` on the host).
-4. Enable SSH, then add the JetPack packages:
+1. If the board has run Avocado OS before, put NVIDIA's stock QSPI firmware back first, with the board in recovery mode (about 9 minutes). A factory board does not need this.
+2. Write the `jetsoninstaller-r39.2.1-...-arm64.iso` to a USB stick, and boot it from the UEFI Boot Manager (F11 on the serial console). Recovery mode is not needed for this step.
+3. If the installer asks to update the firmware, answer `Y`. Choose `Install Jetson ISO`, then `Install on NVMe`.
+4. Finish NVIDIA's first-boot setup on the USB device-mode serial port (`/dev/ttyACM0` on the host).
+5. Enable SSH, then add the JetPack packages:
 
    ```bash
    sudo ssh-keygen -A && sudo systemctl enable --now ssh
    sudo apt-get install nvidia-jetpack
    ```
 
-5. Reboot, wait 4 minutes for first-boot work to settle, and read idle memory three times, 5 seconds apart:
+6. Reboot, wait 4 minutes for first-boot work to settle, and read idle memory three times, 5 seconds apart:
 
    ```bash
    free -m | awk 'NR==2{print $3 " MiB used, " $7 " MiB available"}'
@@ -249,4 +276,4 @@ sha256sum resnet50-v1-12.onnx
 /usr/src/tensorrt/bin/trtexec --onnx=resnet50-v1-12.onnx --saveEngine=resnet50.plan --fp16
 ```
 
-The image has no CA bundle, so `curl -k` is used and the checksum is what establishes the file. Then reboot, wait 240 seconds, read memory three times 5 seconds apart, run `trtexec --loadEngine=resnet50.plan --duration=60 --warmUp=1000` while `MemAvailable` is sampled every 2 seconds, and read memory three more times. The same flags on JetPack use `/usr/src/tensorrt/bin/trtexec` as well.
+The image has no CA bundle, so `curl -k` is used and the checksum is what establishes the file. Then cold-boot the board, wait 240 seconds, read memory three times 5 seconds apart, run `trtexec --loadEngine=resnet50.plan --duration=60 --warmUp=1000` while `MemAvailable` is sampled every 2 seconds, and read memory three more times. The same flags on JetPack use `/usr/src/tensorrt/bin/trtexec` as well. The root filesystem on Avocado OS is read-only, so the model and engine live under `/var`.
