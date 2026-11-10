@@ -1,12 +1,12 @@
 ---
 title: 'How much of an Orin Nano 8GB is left for your model: JetPack 7.2 vs Avocado OS'
-description: 'Same board, two OS images: Avocado OS uses about 394 MiB of RAM at idle against about 866 MiB on JetPack 7.2.1 with the Ubuntu desktop, and this note measures how much RAM each leaves for a TensorRT model.'
+description: 'Same board, two OS images: Avocado OS uses about 444 MiB of RAM at idle against about 866 MiB on JetPack 7.2.1 with the Ubuntu desktop, and this note measures how much RAM each leaves for a TensorRT model.'
 date: 2026-11-06
 draft: true
 authors: [jtia]
 tags: [jetson, orin-nano, memory, tensorrt, jetpack]
 category: 'Memory'
-tested_against: 'Avocado CLI 1.1.0-dev, linux-yocto 6.18.52, 2026 next feed; JetPack 7.2.1 (Ubuntu); Jetson Orin Nano 8GB devkit'
+tested_against: 'Avocado CLI 1.1.0-dev, linux-yocto 6.18.52, 2026 next feed plus bsp-jetson-orin-nano PR #6; JetPack 7.2.1 (Ubuntu); Jetson Orin Nano 8GB devkit'
 poster: jtia
 lift_for_blog: 'On an 8 GB module, the RAM an OS leaves for the model decides the model size, the stream count or whether a cheaper module will do.'
 promote_to_track: ''
@@ -24,7 +24,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR.** The same Jetson Orin Nano 8GB, two OS images, one ResNet-50 FP16 TensorRT engine. Every figure is one install and one run on 2026-11-09.
+**TL;DR.** The same Jetson Orin Nano 8GB, two OS images, one ResNet-50 FP16 TensorRT engine, both in the 25 W power mode. Every figure is one install and one run on 2026-11-09.
 
 **Ubuntu + JetPack 7.2.1** (stock desktop)
 
@@ -34,8 +34,8 @@ import TestStatus from '@site/src/components/TestStatus'
 
 **Avocado OS**
 
-- RAM used: 394 MiB at idle, 799 MiB while the model runs (6665 MiB left at the low point)
-- Disk: 2,473 MiB used with the TensorRT libraries, the model and the engine on it (a 67.5 MiB root filesystem and 2,405 MiB of `/var`)
+- RAM used: 444 MiB at idle, 877 MiB while the model runs (6587 MiB left at the low point)
+- Disk: 2,545 MiB used with the TensorRT libraries, the model and the engine on it (a 67.5 MiB root filesystem and 2,477 MiB of `/var`)
 - Setup: 6 minutes 56 seconds, 4 commands
 
 {/* truncate */}
@@ -51,7 +51,7 @@ This note puts the same board through two OS images and measures what is left fo
 The board is a Jetson Orin Nano 8GB devkit. The two images:
 
 - **JetPack 7.2.1** as a typical user runs it: NVIDIA's `jetsoninstaller-r39.2.1-2026-08-07-18-30-47-arm64.iso` (5,035,601,920 bytes), installed to the NVMe, giving Ubuntu 24.04 with the GNOME desktop on kernel 6.8.12-1021-tegra, default services, no trimming. The stock install has no CUDA, TensorRT or `trtexec`; `apt-get install nvidia-jetpack` adds them (TensorRT 10.16.2.10).
-- **Avocado OS** from the `jetson-orin-nano-power` reference: the `avocado-bsp-jetson-orin-nano`, `avocado-ext-dev`, `avocado-ext-sshd-dev`, `avocado-ext-bringup` and `avocado-ext-trt` extensions on linux-yocto 6.18.52.
+- **Avocado OS** from the `jetson-orin-nano-power` reference: the `avocado-bsp-jetson-orin-nano`, `avocado-ext-dev`, `avocado-ext-sshd-dev`, `avocado-ext-bringup` and `avocado-ext-trt` extensions on linux-yocto 6.18.52. The board support extension comes from bsp-jetson-orin-nano PR #6, which sets the 25 W power mode and the CPU and GPU governors at boot, built as a local path extension because the version on the feed does not have it yet. The power section below says what that changes.
 
 Both sides run TensorRT with native packages, not in a container: `trtexec` from `/usr/src/tensorrt/bin`, installed by `nvidia-jetpack` on JetPack and by the `avocado-ext-trt` extension on Avocado OS. I did not measure a container-based path on JetPack. No camera is involved. `trtexec` feeds the engine its own inputs, so the numbers measure the engine and the memory around it, not a camera pipeline.
 
@@ -79,7 +79,7 @@ Here are the two Avocado OS installs, from flash to login. The first is the base
 
 RAM used is `MemTotal` minus `MemAvailable` from `/proc/meminfo` on both sides, which is the number `free -m` prints as used on JetPack. Both images were sampled the same way: a cold boot, 240 seconds of uptime to settle, three idle readings 5 seconds apart, a 60-second `trtexec` run, then three idle readings again, with `MemAvailable` sampled every 2 seconds across the whole sequence.
 
-The model is `resnet50-v1-12.onnx` from the ONNX model zoo (102,576,593 bytes, sha256 checked on both boards), built on each board with `trtexec --onnx=... --fp16` and run with `--loadEngine=... --duration=60 --warmUp=1000`. The build took 73 seconds on JetPack (a 51,641,260-byte engine) and 52 seconds on Avocado OS (51,528,604 bytes).
+The model is `resnet50-v1-12.onnx` from the ONNX model zoo (102,576,593 bytes, sha256 checked on both boards), built on each board with `trtexec --onnx=... --fp16` and run with `--loadEngine=... --duration=60 --warmUp=1000`. The build took 73 seconds on JetPack (a 51,641,260-byte engine) and 80 seconds on Avocado OS (51,590,116 bytes).
 
 ## Ubuntu + JetPack 7.2.1
 
@@ -112,7 +112,7 @@ The times are from the 2026-11-09 install, except where noted:
 - **Numbers:** about 30 minutes to a configured board, 866 MiB of RAM used at idle, a 1255 MiB peak while the model runs, 6230 MiB left at the low point, and 35,027 MiB of disk.
 - **Experience:** 12 manual steps on every board, an installer that needs stock firmware and stopped part-way on four runs in a row without it, and an unattended install only when the target is the NVMe.
 - **Production readiness:** a general-purpose Ubuntu desktop with `dockerd` running, 365 pending updates and no SSH host keys until someone enables `sshd`. A hundred boards means a hundred manual installs, which does not scale.
-- **Against Avocado OS:** about 4.3 times as long to set up, about 2.2 times the RAM used at idle, about 57% more used at the peak of the model run, 452 MiB less available at idle, and about 14 times the disk.
+- **Against Avocado OS:** about 4.3 times as long to set up, about twice the RAM used at idle, about 43% more used at the peak of the model run, about 400 MiB less available at idle, and about 14 times the disk.
 
 ## Avocado OS
 
@@ -127,7 +127,7 @@ Avocado OS is installed from the project with four commands, recorded in one pas
 
 All four extensions were merged on first boot (`Total: 4 extension(s), 4 merged`), on Avocado OS 2026.73 with kernel 6.18.52. The same image takes OTA updates and is managed as a fleet through Peridio, so the board is provisioned once and updated in place afterwards.
 
-TensorRT is one more extension in the same project, built with `-r trt` instead of `-r power`. There is no separate install step on the board: the libraries come with the image, and on the board I fetched the model (9 seconds) and built the engine (52 seconds).
+TensorRT is one more extension in the same project, built with `-r trt` instead of `-r power`. There is no separate install step on the board: the libraries come with the image, and on the board I fetched the model (2 seconds) and built the engine (80 seconds).
 
 ### Timing
 
@@ -136,10 +136,10 @@ TensorRT is one more extension in the same project, built with `-r trt` instead 
 
 ### Takeaways
 
-- **Numbers:** 6 minutes 56 seconds to a logged-in board, 394 MiB of RAM used at idle, a 799 MiB peak while the model runs, 6665 MiB left at the low point, and 2,473 MiB of disk with TensorRT.
+- **Numbers:** 6 minutes 56 seconds to a logged-in board, 444 MiB of RAM used at idle, an 877 MiB peak while the model runs, 6587 MiB left at the low point, and 2,545 MiB of disk with TensorRT.
 - **Experience:** four commands, no step at the board, and the board boots into the new image by itself.
 - **Production readiness:** an immutable root filesystem with extensions on top, OTA updates, and fleet management through Peridio. The reference carries three development extensions, a root serial console and root SSH among them, to remove before shipping.
-- **Against JetPack:** about 77% less setup time, about 55% less RAM used at idle, about 36% less at the peak of the model run, 452 MiB (about 7%) more RAM available at idle, and about 93% less disk.
+- **Against JetPack:** about 77% less setup time, about 49% less RAM used at idle, about 30% less at the peak of the model run, about 400 MiB (about 6%) more RAM available at idle, and about 93% less disk.
 
 <PullQuote label="Setup">
   About **30 minutes** of installer and manual steps for stock JetPack (approximate), against **6
@@ -149,60 +149,63 @@ TensorRT is one more extension in the same project, built with `-r trt` instead 
 ## Result
 
 <PullQuote>
-  Avocado OS leaves about **452 MiB** more RAM available at idle (**7071 MiB** against **6618 MiB**
-  on JetPack's Ubuntu desktop) and **435 MiB** more while the model runs (**6665 MiB** against
-  **6230 MiB**).
+  Avocado OS leaves about **400 MiB** more RAM available at idle (**7021 MiB** against **6618 MiB**
+  on JetPack's Ubuntu desktop) and **357 MiB** more while the model runs (**6587 MiB** against
+  **6230 MiB**), at the same power draw and about 5% more throughput.
 </PullQuote>
 
 RAM used, in MiB (lower is better):
 
 | State                        | JetPack 7.2.1 | Avocado OS |
 | ---------------------------- | ------------- | ---------- |
-| Idle, cold boot, settled     | 866           | 394        |
-| Model running (average)      | 1213          | 781        |
-| Model running (maximum used) | 1255          | 799        |
-| Idle again after the run     | 1016          | 582        |
+| Idle, cold boot, settled     | 866           | 444        |
+| Model running (average)      | 1213          | 830        |
+| Model running (maximum used) | 1255          | 877        |
+| Idle again after the run     | 1016          | 609        |
 
 RAM available, in MiB (higher is better):
 
 | State                             | JetPack 7.2.1 | Avocado OS |
 | --------------------------------- | ------------- | ---------- |
-| Idle, cold boot, settled          | 6618          | 7071       |
-| Model running (minimum available) | 6230          | 6665       |
-| Idle again after the run          | 6469          | 6882       |
+| Idle, cold boot, settled          | 6618          | 7021       |
+| Model running (minimum available) | 6230          | 6587       |
+| Idle again after the run          | 6469          | 6855       |
 
-![RAM used through the model run on JetPack 7.2.1 and Avocado OS. Both sit flat at idle, jump when the model loads and settle at a higher level after it exits. JetPack idles at 866 MiB and peaks at 1255 MiB; Avocado OS idles at 394 MiB and peaks at 799 MiB.](/img/field-notes/jetpack-vs-avocado-ram-over-time.svg)
+![RAM used through the model run on JetPack 7.2.1 and Avocado OS. Both sit flat at idle, jump when the model loads and settle at a higher level after it exits. JetPack idles at 866 MiB and peaks at 1255 MiB; Avocado OS idles at 444 MiB and peaks at 877 MiB.](/img/field-notes/jetpack-vs-avocado-ram-over-time.svg)
 
-![RAM used on JetPack 7.2.1 and Avocado OS at idle, as an average while the model runs and at its peak: 866 against 394 MiB at idle, 1213 against 781 on average and 1255 against 799 at the peak.](/img/field-notes/jetpack-vs-avocado-ram-summary.svg)
+![RAM used on JetPack 7.2.1 and Avocado OS at idle, as an average while the model runs and at its peak: 866 against 444 MiB at idle, 1213 against 830 on average and 1255 against 877 at the peak.](/img/field-notes/jetpack-vs-avocado-ram-summary.svg)
 
-The model costs about the same RAM on both images, 389 MiB of available memory on JetPack and 406 MiB on Avocado OS at the low point. The gap comes from what is already in use before the model starts.
+The model costs about the same RAM on both images: about 390 MiB of available memory on JetPack and about 430 MiB on Avocado OS at the low point. The gap comes from what is already in use before the model starts.
 
-![GPU and CPU load through the model run. The GPU sits at about 98% on both images while the model runs and at 0% otherwise. CPU use is about 10% on JetPack and about 5% on Avocado OS.](/img/field-notes/jetpack-vs-avocado-gpu-cpu-load.svg)
+![GPU and CPU load through the model run. The GPU sits at about 98% on both images while the model runs and at 0% otherwise. CPU use is about 11% on JetPack and about 9% on Avocado OS.](/img/field-notes/jetpack-vs-avocado-gpu-cpu-load.svg)
 
-- **GPU and CPU load:** both images keep the GPU near 98% for the whole run (95% to 96% on average), so the engine is GPU-bound on both. The CPU averaged 10.7% on JetPack against 5.2% on Avocado OS. JetPack's figures come from `tegrastats`, Avocado OS's from sysfs and `/proc/stat`, because the Avocado image has no `tegrastats`.
-- **Throughput:** 466 to 471 queries per second on JetPack (2.19 ms mean latency, six runs) against 601.6 on Avocado OS (1.70 ms). That is not an OS difference: JetPack ran in the 25 W power mode and this Avocado image ran without one. The power section below has the details.
-- **Conditions:** one install and one cold boot per image on 2026-11-09, three idle readings each. Earlier runs landed within a few MiB of these: 857 to 861 MiB used on JetPack on 2026-11-03, and 390 to 391 MiB on Avocado OS on 2026-11-07.
+- **GPU and CPU load:** both images keep the GPU near 98% for the whole run (95% to 96% on average), so the engine is GPU-bound on both. The CPU averaged 10.7% on JetPack against 8.9% on Avocado OS. JetPack's figures come from `tegrastats`, Avocado OS's from sysfs and `/proc/stat`, because the Avocado image has no `tegrastats`.
+- **Throughput:** 466 to 471 queries per second on JetPack (2.19 ms mean latency, six runs) against 491.6 on Avocado OS (2.09 ms, one run), about 5% more. The GPU ran at 918 MHz on Avocado OS and about 910 MHz on JetPack.
+- **Power:** the module drew 16.3 W while the model ran on Avocado OS and 16.5 W on JetPack, and 4.7 W against 4.9 W at idle. The power section below has the detail.
+- **Conditions:** one install and one cold boot per image on 2026-11-09, three idle readings each. Earlier runs landed within a few MiB of these on JetPack (857 to 861 MiB used on 2026-11-03).
 
 <details>
 <summary>Other readings</summary>
 
-| Image                                    | State                                                                  | Used (MiB) | Available (MiB) |
-| ---------------------------------------- | ---------------------------------------------------------------------- | ---------- | --------------- |
-| JetPack 7.2.1, desktop, earlier install  | idle, cold boot, settled (2026-11-03)                                  | 857 to 861 | 6624 to 6627    |
-| Avocado OS, with TensorRT, earlier run   | idle, cold boot, settled (2026-11-07)                                  | 390 to 391 | 7072 to 7073    |
-| Avocado OS, bare image                   | idle                                                                   | 363 to 368 | not recorded    |
-| Avocado OS, reference runtime            | idle, one SSH session                                                  | 444        | 7020            |
-| Avocado OS, reference runtime            | idle, about a minute after power-on, serial console only (not settled) | 389        | 7074            |
-| Avocado OS, board support extension only | idle, cold boot, settled                                               | 215 to 216 | 7072            |
-| JetPack 7.2.1, headless                  | idle, one boot                                                         | 563 to 566 | not recorded    |
+| Image                                       | State                                                                  | Used (MiB) | Available (MiB) |
+| ------------------------------------------- | ---------------------------------------------------------------------- | ---------- | --------------- |
+| Avocado OS, TensorRT, without power profile | idle, cold boot, settled (2026-11-09, feed BSP)                        | 392 to 395 | 7070 to 7072    |
+| Avocado OS, TensorRT, without power profile | model running (maximum used, minimum available)                        | 799        | 6665            |
+| JetPack 7.2.1, desktop, earlier install     | idle, cold boot, settled (2026-11-03)                                  | 857 to 861 | 6624 to 6627    |
+| Avocado OS, with TensorRT, earlier run      | idle, cold boot, settled (2026-11-07)                                  | 390 to 391 | 7072 to 7073    |
+| Avocado OS, bare image                      | idle                                                                   | 363 to 368 | not recorded    |
+| Avocado OS, reference runtime               | idle, one SSH session                                                  | 444        | 7020            |
+| Avocado OS, reference runtime               | idle, about a minute after power-on, serial console only (not settled) | 389        | 7074            |
+| Avocado OS, board support extension only    | idle, cold boot, settled                                               | 215 to 216 | 7072            |
+| JetPack 7.2.1, headless                     | idle, one boot                                                         | 563 to 566 | not recorded    |
 
-The bare-image Avocado figures are the same on the L4T 6.8 and linux-yocto 6.18 kernels. The headless JetPack row is one boot and is not the comparison baseline: a typical user runs the Ubuntu desktop, so that is what this note is measured against. The board-support-extension-only row is the same 7072 MiB available as the image with the debug and TensorRT extensions. Its Used column is lower because it depends on how the kernel counts buffer cache, so compare Available between images, not Used.
+The first two rows are the same image built with the board support package on the feed today, which does not set the power mode or the governors. It uses about 50 MiB less RAM than the Avocado OS figures above, because the power profile runs `nvpmodel`, `nvpower` and the governors unit, and it is also the configuration behind the 601.6 queries per second in the power section. The bare-image Avocado figures are the same on the L4T 6.8 and linux-yocto 6.18 kernels. The headless JetPack row is one boot and is not the comparison baseline: a typical user runs the Ubuntu desktop, so that is what this note is measured against. The board-support-extension-only row is the same 7072 MiB available as the image with the debug and TensorRT extensions. Its Used column is lower because it depends on how the kernel counts buffer cache, so compare Available between images, not Used.
 
 </details>
 
 ### What the headroom buys
 
-The ResNet-50 run cost about 406 MiB of available RAM on Avocado OS, so the idle gap of 452 MiB is slightly more than one more copy of this workload. On an 8 GB module that is room for:
+The ResNet-50 run cost about 430 MiB of available RAM on Avocado OS, so the idle gap of about 400 MiB is close to one more copy of this workload. On an 8 GB module that is room for:
 
 - a second model resident at the same time, a detector and a classifier for example, instead of swapping them;
 - more concurrent camera streams, each with its own decode and preprocessing buffers;
@@ -213,15 +216,26 @@ The ResNet-50 run cost about 406 MiB of available RAM on Avocado OS, so the idle
 - a safety margin against out-of-memory kills when an allocation spikes, which on a device in the field has no one to restart it;
 - a cheaper module, if a workload that fits in 8 GB on JetPack also fits in less on Avocado OS. I did not test a smaller module.
 
-### Idle power, on the same board
+### Power and throughput, on the same board
 
-Idle power is a tie when Avocado OS runs the `power` profile, and the profile matters. The module's own power monitor (INA3221, VDD_IN rail) reads 4.75 W on the Avocado reference from a cold boot and 4.72 W after a warm reboot. JetPack 7.2.1 read 4.84 W on the same board from `tegrastats` on one headless boot, and 4.93 W with the Ubuntu desktop on 2026-11-09. That is module power only: the carrier, fan and peripherals are excluded.
+With the power profile Avocado OS matches JetPack on power and runs the engine about 5% faster. The module's own power monitor (INA3221, VDD_IN rail) read, over the idle windows and the 60-second run:
 
-The profile sets the 25 W power mode and the `schedutil` CPU and `simple_ondemand` GPU governors at boot. Without them the Jetson kernels boot with the `performance` governors and the GPU sits at 918 MHz while nothing runs. The `trt` run above had no profile: it idled at 6.53 W and drew 19.8 W while the model ran, against 4.93 W and 16.5 W on JetPack. Those clocks are also where its 601.6 queries per second come from. Per watt the two are close, about 30 queries per second per watt on Avocado OS and 28 on JetPack, and I did not run the `trt` image with the profile on, so there is no like-for-like throughput figure. The reference project ships `verify-power.sh`, which reads the monitor so you can check the number on your own hardware.
+| State                    | JetPack 7.2.1 | Avocado OS |
+| ------------------------ | ------------- | ---------- |
+| Idle, mean               | 4.93 W        | 4.72 W     |
+| Model running, mean      | 16.49 W       | 16.28 W    |
+| Throughput (qps)         | 466 to 471    | 491.6      |
+| Queries per second per W | about 28.5    | about 30.2 |
 
-**What to take from it:** set the power profile. With it Avocado OS idles level with JetPack, and the RAM headroom above is a gain on top of equal idle power.
+That is module power only: the carrier, fan and peripherals are excluded. JetPack's figures come from `tegrastats` and Avocado OS's from the monitor itself, and an earlier headless JetPack boot read 4.84 W at idle.
 
-These power figures come from a local build of `avocado-bsp-jetson-orin-nano` that carries the governors unit. The reference depends on that change, which is in review (bsp-jetson-orin-nano PR #6). The BSP currently on the feed, 0.2.1, does not have it: on a board flashed from the feed, `avocado-idle-governors.service` does not exist, `nvpmodel.service` and `nvpower.service` are `disabled`, `nvpmodel -q` prints `power mode is not set!`, the GPU devfreq node is missing and the CPU governor is `performance`. Until that change is merged and published, a project built from the feed does not reach the idle figures.
+The power profile is the 25 W power mode plus the `schedutil` CPU and `simple_ondemand` GPU governors, set at boot by the board support package. Without it the Jetson kernels boot on the `performance` governors with the GPU parked at 918 MHz, and the same image behaves differently: it idled at 6.53 W, drew 19.8 W while the model ran, and reached 601.6 queries per second, because nothing scales the clocks down. That is what a project built from the feed alone gets today, and it is not comparable with JetPack. The profile costs about 50 MiB of RAM. The reference project ships `verify-power.sh`, which reads the monitor so you can check the number on your own hardware.
+
+**What to take from it:** set the power profile. With it Avocado OS idles and runs at the same power as JetPack, a little faster, and with about 400 MiB more RAM left.
+
+The kernel logged `devfreq 17000000.gpu: Couldn't update frequency transition information.` repeatedly on the console while the model built and ran with the governors active. I did not isolate it, and the run was otherwise normal.
+
+The governors unit is in review (bsp-jetson-orin-nano PR #6), and the BSP currently on the feed, 0.2.1, does not have it: on a board flashed from the feed, `avocado-idle-governors.service` does not exist, `nvpmodel.service` and `nvpower.service` are `disabled`, `nvpmodel -q` prints `power mode is not set!`, the GPU devfreq node is missing and the CPU governor is `performance`. Until that change is merged and published, a project built from the feed does not reach the figures above, and the Avocado OS image in this note was built with the BSP pointed at the PR branch.
 
 ## Reproduce it
 
@@ -237,7 +251,7 @@ avocado build
 avocado provision -r power --profile tegraflash-nvme
 ```
 
-Use `--profile tegraflash-sd` for an SD card. Both erase the target entirely and rewrite the QSPI firmware and the UEFI variables. Get onto the board through the debug console (115200 baud), install your key in `/var/lib/ssh/authorized_keys`, then read memory and power from the host:
+Use `--profile tegraflash-sd` for an SD card. Both erase the target entirely and rewrite the QSPI firmware and the UEFI variables. Until the governors change is published, point the `avocado-bsp-jetson-orin-nano` extension at a checkout of the PR branch (`source: {type: path, path: ../bsp}` in `avocado.yaml`). Remove the jumper after the flash, because a power cycle with it fitted returns the board to recovery mode. Get onto the board through the debug console (115200 baud), install your key in `/var/lib/ssh/authorized_keys`, then read memory and power from the host:
 
 ```bash
 ssh root@<device-ip> "free -m | awk 'NR==2{print \$3 \" MiB used, \" \$7 \" MiB available\"}'"
@@ -274,6 +288,7 @@ mkdir -p /var/trt && cd /var/trt
 curl -ksSL -o resnet50-v1-12.onnx 'https://media.githubusercontent.com/media/onnx/models/main/validated/vision/classification/resnet/model/resnet50-v1-12.onnx'
 sha256sum resnet50-v1-12.onnx
 /usr/src/tensorrt/bin/trtexec --onnx=resnet50-v1-12.onnx --saveEngine=resnet50.plan --fp16
+sync
 ```
 
-The image has no CA bundle, so `curl -k` is used and the checksum is what establishes the file. Then cold-boot the board, wait 240 seconds, read memory three times 5 seconds apart, run `trtexec --loadEngine=resnet50.plan --duration=60 --warmUp=1000` while `MemAvailable` is sampled every 2 seconds, and read memory three more times. The same flags on JetPack use `/usr/src/tensorrt/bin/trtexec` as well. The root filesystem on Avocado OS is read-only, so the model and engine live under `/var`.
+The image has no CA bundle, so `curl -k` is used and the checksum is what establishes the file. Run `sync` before you power-cycle: on one run an engine written just before a power cycle came back as a 0-byte file and `trtexec` failed with `read 0 out of 32 bytes`. I did not isolate the cause. Then cold-boot the board, wait 240 seconds, read memory three times 5 seconds apart, run `trtexec --loadEngine=resnet50.plan --duration=60 --warmUp=1000` while `MemAvailable` is sampled every 2 seconds, and read memory three more times. The same flags on JetPack use `/usr/src/tensorrt/bin/trtexec` as well. The root filesystem on Avocado OS is read-only, so the model and engine live under `/var`.
