@@ -36,7 +36,17 @@ In the built page, check:
 grep -l "\[ENGINEER:" field-notes/*.mdx
 ```
 
-The command must not list the note. Scan the note for em dashes and en dashes. After any rewrite, compare every number in the old and new text, and account for each one that changed.
+The command must not list a note that is ready to leave draft. A draft lists its markers, and the build with `draft` set to `false` renders them, so keep the flag `true` until none remain. Scan the note for em dashes and en dashes. After any rewrite, compare every number in the old and new text, and account for each one that changed.
+
+Trace every number to the raw output. This prints each number in the note body that the raw output does not contain:
+
+```bash
+awk '/^---$/{c++; next} c>=2' field-notes/<note>.mdx | grep -o -E '[0-9][0-9,.]*' | sort -u | while read -r n; do m=${n//,/}; m=${m%.}; grep -q -F -- "$m" <raw-output-file> || echo "$n"; done
+```
+
+Each number it prints must be a derivation you can name: a sum, a difference, a unit conversion or a rounding. Version strings, dates and protocol values (such as a settle time) are expected. Write the derivation down. If you cannot name one, the number is unverified. The check matches substrings, so a number can pass by accident. Use it as a screen, not as proof.
+
+Open the generated `-thumb.png` for the note. Every label on it must be readable at 400 px.
 
 ## 4. Do not commit build output
 

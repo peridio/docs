@@ -48,13 +48,13 @@ A Field Note is true. Every number, version and command output traces to somethi
 ### Checklist for step 5
 
 - Frontmatter: `title` (result-first), `description`, `date`, `draft: true`, `authors`, `tags`, `category`, and the internal fields (`tested_against`, `poster`, `lift_for_blog`, `promote_to_track`).
-- Index thumbnail: keep the template's empty `image: ''` line, set `image_source`, then run `make thumbs`. Without the `image:` line the generator writes the files and fails with `no image: line to update`. Use a 16:9 source with large shapes and labels, because the generator dithers it to six grey levels. Commit the generated files and the source.
+- Index thumbnail: keep the template's empty `image: ''` line, set `image_source`, then run `make thumbs`. Without the `image:` line the generator writes the files and fails with `no image: line to update`. Use a 16:9 source with text at least 46 px tall and labels under 16 characters, because the index shows the thumbnail at 400 px, a quarter of the 1600 px source, dithered to six grey levels. Open the generated `-thumb.png` and read every label before you commit. Commit the generated files and the source.
 - `<TestStatus>` with `targets`, a released `cli` version, and the `reference` link.
 - A TL;DR that opens with the result in one sentence with its key number. For a comparison, add one bullet list of facts per option, then one line of conditions.
 - The `{/* truncate */}` marker, then a cold-reader intro of two or three sentences.
 - A body with language-tagged code blocks, and a `<PullQuote>` for the headline result.
 - The honest problems section. In a comparison, fold each problem into its option's section. Drop a problem that is fixed before publication, and say what changed.
-- A "Reproduce it" section with every prerequisite step.
+- A "Reproduce it" section with every prerequisite step. Publish each script the note depends on (a reference repo or a gist) and link it. A path in a scratch directory is not a source a reader can open, so leave an `[ENGINEER: ...]` marker until the script is published.
 - Media: images under `static/img/field-notes/`, and recordings as a responsive YouTube `iframe`.
 
 ## What NOT to do
@@ -70,4 +70,6 @@ A Field Note is true. Every number, version and command output traces to somethi
 
 ## It's working if
 
-`grep -l "\[ENGINEER:" src/field-notes/<note>.mdx` prints nothing, the build in `references/verification.md` exits 0 with `draft` set to `false`, and the note's `draft` line is `true` again afterwards. A reader who reads only the TL;DR can state the result and its key numbers, and each figure in the note appears in the raw data the engineer kept.
+The build in `references/verification.md` exits 0 with `draft` set to `false`, and the note's `draft` line is `true` again afterwards. Every number that does not appear in the raw data is a derivation you can name. A reader who reads only the TL;DR can state the result and its key numbers.
+
+For a note that is ready to leave draft, `grep -l "\[ENGINEER:" src/field-notes/<note>.mdx` prints nothing. A draft that still has markers prints the note, which is expected. Keep `draft: true` until it does not, because the build with `draft` set to `false` renders every marker on the page.

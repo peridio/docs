@@ -49,7 +49,7 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 | `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                                                                                                                           |
 | `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                                                                                                                                     |
 
-Give every note an index thumbnail: keep the template's empty `image: ''` line, set `image_source`, and run `make thumbs`. The generator fails if the `image:` line is missing. Use a 16:9 source with large shapes and labels, because the generator dithers it to six grey levels. Most published notes have a thumbnail, and the build does not enforce it.
+Give every note an index thumbnail: keep the template's empty `image: ''` line, set `image_source`, and run `make thumbs`. The generator fails if the `image:` line is missing. Use a 16:9 source with text at least 46 px tall and labels under 16 characters, because the index shows the thumbnail at 400 px, a quarter of the 1600 px source, dithered to six grey levels. Read every label on the generated `-thumb.png` before you commit. Most published notes have a thumbnail, and the build does not enforce it.
 
 `poster`, `lift_for_blog`, and `promote_to_track` are editorial metadata. They never render to readers, but they live in frontmatter so the team can grep them. Run from `src/field-notes/`:
 
