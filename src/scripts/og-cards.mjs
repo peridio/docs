@@ -18,16 +18,18 @@ import { createHash } from 'node:crypto'
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
-import { OUT_DIR, readNotes } from './og/notes.mjs'
+import { pathToFileURL } from 'node:url'
+import { OUT_DIR, readDescriptions, readNotes } from './og/notes.mjs'
 import { loadFonts, renderNote } from './og/render.mjs'
 import { OG_CANVAS, OG_MAX_BYTES } from './og/tokens.mjs'
 
 const MANIFEST = path.join(OUT_DIR, 'manifest.json')
 const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex')
 
-// Search engines truncate snippets past roughly this; reported, never fatal,
-// because the description is editorial copy.
-const DESCRIPTION_SOFT_MAX = 160
+// Search engines and link previews truncate a description past roughly this,
+// and its first sentence is the card's kicker. Every note, drafts included,
+// must stay at or under it; both `og` and `og:check` fail otherwise.
+export const DESCRIPTION_MAX = 160
 
 async function renderAll() {
   const fonts = await loadFonts()
@@ -56,13 +58,23 @@ function manifestFor(rendered) {
   }
 }
 
-function descriptionWarnings(rendered) {
-  return rendered
-    .filter(({ note }) => String(note.description ?? '').length > DESCRIPTION_SOFT_MAX)
+/** Notes whose description is over DESCRIPTION_MAX, as problem strings. */
+export function descriptionProblems(notes = readDescriptions()) {
+  return notes
+    .filter(({ description }) => description.length > DESCRIPTION_MAX)
     .map(
-      ({ note }) =>
-        `${note.slug}: description is ${note.description.length} chars (search snippets truncate near ${DESCRIPTION_SOFT_MAX})`
+      ({ slug, description }) =>
+        `${slug}: description is ${description.length} chars, over the ${DESCRIPTION_MAX}-char limit (search snippets and link previews cut it off)`
     )
+}
+
+function failOnDescriptions() {
+  const problems = descriptionProblems()
+  if (!problems.length) return
+  console.error('Field Notes descriptions too long:')
+  for (const problem of problems) console.error(`- ${problem}`)
+  console.error(`\nShorten each description to ${DESCRIPTION_MAX} characters or fewer.`)
+  process.exit(1)
 }
 
 /**
@@ -70,6 +82,7 @@ function descriptionWarnings(rendered) {
  * check, so a failing run leaves the committed cards exactly as they were.
  */
 async function generate() {
+  failOnDescriptions()
   const rendered = await renderAll()
   await rm(OUT_DIR, { recursive: true, force: true })
   await mkdir(OUT_DIR, { recursive: true })
@@ -83,11 +96,10 @@ async function generate() {
     `Generated ${rendered.length} Field Notes cards (${(total / 1024).toFixed(0)} KB) in ${path.relative(process.cwd(), OUT_DIR)}`
   )
   if (textOnly.length) console.log(`  type-only (no artwork found): ${textOnly.join(', ')}`)
-  for (const warning of descriptionWarnings(rendered)) console.log(`  note: ${warning}`)
 }
 
 async function check() {
-  const problems = []
+  const problems = [...descriptionProblems()]
   let manifest
   try {
     manifest = JSON.parse(await readFile(MANIFEST, 'utf8'))
@@ -135,8 +147,11 @@ async function check() {
     console.error('\nRegenerate with `npm --prefix src run og` and commit the result.')
     process.exit(1)
   }
-  console.log(`OG check passed: ${rendered.length} Field Notes cards, all current.`)
-  for (const warning of descriptionWarnings(rendered)) console.log(`  note: ${warning}`)
+  console.log(
+    `OG check passed: ${rendered.length} Field Notes cards, all current; every description is at most ${DESCRIPTION_MAX} chars.`
+  )
 }
 
-await (process.argv.includes('--check') ? check() : generate())
+// Only run when executed directly, so tests can import the rule.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
+  await (process.argv.includes('--check') ? check() : generate())

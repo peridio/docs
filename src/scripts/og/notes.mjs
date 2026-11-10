@@ -64,3 +64,17 @@ export function readNotes(dir = NOTES_DIR) {
       artwork: artworkFor(slug, frontMatter),
     }))
 }
+
+/**
+ * Every note's description, drafts included, for the length rule in
+ * og-cards.mjs. Drafts are held to it too, so a note does not pick up a
+ * long description that only fails the day it is published.
+ */
+export function readDescriptions(dir = NOTES_DIR) {
+  return listNoteFiles(dir)
+    .map(readNote)
+    .map(({ slug, frontMatter }) => ({
+      slug,
+      description: String(frontMatter.description ?? '').trim(),
+    }))
+}
