@@ -3,7 +3,7 @@ import { SolutionData } from '../types'
 export const data: SolutionData = {
   title: 'NVIDIA Jetson Orin Nano Production Linux | Day 1 Ready | Peridio',
   description:
-    'Production-ready NVIDIA Jetson Orin Nano deployment from day 1 with Peridio Fleet + Avocado OS. Enterprise Linux, secure OTA, and fleet management for industrial AI.',
+    'Production-ready NVIDIA Jetson Orin Nano from day one with Peridio Fleet and Avocado OS: secure OTA and fleet management for industrial AI.',
   keywords:
     'nvidia jetson orin nano, device management, ota updates, yocto, embedded linux, industrial ai, robotics, fleet management',
   canonicalUrl: 'https://docs.peridio.com/solutions/nvidia/jetson-orin-nano',

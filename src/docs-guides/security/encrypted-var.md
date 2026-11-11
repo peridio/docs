@@ -2,7 +2,7 @@
 title: 'Encrypted /var'
 sidebar_position: 1
 copy_markdown: true
-description: 'Enable LUKS2 encryption of the Avocado OS var partition, bound to the hardware key store where the board has one, choose the key engine with var.hardware, and hold an operator recovery key with var.recovery and avocado var-key.'
+description: "Encrypt the Avocado OS /var partition with LUKS2, bound to the board's hardware key store where it has one, and hold an operator recovery key."
 ---
 
 `/var` is the only writable partition on an Avocado OS device: extensions, application data, Docker layers, and device state all live there. `runtimes.<name>.var.encrypt` turns it into a LUKS2 container. Where the board has a hardware key store the key is bound to it; `var.hardware` chooses the engine, and `auto` falls back to a derived key where none works (see [Choosing the key engine](#choosing-the-key-engine)).

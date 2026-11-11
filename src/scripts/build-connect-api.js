@@ -51,6 +51,27 @@ function yamlSingle(text) {
   return `'${String(text).replace(/\s+/g, ' ').trim().replace(/'/g, "''")}'`
 }
 
+// Meta description for a tag page. The page body keeps the tag's full
+// description; the meta tag keeps whole leading sentences up to 160 characters
+// (OG_DESCRIPTION_MAX, which the build enforces), without code backticks. A
+// first sentence already over the limit is cut at a word with an ellipsis.
+const META_DESCRIPTION_MAX = 160
+function metaDescription(text) {
+  const plain = String(text || '')
+    .replace(/`/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  if (plain.length <= META_DESCRIPTION_MAX) return plain
+  let kept = ''
+  for (const sentence of plain.split(/(?<=[.!?])\s+/)) {
+    const next = kept ? `${kept} ${sentence}` : sentence
+    if (next.length > META_DESCRIPTION_MAX) break
+    kept = next
+  }
+  if (kept) return kept
+  return `${plain.slice(0, META_DESCRIPTION_MAX - 1).replace(/\s+\S*$/, '')}…`
+}
+
 function escapeCell(text) {
   if (!text) return ''
   return String(text)
@@ -429,7 +450,7 @@ function renderTagPage(tag, position) {
   lines.push('---')
   lines.push(`title: ${yamlSingle(tag.name)}`)
   lines.push(`sidebar_position: ${position}`)
-  lines.push(`description: ${yamlSingle(tag.description || '')}`)
+  lines.push(`description: ${yamlSingle(metaDescription(tag.description))}`)
   lines.push('copy_markdown: true')
   lines.push('---')
   lines.push('')

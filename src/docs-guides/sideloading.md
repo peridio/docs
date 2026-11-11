@@ -2,7 +2,7 @@
 sidebar_position: 4
 title: 'Sideloading'
 copy_markdown: true
-description: 'Deploy firmware updates directly from desktop to Raspberry Pi 4 using Avocado OS sideloading - rapid testing without cloud infrastructure for development workflows.'
+description: 'Deploy updates from your desktop straight to a Raspberry Pi 4 with Avocado OS sideloading, for fast testing without cloud infrastructure.'
 ---
 
 This guide provides a comprehensive step-by-step walkthrough for deploying firmware updates directly from your desktop to a Raspberry Pi 4 using Avocado OS's powerful sideloading capabilities. By leveraging Avocado OS sideloading, you can rapidly test and deploy firmware iterations to physical hardware without requiring a full cloud infrastructure setup, making it ideal for development environments, proof-of-concepts, and situations where direct device access is preferred. This approach streamlines the development workflow by allowing you to push updates directly from your workstation to your Raspberry Pi 4 while maintaining the security and reliability features built into the Avocado OS update system.

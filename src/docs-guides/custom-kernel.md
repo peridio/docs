@@ -2,7 +2,7 @@
 sidebar_position: 6
 title: 'Custom kernel'
 copy_markdown: true
-description: 'Bring your own Linux kernel to Avocado - cross-compile from source or install a pre-built kernel package with the required configuration for system extensions, systemd, and boot.'
+description: 'Bring your own Linux kernel to Avocado: cross-compile from source or install a prebuilt kernel package configured for extensions, systemd and boot.'
 ---
 
 Avocado runtimes ship with a default kernel provided by the `avocado-img-bootfiles` package (pulled in by the `avocado-runtime` meta-package). When your project requires a specific kernel version, vendor-supplied kernel sources, or custom driver support, the `kernel` configuration option lets you replace the default kernel with your own.

@@ -1,7 +1,7 @@
 ---
 title: 'Installation'
 sidebar_position: 0
-description: 'Install the Avocado OS MCP server in Claude Code, Claude Desktop, OpenAI Codex, Cursor, and other MCP clients to turn your AI assistant into an Avocado OS co-pilot.'
+description: 'Install the Avocado OS MCP server in Claude Code, Claude Desktop, OpenAI Codex, Cursor and other MCP clients.'
 ---
 
 <a href="https://github.com/avocado-linux/avocado-mcp" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Source_Code-GitHub-7b6ff0?logo=github&logoColor=white&style=for-the-badge" alt="Source Code on GitHub" /></a>

@@ -1,6 +1,6 @@
 ---
 title: 'Connect: 2026.10'
-description: 'Avocado Connect highlights for October 2026 — the LaunchPad guides move to the docs, Fleet becomes the landing page, the Dashboard and LaunchPad are retired, and a first-device card greets new orgs.'
+description: 'Avocado Connect, October 2026: LaunchPad guides move to the docs, Fleet becomes the landing page, and new orgs get a first-device card.'
 ---
 
 - **LaunchPad's guides move to the docs** — the guided missions, tutorials and

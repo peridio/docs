@@ -3,7 +3,7 @@ import { SolutionData } from '../types'
 export const data: SolutionData = {
   title: 'Qualcomm IQ9 Premium Edge AI | Flagship Performance | Peridio',
   description:
-    'Deploy Qualcomm IQ9 (QCS8550) flagship edge AI platform with 45 TOPS performance. Production-ready with Peridio Fleet + Avocado OS for automotive and premium applications.',
+    'Deploy the Qualcomm IQ9 (QCS8550), a 45 TOPS flagship edge AI platform, with Peridio Fleet and Avocado OS for OTA and fleet management.',
   keywords:
     'qualcomm iq9, qcs8550, flagship edge ai, 45 tops, automotive ai, premium edge computing, device management, ota updates',
   canonicalUrl: 'https://docs.peridio.com/solutions/qualcomm/iq-9',

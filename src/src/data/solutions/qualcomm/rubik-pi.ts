@@ -3,7 +3,7 @@ import { SolutionData } from '../types'
 export const data: SolutionData = {
   title: 'Qualcomm Rubik Pi Edge AI Development | Production-Ready Robotics | Peridio',
   description:
-    'Deploy Qualcomm Rubik Pi (RB3 Gen 2) in production 3x faster with Peridio Fleet + Avocado OS. 15.5 TOPS AI performance, secure OTA updates, enterprise robotics support.',
+    'Deploy Qualcomm Rubik Pi (RB3 Gen 2) in production 3x faster with Peridio Fleet and Avocado OS: 15.5 TOPS, secure OTA and robotics support.',
   keywords:
     'qualcomm rubik pi, rb3 gen 2, edge ai, robotics, qcs6490, device management, ota updates, yocto, embedded linux',
   canonicalUrl: 'https://docs.peridio.com/solutions/qualcomm/rubik-pi',

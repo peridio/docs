@@ -3,7 +3,7 @@ import { SolutionData } from '../types'
 export const data: SolutionData = {
   title: 'OnLogic FR201 Industrial Gateway | Production-Ready Edge Computing',
   description:
-    'Deploy OnLogic FR201 fanless industrial gateways with atomic updates, protocol bridging, and enterprise fleet management. Production-ready software on industrial grade hardware.',
+    'Run OnLogic FR201 fanless industrial gateways with atomic updates, protocol bridging and fleet management, on production-ready software.',
   keywords:
     'onlogic fr201, industrial gateway, fanless pc, protocol bridge, atomic updates, fleet management, modbus, opc-ua',
   canonicalUrl: 'https://docs.peridio.com/solutions/onlogic/fr201',

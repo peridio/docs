@@ -1,7 +1,7 @@
 ---
 title: 'Features'
 slug: /avocado-os/features
-description: 'Key features of Avocado OS — production-ready embedded Linux built on Yocto with composable extensions, deterministic builds, safe OTA, and a path from prototype to production.'
+description: 'Key features of Avocado OS: production embedded Linux on Yocto with composable extensions, deterministic builds and safe OTA updates.'
 ---
 
 # Features

@@ -1,7 +1,7 @@
 ---
 title: 'Renesas RZ/V2H Robot RDK'
 sidebar_class_name: hidden
-description: 'Renesas Robot Development Kit (WS125-V2HRDKREFZ) for AI vision and robotics on the RZ/V2H MPU — up to 80 TOPS DRP-AI3, multi-core CPU, multi-OS support, and ROS 2 Jazzy.'
+description: 'Renesas RZ/V2H Robot Development Kit (WS125-V2HRDKREFZ) for AI vision and robotics: up to 80 TOPS DRP-AI3 and ROS 2 Jazzy.'
 ---
 
 # Renesas RZ/V2H Robot RDK

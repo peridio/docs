@@ -3,7 +3,7 @@ sidebar_position: 6.5
 title: 'Device-tree overlays'
 copy_markdown: true
 draft: false
-description: 'Declare a device-tree overlay in an extension and let avocado build compile it in the SDK and deliver it to the boot medium - no manual dtc, no boot-partition surgery, no BSP fork.'
+description: 'Declare a device-tree overlay in an extension and avocado build compiles it and delivers it to the boot medium. No manual dtc, no BSP fork.'
 ---
 
 :::info Jetson only

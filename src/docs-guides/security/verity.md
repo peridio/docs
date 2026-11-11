@@ -2,7 +2,7 @@
 title: 'Filesystem verity'
 sidebar_position: 2
 copy_markdown: true
-description: 'Enable dm-verity on the Avocado OS root filesystem and on extension images with image.verity, and understand what provisioning carries versus what OTA publishes today.'
+description: 'Enable dm-verity on the Avocado OS root filesystem and extension images with image.verity, and learn what provisioning and OTA each carry today.'
 ---
 
 dm-verity gives a read-only filesystem a Merkle hash tree and a single root hash. Every block is verified as it is read, so reading a modified block fails, and tampering after the fact is caught at read time rather than at install time. A successful mount is not proof that every block is intact.
