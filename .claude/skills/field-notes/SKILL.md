@@ -47,7 +47,7 @@ A Field Note is true. Every number, version and command output traces to somethi
 
 ### Checklist for step 5
 
-- Frontmatter: `title` (result-first), `description`, `date`, `draft: true`, `authors`, `tags`, `category`, and the internal fields (`tested_against`, `poster`, `lift_for_blog`, `promote_to_track`).
+- Frontmatter: `title` (result-first), `description`, `date`, `draft: true`, `authors`, `tags`, `category`, and the internal fields (`tested_against`, `poster`, `lift_for_blog`, `promote_to_track`). Keep `description` to 160 characters or fewer, drafts included, because `npm run og:check` fails past that. Lead it with the note's specific claim (board, number, stack), because its first sentence is also the share card's kicker. Set `og_title` only when `npm run og` says the title is too long for the share card.
 - Index thumbnail: keep the template's empty `image: ''` line, set `image_source`, then run `make thumbs`. Without the `image:` line the generator writes the files and fails with `no image: line to update`. Use a 16:9 source with text at least 46 px tall and labels under 16 characters, because the index shows the thumbnail at 400 px, a quarter of the 1600 px source, dithered to six grey levels. Open the generated `-thumb.png` and read every label before you commit. Commit the generated files and the source.
 - `<TestStatus>` with `targets`, a released `cli` version, and the `reference` link.
 - A TL;DR that opens with the result in one sentence with its key number. For a comparison, add one bullet list of facts per option, then one line of conditions.

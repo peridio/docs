@@ -10,6 +10,7 @@ npm run lint
 npm exec -- prettier --check .
 bash ../scripts/check-changelog-registration.sh
 npm run check-mermaid
+npm run og:check
 ```
 
 `prettier --check .` covers the whole repo, including any new SVG.
