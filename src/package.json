@@ -24,8 +24,7 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "check-mermaid": "node scripts/check-mermaid.mjs",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "patch-package"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@algolia/client-search": ">= 4.9.1 < 6",
@@ -46,7 +45,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "file-loader": "^6.2.0",
     "mobx": "^6.13.7",
-    "patch-package": "^8.0.1",
     "prism-react-renderer": "^2.4.1",
     "prop-types": "^15.8.1",
     "react": "^19.1.1",
