@@ -62,7 +62,10 @@ fabricate a number, version, or command output to fill a gap.
 Write `src/field-notes/YYYY-MM-DD-<slug>.mdx`. The filename date prefix must
 match the frontmatter `date`. Always set `draft: true` in the frontmatter — new
 notes default to draft and stay out of the production build until verified and
-ready to ship. Follow the template exactly: frontmatter, the
+ready to ship. Keep `description` to 160 characters or fewer, drafts included:
+`npm run og:check` fails past that, because search snippets and link previews
+cut it off. Lead with the note's specific claim (board, number, stack), since
+the first sentence is also the share card's kicker. Follow the template exactly: frontmatter, the
 `<TestStatus>` card, a two-sentence `**TL;DR**`, the `{/* truncate */}` marker,
 the cold-reader intro, the dense body with language-tagged code blocks, a
 `<PullQuote>` for a standout number, an honest "what broke" section, and a

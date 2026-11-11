@@ -6,7 +6,6 @@ export const data: SolutionData = {
     'Deploy Qualcomm Rubik Pi (RB3 Gen 2) in production 3x faster with Peridio Fleet + Avocado OS. 15.5 TOPS AI performance, secure OTA updates, enterprise robotics support.',
   keywords:
     'qualcomm rubik pi, rb3 gen 2, edge ai, robotics, qcs6490, device management, ota updates, yocto, embedded linux',
-  ogImage: '/img/rubik-pi.jpeg',
   canonicalUrl: 'https://docs.peridio.com/solutions/qualcomm/rubik-pi',
 
   hero: {

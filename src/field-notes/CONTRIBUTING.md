@@ -32,21 +32,22 @@ The filename must start with `YYYY-MM-DD-` so it sorts correctly and the date ma
 
 ## Frontmatter fields
 
-| Field              | Required | Rendered | Purpose                                                                                                                                           |
-| ------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`            | yes      | yes      | The note title                                                                                                                                    |
-| `date`             | yes      | yes      | The dated contract — "true as of this date"                                                                                                       |
-| `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                                                                                             |
-| `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                                                                                                 |
-| `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag                                                                             |
-| `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`, or `-thumb.gif` from an animated source) — written by `make thumbs`, not by hand  |
-| `image_source`     | no       | **no**   | Where `make thumbs` gets the art: `local:<path>`, `unsplash:<photo-id>` or `url:<link>`. Build input only — the theme renders `image`, never this |
-| `image_preset`     | no       | **no**   | Override the dither preset for one note; omit — one preset serves every note                                                                      |
-| `featured`         | no       | yes      | `true` pins the note to the large hero slot on the index                                                                                          |
-| `tested_against`   | no       | **no**   | Free-text versions for greppability (rendered test status uses `<TestStatus>`)                                                                    |
-| `poster`           | no       | **no**   | Engineer who posts the note and is on-call in comments for ~24h                                                                                   |
-| `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                                                                                   |
-| `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                                                                                             |
+| Field              | Required | Rendered | Purpose                                                                                                                                                                                   |
+| ------------------ | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`            | yes      | yes      | The note title                                                                                                                                                                            |
+| `date`             | yes      | yes      | The dated contract — "true as of this date"                                                                                                                                               |
+| `authors`          | yes      | yes      | Real engineer keys from `authors.yml`                                                                                                                                                     |
+| `tags`             | yes      | yes      | Target + topic; rendered as pills in the masthead                                                                                                                                         |
+| `category`         | no       | yes      | Short label above the title on the index; falls back to the first tag                                                                                                                     |
+| `og_title`         | no       | yes      | Shorter headline for the share card only, when `title` is too long to set on it (`npm run og` says so). The page title is unchanged; leave it blank (the template default) to use `title` |
+| `image`            | no       | yes      | Generated index thumbnail (`/img/field-notes/<slug>-thumb.png`, or `-thumb.gif` from an animated source) — written by `make thumbs`, not by hand                                          |
+| `image_source`     | no       | **no**   | Where `make thumbs` gets the art: `local:<path>`, `unsplash:<photo-id>` or `url:<link>`. Build input only — the theme renders `image`, never this                                         |
+| `image_preset`     | no       | **no**   | Override the dither preset for one note; omit — one preset serves every note                                                                                                              |
+| `featured`         | no       | yes      | `true` pins the note to the large hero slot on the index                                                                                                                                  |
+| `tested_against`   | no       | **no**   | Free-text versions for greppability (rendered test status uses `<TestStatus>`)                                                                                                            |
+| `poster`           | no       | **no**   | Engineer who posts the note and is on-call in comments for ~24h                                                                                                                           |
+| `lift_for_blog`    | no       | **no**   | One-line business-case angle for the blog (champion → approver)                                                                                                                           |
+| `promote_to_track` | no       | **no**   | Flag + note if this is curated-track on-ramp material                                                                                                                                     |
 
 `poster`, `lift_for_blog`, and `promote_to_track` are editorial metadata. They never render to readers, but they live in frontmatter so the team can grep them. Run from `src/field-notes/`:
 

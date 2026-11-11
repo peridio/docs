@@ -2,7 +2,6 @@ export interface SolutionData {
   title: string
   description: string
   keywords?: string
-  ogImage?: string
   canonicalUrl?: string
   hero: {
     title: string

@@ -6,7 +6,6 @@ export const data: SolutionData = {
     'Production-ready NXP FRDM i.MX 93 development with dual Cortex-A55, Cortex-M33, Ethos U-65 NPU, and secure edge connectivity. Enterprise OTA and fleet management.',
   keywords:
     'nxp frdm imx93, i.mx 93, cortex-a55, edge ai, ethos u65, industrial linux, embedded, fleet management',
-  ogImage: '/img/NXP-FRDM-93.png',
   canonicalUrl: 'https://docs.peridio.com/solutions/nxp/frdm-93',
 
   hero: {

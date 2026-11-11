@@ -6,7 +6,6 @@ export const data: SolutionData = {
     'Deploy production-grade smart cameras and edge AI vision systems on the Grinn AstraSOM-1680 with Avocado OS. 7.9 TOPS NPU, OTA updates, and CRA-compliant security in a 37×42.6mm module.',
   keywords:
     'grinn astrasom-1680, astra sl1680, edge ai vision, smart camera, npu, dual camera, avocado os, cra compliance, ota updates',
-  ogImage: '/img/grinn-astra-som-1680.png',
   canonicalUrl: 'https://docs.peridio.com/solutions/grinn/astrasom-1680',
 
   hero: {
