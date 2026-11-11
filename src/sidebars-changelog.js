@@ -5,17 +5,33 @@ const sidebars = {
   changelog: [
     {
       type: 'category',
+      label: 'November 2026',
+      collapsible: false,
+      collapsed: false,
+      items: ['november-2026/1.1.0'],
+    },
+    {
+      type: 'category',
       label: 'October 2026',
       collapsible: false,
       collapsed: false,
-      items: ['october-2026/1.0.0', 'october-2026/connect-2026.10'],
+      items: [
+        'october-2026/1.0.0',
+        'october-2026/desktop-1.0.0',
+        'october-2026/mcp-5.4.0',
+        'october-2026/connect-2026.10',
+      ],
     },
     {
       type: 'category',
       label: 'September 2026',
       collapsible: false,
       collapsed: false,
-      items: ['september-2026/1.0.0-rc.5'],
+      items: [
+        'september-2026/1.0.0-rc.5',
+        'september-2026/reference-2026.09',
+        'september-2026/connect-2026.09',
+      ],
     },
     {
       type: 'category',

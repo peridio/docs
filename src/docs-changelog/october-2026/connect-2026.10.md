@@ -23,3 +23,9 @@ description: 'Avocado Connect, October 2026: LaunchPad guides move to the docs, 
 - **Intake moved into onboarding** — the short questionnaire now appears right
   after your first org is created, at `/onboarding/intake`, with a _Finish
   onboarding_ entry in the user menu to come back to it.
+- **Avocado Classic theme.** Connect has the same mint theme as Avocado
+  Desktop. If you selected the old green theme, Connect loads it as Avocado
+  Classic.
+- **Custom MQTT domains for enterprise.** An entitled org can send device MQTT
+  traffic through a domain that it owns.
+- **Upgraded MQTT broker.**

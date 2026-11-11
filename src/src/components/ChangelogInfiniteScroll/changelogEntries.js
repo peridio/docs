@@ -1,10 +1,16 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
+// -- November 2026 --
+import V1_1_0 from '../../../docs-changelog/november-2026/1.1.0.md'
 // -- October 2026 --
 import V1_0_0 from '../../../docs-changelog/october-2026/1.0.0.md'
+import DESKTOP_1_0_0 from '../../../docs-changelog/october-2026/desktop-1.0.0.md'
+import MCP_5_4_0 from '../../../docs-changelog/october-2026/mcp-5.4.0.md'
 import CONNECT_2026_10 from '../../../docs-changelog/october-2026/connect-2026.10.md'
 // -- September 2026 --
 import V1_0_0_RC_5 from '../../../docs-changelog/september-2026/1.0.0-rc.5.md'
+import REF_2026_09 from '../../../docs-changelog/september-2026/reference-2026.09.md'
+import CONNECT_2026_09 from '../../../docs-changelog/september-2026/connect-2026.09.md'
 // -- August 2026 --
 import V1_0_0_RC_2 from '../../../docs-changelog/august-2026/1.0.0-rc.2.md'
 import DESKTOP_1_0_0_RC_7 from '../../../docs-changelog/august-2026/desktop-1.0.0-rc.7.md'
@@ -89,11 +95,34 @@ export const PRODUCTS = [
  */
 const rawEntries = [
   {
+    version: '1.1.0',
+    monthSlug: 'november-2026',
+    monthLabel: 'November 2026',
+    permalink: '/changelog/november-2026/1.1.0',
+    Component: V1_1_0,
+  },
+  {
     version: '1.0.0',
     monthSlug: 'october-2026',
     monthLabel: 'October 2026',
     permalink: '/changelog/october-2026/1.0.0',
     Component: V1_0_0,
+  },
+  {
+    product: 'desktop',
+    version: '1.0.0',
+    monthSlug: 'october-2026',
+    monthLabel: 'October 2026',
+    permalink: '/changelog/october-2026/desktop-1.0.0',
+    Component: DESKTOP_1_0_0,
+  },
+  {
+    product: 'mcp',
+    version: '5.4.0',
+    monthSlug: 'october-2026',
+    monthLabel: 'October 2026',
+    permalink: '/changelog/october-2026/mcp-5.4.0',
+    Component: MCP_5_4_0,
   },
   {
     product: 'connect',
@@ -109,6 +138,22 @@ const rawEntries = [
     monthLabel: 'September 2026',
     permalink: '/changelog/september-2026/1.0.0-rc.5',
     Component: V1_0_0_RC_5,
+  },
+  {
+    product: 'reference',
+    version: '2026.09',
+    monthSlug: 'september-2026',
+    monthLabel: 'September 2026',
+    permalink: '/changelog/september-2026/reference-2026.09',
+    Component: REF_2026_09,
+  },
+  {
+    product: 'connect',
+    version: '2026.09',
+    monthSlug: 'september-2026',
+    monthLabel: 'September 2026',
+    permalink: '/changelog/september-2026/connect-2026.09',
+    Component: CONNECT_2026_09,
   },
   {
     version: '1.0.0-rc.2',
