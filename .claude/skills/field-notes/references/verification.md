@@ -15,6 +15,8 @@ npm run og:check
 
 `prettier --check .` covers the whole repo, including any new SVG.
 
+`og:check` skips drafts, so it passes on a draft note that has no share card. When a note leaves draft, or when a published note's `title`, `og_title`, `description`, `category` or artwork changes, set `draft` to the value you will commit, then run `npm run og` and `npm run og:check`. Commit the changed PNG under `static/img/field-notes/og/` and `static/img/field-notes/og/manifest.json`.
+
 ## 2. Build the page
 
 A note with `draft: true` is not in the build output. To check the rendered page:
@@ -22,7 +24,7 @@ A note with `draft: true` is not in the build output. To check the rendered page
 1. Set `draft: false` in the note.
 2. Run `npm run build`. It must exit 0. The build compiles the MDX.
 3. Open `build/field-notes/YYYY/MM/DD/<slug>.html` and confirm the pieces below.
-4. Set `draft: true` again, and confirm with `grep -n '^draft:' field-notes/<note>.mdx`.
+4. Restore the original `draft` value. If the note had no `draft` line, remove the one you added. Confirm with `grep -n '^draft:' field-notes/<note>.mdx`.
 
 In the built page, check:
 
@@ -51,4 +53,4 @@ Open the generated `-thumb.png` for the note. Every label on it must be readable
 
 ## 4. Do not commit build output
 
-The build can modify `src/src/data/hardware/generated-targets.json`. It is generated output. Stage the note, its assets, `src/field-notes/thumbnails.lock.json` when `make thumbs` changed it, and `src/field-notes/authors.yml` when you registered an author. Leave out the generated hardware data.
+The build can modify `src/src/data/hardware/generated-targets.json`. It is generated output. Stage the note, its assets, `src/field-notes/thumbnails.lock.json` when `make thumbs` changed it, the share card and `manifest.json` when `npm run og` changed them, and `src/field-notes/authors.yml` when you registered an author. Leave out the generated hardware data.
