@@ -4,7 +4,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 
 const targets = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../src/data/hardware/targets.json'), 'utf8'),
+  fs.readFileSync(path.resolve(__dirname, '../src/data/hardware/targets.json'), 'utf8')
 )
 const entry = targets['arm64-uefi-v9']
 const reference = targets['intel-x86-64-v3']

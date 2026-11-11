@@ -1,0 +1,93 @@
+---
+title: 'Siemens Innexis ANA virtual platform'
+sidebar_position: 0
+sidebar_label: 'Innexis ANA'
+description: 'Booting the Avocado OS Arm64 UEFI target on a Siemens Innexis ANA virtual platform: what booted, how the image was loaded and the limits seen.'
+---
+
+# Siemens Innexis ANA virtual platform
+
+This page records a bringup of the Avocado OS `arm64-uefi-v9` target on a Siemens
+Innexis Architecture Native Acceleration (ANA) evaluation chamber. The target is
+in progress for the 2026 release. This is not a supported platform, and the page
+only states what was observed on the chamber.
+
+## Platform
+
+The chamber's `Innexis-Base-AArch64-A` virtual SoC provides:
+
+| Item    | Value                                                                      |
+| ------- | -------------------------------------------------------------------------- |
+| CPU     | 16 `arm,cortex-a720ae` cores in two clusters of eight, GICv3 with ITS      |
+| Memory  | 32 GB at `0x80000000`                                                      |
+| Flash   | Two non-secure CFI flash devices of 64 MiB each, plus one secure flash     |
+| Console | PL011 UART at `0x09000000`, shown as the serial console of the app cluster |
+| Storage | Three `virtio-blk` disks, each accepting a QCOW2 or RAW image              |
+| Other   | `virtio-net`, `virtio-gpu`, USB (xHCI), CAN, PCI ECAM host                 |
+
+## What booted
+
+A provisioned `arm64-uefi-v9` image built with the baseline `aarch64` tune (see
+[Build the userland for the guest's CPU](#build-the-userland-for-the-guests-cpu))
+booted to the Avocado login prompt on the chamber's serial console with direct
+boot:
+
+- Kernel image, device tree (`vsoc.dtb` from the project) and initramfs uploaded
+  to the project, with the empty boot-loader image field and ACPI set to No.
+- Boot arguments
+  `console=ttyAMA0,115200 earlycon=pl011,0x09000000 root=PARTLABEL=rootfs-a ro rootwait`.
+- The provisioned disk as a QCOW2 on `virtual-disk-a`.
+- 8 simulation CPUs (the default is 4; raising it did not change the earlier
+  silent runs below and is not known to be required).
+
+Linux 6.18.52 started, systemd 259.5 reached the multi-user target and the console
+showed `avocado-arm64-uefi-v9 login:`. A root login worked and `systemctl
+is-system-running` reported `degraded`; the boot log shows a failed growfs of
+`/var`, which was not investigated.
+
+## Build the userland for the guest's CPU
+
+The guest reports an Armv8.2-class feature set: the kernel log lists RCpc (`lrcpc`)
+without the Armv8.4 store-release variant, and no BTI. An image built with the
+default Armv9 tune (`armv9a-crypto`) started the kernel, then its first process
+was killed with an illegal instruction, `stlur`, in the dynamic loader. The same
+image boots under QEMU. Building the userland with the baseline `aarch64` tune
+produced the image that booted on the chamber. meta-avocado selects that tune
+with the opt-in `kas/feature/armv8-userland.yml` overlay, added to the kas
+command line of the build.
+
+## UEFI boot
+
+With the chamber's pre-built UEFI loader (`firmware/boot-loaders/uefi.bin`), boot
+type Non-Secure and ACPI Yes, the project reached `running` with no error, but the
+serial console and the virtual display stayed empty for the whole run. This was
+tried with the original image and with serial console arguments added to the
+loader entry, and with 4 and 8 simulation CPUs. The cause was not found, so the
+UEFI route is not confirmed.
+
+## Loading the image
+
+Files are uploaded through the Web IDE (right-click a folder in the Explorer and
+choose **Upload Files...**), one file per upload.
+
+- A 1.9 GiB raw disk image failed to upload after at least 746 MB with
+  `POST upload error`.
+- The same disk converted to a compressed QCOW2 (about 145 MiB) uploaded without
+  error.
+- A kernel image of about 42 MB and initramfs files of 30 to 40 MB uploaded without
+  error.
+
+## Limits seen
+
+- The platform shuts a project down after 60 minutes by default.
+- In the first runs the power-on job took about five minutes before the project
+  reported `running`.
+- The SSH tunnel's Authorize step failed with "Failed to upload SSH public key to
+  ssh tunnel server", so SSH and GDB access through the tunnel was not available.
+- The vSoC's flash layout (two non-secure devices) meets the documented
+  requirement for UEFI, but see the UEFI result above.
+
+## Reproduce locally
+
+The same `arm64-uefi-v9` image runs under QEMU with the `run-qemu` script from
+meta-avocado.
