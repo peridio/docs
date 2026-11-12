@@ -94,7 +94,7 @@ avocado build
 
 ## Provision
 
-Provision the `dev` runtime using the `tegraflash` profile. This builds the system image and flashes it to the Jetson over USB. The `tegraflash-nvme` profile is the explicit name of the same NVMe profile, and the [Jetson Orin Nano Developer Kit hardware page](/hardware/nvidia/jetson-orin-nano-developer-kit) has the recipe for it.
+Provision the `dev` runtime using the `tegraflash` profile. This builds the system image and flashes it to the Jetson over USB. The `tegraflash-nvme` profile is the explicit name of the same NVMe profile, and the [Jetson Orin Nano Developer Kit hardware page](/hardware/nvidia/jetson-orin-nano-developer-kit) shows how to provision it from a locally built tree.
 
 The `tegraflash` profile flashes the NVMe SSD. To flash a microSD card instead, pass `--profile tegraflash-sd`. See [Jetson provisioning profiles](/developer-reference/provisioning#nvidia-jetson-the-profile-picks-the-boot-media).
 
