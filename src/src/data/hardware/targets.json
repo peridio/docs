@@ -1087,5 +1087,36 @@
     },
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/onlogic/fr201"
+  },
+  "amd-x86-64-v4": {
+    "name": "SolidRun R8000",
+    "target": "amd-x86-64-v4",
+    "releases": {
+      "2024": "none",
+      "2026": "in-progress"
+    },
+    "category": "usb",
+    "provisioning": {
+      "hostOs": ["Linux"],
+      "prerequisites": [
+        "USB drive",
+        "UEFI boot support (Legacy BIOS not supported)",
+        "A Linux build host with an AVX-512 CPU (the macOS setup below does not apply to this target)"
+      ],
+      "options": [
+        {
+          "id": "usb",
+          "label": "USB drive",
+          "profile": "usb",
+          "media": "USB drive",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Connect the USB drive to the R8000 and boot from it via UEFI."
+        }
+      ]
+    },
+    "serial": null,
+    "gettingStartedUrl": "/learn/get-started/any-target",
+    "hardwareUrl": "/hardware/solidrun/r8000"
   }
 }
