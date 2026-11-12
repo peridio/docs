@@ -121,6 +121,34 @@ avocado build
 avocado provision dev --profile tegraflash
 ```
 
+### Provision with a locally built stone tree
+
+Use this when the boot-chain [stone](/developer-reference/stone/overview) tree was built locally and is not pulled from a feed. Point the runtime at the tree with `stone_include_paths`. The SDK container must run privileged, so `sdk.container_args` needs `--privileged`. The project that `avocado init` writes already sets it, and a project that dropped it must restore it.
+
+```yaml title="avocado.yaml"
+sdk:
+  container_args:
+    - --privileged
+    - --network=host
+    - -v /dev:/dev
+    - -v /sys:/sys
+
+runtimes:
+  dev:
+    stone_include_paths:
+      - /home/you/stone-tree
+```
+
+avocado-cli joins the listed paths with colons and passes them to the provision hook as `AVOCADO_STONE_INCLUDE_PATHS`. Absolute paths are passed unchanged.
+
+```bash title="Host machine"
+avocado provision dev --profile tegraflash-nvme
+```
+
+The default `tegraflash` profile also flashes the NVMe SSD.
+
+Measured once on one bench (2026-11-06), not re-run. Other profiles and boards are unmeasured.
+
 ### Run
 
 After provisioning completes, remove power from the Jetson, remove the jumper shorting **FC REC** to **GND**, remove the USB-C cable, and apply power.
