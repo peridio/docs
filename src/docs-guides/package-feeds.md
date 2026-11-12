@@ -129,6 +129,27 @@ A name `repos:` does not define is an **add-on feed** the distro feed publishes,
 
 Before anything is written to the lock, the CLI checks the name against the channel's `targets.json` and refuses one the target does not publish, suggesting the nearest published name, the add-ons the target does publish, and the other targets that carry it. A name close to one `repos:` defines is refused as a typo. If `targets.json` cannot be read, the CLI warns and lets dnf report what is missing.
 
+## Using a locally built package
+
+To use a package you built yourself instead of the one the distro feed carries, build the RPM, publish it in a local feed, and rank that feed first. Do the steps in this order, because `avocado install` resolves against the feeds as they are declared when it runs.
+
+1. **Build the RPM.** For a component of the base OS, build it with BitBake; the RPMs land under the build's `tmp/deploy/rpm/<arch>/` directory, as [Modifying OS Components](/developer-reference/modifying-os-components) describes. For your own code, use the SDK. Compile the section, then package it (the section needs a `package` block in `avocado.yaml`):
+
+   ```text
+   avocado sdk compile <section>
+   avocado sdk package <section> --out <dir>
+   ```
+
+   To package an extension sysroot instead, run `avocado ext package <name> --out-dir <dir>`. Without `--out-dir` the RPM stays inside the container.
+
+2. **Put the RPM in a feed directory.** Place the built RPM in a directory that works as an RPM repository. See the provisional note below.
+
+3. **Declare the directory under `repos:`** with `path:`, using the grammar from [Additional Feeds](#additional-feeds).
+
+4. **List it ahead of the distro feed in `distro.feeds`.** Feed order is the priority, so the first feed that carries the package name wins, as described in [Additional Feeds](#additional-feeds).
+
+5. **Install, build and provision.** Run `avocado install`, then `avocado build`, then `avocado provision <runtime> --profile <profile>`.
+
 ## Additional DNF Options
 
 Pass additional flags to DNF using `--dnf-arg`:
