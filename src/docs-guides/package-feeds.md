@@ -98,9 +98,19 @@ You can also override these values with environment variables:
 | `AVOCADO_REPO_URL`   | Override the repository base URL |
 | `AVOCADO_RELEASEVER` | Override the release version     |
 
+## Snapshots and updating
+
+A feed can publish snapshots, so a project resolves the same packages until you choose to move. The feed publishes a per-target pointer at `<repo>/<release>/<channel>/target/<machine>/snapshots-latest.json`. The CLI fetches it over HTTP and never writes it into your project. A 404 means the feed publishes no snapshots, and the project follows the feed's current contents.
+
+On the first fetch the CLI pins the snapshot it resolved in `avocado.lock` under `repo-snapshot`, so a clean rebuild resolves the same packages.
+
+`avocado update` advances the target to the latest snapshot, clears the package, kernel and snapshot pins and rewrites the lock. The next `avocado install` re-resolves against the new snapshot. It is not a package-only upgrade.
+
+A set `AVOCADO_RELEASEVER` counts as an already applied pin, so snapshot pinning is skipped for the distro feed. In that case `avocado update` only clears pins. The variable also supplies `$releasever` for a feed that sets neither its own `releasever` nor a `release` and `channel` pair.
+
 ## Additional Feeds
 
-`distro.feeds` lists the feeds a project enables, in priority order: the first entry wins when two feeds carry the same package, and the distro feed comes first unless you place it yourself. A name defined under `repos:` is your own feed (`url:`, `path:` or `org:`):
+`distro.feeds` lists the feeds a project enables, in priority order: the distro feed comes first unless you place it yourself. Position sets the dnf priority: entries get 10, 20, 30 and so on, and dnf takes a package from the repository with the lowest number regardless of version, even when another feed carries a newer one. A local build listed ahead of the distro feed therefore shadows the distro package. A name defined under `repos:` is your own feed (`url:`, `path:` or `org:`):
 
 ```yaml
 distro:
