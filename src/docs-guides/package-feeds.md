@@ -129,6 +129,30 @@ A name `repos:` does not define is an **add-on feed** the distro feed publishes,
 
 Before anything is written to the lock, the CLI checks the name against the channel's `targets.json` and refuses one the target does not publish, suggesting the nearest published name, the add-ons the target does publish, and the other targets that carry it. A name close to one `repos:` defines is refused as a typo. If `targets.json` cannot be read, the CLI warns and lets dnf report what is missing.
 
+:::caution Provisional: not yet verified end to end
+
+This note depends on avocado-cli changes that are still open pull requests and are not on main. Treat it as unconfirmed until they land and a run confirms it.
+
+:::
+
+<div>
+{/* provisional: confirmed by avocado-feed-first-build-loop E2E */}
+</div>
+
+A feed served from a loopback address such as `http://127.0.0.1:8000` is reachable from the SDK container only with host networking. The default project that `avocado init` writes already sets `--network=host` in `sdk.container_args`, together with `--privileged`, `-v /dev:/dev` and `-v /sys:/sys`, so a project that kept the default needs nothing. A project that removed it needs `--network=host` back:
+
+```yaml
+sdk:
+  container_args:
+    - --network=host
+```
+
+The CLI keeps a loopback URL unchanged when the run's container arguments select host networking, and otherwise rewrites it to the host gateway. That behavior is in avocado-cli open pull requests and is not on main yet.
+
+<div>
+{/* end provisional */}
+</div>
+
 ## Using a locally built package
 
 To use a package you built yourself instead of the one the distro feed carries, build the RPM, publish it in a local feed, and rank that feed first. Do the steps in this order, because `avocado install` resolves against the feeds as they are declared when it runs.
@@ -149,6 +173,39 @@ To use a package you built yourself instead of the one the distro feed carries, 
 4. **List it ahead of the distro feed in `distro.feeds`.** Feed order is the priority, so the first feed that carries the package name wins, as described in [Additional Feeds](#additional-feeds).
 
 5. **Install, build and provision.** Run `avocado install`, then `avocado build`, then `avocado provision <runtime> --profile <profile>`.
+
+:::caution Provisional: not yet verified end to end
+
+This note has not been confirmed by running a full install, build and provision against a local RPM. Treat it as unconfirmed until it is.
+
+:::
+
+<div>
+{/* provisional: confirmed by avocado-feed-first-build-loop E2E */}
+</div>
+
+A `path:` feed plus a plain `*` entry for the package installs a local RPM. The feed directory needs repository metadata, which you can generate with `createrepo_c <dir>`. Declare the feed under `repos:` with `path:`, list it first in `distro.feeds`, and declare the package with version `"*"` in an extension:
+
+```yaml
+distro:
+  release: 2026
+  channel: edge
+  feeds:
+    - local-rpms
+
+repos:
+  local-rpms:
+    path: /home/me/rpms
+
+extensions:
+  my-ext:
+    packages:
+      my-package: '*'
+```
+
+<div>
+{/* end provisional */}
+</div>
 
 ## Additional DNF Options
 
