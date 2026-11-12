@@ -14,7 +14,9 @@ You generally don't think about either of these — they just make builds reprod
 
 ## Lockfiles
 
-When `avocado install` resolves a package list for the first time, the CLI writes the resolved name‑version‑release tuples for every installed package to a lockfile, `avocado.lock`, at the top of your project's source directory (like `Cargo.lock`). A lock from an older CLI at `.avocado/lock.json` is migrated there on first load. Commit it. On subsequent installs the CLI asks DNF for those exact versions, so two team members running the same project — or you running the same project six months from now — get byte‑identical sysroots.
+When `avocado install` resolves a package list for the first time, the CLI writes the resolved name‑version‑release tuples for every installed package to a lockfile, `avocado.lock`, at the top of your project's source directory (like `Cargo.lock`). Commit it. On subsequent installs the CLI asks DNF for those exact versions, so two team members running the same project, or you running the same project six months from now, get byte‑identical sysroots.
+
+A legacy lock from an older CLI may still sit at `.avocado/lock.json`. The CLI reads it only when `avocado.lock` is absent, and does not move it on load. The next save writes `avocado.lock` and removes the legacy file.
 
 ### What gets locked
 
@@ -79,7 +81,7 @@ The typical pattern when you want to pick up an upstream package update:
 2. `avocado install` — the CLI re-resolves with current feed state, installs newer versions, and writes the fresh pins.
 3. `avocado build` and downstream commands proceed against the new sysroot state.
 
-You almost never need to delete `lock.json` by hand. Always prefer `avocado unlock` so the structure of the file is preserved and only the entries you want to refresh are cleared.
+You almost never need to delete `avocado.lock` by hand. Always prefer `avocado unlock` so the structure of the file is preserved and only the entries you want to refresh are cleared.
 
 ## Build stamps
 
