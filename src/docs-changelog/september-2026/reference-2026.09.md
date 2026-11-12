@@ -10,8 +10,8 @@ One new reference and one large update this month.
 [**`jetson-encrypted-var`**](https://github.com/avocado-linux/references/tree/main/jetson-encrypted-var)
 puts `/var` on a LUKS2 volume. The volume key is sealed to the OP-TEE firmware
 TPM of the Jetson against PCR 7, and is not stored on disk. The reference has
-no application code. The full feature is the `var` block of the runtime in
-`avocado.yaml`:
+no application code. The `var` block of the runtime in `avocado.yaml` turns on
+the encryption:
 
 ```yaml
 var:
@@ -24,9 +24,13 @@ var:
 - With `hardware: tpm2`, the device does not use a software-derived key for
   `/var` when the firmware TPM is missing. The default, `auto`, uses an Argon2id
   key in that case.
-- A recovery keyslot prevents a firmware update from locking out a device.
-- An optional operator-held recovery key is available through
-  `avocado var-key`.
+- On Jetson, the OP-TEE firmware TPM is opt-in. The runtime must list
+  `optee-ftpm-init` in `initramfs.packages`. Without it, `hardware: tpm2` fails
+  closed.
+- With `hardware: tpm2`, the device also fails closed when a firmware update
+  changes PCR 7. The recovery keyslot and the optional operator-held key
+  (`avocado var-key`) let you recover the data in `/var` by hand. They do not
+  keep the device booting.
 
 The reference supports the Jetson Orin Nano, Orin NX, AGX Orin and AGX Thor.
 We tested it end to end on a Jetson Orin Nano. It requires the 2026 release,
