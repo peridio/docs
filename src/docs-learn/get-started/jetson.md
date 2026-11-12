@@ -96,7 +96,7 @@ avocado build
 
 Provision the `dev` runtime using the `tegraflash` profile. This builds the system image and flashes it to the Jetson over USB.
 
-The `tegraflash` profile flashes the NVMe SSD. To flash a microSD card or eMMC instead, pass `--profile tegraflash-sd` or `--profile tegraflash-emmc`. See [Jetson provisioning profiles](/developer-reference/provisioning#nvidia-jetson-the-profile-picks-the-boot-media).
+The `tegraflash` profile flashes the NVMe SSD. To flash a microSD card instead, pass `--profile tegraflash-sd`. See [Jetson provisioning profiles](/developer-reference/provisioning#nvidia-jetson-the-profile-picks-the-boot-media).
 
 ```bash
 avocado provision dev --profile tegraflash

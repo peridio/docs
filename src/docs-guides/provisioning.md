@@ -39,7 +39,7 @@ Not every board offers every profile. ICAM-540 offers only `tegraflash` and `teg
 With no `--profile`, a Jetson gets the default `tegraflash` profile, which flashes NVMe. Provisioning still succeeds. If you meant to flash an SD card or eMMC, the board then fails to boot, or boots an older OS from another disk. Pass the profile on every `avocado provision` run:
 
 ```bash
-avocado provision -r dev --profile tegraflash-sd
+avocado provision dev --profile tegraflash-sd
 ```
 
 :::
