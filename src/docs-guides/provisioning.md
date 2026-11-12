@@ -15,6 +15,35 @@ Provisioning transforms build artifacts into deployable images and handles the p
 
 Provisioning profiles define deployment strategies for different hardware interfaces and deployment scenarios. Available profiles depend on the specific target hardware - some targets may support SD card provisioning for development workflows, while others require specialized interfaces for on-board storage like eMMC. Virtual targets using QEMU or similar environments typically don't require physical hardware interfaces. Additionally, custom profiles can be created for hardware-specific provisioning procedures or specialized deployment scenarios.
 
+Pick the profile with `avocado provision --profile <name>`. `avocado provision --list` shows the profiles your target offers. It needs `avocado install` to have run first.
+
+The profile is read when provisioning runs, not when the image is built. `--profile` reaches the target's provision script as the `AVOCADO_PROVISION_PROFILE` environment variable. `avocado build` does not record it, so give it on the `avocado provision` run itself. Without `--profile`, the target's default profile is used.
+
+`--env KEY=VALUE` passes other variables to the same provision process. Repeat it for each variable.
+
+### NVIDIA Jetson: the profile picks the boot media
+
+On Jetson, the tegraflash profile decides which disk gets flashed:
+
+| Profile                                   | Flashes                       |
+| ----------------------------------------- | ----------------------------- |
+| `tegraflash` (default), `tegraflash-nvme` | NVMe                          |
+| `tegraflash-emmc`, `tegraflash-mmc`       | eMMC                          |
+| `tegraflash-sd`                           | microSD                       |
+| `tegraflash-usb`                          | USB drive (2024 release only) |
+
+Not every board offers every profile. ICAM-540 offers only `tegraflash` and `tegraflash-nvme`. Run `avocado provision --list` to see yours.
+
+:::caution Leaving out `--profile` flashes NVMe
+
+With no `--profile`, a Jetson gets the default `tegraflash` profile, which flashes NVMe. Provisioning still succeeds. If you meant to flash an SD card or eMMC, the board then fails to boot, or boots an older OS from another disk. Pass the profile on every `avocado provision` run:
+
+```bash
+avocado provision dev --profile tegraflash-sd
+```
+
+:::
+
 ## Reliable provisioning
 
 ### Provisioning requirements
