@@ -38,7 +38,8 @@ promote_to_track: '' # on-ramp candidate? note the target tutorial
 import PullQuote from '@site/src/components/PullQuote'
 import TestStatus from '@site/src/components/TestStatus'
 
-{/* Test-status card: what you actually verified this against. */}
+{/* Test-status card: what you actually verified this against. `cli` names a released
+    Avocado CLI version. If a development build made the measured image, say so in the text. */}
 
 <TestStatus
   targets={['jetson-orin-nano-devkit']}
@@ -49,7 +50,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR** — Two sentences: what you did and what happened.
+**TL;DR.** One sentence with the result and its key number. For a comparison, add one bullet list of facts per option, then one line of conditions.
 
 {/* truncate */}
 
