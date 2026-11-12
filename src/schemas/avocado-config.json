@@ -460,6 +460,12 @@
           ]
         }
       },
+      "patternProperties": {
+        "^target-.+$": {
+          "$ref": "#/definitions/distroConfig",
+          "description": "Per-target override: a key it sets replaces that key in this block when building for that target."
+        }
+      },
       "additionalProperties": false
     },
     "distroRepoConfig": {
@@ -1097,6 +1103,10 @@
         "recovery": {
           "type": "string",
           "description": "Name of a registry HMAC secret ('avocado signing-keys create <name> --algorithm hmac-sha256') that is the master for an operator recovery keyslot, enrolled per device with 'avocado var-key enroll'. Requires 'encrypt: true'."
+        },
+        "initial_os_rollback": {
+          "type": "boolean",
+          "description": "Whether the provisioned var image carries the OS bundle. Defaults to true. The bundle lets 'runtime activate' roll the device back to this OS after an OS update; false saves its size and gives that rollback up."
         }
       },
       "additionalProperties": false
@@ -1989,8 +1999,12 @@
         },
         "modprobe": {
           "title": "Kernel modules",
-          "$ref": "#/definitions/stringList",
-          "description": "Kernel modules to load when the extension is active. Modules must be available in the kernel or provided by the extension.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ *[A-Za-z0-9_][A-Za-z0-9_-]*( +[^\\s\"-][^\\s\"]*)* *$"
+          },
+          "description": "Kernel modules to load when the extension is active, each a module name optionally followed by parameters such as 'param=value'. Parameters may not start with '-' or hold double quotes. Modules must be available in the kernel or provided by the extension. The extension must build a sysext.",
           "examples": [
             [
               "overlay",
@@ -1999,12 +2013,20 @@
           ]
         },
         "on_merge": {
-          "$ref": "#/definitions/stringList",
-          "description": "Commands run when the extension is merged."
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\r\\n\"]*$"
+          },
+          "description": "Commands run when the extension is merged. Each item is one command on one line, run without a shell, so it may not hold double quotes."
         },
         "on_unmerge": {
-          "$ref": "#/definitions/stringList",
-          "description": "Commands run when the extension is unmerged."
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\r\\n\"]*$"
+          },
+          "description": "Commands run when the extension is unmerged. Each item is one command on one line, run without a shell, so it may not hold double quotes."
         },
         "reload_service_manager": {
           "type": "boolean",

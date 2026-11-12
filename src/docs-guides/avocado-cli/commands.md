@@ -7,7 +7,7 @@ copy_markdown: true
 
 # `commands`
 
-A complete reference of every `avocado` command and subcommand on a single page, taken from `--help` of `avocado 1.0.0 (405f5953 2026-10-27)`. Use your browser's find (Ctrl+F / Cmd+F) to search.
+A complete reference of every `avocado` command and subcommand on a single page, taken from `--help` of `avocado 1.1.0 (5cbc437 2026-11-11)`. Use your browser's find (Ctrl+F / Cmd+F) to search.
 
 ---
 
@@ -1944,6 +1944,9 @@ Options:
 
   -t, --target <TARGET>
           Target architecture
+
+  -r, --runtime <RUNTIME>
+          Runtime whose extension sysroot to install into. Defaults to the runtime `ext build` resolves (the sole or default runtime), so an `ext install` followed by `ext build` fill the same sysroot
 
       --container-arg <CONTAINER_ARGS>
           Additional arguments to pass to the container runtime

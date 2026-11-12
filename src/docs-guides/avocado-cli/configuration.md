@@ -140,6 +140,20 @@ avocado build --target imx8mp-var-dart --target-board variscite-sonata
 
 The per-target [Get Started](/learn/get-started/any-target) page and the target's [hardware page](/hardware/support-matrix) call out when a board is required and which value to use.
 
+## Release and channel per target
+
+`distro.release` and `distro.channel` pick the package feed. A `target-<name>:` block inside `distro:` overrides them for one target, so a project can keep a board on another release:
+
+```yaml
+distro:
+  release: 2026
+  channel: edge
+  target-raspberrypi0-2w:
+    release: 2024
+```
+
+A key that the block sets replaces the base key whole. The override reaches everything that reads `distro`: the feed's releasever, `{{ config.distro.* }}` and with it the SDK image tag, and `avocado update --target`, which takes the snapshot from that target's feed. The target resolves as it does for `{{ avocado.target }}`: `--target`, then `AVOCADO_TARGET`, then `default_target`. With no target, the base values apply. Requires CLI 1.1.0; earlier versions ignore the block.
+
 ## Add-on feeds
 
 `distro.feeds` lists the package feeds to enable, in dnf priority order (first wins). The distro feed comes first unless you list it. A name that `repos:` does not define names an add-on feed that the distro feed publishes for your target, such as ROS 2:
@@ -478,13 +492,14 @@ A built-in `lib/avocado` subvolume is always present (writable). Declaring it ex
 
 ### `var` fields
 
-| Field         | Default | Description                                                                                                                                                       |
-| ------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `compression` | none    | Partition-wide default compression (e.g. `zstd`, `zstd:3`, `lzo`, `zlib:6`, `no`). Overridden by per-subvolume set                                                |
-| `subvolumes`  |         | Map of path → subvolume entry. Paths are relative to the var root                                                                                                 |
-| `encrypt`     | `false` | Encrypt `/var` as a LUKS2 container keyed to the device's hardware key store                                                                                      |
-| `hardware`    | `auto`  | Which key engine binds it: `auto`, `caam`, `tpm2`, or `none`. `caam`/`tpm2` fail the boot closed if that engine cannot hold a keyslot; `none` requires `recovery` |
-| `recovery`    |         | Name of a registry secret (`signing-keys create <name> --algorithm hmac-sha256`) that is the master for an operator-held recovery keyslot                         |
+| Field                 | Default | Description                                                                                                                                                                                                                                                                       |
+| --------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `compression`         | none    | Partition-wide default compression (e.g. `zstd`, `zstd:3`, `lzo`, `zlib:6`, `no`). Overridden by per-subvolume set                                                                                                                                                                |
+| `subvolumes`          |         | Map of path → subvolume entry. Paths are relative to the var root                                                                                                                                                                                                                 |
+| `encrypt`             | `false` | Encrypt `/var` as a LUKS2 container keyed to the device's hardware key store                                                                                                                                                                                                      |
+| `hardware`            | `auto`  | Which key engine binds it: `auto`, `caam`, `tpm2`, or `none`. `caam`/`tpm2` fail the boot closed if that engine cannot hold a keyslot; `none` requires `recovery`                                                                                                                 |
+| `recovery`            |         | Name of a registry secret (`signing-keys create <name> --algorithm hmac-sha256`) that is the master for an operator-held recovery keyslot                                                                                                                                         |
+| `initial_os_rollback` | `true`  | Carry the OS bundle in the provisioned var image, so `runtime activate` can roll the device back to the provisioned OS after an OS update. `false` makes the var image smaller and gives that rollback up. OTA updates and the signed manifest are unchanged. CLI 1.1.0 and later |
 
 `encrypt`, `hardware` and `recovery` are validated at config load — `recovery` without `encrypt`, an unknown `hardware` value, or `hardware: none` without `recovery` are all errors. See [Encrypted /var](/developer-reference/security/encrypted-var) for the full workflow.
 
