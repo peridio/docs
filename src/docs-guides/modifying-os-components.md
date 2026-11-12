@@ -11,7 +11,7 @@ This guide explains where that boundary is and what each kind of change costs.
 
 ## The boundary
 
-**The Avocado CLI consumes RPMs from a package feed. It does not produce them.** Producing an RPM is a Yocto/BitBake function.
+**The Avocado CLI installs RPMs from a package feed.** The SDK can also package your own build output into RPMs (`avocado sdk package`, `avocado ext package`), but the components of the base OS still come from Yocto.
 
 Everything the CLI installs, into the SDK sysroot, the rootfs and initramfs sysroots, or an extension, was built by BitBake upstream and published to the package feed. The SDK container is itself a Yocto artifact.
 
@@ -19,15 +19,18 @@ This is why "can I just build it as an RPM?" is usually the wrong question. Ever
 
 ## What to rebuild
 
-| You changed                                           | Yocto needed | How                                                                                             |
-| ----------------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- |
-| An extension's declared packages                      | No           | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build` |
-| Your own application source                           | No           | [Cross-compilation](/developer-reference/cross-compilation) in the SDK                          |
-| The rootfs or initramfs package list                  | No           | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs)       |
-| A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                   |
-| The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                              |
-| A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                       |
-| Kernel configuration or an in-tree driver             | **Yes**      | [Custom kernel](/developer-reference/custom-kernel)                                             |
+| You changed                                           | Yocto needed | How                                                                                                                                                                        |
+| ----------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| An extension's declared packages                      | No           | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build`                                                                            |
+| Your own application source                           | No           | [Cross-compilation](/developer-reference/cross-compilation) in the SDK                                                                                                     |
+| The rootfs or initramfs package list                  | No           | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs)                                                                                  |
+| A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                                                                                              |
+| The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                                                                                                         |
+| A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                                                                                                  |
+| A library or tool the feed lacks                      | No           | `avocado sdk compile`, `avocado sdk package`, `avocado ext package`, see [Using a locally built package](/developer-reference/package-feeds#using-a-locally-built-package) |
+| Kernel configuration or an in-tree driver             | No           | `kernel.compile` in [Custom kernel](/developer-reference/custom-kernel)                                                                                                    |
+
+Rebuilding the stock kernel of the base OS in place stays a Yocto change; the custom kernel route builds your own kernel and substitutes it.
 
 The first four rows are the common case. The CLI covers them, and nothing in this guide applies.
 
