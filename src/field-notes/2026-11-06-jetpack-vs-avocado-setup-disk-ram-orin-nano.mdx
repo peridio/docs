@@ -26,7 +26,7 @@ import TestStatus from '@site/src/components/TestStatus'
   }}
 />
 
-**TL;DR.** On the same Orin Nano 8GB, Avocado OS goes from a clean project to a login in 6 minutes 56 seconds, against about 24 minutes for JetPack before `nvidia-jetpack` (about 30 minutes with it). It uses 93% less disk and 49% less idle RAM than JetPack 7.2.1, and draws the same power.
+**TL;DR.** On the same Orin Nano 8GB, Avocado OS goes from a clean project to a login in 7 minutes 21 seconds, against about 24 minutes for JetPack before `nvidia-jetpack` (about 30 minutes with it). It uses 93% less disk and 49% less idle RAM than JetPack 7.2.1, and draws the same power.
 
 {/* truncate */}
 
@@ -114,7 +114,7 @@ TensorRT is one more extension. Build it with `-r trt` instead of `-r power`. Th
 
 ### Takeaways
 
-- **Setup:** 6 minutes 56 seconds from a clean project to a root login, without TensorRT. Most of the time was waiting for the board to flash. The install and build steps are short because the packages come prebuilt from the feed.
+- **Setup:** 7 minutes 21 seconds from a clean project to a root login, without TensorRT. Most of the time was waiting for the board to flash. The install and build steps are short because the packages come prebuilt from the feed.
 - **Footprint:** 2,545 MiB of disk with TensorRT, the model and the engine. RAM used was 444 MiB at idle and 877 MiB at the peak with the model running.
 - **Experience:** it feels closer to a build tool than to an OS install. A change to the project gets back onto the board in minutes. Easily customizable, developer friendly, and feels production ready.
 
@@ -129,13 +129,13 @@ TensorRT is one more extension. Build it with `-r trt` instead of `-r power`. Th
 
 **Avocado OS**
 
-- Setup: 6 minutes 56 seconds to a login with the `power` runtime, which has no TensorRT. 4 commands. I did not time a full `trt` setup.
+- Setup: 7 minutes 21 seconds to a login with the `power` runtime, which has no TensorRT. 4 commands. I did not time a full `trt` setup.
 - Disk: 2,545 MiB with TensorRT, the model and the engine
 - RAM used: 444 MiB at idle, 877 MiB with the model running
 - Production readiness: immutable root filesystem, built for OTA updates through Peridio (not measured here)
 
 <PullQuote>
-  With Avocado OS it took less than 7 minutes from scratch to logged in with only 4 terminal
+  With Avocado OS it took about 7 minutes from scratch to logged in with only 4 terminal
   commands. I get 50% less RAM usage and 93% less disk space over JetPack.
 </PullQuote>
 
@@ -143,7 +143,7 @@ TensorRT is one more extension. Build it with `-r trt` instead of `-r power`. Th
 
 |                                 | JetPack 7.2.1    | Avocado OS | Difference   |
 | ------------------------------- | ---------------- | ---------- | ------------ |
-| Time to a login, no TensorRT    | about 24 minutes | 6 min 56 s | 🥑 ~71% less |
+| Time to a login, no TensorRT    | about 24 minutes | 7 min 21 s | 🥑 ~69% less |
 | Manual steps                    | 12               | 4 commands | 🥑 8 fewer   |
 | Disk used                       | 35,027 MiB       | 2,545 MiB  | 🥑 ~93% less |
 | RAM used at idle                | 866 MiB          | 444 MiB    | 🥑 ~49% less |
@@ -161,7 +161,7 @@ TensorRT is one more extension. Build it with `-r trt` instead of `-r power`. Th
 | First boot                    | about 2 min after the installer                                      | 76 s: booted 38 s after the flash, then 38 s more to the root login | 🥑 ~45 s less      |
 | First-boot setup              | seven dialogs and `sshd` by hand, not logged, a few minutes          | none                                                                | 🥑 no manual steps |
 | Add CUDA and TensorRT         | 6 min 10 s for `apt-get install nvidia-jetpack`, a 9,468 MB download | in the `trt` image, not timed                                       | not compared       |
-| Total to a login, no TensorRT | about 24 min                                                         | 6 min 56 s                                                          | 🥑 ~71% less       |
+| Total to a login, no TensorRT | about 24 min                                                         | 7 min 21 s                                                          | 🥑 ~69% less       |
 | Total with TensorRT           | about 30 min                                                         | not timed                                                           | not compared       |
 | Manual steps                  | 12                                                                   | 4 commands                                                          | 🥑 8 fewer         |
 
