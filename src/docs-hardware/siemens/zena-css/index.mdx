@@ -1,0 +1,177 @@
+---
+title: 'Siemens Innexis ANA: Arm Zena CSS'
+sidebar_position: 1
+sidebar_label: 'Zena CSS'
+description: 'Booting Avocado OS on the Arm Zena CSS virtual platform of an Innexis ANA chamber: what booted, three obstacles with their fixes, and the limits seen.'
+---
+
+# Siemens Innexis ANA: Arm Zena CSS
+
+This page records a bringup of the Avocado OS `arm64-uefi-v9` target on the Arm
+Zena Compute Subsystem (CSS) virtual platform of a Siemens Innexis Architecture
+Native Acceleration (ANA) evaluation chamber. The target is in progress for the
+2026 release. This is not a supported platform, and the page only states what was
+observed on the chamber. A command that was not run for this page is marked
+"not re-run".
+
+## Platform
+
+The project was created from the chamber's `Arm-Zena-CSS` template, which carries
+the EWAOL software stack.
+
+| Item            | Value                                                                           |
+| --------------- | ------------------------------------------------------------------------------- |
+| Template        | `Arm-Zena-CSS` (EWAOL software stack)                                           |
+| Simulation CPUs | 4, which the guest sees as 16 CPUs                                              |
+| Host            | A Graviton 2 server (Armv8.2), as stated by the vendor and not observed         |
+| Boot chain      | RSE, TF-A BL2, OP-TEE, U-Boot as UEFI firmware, systemd-boot, Linux             |
+
+## What booted
+
+Avocado OS booted from a QCOW2 made from the provisioned `arm64-uefi-v9` image
+and reached a root shell. The boot went through RSE, TF-A BL2, OP-TEE, U-Boot as
+UEFI firmware, systemd-boot, Linux 6.18.52 and systemd 259.5.
+
+Boot record of the second run:
+
+- The project reported `running` 15 s after the power-on call.
+- The login prompt appeared 20 s later.
+- 7.2 s passed from the start of the kernel to the prompt.
+
+Guest facts from a root login:
+
+| Item    | Value                                                                                                              |
+| ------- | ------------------------------------------------------------------------------------------------------------------ |
+| CPU     | Cortex-A720AE (`CPU implementer 0x41`, `CPU part 0xd89`), 16 CPUs                                                  |
+| Features | `fp asimd evtstrm aes pmull sha1 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp`                   |
+| Memory  | 46 GiB of RAM                                                                                                      |
+| TEE     | OP-TEE 4.5 with `/dev/tee0`, and no `/dev/tpm*`                                                                    |
+| Network | `eth0` on DHCP                                                                                                     |
+| Disk    | `vda` with the partitions `boot-a`, `boot-b`, `recovery`, `rootfs-a`, `rootfs-b` and `var`                         |
+
+`systemctl is-system-running` reported `degraded`. The only failed unit was
+the `systemd-growfs` instance for `/var`; its cause was not investigated.
+
+## Obstacle 1: memory
+
+The template's `vsoc.json` sets `memory > populated-ram` to 128 (GB). The chamber
+offers 112 GiB to a virtual SoC, so Start failed with:
+
+```text
+Requested RAM: 128GiB, but available RAM: 112GiB
+```
+
+The value is editable in the Web IDE editor (find and replace, then save). The
+vendor's Zena guide keeps it at 48 GB or less for GPU passthrough.
+
+The firmware must be rebuilt with the same size, because TF-A and OP-TEE carry it:
+`EWAOL_ADDONS_DRAM_SIZE_GB` feeds `DRAM_SIZE_GB` and `CFG_DRAM_SIZE_GB`. DRAM0 is
+2 GB at `0x80000000` and DRAM1 is the rest, at `0x200_00000000`.
+
+The value used was 48. U-Boot printed `DRAM: 2 GiB (effective 48 GiB)` and the
+guest had 46 GiB.
+
+## Obstacle 2: firmware for a Graviton 2 host
+
+The prebuilt Zena stack is compiled for `-march=armv9.2-a`, so it was rebuilt for
+the Graviton 2 host.
+
+The source is the `ewaol-addons.tar.gz` staged in every Zena project (Web IDE,
+right-click, Download). It is a kas tree over Arm's `sw-ref-stack` (commit
+`6bac7e67`). The menu offers the option "Cortex A720AE on Graviton2 (compile for
+Armv8.2)", which applies a `neoverse-n1` tune patch:
+
+```bash
+kas menu ewaol-addons/Kconfig
+```
+
+The choices were:
+
+- the Arm model EULA accepted
+- ANA-RD-Zena
+- the EWAOL demo
+- Graviton2
+- DRAM 48
+- GPU, virtual camera and virtio sound off
+- RAS off
+
+Of the firmware outputs only `fip_with_bl2.bin` changed size (2039905 to 2039817
+bytes). The RSE images, the provisioning message and the OTP image kept their
+sizes; their contents were not compared. Only the FIP was replaced, in
+`firmware/secure-world/`. The platform does not keep the original once it is
+replaced, so a local copy was saved first.
+
+Build notes:
+
+- The build ran in an Ubuntu 22.04 docker image with kas 4.3.2.
+- The image needed `iproute2`.
+- Ubuntu's security-updated tar `1.34+dfsg-1ubuntu0.1.22.04.6` broke Arm's pinned
+  pseudo (`got *at() syscall for unknown directory`). Pinning
+  `tar=1.34+dfsg-1build3` and holding the package fixed it.
+- The build ran 6802 tasks in about 26 minutes, with 3797 tasks reused from earlier
+  attempts. The build directory was about 112 GB.
+
+## Obstacle 3: serial console
+
+The Avocado arm64 boot entry took its console from the ACPI SPCR table. This
+platform is device-tree based, so the kernel printed until it disabled the early
+console at 0.6 s and then went silent on all four serial consoles while it kept
+running.
+
+The fix that was observed on the chamber the first time was adding
+`console=ttyAMA0,115200n8` after `console=tty0` in `loader/entries/avocado.conf` on
+the first ESP of a copy of the image. The edit used mtools on the raw image, then
+`qemu-img convert -c` wrote the result back to QCOW2. The file was uploaded under a
+new name and `linux-disk` was pointed at it. `loader.conf` has `editor no`, so the
+arguments cannot be edited at boot.
+
+The `kas/feature/pl011-console.yml` overlay in meta-avocado is the repeatable form
+of that edit. The image that booted the first time was built before the overlay
+existed. The overlay was verified under QEMU.
+
+### Overlay image on the chamber
+
+The overlay image has not been booted on the chamber yet.
+
+## Build the image
+
+The build below is the kas equivalent of the build that was run through a wrapper.
+It was not re-run with kas directly (not re-run).
+
+```bash
+kas build --target avocado-stone \
+  kas/machine/arm64-uefi-v9.yml:kas/target/bringup.yml:kas/target/qemu-provision.yml:kas/feature/armv8-userland.yml:kas/feature/pl011-console.yml
+```
+
+The guest reported an Armv8.2-class feature set (no FEAT_LRCPC2), which is why the
+chain includes `kas/feature/armv8-userland.yml`. The default Armv9 tune was not
+tried on this model. It dies with an illegal instruction on the other virtual SoC
+of the same chamber, see
+[Siemens Innexis ANA virtual platform](../innexis-ana/index.mdx).
+
+## Loading the image
+
+Convert the disk to a compressed QCOW2 (not re-run in this exact form):
+
+```bash
+qemu-img convert -c -O qcow2 avocado.img avocado.qcow2
+```
+
+Upload it through the Web IDE. Select the target folder first, because uploads go
+into the selected node and not the node that was right-clicked. The Zena project's
+`software` is the subsystem form, with a `linux-disk` that points at the uploaded
+file.
+
+- A 145 MiB compressed QCOW2 uploaded without error.
+- The rebuilt vendor image of 889 MB was built but never uploaded, so no upload
+  size limit is known between 145 MiB (worked) and a 1.9 GiB raw image (failed at
+  about 746 MB, on the other virtual SoC).
+
+## Limits seen
+
+- `systemctl is-system-running` reports `degraded`, caused only by
+  the `systemd-growfs` instance for `/var` (not investigated).
+- The SSH tunnel's Authorize step failed on this project as on the
+  [Innexis ANA](../innexis-ana/index.mdx) one, so SSH and GDB access through the
+  tunnel was not available.
+- The platform shuts a project down after 60 minutes by default.
