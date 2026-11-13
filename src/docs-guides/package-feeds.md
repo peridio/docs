@@ -170,11 +170,13 @@ To use a package you built yourself instead of the one the distro feed carries, 
 
 3. **Declare the directory under `repos:`** with `path:`, using the grammar from [Additional Feeds](#additional-feeds).
 
-4. **List it ahead of the distro feed in `distro.feeds`.** Feed order is the priority, so the first feed that carries the package name wins, as described in [Additional Feeds](#additional-feeds).
+4. **List it ahead of the distro feed in `distro.feeds`, and list the distro feed after it.** Feed order is the priority, so the first feed that carries the package name wins, as described in [Additional Feeds](#additional-feeds). A list that names only the local feed is not enough: the CLI then inserts the distro feed (`avocado`) first, and the distro package wins.
 
-5. **Install, build and provision.** Run `avocado install`, then `avocado build`, then `avocado provision <runtime> --profile <profile>`.
+5. **Unlock the scope that holds the package.** If an earlier `avocado install` already locked the distro package, a `*` entry keeps that locked version, and the local RPM is not selected even with the feeds in the right order. Run `avocado unlock` for that scope, for example `avocado unlock --extension my-ext`. See [Updating locked versions](/developer-reference/lockfiles-and-build-stamps#updating-locked-versions). A project that has never installed the package can skip this step.
 
-A `path:` feed plus a plain `*` entry for the package installs a local RPM. The feed directory needs repository metadata, which you can generate with `createrepo_c <dir>`. Declare the feed under `repos:` with `path:`, list it first in `distro.feeds`, and declare the package with version `"*"` in an extension:
+6. **Install, build and provision.** Run `avocado install`, then `avocado build`, then `avocado provision <runtime> --profile <profile>`.
+
+A `path:` feed plus a plain `*` entry for the package installs a local RPM. The feed directory needs repository metadata, which you can generate with `createrepo_c <dir>`. Declare the feed under `repos:` with `path:`, list it in `distro.feeds` ahead of `avocado`, and declare the package with version `"*"` in an extension:
 
 ```yaml
 distro:
@@ -182,6 +184,7 @@ distro:
   channel: edge
   feeds:
     - local-rpms
+    - avocado
 
 repos:
   local-rpms:
