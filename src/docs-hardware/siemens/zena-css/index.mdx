@@ -19,12 +19,12 @@ observed on the chamber. A command that was not run for this page is marked
 The project was created from the chamber's `Arm-Zena-CSS` template, which carries
 the EWAOL software stack.
 
-| Item            | Value                                                                           |
-| --------------- | ------------------------------------------------------------------------------- |
-| Template        | `Arm-Zena-CSS` (EWAOL software stack)                                           |
-| Simulation CPUs | 4, which the guest sees as 16 CPUs                                              |
-| Host            | A Graviton 2 server (Armv8.2), as stated by the vendor and not observed         |
-| Boot chain      | RSE, TF-A BL2, OP-TEE, U-Boot as UEFI firmware, systemd-boot, Linux             |
+| Item            | Value                                                                   |
+| --------------- | ----------------------------------------------------------------------- |
+| Template        | `Arm-Zena-CSS` (EWAOL software stack)                                   |
+| Simulation CPUs | 4, which the guest sees as 16 CPUs                                      |
+| Host            | A Graviton 2 server (Armv8.2), as stated by the vendor and not observed |
+| Boot chain      | RSE, TF-A BL2, OP-TEE, U-Boot as UEFI firmware, systemd-boot, Linux     |
 
 ## What booted
 
@@ -34,20 +34,22 @@ UEFI firmware, systemd-boot, Linux 6.18.52 and systemd 259.5.
 
 Boot record of the second run:
 
-- The project reported `running` 15 s after the power-on call.
+- The project reported `running` 15 s after the power-on call. The record does
+  not say which event this was read from, so it is not comparable with the
+  overlay run's 287 s below.
 - The login prompt appeared 20 s later.
 - 7.2 s passed from the start of the kernel to the prompt.
 
 Guest facts from a root login:
 
-| Item    | Value                                                                                                              |
-| ------- | ------------------------------------------------------------------------------------------------------------------ |
-| CPU     | Cortex-A720AE (`CPU implementer 0x41`, `CPU part 0xd89`), 16 CPUs                                                  |
-| Features | `fp asimd evtstrm aes pmull sha1 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp`                   |
-| Memory  | 46 GiB of RAM                                                                                                      |
-| TEE     | OP-TEE 4.5 with `/dev/tee0`, and no `/dev/tpm*`                                                                    |
-| Network | `eth0` on DHCP                                                                                                     |
-| Disk    | `vda` with the partitions `boot-a`, `boot-b`, `recovery`, `rootfs-a`, `rootfs-b` and `var`                         |
+| Item     | Value                                                                                           |
+| -------- | ----------------------------------------------------------------------------------------------- |
+| CPU      | Cortex-A720AE (`CPU implementer 0x41`, `CPU part 0xd89`), 16 CPUs                               |
+| Features | `fp asimd evtstrm aes pmull sha1 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp` |
+| Memory   | 46 GiB of RAM                                                                                   |
+| TEE      | OP-TEE 4.5 with `/dev/tee0`, and no `/dev/tpm*`                                                 |
+| Network  | `eth0` on DHCP                                                                                  |
+| Disk     | `vda` with the partitions `boot-a`, `boot-b`, `recovery`, `rootfs-a`, `rootfs-b` and `var`      |
 
 `systemctl is-system-running` reported `degraded`. The only failed unit was
 the `systemd-growfs` instance for `/var`; its cause was not investigated.
@@ -113,10 +115,18 @@ Build notes:
 
 ## Obstacle 3: serial console
 
-The Avocado arm64 boot entry took its console from the ACPI SPCR table. This
-platform is device-tree based, so the kernel printed until it disabled the early
-console at 0.6 s and then went silent on all four serial consoles while it kept
-running.
+On a device-tree platform the kernel uses the `/chosen/stdout-path` UART as a
+console only when the command line names no `console=`. The Avocado arm64 boot
+entry carries `console=tty0`, which turns that off. The kernel printed until it
+disabled the early console at 0.6 s and then went silent on all four serial
+consoles while it kept running. On an ACPI machine the SPCR table adds the UART
+whatever `console=` says.
+
+This cause comes from reading the kernel source: a `console=` argument sets
+`console_set_on_cmdline`, and the serial core's `of_console_check` then returns
+without adding the stdout-path console. The tree read was a recent mainline one,
+not the guest's 6.18.52 build, and no boot was run without `console=tty0`, so
+the cause is not boot-tested.
 
 The fix that was observed on the chamber the first time was adding
 `console=ttyAMA0,115200n8` after `console=tty0` in `loader/entries/avocado.conf` on
@@ -134,10 +144,11 @@ next section records.
 
 Booted on the chamber with the console overlay: the serial console showed the login prompt and /proc/cmdline held console=ttyAMA0,115200n8.
 
-The power-on job reached `running` 287 s after the call (12:44:33Z to 12:49:20Z),
-and the login prompt appeared 21 s after the console connected. The last kernel
-timestamp printed before the prompt was 7.195 s. The kernel printed past 0.6 s on
-the serial console, where the first boot had gone silent. The kernel line read:
+The power-on job completed with `running` 287 s after the call (12:44:33Z to
+12:49:20Z), and the login prompt appeared 21 s after the console connected. The
+last kernel timestamp printed before the prompt was 7.195 s. The kernel printed
+past 0.6 s on the serial console, where the first boot had gone silent. The
+kernel line read:
 
 ```text
 Kernel command line: initrd=\initramfs.cpio.zst root=PARTLABEL=rootfs-a ro console=tty0 earlycon pci=pcie_bus_safe console=ttyAMA0,115200n8
@@ -165,6 +176,10 @@ kas build --target avocado-stone \
   kas/machine/arm64-uefi-v9.yml:kas/target/bringup.yml:kas/target/qemu-provision.yml:kas/feature/armv8-userland.yml:kas/feature/pl011-console.yml
 ```
 
+`kas/target/bringup.yml` builds a development image with an empty root password
+and `openssh` installed. The root login on the console needed no password. Keep
+such an image off a network that others can reach.
+
 The guest reported an Armv8.2-class feature set (no FEAT_LRCPC2), which is why the
 chain includes `kas/feature/armv8-userland.yml`. The default Armv9 tune was not
 tried on this model. It dies with an illegal instruction on the other virtual SoC
@@ -173,10 +188,12 @@ of the same chamber, see
 
 ## Loading the image
 
-Convert the disk to a compressed QCOW2 (not re-run in this exact form):
+Convert the provisioned image to a compressed QCOW2 (not re-run in this exact
+form). The build writes the image as `avocado-os-avocado-arm64-uefi-v9.img` under
+`tmp/deploy/stone/_build/` in the build directory:
 
 ```bash
-qemu-img convert -c -O qcow2 avocado.img avocado.qcow2
+qemu-img convert -c -O qcow2 avocado-os-avocado-arm64-uefi-v9.img avocado.qcow2
 ```
 
 Upload it through the Web IDE. Select the target folder first, because uploads go
@@ -186,8 +203,8 @@ file.
 
 - A 145 MiB compressed QCOW2 uploaded without error.
 - The rebuilt vendor image of 889 MB was built but never uploaded, so no upload
-  size limit is known between 145 MiB (worked) and a 1.9 GiB raw image (failed at
-  about 746 MB, on the other virtual SoC).
+  size limit is known between 145 MiB (worked) and a 1.9 GiB raw image (failed
+  after at least 746 MB, on the other virtual SoC).
 
 ## Limits seen
 
