@@ -127,11 +127,33 @@ arguments cannot be edited at boot.
 
 The `kas/feature/pl011-console.yml` overlay in meta-avocado is the repeatable form
 of that edit. The image that booted the first time was built before the overlay
-existed. The overlay was verified under QEMU.
+existed. The overlay image was booted under QEMU and then on the chamber, as the
+next section records.
 
 ### Overlay image on the chamber
 
-The overlay image has not been booted on the chamber yet.
+Booted on the chamber with the console overlay: the serial console showed the login prompt and /proc/cmdline held console=ttyAMA0,115200n8.
+
+The power-on job reached `running` 287 s after the call (12:44:33Z to 12:49:20Z),
+and the login prompt appeared 21 s after the console connected. The last kernel
+timestamp printed before the prompt was 7.195 s. The kernel printed past 0.6 s on
+the serial console, where the first boot had gone silent. The kernel line read:
+
+```text
+Kernel command line: initrd=\initramfs.cpio.zst root=PARTLABEL=rootfs-a ro console=tty0 earlycon pci=pcie_bus_safe console=ttyAMA0,115200n8
+```
+
+The guest kernel was 6.18.52. `systemctl is-system-running` reported `degraded`,
+with only the `systemd-growfs` instance for `/var` failed, as in the first
+boot. The image has no `systemd-analyze`, so no analyze figure was taken.
+
+The image was built with `kas/feature/armv8-userland.yml` and
+`kas/feature/pl011-console.yml`. No hand edit of the ESP was needed. The hand edit
+described under the serial console obstacle is the first boot's method, not this
+one.
+
+Under QEMU both images reached the login prompt, only the console image's kernel
+command line held the argument, and the same unit failed in both.
 
 ## Build the image
 
