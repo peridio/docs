@@ -94,7 +94,7 @@ avocado build
 
 ## Provision
 
-Provision the `dev` runtime using the `tegraflash` profile. This builds the system image and flashes it to the Jetson over USB.
+Provision the `dev` runtime using the `tegraflash` profile. This builds the system image and flashes it to the Jetson over USB. The `tegraflash-nvme` profile is the explicit name of the same NVMe profile, and the [Jetson Orin Nano Developer Kit hardware page](/hardware/nvidia/jetson-orin-nano-developer-kit) shows how to provision it from a locally built tree.
 
 ```bash
 avocado provision dev --profile tegraflash

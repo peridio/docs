@@ -11,25 +11,28 @@ This guide explains where that boundary is and what each kind of change costs.
 
 ## The boundary
 
-**The Avocado CLI consumes RPMs from a package feed. It does not produce them.** Producing an RPM is a Yocto/BitBake function.
+**The Avocado CLI installs RPMs from a package feed.** The SDK can also package your own build output into RPMs (`avocado sdk package`, `avocado ext package`), but the components of the base OS still come from Yocto.
 
-Everything the CLI installs, into the SDK sysroot, the rootfs and initramfs sysroots, or an extension, was built by BitBake upstream and published to the package feed. The SDK container is itself a Yocto artifact.
+Everything the CLI installs, into the SDK sysroot, the rootfs and initramfs sysroots, or an extension, comes from the package feed, which BitBake builds upstream, unless you packaged it yourself with the SDK. The SDK container is itself a Yocto artifact.
 
 This is why "can I just build it as an RPM?" is usually the wrong question. Every BitBake recipe already produces an RPM, so the answer is always yes, and it still does not help. The constraint is _which source_ the published RPM was built from: the recipe's pinned `SRCREV`, not your working tree.
 
 ## What to rebuild
 
-| You changed                                           | Yocto needed | How                                                                                             |
-| ----------------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- |
-| An extension's declared packages                      | No           | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build` |
-| Your own application source                           | No           | [Cross-compilation](/developer-reference/cross-compilation) in the SDK                          |
-| The rootfs or initramfs package list                  | No           | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs)       |
-| A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                   |
-| The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                              |
-| A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                       |
-| Kernel configuration or an in-tree driver             | **Yes**      | [Custom kernel](/developer-reference/custom-kernel)                                             |
+| You changed                                           | Yocto needed | How                                                                                                                                                                        |
+| ----------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| An extension's declared packages                      | No           | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build`                                                                            |
+| Your own application source                           | No           | [Cross-compilation](/developer-reference/cross-compilation) in the SDK                                                                                                     |
+| The rootfs or initramfs package list                  | No           | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs)                                                                                  |
+| A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                                                                                              |
+| The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                                                                                                         |
+| A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                                                                                                  |
+| A library or tool the feed lacks                      | No           | `avocado sdk compile`, `avocado sdk package`, `avocado ext package`, see [Using a locally built package](/developer-reference/package-feeds#using-a-locally-built-package) |
+| Kernel configuration or an in-tree driver             | No           | `kernel.compile` in [Custom kernel](/developer-reference/custom-kernel)                                                                                                    |
 
-The first four rows are the common case. The CLI covers them, and nothing in this guide applies.
+Rebuilding the stock kernel of the base OS in place stays a Yocto change; the custom kernel route builds your own kernel and substitutes it.
+
+The rows that say No are the common case. The CLI covers them, and nothing in this guide applies.
 
 Version pins have one wrinkle. Once a package has a lockfile entry, the CLI installs the locked version unless `avocado.yaml` pins an exact version that differs from it: an exact pin wins and is re-locked on the next `avocado install`, but `*`, a glob, or a pin the locked version still matches leaves you on the old one. In that case run [`avocado unlock`](/developer-reference/avocado-cli/commands#avocado-unlock) for the scope that holds the package, then `avocado install`. See [Lockfiles and build stamps](/developer-reference/lockfiles-and-build-stamps#updating-locked-versions).
 
