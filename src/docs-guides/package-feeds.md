@@ -166,23 +166,13 @@ To use a package you built yourself instead of the one the distro feed carries, 
 
    To package an extension sysroot instead, run `avocado ext package <name> --out-dir <dir>`. Without `--out-dir` the RPM stays inside the container.
 
-2. **Put the RPM in a feed directory.** Place the built RPM in a directory that works as an RPM repository. See the provisional note below.
+2. **Put the RPM in a feed directory.** Place the built RPM in a directory that works as an RPM repository by running `createrepo_c <dir>` on it.
 
 3. **Declare the directory under `repos:`** with `path:`, using the grammar from [Additional Feeds](#additional-feeds).
 
 4. **List it ahead of the distro feed in `distro.feeds`.** Feed order is the priority, so the first feed that carries the package name wins, as described in [Additional Feeds](#additional-feeds).
 
 5. **Install, build and provision.** Run `avocado install`, then `avocado build`, then `avocado provision <runtime> --profile <profile>`.
-
-:::caution Provisional: not yet verified end to end
-
-This note has not been confirmed by running a full install, build and provision against a local RPM. Treat it as unconfirmed until it is.
-
-:::
-
-<div>
-{/* provisional: confirmed by avocado-feed-first-build-loop E2E */}
-</div>
 
 A `path:` feed plus a plain `*` entry for the package installs a local RPM. The feed directory needs repository metadata, which you can generate with `createrepo_c <dir>`. Declare the feed under `repos:` with `path:`, list it first in `distro.feeds`, and declare the package with version `"*"` in an extension:
 
@@ -202,10 +192,6 @@ extensions:
     packages:
       my-package: '*'
 ```
-
-<div>
-{/* end provisional */}
-</div>
 
 ## Additional DNF Options
 
