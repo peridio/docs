@@ -132,6 +132,7 @@ sdk:
     - --network=host
     - -v /dev:/dev
     - -v /sys:/sys
+    - -v /home/you/stone-tree:/home/you/stone-tree
 
 runtimes:
   dev:
@@ -139,7 +140,7 @@ runtimes:
       - /home/you/stone-tree
 ```
 
-avocado-cli joins the listed paths with colons and passes them to the provision hook as `AVOCADO_STONE_INCLUDE_PATHS`. Absolute paths are passed unchanged.
+avocado-cli joins the listed paths with colons and passes them to the provision hook as `AVOCADO_STONE_INCLUDE_PATHS`. The hook runs inside the SDK container, so every path must exist there. An absolute path is passed unchanged and is not mounted for you, which is why the example bind-mounts the tree at the same path with `-v`. Alternatively, put the tree inside the project and list it with a relative path, which the CLI maps under the project's source mount at `/opt/src`.
 
 ```bash title="Host machine"
 avocado provision dev --profile tegraflash-nvme
