@@ -125,8 +125,15 @@ whatever `console=` says.
 This cause comes from reading the kernel source: a `console=` argument sets
 `console_set_on_cmdline`, and the serial core's `of_console_check` then returns
 without adding the stdout-path console. The tree read was a recent mainline one,
-not the guest's 6.18.52 build, and no boot was run without `console=tty0`, so
-the cause is not boot-tested.
+not the guest's 6.18.52 build.
+
+A QEMU boot of the same 6.18.52 kernel in device-tree mode (direct kernel boot on
+the `virt` machine, no disk) reproduces it. With the shipped command line the
+serial output ends at the line that disables the early console, 0.011 s in, and
+`ttyAMA0` is never enabled. Without `console=tty0` the kernel enables `ttyAMA0` at
+0.19 s and the log continues. With the shipped line plus
+`console=ttyAMA0,115200n8` it does the same. No boot without `console=tty0` was
+run on the chamber.
 
 The fix that was observed on the chamber the first time was adding
 `console=ttyAMA0,115200n8` after `console=tty0` in `loader/entries/avocado.conf` on
