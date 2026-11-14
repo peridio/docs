@@ -204,7 +204,9 @@ The model costs about the same RAM on both images. Available memory drops by abo
 
 The idle gap of about 420 MiB shrinks to about 240 MiB at the build peak. The build adds about 2.5 GiB on JetPack and about 2.7 GiB on Avocado OS. On an 8 GB module, a build leaves about 4 GiB free on either image. The idle figures differ from the table above (866 and 444 MiB) because each is a separate boot.
 
-I ran one boot and one build per image, with a settle time of 240 seconds. The Avocado OS image came from Avocado CLI 1.1.0 (68c1a83), a development build, with the `trt` runtime in the 25 W mode. The JetPack boot ran kernel 6.8.12-1021-tegra, and I did not read its power mode on this boot. I did not run the build inside a container.
+A container adds little. I rebuilt the engine on JetPack inside NVIDIA's `nvcr.io/nvidia/tensorrt:26.05-py3` container, on a separate cold boot with the same 240-second settle. JetPack held 901 MiB at idle, peaked at 3,485 MiB used (3.65 GB) and fell to 4,000 MiB available, in 74 seconds. That is 59 MiB above the native JetPack peak. The build added 2,584 MiB over idle in the container and 2,572 MiB natively. No run reached 4 GB of used memory. The container's TensorRT is 10.16.1, and the native one is 10.16.2.
+
+I ran one boot and one build per configuration, with a settle time of 240 seconds. The Avocado OS image came from Avocado CLI 1.1.0 (68c1a83), a development build, with the `trt` runtime in the 25 W mode. The JetPack boot ran kernel 6.8.12-1021-tegra, and I did not read its power mode on this boot. I did not run the container on Avocado OS. Used memory is `MemTotal` minus `MemAvailable`, so it leaves out the page cache.
 
 ### Disk
 
