@@ -20,7 +20,7 @@ runtimes:
 
 ```bash title="Host machine"
 avocado build
-avocado provision -r prod --profile sd
+avocado provision prod --profile sd
 ```
 
 That is the whole opt-in. The CLI does the rest:

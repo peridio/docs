@@ -89,7 +89,7 @@ The gateway is programmed through the on-module eMMC over USB, with the `uuu-emm
 
    ```bash title="Host machine"
    avocado build
-   avocado provision -r dev --profile uuu-emmc
+   avocado provision dev --profile uuu-emmc
    ```
 
 3. When programming completes, return the gateway to eMMC boot and power-cycle it. On first boot, the carrier extension switches the boot device tree to `iot-gate-imx8plus.dtb`. That takes effect from the next reboot.
