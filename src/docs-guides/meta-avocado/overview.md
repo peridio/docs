@@ -55,7 +55,7 @@ kas build $KAS_YML
 For QEMU testing:
 
 ```bash
-meta-avocado-qemu/scripts/run-qemu qemux86-64 --tpm
+meta-avocado/meta-avocado-qemu/scripts/run-qemu qemux86-64 --tpm
 ```
 
 :::note
