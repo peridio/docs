@@ -964,6 +964,32 @@
     "gettingStartedUrl": "/learn/get-started/any-target",
     "hardwareUrl": "/hardware/intel/x86-64-v3"
   },
+  "arm64-uefi-v9": {
+    "name": "Arm64 UEFI (Armv9)",
+    "target": "arm64-uefi-v9",
+    "releases": {
+      "2026": "in-progress"
+    },
+    "category": "usb",
+    "provisioning": {
+      "hostOs": ["macOS", "Linux"],
+      "prerequisites": ["USB drive", "UEFI boot support (Legacy BIOS not supported)"],
+      "options": [
+        {
+          "id": "usb",
+          "label": "USB drive",
+          "profile": "usb",
+          "media": "USB drive",
+          "autoMount": true,
+          "command": "avocado provision -r dev --profile usb",
+          "bootInstructions": "Insert the USB drive into the device and boot from USB via UEFI."
+        }
+      ]
+    },
+    "serial": null,
+    "gettingStartedUrl": "/learn/get-started/any-target",
+    "hardwareUrl": null
+  },
   "intel-x86-64-v2": {
     "name": "Intel x86-64-v2",
     "target": "intel-x86-64-v2",
