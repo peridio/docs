@@ -54,7 +54,7 @@ runtimes:
     outputDelay: 600,
   },
   {
-    prompt: '$ avocado provision -r dev --profile tegraflash',
+    prompt: '$ avocado provision dev --profile tegraflash',
     output: `[INFO] Provisioning runtime 'dev'
 [INFO] Running SDK lifecycle hook 'avocado-provision' for 'dev'.
 [INFO] Running stone provision.

@@ -120,7 +120,7 @@ It re-enumerates on the host as `05c6:9008`, ready to provision. This is also th
 Then provision the `dev` runtime with the `ufs` profile:
 
 ```bash title="Host machine"
-avocado provision -r dev --profile ufs
+avocado provision dev --profile ufs
 ```
 
 ### Hypervisor selection (GPU/NPU vs. virtualization)
@@ -149,15 +149,15 @@ virtualization instead, pass the environment variable through to the
 provisioning process:
 
 ```bash title="Host machine"
-avocado provision -r dev --profile ufs --env AVOCADO_HYPERVISOR=kvm
+avocado provision dev --profile ufs --env AVOCADO_HYPERVISOR=kvm
 ```
 
-Pass `-r` the runtime you are provisioning. The [KVM ivshmem
+Name the runtime you are provisioning as the argument. The [KVM ivshmem
 example](#example-project) below defines a single `rt-vms` runtime rather than
 `dev`, and needs `/dev/kvm`, so provision it with:
 
 ```bash title="Host machine"
-avocado provision -r rt-vms --profile ufs --env AVOCADO_HYPERVISOR=kvm
+avocado provision rt-vms --profile ufs --env AVOCADO_HYPERVISOR=kvm
 ```
 
 The selection is a boot-partition choice; it is independent of A/B OS updates

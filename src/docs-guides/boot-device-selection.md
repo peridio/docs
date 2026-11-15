@@ -19,7 +19,7 @@ Provisioning decides **where an image is written**. Firmware decides **which dis
 This bites in a specific, confusing way. You run:
 
 ```bash
-avocado provision -r dev --profile tegraflash-nvme
+avocado provision dev --profile tegraflash-nvme
 ```
 
 It writes a complete, bootable NVMe and reports success. You reboot, and the board comes up on the SD card that was already in the slot. Nothing failed. The NVMe is fine. The firmware simply never chose it - a Jetson's UEFI creates a `UEFI SD Device` entry on its own and places it at the front of its boot order.
