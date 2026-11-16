@@ -590,9 +590,9 @@
           "profile": "usb",
           "media": "USB drive",
           "autoMount": true,
-          "command": "avocado provision -r dev --profile usb",
+          "command": "avocado provision dev --profile usb",
           "bootSteps": [
-            "Plug the USB drive into a rear USB-C port",
+            "With the Spark powered off, plug the USB drive into a rear USB-C port",
             "Power on and hold Esc or Del to enter UEFI setup",
             "On the Save & Exit page, select the USB drive under Boot Override and press Enter"
           ],

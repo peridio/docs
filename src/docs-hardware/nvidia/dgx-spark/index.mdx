@@ -155,17 +155,19 @@ avocado build
 Write the image to a USB drive:
 
 ```bash title="Host machine"
-avocado provision -r dev --profile usb
+avocado provision dev --profile usb
 ```
 
 ### Run
 
 ![DGX Spark rear panel: power button, power input, three USB-C ports, HDMI, Ethernet, and two QSFP ports](/img/hardware/nvidia/dgx-spark-rear-panel.png)
 
-1. Plug the USB drive into one of the USB-C ports on the rear panel, next to
-   the power input.
+1. With the Spark powered off, plug the USB drive into one of the USB-C ports
+   on the rear panel, next to the power input. Plug it in before powering on:
+   the firmware may not offer a drive that was plugged in after boot.
 2. Connect a display to **HDMI** and a USB keyboard, and connect **Ethernet**
-   for network access.
+   for network access. The 10 GbE RJ45 port gets an address over DHCP with no
+   setup.
 3. Power on and hold **Esc** or **Del** to enter UEFI setup. Open the **Save &
    Exit** page, select the USB drive under **Boot Override**, and press
    **Enter**.
