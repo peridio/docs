@@ -36,7 +36,17 @@ const sidebars = {
       label: 'Avocado Desktop',
       collapsible: false,
       collapsed: false,
-      items: ['avocado-desktop/overview'],
+      items: [
+        'avocado-desktop/overview',
+        'avocado-desktop/install',
+        'avocado-desktop/first-run',
+        'avocado-desktop/projects',
+        'avocado-desktop/virtual-machine',
+        'avocado-desktop/usb-devices',
+        'avocado-desktop/agent',
+        'avocado-desktop/settings',
+        'avocado-desktop/troubleshooting',
+      ],
     },
     {
       type: 'category',
