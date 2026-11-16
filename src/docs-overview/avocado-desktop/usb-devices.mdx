@@ -1,0 +1,58 @@
+---
+title: 'USB devices'
+description: 'Pass hardware through to the Avocado Desktop VM for provisioning. Known devkits work out of the box; other hardware needs enabling once.'
+---
+
+# USB devices
+
+Avocado Desktop provisions in a build environment: a VM on macOS, or containers on Linux. A board you plug into your computer only reaches that environment if Desktop passes it through, and Desktop only passes through USB devices on its **allow list**.
+
+Known devkits are on the allow list already. **Any other hardware needs enabling the first time you provision it**, including your own carrier boards and modules. Until you enable it, `avocado provision` waits for a device that never shows up.
+
+## Enable your hardware
+
+1. Put the board in the mode its provisioning step asks for, such as recovery or serial download, and connect it to your computer.
+2. In Desktop, open **Devices** in the sidebar. The **USB devices** pane lists every USB device your computer can see. Hubs and internal devices are hidden.
+3. Find the board's row and turn its toggle on.
+
+The row goes from `available` to `attaching`, then `attached`. Provision once it shows `attached`.
+
+Desktop remembers the devices you enable, so you only do this once for each device. The list lives in `~/Library/Application Support/Avocado/usb_allowlist.json` on macOS and `$XDG_CONFIG_HOME/avocado/usb_allowlist.json` on Linux.
+
+### Hardware that changes USB ID while flashing
+
+Some hardware comes back as a different USB device partway through a flash. For example, a boot ROM hands over to a boot loader, which then starts a flashing gadget. Each of those devices needs enabling.
+
+Those later devices only exist while a flash is running, so you can't toggle them from the list ahead of time. You can handle them in either of two ways:
+
+- **Enable them as they appear.** Start the flash. When it stalls, open **Devices**, turn on the new row, and provision again. The **Events** pane shows each device as it appears.
+- **Add them ahead of time.** If you know the VID:PID of each stage, enter them in the **Add to allow list by VID:PID** card and click **Add**.
+
+## Device states
+
+| State         | Meaning                                                                         |
+| ------------- | ------------------------------------------------------------------------------- |
+| `available`   | Plugged in and staying on your computer. Turn its toggle on to pass it through. |
+| `attaching`   | Enabled, and being passed through to the build environment.                     |
+| `attached`    | In the build environment, and visible to `avocado provision`.                   |
+| `detaching`   | Being returned to your computer.                                                |
+| `gone`        | Unplugged, or re-enumerating as another USB device.                             |
+| `error`       | The pass-through failed. The row shows the error.                               |
+| `not present` | Enabled, but not plugged in.                                                    |
+
+If a device sits in `attaching` for 60 seconds, the attach times out with an error. Click **↻** on the row to try again.
+
+### The generic Linux gadget stays on your computer
+
+A running Linux board often shows up as `1d6b:0104`, the generic Linux gadget, which carries its USB network and serial console. Desktop only passes that device through while a flash that needs it is running. The rest of the time it stays on your computer, even when enabled, and its row says so. To pass it through anyway, click **Attach** on the row.
+
+## Requirements
+
+**macOS.** Desktop's USB helper ships with the app, and macOS asks you to approve it once. Until you do, every page shows **Approve USB passthrough to flash devices**. Click **Open Login Items** and allow Avocado there. If your hardware appears as a USB drive during a flash, Desktop also needs the **Removable Volumes** permission. macOS asks for it the first time: "Avocado.app would like to access files on a removable volume". If you denied or dismissed that prompt, turn on **Removable Volumes** for Avocado under **System Settings → Privacy & Security → Files and Folders**.
+
+**Linux.** Pass-through uses USB/IP, which needs `pkexec` and your distribution's `usbip` tools. Installing the `.deb` gets both, unless you used `--no-install-recommends`. On Ubuntu, the `usbip` tools come in `linux-tools-$(uname -r)`; check that `usbip version` runs cleanly. If something is missing, the **USB devices** pane tells you what to install.
+
+## Related
+
+- [Troubleshooting](/avocado-desktop/troubleshooting)
+- [Provisioning](/developer-reference/provisioning)
