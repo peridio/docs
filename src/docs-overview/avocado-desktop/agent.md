@@ -15,11 +15,11 @@ The agent can see which project you have open, so a request like "build and inst
 
 The agent runs on one of three backends. Pick one under **Settings → Agent**.
 
-| Backend          | Where it runs | What it needs                                                                                     |
-| ---------------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| **Claude Code**  | Your computer | Claude Code installed and signed in once with `claude /login`, on a Claude Pro, Max or Team plan. |
-| **OpenAI Codex** | Your computer | The Codex CLI installed and signed in.                                                            |
-| **Microclaw**    | The build VM  | An API key for the model provider, entered in Settings.                                           |
+| Backend          | Where it runs | What it needs                                                                                                                                                                       |
+| ---------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Claude Code**  | Your computer | A one-time sign-in with `claude /login`, on a Claude Pro, Max or Team plan. The agent ships with the app; you only need the Claude Code CLI to sign in, from Anthropic's installer. |
+| **OpenAI Codex** | Your computer | The Codex CLI installed and signed in.                                                                                                                                              |
+| **Microclaw**    | The build VM  | An API key for the model provider, entered in Settings.                                                                                                                             |
 
 With Claude Code, Desktop uses your Claude subscription. **Force subscription billing** is on by default. It ignores an `ANTHROPIC_API_KEY` in your environment, so you aren't billed through the API by accident.
 

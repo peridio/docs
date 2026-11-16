@@ -32,7 +32,8 @@ Avocado Desktop builds in containers on the host's Docker, so install Docker fir
 Packages:
 
 - **Debian and Ubuntu:** `.deb`, for x86_64 and arm64. The arm64 package is tested on a Raspberry Pi 5 running Raspberry Pi OS.
-- **Fedora:** `.rpm`, for x86_64 and arm64.
+- **Fedora:** `.rpm`, for x86_64.
+- **Arch:** a pacman package, for x86_64, installed with `pacman -U`.
 - **Any distribution:** AppImage, for x86_64.
 
 Every package needs WebKitGTK 4.1. Ubuntu 22.04 and later, Debian 12 and later, and current Fedora ship it.

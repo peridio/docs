@@ -42,13 +42,13 @@ The bar along the bottom of the project shows its path, the release and channel 
 
 Pick a **Profile**. Profiles come from your target and depend on the hardware: for example an SD card image, or flashing on-board storage over USB. Some profiles ask for extra fields, and **Provision** stays disabled until you fill in the required ones. If the provisioning script asks a question, answer it in the terminal.
 
-If the profile flashes over USB, the board has to reach the build VM. Known devkits do automatically. Other hardware needs enabling once, as [USB devices](/avocado-desktop/usb-devices) describes.
+If the profile flashes over USB, the board has to reach the build environment: the VM on macOS, or the build containers on Linux. Known devkits do automatically. Other hardware needs enabling once, as [USB devices](/avocado-desktop/usb-devices) describes.
 
 ### Deploy
 
 Enter the device's address: an IP address, a hostname such as `device.local`, or `host:port`. If the device's serial console is connected, **Detect** finds the address for you.
 
-Turn on **Sign via Connect** if the device has already taken an update through Avocado Connect. The deploy is then signed through Connect. Connect-signed metadata expires after 7 days.
+Turn on **Sign via Connect** when the device's image trusts your Avocado Connect server key rather than your local signing key. That's the case when the project's `server_key` differs from its signing key. Such a device refuses a locally signed deploy, even its first one. With **Sign via Connect**, Connect signs the deploy instead. Connect-signed metadata expires after 7 days.
 
 ### Runs
 

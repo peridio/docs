@@ -5,7 +5,7 @@ description: 'Pass hardware through to the Avocado Desktop VM for provisioning. 
 
 # USB devices
 
-Avocado Desktop provisions inside a VM on macOS and in containers on Linux. A board you plug into your computer only reaches them if Desktop passes it through, and Desktop only passes through USB devices on its **allow list**.
+Avocado Desktop provisions in a build environment: a VM on macOS, or containers on Linux. A board you plug into your computer only reaches that environment if Desktop passes it through, and Desktop only passes through USB devices on its **allow list**.
 
 Known devkits are on the allow list already. **Any other hardware needs enabling the first time you provision it**, including your own carrier boards and modules. Until you enable it, `avocado provision` waits for a device that never shows up.
 
@@ -33,8 +33,8 @@ Those later devices only exist while a flash is running, so you can't toggle the
 | State         | Meaning                                                                         |
 | ------------- | ------------------------------------------------------------------------------- |
 | `available`   | Plugged in and staying on your computer. Turn its toggle on to pass it through. |
-| `attaching`   | Enabled, and being passed through to the VM.                                    |
-| `attached`    | In the VM, and visible to `avocado provision`.                                  |
+| `attaching`   | Enabled, and being passed through to the build environment.                     |
+| `attached`    | In the build environment, and visible to `avocado provision`.                   |
 | `detaching`   | Being returned to your computer.                                                |
 | `gone`        | Unplugged, or re-enumerating as another USB device.                             |
 | `error`       | The pass-through failed. The row shows the error.                               |
@@ -44,7 +44,7 @@ If a device sits in `attaching` for 60 seconds, the attach times out with an err
 
 ### The generic Linux gadget stays on your computer
 
-A running Linux board often shows up as `1d6b:0104`, the generic Linux gadget, which carries its USB network and serial console. Desktop only passes that device to the VM while a flash that needs it is running. The rest of the time it stays on your computer, even when enabled, and its row says so. To pass it through anyway, click **Attach** on the row.
+A running Linux board often shows up as `1d6b:0104`, the generic Linux gadget, which carries its USB network and serial console. Desktop only passes that device through while a flash that needs it is running. The rest of the time it stays on your computer, even when enabled, and its row says so. To pass it through anyway, click **Attach** on the row.
 
 ## Requirements
 

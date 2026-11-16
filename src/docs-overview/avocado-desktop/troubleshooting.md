@@ -19,7 +19,7 @@ A project runs one action at a time. Wait for the current run, or click **Cancel
 
 ## Provisioning waits and never finds the board
 
-The board is plugged in, but Desktop hasn't passed it through to the VM. Known devkits pass through by default; any other hardware needs enabling the first time.
+A likely cause is that Desktop hasn't passed the board through to the build environment: the VM on macOS, or the build containers on Linux. Known devkits pass through by default; any other hardware needs enabling the first time.
 
 Open **Devices** in the sidebar, find the board's row and turn its toggle on. Provision once the row shows `attached`. See [USB devices](/avocado-desktop/usb-devices).
 
@@ -45,6 +45,6 @@ If that fails too, unplug the board and plug it back in. If it still fails, look
 
 ## The board's USB network or serial console disappears from your computer
 
-You enabled a USB device that the running board also uses, so Desktop passed it to the VM. Turn off the row's toggle to keep the device on your computer.
+You enabled a USB device that the running board also uses, so Desktop passed it to the build environment. Turn off the row's toggle to keep the device on your computer.
 
 The generic Linux gadget, `1d6b:0104`, is the exception. See [The generic Linux gadget stays on your computer](/avocado-desktop/usb-devices#the-generic-linux-gadget-stays-on-your-computer).
