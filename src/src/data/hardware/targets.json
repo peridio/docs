@@ -1261,7 +1261,7 @@
       "prerequisites": [
         "USB drive",
         "UEFI boot support (Legacy BIOS not supported)",
-        "A CPU with full AVX-512 (not Intel Alder Lake to Arrow Lake)"
+        "A CPU with full AVX-512 (not Intel hybrid client CPUs from Alder Lake onward, or Xeon 6 E-core)"
       ],
       "options": [
         {

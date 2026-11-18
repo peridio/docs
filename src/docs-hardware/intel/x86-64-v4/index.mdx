@@ -1,7 +1,7 @@
 ---
 title: 'Intel x86-64-v4 with Avocado OS'
 sidebar_position: 0
-description: 'Run Avocado OS on x86-64-v4 hardware with AVX-512: Intel Xeon Scalable, Intel Panther Lake, and AMD Zen 4 and Zen 5.'
+description: 'Run Avocado OS on x86-64-v4 hardware with AVX-512: Intel Xeon Scalable P-core processors and AMD Zen 4 and Zen 5.'
 hide_title: true
 ---
 
@@ -10,11 +10,11 @@ import HardwareHero from '@site/src/components/HardwareHero'
 <HardwareHero
   vendor="Intel"
   model="Intel x86-64-v4"
-  tagline="An x86-64 microarchitecture level 4 target, built with AVX-512 for Intel Xeon, Intel Panther Lake, and AMD Zen 4 and newer."
+  tagline="An x86-64 microarchitecture level 4 target, built with AVX-512 for Intel Xeon Scalable P-core processors and AMD Zen 4 and newer."
   stats={[
     { value: 'x86-64-v4', label: 'Instruction Set' },
     { value: 'AVX-512', label: 'Optimized SIMD' },
-    { value: 'Xeon, Panther Lake', label: 'Intel Support' },
+    { value: 'Xeon Scalable', label: 'Intel Support' },
     { value: 'Zen 4+', label: 'AMD Support' },
     { value: 'UEFI', label: 'Boot Mode' },
     { value: 'TPM 2.0', label: 'Discrete TPM or Intel PTT' },
@@ -39,24 +39,26 @@ The target is `intel-x86-64-v4`. Support is in progress on the **2026** release.
 
 :::caution
 
-Do not use this target on Intel hybrid client CPUs from Alder Lake to Arrow
-Lake. Their E-cores do not have AVX-512, so the image does not run on them.
-Use [x86-64-v3](/hardware/intel/x86-64-v3) for these CPUs.
+Do not use this target on CPUs without full AVX-512. The image does not run
+on them. This includes the Intel hybrid client CPUs from Alder Lake onward,
+Panther Lake included, and the Intel Xeon 6 E-core processors (Sierra Forest
+and Clearwater Forest). Use [x86-64-v3](/hardware/intel/x86-64-v3) for these
+CPUs.
 
 :::
 
 ## Specifications
 
-| Specification | Value                                  | Notes                                      |
-| ------------- | -------------------------------------- | ------------------------------------------ |
-| Architecture  | x86-64-v4                              | AVX-512 F, VL, BW, CD, DQ required         |
-| Intel client  | Panther Lake                           | Alder Lake to Arrow Lake are not supported |
-| Intel Xeon    | Skylake-SP and newer                   | Up to Granite Rapids and Clearwater Forest |
-| AMD           | Zen 4 and Zen 5                        | Ryzen 7000 and 9000, EPYC Genoa and Turin  |
-| Boot          | UEFI                                   | Legacy BIOS is not supported               |
-| Security      | TPM 2.0                                | Discrete TPM or Intel PTT                  |
-| GPU           | NVIDIA discrete GPU driver in the feed | The modules do not load without a GPU      |
-| Storage       | NVMe, SATA, USB                        | Standard block devices                     |
+| Specification | Value                                   | Notes                                                 |
+| ------------- | --------------------------------------- | ----------------------------------------------------- |
+| Architecture  | x86-64-v4                               | AVX-512 F, VL, BW, CD, DQ required                    |
+| Intel client  | Ice Lake, Tiger Lake, Rocket Lake       | Alder Lake and newer are not supported                |
+| Intel Xeon    | Xeon Scalable P-core, Skylake-SP onward | Sierra Forest and Clearwater Forest are not supported |
+| AMD           | Zen 4 and Zen 5                         | Ryzen 7000 and 9000, EPYC Genoa and Turin             |
+| Boot          | UEFI                                    | Legacy BIOS is not supported                          |
+| Security      | TPM 2.0                                 | Discrete TPM or Intel PTT                             |
+| GPU           | NVIDIA discrete GPU driver in the feed  | The modules do not load without a GPU                 |
+| Storage       | NVMe, SATA, USB                         | Standard block devices                                |
 
 ## x86-64-v4, v3, or v2
 
