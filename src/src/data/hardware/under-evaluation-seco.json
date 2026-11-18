@@ -1,0 +1,35 @@
+{
+  "category": "SECO",
+  "devices": [
+    {
+      "name": "SECO SOM-COMe-CT6-Dragonwing-IQ-X",
+      "vendor": "SECO",
+      "chipset": "Qualcomm Dragonwing IQ-X",
+      "productType": "SOM"
+    },
+    {
+      "name": "SECO SOM-SMARC-Dragonwing-IQ8",
+      "vendor": "SECO",
+      "chipset": "Qualcomm Dragonwing IQ8",
+      "productType": "SOM"
+    },
+    {
+      "name": "SECO SOM-SMARC-QCS6490",
+      "vendor": "SECO",
+      "chipset": "Qualcomm QCS6490",
+      "productType": "SOM"
+    },
+    {
+      "name": "SECO SOM-COM-HPC-A-Dragonwing-IQ10",
+      "vendor": "SECO",
+      "chipset": "Qualcomm Dragonwing IQ10",
+      "productType": "SOM"
+    },
+    {
+      "name": "SECO SBC-Dragonwing-IQ-2390",
+      "vendor": "SECO",
+      "chipset": "Qualcomm Dragonwing IQ-2390",
+      "productType": "SBC"
+    }
+  ]
+}

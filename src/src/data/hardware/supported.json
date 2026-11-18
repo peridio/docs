@@ -20,7 +20,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -46,6 +46,17 @@
       }
     },
     {
+      "name": "CompuLab IOT-GATE-iMX8PLUS",
+      "target": "ucm-imx8m-plus",
+      "board": "iot-gate-imx8plus",
+      "url": "/hardware/compulab/iot-gate-imx8plus",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "supported"
+      }
+    },
+    {
       "name": "CompuLab UCM-i.MX8M-Plus",
       "target": "ucm-imx8m-plus",
       "board": "",
@@ -53,18 +64,18 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
-      "name": "CompuLab IOT-GATE-iMX8PLUS",
-      "target": "ucm-imx8m-plus",
+      "name": "FriendlyELEC NanoPi R5S",
+      "target": "nanopi-r5s",
       "board": "",
-      "url": "/hardware/compulab/iot-gate-imx8plus",
+      "url": "/hardware/friendlyelec/nanopi-r5s",
       "external": false,
       "lts": {
-        "2024": "supported",
-        "2026": "in-progress"
+        "2024": "none",
+        "2026": "supported"
       }
     },
     {
@@ -86,7 +97,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -97,11 +108,33 @@
       "external": false,
       "lts": {
         "2024": "supported",
+        "2026": "supported"
+      }
+    },
+    {
+      "name": "Intel x86-64-v4",
+      "target": "intel-x86-64-v4",
+      "board": "",
+      "url": "/hardware/intel/x86-64-v4",
+      "external": false,
+      "lts": {
+        "2024": "none",
         "2026": "in-progress"
       }
     },
     {
-      "name": "NVIDIA Jetson AGX Orin Developer Kit",
+      "name": "NVIDIA DGX Spark",
+      "target": "arm64-uefi-v9",
+      "board": "dgx-spark",
+      "url": "/hardware/nvidia/dgx-spark",
+      "external": false,
+      "lts": {
+        "2024": "none",
+        "2026": "supported"
+      }
+    },
+    {
+      "name": "NVIDIA Jetson AGX Orin",
       "target": "jetson-agx-orin",
       "board": "",
       "url": "/hardware/nvidia/jetson-agx-orin",
@@ -109,17 +142,6 @@
       "lts": {
         "2024": "supported",
         "2026": "supported"
-      }
-    },
-    {
-      "name": "NVIDIA DGX Spark",
-      "target": "arm64-uefi-v9",
-      "board": "",
-      "url": "/hardware/nvidia/dgx-spark",
-      "external": false,
-      "lts": {
-        "2024": "none",
-        "2026": "in-progress"
       }
     },
     {
@@ -134,18 +156,7 @@
       }
     },
     {
-      "name": "NVIDIA Jetson Orin NX",
-      "target": "jetson-orin-nx",
-      "board": "",
-      "url": "/hardware/nvidia/jetson-orin-nx",
-      "external": false,
-      "lts": {
-        "2024": "supported",
-        "2026": "in-progress"
-      }
-    },
-    {
-      "name": "NVIDIA Jetson Orin Nano Developer Kit",
+      "name": "NVIDIA Jetson Orin Nano",
       "target": "jetson-orin-nano",
       "board": "",
       "url": "/hardware/nvidia/jetson-orin-nano-developer-kit",
@@ -156,25 +167,36 @@
       }
     },
     {
-      "name": "NXP FRDM i.MX 91",
-      "target": "imx91-frdm",
+      "name": "NVIDIA Jetson Orin NX",
+      "target": "jetson-orin-nx",
       "board": "",
-      "url": "/hardware/nxp/frdm-imx-91",
+      "url": "/hardware/nvidia/jetson-orin-nx",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
-      "name": "NXP i.MX 8MP EVK",
+      "name": "NXP i.MX 8M Plus EVK",
       "target": "imx8mp-evk",
       "board": "",
       "url": "/hardware/nxp/imx8mp",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
+      }
+    },
+    {
+      "name": "NXP i.MX 91 FRDM",
+      "target": "imx91-frdm",
+      "board": "",
+      "url": "/hardware/nxp/frdm-imx-91",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "supported"
       }
     },
     {
@@ -185,18 +207,29 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
-      "name": "NXP i.MX 93 FRDM SBC",
+      "name": "NXP i.MX 93 FRDM",
       "target": "imx93-frdm",
       "board": "",
       "url": "/hardware/nxp/frdm-imx-93",
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
+      }
+    },
+    {
+      "name": "NXP i.MX 95 FRDM",
+      "target": "imx95-frdm",
+      "board": "",
+      "url": "/hardware/nxp/frdm-imx-95",
+      "external": false,
+      "lts": {
+        "2024": "supported",
+        "2026": "supported"
       }
     },
     {
@@ -222,9 +255,9 @@
       }
     },
     {
-      "name": "Qualcomm RB3 Gen 2 Vision Kit",
+      "name": "Qualcomm RB3 Gen 2 Industrial Kit",
       "target": "rb3gen2",
-      "board": "rb3gen2-vision",
+      "board": "rb3gen2-industrial",
       "url": "/hardware/qualcomm/rb3-gen-2",
       "external": false,
       "lts": {
@@ -233,9 +266,9 @@
       }
     },
     {
-      "name": "Qualcomm RB3 Gen 2 Industrial Kit",
+      "name": "Qualcomm RB3 Gen 2 Vision Kit",
       "target": "rb3gen2",
-      "board": "rb3gen2-industrial",
+      "board": "rb3gen2-vision",
       "url": "/hardware/qualcomm/rb3-gen-2",
       "external": false,
       "lts": {
@@ -251,7 +284,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -262,7 +295,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -306,7 +339,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {
@@ -328,7 +361,7 @@
       "external": false,
       "lts": {
         "2024": "supported",
-        "2026": "in-progress"
+        "2026": "supported"
       }
     },
     {

@@ -2,12 +2,6 @@
   "category": "NXP i.MX ECOSYSTEM",
   "devices": [
     {
-      "name": "FRDM-i.MX 95",
-      "vendor": "NXP",
-      "chipset": "i.MX 95",
-      "productType": "Development Kit"
-    },
-    {
       "name": "Ara240 16GB M.2 Module",
       "vendor": "NXP",
       "chipset": "Ara240 NPU",

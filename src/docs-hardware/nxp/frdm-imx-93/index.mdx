@@ -1,7 +1,7 @@
 ---
-title: 'Edge AI Development with NXP FRDM i.MX 93'
+title: 'Edge AI Development with NXP i.MX 93 FRDM'
 sidebar_position: 0
-description: 'Run Avocado OS on the NXP FRDM i.MX 93: dual Cortex-A55, Cortex-M33 and an Ethos-U65 NPU, with secure OTA and fleet management.'
+description: 'Run Avocado OS on the NXP i.MX 93 FRDM: dual Cortex-A55, Cortex-M33 and an Ethos-U65 NPU, with secure OTA and fleet management.'
 hide_title: true
 ---
 
@@ -11,10 +11,10 @@ import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
 <HardwareHero
   vendor="NXP"
   vendorUrl="https://www.nxp.com/design/design-center/development-boards-and-designs/FRDM-IMX93"
-  model="NXP FRDM i.MX 93"
+  model="NXP i.MX 93 FRDM"
   tagline="Dual Cortex-A55 + Cortex-M33 heterogeneous platform with Ethos U-65 NPU, EdgeLock secure enclave, and industrial connectivity for edge AI applications."
   image="/img/hardware/nxp/nxp_frdm-imx-93.png"
-  imageAlt="NXP FRDM i.MX 93 development board"
+  imageAlt="NXP i.MX 93 FRDM development board"
   stats={[
     { value: '1.7 GHz', label: 'Dual Cortex-A55' },
     { value: '0.5 TOPS', label: 'Ethos U-65 NPU' },
@@ -34,7 +34,7 @@ import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
 
 ## Overview
 
-The NXP FRDM i.MX 93 development platform, enhanced with Avocado Linux and Avocado Connect, delivers a production-ready heterogeneous computing solution for edge AI applications. This integrated platform combines dual Cortex-A55 application processors, a Cortex-M33 real-time core, and an Ethos U-65 NPU to enable sophisticated edge processing with 0.5 TOPS of AI performance. The pre-integrated Linux and RTOS environment eliminates months of complex multi-core development, while EdgeLock security and atomic OTA updates ensure enterprise-grade deployment from prototype to production. Teams can leverage industrial connectivity options including CAN FD and Gigabit Ethernet to build secure, scalable edge AI systems that operate reliably in -40°C to +85°C environments with 10+ years of platform support.
+The NXP i.MX 93 FRDM development platform, enhanced with Avocado Linux and Avocado Connect, delivers a production-ready heterogeneous computing solution for edge AI applications. This integrated platform combines dual Cortex-A55 application processors, a Cortex-M33 real-time core, and an Ethos U-65 NPU to enable sophisticated edge processing with 0.5 TOPS of AI performance. The pre-integrated Linux and RTOS environment eliminates months of complex multi-core development, while EdgeLock security and atomic OTA updates ensure enterprise-grade deployment from prototype to production. Teams can leverage industrial connectivity options including CAN FD and Gigabit Ethernet to build secure, scalable edge AI systems that operate reliably in -40°C to +85°C environments with 10+ years of platform support.
 
 ## Specifications
 
@@ -117,13 +117,13 @@ runtimes:
       fit_key: product-fit
 ```
 
-AHAB is applied when the feed is built rather than from `avocado.yaml`, because it signs the boot container the ROM loads. Signing does not close the part — an OPEN device boots a signed image without checking it, which is the window to validate in before burning SRK fuses. See [Boot signing](/developer-reference/security/boot-signing#ahab-signing-the-imx-9-boot-container).
+AHAB is applied when the feed is built rather than from `avocado.yaml`, because it signs the boot container the ROM loads. Signing does not close the part. An OPEN device boots a signed image without checking it, which is the window to validate in before burning SRK fuses. See [Boot signing](/developer-reference/security/boot-signing#ahab-signing-the-imx-9-boot-container).
 
 `imx91-frdm` carries the AHAB wiring too; it does not declare encrypted `/var` or verified boot yet.
 
 ## Getting Started
 
-The [NXP FRDM i.MX 93 guide](/learn/get-started/frdm-imx93) walks through the whole path for this board: prerequisites, the serial console, building, provisioning to an SD card, first boot, and running your own container so that it comes back after a power cycle.
+The [NXP i.MX 93 FRDM guide](/learn/get-started/frdm-imx93) walks through the whole path for this board: prerequisites, the serial console, building, provisioning to an SD card, first boot, and running your own container so that it comes back after a power cycle.
 
 ```bash title="Host machine"
 avocado init --target imx93-frdm imx93-frdm

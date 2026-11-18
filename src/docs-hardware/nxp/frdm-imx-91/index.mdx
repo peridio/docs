@@ -1,7 +1,7 @@
 ---
-title: 'Production-Ready NXP FRDM i.MX 91 Deployment'
+title: 'Production-Ready NXP i.MX 91 FRDM Deployment'
 sidebar_position: 0
-description: 'Run Avocado OS on the NXP FRDM i.MX 91: low-power Cortex-A55, EdgeLock security, Wi-Fi 6 and dual Gigabit Ethernet for IoT and industrial edge.'
+description: 'Run Avocado OS on the NXP i.MX 91 FRDM: low-power Cortex-A55, EdgeLock security, Wi-Fi 6 and dual Gigabit Ethernet for IoT and industrial edge.'
 hide_title: true
 ---
 
@@ -11,10 +11,10 @@ import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
 <HardwareHero
   vendor="NXP"
   vendorUrl="https://www.nxp.com/design/design-center/development-boards-and-designs/FRDM-IMX91"
-  model="NXP FRDM i.MX 91"
+  model="NXP i.MX 91 FRDM"
   tagline="Low-power single Cortex-A55 platform with EdgeLock secure enclave, Wi-Fi 6, and dual Gigabit Ethernet for secure IoT and industrial edge applications."
   image="/img/hardware/nxp/FRDM-IMX91.png"
-  imageAlt="NXP FRDM i.MX 91"
+  imageAlt="NXP i.MX 91 FRDM"
   stats={[
     { value: '1.4 GHz', label: 'Cortex-A55' },
     { value: '1GB', label: 'LPDDR4 Memory' },
@@ -34,7 +34,7 @@ import SecurityCapabilities from '@site/src/components/SecurityCapabilities'
 
 ## Overview
 
-The NXP FRDM i.MX 91 development board, paired with Avocado OS, delivers a production-ready low-power Linux platform for IoT and industrial edge applications. Built around the i.MX 91 processor with a single Cortex-A55 core at 1.4GHz, this board strikes the balance between compute capability and power efficiency that edge devices demand. With onboard Wi-Fi 6, Bluetooth LE 5.4, dual Gigabit Ethernet (including TSN support), and NXP's EdgeLock secure enclave, teams can build secure, connected devices without months of BSP work. Avocado OS provides an immutable Yocto-based Linux with atomic OTA updates, so your devices stay secure and maintainable across their entire lifecycle.
+The NXP i.MX 91 FRDM development board, paired with Avocado OS, delivers a production-ready low-power Linux platform for IoT and industrial edge applications. Built around the i.MX 91 processor with a single Cortex-A55 core at 1.4GHz, this board strikes the balance between compute capability and power efficiency that edge devices demand. With onboard Wi-Fi 6, Bluetooth LE 5.4, dual Gigabit Ethernet (including TSN support), and NXP's EdgeLock secure enclave, teams can build secure, connected devices without months of BSP work. Avocado OS provides an immutable Yocto-based Linux with atomic OTA updates, so your devices stay secure and maintainable across their entire lifecycle.
 
 ## Specifications
 
@@ -97,15 +97,15 @@ Onboard Wi-Fi 6 and BLE 5.4 with 802.15.4 for Thread/Zigbee. Connect to any wire
 
 ### Rapid Development
 
-Hardware-in-the-loop development with Avocado OS. Edit code locally, test on hardware instantly — no rebuild required.
+Hardware-in-the-loop development with Avocado OS. Edit code locally, test on hardware instantly, with no rebuild required.
 
 ## Security features
 
 <SecurityCapabilities machine="imx91-frdm" />
 
-AHAB is applied when the feed is built rather than from `avocado.yaml`, because it signs the boot container the ROM loads. Signing does not close the part — an OPEN device boots a signed image without checking it, which is the window to validate in before burning SRK fuses. See [Boot signing](/developer-reference/security/boot-signing#ahab-signing-the-imx-9-boot-container).
+AHAB is applied when the feed is built rather than from `avocado.yaml`, because it signs the boot container the ROM loads. Signing does not close the part. An OPEN device boots a signed image without checking it, which is the window to validate in before burning SRK fuses. See [Boot signing](/developer-reference/security/boot-signing#ahab-signing-the-imx-9-boot-container).
 
-The sibling [FRDM i.MX 93](/hardware/nxp/frdm-imx-93) carries the same AHAB wiring plus encrypted `/var`, verified boot and rootfs verity.
+The sibling [i.MX 93 FRDM](/hardware/nxp/frdm-imx-93) carries the same AHAB wiring plus encrypted `/var`, verified boot and rootfs verity.
 
 ## Getting Started
 
@@ -118,7 +118,7 @@ Follow the [Any Supported Target](/learn/get-started/any-target) instructions un
 Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
 
 :::note Provisioning on a Linux host
-If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+If your Linux desktop auto-mounts removable media, disable it first. See [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
 :::
 
 ```bash title="Host machine"
