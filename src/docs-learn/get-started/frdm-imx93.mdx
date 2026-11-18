@@ -1,19 +1,19 @@
 ---
-title: NXP FRDM i.MX 93
-description: Getting started with Avocado OS on the NXP FRDM i.MX 93.
+title: NXP i.MX 93 FRDM
+description: Getting started with Avocado OS on the NXP i.MX 93 FRDM.
 sidebar_position: 3
 ---
 
 import HostPrerequisites from '@site/src/components/shared/HostPrerequisites'
 import SerialConsoleOptional from '@site/src/components/shared/SerialConsoleOptional'
 
-# NXP FRDM i.MX 93
+# NXP i.MX 93 FRDM
 
-This guide walks you through building and deploying Avocado OS to an NXP FRDM i.MX 93, then running your own container on it.
+This guide walks you through building and deploying Avocado OS to an NXP i.MX 93 FRDM, then running your own container on it.
 
 ## Prerequisites
 
-- NXP FRDM i.MX 93 development board
+- NXP i.MX 93 FRDM development board
 - microSD card (8 GB+)
 - An SD card reader
 - A USB-C cable (the board's debug console and power)
@@ -32,7 +32,7 @@ The board carries its debug console on the onboard USB-C port, so no separate TT
 ls /dev/serial/by-id/
 ```
 
-You will see a pair like this — the serial number is your board's:
+You will see a pair like this. The serial number is your board's:
 
 ```text
 usb-1a86_USB_Dual_Serial_5B6D003987-if00 -> ../../ttyACM0
@@ -49,7 +49,7 @@ Prefer this `by-id` path over `/dev/ttyACM0`. The `ttyACM` number shifts when ot
 
 ## Initialize
 
-Create a new project targeting the FRDM i.MX 93.
+Create a new project targeting the i.MX 93 FRDM.
 
 ```bash
 avocado init --target imx93-frdm imx93-frdm
@@ -77,14 +77,14 @@ avocado build
 Insert your SD card into a reader on your host, then write the `dev` runtime to it:
 
 :::note Provisioning on a Linux host
-If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+If your Linux desktop auto-mounts removable media, disable it first. See [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
 :::
 
 ```bash
 avocado provision dev --profile sd
 ```
 
-The CLI detects the available block devices and prompts you to select the target. Verify you select the correct device — this operation overwrites the target disk.
+The CLI detects the available block devices and prompts you to select the target. Verify you select the correct device. This operation overwrites the target disk.
 
 ## Run
 
@@ -163,7 +163,7 @@ RestartSec=10
 WantedBy=multi-user.target
 ```
 
-Use `Restart=always` rather than `on-failure`. With `--rm` and `Type=simple`, a container that exits cleanly — your app shutting down, or an external `docker stop` — leaves the unit inactive with nothing to bring it back, so the device silently stops running your application.
+Use `Restart=always` rather than `on-failure`. With `--rm` and `Type=simple`, a container that exits cleanly (your app shutting down, or an external `docker stop`) leaves the unit inactive with nothing to bring it back, so the device silently stops running your application.
 
 Rebuild, provision, and boot. Then confirm on the device:
 

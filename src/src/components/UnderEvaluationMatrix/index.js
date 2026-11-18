@@ -13,6 +13,7 @@ import connectTechData from '../../data/hardware/under-evaluation-connecttech.js
 import technexionData from '../../data/hardware/under-evaluation-technexion.json'
 import quectelData from '../../data/hardware/under-evaluation-quectel.json'
 import innodiskData from '../../data/hardware/under-evaluation-innodisk.json'
+import secoData from '../../data/hardware/under-evaluation-seco.json'
 
 const PAGE_SLUGS = {
   'Advantech MIC-715-OX': 'mic-715-ox',
@@ -26,12 +27,16 @@ const PAGE_SLUGS = {
   'IQ-9075': 'iq-9075',
   'Rubik Pi 3': 'rubik-pi-3',
   'AXON-IMX8M-PLUS': 'axon-imx8m-plus',
-  'FRDM-i.MX 95': 'frdm-imx-95',
   'Ara240 16GB M.2 Module': 'ara240',
   'RZ/V2H Robot RDK': 'rz-v2h',
   'Lanner EAI-I132': 'eai-i132',
   'Synaptics Coral Dev Board': 'coral-dev-board',
   'Innodisk EXEC-Q911': 'exec-q911',
+  'SECO SOM-COMe-CT6-Dragonwing-IQ-X': 'seco-som-come-ct6-iq-x',
+  'SECO SOM-SMARC-Dragonwing-IQ8': 'seco-som-smarc-iq8',
+  'SECO SOM-SMARC-QCS6490': 'seco-som-smarc-qcs6490',
+  'SECO SOM-COM-HPC-A-Dragonwing-IQ10': 'seco-som-com-hpc-a-iq10',
+  'SECO SBC-Dragonwing-IQ-2390': 'seco-sbc-iq-2390',
 }
 
 const columns = [
@@ -67,6 +72,7 @@ export default function UnderEvaluationMatrix() {
   const data = [
     advantechData,
     qualcommData,
+    secoData,
     nxpData,
     renesasData,
     lannerData,

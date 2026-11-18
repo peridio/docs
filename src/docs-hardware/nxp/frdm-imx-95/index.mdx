@@ -1,0 +1,152 @@
+---
+title: 'NXP i.MX 95 FRDM with Avocado OS'
+sidebar_position: 0
+description: 'Run Avocado OS on the NXP i.MX 95 FRDM: six Cortex-A55 cores, Cortex-M7 and Cortex-M33, an eIQ Neutron NPU, and atomic A/B updates.'
+hide_title: true
+---
+
+import HardwareHero from '@site/src/components/HardwareHero'
+
+<HardwareHero
+  vendor="NXP"
+  vendorUrl="https://www.nxp.com/design/design-center/development-boards-and-designs/FRDM-IMX95"
+  model="NXP i.MX 95 FRDM"
+  tagline="Six Cortex-A55 cores with Cortex-M7 and Cortex-M33 real-time cores and an eIQ Neutron NPU, on an immutable Linux with atomic A/B updates."
+  image="/img/hardware/nxp/frdm-imx-95.png"
+  imageAlt="NXP i.MX 95 FRDM development board"
+  stats={[
+    { value: '6x A55', label: 'Cortex-A55 Cores' },
+    { value: 'M7 + M33', label: 'Real-Time Cores' },
+    { value: 'eIQ Neutron', label: 'NPU' },
+    { value: '8GB', label: 'LPDDR4X Memory' },
+    { value: '32GB', label: 'eMMC 5.1 Storage' },
+    { value: '2x GbE', label: 'Ethernet' },
+  ]}
+  target="imx95-frdm"
+  ctas={{
+    primary: {
+      label: 'Get Started',
+      to: '/learn/get-started/any-target#imx95-frdm',
+    },
+    secondary: {
+      label: 'Visit NXP Product Page',
+      to: 'https://www.nxp.com/design/design-center/development-boards-and-designs/FRDM-IMX95',
+      external: true,
+    },
+  }}
+/>
+
+## Overview
+
+The NXP i.MX 95 FRDM is a development board for the i.MX 95 applications
+processor. The processor has six Cortex-A55 cores, a Cortex-M7, a Cortex-M33,
+and an eIQ Neutron NPU.
+
+On the 2026 release, Avocado OS builds this board from the NXP `meta-imx`
+layer for Linux 6.18. On the i.MX 95, the U-Boot version must match the
+System Manager firmware. Avocado OS uses U-Boot 2026.04, the version that NXP
+releases with this firmware.
+
+The target is `imx95-frdm`, available on the **2026** release feed.
+
+## Specifications
+
+| Specification | Value                                | Notes                              |
+| ------------- | ------------------------------------ | ---------------------------------- |
+| SoC           | NXP i.MX 95                          | 15 mm x 15 mm package              |
+| CPU           | 6x Cortex-A55                        |                                    |
+| Real-time     | 1x Cortex-M7, 1x Cortex-M33          |                                    |
+| NPU           | NXP eIQ Neutron NPU                  |                                    |
+| Memory        | 8GB LPDDR4X-4000                     |                                    |
+| Storage       | 32GB eMMC 5.1, microSD slot          |                                    |
+| Ethernet      | 2x GbE RJ-45                         |                                    |
+| CAN           | 2x CAN header                        | TJA1051 transceiver                |
+| USB           | 1x USB 3.0 Type-C, 1x USB 2.0 Type-A |                                    |
+| Display       | MIPI-DSI, LVDS, HDMI (from LVDS)     |                                    |
+| Camera        | 2x MIPI-CSI (FPC 22-pin)             | One shares its lanes with MIPI-DSI |
+| Wireless      | IW612 M.2 module                     | Wi-Fi 6, Bluetooth 5.4, 802.15.4   |
+| Debug console | USB-C (J1), 115200 baud              | A WCH chip gives four serial ports |
+
+## Boot Switch
+
+`SW1` positions 1 and 2 select the boot device. By default, the board boots
+from the eMMC.
+
+| Boot device       | SW1-1 | SW1-2 |
+| ----------------- | ----- | ----- |
+| Serial downloader | OFF   | ON    |
+| eMMC              | ON    | OFF   |
+| microSD card      | ON    | ON    |
+
+## Getting Started
+
+### Init, Install, & Build
+
+Follow the [Any Supported Target](/learn/get-started/any-target#imx95-frdm)
+instructions under Getting Started. This target is `imx95-frdm`.
+
+```bash title="Host machine"
+avocado init --target imx95-frdm imx95-frdm
+cd imx95-frdm
+avocado install
+avocado build
+```
+
+### Connect the Serial Console
+
+Connect the debug port `J1` to the host with a USB-C cable. The board gives
+four serial ports. One of these ports is the Linux console on the Cortex-A55.
+Open each port at 115200 baud until you see the Linux boot log:
+
+```bash title="Host machine"
+ls /dev/serial/by-id/
+tio -b 115200 /dev/ttyACM0
+```
+
+### Provision
+
+Avocado OS supports two ways to provision this board: a microSD card (`sd`
+profile) and the onboard eMMC over USB (`uuu-emmc` profile).
+
+#### microSD Card
+
+1. Put a microSD card in a card reader on the host.
+2. Write the image to the card:
+
+   ```bash title="Host machine"
+   avocado provision dev --profile sd
+   ```
+
+3. Make sure that the board is powered off.
+4. Set `SW1-1` to ON and `SW1-2` to ON to boot from the microSD card.
+5. Put the card in the board.
+6. Connect a USB PD power supply to `J25`.
+
+#### eMMC
+
+The `uuu-emmc` profile writes the image to the eMMC over USB, with the board in
+serial downloader mode.
+
+1. Make sure that the board is powered off.
+2. Set `SW1-1` to OFF and `SW1-2` to ON to select serial downloader mode.
+3. Connect the `USB1` port (`J3`) to the host with a USB cable.
+4. Connect a USB PD power supply to `J25`.
+5. Write the image to the eMMC:
+
+   ```bash title="Host machine"
+   avocado provision dev --profile uuu-emmc
+   ```
+
+   The command waits up to 60 seconds for the board to appear in serial
+   downloader mode. It then writes the image and the bootloader to the eMMC.
+
+6. Power off the board.
+7. Set `SW1-1` to ON and `SW1-2` to OFF to boot from the eMMC.
+8. Disconnect the `USB1` cable.
+9. Connect power to `J25`.
+
+### Run
+
+The board boots Avocado OS from the media that you provisioned. The `root` user is
+passwordless in the `dev` runtime used by this guide. Log in on the serial
+console, or use SSH when the device is on the network.

@@ -1,6 +1,6 @@
 {
-  "label": "FRDM-i.MX 91",
-  "position": 3,
+  "label": "i.MX 91 FRDM",
+  "position": 2,
   "collapsible": true,
   "collapsed": true,
   "link": {

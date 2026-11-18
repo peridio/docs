@@ -48,6 +48,11 @@ const config = {
             from: '/hardware/under-evaluation/rubik-pi-3',
             to: '/hardware/qualcomm/rubik-pi-3',
           },
+          // FRDM i.MX 95 graduated from Under Evaluation to a supported target.
+          {
+            from: '/hardware/under-evaluation/frdm-imx-95',
+            to: '/hardware/nxp/frdm-imx-95',
+          },
           // The former "Rubik Pi" page now points at the Rubik Pi 3 target.
           { from: '/hardware/qualcomm/rubik-pi', to: '/hardware/qualcomm/rubik-pi-3' },
           // Avocado OS product pages moved under the /avocado-os/ prefix.
