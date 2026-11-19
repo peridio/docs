@@ -129,6 +129,12 @@ A name `repos:` does not define is an **add-on feed** the distro feed publishes,
 
 Before anything is written to the lock, the CLI checks the name against the channel's `targets.json` and refuses one the target does not publish, suggesting the nearest published name, the add-ons the target does publish, and the other targets that carry it. A name close to one `repos:` defines is refused as a typo. If `targets.json` cannot be read, the CLI warns and lets dnf report what is missing.
 
+:::caution Not in a tagged avocado-cli release yet
+
+The loopback handling below, including `rewrite_loopback`, is on avocado-cli `main` and listed under `[Unreleased]` in its changelog. The latest tagged release, 1.1.0, does not contain it, so a released CLI may not honor it. The Docker Desktop and Avocado VM behavior has not been verified end to end.
+
+:::
+
 On native Linux, a feed served from a loopback address such as `http://127.0.0.1:8000` is reachable from the SDK container as written only with host networking. The default project that `avocado init` writes already sets `--network=host` in `sdk.container_args`, together with `--privileged`, `-v /dev:/dev` and `-v /sys:/sys`, so a project that kept the default needs nothing. A project that removed it needs `--network=host` back:
 
 ```yaml
