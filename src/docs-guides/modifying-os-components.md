@@ -19,16 +19,16 @@ This is why "can I just build it as an RPM?" is usually the wrong question. Ever
 
 ## What to rebuild
 
-| You changed                                           | Yocto needed | How                                                                                                                                                                        |
-| ----------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| An extension's declared packages                      | No           | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build`                                                                            |
-| Your own application source                           | No           | [Cross-compilation](/developer-reference/cross-compilation) in the SDK                                                                                                     |
-| The rootfs or initramfs package list                  | No           | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs)                                                                                  |
-| A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                                                                                              |
-| The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                                                                                                         |
-| A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                                                                                                  |
+| You changed                                           | Yocto needed | How                                                                                                                                                 |
+| ----------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| An extension's declared packages                      | No           | [`avocado ext dnf`](/developer-reference/avocado-cli/commands#avocado-ext-dnf), `avocado build`                                                     |
+| Your own application source                           | No           | [Cross-compilation](/developer-reference/cross-compilation) in the SDK                                                                              |
+| The rootfs or initramfs package list                  | No           | [Customizing the rootfs and initramfs](/developer-reference/customizing-rootfs-initramfs)                                                           |
+| A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                                                                       |
+| The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                                                                                  |
+| A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                                                                           |
 | A library or tool the feed lacks                      | No           | `avocado sdk compile`, `avocado sdk package`, see [Using a locally built package](/developer-reference/package-feeds#using-a-locally-built-package) |
-| Kernel configuration or an in-tree driver             | No           | `kernel.compile` in [Custom kernel](/developer-reference/custom-kernel)                                                                                                    |
+| Kernel configuration or an in-tree driver             | No           | `kernel.compile` in [Custom kernel](/developer-reference/custom-kernel)                                                                             |
 
 Rebuilding the stock kernel of the base OS in place stays a Yocto change; the custom kernel route builds your own kernel and substitutes it.
 
