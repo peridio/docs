@@ -186,6 +186,7 @@ repos:
 
 extensions:
   my-ext:
+    version: '1.0.0'
     packages:
       my-package: '*'
 
