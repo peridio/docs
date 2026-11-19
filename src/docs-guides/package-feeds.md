@@ -129,16 +129,6 @@ A name `repos:` does not define is an **add-on feed** the distro feed publishes,
 
 Before anything is written to the lock, the CLI checks the name against the channel's `targets.json` and refuses one the target does not publish, suggesting the nearest published name, the add-ons the target does publish, and the other targets that carry it. A name close to one `repos:` defines is refused as a typo. If `targets.json` cannot be read, the CLI warns and lets dnf report what is missing.
 
-:::caution Provisional: not yet verified end to end
-
-This note depends on avocado-cli changes that are still open pull requests and are not on main. Treat it as unconfirmed until they land and a run confirms it.
-
-:::
-
-<div>
-{/* provisional: confirmed by avocado-feed-first-build-loop E2E */}
-</div>
-
 On native Linux, a feed served from a loopback address such as `http://127.0.0.1:8000` is reachable from the SDK container as written only with host networking. The default project that `avocado init` writes already sets `--network=host` in `sdk.container_args`, together with `--privileged`, `-v /dev:/dev` and `-v /sys:/sys`, so a project that kept the default needs nothing. A project that removed it needs `--network=host` back:
 
 ```yaml
@@ -147,15 +137,9 @@ sdk:
     - --network=host
 ```
 
-The CLI keeps a loopback URL unchanged when `sdk.container_args` (including `sdk.<target>.container_args`) selects host networking, and otherwise rewrites it to the host gateway, `host.docker.internal`. The decision reads the project configuration only: a `--network=host` passed on the command line with `--container-arg` still reaches the container but does not stop the rewrite, so put it in `sdk.container_args`. A feed under `repos:` can override the decision with `rewrite_loopback: true` or `false`; the distro feed cannot.
+For a feed under `repos:`, the CLI keeps a loopback URL unchanged when `sdk.container_args` (including `sdk.<target>.container_args`) selects host networking, and otherwise rewrites it to the host gateway, `host.docker.internal`. That decision reads the project configuration only, so install and build stamp the same address; a feed can override it with `rewrite_loopback: true` or `false`. The distro feed follows the arguments docker actually receives instead: a `--network=host` passed on the command line with `--container-arg` also keeps a loopback distro URL, and a `--container-arg` that replaces the configured arguments drops a `--network=host` set there. The distro feed cannot use `rewrite_loopback`.
 
 On Docker Desktop and under the Avocado VM, host networking does not share your machine's loopback, so the CLI rewrites a loopback URL to the host gateway even with `--network=host`. There the feed server must accept connections that arrive through that gateway address. If the feed is unreachable while the server listens only on `127.0.0.1`, bind it to an address the gateway reaches, such as `0.0.0.0`.
-
-This behavior is in avocado-cli open pull requests and is not on main yet.
-
-<div>
-{/* end provisional */}
-</div>
 
 ## Using a locally built package
 
