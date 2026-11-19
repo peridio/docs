@@ -11,7 +11,7 @@ This guide explains where that boundary is and what each kind of change costs.
 
 ## The boundary
 
-**The Avocado CLI installs RPMs from a package feed.** The SDK can also package your own build output into RPMs (`avocado sdk package`, `avocado ext package`), but the components of the base OS still come from Yocto.
+**The Avocado CLI installs RPMs from a package feed.** The SDK can also package your own build output into RPMs (`avocado sdk package`), but the components of the base OS still come from Yocto.
 
 Everything the CLI installs, into the SDK sysroot, the rootfs and initramfs sysroots, or an extension, comes from the package feed, which BitBake builds upstream, unless you packaged it yourself with the SDK. The SDK container is itself a Yocto artifact.
 
@@ -27,7 +27,7 @@ This is why "can I just build it as an RPM?" is usually the wrong question. Ever
 | A published package, to a different published version | No           | Pin the version in `avocado.yaml`, then unlock and re-install                                                                                                              |
 | The **source** of a packaged component                | **Yes**      | `bitbake <recipe>`                                                                                                                                                         |
 | A recipe, bbappend, packagegroup, or machine config   | **Yes**      | `bitbake`                                                                                                                                                                  |
-| A library or tool the feed lacks                      | No           | `avocado sdk compile`, `avocado sdk package`, `avocado ext package`, see [Using a locally built package](/developer-reference/package-feeds#using-a-locally-built-package) |
+| A library or tool the feed lacks                      | No           | `avocado sdk compile`, `avocado sdk package`, see [Using a locally built package](/developer-reference/package-feeds#using-a-locally-built-package) |
 | Kernel configuration or an in-tree driver             | No           | `kernel.compile` in [Custom kernel](/developer-reference/custom-kernel)                                                                                                    |
 
 Rebuilding the stock kernel of the base OS in place stays a Yocto change; the custom kernel route builds your own kernel and substitutes it.

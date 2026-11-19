@@ -152,7 +152,7 @@ To use a package you built yourself instead of the one the distro feed carries, 
    avocado sdk package <section> --out <dir>
    ```
 
-   To package an extension sysroot instead, run `avocado ext package <name> --out-dir <dir>`. Without `--out-dir` the RPM stays inside the container.
+   Without `--out` the RPM stays inside the container. `avocado ext package` does not fit this workflow: it packages an extension's sources, not a built sysroot, so its RPM does not deliver compiled binaries. For that source workflow, see `source.type: package` in [Cross-compilation](/developer-reference/cross-compilation).
 
 2. **Put the RPM in a feed directory.** Place the built RPM in a directory that works as an RPM repository by running `createrepo_c <dir>` on it.
 
@@ -182,6 +182,10 @@ extensions:
   my-ext:
     packages:
       my-package: '*'
+
+runtimes:
+  dev:
+    extensions: [my-ext]
 ```
 
 ## Additional DNF Options
