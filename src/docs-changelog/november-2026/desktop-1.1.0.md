@@ -51,6 +51,3 @@ See
 
 - Dependency updates for RustSec advisories in quinn-udp, anyhow and rustix.
 - tauri-plugin-updater 2.14.1, which moves zip to 9.4.1 for two advisories.
-
-The full record is in the
-[CHANGELOG](https://github.com/avocado-linux/avocado-desktop/blob/main/CHANGELOG.md).

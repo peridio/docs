@@ -20,7 +20,6 @@ const sidebars = {
         'provisioning',
         'boot-device-selection',
         'hardware-in-the-loop',
-        'rubicon',
         'container-dev-mode',
         'sideloading',
         // The OTA guide moved to Learn; keep it findable from here.

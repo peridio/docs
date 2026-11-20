@@ -56,10 +56,6 @@ provision:
 
 The keys are `privileged`, `network_mode`, `volumes`, `devices`, `extra_hosts`, `cap_add` and `environment`. `container_args` still works, and remains the place for any flag without a key. Where both set the same thing, the block wins.
 
-### Provisioning a board you are not next to
-
-With a [Rubicon](/developer-reference/rubicon), `avocado provision --rubicon` provisions a board on a hub, from your desk or from CI. `--pack` writes a provisionable bundle that another machine can replay with `--bundle`.
-
 ### NVIDIA Jetson: the profile picks the boot media
 
 On Jetson, the tegraflash profile decides which disk gets flashed:
