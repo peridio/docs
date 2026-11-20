@@ -83,7 +83,7 @@ These shortcuts are fixed: Settings ⌘/Ctrl+,, and zoom ⌘/Ctrl with +, − or
 
 ## Updates
 
-Lists **Avocado Desktop**, the **Avocado CLI** and, on macOS, the **Avocado VM**, each with its state: up to date, an available update, or an error to retry. **Check now** checks all three. See [Install and update](/avocado-desktop/install#updates).
+Lists **Avocado Desktop**, the **Avocado CLI** and, on macOS, the **Avocado VM**, each with its state: up to date, an available update, or an error to retry. **Check now** checks all three. If you use a pre-release CLI, such as an `rc` build, Updates offers the final release once it ships. See [Install and update](/avocado-desktop/install#updates).
 
 ## Privacy & Help
 

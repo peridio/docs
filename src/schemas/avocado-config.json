@@ -215,8 +215,8 @@
     },
     "rootfs": {
       "title": "Root filesystem",
-      "$ref": "#/definitions/imageSection",
-      "description": "Root filesystem image configuration. Either one configuration, which becomes the implicit 'default', or a map of named configurations. When no 'packages' are set, installs 'avocado-pkg-rootfs'. In the named-map form only the 'default' (or sole) entry is built, and its 'overlay', 'post_install' and 'image' are not read."
+      "$ref": "#/definitions/rootfsSection",
+      "description": "Root filesystem image configuration. Either one configuration, which becomes the implicit 'default', or a map of named configurations. When no 'packages' are set, installs 'avocado-pkg-rootfs'. In the named-map form, install reads the 'default' (or sole) entry, and a runtime's image step reads the entry its 'rootfs: <name>' names, else that same entry. A 'target-<name>:' block beside the named entries applies over the selected entry, and the entry's own 'target-<name>:' block applies over both."
     },
     "initramfs": {
       "title": "Initramfs",
@@ -282,6 +282,11 @@
       "title": "Peridio Connect",
       "$ref": "#/definitions/connectConfig",
       "description": "Default Peridio Connect organization and project for 'avocado connect' commands."
+    },
+    "rubicon": {
+      "title": "Rubicon",
+      "$ref": "#/definitions/rubiconConfig",
+      "description": "Rubicon settings for provisioning through a Rubicon board on a hub (`avocado provision --rubicon`)."
     }
   },
   "patternProperties": {
@@ -385,6 +390,62 @@
         ],
         "--privileged --network=host"
       ]
+    },
+    "containerConfig": {
+      "title": "Container settings",
+      "type": "object",
+      "description": "Settings for the container, by name, spelled as Docker Compose spells them. Applied after 'container_args', which stays for anything that has no key here. Supports environment variable expansion using ${VAR_NAME} syntax.",
+      "properties": {
+        "privileged": {
+          "type": "boolean",
+          "description": "Run the container privileged."
+        },
+        "network_mode": {
+          "type": "string",
+          "description": "Network the container joins.",
+          "examples": [
+            "host"
+          ]
+        },
+        "volumes": {
+          "$ref": "#/definitions/stringList",
+          "description": "Bind mounts and volumes, as 'source:target[:options]'.",
+          "examples": [
+            [
+              "/dev:/dev"
+            ]
+          ]
+        },
+        "devices": {
+          "$ref": "#/definitions/stringList",
+          "description": "Host devices to pass through.",
+          "examples": [
+            [
+              "/dev/ttyUSB0"
+            ]
+          ]
+        },
+        "extra_hosts": {
+          "$ref": "#/definitions/stringList",
+          "description": "Extra /etc/hosts entries, as 'host:ip'."
+        },
+        "cap_add": {
+          "$ref": "#/definitions/stringList",
+          "description": "Linux capabilities to add."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Environment variables to set in the container.",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "distroConfig": {
       "title": "Distribution configuration",
@@ -505,7 +566,7 @@
     "repoDef": {
       "title": "Package feed",
       "type": "object",
-      "description": "A named package feed with exactly one locator: 'url' (a remote repository), 'org' (a Peridio Connect private feed) or 'path' (a local RPM directory). 'username' and 'password' go together. An entry used as the distribution feed accepts only 'url', 'release', 'channel', 'releasever', 'ca' and 'tls_verify', and its url must not contain '$releasever' or '$target'.",
+      "description": "A named package feed with exactly one locator: 'url' (a remote repository), 'org' (a Peridio Connect private feed) or 'path' (a local RPM directory). 'username' and 'password' go together. An entry used as the distribution feed accepts only 'url', 'release', 'channel', 'releasever', 'ca' and 'tls_verify' ('rewrite_loopback' is not offered there), and its url must not contain '$releasever' or '$target'.",
       "properties": {
         "url": {
           "type": "string",
@@ -579,6 +640,10 @@
         "tls_verify": {
           "type": "boolean",
           "description": "Whether to verify the feed's TLS certificate. Defaults to true."
+        },
+        "rewrite_loopback": {
+          "type": "boolean",
+          "description": "Rewrite a loopback host (localhost, 127.0.0.1) in 'url' to an address the build container can reach. Not accepted on the distribution feed."
         }
       },
       "additionalProperties": false
@@ -710,6 +775,9 @@
         },
         "container_args": {
           "$ref": "#/definitions/containerArgs"
+        },
+        "container": {
+          "$ref": "#/definitions/containerConfig"
         },
         "disable_weak_dependencies": {
           "title": "Disable weak dependencies",
@@ -850,6 +918,36 @@
               "glibc"
             ]
           ]
+        },
+        "provides": {
+          "$ref": "#/definitions/stringList",
+          "description": "RPM Provides entries for the package.",
+          "examples": [
+            [
+              "foo = 1.0"
+            ]
+          ]
+        },
+        "epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "RPM epoch. Omitted from the generated spec when not set."
+        },
+        "pre_install": {
+          "type": "string",
+          "description": "Script run before the package is installed (%pre scriptlet)."
+        },
+        "post_install": {
+          "type": "string",
+          "description": "Script run after the package is installed (%post scriptlet)."
+        },
+        "pre_uninstall": {
+          "type": "string",
+          "description": "Script run before the package is removed (%preun scriptlet)."
+        },
+        "post_uninstall": {
+          "type": "string",
+          "description": "Script run after the package is removed (%postun scriptlet)."
         },
         "files": {
           "$ref": "#/definitions/stringList",
@@ -1363,7 +1461,7 @@
     "imageConfig": {
       "title": "Image configuration",
       "type": "object",
-      "description": "A rootfs or initramfs image configuration.",
+      "description": "An initramfs image configuration.",
       "properties": {
         "packages": {
           "$ref": "#/definitions/packages",
@@ -1426,6 +1524,75 @@
           "description": "Named image configurations.",
           "additionalProperties": {
             "$ref": "#/definitions/namedImageConfig"
+          }
+        }
+      ]
+    },
+    "rootfsConfig": {
+      "title": "Root filesystem configuration",
+      "type": "object",
+      "description": "A rootfs image configuration.",
+      "properties": {
+        "packages": {
+          "$ref": "#/definitions/imageConfig/properties/packages"
+        },
+        "dependencies": {
+          "$ref": "#/definitions/imageConfig/properties/dependencies"
+        },
+        "filesystem": {
+          "$ref": "#/definitions/imageConfig/properties/filesystem"
+        },
+        "overlay": {
+          "$ref": "#/definitions/imageConfig/properties/overlay"
+        },
+        "image": {
+          "$ref": "#/definitions/imageConfig/properties/image"
+        },
+        "post_install": {
+          "$ref": "#/definitions/imageConfig/properties/post_install"
+        },
+        "permissions": {
+          "$ref": "#/definitions/imageConfig/properties/permissions"
+        },
+        "source": {
+          "$ref": "#/definitions/imageConfig/properties/source"
+        }
+      },
+      "patternProperties": {
+        "^target-.+$": {
+          "$ref": "#/definitions/rootfsTargetOverride",
+          "description": "Per-target override, applied over this block when building for that target."
+        },
+        "^kernel-.+$": {
+          "type": "object",
+          "description": "Not applied: rootfs reads only 'target-<name>:' overrides.",
+          "x-avocado-warning": "is ignored; rootfs applies 'target-<name>:' overrides only, not 'kernel-<spec>:'"
+        }
+      },
+      "additionalProperties": false,
+      "x-avocado-target-overrides": true
+    },
+    "rootfsSection": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/rootfsConfig"
+        },
+        {
+          "type": "object",
+          "description": "Named rootfs configurations.",
+          "patternProperties": {
+            "^target-.+$": {
+              "$ref": "#/definitions/rootfsTargetOverride",
+              "description": "Per-target override, applied over the selected entry."
+            },
+            "^kernel-.+$": {
+              "type": "object",
+              "description": "Not applied: rootfs reads only 'target-<name>:' overrides.",
+              "x-avocado-warning": "is ignored; rootfs applies 'target-<name>:' overrides only, not 'kernel-<spec>:'"
+            }
+          },
+          "additionalProperties": {
+            "$ref": "#/definitions/namedRootfsConfig"
           }
         }
       ]
@@ -1723,6 +1890,9 @@
         "container_args": {
           "$ref": "#/definitions/containerArgs"
         },
+        "container": {
+          "$ref": "#/definitions/containerConfig"
+        },
         "state_file": {
           "title": "State file",
           "type": "string",
@@ -1730,6 +1900,22 @@
           "examples": [
             ".avocado/provision-dev.state"
           ]
+        },
+        "rubicon": {
+          "title": "Rubicon run profiles",
+          "type": "object",
+          "description": "Run profiles (names under rubicon.run) a hub runs around this provision profile when provisioning through a Rubicon.",
+          "properties": {
+            "before": {
+              "type": "string",
+              "description": "Run before provisioning, e.g. to put the DUT into recovery."
+            },
+            "after": {
+              "type": "string",
+              "description": "Run after a successful provision, e.g. to check that the DUT boots."
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -2164,7 +2350,7 @@
         },
         "package_files": {
           "$ref": "#/definitions/stringList",
-          "description": "Glob patterns for the files 'avocado ext package' ships. Replaces the default set (the config file, overlays, compile and install scripts); the version file is always added."
+          "description": "Glob patterns for the files 'avocado ext package' ships. Replaces the default set (the config file, overlays, compile and install scripts); the version file is always added. For an extension with a compile package, these are also the declared sources of the build: 'avocado build' skips its sdk.compile sections only while these files, the scripts, the config, the SDK and the lock pins do not change. Without this list, the compile sections run on every extension build."
         },
         "release": {
           "type": "string",
@@ -2296,6 +2482,40 @@
       },
       "additionalProperties": false
     },
+    "rootfsTargetOverride": {
+      "title": "Rootfs per-target override",
+      "type": "object",
+      "description": "Settings applied over the enclosing rootfs block, or over the selected named entry, when building for that target. 'packages' and 'image' merge key by key with the base; 'overlay', 'permissions', 'post_install' and 'filesystem' replace the base's value.",
+      "properties": {
+        "packages": {
+          "$ref": "#/definitions/imageConfig/properties/packages"
+        },
+        "dependencies": {
+          "$ref": "#/definitions/imageConfig/properties/dependencies"
+        },
+        "filesystem": {
+          "$ref": "#/definitions/imageConfig/properties/filesystem"
+        },
+        "overlay": {
+          "$ref": "#/definitions/imageConfig/properties/overlay"
+        },
+        "post_install": {
+          "$ref": "#/definitions/imageConfig/properties/post_install"
+        },
+        "image": {
+          "$ref": "#/definitions/imageOptions"
+        },
+        "permissions": {
+          "$ref": "#/definitions/imageConfig/properties/permissions"
+        }
+      },
+      "patternProperties": {
+        "^target-.+$": {
+          "$ref": "#/definitions/rootfsTargetOverride"
+        }
+      },
+      "additionalProperties": false
+    },
     "kernelEntry": {
       "title": "Kernel entry",
       "type": "object",
@@ -2337,7 +2557,7 @@
     "namedImageConfig": {
       "title": "Named image entry",
       "type": "object",
-      "description": "A named rootfs or initramfs entry. Only the 'default' (or sole) entry is built, and 'overlay', 'post_install', 'image' and 'source' are read only in the single-entry form.",
+      "description": "A named initramfs entry. Only the 'default' (or sole) entry is built, and 'overlay', 'post_install', 'image' and 'source' are read only in the single-entry form.",
       "properties": {
         "packages": {
           "$ref": "#/definitions/imageConfig/properties/packages"
@@ -2354,6 +2574,47 @@
       },
       "additionalProperties": false
     },
+    "namedRootfsConfig": {
+      "title": "Named rootfs entry",
+      "type": "object",
+      "description": "A named rootfs entry. Install reads the 'default' (or sole) entry; a runtime's image step reads the entry its 'rootfs: <name>' names, else that one. 'source' is read only in the single-entry form.",
+      "properties": {
+        "packages": {
+          "$ref": "#/definitions/imageConfig/properties/packages"
+        },
+        "dependencies": {
+          "$ref": "#/definitions/imageConfig/properties/dependencies"
+        },
+        "filesystem": {
+          "$ref": "#/definitions/imageConfig/properties/filesystem"
+        },
+        "overlay": {
+          "$ref": "#/definitions/imageConfig/properties/overlay"
+        },
+        "image": {
+          "$ref": "#/definitions/imageConfig/properties/image"
+        },
+        "post_install": {
+          "$ref": "#/definitions/imageConfig/properties/post_install"
+        },
+        "permissions": {
+          "$ref": "#/definitions/imageConfig/properties/permissions"
+        }
+      },
+      "patternProperties": {
+        "^target-.+$": {
+          "$ref": "#/definitions/rootfsTargetOverride",
+          "description": "Per-target override, applied over this entry and over a 'target-<name>:' block beside the entries."
+        },
+        "^kernel-.+$": {
+          "type": "object",
+          "description": "Not applied: rootfs reads only 'target-<name>:' overrides.",
+          "x-avocado-warning": "is ignored; rootfs applies 'target-<name>:' overrides only, not 'kernel-<spec>:'"
+        }
+      },
+      "additionalProperties": false,
+      "x-avocado-target-overrides": true
+    },
     "runtimeImageRef": {
       "title": "Runtime image block",
       "type": "object",
@@ -2363,6 +2624,230 @@
           "$ref": "#/definitions/imageConfig/properties/permissions"
         }
       },
+      "additionalProperties": false
+    },
+    "rubiconConfig": {
+      "title": "Rubicon configuration",
+      "type": "object",
+      "properties": {
+        "run": {
+          "title": "Run profiles",
+          "type": "object",
+          "description": "Named run profiles: steps a hub runs against a Rubicon and its DUT. Extensions contribute them; a project entry of the same name replaces the extension's whole.",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/rubiconStep"
+            }
+          }
+        },
+        "default": {
+          "type": "string",
+          "description": "The board `provision --rubicon` and `avocado rubicon` use when none is named (firmware name, label or address)."
+        },
+        "console": {
+          "type": "object",
+          "description": "The DUT's serial console.",
+          "properties": {
+            "baud": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Console rate (default 115200)."
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Which UART of a multi-port USB serial adapter is the console (0, the default, is the first: FT4232H port A)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "wiring": {
+          "type": "object",
+          "description": "What each of the Rubicon's pins is wired to on this target (ssr1: \"REC button\"), shown beside the pin by `avocado rubicon show` and in a hub's job log. Extensions contribute it with their run profiles; the project wins per pin.",
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9]*$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "analyzer": {
+          "type": "object",
+          "description": "Buses on the Rubicon's logic-analyzer channels, by name (i2c-gp: { protocol: i2c, sda: la12, scl: la13 }). The hub sets those channels as plain inputs (no pull) so they don't load the bus; every other channel keeps its pull-down. Extensions contribute them; the project wins per bus.",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["protocol"],
+            "properties": {
+              "protocol": {
+                "type": "string",
+                "description": "The bus protocol (i2c, spi, uart...)."
+              }
+            },
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^la([0-9]|1[0-5])$",
+              "description": "The channel carrying this signal."
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "rubiconStep": {
+      "title": "Rubicon run profile step",
+      "description": "Exactly one of these keys per step.",
+      "type": "object",
+      "properties": {
+        "out": {
+          "type": "object",
+          "description": "Switch Rubicon outputs (power, ssr1…, od1…) on or off. What each is wired to is the target's business.",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z]+[0-9]*$"
+          },
+          "additionalProperties": {
+            "enum": [
+              "on",
+              "off"
+            ]
+          }
+        },
+        "pulse": {
+          "type": "object",
+          "description": "Turn outputs on for this many milliseconds, then off (a button press).",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z]+[0-9]*$"
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "servo": {
+          "type": "object",
+          "description": "Set servo / linear-actuator outputs to a pulse width in us (servo: { sv1: 1800 }, about 1000-2000 for a hobby servo); 0 stops the pulses.",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "const": 0
+              },
+              {
+                "type": "integer",
+                "minimum": 400,
+                "maximum": 2600
+              }
+            ]
+          }
+        },
+        "run": {
+          "type": "string",
+          "description": "Run another run profile's steps here."
+        },
+        "wait_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Wait this many milliseconds."
+        },
+        "hold_usb": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([0-9a-fA-F]{4}:([0-9a-fA-F]{4}|\\*)|\\*)$"
+          },
+          "description": "Keep the board's USB devices with these ids (vvvv:pppp, vvvv:* for any product, or * for every device on the board's USB port) attached to the hub for the rest of the job."
+        },
+        "wait_usb": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{4}:[0-9a-fA-F]{4}$"
+            },
+            "timeout_s": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "id",
+            "timeout_s"
+          ],
+          "additionalProperties": false,
+          "description": "Wait until a held device with this id is attached."
+        },
+        "console_expect": {
+          "type": "object",
+          "properties": {
+            "markers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "timeout_s": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "markers",
+            "timeout_s"
+          ],
+          "additionalProperties": false,
+          "description": "Wait until the DUT's serial console prints one of these markers."
+        },
+        "console_send": {
+          "type": "string",
+          "description": "Type this on the DUT's serial console, as is: write the line ending (\"boot\\r\") and any escape sequence (\"\\u001b[B\", down arrow)."
+        },
+        "sd_mux": {
+          "type": "string",
+          "enum": [
+            "host",
+            "dut"
+          ],
+          "description": "Hand the card in an SDWire3 on the board's USB port to the hub (host: a disk there, AVOCADO_PROVISION_DEVICE for the provision that follows) or to the DUT (dut)."
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "transfer",
+            "monitor"
+          ],
+          "description": "The Rubicon's mode: transfer (its whole USB/IP buffer pool, for flashing; provision jobs switch to it themselves) or monitor (part of the pool lent to on-board analysis while a DUT runs)."
+        },
+        "with_usb": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{4}:[0-9a-fA-F]{4}$"
+            },
+            "run": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "timeout_s": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Seconds the command may take (the hub's default: 120)."
+            }
+          },
+          "required": [
+            "id",
+            "run"
+          ],
+          "additionalProperties": false,
+          "description": "Attach the board's USB device id to the hub, run run in the job's SDK container with it, then let it go (the console pauses meanwhile). Provision jobs only."
+        }
+      },
+      "minProperties": 1,
+      "maxProperties": 1,
       "additionalProperties": false
     }
   }

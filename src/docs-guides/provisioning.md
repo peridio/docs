@@ -19,7 +19,46 @@ Pick the profile with `avocado provision --profile <name>`. `avocado provision -
 
 The profile is read when provisioning runs, not when the image is built. `--profile` reaches the target's provision script as the `AVOCADO_PROVISION_PROFILE` environment variable. `avocado build` does not record it, so give it on the `avocado provision` run itself. Without `--profile`, the target's default profile is used.
 
-`--env KEY=VALUE` passes other variables to the same provision process. Repeat it for each variable.
+`--env KEY=VALUE` passes other variables to the same provision process. Repeat it for each variable. Since avocado-cli 1.2.0, the values also fill `{{ env.KEY }}` in `avocado.yaml`, ahead of your shell's environment, so a profile can template on them without you exporting them too.
+
+### What a provision script receives
+
+Besides `AVOCADO_PROVISION_PROFILE` and your `--env` values, the CLI sets these for the provision script (avocado-cli 1.2.0 or later):
+
+| Variable                        | Value                                                                                                                                                                                                                                                          |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AVOCADO_PROVISION_FORCE`       | `1` under `--force`, `0` without it. A script can ask for confirmation before an erasing flash unless the operator already confirmed.                                                                                                                          |
+| `AVOCADO_PROVISION_DRY_RUN`     | `1` under `--dry-run`.                                                                                                                                                                                                                                         |
+| `AVOCADO_PROVISION_HOST_MOUNTS` | A read-only copy of the host's mount table, so a script can refuse to write a disk that is mounted. Set only on a Linux host running Docker directly. It is unset on Docker Desktop, under the avocado VM and with `--runs-on`, so a script cannot rely on it. |
+
+### Check a profile without writing
+
+```bash
+avocado provision dev --profile sd --dry-run
+```
+
+`--dry-run` runs every check of the profile and writes nothing. The script gets `AVOCADO_PROVISION_DRY_RUN=1`, and the CLI skips its own SD card write. The CLI refuses `--dry-run` for a profile whose provisioning manifest does not declare `config.dry_run: true`, because such a script would not know to hold back. It runs only locally: a bundle replay or a hub job would write.
+
+### Container settings for a profile
+
+A provision profile can set its container's access by name with a `container:` block, spelled as Docker Compose spells it. `sdk` takes the same block:
+
+```yaml
+provision:
+  sd:
+    container:
+      privileged: true
+      volumes:
+        - /dev:/dev
+      environment:
+        DEBUG: '1'
+```
+
+The keys are `privileged`, `network_mode`, `volumes`, `devices`, `extra_hosts`, `cap_add` and `environment`. `container_args` still works, and remains the place for any flag without a key. Where both set the same thing, the block wins.
+
+### Provisioning a board you are not next to
+
+With a [Rubicon](/developer-reference/rubicon), `avocado provision --rubicon` provisions a board on a hub, from your desk or from CI. `--pack` writes a provisionable bundle that another machine can replay with `--bundle`.
 
 ### NVIDIA Jetson: the profile picks the boot media
 

@@ -8,7 +8,12 @@ const sidebars = {
       label: 'November 2026',
       collapsible: false,
       collapsed: false,
-      items: ['november-2026/1.1.0'],
+      items: [
+        'november-2026/1.2.0',
+        'november-2026/desktop-1.1.0',
+        'november-2026/vm-0.6.0',
+        'november-2026/1.1.0',
+      ],
     },
     {
       type: 'category',

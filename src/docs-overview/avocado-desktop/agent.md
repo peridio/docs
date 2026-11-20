@@ -30,6 +30,7 @@ The agent works through the **Avocado MCP**, a [Model Context Protocol](https://
 - list your projects, and read and write project files
 - add packages to an extension
 - run Install, Build, Provision and Deploy, and follow their progress
+- update a project to the latest feed snapshot, as [Update to the latest snapshot](/avocado-desktop/projects#update-to-the-latest-snapshot) does
 - answer prompts in the provisioning terminal
 - read serial consoles and the list of connected USB devices
 - start and stop the build VM

@@ -462,6 +462,32 @@ The `--out` flag copies the resulting RPM(s) to the host. Without it, RPMs stay 
 
 See [`avocado sdk package`](/developer-reference/avocado-cli/commands#avocado-sdk-package) for the complete field reference including sub-package splitting.
 
+#### Provides, epoch and scriptlets
+
+Since avocado-cli 1.2.0, a `package` block also takes these optional keys:
+
+| Key              | Type            | Becomes in the RPM spec        |
+| ---------------- | --------------- | ------------------------------ |
+| `provides`       | list of strings | One `Provides:` line per entry |
+| `epoch`          | integer         | `Epoch:`                       |
+| `pre_install`    | script          | `%pre`                         |
+| `post_install`   | script          | `%post`                        |
+| `pre_uninstall`  | script          | `%preun`                       |
+| `post_uninstall` | script          | `%postun`                      |
+
+```yaml
+sdk:
+  compile:
+    probe:
+      package:
+        version: '1.0.0'
+        epoch: 2
+        provides: ['probe-cap = 1.0']
+        post_install: echo "installed $(date +%s)"
+```
+
+A `%` in a scriptlet or a provide is escaped, so `date +%s` reaches the RPM as written. A scriptlet line that starts with `%` is rejected, because rpm would read it as a new section; start the line with another character. A provide or a `requires` entry that holds a newline or another control character is rejected with an error naming it. A `%` macro in `requires` still expands. Check the result with `rpm -qp --provides`, `rpm -qp --scripts` or `rpm -qp --qf '%{EPOCH}\n'` on the built RPM.
+
 ### Packaging an extension as an RPM
 
 Use `avocado ext package` to bundle an extension's source directory as an RPM that can be published to a package feed and consumed as a remote extension:
