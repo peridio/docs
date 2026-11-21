@@ -278,7 +278,7 @@ Watch for misspellings here. `permissions: { user: ... }` has no permissions fie
 
 Named entries are referenced by name, for example `permissions: prod` on a rootfs, or `kernel: yocto-6-6` on a runtime.
 
-For `rootfs`, every field is read from the selected entry (avocado-cli 1.2.0 or later). `avocado install` installs the entry named `default`, or the only entry, and a runtime's image step uses the entry its `rootfs: <name>` names. For `initramfs`, only the entry named `default` (or the only entry) is built, and `overlay`, `post_install`, `image` and `source` are read only in the one-configuration form.
+For `rootfs`, every field except `source` is read from the selected entry (avocado-cli 1.2.0 or later). `source` is read only in the one-configuration form. `avocado install` installs the entry named `default`, or the only entry, and a runtime's image step uses the entry its `rootfs: <name>` names. For `initramfs`, only the entry named `default` (or the only entry) is built, and `overlay`, `post_install`, `image` and `source` are read only in the one-configuration form.
 
 ## Rootfs configuration
 
