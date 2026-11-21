@@ -22,7 +22,9 @@ By default, the CLI looks for a configuration file named `avocado.yaml` in the c
 
 For detailed information about all available configuration options, see the [config schema](/developer-reference/avocado-cli/config-schema).
 
-`avocado init` writes a starter `avocado.yaml` on `distro.release: 2026` and `distro.channel: edge`. Its first line is a `yaml-language-server` comment that points editors at the [JSON Schema](/schemas/avocado-config.json), so they validate the file as you type. `avocado config schema` prints the schema the installed CLI uses.
+`avocado init` writes a starter `avocado.yaml` on `distro.release: 2026` and `distro.channel: edge`. Its first line is a `yaml-language-server` comment that points editors at the [JSON Schema](/schemas/avocado-config.json), so they validate the file as you type. `avocado config schema` prints the schema the installed CLI uses. The starter sets `cli_requirement: '>=1.0.0'`.
+
+`avocado init --minimal` (avocado-cli 1.2.0 or later) writes a project with only the local application extension. It leaves out `avocado-ext-dev`, `avocado-ext-sshd-dev` and the board support extensions, for a feed that does not carry them, so the first build doesn't fail on dependency resolution.
 
 ### Checking your config
 
@@ -46,19 +48,23 @@ The same schema powers editor support. Projects created with `avocado init` star
 
 Environment variables take precedence over configuration file values. When set, they override the corresponding config field.
 
-| Environment variable           | Config equivalent        | Description                                                                                                                                                                            |
-| ------------------------------ | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AVOCADO_TARGET`               | `default_target`         | Target architecture for builds and deployments.                                                                                                                                        |
-| `AVOCADO_TARGET_BOARD`         | `default_target_board`   | Board variant within the target, feeding `{{ avocado.target.board }}` interpolation.                                                                                                   |
-| `AVOCADO_RUNTIME`              | `default_runtime`        | Default runtime for commands that scope by runtime. Overrides `default_runtime` from config.                                                                                           |
-| `AVOCADO_REPO_URL`             | `distro.repo.url`        | Package repository URL.                                                                                                                                                                |
-| `AVOCADO_RELEASEVER`           | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).                                                                                                                                           |
-| `AVOCADO_DISTRO_RELEASE`       | `distro.release`         | Distribution feed year (e.g., `2024`).                                                                                                                                                 |
-| `AVOCADO_DISTRO_CHANNEL`       | `distro.channel`         | Distribution stability channel (e.g., `edge`, `stable`).                                                                                                                               |
-| `AVOCADO_REPO_CA`              | `distro.repo.ca`         | Path to a CA certificate bundle that the package feed's TLS certificate is checked against.                                                                                            |
-| `AVOCADO_REPO_INSECURE`        | `distro.repo.tls_verify` | Set to `1`, `true` or `yes` to skip TLS verification of the package feed. Testing only.                                                                                                |
-| `AVOCADO_PARALLEL_TASKS`       | none                     | How many tasks run at once across the install DAG, the build DAG and the SDK phase. Defaults to `min(cpus, 4)`, and to `1` under `--runs-on`.                                          |
-| `AVOCADO_NO_SESSION_CONTAINER` | none                     | Set to `1` to run each install and build step in its own `docker run` instead of reusing one SDK container per command. For debugging a container an earlier step left in a bad state. |
+| Environment variable           | Config equivalent        | Description                                                                                                                                                                                          |
+| ------------------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AVOCADO_TARGET`               | `default_target`         | Target architecture for builds and deployments.                                                                                                                                                      |
+| `AVOCADO_TARGET_BOARD`         | `default_target_board`   | Board variant within the target, feeding `{{ avocado.target.board }}` interpolation.                                                                                                                 |
+| `AVOCADO_RUNTIME`              | `default_runtime`        | Default runtime for commands that scope by runtime. Overrides `default_runtime` from config.                                                                                                         |
+| `AVOCADO_REPO_URL`             | `distro.repo.url`        | Package repository URL.                                                                                                                                                                              |
+| `AVOCADO_RELEASEVER`           | `distro.repo.releasever` | DNF releasever override (e.g., `2024/edge`).                                                                                                                                                         |
+| `AVOCADO_DISTRO_RELEASE`       | `distro.release`         | Distribution feed year (e.g., `2024`).                                                                                                                                                               |
+| `AVOCADO_DISTRO_CHANNEL`       | `distro.channel`         | Distribution stability channel (e.g., `edge`, `stable`).                                                                                                                                             |
+| `AVOCADO_REPO_CA`              | `distro.repo.ca`         | Path to a CA certificate bundle that the package feed's TLS certificate is checked against.                                                                                                          |
+| `AVOCADO_REPO_INSECURE`        | `distro.repo.tls_verify` | Set to `1`, `true` or `yes` to skip TLS verification of the package feed. Testing only.                                                                                                              |
+| `AVOCADO_PARALLEL_TASKS`       | none                     | How many tasks run at once across the install DAG, the build DAG and the SDK phase. Defaults to `min(cpus, 4)`, and to `1` under `--runs-on`.                                                        |
+| `AVOCADO_NO_SESSION_CONTAINER` | none                     | Set to `1` to run each install and build step in its own `docker run` instead of reusing one SDK container per command. For debugging a container an earlier step left in a bad state.               |
+| `AVOCADO_OFFLINE`              | none                     | Set to `1`, `true` or `yes` to skip the CLI's snapshot, pin and feed lookups and use the locked pin. Same as `--offline`. See [Working offline](/developer-reference/package-feeds#working-offline). |
+| `AVOCADO_DOCKER_CLI`           | none                     | Set to `1` to run the `docker` command for every container, instead of the CLI's built-in Docker Engine client.                                                                                      |
+| `AVOCADO_CONNECT_TOKEN`        | none                     | A Connect API token. When set, `avocado connect` commands use it instead of the saved profiles. It is never written to disk.                                                                         |
+| `AVOCADO_CONNECT_URL`          | none                     | The Connect server for `AVOCADO_CONNECT_TOKEN`. Defaults to `https://connect.peridio.com`. Without a token, commands use the saved profile for this server.                                          |
 
 ### Legacy environment variables
 
@@ -185,6 +191,36 @@ connect:
 | `project`    | Default project ID for `avocado connect` commands                                              |
 | `server_key` | Connect server's TUF signing public key (hex). Per-runtime `signing.server_key` overrides this |
 
+`AVOCADO_CONNECT_TOKEN` and `AVOCADO_CONNECT_URL` apply to `avocado connect` commands since avocado-cli 1.2.0. `connect auth login`, `logout` and `status`, `connect init` and `deploy --connect-sign` still use the saved profiles. Saved credentials live in `credentials.json`, which the CLI keeps readable by your user only.
+
+## Container settings
+
+`sdk` and each provision profile take a `container:` block that sets the container's access by name, spelled as Docker Compose spells it (avocado-cli 1.2.0 or later):
+
+```yaml
+sdk:
+  container:
+    privileged: true
+    network_mode: host
+    volumes:
+      - /dev:/dev
+      - /sys:/sys
+    environment:
+      CFLAGS: '-O2'
+```
+
+| Field          | Description                                           |
+| -------------- | ----------------------------------------------------- |
+| `privileged`   | Run the container privileged                          |
+| `network_mode` | Network the container joins, such as `host`           |
+| `volumes`      | Bind mounts and volumes, as `source:target[:options]` |
+| `devices`      | Host devices to pass through, such as `/dev/ttyUSB0`  |
+| `extra_hosts`  | Extra `/etc/hosts` entries, as `host:ip`              |
+| `cap_add`      | Linux capabilities to add                             |
+| `environment`  | Environment variables to set                          |
+
+`container_args` still works and is the place for any flag that has no key here. The block is applied after it, so where both set the same thing, the block wins. A quoted `environment` value keeps the spaces at its edges.
+
 ## Runtime signing configuration
 
 The per-runtime `signing` section names keys from the machine-local signing-key registry (`avocado signing-keys`). Only names appear in `avocado.yaml`; no key material is ever committed.
@@ -240,7 +276,9 @@ permissions:
 
 Watch for misspellings here. `permissions: { user: ... }` has no permissions field, so it is read as an entry named `user`, not as users. The CLI warns about this: `'permissions.user' sets no permissions fields, so it is read as a named permissions entry; did you mean the field 'users'?`
 
-Named entries are referenced by name, for example `permissions: prod` on a rootfs, or `kernel: yocto-6-6` on a runtime. For `rootfs` and `initramfs`, only the entry named `default` (or the only entry) is built, and `overlay`, `post_install`, `image` and `source` are read only in the one-configuration form, so use that form for images.
+Named entries are referenced by name, for example `permissions: prod` on a rootfs, or `kernel: yocto-6-6` on a runtime.
+
+For `rootfs`, every field except `source` is read from the selected entry (avocado-cli 1.2.0 or later). `source` is read only in the one-configuration form. `avocado install` installs the entry named `default`, or the only entry, and a runtime's image step uses the entry its `rootfs: <name>` names. For `initramfs`, only the entry named `default` (or the only entry) is built, and `overlay`, `post_install`, `image` and `source` are read only in the one-configuration form.
 
 ## Rootfs configuration
 
@@ -255,17 +293,17 @@ rootfs:
     avocado-pkg-rootfs: '*'
 ```
 
-| Field          | Default              | Description                                                                                                                                                                                                                                                                      |
-| -------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `packages`     | `avocado-pkg-rootfs` | Map of package names to version constraints. When no packages are set, the rootfs installs `avocado-pkg-rootfs`                                                                                                                                                                  |
-| `filesystem`   | `erofs-lz4`          | Image format: `erofs-lz4` or `erofs-zst`                                                                                                                                                                                                                                         |
-| `overlay`      |                      | Path or object. See [Overlay](#overlay) below                                                                                                                                                                                                                                    |
-| `permissions`  |                      | Users and groups for the image: the name of a [permissions](#permissions) profile, or an inline profile                                                                                                                                                                          |
-| `post_install` |                      | Script, relative to `src_dir`, run on the image work directory just before the filesystem is created. It replaces the built-in steps (usrmerge symlinks, removing `/media`, `/mnt`, `/srv` and the contents of `/boot`, an empty `/etc/machine-id`, systemd presets, `ldconfig`) |
-| `image`        |                      | Image wrapper options. See [Image options](#image-options) below                                                                                                                                                                                                                 |
-| `source`       |                      | `{ type: path, path: <dir> }` reads the whole section from `<dir>/avocado.yaml` (or `avocado.yml`) instead, with `<dir>` relative to `src_dir`                                                                                                                                   |
+| Field          | Default              | Description                                                                                                                                                                                                                                                                                                                                  |
+| -------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages`     | `avocado-pkg-rootfs` | Map of package names to version constraints. When no packages are set, the rootfs installs `avocado-pkg-rootfs`                                                                                                                                                                                                                              |
+| `filesystem`   | `erofs-lz4`          | Image format: `erofs-lz4` or `erofs-zst`                                                                                                                                                                                                                                                                                                     |
+| `overlay`      |                      | Path or object. See [Overlay](#overlay) below                                                                                                                                                                                                                                                                                                |
+| `permissions`  |                      | Users and groups for the image: the name of a [permissions](#permissions) profile, or an inline profile                                                                                                                                                                                                                                      |
+| `post_install` |                      | Script, relative to `src_dir`, run on the image work directory just before the filesystem is created. It replaces the built-in steps (usrmerge symlinks, removing `/media`, `/mnt`, `/srv` and the contents of `/boot` other than directories a package owns, such as mount points, an empty `/etc/machine-id`, systemd presets, `ldconfig`) |
+| `image`        |                      | Image wrapper options. See [Image options](#image-options) below                                                                                                                                                                                                                                                                             |
+| `source`       |                      | `{ type: path, path: <dir> }` reads the whole section from `<dir>/avocado.yaml` (or `avocado.yml`) instead, with `<dir>` relative to `src_dir`                                                                                                                                                                                               |
 
-A `target-<name>:` block inside `rootfs` overrides settings for that target, but only `post_install` and `image` are taken from it.
+A `target-<name>:` block inside `rootfs` overrides settings for that target, at install and at the image step. Package maps and `image` merge key by key. `overlay` and `permissions` replace the base value as a whole, so a target's long-form overlay does not inherit the base's `mode`. With named entries, a `target-<name>:` block beside the entries applies over the selected entry, and the entry's own `target-<name>:` block applies over both. Before avocado-cli 1.2.0, only `post_install` and `image` were taken from the block.
 
 ## Initramfs configuration
 

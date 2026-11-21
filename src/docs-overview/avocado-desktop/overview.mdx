@@ -9,7 +9,7 @@ import CalloutButton from '@site/src/components/CalloutButton'
 
 Build and provision Avocado OS from your own machine. Describe what you want in plain English and a built-in AI agent drives the whole toolchain — editing config, cross-compiling, building the image, and writing it to hardware — so you ship a real device without memorizing a single config key.
 
-Avocado Desktop is the native app for building Avocado OS, Peridio's immutable embedded Linux runtime. It bundles the cross-compilation toolchain, hardware provisioning, and a developer-preview AI agent wired to the Avocado MCP into one workspace that runs locally on your machine. On macOS it also bundles the build VM your images are built in. On Linux it builds with the host's Docker instead.
+Avocado Desktop is the native app for building Avocado OS, Peridio's immutable embedded Linux runtime. It bundles the cross-compilation toolchain, hardware provisioning, and a developer-preview AI agent wired to the Avocado MCP into one workspace that runs locally on your machine. On macOS it also bundles the build VM your images are built in. On Linux it builds with the host's Docker Engine instead. Neither needs Docker Desktop.
 
 <div style={{ marginBottom: '1.75rem' }}>
   <CalloutButton
@@ -87,7 +87,7 @@ Under the hood, the agent is wired to the **Avocado MCP**, a [Model Context Prot
 
 Avocado Desktop cross-compiles your application to the target architecture and assembles a complete image — the parts that are easy to get wrong by hand are handled for you.
 
-- **Build environment** — on macOS the build VM ships with the app, so there is no separate SDK install or container setup; on Linux the app builds with the host's Docker
+- **Build environment** — on macOS the build VM ships with the app, so there is no separate SDK install or container setup; on Linux the app builds with the host's Docker Engine. Neither needs Docker Desktop or the `docker` command
 - **Cross-compilation** — produces real target binaries, such as `aarch64-avocado-linux-gnu` ELF executables, not prebuilt drop-ins
 - **Config handled for you** — the SDK toolchain, sysroot-aware compile steps, and `avocado.yaml` are generated and maintained by the agent
 

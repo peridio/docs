@@ -25,9 +25,13 @@ brew install qemu
 
 The app includes its own Avocado CLI, so you don't need to install one.
 
+You don't need Docker Desktop or the `docker` command either. The bundled CLI, 1.2.0 or later, talks to the build engine inside the VM itself. Desktop uses an Avocado CLI on your `PATH` ahead of the one it includes, if that CLI is 0.39.0 or later. If it is older than 1.2.0, Install and Build stop and ask you to update the CLI or install the Docker CLI with `brew install docker`. Run `avocado upgrade` on that CLI, or remove it so Desktop uses its own. The [first-run](/avocado-desktop/first-run) check doesn't warn about this case.
+
 ## Linux
 
-Avocado Desktop builds in containers on the host's Docker, so install Docker first. The build VM is optional on Linux.
+Avocado Desktop builds in containers on the host's Docker Engine, so install Docker Engine from your distribution's packages first. Make sure the daemon is running and your user can reach it, for example by adding it to the `docker` group. The build VM is optional on Linux.
+
+The bundled Avocado CLI, 1.2.0 or later, talks to the Docker daemon itself, so the `docker` command isn't required. With an older CLI, Install and Build ask you to install the Docker CLI as well.
 
 Packages:
 

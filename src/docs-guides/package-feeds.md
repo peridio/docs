@@ -106,7 +106,32 @@ On the first fetch the CLI pins the snapshot it resolved in `avocado.lock` under
 
 `avocado update` advances the target to the latest snapshot, clears the package, kernel and snapshot pins and rewrites the lock. The next `avocado install` re-resolves against the new snapshot. It is not a package-only upgrade.
 
-A set `AVOCADO_RELEASEVER` counts as an already applied pin, so snapshot pinning is skipped for the distro feed. In that case `avocado update` only clears pins. The variable also supplies `$releasever` for a feed that sets neither its own `releasever` nor a `release` and `channel` pair.
+A set `AVOCADO_RELEASEVER` counts as an already applied pin, so snapshot pinning is skipped for the distro feed. In that case `avocado update` only clears pins. The variable also supplies `$releasever` for a feed that sets neither its own `releasever` nor a `release` and `channel` pair. When a project has a locked pin, the CLI says once per run that the override wins:
+
+```text
+pin ignored: AVOCADO_RELEASEVER is set to <value>; the locked pin <pin> is not used
+```
+
+Unset `AVOCADO_RELEASEVER` and the locked pin applies again.
+
+A pin also records the feed URL it came from. If you point `distro.repo.url` at a mirror or another feed with the same release and channel, the CLI warns that the pin does not match instead of reusing a snapshot ID that feed never issued. Run `avocado update` to pin a snapshot of the new feed. When a pinned rebuild finds that the channel has moved on, it prints one line naming the pinned and the latest snapshot.
+
+### Feed checks before downloading
+
+`avocado install`, `sdk install`, `fetch`, `ext fetch`, `ext install`, `runtime install`, `rootfs install` and `initramfs install` check each feed before downloading anything. The CLI reads the repository metadata of each URL feed from your machine, and checks a `path:` feed on disk. An unreachable feed, or one with no metadata, fails at once with an error that names the feed and the reason, instead of a dnf error from inside the SDK container.
+
+The check is skipped with `--runs-on`, where dnf runs on the remote machine, and for a feed with TLS verification turned off. The dnf passthrough commands (`sdk dnf`, `ext dnf`, `runtime dnf`, `sdk run`) and `avocado update` do not check feeds.
+
+If a feed answers HTTP 429 (Too Many Requests), dnf reports "No more mirrors to try". When a run fails, the CLI checks the feed once and, if it is rate limiting, says so and how long to wait.
+
+### Working offline
+
+`--offline`, or `AVOCADO_OFFLINE` set to `1`, `true` or `yes`, stops the CLI's own lookups: the latest-snapshot pointer, the pin check and the feed checks. The CLI uses the snapshot pinned in `avocado.lock` and prints it once. That pin is whatever the last online `avocado update` recorded, so an old pin installs old packages.
+
+- **No pin.** With no pin in the lock and the default distro feed, the CLI stops before any request and asks you to run `avocado update` while online. Any other `distro.repo.url` continues unpinned, with a notice.
+- **Commands that fail.** `avocado update` and an `org:` feed that has no token yet fail with an error naming `--offline`.
+- **Commands that still connect.** `init --reference`, `upgrade`, `vm update`, `connect` and `runtime deploy` connect as usual, because a network call is their purpose.
+- **dnf still needs the network.** `--offline` does not make dnf inside the SDK container work offline. An install that needs packages from a remote feed still needs the network.
 
 ## Additional Feeds
 
@@ -129,11 +154,9 @@ A name `repos:` does not define is an **add-on feed** the distro feed publishes,
 
 Before anything is written to the lock, the CLI checks the name against the channel's `targets.json` and refuses one the target does not publish, suggesting the nearest published name, the add-ons the target does publish, and the other targets that carry it. A name close to one `repos:` defines is refused as a typo. If `targets.json` cannot be read, the CLI warns and lets dnf report what is missing.
 
-:::caution Not in a tagged avocado-cli release yet
+### Feeds served from localhost
 
-The loopback handling below, including `rewrite_loopback`, is on avocado-cli `main` and listed under `[Unreleased]` in its changelog. The latest tagged release, 1.1.0, does not contain it, so a released CLI may not honor it. The Docker Desktop and Avocado VM behavior has not been verified end to end.
-
-:::
+The loopback handling below, including `rewrite_loopback`, needs avocado-cli 1.2.0 or later.
 
 On native Linux, a feed served from a loopback address such as `http://127.0.0.1:8000` is reachable from the SDK container as written only with host networking. The default project that `avocado init` writes already sets `--network=host` in `sdk.container_args`, together with `--privileged`, `-v /dev:/dev` and `-v /sys:/sys`, so a project that kept the default needs nothing. A project that removed it needs `--network=host` back:
 
@@ -160,7 +183,7 @@ To use a package you built yourself instead of the one the distro feed carries, 
 
    Without `--out` the RPM stays inside the container. `avocado ext package` does not fit this workflow: it packages an extension's sources, not a built sysroot, so its RPM does not deliver compiled binaries. For that source workflow, see `source.type: package` in [Cross-compilation](/developer-reference/cross-compilation).
 
-2. **Put the RPM in a feed directory.** Place the built RPM in a directory that works as an RPM repository by running `createrepo_c <dir>` on it.
+2. **Put the RPM in a feed directory.** Copy the built RPM into a directory and run `avocado feed index <dir>`. It writes `<dir>/repodata/` with the host's `createrepo_c`, and rewrites it on every run. Run it again after you add, remove or replace an RPM.
 
 3. **Declare the directory under `repos:`** with `path:`, using the grammar from [Additional Feeds](#additional-feeds).
 
@@ -170,7 +193,7 @@ To use a package you built yourself instead of the one the distro feed carries, 
 
 6. **Install, build and provision.** Run `avocado install`, then `avocado build`, then `avocado provision <runtime> --profile <profile>`.
 
-A `path:` feed plus a plain `*` entry for the package installs a local RPM. The feed directory needs repository metadata, which you can generate with `createrepo_c <dir>`. Declare the feed under `repos:` with `path:`, list it in `distro.feeds` ahead of `avocado`, and declare the package with version `"*"` in an extension:
+A `path:` feed plus a plain `*` entry for the package installs a local RPM. The feed directory needs repository metadata, which `avocado feed index <dir>` writes. Declare the feed under `repos:` with `path:`, list it in `distro.feeds` ahead of `avocado`, and declare the package with version `"*"` in an extension:
 
 ```yaml
 distro:
@@ -194,6 +217,12 @@ runtimes:
   dev:
     extensions: [my-ext]
 ```
+
+### `avocado feed index`
+
+`avocado feed index <dir>` needs `createrepo_c` on your `PATH`. Install it from your package manager, for example `apt install createrepo-c`, `dnf install createrepo_c` or `pacman -S createrepo_c`. The command fails with an error naming the tool when it is missing, and naming the path when the directory does not exist.
+
+The metadata takes its timestamps from the newest RPM in the directory, so indexing an unchanged directory again writes the same `repomd.xml`. A symlinked directory that leads back into its own path, such as `a -> .`, fails naming the link, because `createrepo_c` would follow it forever. A link to a directory outside the feed is followed and indexed.
 
 ## Additional DNF Options
 

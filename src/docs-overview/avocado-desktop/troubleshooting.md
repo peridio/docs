@@ -1,6 +1,6 @@
 ---
 title: 'Troubleshooting'
-description: 'Fixes for common Avocado Desktop problems, starting with provisioning that never finds the board.'
+description: 'Fixes for common Avocado Desktop problems: Docker and VM errors, stale packages, stuck runs, and boards that provisioning cannot find.'
 ---
 
 # Troubleshooting
@@ -8,6 +8,20 @@ description: 'Fixes for common Avocado Desktop problems, starting with provision
 ## The VM won't start on macOS
 
 The build VM runs on QEMU, which doesn't come with the app. Install it with `brew install qemu`, then click **Start** on the **Overview** pane. The **Getting started** card shows what is still missing.
+
+## Install or Build says Docker isn't installed
+
+The Avocado CLI that Desktop runs is older than 1.2.0, so it still needs the `docker` command. Update the CLI from **Settings → Updates**, or remove the older CLI from your `PATH` so Desktop uses its own copy. The [first-run](/avocado-desktop/first-run) CLI check shows which CLI Desktop finds first. If you need the older CLI, install the Docker CLI instead: `brew install docker` on macOS, or your distribution's Docker packages on Linux. On macOS you don't need Docker Desktop.
+
+## Install or Build says Docker isn't running
+
+On macOS, the build engine runs in the build VM. Start the VM from the **Overview** pane and run again.
+
+On Linux, start the Docker daemon, for example with `sudo systemctl start docker`, and check that your user can reach it without `sudo`, for example that it's in the `docker` group. Log out and back in after adding it.
+
+## Packages are older than the feed's
+
+The project's lock pins the feed snapshot it last installed. Open **Install**, check **Update to the latest snapshot** and run **Update & Install**. If the new packages cause problems, **Revert** goes back, or restore `avocado.lock` from git if Install failed. See [Update to the latest snapshot](/avocado-desktop/projects#update-to-the-latest-snapshot).
 
 ## Build says "up to date" after a change
 

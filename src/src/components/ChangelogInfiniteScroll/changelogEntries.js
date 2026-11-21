@@ -1,6 +1,9 @@
 // Static imports of all changelog entries, ordered newest-first to match sidebars-changelog.js
 
 // -- November 2026 --
+import V1_2_0 from '../../../docs-changelog/november-2026/1.2.0.md'
+import DESKTOP_1_1_0 from '../../../docs-changelog/november-2026/desktop-1.1.0.md'
+import VM_0_6_0 from '../../../docs-changelog/november-2026/vm-0.6.0.md'
 import V1_1_0 from '../../../docs-changelog/november-2026/1.1.0.md'
 // -- October 2026 --
 import V1_0_0 from '../../../docs-changelog/october-2026/1.0.0.md'
@@ -83,6 +86,7 @@ export const PRODUCTS = [
   { id: 'all', label: 'All' },
   { id: 'cli', label: 'CLI' },
   { id: 'desktop', label: 'Desktop' },
+  { id: 'vm', label: 'VM' },
   { id: 'mcp', label: 'MCP' },
   { id: 'connect', label: 'Connect' },
   { id: 'reference', label: 'References' },
@@ -94,6 +98,29 @@ export const PRODUCTS = [
  * Entries without an explicit `product` are CLI releases.
  */
 const rawEntries = [
+  {
+    version: '1.2.0',
+    monthSlug: 'november-2026',
+    monthLabel: 'November 2026',
+    permalink: '/changelog/november-2026/1.2.0',
+    Component: V1_2_0,
+  },
+  {
+    product: 'desktop',
+    version: '1.1.0',
+    monthSlug: 'november-2026',
+    monthLabel: 'November 2026',
+    permalink: '/changelog/november-2026/desktop-1.1.0',
+    Component: DESKTOP_1_1_0,
+  },
+  {
+    product: 'vm',
+    version: '0.6.0',
+    monthSlug: 'november-2026',
+    monthLabel: 'November 2026',
+    permalink: '/changelog/november-2026/vm-0.6.0',
+    Component: VM_0_6_0,
+  },
   {
     version: '1.1.0',
     monthSlug: 'november-2026',
