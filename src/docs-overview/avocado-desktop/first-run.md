@@ -13,7 +13,7 @@ The first time you open Avocado Desktop, a short wizard sets it up. You can skip
 2. **Permissions.** This step explains the two permissions Desktop asks for:
    - **USB device access**, for flashing hardware. Desktop installs a privileged helper for this.
    - **File access**, for your projects, which live in `~/Avocado/Projects` by default.
-3. **Avocado CLI check.** Desktop lists every Avocado CLI it finds, and warns if an older one on your `PATH` would be used ahead of the copy the app includes. **Re-check** runs the check again. If everything is fine, the step skips itself.
+3. **Avocado CLI check.** Desktop lists every Avocado CLI it finds. A CLI on your `PATH` at 0.39.0 or later is used ahead of the copy the app includes, and the check warns only about one older than 0.39.0. **Re-check** runs the check again. If everything is fine, the step skips itself.
 4. **QEMU check (macOS).** The build VM needs QEMU. If it's missing, this step shows the install command with a **Copy** button.
 5. **Start the VM (macOS).** Desktop installs and starts the build VM. You can skip this and start it later from the dashboard.
 6. **You're all set.** The wizard ends by pointing you at your first project.

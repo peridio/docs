@@ -481,6 +481,7 @@ sdk:
     probe:
       package:
         version: '1.0.0'
+        install: pkg-install.sh
         epoch: 2
         provides: ['probe-cap = 1.0']
         post_install: echo "installed $(date +%s)"

@@ -16,7 +16,8 @@ macOS offers the update in **Settings → Updates**.
   then Install, and Install runs only if the update succeeded.
 - **The run log lists what moved** in that target's lock.
 - **Revert** puts the lock from before the update back, then runs Clean and
-  Install. Desktop keeps that lock until the app quits.
+  Install. It appears after an Update & Install that succeeded, and Desktop
+  keeps that lock until the app quits or its window reloads.
 - **The agent can do the same.** The `run_project_action` tool accepts
   `update`.
 

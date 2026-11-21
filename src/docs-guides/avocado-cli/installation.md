@@ -30,7 +30,7 @@ The CLI runs its builds in containers, so it needs a Docker Engine to talk to:
 - **Linux:** Docker Engine running on the host, with your user able to reach it.
 - **macOS and Windows:** the avocado VM, which `avocado vm` manages, or Docker Desktop. On Windows the VM runs under QEMU with WHPX. Its workspace share uses SMB and needs a one-time elevated setup, so treat `avocado vm` on Windows as a preview.
 
-Since 1.2.0, the CLI talks to the Docker daemon itself, over the Engine API, so the `docker` command doesn't need to be installed. It honors `DOCKER_HOST` and the current docker context. The `docker` command is still used for `avocado container dev`, for `--runs-on` remotes, on Windows, with a `--container-tool` other than `docker`, and when `DOCKER_HOST` is an `ssh://` or TLS endpoint. Set `AVOCADO_DOCKER_CLI=1` to use the `docker` command everywhere.
+Since 1.2.0, the CLI talks to the Docker daemon itself, over the Engine API, so the `docker` command doesn't need to be installed. It honors `DOCKER_HOST` and the current docker context. The `docker` command is still used for `avocado container dev`, for `--runs-on` remotes, and with a `--container-tool` other than `docker`. It is also used when the daemon needs a transport the built-in client lacks: `DOCKER_HOST` is an `ssh://` or `https://` endpoint, `DOCKER_TLS_VERIFY` or `DOCKER_TLS` is set, or `DOCKER_HOST` is unset and the current docker context's endpoint is not a local `unix://` or `npipe://` socket. A plain `tcp://` `DOCKER_HOST`, which the avocado VM sets on Windows, uses the built-in client. Set `AVOCADO_DOCKER_CLI=1` to use the `docker` command everywhere.
 
 ## Install
 
