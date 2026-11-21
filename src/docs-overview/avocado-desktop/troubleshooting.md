@@ -21,7 +21,7 @@ On Linux, start the Docker daemon, for example with `sudo systemctl start docker
 
 ## Packages are older than the feed's
 
-The project's lock pins the feed snapshot it last installed. Open **Install**, check **Update to the latest snapshot** and run **Update & Install**. If the new packages cause problems, **Revert** goes back, or restore `avocado.lock` from git if Install failed. See [Update to the latest snapshot](/avocado-desktop/projects#update-to-the-latest-snapshot).
+The project's lock pins the feed snapshot it last installed. Open **Install**, check **Update to the latest snapshot** and run **Update & Install**. If the new packages cause problems, **Revert** goes back. If Install failed, restore `avocado.lock` from git, then run **More → Clean…** and **Install**. See [Update to the latest snapshot](/avocado-desktop/projects#update-to-the-latest-snapshot).
 
 ## Build says "up to date" after a change
 

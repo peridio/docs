@@ -44,7 +44,9 @@ The bar along the bottom of the project shows its path, the release and channel 
 
 `avocado update` only rewrites the target's lock in `avocado.lock`. The packages change when Install runs. When the Install succeeds, the run log lists what moved in that target's lock, up to 40 lines. Other targets in the lock stay as they were, so update each target you build.
 
-To undo an update, open **Install** and click **Revert**. Revert appears only after an **Update & Install** that succeeded and changed the lock. If Install fails after the update, restore `avocado.lock` from git. After you confirm, Desktop writes back the lock from before the update, runs **Clean**, then Install. Clean deletes all build output, so this takes as long as a first install. A plain Install can't do this, because it doesn't downgrade packages that are already installed. Desktop keeps only the most recent lock it replaced, and only until the app quits or its window reloads. To go back further, restore `avocado.lock` from git.
+To undo an update, open **Install** and click **Revert**. Revert appears only after an **Update & Install** that succeeded and changed the lock. After you confirm, Desktop writes back the lock from before the update, runs **Clean**, then Install. Clean deletes all build output, so this takes as long as a first install. A plain Install can't do this, because it doesn't downgrade packages that are already installed. Desktop keeps only the most recent lock it replaced, and only until the app quits or its window reloads.
+
+Without Revert, for example after a failed Install or to go back further, restore `avocado.lock` from git, then run **More → Clean…** and **Install**.
 
 ### Provision
 
