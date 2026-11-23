@@ -338,13 +338,21 @@ export default function TargetSelector() {
 
           <HostPrerequisites />
 
+          {!t.provisioning.hostOs.includes('macOS') && (
+            <Admonition type="warning" title="Host requirement">
+              <p>Provisioning this target needs a {t.provisioning.hostOs.join(' or ')} host.</p>
+            </Admonition>
+          )}
+
           {t.serial && (
             <>
-              <Heading as="h2">Serial Console (optional)</Heading>
+              <Heading as="h2">Serial Console{t.serial.required ? '' : ' (optional)'}</Heading>
               {/* Boards with an onboard UART bridge (serial.onboard) need only a
                   cable, not a separate USB adapter, so the shared adapter callout
                   would be misleading — show a cable-oriented optional note instead. */}
-              {t.serial.onboard ? (
+              {t.serial.required ? (
+                <p>Provisioning this target runs over its serial console, so connect it first.</p>
+              ) : t.serial.onboard ? (
                 <Admonition type="note" title="Optional: serial console">
                   <p>
                     The serial console is optional. Connect the serial console cable only if you

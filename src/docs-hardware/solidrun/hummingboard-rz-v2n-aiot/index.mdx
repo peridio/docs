@@ -117,25 +117,63 @@ LTS commitments aligned with the Civil Infrastructure Platform (CIP™), whose k
 
 ### Init, Install, & Build
 
-Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `rzv2n-sr-som`. The provisioning specifics are below.
+Follow the [Any Supported Target](/learn/get-started/any-target) instructions under Getting Started to begin. This target is `rzv2n-sr-som`, published on the **2026** release (`edge` and `next` channels), which is what `avocado init` writes. Board support comes from the `avocado-bsp-rzv2n-sr-som` extension. The provisioning specifics below are for the 2026 release.
 
 ### Provision
 
-Build the project and execute the provisioning procedure. This will build the system image and flash it to your target hardware.
+Provisioning has two parts: the bootloader goes into the SoM's SPI NOR flash once, then the OS goes onto the eMMC or a microSD card. Run both from a Linux host: the SDK container needs direct access to the board's USB serial and USB disk devices.
 
-:::note Provisioning on a Linux host
-If your Linux desktop auto-mounts removable media, disable it first — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
-:::
+#### Step 1 — Bootloader to SPI NOR (once per board)
+
+The `serial` profile loads Renesas's Flash Writer over the board's serial console and programs BL2 and the FIP (TF-A and U-Boot) into SPI NOR.
+
+1. Connect the board's serial console to your host.
+2. Set DIP switch S5 to **Serial Downloader** mode (MD0 = ON, MD1 = ON) and power on the board.
+3. Build and provision with the `serial` profile. It uses `/dev/ttyUSB0`; if the console is on another port, add `--env AVOCADO_RZ_SERIAL_PORT=/dev/ttyUSB1`. Press Enter when it asks, then power-cycle the board when it prints `Please reset the board into SCIF download mode...`. The board signals that it's ready only once, right after it powers on, and the tool wasn't listening yet the first time. Without the power cycle, the tool times out after 30 seconds.
 
 ```bash title="Host machine"
 avocado build
+avocado provision dev --profile serial
+```
+
+4. Power off, set S5 to **SPI boot** (MD0 = OFF, MD1 = ON), and power on. U-Boot now runs from SPI NOR. With no OS on the eMMC or the microSD yet, it waits in fastboot mode.
+
+#### Step 2, Option A — eMMC over USB
+
+U-Boot exposes the eMMC to your host as a USB disk, and the `emmc` profile writes the OS image to it.
+
+1. Disable Linux host auto-mounting first if applicable, since the eMMC appears as a removable disk — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting). Then connect the board's USB 2.0 device port (J5003) to your host.
+2. On the serial console, press Ctrl-C to leave fastboot (on a board that already has an OS, press a key to stop autoboot), then run `ums 0 mmc 0`.
+3. Provision with the `emmc` profile, and press Enter when it asks:
+
+```bash title="Host machine"
+avocado provision dev --profile emmc
+```
+
+4. When it completes, press Ctrl-C on the console to stop `ums`, then power-cycle the board. It boots Avocado OS from the eMMC.
+
+#### Step 2, Option B — microSD card
+
+Put the microSD card in your host's card reader and provision with the `sd` profile. Disable Linux host auto-mounting first if applicable — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting).
+
+```bash title="Host machine"
 avocado provision dev --profile sd
 ```
 
+Move the card to the board and power it on. To write a card that is already in the board instead, run `ums 0 mmc 1` on the U-Boot console and add `--env AVOCADO_RZ_SD_VIA_UMS=1` to the command.
+
+U-Boot boots the eMMC when it holds an OS, and the microSD only when the eMMC holds none.
+
 ### Run
 
-After provisioning completes, insert the microSD card into your target device and power it on.
+The `root` user is passwordless in the `dev` runtime used by this guide. The serial console is `ttySC0` at 115200 baud. You can also SSH into the device once it is on the network.
 
-The device will boot from the microSD card with the provisioned system. The `root` user is passwordless in the `dev` runtime used by this guide.
+### Updates
+
+The OS disk, eMMC or microSD, has A and B slots. An update over the air writes the inactive slot's kernel and root filesystem, and U-Boot tries the new slot up to three times before it rolls back to the previous one. Each boot slot also carries the FIP its OS was built with: on the first boot of a slot, U-Boot writes that FIP to SPI NOR if it differs, so the boot chain is updated, and rolled back, with the OS. BL2 is not updated over the air; reprogram it with the `serial` profile.
+
+### Run AI Models on the DRP-AI3
+
+The 2026 release ships the DRP-AI3 driver (`kernel-module-drpai`) and Renesas's RUHMI runtime (`lib-ruhmi`). The [`rzv2n-drpai-yolo`](https://github.com/avocado-linux/references/tree/main/rzv2n-drpai-yolo) reference project runs YOLOv3 object detection on the accelerator.
 
 For board-level setup details — power, console, boot mode selection, and peripheral wiring — see SolidRun's [HummingBoard RZ/V2N IIoT SBC Quick Start Guide](https://dev.solid-run.com/renesas/rz-v2n/sbc-platform/hummingboard-iiot-rz-v2n-som-quick-start-guide).
