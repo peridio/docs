@@ -1070,7 +1070,7 @@
           "profile": "emmc",
           "media": "On-board eMMC",
           "autoMount": true,
-          "description": "Program the bootloader into SPI NOR once first: set DIP switch S5 to Serial Downloader mode (MD0 = ON, MD1 = ON), run `avocado provision dev --profile serial` over the serial console, then set S5 back to SPI boot (MD0 = OFF, MD1 = ON). See the hardware page for the full steps. Then connect J5003 to your host, run `ums 0 mmc 0` on the U-Boot console, and run the emmc profile:",
+          "description": "Program the bootloader into SPI NOR once first: set DIP switch S5 to Serial Downloader mode (MD0 = ON, MD1 = ON), run `avocado provision dev --profile serial` over the serial console and power-cycle the board when it asks, then set S5 back to SPI boot (MD0 = OFF, MD1 = ON). See the hardware page for the full steps. Then connect J5003 to your host, run `ums 0 mmc 0` on the U-Boot console, and run the emmc profile:",
           "command": "avocado provision dev --profile emmc",
           "bootInstructions": "Press Ctrl-C on the console to stop ums, then power-cycle the board. It boots from the eMMC."
         },
@@ -1080,7 +1080,7 @@
           "profile": "sd",
           "media": "microSD card (8GB+)",
           "autoMount": true,
-          "description": "Program the bootloader into SPI NOR once first: set DIP switch S5 to Serial Downloader mode (MD0 = ON, MD1 = ON), run `avocado provision dev --profile serial` over the serial console, then set S5 back to SPI boot (MD0 = OFF, MD1 = ON). See the hardware page for the full steps. Then insert the microSD card into a reader on your host and run the sd profile:",
+          "description": "Program the bootloader into SPI NOR once first: set DIP switch S5 to Serial Downloader mode (MD0 = ON, MD1 = ON), run `avocado provision dev --profile serial` over the serial console and power-cycle the board when it asks, then set S5 back to SPI boot (MD0 = OFF, MD1 = ON). See the hardware page for the full steps. Then insert the microSD card into a reader on your host and run the sd profile:",
           "command": "avocado provision dev --profile sd",
           "bootInstructions": "Insert the SD card into the board and apply power. The microSD boots when the eMMC holds no OS."
         }

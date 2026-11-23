@@ -129,7 +129,7 @@ The `serial` profile loads Renesas's Flash Writer over the board's serial consol
 
 1. Connect the board's serial console to your host.
 2. Set DIP switch S5 to **Serial Downloader** mode (MD0 = ON, MD1 = ON) and power on the board.
-3. Build and provision with the `serial` profile. It uses `/dev/ttyUSB0`; if the console is on another port, add `--env AVOCADO_RZ_SERIAL_PORT=/dev/ttyUSB1`.
+3. Build and provision with the `serial` profile. It uses `/dev/ttyUSB0`; if the console is on another port, add `--env AVOCADO_RZ_SERIAL_PORT=/dev/ttyUSB1`. Press Enter when it asks, then power-cycle the board when it prints `Please reset the board into SCIF download mode...`. The board signals that it's ready only once, right after it powers on, and the tool wasn't listening yet the first time. Without the power cycle, the tool times out after 30 seconds.
 
 ```bash title="Host machine"
 avocado build
