@@ -1069,7 +1069,7 @@
           "label": "eMMC over USB",
           "profile": "emmc",
           "media": "On-board eMMC",
-          "autoMount": false,
+          "autoMount": true,
           "description": "Program the bootloader into SPI NOR once first: set DIP switch S5 to Serial Downloader mode (MD0 = ON, MD1 = ON), run `avocado provision dev --profile serial` over the serial console, then set S5 back to SPI boot (MD0 = OFF, MD1 = ON). See the hardware page for the full steps. Then connect J5003 to your host, run `ums 0 mmc 0` on the U-Boot console, and run the emmc profile:",
           "command": "avocado provision dev --profile emmc",
           "bootInstructions": "Press Ctrl-C on the console to stop ums, then power-cycle the board. It boots from the eMMC."
@@ -1087,6 +1087,7 @@
       ]
     },
     "serial": {
+      "required": true,
       "baud": 115200,
       "voltage": "3.3V",
       "command": "tio -b 115200 /dev/ttyUSB0"

@@ -142,7 +142,7 @@ avocado provision dev --profile serial
 
 U-Boot exposes the eMMC to your host as a USB disk, and the `emmc` profile writes the OS image to it.
 
-1. Connect the board's USB 2.0 device port (J5003) to your host.
+1. Disable Linux host auto-mounting first if applicable, since the eMMC appears as a removable disk — see [Linux Auto-Mounting](/developer-reference/linux-auto-mounting). Then connect the board's USB 2.0 device port (J5003) to your host.
 2. On the serial console, press Ctrl-C to leave fastboot (on a board that already has an OS, press a key to stop autoboot), then run `ums 0 mmc 0`.
 3. Provision with the `emmc` profile, and press Enter when it asks:
 
