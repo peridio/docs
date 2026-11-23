@@ -7,7 +7,7 @@ copy_markdown: true
 
 # `commands`
 
-A complete reference of every `avocado` command and subcommand on a single page, taken from `--help` of `avocado 1.1.0 (5cbc437 2026-11-11)`. Use your browser's find (Ctrl+F / Cmd+F) to search.
+A complete reference of every `avocado` command and subcommand on a single page, taken from `--help` of `avocado 1.2.0 (4c05bb48 2026-11-19)`. Use your browser's find (Ctrl+F / Cmd+F) to search.
 
 ---
 
@@ -31,8 +31,10 @@ Commands:
   runtime       Runtime management commands
   hitl          Hardware-in-the-loop testing commands
   vm            Manage the local avocado-vm helper VM (macOS / Windows dev hosts)
+  rubicon       Rubicon boards: list them (this machine's VM and the org's VMs), run a run profile, watch or use a DUT's serial console
   container     Container Dev Mode: iterate on containers running on a device
   config        Project configuration introspection (read-only)
+  feed          Local RPM feed tooling
   clean         Clean the avocado project by removing docker volumes and state files
   install       Install all components, or add specific packages to an extension/runtime/SDK
   uninstall     Remove packages from an extension, runtime, or SDK and update avocado.yaml
@@ -61,6 +63,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
   -V, --version              Print version
 
@@ -90,6 +93,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -133,6 +137,8 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help
           Print help
 
@@ -173,6 +179,9 @@ Options:
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
   -h, --help
           Print help (see a summary with '-h')
 
@@ -204,6 +213,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -230,6 +240,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -259,6 +270,8 @@ Options:
           Repository to fetch reference from (format: "owner/repo", defaults to "avocado-linux/references")
       --name <NAME>
           Name for the new project. When provided, the project is created in `<directory>/<name>/`. Defaults to the reference name when initializing from a reference, or to the destination directory name otherwise
+      --minimal
+          Omit the default remote extensions (avocado-ext-dev, avocado-ext-sshd-dev, the board BSP) from the generated config
       --output <OUTPUT>
           Output format [default: human] [possible values: human, json]
       --runs-on <USER@HOST>
@@ -271,6 +284,8 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help
           Print help
 
@@ -350,6 +365,9 @@ Options:
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
   -h, --help
           Print help (see a summary with '-h')
 
@@ -385,6 +403,8 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help
           Print help
 
@@ -435,6 +455,9 @@ Options:
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
   -h, --help
           Print help (see a summary with '-h')
 
@@ -447,30 +470,108 @@ Options:
 ```
 Provision a runtime (shortcut for 'runtime provision')
 
-Usage: avocado provision [OPTIONS] [NAME]
+Usage: avocado provision [OPTIONS] [NAME] [-- <EXEC>...]
 
 Arguments:
-  [NAME]  Runtime name (must be defined in config)
+  [NAME]
+          Runtime name (must be defined in config)
+
+  [EXEC]...
+          With `--bundle`: run this command in the bundle's SDK container (USB passed through, as for the provision) instead of provisioning, e.g. `-- boardctl --target thor-jetson-devkit recovery`. A hub's `with_usb` run-profile step uses it
 
 Options:
-  -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
-  -v, --verbose                         Enable verbose output
-  -f, --force                           Skip warnings and confirmation prompts. A raw SD card write from the host still asks for confirmation
-  -t, --target <TARGET>                 Target architecture
-      --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
-      --profile <PROVISION_PROFILE>     Provision profile to use
-      --env <ENV>                       Environment variables to pass to the provision process
-      --out <OUT>                       Output path relative to src_dir for provisioning artifacts
-      --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
-      --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
-      --list                            List the provisioning profiles available for the resolved target instead of provisioning. Reads the stone manifest from the installed SDK volume; requires `avocado install` to have run
-      --output <OUTPUT>                 Output format. JSON skips TUI rendering and emits NDJSON events [default: human] [possible values: human, json]
-      --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
-      --nfs-port <NFS_PORT>             NFS port for remote execution (auto-selects from 12050-12099 if not specified)
-      --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
-      --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
-      --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
-  -h, --help                            Print help
+  -C, --config <CONFIG>
+          Path to avocado.yaml configuration file
+
+          [default: avocado.yaml]
+
+  -v, --verbose
+          Enable verbose output
+
+  -f, --force
+          Skip warnings and confirmation prompts. A raw SD card write from the host still asks for confirmation. Not with `--bundle`, which carries the packing run's choice
+
+      --dry-run
+          Run the provision script without writing the target. The script receives AVOCADO_PROVISION_DRY_RUN=1, and the host-side SD card burn is skipped. Local only: a bundle or a hub job would write
+
+  -t, --target <TARGET>
+          Target architecture. Not with `--bundle`, which carries its own
+
+      --target-board <TARGET_BOARD>
+          Target board override for `{{ avocado.target.board }}`
+
+      --profile <PROVISION_PROFILE>
+          Provision profile to use
+
+      --env <ENV>
+          Environment variables to pass to the provision process; they also fill `{{ env.KEY }}` in avocado.yaml, ahead of the caller's environment
+
+      --out <OUT>
+          Output path relative to src_dir for provisioning artifacts. Not with `--bundle`
+
+      --container-arg <CONTAINER_ARGS>
+          Additional arguments to pass to the container runtime. Not with `--bundle`: a replay runs with the bundled config's container args
+
+      --dnf-arg <DNF_ARGS>
+          Additional arguments to pass to DNF commands. Not with `--bundle`, whose SDK install follows the bundled lock
+
+      --list
+          List the provisioning profiles available for the resolved target instead of provisioning. Reads the stone manifest from the installed SDK volume; requires `avocado install` to have run
+
+      --pack <PACK>
+          Write a provisionable bundle directory (bundle.json + content- addressed blobs) instead of provisioning: everything the provisioning hook needs, deduplicated. Given an existing directory, writes `<runtime>-<target>.bundle` inside it
+
+      --bundle <BUNDLE>
+          Provision from a bundle with only the SDK installed (no build tree): a bundle directory made by `--pack`, or a job's spec.json (bundle.json + blob URLs). Blobs are cached by sha256 under `.avocado-bundle/` in the current directory, which gets the bundle's avocado.yaml/lock: run it in an empty directory (or one an earlier replay used), never a project
+
+      --rubicon [<RUBICON>]
+          Provision the device behind this Rubicon (label, name or address) through the avocado-vm that drives it: this machine's VM if it has the board, otherwise through Connect. Syncs what the hub lacks, runs there, streams the log back. Without a value: the project's `rubicon.default`
+
+      --via <VIA>
+          With --rubicon: force the hub (auto: local VM first, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          With --rubicon via Connect: the VM, when several know the board
+
+      --connect-profile <CONNECT_PROFILE>
+          With --rubicon via Connect: Connect profile to use
+
+      --interactive
+          With --rubicon: for a human at the board's console. Runs the recovery steps and the flash, then leaves the DUT powered on to boot: no boot check, no console in the job log, and your `avocado rubicon console` stays writable throughout. Without it (automation, for CI and tests) the job checks the boot and owns the console while it runs
+
+      --output <OUTPUT>
+          Output format. JSON skips TUI rendering and emits NDJSON events
+
+          [default: human]
+          [possible values: human, json]
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
 
 ```
 
@@ -500,6 +601,8 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help
           Print help
 
@@ -537,6 +640,8 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help
           Print help
 
@@ -564,6 +669,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -591,6 +697,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -622,6 +729,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -649,6 +757,7 @@ Options:
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                   Print help
 
 ```
@@ -671,6 +780,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -691,6 +801,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -708,6 +819,8 @@ Usage: avocado connect [OPTIONS] <COMMAND>
 
 Commands:
   auth          Authenticate with the Connect platform
+  bundle        Provisionable runtime bundles (from `avocado provision --pack`)
+  provision     Provision a bundle onto the DUT behind a site VM's Rubicon, through Connect. Records the job's origin; with --wait, streams the log and exits non-zero unless the job passed (for CI)
   init          Initialize connect settings in avocado.yaml (org, project, server key, extensions, claim token, device config)
   clean         Remove connect configuration (connect section, connect-config extension, and device config overlay)
   orgs          Manage organizations
@@ -729,6 +842,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -753,6 +867,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -777,6 +892,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -798,6 +914,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -819,7 +936,89 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
+
+```
+
+---
+
+### `avocado connect bundle` {#connect-bundle}
+
+```
+Provisionable runtime bundles (from `avocado provision --pack`)
+
+Usage: avocado connect bundle [OPTIONS] <COMMAND>
+
+Commands:
+  upload  Upload a bundle file to Connect
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado connect bundle upload`
+
+```
+Upload a bundle file to Connect
+
+Usage: avocado connect bundle upload [OPTIONS] <FILE>
+
+Arguments:
+  <FILE>
+
+Options:
+      --name <NAME>
+      --org <ORG>
+      --profile <PROFILE>
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado connect provision`
+
+```
+Provision a bundle onto the DUT behind a site VM's Rubicon, through Connect. Records the job's origin; with --wait, streams the log and exits non-zero unless the job passed (for CI)
+
+Usage: avocado connect provision [OPTIONS] --vm <VM> --rubicon <RUBICON>
+
+Options:
+      --vm <VM>                      VM id (Connect's VMs page)
+      --rubicon <RUBICON>            Rubicon address on that VM
+      --bundle <BUNDLE>              Bundle id
+      --runtime <RUNTIME>            Runtime id: provision its attached provisioning assets (uploaded with `connect upload --provisionable`)
+      --profile <PROFILE>            Provision profile
+      --repository <REPOSITORY>      Source repository (e.g. owner/name)
+      --pr <PR_URL>                  Pull request URL
+      --commit <COMMIT>              Commit SHA
+      --run-url <RUN_URL>            CI run URL
+      --wait                         Wait for the result, stream the log, fail unless it passed
+      --org <ORG>
+      --profile-name <PROFILE_NAME>
+      --runs-on <USER@HOST>          Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>              SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui                       Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start             On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                      Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                         Print help
 
 ```
 
@@ -845,6 +1044,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -867,6 +1067,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -891,6 +1092,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -912,6 +1114,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -936,6 +1139,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -966,6 +1170,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -991,6 +1196,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1014,6 +1220,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1038,6 +1245,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1061,6 +1269,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1086,6 +1295,7 @@ Options:
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                    Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                       Print help
 
 ```
@@ -1110,6 +1320,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1135,6 +1346,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1157,6 +1369,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1181,6 +1394,7 @@ Options:
       --sdk-arch <ARCH>          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                   Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start         On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                  Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                     Print help
 
 ```
@@ -1205,6 +1419,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1230,6 +1445,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1254,6 +1470,7 @@ Options:
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                   Print help
 
 ```
@@ -1280,6 +1497,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1307,6 +1525,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1333,6 +1552,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1357,6 +1577,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1381,6 +1602,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1406,6 +1628,7 @@ Options:
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                    Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                       Print help
 
 ```
@@ -1431,6 +1654,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1453,6 +1677,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1477,6 +1702,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1501,6 +1727,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1523,6 +1750,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1551,6 +1779,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1575,6 +1804,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1602,6 +1832,7 @@ Options:
       --no-sbom                        Skip SBOM generation; no SBOM is stored for the runtime
       --profile <PROFILE>              Profile name (defaults to the active default profile)
       --publish                        Publish the runtime immediately after upload (draft → published)
+      --provisionable                  Also make the runtime provisionable: pack the provisioning assets (boot chain, flash tools, var-staging, ...) and attach them to the uploaded runtime. Content Connect already has, such as the runtime's own images, is not sent again
       --deploy-cohort <DEPLOY_COHORT>  Deploy after upload: cohort ID to target
       --deploy-name <DEPLOY_NAME>      Deploy after upload: deployment name (auto-generated if omitted)
       --deploy-tag <DEPLOY_TAG>        Deploy after upload: filter by tags (repeatable)
@@ -1612,6 +1843,7 @@ Options:
       --sdk-arch <ARCH>                SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                         Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start               On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                        Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                           Print help
 
 ```
@@ -1642,6 +1874,7 @@ Options:
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                    Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                       Print help
 
 ```
@@ -1664,6 +1897,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1689,6 +1923,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1713,6 +1948,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1738,6 +1974,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1761,6 +1998,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1786,6 +2024,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1810,6 +2049,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1832,6 +2072,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1855,6 +2096,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1878,6 +2120,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1911,6 +2154,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -1969,6 +2213,9 @@ Options:
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
   -h, --help
           Print help (see a summary with '-h')
 
@@ -1998,6 +2245,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2027,6 +2275,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2048,6 +2297,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2072,6 +2322,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2101,6 +2352,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2122,6 +2374,7 @@ Options:
   -v, --verbose                         Enable verbose output
   -t, --target <TARGET>                 Target architecture
   -r, --runtime <RUNTIME>               Runtime context for the clean (resolves which extension sysroot tree to operate on). Falls through to legacy per-target behavior when no runtime resolves
+      --skip-compile                    Skip cleaning the compile sections the extension uses (they are cleaned by default)
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
       --runs-on <USER@HOST>             Run command on remote host using local volume via NFS (format: user@host)
@@ -2129,6 +2382,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2170,6 +2424,8 @@ Options:
           Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help
           Print help
 
@@ -2200,6 +2456,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2229,6 +2486,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2261,6 +2519,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2288,6 +2547,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2317,6 +2577,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2337,10 +2598,11 @@ Options:
   -C, --config <CONFIG>                 Path to avocado.yaml configuration file [default: avocado.yaml]
   -v, --verbose                         Enable verbose output
   -f, --force                           Skip warnings and confirmation prompts. A raw SD card write from the host still asks for confirmation
+      --dry-run                         Run the provision script without writing the target. The script receives AVOCADO_PROVISION_DRY_RUN=1, and the host-side SD card burn is skipped
   -t, --target <TARGET>                 Target architecture
       --target-board <TARGET_BOARD>     Target board override for `{{ avocado.target.board }}`
       --profile <PROVISION_PROFILE>     Provision profile to use
-      --env <ENV>                       Environment variables to pass to the provision process
+      --env <ENV>                       Environment variables to pass to the provision process; they also fill `{{ env.KEY }}` in avocado.yaml, ahead of the caller's environment
       --out <OUT>                       Output path relative to src_dir for provisioning artifacts
       --container-arg <CONTAINER_ARGS>  Additional arguments to pass to the container runtime
       --dnf-arg <DNF_ARGS>              Additional arguments to pass to DNF commands
@@ -2349,6 +2611,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2370,6 +2633,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2394,6 +2658,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2422,6 +2687,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2449,6 +2715,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2479,6 +2746,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2506,6 +2774,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2536,6 +2805,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2571,6 +2841,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2594,6 +2865,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2621,6 +2893,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2648,6 +2921,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2673,6 +2947,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2700,6 +2975,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2728,6 +3004,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -2755,6 +3032,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2784,6 +3062,7 @@ Options:
       --sdk-arch <ARCH>         SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                  Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start        On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                 Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                    Print help
 
 ```
@@ -2809,11 +3088,10 @@ Options:
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                   Print help
 
 ```
-
-See [Boot signing](/developer-reference/security/boot-signing) for the workflow this key is used by.
 
 ---
 
@@ -2830,6 +3108,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2853,6 +3132,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2860,8 +3140,6 @@ Options:
 ---
 
 ## Var Key Commands
-
-Operator-held recovery key for an encrypted `/var`. See [Encrypted /var](/developer-reference/security/encrypted-var) for the full workflow.
 
 ### `avocado var-key`
 
@@ -2880,6 +3158,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2905,6 +3184,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2930,6 +3210,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -2956,6 +3237,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3010,6 +3292,9 @@ Options:
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
   -h, --help
           Print help (see a summary with '-h')
 
@@ -3036,6 +3321,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -3060,6 +3346,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -3086,6 +3373,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3140,6 +3428,9 @@ Options:
       --no-vm-auto-start
           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
 
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
   -h, --help
           Print help (see a summary with '-h')
 
@@ -3166,6 +3457,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -3190,6 +3482,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -3219,6 +3512,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3247,6 +3541,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -3266,6 +3561,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3288,6 +3584,7 @@ Options:
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                    Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                       Print help
 
 ```
@@ -3310,6 +3607,7 @@ Options:
       --sdk-arch <ARCH>            SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                     Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start           On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                    Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                       Print help
 
 ```
@@ -3330,6 +3628,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3357,6 +3656,7 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
@@ -3383,6 +3683,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3405,6 +3706,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3424,6 +3726,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3445,6 +3748,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3452,8 +3756,6 @@ Options:
 ---
 
 ## Container Commands
-
-Container Dev Mode: a layer-aware hot-reload loop for a container running on a device.
 
 ### `avocado container`
 
@@ -3471,6 +3773,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3497,6 +3800,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3516,6 +3820,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3535,6 +3840,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3554,6 +3860,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3573,6 +3880,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3592,6 +3900,55 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+## Feed Commands
+
+### `avocado feed`
+
+```
+Local RPM feed tooling
+
+Usage: avocado feed [OPTIONS] <COMMAND>
+
+Commands:
+  index  Write repodata/ for a directory of RPMs by running the host createrepo_c
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado feed index`
+
+```
+Write repodata/ for a directory of RPMs by running the host createrepo_c
+
+Usage: avocado feed index [OPTIONS] <DIR>
+
+Arguments:
+  <DIR>  Directory of RPMs to index
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3616,6 +3973,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3640,15 +3998,747 @@ Options:
       --sdk-arch <ARCH>                 SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                          Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start                On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                         Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                            Print help
 
 ```
 
 ---
 
-## VM Commands
+## Rubicon Commands
 
-The local helper VM used on macOS and Windows development hosts.
+### `avocado rubicon`
+
+```
+Rubicon boards: list them (this machine's VM and the org's VMs), run a run profile, watch or use a DUT's serial console
+
+Usage: avocado rubicon [OPTIONS] <COMMAND>
+
+Commands:
+  list     Boards reachable from here, with their state
+  show     One board in detail
+  add      Add a board to this machine's VM by address
+  remove   Remove a board from this machine's VM
+  label    Set a board's label on this machine's VM
+  run      Run one of the project's run profiles (`rubicon.run.<name>`) on a board
+  console  Interactive serial console of a board's DUT (Ctrl-] leaves). Without a terminal, piped stdin goes to the DUT as raw bytes (`printf '\033[B\r' | avocado rubicon console --for 5`)
+  claim    Claim a board for the Connect org: someone presses its SW2 within the minute. Claimed, the board accepts actions only with tokens
+  update   Put new firmware on a board (MCUboot test boot; the board keeps it only if it comes back healthy, else it rolls back by itself)
+  logs     What a board's DUT console printed recently
+  cancel   Cancel a job on a board's hub: waiting, it leaves the queue; running, it is stopped and the board cleaned up. The job id (or its start) is in `avocado rubicon list`
+
+Options:
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon list`
+
+```
+Boards reachable from here, with their state
+
+Usage: avocado rubicon list [OPTIONS]
+
+Options:
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon show`
+
+```
+One board in detail
+
+Usage: avocado rubicon show [OPTIONS] [BOARD]
+
+Arguments:
+  [BOARD]
+
+
+Options:
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon add`
+
+```
+Add a board to this machine's VM by address
+
+Usage: avocado rubicon add [OPTIONS] <ADDRESS>
+
+Arguments:
+  <ADDRESS>
+
+
+Options:
+      --label <LABEL>
+
+
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon remove`
+
+```
+Remove a board from this machine's VM
+
+Usage: avocado rubicon remove [OPTIONS] <BOARD>
+
+Arguments:
+  <BOARD>
+
+
+Options:
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon label`
+
+```
+Set a board's label on this machine's VM
+
+Usage: avocado rubicon label [OPTIONS] <BOARD> <LABEL>
+
+Arguments:
+  <BOARD>
+
+
+  <LABEL>
+
+
+Options:
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon run`
+
+```
+Run one of the project's run profiles (`rubicon.run.<name>`) on a board
+
+Usage: avocado rubicon run [OPTIONS] <PROFILE>
+
+Arguments:
+  <PROFILE>
+          The run profile
+
+Options:
+      --board <BOARD>
+
+
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon console`
+
+```
+Interactive serial console of a board's DUT (Ctrl-] leaves). Without a terminal, piped stdin goes to the DUT as raw bytes (`printf '\033[B\r' | avocado rubicon console --for 5`)
+
+Usage: avocado rubicon console [OPTIONS] [BOARD]
+
+Arguments:
+  [BOARD]
+
+
+Options:
+      --read-only
+          Watch only; never send input
+
+      --for <SECS>
+          Leave after this many seconds, releasing the console
+
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon claim`
+
+```
+Claim a board for the Connect org: someone presses its SW2 within the minute. Claimed, the board accepts actions only with tokens
+
+Usage: avocado rubicon claim [OPTIONS] [BOARD]
+
+Arguments:
+  [BOARD]
+
+
+Options:
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon update`
+
+```
+Put new firmware on a board (MCUboot test boot; the board keeps it only if it comes back healthy, else it rolls back by itself)
+
+Usage: avocado rubicon update [OPTIONS] [BOARD]
+
+Arguments:
+  [BOARD]
+
+
+Options:
+      --file <FILE>
+          A signed image (`zephyr.signed.bin`)
+
+      --version <VERSION>
+          A released version (`0.1.0+83` or `0.1.0.83`)
+
+      --all
+          Every online board reachable from here (three at a time)
+
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon logs`
+
+```
+What a board's DUT console printed recently
+
+Usage: avocado rubicon logs [OPTIONS] [BOARD]
+
+Arguments:
+  [BOARD]
+
+
+Options:
+  -f, --follow
+          Keep printing as it prints
+
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+### `avocado rubicon cancel`
+
+```
+Cancel a job on a board's hub: waiting, it leaves the queue; running, it is stopped and the board cleaned up. The job id (or its start) is in `avocado rubicon list`
+
+Usage: avocado rubicon cancel [OPTIONS] <JOB>
+
+Arguments:
+  <JOB>
+
+
+Options:
+      --board <BOARD>
+
+
+  -C, --config <CONFIG>
+          Project config (run profiles, `rubicon.default`, console rate)
+
+          [default: avocado.yaml]
+
+      --via <VIA>
+          Where to look for boards (auto: this machine's VM, then Connect)
+
+          Possible values:
+          - auto:    This machine's VM if it drives the board, else Connect
+          - local:   Only this machine's avocado-vm
+          - connect: Only through Connect
+
+          [default: auto]
+
+      --vm <VM>
+          Connect only: the VM, when several know a board
+
+      --connect-profile <CONNECT_PROFILE>
+          Connect profile to use
+
+      --runs-on <USER@HOST>
+          Run command on remote host using local volume via NFS (format: user@host)
+
+      --nfs-port <NFS_PORT>
+          NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+
+      --sdk-arch <ARCH>
+          SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+
+      --no-tui
+          Disable TUI output (use legacy sequential output with inherited stdio)
+
+      --no-vm-auto-start
+          On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+
+      --offline
+          Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+```
+
+---
+
+## VM Commands
 
 ### `avocado vm`
 
@@ -3666,6 +4756,9 @@ Commands:
   rebuild  Re-record the manifest from a fresh --vm-source. Preserves data disk unless --reset-data is given. VM must be stopped first
   reset    Wipe the persistent `var.btrfs` and re-seed from the installed var artifact. Use this when you want a clean /var (Docker volumes, container caches, project work in /data, etc.). Doesn't change the VM image version — see `vm update` for that
   config   Read/write persistent VM configuration at `~/.avocado/vm/config.yaml`. Same file the Avocado.app settings UI edits — every knob shipped in the desktop is reachable here
+  connect  Associate this VM with a Connect org (claims it as a VM hub)
+  rubicon  Manage the Rubicon USB/IP boards this VM hub drives
+  service  Run the VM headless under a systemd user unit (hibernation off), so it stays up across logout and reboot
   update   Check for and apply VM image updates from the release channel. Stops + restarts the VM if it was running. A release that ships a new `var` image schedules a state sync applied on the next start; the VM's Docker volumes, SDKs and /data are preserved
 
 Options:
@@ -3674,6 +4767,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3688,7 +4782,7 @@ Boot the avocado-vm (fails if it is already running)
 Usage: avocado vm start [OPTIONS]
 
 Options:
-      --vm-source <VM_SOURCE>          Directory containing `direct` profile output (manifest.json + artifacts). Resolution order when unset: $AVOCADO_VM_DIR → ~/.avocado/vm/install/ (populated by `avocado vm update`) → last `vm start`/`vm rebuild` dir → error
+      --vm-source <VM_SOURCE>          Directory containing `direct` profile output (manifest.json + artifacts). Resolution order when unset: $AVOCADO_VM_DIR → the source the last `vm start`/`vm rebuild`/`vm update` used → ~/.avocado/vm/install/ (populated by `avocado vm update`) → error
       --memory-mib <MEMORY_MIB>        Memory in MiB. Resolution order: this flag → `runtime.memory_mib` in `~/.avocado/vm/config.yaml` (also written by Avocado.app's settings UI) → 4096. When passed, the value is persisted back to the config so the next flag-less `vm start` reuses it
       --cpus <CPUS>                    vCPU count. Same resolution + persistence as `--memory-mib`, falling back to `runtime.cpus` or 4
       --ssh-port <SSH_PORT>            Bind SSH on this host port (default: pick a free high port)
@@ -3703,6 +4797,7 @@ Options:
       --sdk-arch <ARCH>                SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                         Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start               On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                        Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                           Print help
 
 ```
@@ -3723,6 +4818,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3742,6 +4838,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3764,6 +4861,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3784,6 +4882,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3805,6 +4904,7 @@ Options:
       --sdk-arch <ARCH>        SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui                 Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start       On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline                Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                   Print help
 
 ```
@@ -3825,6 +4925,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3850,6 +4951,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3873,6 +4975,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3896,6 +4999,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3918,6 +5022,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3938,6 +5043,210 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm connect`
+
+```
+Associate this VM with a Connect org (claims it as a VM hub)
+
+Usage: avocado vm connect [OPTIONS]
+
+Options:
+      --org <ORG>            Organization ID (default: the profile's org)
+      --name <NAME>          Name for the claim token / VM (default: vm-<hostname>)
+      --force                Claim again even if the VM is already connected
+      --status               Show the connection state instead of connecting
+      --disconnect           Stop avocado-conn and remove its local credentials
+      --profile <PROFILE>    Connect profile to use
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm rubicon` {#vm-rubicon}
+
+```
+Manage the Rubicon USB/IP boards this VM hub drives
+
+Usage: avocado vm rubicon [OPTIONS] <COMMAND>
+
+Commands:
+  add     Add a board by address (or update its label)
+  list    List configured boards with their live state
+  remove  Stop managing a board
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm rubicon add`
+
+```
+Add a board by address (or update its label)
+
+Usage: avocado vm rubicon add [OPTIONS] <ADDRESS>
+
+Arguments:
+  <ADDRESS>
+
+Options:
+      --label <LABEL>
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm rubicon list`
+
+```
+List configured boards with their live state
+
+Usage: avocado vm rubicon list [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm rubicon remove`
+
+```
+Stop managing a board
+
+Usage: avocado vm rubicon remove [OPTIONS] <ADDRESS>
+
+Arguments:
+  <ADDRESS>
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+### `avocado vm service` {#vm-service}
+
+```
+Run the VM headless under a systemd user unit (hibernation off), so it stays up across logout and reboot
+
+Usage: avocado vm service [OPTIONS] <COMMAND>
+
+Commands:
+  install    Write ~/.config/systemd/user/avocado-vm.service, enable and start it
+  uninstall  Stop, disable and remove the unit
+  status     Show the unit's state, lingering, and `vm status`
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm service install`
+
+```
+Write ~/.config/systemd/user/avocado-vm.service, enable and start it
+
+Usage: avocado vm service install [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm service uninstall`
+
+```
+Stop, disable and remove the unit
+
+Usage: avocado vm service uninstall [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
+  -h, --help                 Print help
+
+```
+
+---
+
+#### `avocado vm service status`
+
+```
+Show the unit's state, lingering, and `vm status`
+
+Usage: avocado vm service status [OPTIONS]
+
+Options:
+      --runs-on <USER@HOST>  Run command on remote host using local volume via NFS (format: user@host)
+      --nfs-port <NFS_PORT>  NFS port for remote execution (auto-selects from 12050-12099 if not specified)
+      --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
+      --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
+      --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```
@@ -3961,6 +5270,7 @@ Options:
       --sdk-arch <ARCH>      SDK container architecture for cross-arch emulation via Docker buildx/QEMU (aarch64 or x86-64)
       --no-tui               Disable TUI output (use legacy sequential output with inherited stdio)
       --no-vm-auto-start     On macOS/Windows, do not route docker through the avocado-vm; talk to the local docker daemon directly. Without this flag the CLI uses a running avocado-vm, and starts a stopped one only when `AVOCADO_VM_DIR` is set; otherwise it warns and uses local docker. (Equivalent to `AVOCADO_VM_AUTO_START=0`.)
+      --offline              Make no snapshot or feed preflight request; use the locked pin (equivalent to `AVOCADO_OFFLINE=1`)
   -h, --help                 Print help
 
 ```

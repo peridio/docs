@@ -38,6 +38,16 @@ The bar along the bottom of the project shows its path, the release and channel 
 
 **Reinstall from scratch** runs `avocado install -f`. It clears every extension's sysroot, so the next build rebuilds all of them. Use it when Build reports "up to date" after a change it should have picked up. The box unchecks itself after each run.
 
+#### Update to the latest snapshot
+
+**Update to the latest snapshot** moves the project to the newest packages in its feed. Checked, the button reads **Update & Install**, or **Update & Reinstall** together with **Reinstall from scratch**. It runs `avocado update` for the selected target, then Install. If the update fails, Install doesn't run. Like **Reinstall from scratch**, the box unchecks itself when the drawer opens and after each run.
+
+`avocado update` only rewrites the target's lock in `avocado.lock`. The packages change when Install runs. When the Install succeeds, the run log lists what moved in that target's lock, up to 40 lines. Other targets in the lock stay as they were, so update each target you build.
+
+To undo an update, open **Install** and click **Revert**. Revert appears only after an **Update & Install** that succeeded and changed the lock. After you confirm, Desktop writes back the lock from before the update, runs **Clean**, then Install. Clean deletes all build output, so this takes as long as a first install. A plain Install can't do this, because it doesn't downgrade packages that are already installed. Desktop keeps only the most recent lock it replaced, and only until the app quits or its window reloads.
+
+Without Revert, for example after a failed Install or to go back further, restore `avocado.lock` from git, then run **More → Clean…** and **Install**.
+
 ### Provision
 
 Pick a **Profile**. Profiles come from your target and depend on the hardware: for example an SD card image, or flashing on-board storage over USB. Some profiles ask for extra fields, and **Provision** stays disabled until you fill in the required ones. If the provisioning script asks a question, answer it in the terminal.

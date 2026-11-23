@@ -106,6 +106,7 @@ $AVOCADO_PREFIX/.stamps/
 ├── ext/<name>/install.stamp
 ├── ext/<name>/build.stamp
 ├── ext/<name>/image.stamp
+├── sdk/<host_arch>/compile/<section>.stamp
 ├── runtime/<name>/install.stamp
 ├── runtime/<name>/build.stamp
 ├── runtime/<name>/sign.stamp
@@ -125,9 +126,26 @@ When you re-run a command, the CLI re-computes those hashes against the current 
 
 Stamps are also chained via prerequisites: a runtime build won't proceed unless the corresponding install stamp exists, and so on. This is what prevents out-of-order builds from producing silently broken artifacts.
 
+### Compile sections
+
+Since avocado-cli 1.2.0, `ext build` writes a stamp for each `sdk.compile` section it runs, and skips the section on the next build when nothing it reads has changed. The stamp covers the section's config and compile script, the `package_files` of every extension that names the section, the SDK settings and repository, and the lock pins of the SDK and the target sysroot.
+
+The skip needs a `package_files` list on every extension that names the section. Without one, the CLI cannot tell that a source file changed, so the section always compiles. It also always compiles when:
+
+- a `package_files` path or glob directory is, or holds, a symlink, or a glob matches nothing,
+- `sdk.container_args` or the `sdk.container` block passes anything other than `--privileged`, `--network=host`, `-v /dev:/dev`, `-v /sys:/sys` and `-e NAME=value` flags,
+- the project has no lock file,
+- the CLI runs from a directory other than the project and there is no `src_dir`.
+
+Run `ext build -v` to see why a section was not skipped. `avocado sdk compile` always runs. `--no-stamps`, `ext clean` and `sdk clean <section>` remove the section stamp. `ext clean --skip-compile` cleans the extension and leaves its compile sections as they are.
+
+An extension whose package has both `compile` and `install` is always rebuilt, and its compile step decides whether the compile itself can be skipped.
+
 ### Partial failures
 
-Stamps are only written **on success**. If `avocado build` fails partway through assembling a runtime, no build stamp is created for that runtime — but stamps for any earlier successful steps (install, extension builds) remain valid. The next run resumes from the failed step rather than redoing successful work.
+Stamps are only written **on success**. When a step fails, the summary marks the steps after it `(skipped: earlier step failed)`, and steps that had started but not finished `(not finished: a step failed)`. Only the steps before the failure keep `(up to date)`.
+
+If `avocado build` fails partway through assembling a runtime, no build stamp is created for that runtime — but stamps for any earlier successful steps (install, extension builds) remain valid. The next run resumes from the failed step rather than redoing successful work.
 
 This is sometimes surprising: you fix the error, run `avocado build` again, and the install step doesn't re-run. That's correct — the install already succeeded, its stamp is still valid, and only the failed step needs to be retried.
 

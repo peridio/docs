@@ -7,7 +7,7 @@ description: 'The Linux VM Avocado Desktop builds in on macOS: starting, hiberna
 
 On macOS, Avocado Desktop builds inside a small Linux VM, which runs on QEMU. Every `avocado install`, `build` and `provision` runs in SDK containers inside that VM. The VM also holds USB devices passed through for flashing.
 
-On Linux, Desktop builds in containers on the host's Docker instead, and you don't need the VM.
+On Linux, Desktop builds in containers on the host's Docker Engine instead, and you don't need the VM.
 
 ## The Overview pane
 
