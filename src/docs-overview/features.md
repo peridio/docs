@@ -184,9 +184,9 @@ This matters for certification, for auditing, for debugging production issues, a
 
 ## Safe OTA with Automatic Rollback
 
-OTA updates target runtimes — the collection of extensions that make up your deployment. Push a new runtime to your fleet and devices apply it without a reboot. Extensions are merged live by systemd. If something goes wrong, automatic rollback restores the last known-good state.
+OTA updates target runtimes — the collection of extensions that make up your deployment. Push a new runtime to your fleet and devices apply it without a reboot. Extensions are merged live by systemd. An OS update is written to the inactive A/B slot, and after the reboot `avocadoctl` checks the running `AVOCADO_OS_BUILD_ID` and rolls back to the previous slot on a mismatch. That check is the rollback trigger: boot-attempt counting exists only on boards whose bootloader implements it, some boards ship no rollback actions, and on Jetson recovery from a slot that fails to boot depends on NVIDIA firmware. See [Rollback](/avocado-os/security/update-architecture#rollback).
 
-> **No reboot required. No half-applied updates. No bricked devices.**
+> **No reboot required for extension updates. The active slot is not written during an OS update.**
 
 Updates are granular because of the extension architecture. Update your application without touching the base OS. Update the OS without touching the application. Update the model without touching either. Each layer is independently versioned and independently updatable, and the A/B mechanism protects the entire stack.
 

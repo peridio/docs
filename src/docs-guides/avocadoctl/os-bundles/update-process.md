@@ -99,6 +99,9 @@ When `stream_os_to_partition = true` is set in the [configuration](/developer-re
 - Reduces disk I/O and temporary storage requirements.
 - Disables resumable downloads for the OS bundle (the entire artifact must be re-downloaded on failure).
 - Extension images are still staged normally.
+- The OS bundle is not compared to the signed `targets` hash. Its artifacts are verified only against the hashes in the bundle's own unsigned `bundle.json`. See [What is verified](/avocado-os/security/update-architecture#what-is-verified).
+
+Streaming is off by default.
 
 ## Cleanup
 
