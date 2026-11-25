@@ -13,7 +13,7 @@ This guide covers how to pre-populate the var partition at build time so your de
 
 ### The var partition
 
-The var partition mounts at `/var` and survives OTA updates. It is separate from the immutable root so that updates can be applied atomically without wiping runtime state.
+The var partition mounts at `/var` and survives OTA updates. It is separate from the immutable root, and an OS update writes only the artifacts its board's update manifest lists. In the shipped manifests that list contains the root filesystem and boot artifacts and never the var partition, so an OS update does not wipe runtime state.
 
 Files on the var partition are writable and are not managed by the extension system. This is where Docker stores image layers, databases store their files, and applications write configuration that persists across reboots and updates.
 
@@ -58,6 +58,8 @@ Each entry has two fields:
 `dest` is always a directory: the source file or directory is copied into it under its own name, and directories are copied recursively. Above, `config/myapp` lands at `/var/lib/myapp/` and `certs/device.pem` at `/var/lib/myapp/certs/device.pem`. A `dest` that names the file itself (`dest: lib/myapp/certs/device.pem`) creates a directory of that name with the file inside it.
 
 The copies are owned by root, whatever their owner in your source tree, and files already in `dest` keep their owners.
+
+Seeded files are part of the var partition image that `avocado provision` writes. The device-side update code (`avocadoctl`) does not copy `var_files`, so a changed `var_files` entry does not reach a device that is already provisioned.
 
 ### When to use this
 

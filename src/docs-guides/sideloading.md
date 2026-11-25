@@ -401,6 +401,16 @@ The sideloading process will:
 2. **Start a local HTTP server** to serve the update repository
 3. **SSH into the device** and run `avocadoctl runtime add` pointing at the hosted repository, causing the device to pull and apply the updated images
 
+##### What the device checks
+
+The device verifies the update the same way as any other `avocadoctl runtime add` from a URL:
+
+- It checks the `timestamp`, `snapshot` and `targets` signatures against the trust anchor in `/var/lib/avocado/metadata/root.json` before it downloads anything, and refuses the update when that file is missing.
+- It checks each downloaded file against the SHA-256 and length in the signed metadata. If `stream_os_to_partition` is enabled in the `avocadoctl` configuration (it is off by default), the OS bundle skips this check and is verified only against the hashes in its own unsigned `bundle.json`.
+- It does not check metadata expiry and does not compare metadata versions with earlier ones, so a validly signed older runtime is accepted.
+
+See [Atomic Update Architecture](/avocado-os/security/update-architecture#what-is-verified) for the full list.
+
 ### Verify the update
 
 After the update completes, SSH back into the device and verify that `tcpdump` is now available:

@@ -54,7 +54,7 @@ When dm-verity detects a block that doesn't match its expected hash:
 1. The read operation returns an I/O error
 2. The system logs the failure with the specific block that failed verification
 3. Depending on configuration, the system can continue in degraded mode or trigger a reboot into the recovery partition
-4. On reboot, the A/B partition scheme allows falling back to the last known-good slot
+4. `avocadoctl` does not switch slots on a dm-verity failure. After an OS update it rolls back only when its post-boot build ID checks fail (the rootfs `AVOCADO_OS_BUILD_ID` and, in the initramfs, the initramfs build ID). If the failure resets the device during the first boot of a new slot, before the update is committed, the board's bootloader fallback can return it to the previous slot on boards that have one (see [Rollback](/avocado-os/security/update-architecture#rollback))
 
 ## Relationship to secure boot
 
